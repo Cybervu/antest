@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.vod.R;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.util.Util;
@@ -52,7 +53,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class SplashScreen extends Activity {
+public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddress{
 
     String[] genreArrToSend;
     String[] genreValueArrayToSend;
@@ -130,35 +131,34 @@ public class SplashScreen extends Activity {
 
 
 
-       /* if (countryPref != null) {
+        if (countryPref != null) {
             String countryCodeStr = countryPref.getString("countryCode", null);
 
             if (countryCodeStr == null) {
                 if (isNetwork == true) {
-                    AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
+                    GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this);
                     asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
                 } else {
                     noInternetLayout.setVisibility(View.VISIBLE);
                     geoBlockedLayout.setVisibility(View.GONE);
                 }
             } else {
-                AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
+                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this);
                 asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
             }
         } else {
             if (isNetwork == true) {
 
-                AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
+                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this);
                 asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
             } else {
                 noInternetLayout.setVisibility(View.VISIBLE);
                 geoBlockedLayout.setVisibility(View.GONE);
             }
-        }*/
+        }
 
-        AsynGetPlanId asynGetPlanId = new AsynGetPlanId();
-        asynGetPlanId.executeOnExecutor(threadPoolExecutor);
+
     }
 
     @Override
@@ -180,7 +180,24 @@ public class SplashScreen extends Activity {
         System.exit(0);
     }
 
-    //Verify the IP
+    @Override
+    public void onIPAddressPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
+        if (ipAddressStr.equals("")) {
+            noInternetLayout.setVisibility(View.VISIBLE);
+            geoBlockedLayout.setVisibility(View.GONE);
+        } else{
+            this.ipAddressStr = ipAddressStr;
+            AsynGetCountry asynGetCountry = new AsynGetCountry();
+            asynGetCountry.executeOnExecutor(threadPoolExecutor);
+        }
+    }
+
+    /*//Verify the IP
     private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
         String responseStr;
 
@@ -283,7 +300,7 @@ public class SplashScreen extends Activity {
 
         }
     }
-
+*/
     //Verify the IP
     private class AsynGetCountry extends AsyncTask<Void, Void, Void> {
         String responseStr;

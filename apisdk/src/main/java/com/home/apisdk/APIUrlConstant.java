@@ -7,17 +7,6 @@ package com.home.apisdk;
 public class APIUrlConstant {
 
     public static String BASE_URl="" ;
-
-    public static String getBASE_URl() {
-        return BASE_URl;
-    }
-
-    public static void setBASE_URl(String BASE_URl) {
-        BASE_URl = BASE_URl;
-    }
-
-
-
     public static final String INITIALIZATION_URL = BASE_URl+"initialiseSdk";
     public static final String MENU_LIST_URL = BASE_URl+"getMenuList";
     public static final String GENRE_LIST_URL = BASE_URl+"getGenreList";
