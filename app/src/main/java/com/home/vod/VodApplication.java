@@ -13,6 +13,6 @@ public class VodApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        APIUrlConstant.BASE_URl= BuildConfig.SERVICE_BASE_PATH;
+        APIUrlConstant.setBASE_URl(BuildConfig.SERVICE_BASE_PATH);
     }
 }

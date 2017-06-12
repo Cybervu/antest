@@ -274,7 +274,7 @@
                     android:layout_marginTop="10dp"
                     android:visibility="gone" />
 
-                <com.home.muvisdk.utils.ExpandableTextView
+                <com.home.vod.utils.ExpandableTextView
                     android:id="@+id/videoStoryTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -17,7 +17,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
+import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
+import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
 import com.home.vod.R;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.util.Util;
@@ -53,7 +56,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddress{
+public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddress, CheckGeoBlockCountryAsynTask.CheckGeoBlockForCountry{
 
     String[] genreArrToSend;
     String[] genreValueArrayToSend;
@@ -192,9 +195,42 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             geoBlockedLayout.setVisibility(View.GONE);
         } else{
             this.ipAddressStr = ipAddressStr;
-            AsynGetCountry asynGetCountry = new AsynGetCountry();
+            CheckGeoBlockInputModel checkGeoBlockInputModel=new CheckGeoBlockInputModel();
+            checkGeoBlockInputModel.setAuthToken(Util.authTokenStr);
+            checkGeoBlockInputModel.setIp(ipAddressStr);
+            CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel,this);
             asynGetCountry.executeOnExecutor(threadPoolExecutor);
         }
+    }
+
+    @Override
+    public void onCheckGeoBlockCountryPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onCheckGeoBlockCountryPostExecuteCompleted(CheckGeoBlockOutputModel checkGeoBlockOutputModel, int status, String message) {
+        if (checkGeoBlockOutputModel == null) {
+           // countryCode = "";
+            noInternetLayout.setVisibility(View.GONE);
+            geoBlockedLayout.setVisibility(View.VISIBLE);
+        } else {
+            if (status > 0 && status == 200) {
+                if (countryPref != null) {
+                    SharedPreferences.Editor countryEditor = countryPref.edit();
+                    countryEditor.putString("countryCode", checkGeoBlockOutputModel.getCountrycode().trim());
+
+                    countryEditor.commit();
+                    AsynGetPlanId asynGetPlanId = new AsynGetPlanId();
+                    asynGetPlanId.executeOnExecutor(threadPoolExecutor);
+                }
+
+            } else {
+                noInternetLayout.setVisibility(View.GONE);
+                geoBlockedLayout.setVisibility(View.VISIBLE);
+            }
+        }
+
     }
 
     /*//Verify the IP
@@ -302,119 +338,119 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     }
 */
     //Verify the IP
-    private class AsynGetCountry extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        String countryCode;
-        int status;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = Util.rootUrl().trim() + Util.loadCountryUrl.trim();
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpGet httppost = new HttpGet(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("ip", ipAddressStr.trim());
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    countryCode = "";
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            noInternetLayout.setVisibility(View.GONE);
-                            geoBlockedLayout.setVisibility(View.VISIBLE);
-
-                        }
-                    });
-
-                } catch (UnsupportedEncodingException e) {
-
-                    countryCode = "";
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            noInternetLayout.setVisibility(View.GONE);
-                            geoBlockedLayout.setVisibility(View.VISIBLE);
-
-                        }
-                    });
-
-                } catch (IOException e) {
-                    countryCode = "";
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            noInternetLayout.setVisibility(View.GONE);
-                            geoBlockedLayout.setVisibility(View.VISIBLE);
-
-                        }
-                    });
-
-                }
-                if (responseStr != null) {
-                    Object json = new JSONTokener(responseStr).nextValue();
-                    if (json instanceof JSONObject) {
-                        String statusStr = ((JSONObject) json).getString("code");
-                        status = Integer.parseInt(statusStr);
-                        if (status == 200) {
-                            countryCode = ((JSONObject) json).getString("country");
-                        }
-
-                    }
-
-                }
-
-            } catch (Exception e) {
-                countryCode = "";
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        noInternetLayout.setVisibility(View.GONE);
-                        geoBlockedLayout.setVisibility(View.VISIBLE);
-
-                    }
-                });
-
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if (responseStr == null) {
-                countryCode = "";
-                noInternetLayout.setVisibility(View.GONE);
-                geoBlockedLayout.setVisibility(View.VISIBLE);
-            } else {
-                if (status > 0 && status == 200) {
-                    if (countryPref != null) {
-                        SharedPreferences.Editor countryEditor = countryPref.edit();
-                        countryEditor.putString("countryCode", countryCode.trim());
-
-                        countryEditor.commit();
-                        AsynGetPlanId asynGetPlanId = new AsynGetPlanId();
-                        asynGetPlanId.executeOnExecutor(threadPoolExecutor);
-                    }
-
-                } else {
-                    noInternetLayout.setVisibility(View.GONE);
-                    geoBlockedLayout.setVisibility(View.VISIBLE);
-                }
-            }
-
-        }
-
-        protected void onPreExecute() {
-
-        }
-    }
+//    private class AsynGetCountry extends AsyncTask<Void, Void, Void> {
+//        String responseStr;
+//        String countryCode;
+//        int status;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.loadCountryUrl.trim();
+//
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpGet httppost = new HttpGet(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("ip", ipAddressStr.trim());
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    countryCode = "";
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//                            noInternetLayout.setVisibility(View.GONE);
+//                            geoBlockedLayout.setVisibility(View.VISIBLE);
+//
+//                        }
+//                    });
+//
+//                } catch (UnsupportedEncodingException e) {
+//
+//                    countryCode = "";
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//                            noInternetLayout.setVisibility(View.GONE);
+//                            geoBlockedLayout.setVisibility(View.VISIBLE);
+//
+//                        }
+//                    });
+//
+//                } catch (IOException e) {
+//                    countryCode = "";
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//                            noInternetLayout.setVisibility(View.GONE);
+//                            geoBlockedLayout.setVisibility(View.VISIBLE);
+//
+//                        }
+//                    });
+//
+//                }
+//                if (responseStr != null) {
+//                    Object json = new JSONTokener(responseStr).nextValue();
+//                    if (json instanceof JSONObject) {
+//                        String statusStr = ((JSONObject) json).getString("code");
+//                        status = Integer.parseInt(statusStr);
+//                        if (status == 200) {
+//                            countryCode = ((JSONObject) json).getString("country");
+//                        }
+//
+//                    }
+//
+//                }
+//
+//            } catch (Exception e) {
+//                countryCode = "";
+//                runOnUiThread(new Runnable() {
+//                    public void run() {
+//                        noInternetLayout.setVisibility(View.GONE);
+//                        geoBlockedLayout.setVisibility(View.VISIBLE);
+//
+//                    }
+//                });
+//
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            if (responseStr == null) {
+//                countryCode = "";
+//                noInternetLayout.setVisibility(View.GONE);
+//                geoBlockedLayout.setVisibility(View.VISIBLE);
+//            } else {
+//                if (status > 0 && status == 200) {
+//                    if (countryPref != null) {
+//                        SharedPreferences.Editor countryEditor = countryPref.edit();
+//                        countryEditor.putString("countryCode", countryCode.trim());
+//
+//                        countryEditor.commit();
+//                        AsynGetPlanId asynGetPlanId = new AsynGetPlanId();
+//                        asynGetPlanId.executeOnExecutor(threadPoolExecutor);
+//                    }
+//
+//                } else {
+//                    noInternetLayout.setVisibility(View.GONE);
+//                    geoBlockedLayout.setVisibility(View.VISIBLE);
+//                }
+//            }
+//
+//        }
+//
+//        protected void onPreExecute() {
+//
+//        }
+//    }
 
 
     private class AsynGetPlanId extends AsyncTask<Void, Void, Void> {
