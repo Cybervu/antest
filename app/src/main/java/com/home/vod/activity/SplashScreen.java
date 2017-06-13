@@ -17,12 +17,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
+import com.home.apisdk.apiController.GetLanguageListAsynTask;
+import com.home.apisdk.apiController.GetPlanListAsynctask;
+import com.home.apisdk.apiController.IsRegistrationEnabledAsynTask;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
 import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
+import com.home.apisdk.apiModel.IsRegistrationEnabledInputModel;
+import com.home.apisdk.apiModel.IsRegistrationEnabledOutputModel;
+import com.home.apisdk.apiModel.LanguageListInputModel;
+import com.home.apisdk.apiModel.LanguageListOutputModel;
+import com.home.apisdk.apiModel.SubscriptionPlanInputModel;
+import com.home.apisdk.apiModel.SubscriptionPlanOutputModel;
+import com.home.vod.BuildConfig;
 import com.home.vod.R;
 import com.home.vod.model.LanguageModel;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
 import org.apache.http.HttpResponse;
@@ -56,7 +68,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddress, CheckGeoBlockCountryAsynTask.CheckGeoBlockForCountry{
+public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddress, CheckGeoBlockCountryAsynTask.CheckGeoBlockForCountry, GetPlanListAsynctask.GetStudioPlanLists,IsRegistrationEnabledAsynTask.IsRegistrationenabled,GetLanguageListAsynTask.GetLanguageList{
 
     String[] genreArrToSend;
     String[] genreValueArrayToSend;
@@ -67,6 +79,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     ArrayList<LanguageModel> languageModels = new ArrayList<>();
     TextView noInternetTextView;
     TextView geoTextView;
+
+
 
     String User_Id = "";
     String Email_Id = "";
@@ -95,6 +109,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        APIUrlConstant.BASE_URl= BuildConfig.SERVICE_BASE_PATH;
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.release.cmaxtv",  // replace with your unique package name
@@ -211,7 +226,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onCheckGeoBlockCountryPostExecuteCompleted(CheckGeoBlockOutputModel checkGeoBlockOutputModel, int status, String message) {
         if (checkGeoBlockOutputModel == null) {
-           // countryCode = "";
+            // countryCode = "";
             noInternetLayout.setVisibility(View.GONE);
             geoBlockedLayout.setVisibility(View.VISIBLE);
         } else {
@@ -219,10 +234,12 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 if (countryPref != null) {
                     SharedPreferences.Editor countryEditor = countryPref.edit();
                     countryEditor.putString("countryCode", checkGeoBlockOutputModel.getCountrycode().trim());
-
                     countryEditor.commit();
-                    AsynGetPlanId asynGetPlanId = new AsynGetPlanId();
-                    asynGetPlanId.executeOnExecutor(threadPoolExecutor);
+                    SubscriptionPlanInputModel planListInput=new SubscriptionPlanInputModel();
+                    planListInput.setAuthToken(Util.authTokenStr);
+                    planListInput.setLang(Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                    GetPlanListAsynctask asynGetPlanid= new GetPlanListAsynctask(planListInput,this);
+                    asynGetPlanid.executeOnExecutor(threadPoolExecutor);
                 }
 
             } else {
@@ -233,6 +250,86 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     }
 
+    @Override
+    public void onGetPlanListPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onGetPlanListPostExecuteCompleted(ArrayList<SubscriptionPlanOutputModel> planListOutput, int status) {
+        if (status > 0) {
+            if (status == 200) {
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PLAN_ID, "1");
+                LogUtil.showLog("SUBHA", "responsestring of plan id = 1");
+            } else {
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PLAN_ID, "0");
+                LogUtil.showLog("SUBHA", "responsestring of plan id = 0");
+            }
+        }
+
+        IsRegistrationEnabledInputModel isRegistrationEnabledInputModel=new IsRegistrationEnabledInputModel();
+        isRegistrationEnabledInputModel.setAuthToken(Util.authTokenStr);
+        IsRegistrationEnabledAsynTask asynIsRegistrationEnabled=new IsRegistrationEnabledAsynTask(isRegistrationEnabledInputModel,this);
+        asynIsRegistrationEnabled.executeOnExecutor(threadPoolExecutor);
+    }
+
+    @Override
+    public void onIsRegistrationenabledPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message) {
+
+        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_RESTRICT_DEVICE, isRegistrationEnabledOutputModel.getIsRestrictDevice());
+        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_ONE_STEP_REGISTRATION,""+isRegistrationEnabledOutputModel.getSignup_step());
+        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_MYLIBRARY, ""+isRegistrationEnabledOutputModel.getIsMylibrary());
+        SharedPreferences.Editor isLoginPrefEditor = isLoginPref.edit();
+        isLoginPrefEditor.putInt(Util.IS_LOGIN_PREF_KEY, isRegistrationEnabledOutputModel.getIs_login());
+
+        isLoginPrefEditor.commit();
+        LanguageListInputModel languageListInputModel=new LanguageListInputModel();
+        languageListInputModel.setAuthToken(Util.authTokenStr);
+        GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel,this);
+        asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
+
+
+            /*AsynGetGenreList asynGetGenreList = new AsynGetGenreList();
+            asynGetGenreList.executeOnExecutor(threadPoolExecutor);*/
+
+
+    }
+
+    @Override
+    public void onGetLanguageListPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
+
+
+                if (languageModels.size() == 1) {
+                    SharedPreferences.Editor countryEditor = language_list_pref.edit();
+                    countryEditor.putString("total_language", "1");
+                    countryEditor.commit();
+                }
+                if (Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, "").equalsIgnoreCase("")) {
+                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Default_Language);
+                }
+                  /*  AsynGetTransalatedLanguage asynGetGenreList = new AsynGetTransalatedLanguage();
+                    asynGetGenreList.executeOnExecutor(threadPoolExecutor);*/
+                if (!Default_Language.equals("en")) {
+                    //                  Call For Language Translation.
+                    AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
+                    asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
+
+                } else {
+                    AsynGetGenreList asynGetGenreList = new AsynGetGenreList();
+                    asynGetGenreList.executeOnExecutor(threadPoolExecutor);
+                }
+
+            }
     /*//Verify the IP
     private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
         String responseStr;
@@ -453,94 +550,94 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //    }
 
 
-    private class AsynGetPlanId extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int status;
-
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = Util.rootUrl().trim() + Util.getStudioPlanLists.trim();
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpGet httppost = new HttpGet(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("SUBHA", "responsestring of plan list = " + responseStr);
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-
-                        }
-                    });
-
-                } catch (UnsupportedEncodingException e) {
-
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-
-                        }
-                    });
-
-                } catch (IOException e) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-
-                        }
-                    });
-
-                }
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                }
-
-                if (status > 0) {
-                    if (status == 200) {
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PLAN_ID, "1");
-                        Log.v("SUBHA", "responsestring of plan id = 1");
-                    } else {
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PLAN_ID, "0");
-                        Log.v("SUBHA", "responsestring of plan id = 0");
-                    }
-                }
-
-            } catch (final Exception e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                    }
-                });
-
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            AsynIsRegistrationEnabled asynIsRegistrationEnabled = new AsynIsRegistrationEnabled();
-            asynIsRegistrationEnabled.executeOnExecutor(threadPoolExecutor);
-        }
-
-        protected void onPreExecute() {
-
-        }
-    }
+//    private class AsynGetPlanId extends AsyncTask<Void, Void, Void> {
+//        String responseStr;
+//        int status;
+//
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.getStudioPlanLists.trim();
+//
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpGet httppost = new HttpGet(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//                    Log.v("SUBHA", "responsestring of plan list = " + responseStr);
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//
+//
+//                        }
+//                    });
+//
+//                } catch (UnsupportedEncodingException e) {
+//
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//
+//
+//                        }
+//                    });
+//
+//                } catch (IOException e) {
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//
+//
+//                        }
+//                    });
+//
+//                }
+//                JSONObject myJson = null;
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    status = Integer.parseInt(myJson.optString("code"));
+//                }
+//
+//                if (status > 0) {
+//                    if (status == 200) {
+//                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PLAN_ID, "1");
+//                        Log.v("SUBHA", "responsestring of plan id = 1");
+//                    } else {
+//                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PLAN_ID, "0");
+//                        Log.v("SUBHA", "responsestring of plan id = 0");
+//                    }
+//                }
+//
+//            } catch (final Exception e) {
+//                runOnUiThread(new Runnable() {
+//                    public void run() {
+//                    }
+//                });
+//
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            AsynIsRegistrationEnabled asynIsRegistrationEnabled = new AsynIsRegistrationEnabled();
+//            asynIsRegistrationEnabled.executeOnExecutor(threadPoolExecutor);
+//        }
+//
+//        protected void onPreExecute() {
+//
+//        }
+//    }
 
     //subhashree genre
 
@@ -759,316 +856,316 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     }
 
 
-    private class AsynIsRegistrationEnabled extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int statusCode;
-        private int isLogin = 0;
-        private String IsMyLibrary = "0";
-        private String IsOneStepReg = "0";
-        private String isRestrictDevice = "0";
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl() + Util.isRegistrationEnabledurl.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-
-                        }
-
-                    });
-                    e.printStackTrace();
-                }
-
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-
-                }
-
-                if (statusCode > 0) {
-                    if (statusCode == 200) {
-                        if ((myJson.has("is_login")) && myJson.getString("is_login").trim() != null && !myJson.getString("is_login").trim().isEmpty() && !myJson.getString("is_login").trim().equals("null") && !myJson.getString("is_login").trim().matches("")) {
-                            isLogin = Integer.parseInt(myJson.getString("is_login"));
-
-
-                            IsOneStepReg = myJson.optString("signup_step");
-                            isRestrictDevice = myJson.optString("isRestrictDevice");
-
-                            Log.v("BIBHU","isRestrictDevice="+isRestrictDevice);
-
-//                            IsOneStepReg = "1";
-
-
-                            //Adder Later By Bibhu
-                            //This code is used for the 'My Library Feature'
-
-                            if (isLogin == 1)
-
-                            {
-                                if ((myJson.optString("isMylibrary")).trim().equals("1")) {
-                                    IsMyLibrary = "1";
-                                }
-                            } else {
-                                IsMyLibrary = "0";
-                            }
-
-                        } else {
-                            isLogin = 0;
-                        }
-
-                    } else {
-                        isLogin = 0;
-                    }
-                } else {
-                    responseStr = "0";
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            isLogin = 0;
-
-
-                        }
-                    });
-                }
-            } catch (JSONException e1) {
-                try {
-                } catch (IllegalArgumentException ex) {
-                    responseStr = "0";
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            isLogin = 0;
-
-
-                        }
-                    });
-                    e1.printStackTrace();
-                }
-            } catch (Exception e) {
-                try {
-
-                } catch (IllegalArgumentException ex) {
-                    responseStr = "0";
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            isLogin = 0;
-
-
-                        }
-                    });
-                    e.printStackTrace();
-                }
-
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-
-
-            try {
-
-            } catch (IllegalArgumentException e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        isLogin = 0;
-
-
-                    }
-                });
-            }
-
-            if (responseStr == null) {
-                isLogin = 0;
-
-
-            }
-            if ((responseStr.trim().equalsIgnoreCase("0"))) {
-                isLogin = 0;
-
-            }
-
-            Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_RESTRICT_DEVICE, isRestrictDevice);
-            Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_ONE_STEP_REGISTRATION, IsOneStepReg);
-            Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_MYLIBRARY, IsMyLibrary);
-            SharedPreferences.Editor isLoginPrefEditor = isLoginPref.edit();
-            isLoginPrefEditor.putInt(Util.IS_LOGIN_PREF_KEY, isLogin);
-
-            isLoginPrefEditor.commit();
-            AsynGetLanguageList asynGetLanguageList = new AsynGetLanguageList();
-            asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
-
-
-            /*AsynGetGenreList asynGetGenreList = new AsynGetGenreList();
-            asynGetGenreList.executeOnExecutor(threadPoolExecutor);*/
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-
-    }
-
-    private class AsynGetLanguageList extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int status;
-
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-//          String urlRouteList =Util.rootUrl().trim()+Util.LanguageList.trim();
-            String urlRouteList = Util.rootUrl().trim() + Util.LanguageList.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr);
-
-
-                // Execute HTTP Post Request
-                try {
-
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = (EntityUtils.toString(response.getEntity())).trim();
-                } catch (Exception e) {
-                }
-                if (responseStr != null) {
-                    JSONObject json = new JSONObject(responseStr);
-                    try {
-                        status = Integer.parseInt(json.optString("code"));
-                        Default_Language = json.optString("default_lang");
-                    } catch (Exception e) {
-                        status = 0;
-                    }
-                }
-
-            } catch (Exception e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        noInternetLayout.setVisibility(View.GONE);
-                        geoBlockedLayout.setVisibility(View.VISIBLE);
-
-                    }
-                });
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if (responseStr == null) {
-                noInternetLayout.setVisibility(View.GONE);
-                geoBlockedLayout.setVisibility(View.VISIBLE);
-            } else {
-                if (status > 0 && status == 200) {
-
-                    try {
-                        JSONObject json = new JSONObject(responseStr);
-                        JSONArray jsonArray = json.getJSONArray("lang_list");
-
-
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            String language_id = jsonArray.getJSONObject(i).optString("code").trim();
-                            String language_name = jsonArray.getJSONObject(i).optString("language").trim();
-
-
-                            LanguageModel languageModel = new LanguageModel();
-                            languageModel.setLanguageId(language_id);
-                            languageModel.setLanguageName(language_name);
-                            if (Default_Language.equalsIgnoreCase(language_id)) {
-                                languageModel.setIsSelected(true);
-
-                            } else {
-                                languageModel.setIsSelected(false);
-                            }
-
-                            languageModels.add(languageModel);
-                        }
-
-                        Util.languageModel = languageModels;
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        noInternetLayout.setVisibility(View.GONE);
-                        geoBlockedLayout.setVisibility(View.VISIBLE);
-                    }
-                    Util.languageModel = languageModels;
-
-                    if (languageModels.size() == 1) {
-                        SharedPreferences.Editor countryEditor = language_list_pref.edit();
-                        countryEditor.putString("total_language", "1");
-                        countryEditor.commit();
-                    }
-                    if (Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, "").equalsIgnoreCase("")) {
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Default_Language);
-                    }
-                  /*  AsynGetTransalatedLanguage asynGetGenreList = new AsynGetTransalatedLanguage();
-                    asynGetGenreList.executeOnExecutor(threadPoolExecutor);*/
-                    if (!Default_Language.equals("en")) {
-                        //                  Call For Language Translation.
-                        AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
-                        asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
-
-                    } else {
-                        AsynGetGenreList asynGetGenreList = new AsynGetGenreList();
-                        asynGetGenreList.executeOnExecutor(threadPoolExecutor);
-                    }
-
-                } else {
-                    noInternetLayout.setVisibility(View.GONE);
-                    geoBlockedLayout.setVisibility(View.VISIBLE);
-                }
-            }
-
-        }
-
-        protected void onPreExecute() {
-
-        }
-    }
-
-
-    private class AsynGetTransalatedLanguage extends AsyncTask<Void, Void, Void> {
+//    private class AsynIsRegistrationEnabled extends AsyncTask<Void, Void, Void> {
+//        String responseStr;
+//        int statusCode;
+//        private int isLogin = 0;
+//        private String IsMyLibrary = "0";
+//        private String IsOneStepReg = "0";
+//        private String isRestrictDevice = "0";
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(Util.rootUrl() + Util.isRegistrationEnabledurl.trim());
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//
+//                        }
+//
+//                    });
+//                    e.printStackTrace();
+//                }
+//
+//
+//                JSONObject myJson = null;
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//
+//                }
+//
+//                if (statusCode > 0) {
+//                    if (statusCode == 200) {
+//                        if ((myJson.has("is_login")) && myJson.getString("is_login").trim() != null && !myJson.getString("is_login").trim().isEmpty() && !myJson.getString("is_login").trim().equals("null") && !myJson.getString("is_login").trim().matches("")) {
+//                            isLogin = Integer.parseInt(myJson.getString("is_login"));
+//
+//
+//                            IsOneStepReg = myJson.optString("signup_step");
+//                            isRestrictDevice = myJson.optString("isRestrictDevice");
+//
+//                            Log.v("BIBHU","isRestrictDevice="+isRestrictDevice);
+//
+////                            IsOneStepReg = "1";
+//
+//
+//                            //Adder Later By Bibhu
+//                            //This code is used for the 'My Library Feature'
+//
+//                            if (isLogin == 1)
+//
+//                            {
+//                                if ((myJson.optString("isMylibrary")).trim().equals("1")) {
+//                                    IsMyLibrary = "1";
+//                                }
+//                            } else {
+//                                IsMyLibrary = "0";
+//                            }
+//
+//                        } else {
+//                            isLogin = 0;
+//                        }
+//
+//                    } else {
+//                        isLogin = 0;
+//                    }
+//                } else {
+//                    responseStr = "0";
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                            isLogin = 0;
+//
+//
+//                        }
+//                    });
+//                }
+//            } catch (JSONException e1) {
+//                try {
+//                } catch (IllegalArgumentException ex) {
+//                    responseStr = "0";
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                            isLogin = 0;
+//
+//
+//                        }
+//                    });
+//                    e1.printStackTrace();
+//                }
+//            } catch (Exception e) {
+//                try {
+//
+//                } catch (IllegalArgumentException ex) {
+//                    responseStr = "0";
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                            isLogin = 0;
+//
+//
+//                        }
+//                    });
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//            return null;
+//
+//        }
+//
+//        protected void onPostExecute(Void result) {
+//
+//
+//            try {
+//
+//            } catch (IllegalArgumentException e) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        isLogin = 0;
+//
+//
+//                    }
+//                });
+//            }
+//
+//            if (responseStr == null) {
+//                isLogin = 0;
+//
+//
+//            }
+//            if ((responseStr.trim().equalsIgnoreCase("0"))) {
+//                isLogin = 0;
+//
+//            }
+//
+//            Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_RESTRICT_DEVICE, isRestrictDevice);
+//            Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_ONE_STEP_REGISTRATION, IsOneStepReg);
+//            Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_MYLIBRARY, IsMyLibrary);
+//            SharedPreferences.Editor isLoginPrefEditor = isLoginPref.edit();
+//            isLoginPrefEditor.putInt(Util.IS_LOGIN_PREF_KEY, isLogin);
+//
+//            isLoginPrefEditor.commit();
+//            AsynGetLanguageList asynGetLanguageList = new AsynGetLanguageList();
+//            asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
+//
+//
+//            /*AsynGetGenreList asynGetGenreList = new AsynGetGenreList();
+//            asynGetGenreList.executeOnExecutor(threadPoolExecutor);*/
+//
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//
+//        }
+//
+//
+//    }
+
+//    private class AsynGetLanguageList extends AsyncTask<Void, Void, Void> {
+//        String responseStr;
+//        int status;
+//
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+////          String urlRouteList =Util.rootUrl().trim()+Util.LanguageList.trim();
+//            String urlRouteList = Util.rootUrl().trim() + Util.LanguageList.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr);
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//
+//
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = (EntityUtils.toString(response.getEntity())).trim();
+//                } catch (Exception e) {
+//                }
+//                if (responseStr != null) {
+//                    JSONObject json = new JSONObject(responseStr);
+//                    try {
+//                        status = Integer.parseInt(json.optString("code"));
+//                        Default_Language = json.optString("default_lang");
+//                    } catch (Exception e) {
+//                        status = 0;
+//                    }
+//                }
+//
+//            } catch (Exception e) {
+//                runOnUiThread(new Runnable() {
+//                    public void run() {
+//                        noInternetLayout.setVisibility(View.GONE);
+//                        geoBlockedLayout.setVisibility(View.VISIBLE);
+//
+//                    }
+//                });
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            if (responseStr == null) {
+//                noInternetLayout.setVisibility(View.GONE);
+//                geoBlockedLayout.setVisibility(View.VISIBLE);
+//            } else {
+//                if (status > 0 && status == 200) {
+//
+//                    try {
+//                        JSONObject json = new JSONObject(responseStr);
+//                        JSONArray jsonArray = json.getJSONArray("lang_list");
+//
+//
+//                        for (int i = 0; i < jsonArray.length(); i++) {
+//                            String language_id = jsonArray.getJSONObject(i).optString("code").trim();
+//                            String language_name = jsonArray.getJSONObject(i).optString("language").trim();
+//
+//
+//                            LanguageModel languageModel = new LanguageModel();
+//                            languageModel.setLanguageId(language_id);
+//                            languageModel.setLanguageName(language_name);
+//                            if (Default_Language.equalsIgnoreCase(language_id)) {
+//                                languageModel.setIsSelected(true);
+//
+//                            } else {
+//                                languageModel.setIsSelected(false);
+//                            }
+//
+//                            languageModels.add(languageModel);
+//                        }
+//
+//                        Util.languageModel = languageModels;
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                        noInternetLayout.setVisibility(View.GONE);
+//                        geoBlockedLayout.setVisibility(View.VISIBLE);
+//                    }
+//                    Util.languageModel = languageModels;
+//
+//                    if (languageModels.size() == 1) {
+//                        SharedPreferences.Editor countryEditor = language_list_pref.edit();
+//                        countryEditor.putString("total_language", "1");
+//                        countryEditor.commit();
+//                    }
+//                    if (Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, "").equalsIgnoreCase("")) {
+//                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Default_Language);
+//                    }
+//                  /*  AsynGetTransalatedLanguage asynGetGenreList = new AsynGetTransalatedLanguage();
+//                    asynGetGenreList.executeOnExecutor(threadPoolExecutor);*/
+//                    if (!Default_Language.equals("en")) {
+//                        //                  Call For Language Translation.
+//                        AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
+//                        asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
+//
+//                    } else {
+//                        AsynGetGenreList asynGetGenreList = new AsynGetGenreList();
+//                        asynGetGenreList.executeOnExecutor(threadPoolExecutor);
+//                    }
+//
+//                } else {
+//                    noInternetLayout.setVisibility(View.GONE);
+//                    geoBlockedLayout.setVisibility(View.VISIBLE);
+//                }
+//            }
+//
+//        }
+//
+//        protected void onPreExecute() {
+//
+//        }
+//    }
+
+
+    private class  AsynGetTransalatedLanguage extends AsyncTask<Void, Void, Void> {
         String responseStr;
         int status;
 
@@ -1430,11 +1527,11 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
                         Log.v("BIBHU2", "google_id=" + Util.getTextofLanguage(SplashScreen.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
 
-                            Intent i = new Intent(SplashScreen.this, MainActivity.class);
-                            i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(i);
-                            finish();
-                            overridePendingTransition(0,0);
+                        Intent i = new Intent(SplashScreen.this, MainActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(i);
+                        finish();
+                        overridePendingTransition(0,0);
 
                         String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
 
