@@ -56,7 +56,7 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
 
             // Execute HTTP Post Request
             try {
-                URL url = new URL(APIUrlConstant.VALIDATE_USER_FOR_CONTENT_URL);
+                URL url = new URL(APIUrlConstant.getValidateUserForContentUrl());
                 HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
                 conn.setReadTimeout(10000);
                 conn.setConnectTimeout(20000);

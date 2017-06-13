@@ -55,7 +55,7 @@ public class GetFeatureContentAsynTask extends AsyncTask<FeatureContentInputMode
 
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(APIUrlConstant.GET_FEATURE_CONTENT_URL);
+                HttpPost httppost = new HttpPost(APIUrlConstant.getGetFeatureContentUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
                 httppost.addHeader("authToken", this.featureContentInputModel.getAuthToken());

@@ -52,7 +52,7 @@ public class GetInvoicePdfAsynTask extends AsyncTask<GetInvoicePdfInputModel,Voi
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.GET_INVOICE_PDF_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getGetInvoicePdfUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader("authToken", this.getInvoicePdfInputModel.getAuthToken());

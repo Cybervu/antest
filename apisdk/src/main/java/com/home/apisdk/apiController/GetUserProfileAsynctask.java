@@ -53,7 +53,7 @@ public class GetUserProfileAsynctask extends AsyncTask<Get_UserProfile_Input,Voi
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.GET_PROFILE_DETAILS_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getGetProfileDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader("authToken", this.get_userProfile_input.getAuthToken());

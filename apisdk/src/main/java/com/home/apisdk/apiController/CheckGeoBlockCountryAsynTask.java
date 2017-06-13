@@ -54,8 +54,8 @@ public class CheckGeoBlockCountryAsynTask extends AsyncTask<CheckGeoBlockInputMo
 
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                String url = APIUrlConstant.CHECK_GEO_BLOCK_URL;
-                HttpPost httppost = new HttpPost(APIUrlConstant.CHECK_GEO_BLOCK_URL);
+                String url = APIUrlConstant.getCheckGeoBlockUrl();
+                HttpPost httppost = new HttpPost(url);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
                 httppost.addHeader("authToken", this.checkGeoBlockInputModel.getAuthToken());

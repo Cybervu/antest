@@ -52,7 +52,7 @@ public class DeleteInvoicePdfAsynTask extends AsyncTask<DeleteInvoicePdfInputMod
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.DELETE_INVOICE_PDF_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getDeleteInvoicePdfUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader("authToken", this.deleteInvoicePdfInputModel.getAuthToken());

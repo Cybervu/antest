@@ -58,7 +58,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
 
             try {
                 HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(APIUrlConstant.CONTENT_DETAILS_URL);
+                HttpPost httppost = new HttpPost(APIUrlConstant.getContentDetailsUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", this.contentDetailsInput.getAuthToken());
                 httppost.addHeader("permalink",this.contentDetailsInput.getPermalink());

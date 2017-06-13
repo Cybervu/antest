@@ -53,7 +53,7 @@ public class VoucherSubscriptionAsyntask extends AsyncTask<VoucherSubscriptionIn
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.VOUCHER_SUBSCRIPTION_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getVoucherSubscriptionUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader("authToken", this.voucherSubscriptionInputModel.getAuthToken());

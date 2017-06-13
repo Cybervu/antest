@@ -53,7 +53,7 @@ public class RegisterUserPaymentAsyntask extends AsyncTask<RegisterUserPaymentIn
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.REGISTER_USER_PAYMENT_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getRegisterUserPaymentUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader("authToken", this.registerUserPaymentInputModel.getAuthToken());

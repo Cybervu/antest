@@ -52,7 +52,7 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
 
         try {
             HttpClient httpclient=new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.SOCIALAUTH_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getSocialauthUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader("authToken", this.socialAuthInputModel.getAuthToken());
             httppost.addHeader("email", this.socialAuthInputModel.getEmail());

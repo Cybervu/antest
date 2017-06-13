@@ -54,7 +54,7 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
 
         try {
             HttpClient httpclient=new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.TRANSACTION_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getTransactionUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader("authToken", this.transactionInputModel.getAuthToken());
             httppost.addHeader("user_id",this.transactionInputModel.getUser_id());

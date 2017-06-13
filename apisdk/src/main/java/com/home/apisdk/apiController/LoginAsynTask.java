@@ -53,7 +53,7 @@ public class LoginAsynTask extends AsyncTask<Login_input, Void, Void> {
 
         try {
             HttpClient httpclient=new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.LOGIN_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getLoginUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader("authToken", this.login_input.getAuthToken());
             httppost.addHeader("email", this.login_input.getEmail());

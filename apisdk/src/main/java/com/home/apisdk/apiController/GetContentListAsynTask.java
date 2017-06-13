@@ -57,7 +57,7 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
 
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(APIUrlConstant.GET_CONTENT_LIST_URL);
+                HttpPost httppost = new HttpPost(APIUrlConstant.getGetContentListUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
                 httppost.addHeader("authToken", this.contentListInput.getAuthToken());

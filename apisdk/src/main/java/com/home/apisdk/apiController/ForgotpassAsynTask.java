@@ -56,7 +56,7 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
 
         try {
             HttpClient httpclient=new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.FORGOT_PASSWORD_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getForgotPasswordUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader("authToken", this.forgotpassword_input.getAuthToken());
             httppost.addHeader("email", this.forgotpassword_input.getEmail());
