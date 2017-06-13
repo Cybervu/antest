@@ -52,7 +52,7 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput,Void ,
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.VIDEO_DETAILS_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getVideoDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader("authToken", this.getVideoDetailsInput.getAuthToken());

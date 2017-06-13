@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * Created by MUVI on 1/20/2017.
  */
 
-public class GetPlanListAsynctask extends AsyncTask<SubscriptionPlanInputModel,Void ,Void > {
+public class  GetPlanListAsynctask extends AsyncTask<SubscriptionPlanInputModel,Void ,Void > {
 
     public SubscriptionPlanInputModel planListInput;
     String PACKAGE_NAME,message,responseStr;
@@ -56,10 +56,11 @@ public class GetPlanListAsynctask extends AsyncTask<SubscriptionPlanInputModel,V
         Log.v("SUBHA","doInbkg....");
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.SUBSCRIPTION_PLAN_LISTS);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getSubscriptionPlanLists());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader("authToken", this.planListInput.getAuthToken());
+            httppost.addHeader("lang_code",this.planListInput.getLang());
 
             Log.v("SUBHA","authToken = "+ this.planListInput.getAuthToken());
             // Execute HTTP Post Request

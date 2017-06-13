@@ -7,6 +7,16 @@ package com.home.apisdk.apiModel;
 public class SubscriptionPlanInputModel {
      String authToken ;
 
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    String lang;
+
     public String getAuthToken() {
         return authToken;
     }

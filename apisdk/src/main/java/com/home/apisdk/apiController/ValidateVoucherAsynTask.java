@@ -52,7 +52,7 @@ public class ValidateVoucherAsynTask extends AsyncTask<ValidateVoucherInputModel
 
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(APIUrlConstant.VALIDATE_VOUCHER_URL);
+                HttpPost httppost = new HttpPost(APIUrlConstant.getValidateVoucherUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
                 httppost.addHeader("authToken", this.validateVoucherInputModel.getAuthToken());

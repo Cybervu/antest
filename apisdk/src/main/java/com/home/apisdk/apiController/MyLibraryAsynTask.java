@@ -56,7 +56,7 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
 
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(APIUrlConstant.MYLIBRARY_URL);
+                HttpPost httppost = new HttpPost(APIUrlConstant.getMylibraryUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
                 httppost.addHeader("authToken", this.myLibraryInputModel.getAuthToken());

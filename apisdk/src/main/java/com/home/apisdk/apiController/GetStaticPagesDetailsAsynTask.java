@@ -53,7 +53,7 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.GETSTATICPAGES_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getGetstaticpagesUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader("authToken", this.getStaticPagesDeatilsModelInput.getAuthToken());

@@ -57,7 +57,7 @@ public class GetVideoLogsAsynTask extends AsyncTask<VideoLogsInputModel, Void, V
 
             // Execute HTTP Post Request
             try {
-                URL url = new URL(APIUrlConstant.VIDEO_LOGS_URL);
+                URL url = new URL(APIUrlConstant.getVideoLogsUrl());
                 HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
                 conn.setReadTimeout(10000);
                 conn.setConnectTimeout(15000);

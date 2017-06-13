@@ -59,7 +59,7 @@ public class GetLanguageListAsynTask extends AsyncTask<LanguageListInputModel, V
             try {
 
                 try {
-                    URL url = new URL(APIUrlConstant.GET_LANGUAGE_LIST_URL);
+                    URL url = new URL(APIUrlConstant.getGetLanguageListUrl());
                     HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
                     conn.setReadTimeout(10000);
                     conn.setConnectTimeout(15000);

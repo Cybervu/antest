@@ -56,7 +56,7 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
 
         try {
             HttpClient httpclient=new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.GET_EPISODE_DETAILS_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getGetEpisodeDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader("authToken", this.episode_details_input.getAuthtoken());
             httppost.addHeader("permalink", this.episode_details_input.getPermalink());

@@ -54,7 +54,7 @@ public class GetMonetizationDetailsAsynctask extends AsyncTask<GetMonetizationDe
 
         try {
             HttpClient httpclient=new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.GET_MONETIZATION_DETAILS_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getGetMonetizationDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader("authToken", this.getMonetizationDetailsInputModel.getAuthToken());
             httppost.addHeader("user_id",this.getMonetizationDetailsInputModel.getUser_id());

@@ -56,7 +56,7 @@ public class GetCardListForPPVAsynTask extends AsyncTask<GetCardListForPPVInputM
 
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(APIUrlConstant.GET_CARD_LIST_FOR_PPV_URL);
+                HttpPost httppost = new HttpPost(APIUrlConstant.getGetCardListForPpvUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
                 httppost.addHeader("authToken", this.getCardListForPPVInputModel.getAuthToken());

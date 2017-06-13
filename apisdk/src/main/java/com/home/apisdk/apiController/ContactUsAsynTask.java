@@ -52,7 +52,7 @@ public class ContactUsAsynTask extends AsyncTask<ContactUsInputModel,Void ,Void 
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.CONTACT_US_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getContactUsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader("authToken", this.contactUsInputModel.getAuthToken());

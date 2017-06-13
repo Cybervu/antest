@@ -53,7 +53,7 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.AUTH_USER_PAYMENT_INFO_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getAuthUserPaymentInfoUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader("authToken", this.authUserPaymentInfoInputModel.getAuthToken());

@@ -47,7 +47,7 @@ public class GetIpAddressAsynTask extends AsyncTask<Void,Void ,Void > {
 
             // Execute HTTP Post Request
             try {
-                URL url = new URL(APIUrlConstant.IP_ADDRESS_URL);
+                URL url = new URL(APIUrlConstant.getIpAddressUrl());
                 HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
                 InputStream ins = con.getInputStream();
                 InputStreamReader isr = new InputStreamReader(ins);

@@ -6,10 +6,20 @@ package com.home.apisdk.apiModel;
 
 public class IsRegistrationEnabledOutputModel {
 
-    int isMylibrary;
-    int is_login;
-    int signup_step;
-    int has_favourite;
+    int isMylibrary = 0;
+    int is_login =0;
+    int signup_step =0;
+    int has_favourite=0;
+
+    public String getIsRestrictDevice() {
+        return isRestrictDevice;
+    }
+
+    public void setIsRestrictDevice(String isRestrictDevice) {
+        this.isRestrictDevice = isRestrictDevice;
+    }
+
+    String isRestrictDevice;
 
     public int getIsMylibrary() {
         return isMylibrary;

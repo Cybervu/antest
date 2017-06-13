@@ -54,7 +54,7 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
 
         try {
             HttpClient httpclient=new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.REGISTER_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getRegisterUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader("authToken", this.registration_input.getAuthToken());
             httppost.addHeader("email", this.registration_input.getEmail());

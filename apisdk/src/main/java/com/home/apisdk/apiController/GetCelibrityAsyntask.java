@@ -55,7 +55,7 @@ public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel,Void ,Vo
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.GET_CELIBRITY_URL);
+            HttpPost httppost = new HttpPost(APIUrlConstant.getGetCelibrityUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader("authToken", this.celibrityInputModel.getAuthToken());
