@@ -44,7 +44,6 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
         PACKAGE_NAME=context.getPackageName();
         Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
         Log.v("SUBHA","register user payment");
-
     }
 
     @Override

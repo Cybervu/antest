@@ -19,12 +19,15 @@ import android.widget.TextView;
 
 import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
+import com.home.apisdk.apiController.GetGenreListAsynctask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetPlanListAsynctask;
 import com.home.apisdk.apiController.IsRegistrationEnabledAsynTask;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
 import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
+import com.home.apisdk.apiModel.GenreListInput;
+import com.home.apisdk.apiModel.GenreListOutput;
 import com.home.apisdk.apiModel.IsRegistrationEnabledInputModel;
 import com.home.apisdk.apiModel.IsRegistrationEnabledOutputModel;
 import com.home.apisdk.apiModel.LanguageListInputModel;
@@ -47,14 +50,9 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -66,21 +64,25 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.HttpsURLConnection;
-
-public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddress, CheckGeoBlockCountryAsynTask.CheckGeoBlockForCountry, GetPlanListAsynctask.GetStudioPlanLists,IsRegistrationEnabledAsynTask.IsRegistrationenabled,GetLanguageListAsynTask.GetLanguageList{
+public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddress,
+        CheckGeoBlockCountryAsynTask.CheckGeoBlockForCountry,
+        GetPlanListAsynctask.GetStudioPlanLists,
+        IsRegistrationEnabledAsynTask.IsRegistrationenabled,
+        GetLanguageListAsynTask.GetLanguageList,
+        GetGenreListAsynctask.GenreList{
 
     String[] genreArrToSend;
     String[] genreValueArrayToSend;
 
     RelativeLayout noInternetLayout;
     RelativeLayout geoBlockedLayout;
-    String Default_Language = "";
+    String default_Language = "";
     ArrayList<LanguageModel> languageModels = new ArrayList<>();
     TextView noInternetTextView;
     TextView geoTextView;
 
-
+    ArrayList<String> genreArrayList = new ArrayList<String>();
+    ArrayList<String> genreValueArrayList = new ArrayList<String>();
 
     String User_Id = "";
     String Email_Id = "";
@@ -109,7 +111,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        APIUrlConstant.BASE_URl= BuildConfig.SERVICE_BASE_PATH;
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.release.cmaxtv",  // replace with your unique package name
@@ -293,11 +294,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel,this);
         asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
 
-
-            /*AsynGetGenreList asynGetGenreList = new AsynGetGenreList();
-            asynGetGenreList.executeOnExecutor(threadPoolExecutor);*/
-
-
     }
 
     @Override
@@ -308,28 +304,153 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
 
+        this.default_Language=defaultLanguage;
+        for (int i = 0; i <languageListOutputArray.size(); i++) {
 
-                if (languageModels.size() == 1) {
-                    SharedPreferences.Editor countryEditor = language_list_pref.edit();
-                    countryEditor.putString("total_language", "1");
-                    countryEditor.commit();
-                }
-                if (Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, "").equalsIgnoreCase("")) {
-                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Default_Language);
-                }
-                  /*  AsynGetTransalatedLanguage asynGetGenreList = new AsynGetTransalatedLanguage();
-                    asynGetGenreList.executeOnExecutor(threadPoolExecutor);*/
-                if (!Default_Language.equals("en")) {
-                    //                  Call For Language Translation.
-                    AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
-                    asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
+            LanguageModel languageModel = new LanguageModel();
+            languageModel.setLanguageId(languageListOutputArray.get(i).getLanguageCode());
+            languageModel.setLanguageName(languageListOutputArray.get(i).getLanguageName());
+            if (defaultLanguage.equalsIgnoreCase(languageListOutputArray.get(i).getLanguageCode())) {
+                languageModel.setIsSelected(true);
 
-                } else {
-                    AsynGetGenreList asynGetGenreList = new AsynGetGenreList();
-                    asynGetGenreList.executeOnExecutor(threadPoolExecutor);
-                }
+            } else {
+                languageModel.setIsSelected(false);
+            }
+
+            languageModels.add(languageModel);
+        }
+
+        Util.languageModel=languageModels;
+
+
+
+        if (languageModels.size() == 1) {
+            SharedPreferences.Editor countryEditor = language_list_pref.edit();
+            countryEditor.putString("total_language", "1");
+            countryEditor.commit();
+        }
+        if (Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, "").equalsIgnoreCase("")) {
+            Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, defaultLanguage);
+        }
+
+        //                  Call For Language Translation.
+        AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
+        asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
+
+
+    }
+
+    @Override
+    public void onGetGenreListPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onGetGenreListPostExecuteCompleted(ArrayList<GenreListOutput> genreListOutput, int code, String status) {
+        if (code > 0) {
+            int lengthJsonArr = genreListOutput.size();
+            if (lengthJsonArr > 0) {
+                genreArrayList.add(0, Util.getTextofLanguage(SplashScreen.this, Util.FILTER_BY, Util.DEFAULT_FILTER_BY));
+                genreValueArrayList.add(0, "");
 
             }
+            for (int i = 0; i < lengthJsonArr; i++) {
+                genreArrayList.add(genreListOutput.get(i).getGenre_name());
+                genreValueArrayList.add(genreListOutput.get(i).getGenre_name());
+
+
+            }
+
+            if (genreArrayList.size() > 1) {
+
+                genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_BY, Util.DEFAULT_SORT_BY));
+                genreValueArrayList.add(genreValueArrayList.size(), "");
+
+
+                genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_LAST_UPLOADED, Util.DEFAULT_SORT_LAST_UPLOADED));
+                genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
+
+                genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_RELEASE_DATE, Util.DEFAULT_SORT_RELEASE_DATE));
+                genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
+
+                genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_ALPHA_A_Z, Util.DEFAULT_SORT_ALPHA_A_Z));
+                genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
+
+                genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_ALPHA_Z_A, Util.DEFAULT_SORT_ALPHA_Z_A));
+                genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
+
+
+            }
+            genreArrToSend = new String[genreArrayList.size()];
+            genreArrToSend = genreArrayList.toArray(genreArrToSend);
+
+
+            genreValueArrayToSend = new String[genreValueArrayList.size()];
+            genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
+        } else {
+            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_BY, Util.DEFAULT_SORT_BY));
+            genreValueArrayList.add(genreValueArrayList.size(), "");
+
+
+            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_LAST_UPLOADED, Util.DEFAULT_SORT_LAST_UPLOADED));
+            genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
+
+            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_RELEASE_DATE, Util.DEFAULT_SORT_RELEASE_DATE));
+            genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
+
+            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_ALPHA_A_Z, Util.DEFAULT_SORT_ALPHA_A_Z));
+            genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
+
+            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_ALPHA_Z_A, Util.DEFAULT_SORT_ALPHA_Z_A));
+            genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
+
+            genreArrToSend = new String[genreArrayList.size()];
+            genreArrToSend = genreArrayList.toArray(genreArrToSend);
+
+
+            genreValueArrayToSend = new String[genreValueArrayList.size()];
+            genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
+
+        }
+
+        SharedPreferences.Editor isLoginPrefEditor = isLoginPref.edit();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < genreArrToSend.length; i++) {
+            sb.append(genreArrToSend[i]).append(",");
+        }
+        isLoginPrefEditor.putString(Util.GENRE_ARRAY_PREF_KEY, sb.toString());
+        StringBuilder sb1 = new StringBuilder();
+        for (int i = 0; i < genreValueArrayToSend.length; i++) {
+            sb1.append(genreValueArrayToSend[i]).append(",");
+        }
+        isLoginPrefEditor.putString(Util.GENRE_VALUES_ARRAY_PREF_KEY, sb1.toString());
+        isLoginPrefEditor.commit();
+
+        // This Code Is Done For The One Step Registration.
+
+
+        if ((Util.getTextofLanguage(SplashScreen.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
+                .trim()).equals("1")) {
+
+            if (pref != null) {
+                User_Id = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+                Email_Id = pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
+
+                if (User_Id != null && Email_Id != null) {
+
+                    AsynLoadProfileDetails asynLoadProfileDetails = new AsynLoadProfileDetails();
+                    asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
+
+                } else {
+                    Call_One_Step_Procedure();
+                }
+            } else {
+                Call_One_Step_Procedure();
+            }
+        } else {
+            Call_One_Step_Procedure();
+        }
+    }
     /*//Verify the IP
     private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
         String responseStr;
@@ -641,219 +762,220 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     //subhashree genre
 
-    private class AsynGetGenreList extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int status;
-        ArrayList<String> genreArrayList = new ArrayList<String>();
-        ArrayList<String> genreValueArrayList = new ArrayList<String>();
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = Util.rootUrl().trim() + Util.getGenreListUrl.trim();
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpGet httppost = new HttpGet(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-
-                        }
-                    });
-
-                } catch (UnsupportedEncodingException e) {
-
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-
-                        }
-                    });
-
-                } catch (IOException e) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-
-                        }
-                    });
-
-                }
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                }
-
-                if (status > 0) {
-                    if (status == 200) {
-
-                        JSONArray jsonMainNode = myJson.getJSONArray("genre_list");
-
-                        int lengthJsonArr = jsonMainNode.length();
-                        if (lengthJsonArr > 0) {
-                            genreArrayList.add(0, Util.getTextofLanguage(SplashScreen.this, Util.FILTER_BY, Util.DEFAULT_FILTER_BY));
-                            genreValueArrayList.add(0, "");
-
-                        }
-                        for (int i = 0; i < lengthJsonArr; i++) {
-                            genreArrayList.add(jsonMainNode.get(i).toString());
-                            genreValueArrayList.add(jsonMainNode.get(i).toString());
-
-
-                        }
-
-                        if (genreArrayList.size() > 1) {
-
-                            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_BY, Util.DEFAULT_SORT_BY));
-                            genreValueArrayList.add(genreValueArrayList.size(), "");
-
-
-                            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_LAST_UPLOADED, Util.DEFAULT_SORT_LAST_UPLOADED));
-                            genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
-
-                            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_RELEASE_DATE, Util.DEFAULT_SORT_RELEASE_DATE));
-                            genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
-
-                            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_ALPHA_A_Z, Util.DEFAULT_SORT_ALPHA_A_Z));
-                            genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
-
-                            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_ALPHA_Z_A, Util.DEFAULT_SORT_ALPHA_Z_A));
-                            genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
-
-
-                        }
-
-                    } else {
-                        responseStr = "0";
-
-                    }
-                }
-
-            } catch (final Exception e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                    }
-                });
-
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if (responseStr == null) {
-
-            } else {
-                if (status > 0 && status == 200) {
-                    genreArrToSend = new String[genreArrayList.size()];
-                    genreArrToSend = genreArrayList.toArray(genreArrToSend);
-
-
-                    genreValueArrayToSend = new String[genreValueArrayList.size()];
-                    genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
-
-
-                } else {
-                   /* genreArrToSend = new String[0];
-                    genreArrToSend = genreArrayList.toArray(genreArrToSend);
-
-
-                    genreValueArrayToSend = new String[0];
-                    genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);*/
-
-
-                    genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_BY, Util.DEFAULT_SORT_BY));
-                    genreValueArrayList.add(genreValueArrayList.size(), "");
-
-
-                    genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_LAST_UPLOADED, Util.DEFAULT_SORT_LAST_UPLOADED));
-                    genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
-
-                    genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_RELEASE_DATE, Util.DEFAULT_SORT_RELEASE_DATE));
-                    genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
-
-                    genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_ALPHA_A_Z, Util.DEFAULT_SORT_ALPHA_A_Z));
-                    genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
-
-                    genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_ALPHA_Z_A, Util.DEFAULT_SORT_ALPHA_Z_A));
-                    genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
-
-                    genreArrToSend = new String[genreArrayList.size()];
-                    genreArrToSend = genreArrayList.toArray(genreArrToSend);
-
-
-                    genreValueArrayToSend = new String[genreValueArrayList.size()];
-                    genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
-
-
-                }
-
-            }
-
-            SharedPreferences.Editor isLoginPrefEditor = isLoginPref.edit();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < genreArrToSend.length; i++) {
-                sb.append(genreArrToSend[i]).append(",");
-            }
-            isLoginPrefEditor.putString(Util.GENRE_ARRAY_PREF_KEY, sb.toString());
-            StringBuilder sb1 = new StringBuilder();
-            for (int i = 0; i < genreValueArrayToSend.length; i++) {
-                sb1.append(genreValueArrayToSend[i]).append(",");
-            }
-            isLoginPrefEditor.putString(Util.GENRE_VALUES_ARRAY_PREF_KEY, sb1.toString());
-            isLoginPrefEditor.commit();
-
-            // This Code Is Done For The One Step Registration.
-
-
-            if ((Util.getTextofLanguage(SplashScreen.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
-                    .trim()).equals("1")) {
-
-                if (pref != null) {
-                    User_Id = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-                    Email_Id = pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
-
-                    if (User_Id != null && Email_Id != null) {
-
-                        AsynLoadProfileDetails asynLoadProfileDetails = new AsynLoadProfileDetails();
-                        asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
-
-                    } else {
-                        Call_One_Step_Procedure();
-                    }
-                } else {
-                    Call_One_Step_Procedure();
-                }
-            } else {
-                Call_One_Step_Procedure();
-            }
-
-            // ==============End=====================//
-
-
-//            Call_One_Step_Procedure(); // Have To Change
-
-        }
-
-        protected void onPreExecute() {
-
-        }
-    }
+//    private class AsynGetGenreList extends AsyncTask<Void, Void, Void> {
+//        String responseStr;
+//        int status;
+//        ArrayList<String> genreArrayList = new ArrayList<String>();
+//        ArrayList<String> genreValueArrayList = new ArrayList<String>();
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.getGenreListUrl.trim();
+//
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpGet httppost = new HttpGet(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//
+//
+//                        }
+//                    });
+//
+//                } catch (UnsupportedEncodingException e) {
+//
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//
+//
+//                        }
+//                    });
+//
+//                } catch (IOException e) {
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//
+//
+//                        }
+//                    });
+//
+//                }
+//                JSONObject myJson = null;
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    status = Integer.parseInt(myJson.optString("code"));
+//                }
+//
+//                if (status > 0) {
+//                    if (status == 200) {
+//
+//                        JSONArray jsonMainNode = myJson.getJSONArray("genre_list");
+//
+//                        int lengthJsonArr = jsonMainNode.length();
+//                        if (lengthJsonArr > 0) {
+//                            genreArrayList.add(0, Util.getTextofLanguage(SplashScreen.this, Util.FILTER_BY, Util.DEFAULT_FILTER_BY));
+//                            genreValueArrayList.add(0, "");
+//
+//                        }
+//                        for (int i = 0; i < lengthJsonArr; i++) {
+//                            genreArrayList.add(jsonMainNode.get(i).toString());
+//                            genreValueArrayList.add(jsonMainNode.get(i).toString());
+//
+//
+//                        }
+//
+//                        if (genreArrayList.size() > 1) {
+//
+//                            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_BY, Util.DEFAULT_SORT_BY));
+//                            genreValueArrayList.add(genreValueArrayList.size(), "");
+//
+//
+//                            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_LAST_UPLOADED, Util.DEFAULT_SORT_LAST_UPLOADED));
+//                            genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
+//
+//                            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_RELEASE_DATE, Util.DEFAULT_SORT_RELEASE_DATE));
+//                            genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
+//
+//                            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_ALPHA_A_Z, Util.DEFAULT_SORT_ALPHA_A_Z));
+//                            genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
+//
+//                            genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_ALPHA_Z_A, Util.DEFAULT_SORT_ALPHA_Z_A));
+//                            genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
+//
+//
+//                        }
+//
+//                    } else {
+//                        responseStr = "0";
+//
+//                    }
+//                }
+//
+//            } catch (final Exception e) {
+//                runOnUiThread(new Runnable() {
+//                    public void run() {
+//                    }
+//                });
+//
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            if (responseStr == null) {
+//
+//            } else {
+//                if (status > 0 && status == 200) {
+//                    genreArrToSend = new String[genreArrayList.size()];
+//                    genreArrToSend = genreArrayList.toArray(genreArrToSend);
+//
+//
+//                    genreValueArrayToSend = new String[genreValueArrayList.size()];
+//                    genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
+//
+//
+//                } else {
+//                   /* genreArrToSend = new String[0];
+//                    genreArrToSend = genreArrayList.toArray(genreArrToSend);
+//
+//
+//                    genreValueArrayToSend = new String[0];
+//                    genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);*/
+//
+//
+//                    genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_BY, Util.DEFAULT_SORT_BY));
+//                    genreValueArrayList.add(genreValueArrayList.size(), "");
+//
+//
+//                    genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_LAST_UPLOADED, Util.DEFAULT_SORT_LAST_UPLOADED));
+//                    genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
+//
+//                    genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_RELEASE_DATE, Util.DEFAULT_SORT_RELEASE_DATE));
+//                    genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
+//
+//                    genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_ALPHA_A_Z, Util.DEFAULT_SORT_ALPHA_A_Z));
+//                    genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
+//
+//                    genreArrayList.add(genreArrayList.size(), Util.getTextofLanguage(SplashScreen.this, Util.SORT_ALPHA_Z_A, Util.DEFAULT_SORT_ALPHA_Z_A));
+//                    genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
+//
+//                    genreArrToSend = new String[genreArrayList.size()];
+//                    genreArrToSend = genreArrayList.toArray(genreArrToSend);
+//
+//
+//                    genreValueArrayToSend = new String[genreValueArrayList.size()];
+//                    genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
+//
+//
+//                }
+//
+//            }
+//
+//            SharedPreferences.Editor isLoginPrefEditor = isLoginPref.edit();
+//            StringBuilder sb = new StringBuilder();
+//            for (int i = 0; i < genreArrToSend.length; i++) {
+//                sb.append(genreArrToSend[i]).append(",");
+//            }
+//            isLoginPrefEditor.putString(Util.GENRE_ARRAY_PREF_KEY, sb.toString());
+//            StringBuilder sb1 = new StringBuilder();
+//            for (int i = 0; i < genreValueArrayToSend.length; i++) {
+//                sb1.append(genreValueArrayToSend[i]).append(",");
+//            }
+//            isLoginPrefEditor.putString(Util.GENRE_VALUES_ARRAY_PREF_KEY, sb1.toString());
+//            isLoginPrefEditor.commit();
+//
+//            // This Code Is Done For The One Step Registration.
+//
+//
+//            if ((Util.getTextofLanguage(SplashScreen.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
+//                    .trim()).equals("1")) {
+//
+//                if (pref != null) {
+//                    User_Id = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+//                    Email_Id = pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
+//
+//                    if (User_Id != null && Email_Id != null) {
+//
+//                        AsynLoadProfileDetails asynLoadProfileDetails = new AsynLoadProfileDetails();
+//                        asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
+//
+//                    } else {
+//                        Call_One_Step_Procedure();
+//                    }
+//                } else {
+//                    Call_One_Step_Procedure();
+//                }
+//            } else {
+//                Call_One_Step_Procedure();
+//            }
+//
+//
+//            // ==============End=====================//
+//
+//
+////            Call_One_Step_Procedure(); // Have To Change
+//
+//        }
+//
+//        protected void onPreExecute() {
+//
+//        }
+//    }
 
 
 //    private class AsynIsRegistrationEnabled extends AsyncTask<Void, Void, Void> {
@@ -1071,7 +1193,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //                    JSONObject json = new JSONObject(responseStr);
 //                    try {
 //                        status = Integer.parseInt(json.optString("code"));
-//                        Default_Language = json.optString("default_lang");
+//                        default_Language = json.optString("default_lang");
 //                    } catch (Exception e) {
 //                        status = 0;
 //                    }
@@ -1112,7 +1234,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //                            LanguageModel languageModel = new LanguageModel();
 //                            languageModel.setLanguageId(language_id);
 //                            languageModel.setLanguageName(language_name);
-//                            if (Default_Language.equalsIgnoreCase(language_id)) {
+//                            if (default_Language.equalsIgnoreCase(language_id)) {
 //                                languageModel.setIsSelected(true);
 //
 //                            } else {
@@ -1137,11 +1259,11 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //                        countryEditor.commit();
 //                    }
 //                    if (Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, "").equalsIgnoreCase("")) {
-//                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Default_Language);
+//                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, default_Language);
 //                    }
 //                  /*  AsynGetTransalatedLanguage asynGetGenreList = new AsynGetTransalatedLanguage();
 //                    asynGetGenreList.executeOnExecutor(threadPoolExecutor);*/
-//                    if (!Default_Language.equals("en")) {
+//                    if (!default_Language.equals("en")) {
 //                        //                  Call For Language Translation.
 //                        AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
 //                        asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
@@ -1178,7 +1300,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr);
-                httppost.addHeader("lang_code", Default_Language);
+                httppost.addHeader("lang_code", default_Language);
 
 
                 // Execute HTTP Post Request
@@ -1392,7 +1514,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
 
                         Util.getTextofLanguage(SplashScreen.this, Util.PURCHASE, Util.DEFAULT_PURCHASE);
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Default_Language);
+                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, default_Language);
 
                         //Call For Language PopUp Dialog
 
@@ -1408,7 +1530,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                     noInternetLayout.setVisibility(View.GONE);
                 }
             }
-            AsynGetGenreList asynGetGenreList = new AsynGetGenreList();
+            GenreListInput genreListInput=new GenreListInput();
+            genreListInput.setAuthToken(Util.authTokenStr);
+
+            GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput,SplashScreen.this);
             asynGetGenreList.executeOnExecutor(threadPoolExecutor);
 
 

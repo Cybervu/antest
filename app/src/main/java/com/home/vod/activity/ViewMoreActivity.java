@@ -1765,7 +1765,7 @@ public class ViewMoreActivity extends AppCompatActivity {
                 Util.setLanguageSharedPrefernce(ViewMoreActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.languageModel.get(position).getLanguageId());
                 languageCustomAdapter.notifyDataSetChanged();
 
-                // Default_Language = Util.languageModel.get(position).getLanguageId();
+                // default_Language = Util.languageModel.get(position).getLanguageId();
              /*   AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
                 asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);*/
 
@@ -1976,7 +1976,7 @@ public class ViewMoreActivity extends AppCompatActivity {
                     }
 
 
-                 /*   if(!Default_Language.equals("en")) {
+                 /*   if(!default_Language.equals("en")) {
                         //                  Call For Language Translation.
                         AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
                         asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
