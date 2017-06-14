@@ -50,8 +50,12 @@ import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.images.WebImage;
+import com.home.apisdk.apiController.LoginAsynTask;
+import com.home.apisdk.apiModel.Login_input;
+import com.home.apisdk.apiModel.Login_output;
 import com.home.vod.R;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -84,7 +88,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class   LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements LoginAsynTask.LoinDetails {
 
 
     /*subtitle-------------------------------------*/
@@ -100,6 +104,155 @@ public class   LoginActivity extends AppCompatActivity {
     ArrayList<String> ResolutionFormat = new ArrayList<>();
     ArrayList<String> ResolutionUrl = new ArrayList<>();
     public static ProgressBarHandler progressBarHandler;
+    ProgressBarHandler pDialog;
+
+    @Override
+    public void onLoginPreExecuteStarted() {
+        pDialog = new ProgressBarHandler(LoginActivity.this);
+        pDialog.show();
+    }
+
+    @Override
+    public void onLoginPostExecuteCompleted(Login_output login_output, int status, String message) {
+
+
+
+        if (status > 0) {
+
+            SharedPreferences.Editor editor = pref.edit();
+
+            if (status == 200){
+
+                editor.putString("PREFS_LOGGEDIN_KEY","1");
+                editor.putString("PREFS_LOGGEDIN_ID_KEY",login_output.getId());
+                editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY","");
+                editor.putString("PREFS_LOGIN_EMAIL_ID_KEY", login_output.getEmail());
+                editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", login_output.getDisplay_name());
+                editor.putString("PREFS_LOGIN_PROFILE_IMAGE_KEY", login_output.getProfile_image());
+                // editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY",loginPasswordEditText.getText().toString().trim());
+                editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY",login_output.getIsSubscribed());
+                editor.putString("PREFS_LOGIN_HISTORYID_KEY",login_output.getLogin_history_id());
+
+
+                Date todayDate = new Date();
+                String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
+                editor.putString("date", todayStr.trim());
+                editor.commit();
+
+
+
+                if (Util.checkNetwork(LoginActivity.this) == true) {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+
+
+                    if(Util.getTextofLanguage(LoginActivity.this,Util.IS_RESTRICT_DEVICE,Util.DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1"))
+                    {
+
+                        LogUtil.showLog("BIBHU","isRestrictDevice called");
+                        // Call For Check Api.
+                        AsynCheckDevice asynCheckDevice = new AsynCheckDevice();
+                        asynCheckDevice.executeOnExecutor(threadPoolExecutor);
+                    }
+                    else {
+
+                        if (Util.check_for_subscription == 1) {
+                            //go to subscription page
+                            if (Util.checkNetwork(LoginActivity.this) == true) {
+                                if (Util.dataModel.getIsFreeContent() == 1) {
+                                    asynLoadVideoUrls = new AsynLoadVideoUrls();
+                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                                } else {
+                                    asynValidateUserDetails = new AsynValidateUserDetails();
+                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+
+                                }
+                            } else {
+                                Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            }
+
+                        } else {
+                            if (PlanId.equals("1") && login_output.getIsSubscribed().equals("0")) {
+                                Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                                finish();
+                                overridePendingTransition(0, 0);
+                            } else {
+                                Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                                in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(in);
+                                finish();
+                            }
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                }
+            }
+            else if(status == 300) {
+                // Show Popup For the Simultaneous Logout
+
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
+
+                }
+                show_logout_popup(login_output.getMsg());
+            }
+
+            else{
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.EMAIL_PASSWORD_INVALID, Util.DEFAULT_EMAIL_PASSWORD_INVALID));
+                dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                dlgAlert.create().show();
+            }
+        }else{
+            try {
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
+                }
+            } catch (IllegalArgumentException ex) {
+
+            }
+
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
+            dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
+        }
+
+    }
 
         /*subtitle-------------------------------------*/
     /*chromecast-------------------------------------*/
@@ -193,7 +346,7 @@ public class   LoginActivity extends AppCompatActivity {
     AsynFbRegDetails asynFbRegDetails;
 
     /*********fb****/
-    AsynLogInDetails asyncReg;
+    //AsynLogInDetails asyncReg;
     AsynLoadVideoUrls asynLoadVideoUrls;
     AsynValidateUserDetails asynValidateUserDetails;
     EditText editEmailStr, editPasswordStr;
@@ -232,7 +385,7 @@ public class   LoginActivity extends AppCompatActivity {
         deviceName = myDevice.getName();
 
 
-        Log.v("BIBHU","Device_Name="+deviceName);
+        LogUtil.showLog("BIBHU","Device_Name="+deviceName);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
@@ -241,11 +394,11 @@ public class   LoginActivity extends AppCompatActivity {
                 .trim()).equals("1")) {
             mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-            Log.v("BIBHU","Called");
+            LogUtil.showLog("BIBHU","Called");
         }
         else
         {
-            Log.v("BIBHU","Called============"+(Util.getTextofLanguage(LoginActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)));
+            LogUtil.showLog("BIBHU","Called============"+(Util.getTextofLanguage(LoginActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)));
             mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }
 
@@ -728,7 +881,11 @@ public class   LoginActivity extends AppCompatActivity {
                 boolean isValidEmail = Util.isValidMail(regEmailStr);
                 if(isValidEmail == true)
                 {
-                    asyncReg = new AsynLogInDetails();
+                    Login_input login_input= new Login_input();
+                    login_input.setAuthToken(Util.authTokenStr);
+                    login_input.setEmail(regEmailStr);
+                    login_input.setPassword(regPasswordStr);
+                    LoginAsynTask asyncReg= new LoginAsynTask(login_input,this);
                     asyncReg.executeOnExecutor(threadPoolExecutor);
                 }
                 else
@@ -747,272 +904,272 @@ public class   LoginActivity extends AppCompatActivity {
         }
 
     }
-    private class AsynLogInDetails extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-        int statusCode;
-        String loggedInIdStr;
-        String responseStr;
-        String isSubscribedStr;
-        String loginHistoryIdStr;
-        String logout_limit_message;
-
-        JSONObject myJson = null;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-
-
-            String urlRouteList = Util.rootUrl().trim()+Util.loginUrl.trim();
-            try {
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("password", regPasswordStr);
-                httppost.addHeader("email", regEmailStr);
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("lang_code",Util.getTextofLanguage(LoginActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-                // Added For FCM
-
-                httppost.addHeader("device_id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                httppost.addHeader("google_id", Util.getTextofLanguage(LoginActivity.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
-                httppost.addHeader("device_type","1");
-
-
-
-           /*     try {
-                    httppost.setEntity(new UrlEncodedFormEntity(cred, "UTF-8"));
-                }
-
-                catch (UnsupportedEncodingException e) {
-                    statusCode = 0;
-                    e.printStackTrace();
-                }*/
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                    Log.v("BIBHU2","google_id="+Util.getTextofLanguage(LoginActivity.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
-                    Log.v("BIBHU2","responseStr="+responseStr);
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            statusCode = 0;
-                            //Crouton.showText(ShowWithEpisodesListActivity.this, "Slow Internet Connection", Style.INFO);
-                            Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    statusCode = 0;
-
-                    e.printStackTrace();
-                }
-                if(responseStr!=null){
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-
-                    //userIdStr = myJson.optString("status");
-                    loggedInIdStr = myJson.optString("id");
-                    isSubscribedStr = myJson.optString("isSubscribed");
-                    UniversalIsSubscribed = isSubscribedStr;
-                    loginHistoryIdStr = myJson.optString("login_history_id");
-                    logout_limit_message = myJson.optString("msg");
-
-
-                }
-
-            }
-            catch (Exception e) {
-                statusCode = 0;
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if(responseStr == null){
-                try {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                } catch (IllegalArgumentException ex) {
-                    statusCode = 0;
-
-                }
-                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
-                dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK));
-                dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                dlgAlert.create().show();
-            }
-
-            if (statusCode > 0) {
-
-                SharedPreferences.Editor editor = pref.edit();
-
-                if (statusCode == 200){
-                    String displayNameStr = myJson.optString("display_name");
-                    String emailFromApiStr = myJson.optString("email");
-                    String profileImageStr = myJson.optString("profile_image");
-
-                    editor.putString("PREFS_LOGGEDIN_KEY","1");
-                    editor.putString("PREFS_LOGGEDIN_ID_KEY",loggedInIdStr);
-                    editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY","");
-                    editor.putString("PREFS_LOGIN_EMAIL_ID_KEY", emailFromApiStr);
-                    editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", displayNameStr);
-                    editor.putString("PREFS_LOGIN_PROFILE_IMAGE_KEY", profileImageStr);
-                    // editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY",loginPasswordEditText.getText().toString().trim());
-                    editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY",isSubscribedStr);
-                    editor.putString("PREFS_LOGIN_HISTORYID_KEY",loginHistoryIdStr);
-
-
-                    Date todayDate = new Date();
-                    String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
-                    editor.putString("date", todayStr.trim());
-                    editor.commit();
-
-
-                Log.v("BIBHU","PlanId="+PlanId+" ,isSubscribedStr="+isSubscribedStr);
-
-                    if (Util.checkNetwork(LoginActivity.this) == true) {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-
-
-                        if(Util.getTextofLanguage(LoginActivity.this,Util.IS_RESTRICT_DEVICE,Util.DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1"))
-                        {
-
-                            Log.v("BIBHU","isRestrictDevice called");
-                            // Call For Check Api.
-                            AsynCheckDevice asynCheckDevice = new AsynCheckDevice();
-                            asynCheckDevice.executeOnExecutor(threadPoolExecutor);
-                        }
-                        else {
-
-                            if (Util.check_for_subscription == 1) {
-                                //go to subscription page
-                                if (Util.checkNetwork(LoginActivity.this) == true) {
-                                    if (Util.dataModel.getIsFreeContent() == 1) {
-                                        asynLoadVideoUrls = new AsynLoadVideoUrls();
-                                        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                    } else {
-                                        asynValidateUserDetails = new AsynValidateUserDetails();
-                                        asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-
-                                    }
-                                } else {
-                                    Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                                }
-
-                            } else {
-                                if (PlanId.equals("1") && isSubscribedStr.equals("0")) {
-                                    Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(intent);
-                                    finish();
-                                    overridePendingTransition(0, 0);
-                                } else {
-                                    Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                                    in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(in);
-                                    finish();
-                                }
-                            }
-                        }
-
-                    } else {
-                        Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                    }
-                }
-                else if(statusCode == 300) {
-                    // Show Popup For the Simultaneous Logout
-
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-
-                    }
-                    show_logout_popup(logout_limit_message);
-                }
-
-                else{
-                    try {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        statusCode = 0;
-                    }
-
-                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.EMAIL_PASSWORD_INVALID, Util.DEFAULT_EMAIL_PASSWORD_INVALID));
-                    dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    dlgAlert.create().show();
-                }
-            }else{
-                try {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                } catch (IllegalArgumentException ex) {
-
-                }
-
-                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
-                dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                dlgAlert.create().show();
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressBarHandler(LoginActivity.this);
-            pDialog.show();
-        }
-    }
+//    private class AsynLogInDetails extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler pDialog;
+//        int statusCode;
+//        String loggedInIdStr;
+//        String responseStr;
+//        String isSubscribedStr;
+//        String loginHistoryIdStr;
+//        String logout_limit_message;
+//
+//        JSONObject myJson = null;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//
+//
+//            String urlRouteList = Util.rootUrl().trim()+Util.loginUrl.trim();
+//            try {
+//                HttpClient httpclient=new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("password", regPasswordStr);
+//                httppost.addHeader("email", regEmailStr);
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("lang_code",Util.getTextofLanguage(LoginActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//                // Added For FCM
+//
+//                httppost.addHeader("device_id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+//                httppost.addHeader("google_id", Util.getTextofLanguage(LoginActivity.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
+//                httppost.addHeader("device_type","1");
+//
+//
+//
+//           /*     try {
+//                    httppost.setEntity(new UrlEncodedFormEntity(cred, "UTF-8"));
+//                }
+//
+//                catch (UnsupportedEncodingException e) {
+//                    statusCode = 0;
+//                    e.printStackTrace();
+//                }*/
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//                    Log.v("BIBHU2","google_id="+Util.getTextofLanguage(LoginActivity.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
+//                    Log.v("BIBHU2","responseStr="+responseStr);
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e){
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            statusCode = 0;
+//                            //Crouton.showText(ShowWithEpisodesListActivity.this, "Slow Internet Connection", Style.INFO);
+//                            Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    statusCode = 0;
+//
+//                    e.printStackTrace();
+//                }
+//                if(responseStr!=null){
+//                    myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//
+//                    //userIdStr = myJson.optString("status");
+//                    loggedInIdStr = myJson.optString("id");
+//                    isSubscribedStr = myJson.optString("isSubscribed");
+//                    UniversalIsSubscribed = isSubscribedStr;
+//                    loginHistoryIdStr = myJson.optString("login_history_id");
+//                    logout_limit_message = myJson.optString("msg");
+//
+//
+//                }
+//
+//            }
+//            catch (Exception e) {
+//                statusCode = 0;
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            if(responseStr == null){
+//                try {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                } catch (IllegalArgumentException ex) {
+//                    statusCode = 0;
+//
+//                }
+//                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+//                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
+//                dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK));
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            }
+//
+//            if (statusCode > 0) {
+//
+//                SharedPreferences.Editor editor = pref.edit();
+//
+//                if (statusCode == 200){
+//                    String displayNameStr = myJson.optString("display_name");
+//                    String emailFromApiStr = myJson.optString("email");
+//                    String profileImageStr = myJson.optString("profile_image");
+//
+//                    editor.putString("PREFS_LOGGEDIN_KEY","1");
+//                    editor.putString("PREFS_LOGGEDIN_ID_KEY",loggedInIdStr);
+//                    editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY","");
+//                    editor.putString("PREFS_LOGIN_EMAIL_ID_KEY", emailFromApiStr);
+//                    editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", displayNameStr);
+//                    editor.putString("PREFS_LOGIN_PROFILE_IMAGE_KEY", profileImageStr);
+//                    // editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY",loginPasswordEditText.getText().toString().trim());
+//                    editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY",isSubscribedStr);
+//                    editor.putString("PREFS_LOGIN_HISTORYID_KEY",loginHistoryIdStr);
+//
+//
+//                    Date todayDate = new Date();
+//                    String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
+//                    editor.putString("date", todayStr.trim());
+//                    editor.commit();
+//
+//
+//                Log.v("BIBHU","PlanId="+PlanId+" ,isSubscribedStr="+isSubscribedStr);
+//
+//                    if (Util.checkNetwork(LoginActivity.this) == true) {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//
+//
+//                        if(Util.getTextofLanguage(LoginActivity.this,Util.IS_RESTRICT_DEVICE,Util.DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1"))
+//                        {
+//
+//                            Log.v("BIBHU","isRestrictDevice called");
+//                            // Call For Check Api.
+//                            AsynCheckDevice asynCheckDevice = new AsynCheckDevice();
+//                            asynCheckDevice.executeOnExecutor(threadPoolExecutor);
+//                        }
+//                        else {
+//
+//                            if (Util.check_for_subscription == 1) {
+//                                //go to subscription page
+//                                if (Util.checkNetwork(LoginActivity.this) == true) {
+//                                    if (Util.dataModel.getIsFreeContent() == 1) {
+//                                        asynLoadVideoUrls = new AsynLoadVideoUrls();
+//                                        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+//                                    } else {
+//                                        asynValidateUserDetails = new AsynValidateUserDetails();
+//                                        asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+//
+//                                    }
+//                                } else {
+//                                    Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                                }
+//
+//                            } else {
+//                                if (PlanId.equals("1") && isSubscribedStr.equals("0")) {
+//                                    Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+//                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                    startActivity(intent);
+//                                    finish();
+//                                    overridePendingTransition(0, 0);
+//                                } else {
+//                                    Intent in = new Intent(LoginActivity.this, MainActivity.class);
+//                                    in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                    startActivity(in);
+//                                    finish();
+//                                }
+//                            }
+//                        }
+//
+//                    } else {
+//                        Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//                else if(statusCode == 300) {
+//                    // Show Popup For the Simultaneous Logout
+//
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//
+//                    }
+//                    show_logout_popup(logout_limit_message);
+//                }
+//
+//                else{
+//                    try {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                    } catch (IllegalArgumentException ex) {
+//                        statusCode = 0;
+//                    }
+//
+//                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+//                    dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.EMAIL_PASSWORD_INVALID, Util.DEFAULT_EMAIL_PASSWORD_INVALID));
+//                    dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setCancelable(false);
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                }
+//                            });
+//                    dlgAlert.create().show();
+//                }
+//            }else{
+//                try {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                } catch (IllegalArgumentException ex) {
+//
+//                }
+//
+//                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+//                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
+//                dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            }
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            pDialog = new ProgressBarHandler(LoginActivity.this);
+//            pDialog.show();
+//        }
+//    }
 
 
 
@@ -1782,9 +1939,9 @@ public class   LoginActivity extends AppCompatActivity {
         if (asynLoadVideoUrls!=null){
             asynLoadVideoUrls.cancel(true);
         }
-        if (asyncReg!=null){
-            asyncReg.cancel(true);
-        }
+//        if (asyncReg!=null){
+//            asyncReg.cancel(true);
+//        }
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
