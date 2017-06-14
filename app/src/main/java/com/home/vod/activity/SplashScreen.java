@@ -1270,8 +1270,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //
 //                    } else {
 //                        AsynGetGenreList asynGetGenreList = new AsynGetGenreList();
-//                        asynGetGenreList.executeOnExecutor(threadPoolExecutor);
-//                    }
+//                        asynGetGenreList.executeOnExe
 //
 //                } else {
 //                    noInternetLayout.setVisibility(View.GONE);
