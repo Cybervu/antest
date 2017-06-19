@@ -43,6 +43,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.home.vod.R;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -460,26 +461,26 @@ public class RegisterActivity extends AppCompatActivity {
         country_spinner.setAdapter(Country_arrayAdapter);
 
         Selected_Country_Id = countryPref.getString("countryCode", "0");
-        Log.v("BIBHU","primary Selected_Country_Id="+Selected_Country_Id);
+        LogUtil.showLog("BIBHU","primary Selected_Country_Id="+Selected_Country_Id);
         if(Selected_Country_Id.equals("0"))
         {
             country_spinner.setSelection(224);
             Selected_Country_Id = Country_Code_List.get(224);
-            Log.v("BIBHU","country not  matche"+"=="+Selected_Country_Id);
+            LogUtil.showLog("BIBHU","country not  matche"+"=="+Selected_Country_Id);
         }
         else
         {
             for(int i=0;i<Country_Code_List.size();i++)
             {
 
-                Log.v("BIBHU","Country names ="+Country_Code_List.get(i));
+                LogUtil.showLog("BIBHU","Country names ="+Country_Code_List.get(i));
 
                 if(Selected_Country_Id.trim().equals(Country_Code_List.get(i)))
                 {
                     country_spinner.setSelection(i);
                     Selected_Country_Id = Country_Code_List.get(i);
 
-                    Log.v("BIBHU","country  matched ="+Selected_Country_Id);
+                    LogUtil.showLog("BIBHU","country  matched ="+Selected_Country_Id);
                 }
             }
         }
