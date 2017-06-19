@@ -16,7 +16,7 @@ import com.home.vod.R;
 /**
  * Created by User on 15-03-2017.
  */
-public class ExpandableTextView extends TextView {
+public class ExpandableTextView extends android.support.v7.widget.AppCompatTextView {
     private static final int DEFAULT_TRIM_LENGTH = 200;
     private String ELLIPSIS = " View More";
     private static final String VIEW_LESS_ELLIPSIS = " View Less";
