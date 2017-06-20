@@ -5,7 +5,18 @@ package com.home.apisdk.apiModel;
  */
 public class LogoutInput {
 
-String authToken,login_history_id;
+String authToken;
+    String login_history_id;
+
+    public String getLang_code() {
+        return lang_code;
+    }
+
+    public void setLang_code(String lang_code) {
+        this.lang_code = lang_code;
+    }
+
+    String lang_code;
 
 
     public String getAuthToken() {

@@ -59,6 +59,7 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput,Void ,
             httppost.addHeader("content_uniq_id", this.getVideoDetailsInput.getContent_uniq_id());
             httppost.addHeader("stream_uniq_id", this.getVideoDetailsInput.getStream_uniq_id());
             httppost.addHeader("internet_speed", this.getVideoDetailsInput.getInternetSpeed());
+            httppost.addHeader("user_id",this.getVideoDetailsInput.getUser_id());
 
             // Execute HTTP Post Request
             try {
