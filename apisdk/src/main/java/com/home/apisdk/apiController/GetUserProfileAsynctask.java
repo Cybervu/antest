@@ -59,6 +59,7 @@ public class GetUserProfileAsynctask extends AsyncTask<Get_UserProfile_Input,Voi
             httppost.addHeader("authToken", this.get_userProfile_input.getAuthToken());
             httppost.addHeader("email", this.get_userProfile_input.getEmail());
             httppost.addHeader("user_id", this.get_userProfile_input.getUser_id());
+            httppost.addHeader("lang_code",this.get_userProfile_input.getLang_code());
 
             // Execute HTTP Post Request
             try {

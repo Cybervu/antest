@@ -55,6 +55,7 @@ public class LogoutAsynctask extends AsyncTask<LogoutInput,Void ,Void > {
 
             httppost.addHeader("authToken", this.logoutInput.getAuthToken());
             httppost.addHeader("login_history_id", this.logoutInput.getLogin_history_id());
+            httppost.addHeader("lang_code",this.logoutInput.getLang_code());
 
             // Execute HTTP Post Request
             try {

@@ -6,7 +6,19 @@ package com.home.apisdk.apiModel;
 
 public class Get_UserProfile_Input {
 
-    String authToken,user_id,email;
+    String authToken;
+    String user_id;
+    String email;
+
+    public String getLang_code() {
+        return lang_code;
+    }
+
+    public void setLang_code(String lang_code) {
+        this.lang_code = lang_code;
+    }
+
+    String lang_code;
 
     public void setAuthToken(String authToken){this.authToken = authToken;}
     public String getAuthToken(){return authToken;}

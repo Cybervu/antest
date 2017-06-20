@@ -4,7 +4,19 @@ package com.home.apisdk.apiModel;
  * Created by Muvi on 10/4/2016.
  */
 public class GetVideoDetailsInput {
-    String authToken,content_uniq_id,stream_uniq_id;
+    String authToken;
+    String content_uniq_id;
+    String stream_uniq_id;
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    String user_id;
     String internetSpeed = "0";
     public String getAuthToken() {
         return authToken;

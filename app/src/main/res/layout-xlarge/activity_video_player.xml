@@ -435,7 +435,7 @@
 
             </LinearLayout>
 
-            <com.release.vishwamtv.utils.ExpandableTextView
+            <com.home.vod.util.ExpandableTextView
                 android:id="@+id/story"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

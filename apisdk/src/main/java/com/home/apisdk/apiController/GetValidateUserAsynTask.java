@@ -33,6 +33,7 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
     String responseStr;
     int status;
     String message,PACKAGE_NAME;
+    String validuser_str;
     public interface GetValidateUser{
         void onGetValidateUserPreExecuteStarted();
         void onGetValidateUserPostExecuteCompleted(ValidateUserOutput validateUserOutput, int status, String message);
@@ -162,6 +163,11 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
 
                 }
 
+                if ((mainJson.has("status")) && mainJson.getString("status").trim() != null && !mainJson.getString("msg").trim().isEmpty() && !mainJson.getString("msg").trim().equals("null") && !mainJson.getString("msg").trim().matches("")) {
+                    validateUserOutput.setMessage(mainJson.getString("status"));
+                    validuser_str = mainJson.getString("status");
+
+                }
             }
 
             else{
