@@ -5,6 +5,6 @@ package com.home.apisdk;
  */
 
 public class CommonConstants {
-    public static String HashKey = "";
-    public static String User_Package_Name_At_Api = "";
+    public static String hashKey = "";
+    public static String user_Package_Name_At_Api = "";
 }

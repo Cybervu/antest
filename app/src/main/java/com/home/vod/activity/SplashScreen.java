@@ -23,11 +23,14 @@ import com.home.apisdk.apiController.GetGenreListAsynctask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetPlanListAsynctask;
+import com.home.apisdk.apiController.GetUserProfileAsynctask;
 import com.home.apisdk.apiController.IsRegistrationEnabledAsynTask;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
 import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
 import com.home.apisdk.apiModel.GenreListInput;
 import com.home.apisdk.apiModel.GenreListOutput;
+import com.home.apisdk.apiModel.Get_UserProfile_Input;
+import com.home.apisdk.apiModel.Get_UserProfile_Output;
 import com.home.apisdk.apiModel.IsRegistrationEnabledInputModel;
 import com.home.apisdk.apiModel.IsRegistrationEnabledOutputModel;
 import com.home.apisdk.apiModel.LanguageListInputModel;
@@ -69,7 +72,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         GetPlanListAsynctask.GetStudioPlanLists,
         IsRegistrationEnabledAsynTask.IsRegistrationenabled,
         GetLanguageListAsynTask.GetLanguageList,
-        GetGenreListAsynctask.GenreList{
+        GetGenreListAsynctask.GenreList,GetUserProfileAsynctask.Get_UserProfile{
 
     String[] genreArrToSend;
     String[] genreValueArrayToSend;
@@ -437,8 +440,12 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 Email_Id = pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
 
                 if (User_Id != null && Email_Id != null) {
-
-                    AsynLoadProfileDetails asynLoadProfileDetails = new AsynLoadProfileDetails();
+                    Get_UserProfile_Input get_userProfile_input=new Get_UserProfile_Input();
+                    get_userProfile_input.setAuthToken(Util.authTokenStr);
+                    get_userProfile_input.setEmail(get_userProfile_input.getEmail());
+                    get_userProfile_input.setUser_id(get_userProfile_input.getEmail());
+                    get_userProfile_input.setLang_code(get_userProfile_input.getLang_code());
+                    GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input,this);
                     asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
 
                 } else {
@@ -450,6 +457,20 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         } else {
             Call_One_Step_Procedure();
         }
+    }
+
+    @Override
+    public void onGet_UserProfilePreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onGet_UserProfilePostExecuteCompleted(Get_UserProfile_Output get_userProfile_output, int code, String message, String status) {
+        if (status == null) {
+            isSubscribed = "0";
+        }
+
+        Call_One_Step_Procedure();
     }
     /*//Verify the IP
     private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
@@ -1704,74 +1725,74 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     }
 
 
-    private class AsynLoadProfileDetails extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int statusCode;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.loadProfileUrl.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", User_Id);
-                httppost.addHeader("email", Email_Id);
-                httppost.addHeader("lang_code", Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-                // Execute HTTP Post Request
-                try {
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-
-                } catch (IOException e) {
-                    isSubscribed = "0";
-                }
-
-                Log.v("BIBHU", "responseStr of get profile update =" + responseStr);
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-
-                }
-                if (statusCode > 0) {
-                    if (statusCode == 200) {
-
-                        if ((myJson.has("isSubscribed")) && myJson.optString("isSubscribed").trim() != null && !myJson.optString("isSubscribed").trim().isEmpty() && !myJson.optString("isSubscribed").trim().equals("null") && !myJson.optString("isSubscribed").trim().matches("")) {
-                            isSubscribed = myJson.getString("isSubscribed");
-                        } else {
-                            isSubscribed = "0";
-                        }
-                    } else {
-                        isSubscribed = "0";
-                    }
-                } else {
-                    isSubscribed = "0";
-                }
-            } catch (Exception e) {
-                isSubscribed = "0";
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-
-
-            if (responseStr == null) {
-                isSubscribed = "0";
-            }
-
-            Call_One_Step_Procedure();
-
-        }
-
-    }
+//    private class AsynLoadProfileDetails extends AsyncTask<Void, Void, Void> {
+//        String responseStr;
+//        int statusCode;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.loadProfileUrl.trim());
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("user_id", User_Id);
+//                httppost.addHeader("email", Email_Id);
+//                httppost.addHeader("lang_code", Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//                // Execute HTTP Post Request
+//                try {
+//
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//
+//                } catch (IOException e) {
+//                    isSubscribed = "0";
+//                }
+//
+//                Log.v("BIBHU", "responseStr of get profile update =" + responseStr);
+//
+//                JSONObject myJson = null;
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//
+//                }
+//                if (statusCode > 0) {
+//                    if (statusCode == 200) {
+//
+//                        if ((myJson.has("isSubscribed")) && myJson.optString("isSubscribed").trim() != null && !myJson.optString("isSubscribed").trim().isEmpty() && !myJson.optString("isSubscribed").trim().equals("null") && !myJson.optString("isSubscribed").trim().matches("")) {
+//                            isSubscribed = myJson.getString("isSubscribed");
+//                        } else {
+//                            isSubscribed = "0";
+//                        }
+//                    } else {
+//                        isSubscribed = "0";
+//                    }
+//                } else {
+//                    isSubscribed = "0";
+//                }
+//            } catch (Exception e) {
+//                isSubscribed = "0";
+//            }
+//            return null;
+//        }
+//
+//        protected void onPostExecute(Void result) {
+//
+//
+//            if (responseStr == null) {
+//                isSubscribed = "0";
+//            }
+//
+//            Call_One_Step_Procedure();
+//
+//        }
+//
+//    }
 
 }

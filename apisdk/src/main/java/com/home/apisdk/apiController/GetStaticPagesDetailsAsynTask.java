@@ -123,14 +123,14 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
         super.onPreExecute();
         listener.onGetStaticPageDetailsPreExecuteStarted();
         code = 0;
-       /* if(!PACKAGE_NAME.equals(CommonConstants.User_Package_Name_At_Api))
+       /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetStaticPageDetailsPostExecuteCompleted(getStaticPageDetailsModelOutput,code,message,status);
             return;
         }
-        if(CommonConstants.HashKey.equals(""))
+        if(CommonConstants.hashKey.equals(""))
         {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";

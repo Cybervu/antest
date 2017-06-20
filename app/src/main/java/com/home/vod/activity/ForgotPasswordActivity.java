@@ -18,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.home.apisdk.apiController.ForgotpassAsynTask;
+import com.home.apisdk.apiModel.Forgotpassword_input;
+import com.home.apisdk.apiModel.Forgotpassword_output;
 import com.home.vod.R;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -43,15 +46,16 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 
-public class ForgotPasswordActivity extends AppCompatActivity {
+public class ForgotPasswordActivity extends AppCompatActivity implements ForgotpassAsynTask.ForgotpassDetails{
     Toolbar mActionBarToolbar;
     ImageView logoImageView;
     EditText editEmailStr;
     TextView logintextView;
     Button submitButton;
+    ProgressBarHandler pDialog;
     String loginEmailStr = "";
     boolean navigation=false;
-    AsynForgotPasswordDetails asyncPasswordForgot;
+    ForgotpassAsynTask asyncPasswordForgot;
     // load asynctask
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -142,7 +146,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         if (isNetwork) {
             boolean isValidEmail = Util.isValidMail(loginEmailStr);
             if (isValidEmail == true) {
-                asyncPasswordForgot = new AsynForgotPasswordDetails();
+                Forgotpassword_input forgotpassword_input=new Forgotpassword_input();
+                forgotpassword_input.setAuthToken(Util.authTokenStr);
+                forgotpassword_input.setLang_code(forgotpassword_input.getLang_code());
+                forgotpassword_input.setEmail(forgotpassword_input.getEmail());
+                ForgotpassAsynTask asyncPasswordForgot = new ForgotpassAsynTask(forgotpassword_input,this);
                 asyncPasswordForgot.executeOnExecutor(threadPoolExecutor);
             } else {
 
@@ -155,126 +163,159 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }
     }
 
-    private class AsynForgotPasswordDetails extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-        String loginEmailIdStr = editEmailStr.getText().toString();
-        int responseCode;
-        String responseStr;
+    @Override
+    public void onForgotpassDetailsPreExecuteStarted() {
 
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            ArrayList<NameValuePair> cred = new ArrayList<NameValuePair>();
-            cred.add(new BasicNameValuePair("email", loginEmailIdStr));
-            cred.add(new BasicNameValuePair("authToken", Util.authTokenStr.trim()));
-
-            String urlRouteList = Util.rootUrl().trim() + Util.forgotpasswordUrl.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("email", loginEmailIdStr);
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("lang_code",Util.getTextofLanguage(ForgotPasswordActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-
-                try {
-                    httppost.setEntity(new UrlEncodedFormEntity(cred, "UTF-8"));
-                } catch (UnsupportedEncodingException e) {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                    responseCode = 0;
-                    e.printStackTrace();
-                }
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (pDialog != null && pDialog.isShowing()) {
-                                pDialog.hide();
-                                pDialog = null;
-                            }
-                            responseCode = 0;
-                            Toast.makeText(ForgotPasswordActivity.this, Util.getTextofLanguage(ForgotPasswordActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                    responseCode = 0;
-                    e.printStackTrace();
-                }
-                if (responseStr != null) {
-                    JSONObject myJson = new JSONObject(responseStr);
-                    responseCode = Integer.parseInt(myJson.optString("code"));
-                }
-
-            } catch (Exception e) {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-                responseCode = 0;
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
-
-            }
-            if (responseStr == null) {
-                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
-
-            }
-            if (responseCode == 0) {
-                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
-            }
-            if (responseCode > 0) {
-                if (responseCode == 200) {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                    navigation=true;
-                    ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.PASSWORD_RESET_LINK,Util.DEFAULT_PASSWORD_RESET_LINK));
-
-
-                } else {
-                    ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
-                }
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressBarHandler(ForgotPasswordActivity.this);
-            pDialog.show();
-        }
+        pDialog = new ProgressBarHandler(ForgotPasswordActivity.this);
+        pDialog.show();
     }
+
+    @Override
+    public void onForgotpassDetailsPostExecuteCompleted(Forgotpassword_output forgotpassword_output, int status, String message) {
+        if (forgotpassword_output == null) {
+            ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
+
+        }
+        if (status == 0) {
+            ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
+        }
+        if (status > 0) {
+            if (status == 200) {
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
+                }
+                navigation=true;
+                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.PASSWORD_RESET_LINK,Util.DEFAULT_PASSWORD_RESET_LINK));
+
+
+            } else {
+                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
+            }
+        }
+
+    }
+
+//    private class AsynForgotPasswordDetails extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler pDialog;
+//        String loginEmailIdStr = editEmailStr.getText().toString();
+//        int responseCode;
+//        String responseStr;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            ArrayList<NameValuePair> cred = new ArrayList<NameValuePair>();
+//            cred.add(new BasicNameValuePair("email", loginEmailIdStr));
+//            cred.add(new BasicNameValuePair("authToken", Util.authTokenStr.trim()));
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.forgotpasswordUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("email", loginEmailIdStr);
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("lang_code",Util.getTextofLanguage(ForgotPasswordActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//
+//                try {
+//                    httppost.setEntity(new UrlEncodedFormEntity(cred, "UTF-8"));
+//                } catch (UnsupportedEncodingException e) {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                    responseCode = 0;
+//                    e.printStackTrace();
+//                }
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (pDialog != null && pDialog.isShowing()) {
+//                                pDialog.hide();
+//                                pDialog = null;
+//                            }
+//                            responseCode = 0;
+//                            Toast.makeText(ForgotPasswordActivity.this, Util.getTextofLanguage(ForgotPasswordActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                    responseCode = 0;
+//                    e.printStackTrace();
+//                }
+//                if (responseStr != null) {
+//                    JSONObject myJson = new JSONObject(responseStr);
+//                    responseCode = Integer.parseInt(myJson.optString("code"));
+//                }
+//
+//            } catch (Exception e) {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//                responseCode = 0;
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//            try {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//            } catch (IllegalArgumentException ex) {
+//                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
+//
+//            }
+//            if (responseStr == null) {
+//                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
+//
+//            }
+//            if (responseCode == 0) {
+//                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
+//            }
+//            if (responseCode > 0) {
+//                if (responseCode == 200) {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                    navigation=true;
+//                    ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.PASSWORD_RESET_LINK,Util.DEFAULT_PASSWORD_RESET_LINK));
+//
+//
+//                } else {
+//                    ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
+//                }
+//            }
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            pDialog = new ProgressBarHandler(ForgotPasswordActivity.this);
+//            pDialog.show();
+//        }
+//    }
 
     @Override
     public void onBackPressed() {

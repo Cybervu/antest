@@ -174,14 +174,14 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
 
         status = 0;
         totalItems = 0;
-        if(!PACKAGE_NAME.equals(CommonConstants.User_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);
             return;
         }
-        if(CommonConstants.HashKey.equals(""))
+        if(CommonConstants.hashKey.equals(""))
         {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";

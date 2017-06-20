@@ -166,14 +166,14 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
         listener.onRegistrationDetailsPreExecuteStarted();
 
         status = 0;
-        if(!PACKAGE_NAME.equals(CommonConstants.User_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onRegistrationDetailsPostExecuteCompleted(registration_output, status, message);
             return;
         }
-        if(CommonConstants.HashKey.equals("")) {
+        if(CommonConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onRegistrationDetailsPostExecuteCompleted(registration_output, status, message);
