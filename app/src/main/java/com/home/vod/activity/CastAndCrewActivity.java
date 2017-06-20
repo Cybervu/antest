@@ -15,6 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.home.apisdk.apiController.GetCelibrityAsyntask;
+import com.home.apisdk.apiModel.CelibrityInputModel;
+import com.home.apisdk.apiModel.CelibrityOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.CastCrewAdapter;
 import com.home.vod.model.GetCastCrewItem;
@@ -42,7 +45,7 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 
-public class CastAndCrewActivity extends AppCompatActivity {
+public class CastAndCrewActivity extends AppCompatActivity implements GetCelibrityAsyntask.GetCelibrity {
 
 
 
@@ -57,6 +60,7 @@ public class CastAndCrewActivity extends AppCompatActivity {
     RelativeLayout noInternetLayout;
     RelativeLayout noDataLayout;
     TextView noDataTextView;
+    ProgressBarHandler pDialog;
     TextView noInternetTextView;
 
     LinearLayout primary_layout;
@@ -163,14 +167,49 @@ public class CastAndCrewActivity extends AppCompatActivity {
         noDataLayout.setVisibility(View.GONE);
         primary_layout.setVisibility(View.VISIBLE);
 
-
-        AsynGetCsatDetails asynGetCsatDetails = new AsynGetCsatDetails();
+        CelibrityInputModel celibrityInputModel=new CelibrityInputModel();
+        celibrityInputModel.setAuthToken(Util.authTokenStr);
+        celibrityInputModel.setMovie_id(celibrityInputModel.getMovie_id());
+        GetCelibrityAsyntask asynGetCsatDetails = new GetCelibrityAsyntask(celibrityInputModel,this);
         asynGetCsatDetails.executeOnExecutor(threadPoolExecutor);
+
+    }
+
+    @Override
+    public void onGetCelibrityPreExecuteStarted() {
+
+        pDialog = new ProgressBarHandler(CastAndCrewActivity.this);
+            pDialog.show();
+
+    }
+
+    @Override
+    public void onGetCelibrityPostExecuteCompleted(ArrayList<CelibrityOutputModel> celibrityOutputModel, int status,String msg) {
+        if(status==200){
+
+            for (int i = 0; i < celibrityOutputModel.size() ; i++) {
+                GetCastCrewItem   movie = new GetCastCrewItem(celibrityOutputModel.get(i).getName(),
+                        celibrityOutputModel.get(i).getCast_type(),celibrityOutputModel.get(i).getCelebrity_image());
+                castCrewItems.add(movie);
+            }
+            noDataLayout.setVisibility(View.GONE);
+            noInternetLayout.setVisibility(View.GONE);
+            primary_layout.setVisibility(View.VISIBLE);
+            // Set the grid adapter here.
+            castCrewAdapter.notifyDataSetChanged();
+        }else if(status==448){
+            ShowDialog(msg);
+        }
+        else if(status==0){
+            primary_layout.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.VISIBLE);
+            noInternetLayout.setVisibility(View.GONE);
+        }
 
     }
     //Asyntask for getDetails of the csat and crew members.
 
-    private class AsynGetCsatDetails extends AsyncTask<Void, Void, Void> {
+   /* private class AsynGetCsatDetails extends AsyncTask<Void, Void, Void> {
         ProgressBarHandler pDialog;
         String responseStr = "";
         int status;
@@ -189,8 +228,8 @@ public class CastAndCrewActivity extends AppCompatActivity {
                 httppost.addHeader("movie_id",getIntent().getStringExtra("cast_movie_id"));
                 httppost.addHeader("lang_code",Util.getTextofLanguage(CastAndCrewActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
-               /* httppost.addHeader("authToken", "1836d3f6a8d75407a162bcc5eece68c7");
-                httppost.addHeader("movie_id","acb089ace5126fe0e1e6054edd86dc6d");*/
+               *//* httppost.addHeader("authToken", "1836d3f6a8d75407a162bcc5eece68c7");
+                httppost.addHeader("movie_id","acb089ace5126fe0e1e6054edd86dc6d");*//*
 
 
                 // Execute HTTP Post Request
@@ -325,7 +364,7 @@ public class CastAndCrewActivity extends AppCompatActivity {
 
 
         }
-    }
+    }*/
 
     public void ShowDialog(String msg) {
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(CastAndCrewActivity.this, R.style.MyAlertDialogStyle);
