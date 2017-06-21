@@ -229,9 +229,10 @@ public class ContactUs extends Fragment implements ContactUsAsynTask.ContactUs {
         if (isNetwork){
             ContactUsInputModel contactUsInputModel=new ContactUsInputModel();
             contactUsInputModel.setAuthToken(Util.authTokenStr);
-            contactUsInputModel.setEmail(contactUsInputModel.getEmail());
-            contactUsInputModel.setName(contactUsInputModel.getName());
-            contactUsInputModel.setMessage(contactUsInputModel.getMessage());
+            contactUsInputModel.setEmail(String.valueOf(regEmailStr));
+            contactUsInputModel.setName(String.valueOf(regNameStr));
+            contactUsInputModel.setMessage(String.valueOf(regMessageStr));
+            contactUsInputModel.setLang_code(Util.getTextofLanguage(context,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
             ContactUsAsynTask asynContactUs = new ContactUsAsynTask(contactUsInputModel, context);
             asynContactUs.execute();
 
