@@ -121,7 +121,7 @@ public class GetLanguageListAsynTask extends AsyncTask<LanguageListInputModel, V
                 }
 
 
-                    if (status == 200) {
+                if (status > 0 && status == 200) {
 
                         JSONArray jsonMainNode = myJson.getJSONArray("lang_list");
 

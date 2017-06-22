@@ -59,6 +59,7 @@ public class ContactUsAsynTask extends AsyncTask<ContactUsInputModel,Void ,Void 
             httppost.addHeader("email", this.contactUsInputModel.getEmail());
             httppost.addHeader("name", this.contactUsInputModel.getName());
             httppost.addHeader("message", this.contactUsInputModel.getMessage());
+            httppost.addHeader("lang_code",this.contactUsInputModel.getLang_code());
 
             // Execute HTTP Post Request
             try {

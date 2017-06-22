@@ -15,6 +15,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -27,6 +28,8 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput,Void ,
 
     public GetVideoDetailsInput getVideoDetailsInput;
     String PACKAGE_NAME,message,responseStr,status;
+    JSONArray SubtitleJosnArray = null;
+    JSONArray ResolutionJosnArray = null;
     int code;
     Get_Video_Details_Output get_video_details_output;
 
@@ -83,6 +86,8 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput,Void ,
                 myJson = new JSONObject(responseStr);
                 code = Integer.parseInt(myJson.optString("code"));
                 message = myJson.optString("msg");
+                SubtitleJosnArray = myJson.optJSONArray("subTitle");
+                ResolutionJosnArray = myJson.optJSONArray("videoDetails");
                 status = myJson.optString("status");
             }
 
@@ -107,6 +112,8 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput,Void ,
         }
         return null;
     }
+
+
 
 
     @Override

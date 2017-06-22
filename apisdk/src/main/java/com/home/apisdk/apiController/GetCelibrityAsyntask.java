@@ -28,12 +28,12 @@ import java.util.ArrayList;
 public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel,Void ,Void > {
 
     public CelibrityInputModel celibrityInputModel;
-    String PACKAGE_NAME,message,responseStr;
+    String PACKAGE_NAME,message,responseStr,msg;
     int code;
 
     public interface GetCelibrity{
         void onGetCelibrityPreExecuteStarted();
-        void onGetCelibrityPostExecuteCompleted(ArrayList<CelibrityOutputModel> celibrityOutputModel, int status);
+        void onGetCelibrityPostExecuteCompleted(ArrayList<CelibrityOutputModel> celibrityOutputModel, int status,String msg);
     }
 
     private GetCelibrity listener;
@@ -60,7 +60,9 @@ public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel,Void ,Vo
 
             httppost.addHeader("authToken", this.celibrityInputModel.getAuthToken());
             httppost.addHeader("movie_id", this.celibrityInputModel.getMovie_id());
+            httppost.addHeader("lang_code",this.celibrityInputModel.getLang_code());
 
+            Log.v("SUBHA","lang_code = "+ this.celibrityInputModel.getLang_code());
             Log.v("SUBHA","authToken = "+ this.celibrityInputModel.getAuthToken());
             Log.v("SUBHA","movie id = "+ this.celibrityInputModel.getMovie_id());
             try {
@@ -83,6 +85,7 @@ public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel,Void ,Vo
                 myJson = new JSONObject(responseStr);
                 code = Integer.parseInt(myJson.optString("code"));
                 message = myJson.optString("status");
+                msg=myJson.optString("msg");
 
             }
 
@@ -96,18 +99,31 @@ public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel,Void ,Vo
                         try {
                             jsonChildNode = jsonMainNode.getJSONObject(i);
                             CelibrityOutputModel content = new CelibrityOutputModel();
+                            String celebrityName = jsonChildNode.optString("name");
+                            String celebrityImage = jsonChildNode.optString("celebrity_image");
+                            String celebrityCastType = jsonChildNode.optString("cast_type");
 
-                            if ((jsonChildNode.has("name")) && jsonChildNode.getString("name").trim() != null && !jsonChildNode.getString("name").trim().isEmpty() && !jsonChildNode.getString("name").trim().equals("null") && !jsonChildNode.getString("name").trim().matches("")) {
-                                content.setName(jsonChildNode.getString("name"));
-                            }
-                            if ((jsonChildNode.has("cast_type")) && jsonChildNode.getString("cast_type").trim() != null && !jsonChildNode.getString("cast_type").trim().isEmpty() && !jsonChildNode.getString("cast_type").trim().equals("null") && !jsonChildNode.getString("cast_type").trim().matches("")) {
-                                content.setCast_type(jsonChildNode.getString("cast_type"));
+                            celebrityCastType = celebrityCastType.replaceAll("\\[", "");
+                            celebrityCastType = celebrityCastType.replaceAll("\\]","");
+                            celebrityCastType = celebrityCastType.replaceAll(","," , ");
+                            celebrityCastType = celebrityCastType.replaceAll("\"", "");
 
+
+                            if(celebrityImage.equals("") || celebrityImage==null)
+                            {
+                                celebrityImage = "";
                             }
-                            if ((jsonChildNode.has("celebrity_image")) && jsonChildNode.getString("celebrity_image").trim() != null && !jsonChildNode.getString("celebrity_image").trim().isEmpty() && !jsonChildNode.getString("celebrity_image").trim().equals("null") && !jsonChildNode.getString("celebrity_image").trim().matches("")) {
-                                content.setCelebrity_image(jsonChildNode.getString("celebrity_image"));
+                            else
+                            {
+                                if(!celebrityImage.contains("http"))
+                                {
+                                    celebrityImage ="";
+                                }
                             }
 
+                            content.setName(celebrityName);
+                            content.setCast_type(celebrityCastType);
+                            content.setCelebrity_image(celebrityImage);
 
                             celibrityOutputModel.add(content);
                         } catch (Exception e) {
@@ -146,6 +162,6 @@ public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel,Void ,Vo
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onGetCelibrityPostExecuteCompleted(celibrityOutputModel,code);
+        listener.onGetCelibrityPostExecuteCompleted(celibrityOutputModel,code,msg);
     }
 }

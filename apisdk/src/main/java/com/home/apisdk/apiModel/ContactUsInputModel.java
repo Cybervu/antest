@@ -9,6 +9,16 @@ public class ContactUsInputModel {
     String name;
     String message;
 
+    public String getLang_code() {
+        return Lang_code;
+    }
+
+    public void setLang_code(String lang_code) {
+        Lang_code = lang_code;
+    }
+
+    String Lang_code;
+
     public String getMessage() {
         return message;
     }

@@ -84,7 +84,9 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
                         .appendQueryParameter("purchase_type", this.validateUserInput.getPurchaseType());
                 String query = builder.build().getEncodedQuery();
 
-
+                Log.v("SUBHA", "authToken" +this.validateUserInput.getAuthToken());
+                Log.v("SUBHA", "user_id" +this.validateUserInput.getUserId());
+                Log.v("SUBHA", "movie_id" +this.validateUserInput.getMuviUniqueId());
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));

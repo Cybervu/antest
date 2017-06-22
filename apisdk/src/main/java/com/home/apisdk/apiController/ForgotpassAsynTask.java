@@ -62,6 +62,11 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
             httppost.addHeader("email", this.forgotpassword_input.getEmail());
             httppost.addHeader("lang_code",this.forgotpassword_input.getLang_code());
 
+            Log.v("SUBHA", "responseStr"+this.forgotpassword_input.getAuthToken());
+            Log.v("SUBHA", "responseStr"+this.forgotpassword_input.getEmail());
+            Log.v("SUBHA", "responseStr"+this.forgotpassword_input.getLang_code());
+
+
 
             // Execute HTTP Post Request
             try {
