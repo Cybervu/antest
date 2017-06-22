@@ -22,26 +22,32 @@ import java.io.IOException;
  * Created by MUVI on 1/20/2017.
  */
 
-public class LogoutAsynctask extends AsyncTask<LogoutInput,Void ,Void > {
+public class LogoutAsynctask extends AsyncTask<LogoutInput, Void, Void> {
 
     public LogoutInput logoutInput;
-    String PACKAGE_NAME,message,responseStr,status;
+    String PACKAGE_NAME, message, responseStr, status;
     int code;
 
-    public interface Logout{
+
+
+    public interface Logout {
         void onLogoutPreExecuteStarted();
+
         void onLogoutPostExecuteCompleted(int code, String status, String message);
     }
 
     private Logout listener;
+    private Context context;
 
-    public LogoutAsynctask(LogoutInput logoutInput, Context context) {
-        this.listener = (Logout) context;
+    public LogoutAsynctask(LogoutInput logoutInput, Logout listener, Context context) {
+        this.listener = listener;
+        this.context = context;
+
 
         this.logoutInput = logoutInput;
-        PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
-        Log.v("SUBHA","LogoutAsynctask");
+        PACKAGE_NAME = context.getPackageName();
+        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
+        Log.v("SUBHA", "LogoutAsynctask");
 
     }
 
@@ -55,7 +61,7 @@ public class LogoutAsynctask extends AsyncTask<LogoutInput,Void ,Void > {
 
             httppost.addHeader("authToken", this.logoutInput.getAuthToken());
             httppost.addHeader("login_history_id", this.logoutInput.getLogin_history_id());
-            httppost.addHeader("lang_code",this.logoutInput.getLang_code());
+            httppost.addHeader("lang_code", this.logoutInput.getLang_code());
 
             // Execute HTTP Post Request
             try {
@@ -95,7 +101,7 @@ public class LogoutAsynctask extends AsyncTask<LogoutInput,Void ,Void > {
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onLogoutPreExecuteStarted();
-        code= 0;
+        code = 0;
         status = "";
         /*if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
@@ -114,6 +120,6 @@ public class LogoutAsynctask extends AsyncTask<LogoutInput,Void ,Void > {
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onLogoutPostExecuteCompleted(code,status,message);
+        listener.onLogoutPostExecuteCompleted(code, status, message);
     }
 }

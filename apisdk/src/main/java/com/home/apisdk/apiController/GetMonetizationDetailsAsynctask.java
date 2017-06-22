@@ -37,10 +37,13 @@ public class GetMonetizationDetailsAsynctask extends AsyncTask<GetMonetizationDe
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private GetMonetizationDetails listener;
+    private Context context;
     GetMonetizationDetailsOutputModel getMonetizationDetailsOutputModel=new GetMonetizationDetailsOutputModel();
 
-    public GetMonetizationDetailsAsynctask(GetMonetizationDetailsInputModel getMonetizationDetailsInputModel, Context context) {
-        this.listener = (GetMonetizationDetails) context;
+    public GetMonetizationDetailsAsynctask(GetMonetizationDetailsInputModel getMonetizationDetailsInputModel,GetMonetizationDetails listener, Context context) {
+        this.listener = listener;
+        this.context=context;
+
         this.getMonetizationDetailsInputModel = getMonetizationDetailsInputModel;
         PACKAGE_NAME=context.getPackageName();
         Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);

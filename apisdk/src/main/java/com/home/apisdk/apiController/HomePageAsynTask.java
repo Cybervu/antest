@@ -43,12 +43,15 @@ public class HomePageAsynTask extends AsyncTask<HomePageInputModel, Void, Void> 
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private HomePage listener;
+    private Context context;
     HomePageOutputModel homePageOutputModel = new HomePageOutputModel();
     ArrayList<HomePageSectionModel> homePageSectionModelArrayList = new ArrayList<HomePageSectionModel>();
     ArrayList<HomePageBannerModel> homePageBannerModelArrayList = new ArrayList<HomePageBannerModel>();
 
-    public HomePageAsynTask(HomePageInputModel homePageInputModel, Context context) {
-        this.listener = (HomePage) context;
+    public HomePageAsynTask(HomePageInputModel homePageInputModel,HomePage listener, Context context) {
+        this.listener = listener;
+        this.context=context;
+
         this.homePageInputModel = homePageInputModel;
         PACKAGE_NAME = context.getPackageName();
         Log.v("SUBHA","getPlanListAsynctask");

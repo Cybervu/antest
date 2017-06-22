@@ -40,10 +40,13 @@ public class GetVideoBufferLogsAsynTask extends AsyncTask<VideoBufferLogsInputMo
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private GetVideoBufferLogs listener;
+    private Context context;
     VideoBufferLogsOutputModel videoBufferLogsOutputModel=new VideoBufferLogsOutputModel();
 
-    public GetVideoBufferLogsAsynTask(VideoBufferLogsInputModel videoBufferLogsInputModel, Context context) {
-        this.listener = (GetVideoBufferLogs)context;
+    public GetVideoBufferLogsAsynTask(VideoBufferLogsInputModel videoBufferLogsInputModel,GetVideoBufferLogs listener, Context context) {
+        this.listener = listener;
+        this.context=context;
+
         this.videoBufferLogsInputModel = videoBufferLogsInputModel;
         Log.v("SUBHA", "LoginAsynTask");
         PACKAGE_NAME=context.getPackageName();

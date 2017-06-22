@@ -37,9 +37,12 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
     }
 
     private GetStaticPageDetails listener;
+    private Context context;
 
-    public GetStaticPagesDetailsAsynTask(GetStaticPagesDeatilsModelInput getStaticPagesDeatilsModelInput, Context context) {
-        this.listener = (GetStaticPageDetails) context;
+    public GetStaticPagesDetailsAsynTask(GetStaticPagesDeatilsModelInput getStaticPagesDeatilsModelInput, GetStaticPageDetails listener, Context context) {
+        this.listener = listener;
+        this.context = context;
+
 
         this.getStaticPagesDeatilsModelInput = getStaticPagesDeatilsModelInput;
         PACKAGE_NAME = context.getPackageName();
@@ -104,7 +107,6 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
                     getStaticPageDetailsModelOutput.setTitle("");
 
                 }
-
 
 
             }

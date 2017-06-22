@@ -37,10 +37,12 @@ public class CheckGeoBlockCountryAsynTask extends AsyncTask<CheckGeoBlockInputMo
     }
 
         private CheckGeoBlockForCountry listener;
+        private Context context;
        CheckGeoBlockOutputModel checkGeoBlockOutputModel=new CheckGeoBlockOutputModel();
 
-        public CheckGeoBlockCountryAsynTask(CheckGeoBlockInputModel checkGeoBlockInputModel, Context context) {
-            this.listener = (CheckGeoBlockForCountry) context;
+        public CheckGeoBlockCountryAsynTask(CheckGeoBlockInputModel checkGeoBlockInputModel,CheckGeoBlockForCountry listener, Context context) {
+            this.listener = listener;
+            this.context=context;
 
             this.checkGeoBlockInputModel = checkGeoBlockInputModel;
             PACKAGE_NAME=context.getPackageName();

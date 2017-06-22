@@ -24,27 +24,31 @@ import java.io.IOException;
  * Created by MUVI on 1/20/2017.
  */
 
-public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Input,Void ,Void > {
+public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Input, Void, Void> {
 
     public Update_UserProfile_Input update_userProfile_input;
-    String PACKAGE_NAME,message,responseStr;
+    String PACKAGE_NAME, message, responseStr;
     int code;
     Update_UserProfile_Output update_userProfile_output;
 
-    public interface Update_UserProfile{
+    public interface Update_UserProfile {
         void onUpdateUserProfilePreExecuteStarted();
+
         void onUpdateUserProfilePostExecuteCompleted(Update_UserProfile_Output update_userProfile_output, int code, String message);
     }
 
     private Update_UserProfile listener;
+    private Context context;
 
-    public UpadteUserProfileAsynctask(Update_UserProfile_Input update_userProfile_input, Context context) {
-        this.listener = (Update_UserProfile) context;
+    public UpadteUserProfileAsynctask(Update_UserProfile_Input update_userProfile_input, Update_UserProfile listener, Context context) {
+        this.listener = listener;
+        this.context = context;
+
 
         this.update_userProfile_input = update_userProfile_input;
-        PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
-        Log.v("SUBHA","UpadteUserProfileAsynctask");
+        PACKAGE_NAME = context.getPackageName();
+        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
+        Log.v("SUBHA", "UpadteUserProfileAsynctask");
 
     }
 
@@ -82,24 +86,24 @@ public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Inp
                 message = myJson.optString("msg");
             }
 
-                if (code == 200) {
+            if (code == 200) {
 
 
-                        try {
-                            update_userProfile_output = new Update_UserProfile_Output();
-                            update_userProfile_output.setName(myJson.optString("name"));
-                            update_userProfile_output.setEmail(myJson.optString("email"));
-                            update_userProfile_output.setNick_name(myJson.optString("nick_name"));
-                            update_userProfile_output.setProfile_image(myJson.optString("profile_image"));
+                try {
+                    update_userProfile_output = new Update_UserProfile_Output();
+                    update_userProfile_output.setName(myJson.optString("name"));
+                    update_userProfile_output.setEmail(myJson.optString("email"));
+                    update_userProfile_output.setNick_name(myJson.optString("nick_name"));
+                    update_userProfile_output.setProfile_image(myJson.optString("profile_image"));
 
-                            Log.v("SUBHA", "user_name====== " +myJson.optString("name"));
+                    Log.v("SUBHA", "user_name====== " + myJson.optString("name"));
 
-                        } catch (Exception e) {
-                            code = 0;
-                            message = "";
-                        }
-
+                } catch (Exception e) {
+                    code = 0;
+                    message = "";
                 }
+
+            }
         } catch (Exception e) {
             code = 0;
             message = "";
@@ -112,24 +116,22 @@ public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Inp
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onUpdateUserProfilePreExecuteStarted();
-        code= 0;
-        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
-        {
+        code = 0;
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
-            listener.onUpdateUserProfilePostExecuteCompleted(update_userProfile_output,code,message);
+            listener.onUpdateUserProfilePostExecuteCompleted(update_userProfile_output, code, message);
             return;
         }
-        if(CommonConstants.hashKey.equals(""))
-        {
+        if (CommonConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
-            listener.onUpdateUserProfilePostExecuteCompleted(update_userProfile_output,code,message);
+            listener.onUpdateUserProfilePostExecuteCompleted(update_userProfile_output, code, message);
         }
     }
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onUpdateUserProfilePostExecuteCompleted(update_userProfile_output,code,message);
+        listener.onUpdateUserProfilePostExecuteCompleted(update_userProfile_output, code, message);
     }
 }

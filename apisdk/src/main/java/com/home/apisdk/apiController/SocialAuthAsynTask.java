@@ -28,37 +28,43 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
 
     String responseStr;
     int status;
-    String message,PACKAGE_NAME;
-    public interface SocialAuth{
+    String message, PACKAGE_NAME;
+
+    public interface SocialAuth {
         void onSocialAuthPreExecuteStarted();
+
         void onSocialAuthPostExecuteCompleted(SocialAuthOutputModel socialAuthOutputModel, int status, String message);
     }
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private SocialAuth listener;
-    SocialAuthOutputModel socialAuthOutputModel=new SocialAuthOutputModel();
+    private Context context;
+    SocialAuthOutputModel socialAuthOutputModel = new SocialAuthOutputModel();
 
-    public SocialAuthAsynTask(SocialAuthInputModel socialAuthInputModel, Context context) {
-        this.listener = (SocialAuth)context;
+    public SocialAuthAsynTask(SocialAuthInputModel socialAuthInputModel, SocialAuth listener, Context context) {
+        this.listener = listener;
+        this.context = context;
+
         this.socialAuthInputModel = socialAuthInputModel;
         Log.v("SUBHA", "LoginAsynTask");
-        PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
+        PACKAGE_NAME = context.getPackageName();
+        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
 
     }
+
     @Override
     protected Void doInBackground(SocialAuthInputModel... params) {
 
 
         try {
-            HttpClient httpclient=new DefaultHttpClient();
+            HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getSocialauthUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader("authToken", this.socialAuthInputModel.getAuthToken());
             httppost.addHeader("email", this.socialAuthInputModel.getEmail());
-            httppost.addHeader("password",this.socialAuthInputModel.getPassword());
-            httppost.addHeader("name",this.socialAuthInputModel.getName());
-            httppost.addHeader("fb_userid",this.socialAuthInputModel.getFb_userid());
+            httppost.addHeader("password", this.socialAuthInputModel.getPassword());
+            httppost.addHeader("name", this.socialAuthInputModel.getName());
+            httppost.addHeader("fb_userid", this.socialAuthInputModel.getFb_userid());
 
 
             // Execute HTTP Post Request
@@ -67,22 +73,22 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
                 responseStr = EntityUtils.toString(response.getEntity());
 
 
-            } catch (org.apache.http.conn.ConnectTimeoutException e){
+            } catch (org.apache.http.conn.ConnectTimeoutException e) {
 
                 status = 0;
                 message = "Error";
-                Log.v("SUBHA","ConnectTimeoutException"+e.toString());
+                Log.v("SUBHA", "ConnectTimeoutException" + e.toString());
 
 
-            }catch (IOException e) {
+            } catch (IOException e) {
                 status = 0;
                 message = "Error";
-                Log.v("SUBHA","IOException"+e.toString());
+                Log.v("SUBHA", "IOException" + e.toString());
 
             }
 
-            JSONObject mainJson =null;
-            if(responseStr!=null) {
+            JSONObject mainJson = null;
+            if (responseStr != null) {
                 mainJson = new JSONObject(responseStr);
                 status = Integer.parseInt(mainJson.optString("code"));
 
@@ -151,23 +157,19 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
                 }
 
 
-            }
-
-            else{
+            } else {
                 responseStr = "0";
                 status = 0;
                 message = "Error";
             }
         } catch (final JSONException e1) {
 
-            Log.v("SUBHA","IOException"+e1.toString());
+            Log.v("SUBHA", "IOException" + e1.toString());
 
             responseStr = "0";
             status = 0;
-            message = "Error";            }
-
-        catch (Exception e)
-        {
+            message = "Error";
+        } catch (Exception e) {
 
             responseStr = "0";
             status = 0;
@@ -177,6 +179,7 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
 
 
     }
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -198,7 +201,6 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
         }*/
 
     }
-
 
 
     @Override

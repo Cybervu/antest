@@ -38,10 +38,13 @@ public class GetMenuListAsynctask extends AsyncTask<MenuListInput,Void ,Void > {
     }
 
     private GetMenuList listener;
+    private Context context;
     ArrayList<MenuListOutput> menuListOutput = new ArrayList<MenuListOutput>();
 
-    public GetMenuListAsynctask(MenuListInput menuListInput, Context context) {
-        this.listener = (GetMenuList) context;
+    public GetMenuListAsynctask(MenuListInput menuListInput,GetMenuList listener, Context context) {
+        this.listener = listener;
+        this.context=context;
+
 
         this.menuListInput = menuListInput;
         PACKAGE_NAME=context.getPackageName();

@@ -25,27 +25,31 @@ import java.util.ArrayList;
  * Created by MUVI on 1/20/2017.
  */
 
-public class PurchaseHistoryAsyntask extends AsyncTask<PurchaseHistoryInputModel,Void ,Void > {
+public class PurchaseHistoryAsyntask extends AsyncTask<PurchaseHistoryInputModel, Void, Void> {
 
     public PurchaseHistoryInputModel purchaseHistoryInputModel;
-    String PACKAGE_NAME,message,responseStr;
+    String PACKAGE_NAME, message, responseStr;
     int code;
 
-    public interface PurchaseHistory{
+    public interface PurchaseHistory {
         void onPurchaseHistoryPreExecuteStarted();
+
         void onPurchaseHistoryPostExecuteCompleted(ArrayList<PurchaseHistoryOutputModel> purchaseHistoryOutputModel, int status);
     }
 
     private PurchaseHistory listener;
+    private Context context;
     ArrayList<PurchaseHistoryOutputModel> purchaseHistoryOutputModel = new ArrayList<PurchaseHistoryOutputModel>();
 
-    public PurchaseHistoryAsyntask(PurchaseHistoryInputModel purchaseHistoryInputModel, Context context) {
-        this.listener = (PurchaseHistory) context;
+    public PurchaseHistoryAsyntask(PurchaseHistoryInputModel purchaseHistoryInputModel, PurchaseHistory listener, Context context) {
+        this.listener = listener;
+        this.context = context;
+
 
         this.purchaseHistoryInputModel = purchaseHistoryInputModel;
-        PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
-        Log.v("SUBHA","getPlanListAsynctask");
+        PACKAGE_NAME = context.getPackageName();
+        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
+        Log.v("SUBHA", "getPlanListAsynctask");
 
     }
 
@@ -85,51 +89,51 @@ public class PurchaseHistoryAsyntask extends AsyncTask<PurchaseHistoryInputModel
 
             }
 
-                if (code == 200) {
+            if (code == 200) {
 
-                    JSONArray jsonMainNode = myJson.getJSONArray("section");
+                JSONArray jsonMainNode = myJson.getJSONArray("section");
 
-                    int lengthJsonArr = jsonMainNode.length();
-                    for (int i = 0; i < lengthJsonArr; i++) {
-                        JSONObject jsonChildNode;
-                        try {
-                            jsonChildNode = jsonMainNode.getJSONObject(i);
-                            PurchaseHistoryOutputModel content = new PurchaseHistoryOutputModel();
+                int lengthJsonArr = jsonMainNode.length();
+                for (int i = 0; i < lengthJsonArr; i++) {
+                    JSONObject jsonChildNode;
+                    try {
+                        jsonChildNode = jsonMainNode.getJSONObject(i);
+                        PurchaseHistoryOutputModel content = new PurchaseHistoryOutputModel();
 
-                            if ((jsonChildNode.has("amount")) && jsonChildNode.getString("amount").trim() != null && !jsonChildNode.getString("amount").trim().isEmpty() && !jsonChildNode.getString("amount").trim().equals("null") && !jsonChildNode.getString("amount").trim().matches("")) {
-                                content.setAmount(jsonChildNode.getString("amount"));
-                            }
-                            if ((jsonChildNode.has("currency_code")) && jsonChildNode.getString("currency_code").trim() != null && !jsonChildNode.getString("currency_code").trim().isEmpty() && !jsonChildNode.getString("currency_code").trim().equals("null") && !jsonChildNode.getString("currency_code").trim().matches("")) {
-                                content.setCurrency_code(jsonChildNode.getString("currency_code"));
-
-                            }
-                            if ((jsonChildNode.has("currency_symbol")) && jsonChildNode.getString("currency_symbol").trim() != null && !jsonChildNode.getString("currency_symbol").trim().isEmpty() && !jsonChildNode.getString("currency_symbol").trim().equals("null") && !jsonChildNode.getString("currency_symbol").trim().matches("")) {
-                                content.setCurrency_symbol(jsonChildNode.getString("currency_symbol"));
-                            }
-                            if ((jsonChildNode.has("id")) && jsonChildNode.getString("id").trim() != null && !jsonChildNode.getString("id").trim().isEmpty() && !jsonChildNode.getString("id").trim().equals("null") && !jsonChildNode.getString("id").trim().matches("")) {
-                                content.setId(jsonChildNode.getString("id"));
-                            }
-                            if ((jsonChildNode.has("invoice_id")) && jsonChildNode.getString("invoice_id").trim() != null && !jsonChildNode.getString("invoice_id").trim().isEmpty() && !jsonChildNode.getString("invoice_id").trim().equals("null") && !jsonChildNode.getString("invoice_id").trim().matches("")) {
-                                content.setInvoice_id(jsonChildNode.getString("invoice_id"));
-                            }
-                            if ((jsonChildNode.has("statusppv")) && jsonChildNode.getString("statusppv").trim() != null && !jsonChildNode.getString("statusppv").trim().isEmpty() && !jsonChildNode.getString("statusppv").trim().equals("null") && !jsonChildNode.getString("statusppv").trim().matches("")) {
-                                content.setStatusppv(jsonChildNode.getString("statusppv"));
-                            }
-                            if ((jsonChildNode.has("transaction_date")) && jsonChildNode.getString("transaction_date").trim() != null && !jsonChildNode.getString("transaction_date").trim().isEmpty() && !jsonChildNode.getString("transaction_date").trim().equals("null") && !jsonChildNode.getString("transaction_date").trim().matches("")) {
-                                content.setTransaction_date(jsonChildNode.getString("transaction_date"));
-                            }
-                            if ((jsonChildNode.has("transaction_status")) && jsonChildNode.getString("transaction_status").trim() != null && !jsonChildNode.getString("transaction_status").trim().isEmpty() && !jsonChildNode.getString("transaction_status").trim().equals("null") && !jsonChildNode.getString("transaction_status").trim().matches("")) {
-                                content.setTransaction_status(jsonChildNode.getString("transaction_status"));
-                            }
-
-
-                            purchaseHistoryOutputModel.add(content);
-                        } catch (Exception e) {
-                            code = 0;
-                            message = "";
+                        if ((jsonChildNode.has("amount")) && jsonChildNode.getString("amount").trim() != null && !jsonChildNode.getString("amount").trim().isEmpty() && !jsonChildNode.getString("amount").trim().equals("null") && !jsonChildNode.getString("amount").trim().matches("")) {
+                            content.setAmount(jsonChildNode.getString("amount"));
                         }
+                        if ((jsonChildNode.has("currency_code")) && jsonChildNode.getString("currency_code").trim() != null && !jsonChildNode.getString("currency_code").trim().isEmpty() && !jsonChildNode.getString("currency_code").trim().equals("null") && !jsonChildNode.getString("currency_code").trim().matches("")) {
+                            content.setCurrency_code(jsonChildNode.getString("currency_code"));
+
+                        }
+                        if ((jsonChildNode.has("currency_symbol")) && jsonChildNode.getString("currency_symbol").trim() != null && !jsonChildNode.getString("currency_symbol").trim().isEmpty() && !jsonChildNode.getString("currency_symbol").trim().equals("null") && !jsonChildNode.getString("currency_symbol").trim().matches("")) {
+                            content.setCurrency_symbol(jsonChildNode.getString("currency_symbol"));
+                        }
+                        if ((jsonChildNode.has("id")) && jsonChildNode.getString("id").trim() != null && !jsonChildNode.getString("id").trim().isEmpty() && !jsonChildNode.getString("id").trim().equals("null") && !jsonChildNode.getString("id").trim().matches("")) {
+                            content.setId(jsonChildNode.getString("id"));
+                        }
+                        if ((jsonChildNode.has("invoice_id")) && jsonChildNode.getString("invoice_id").trim() != null && !jsonChildNode.getString("invoice_id").trim().isEmpty() && !jsonChildNode.getString("invoice_id").trim().equals("null") && !jsonChildNode.getString("invoice_id").trim().matches("")) {
+                            content.setInvoice_id(jsonChildNode.getString("invoice_id"));
+                        }
+                        if ((jsonChildNode.has("statusppv")) && jsonChildNode.getString("statusppv").trim() != null && !jsonChildNode.getString("statusppv").trim().isEmpty() && !jsonChildNode.getString("statusppv").trim().equals("null") && !jsonChildNode.getString("statusppv").trim().matches("")) {
+                            content.setStatusppv(jsonChildNode.getString("statusppv"));
+                        }
+                        if ((jsonChildNode.has("transaction_date")) && jsonChildNode.getString("transaction_date").trim() != null && !jsonChildNode.getString("transaction_date").trim().isEmpty() && !jsonChildNode.getString("transaction_date").trim().equals("null") && !jsonChildNode.getString("transaction_date").trim().matches("")) {
+                            content.setTransaction_date(jsonChildNode.getString("transaction_date"));
+                        }
+                        if ((jsonChildNode.has("transaction_status")) && jsonChildNode.getString("transaction_status").trim() != null && !jsonChildNode.getString("transaction_status").trim().isEmpty() && !jsonChildNode.getString("transaction_status").trim().equals("null") && !jsonChildNode.getString("transaction_status").trim().matches("")) {
+                            content.setTransaction_status(jsonChildNode.getString("transaction_status"));
+                        }
+
+
+                        purchaseHistoryOutputModel.add(content);
+                    } catch (Exception e) {
+                        code = 0;
+                        message = "";
                     }
                 }
+            }
         } catch (Exception e) {
             code = 0;
             message = "";
@@ -143,7 +147,7 @@ public class PurchaseHistoryAsyntask extends AsyncTask<PurchaseHistoryInputModel
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onPurchaseHistoryPreExecuteStarted();
-        code= 0;
+        code = 0;
      /*   if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
@@ -155,12 +159,12 @@ public class PurchaseHistoryAsyntask extends AsyncTask<PurchaseHistoryInputModel
             this.cancel(true);
             listener.onGetPlanListPostExecuteCompleted(planListOutput,code);
         }*/
-        listener.onPurchaseHistoryPostExecuteCompleted(purchaseHistoryOutputModel,code);
+        listener.onPurchaseHistoryPostExecuteCompleted(purchaseHistoryOutputModel, code);
 
     }
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onPurchaseHistoryPostExecuteCompleted(purchaseHistoryOutputModel,code);
+        listener.onPurchaseHistoryPostExecuteCompleted(purchaseHistoryOutputModel, code);
     }
 }

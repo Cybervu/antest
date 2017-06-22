@@ -36,9 +36,11 @@ public class ContactUsAsynTask extends AsyncTask<ContactUsInputModel,Void ,Void 
     }
 
     private ContactUs listener;
+    private Context context;
 
-    public ContactUsAsynTask(ContactUsInputModel contactUsInputModel, Context context) {
-        this.listener = (ContactUs) context;
+    public ContactUsAsynTask(ContactUsInputModel contactUsInputModel,ContactUs listener, Context context) {
+        this.listener = listener;
+        this.context=context;
 
         this.contactUsInputModel = contactUsInputModel;
         PACKAGE_NAME=context.getPackageName();

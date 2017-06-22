@@ -40,11 +40,14 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private ForgotpassDetails listener;
+    private Context context;
     Forgotpassword_output forgotpassword_output=new Forgotpassword_output();
 
-    public ForgotpassAsynTask(Forgotpassword_input forgotpassword_input, Context context) {
+    public ForgotpassAsynTask(Forgotpassword_input forgotpassword_input,ForgotpassDetails listener, Context context) {
         this.forgotpassword_input = forgotpassword_input;
-        this.listener = (ForgotpassDetails) context;
+        this.listener = listener;
+        this.context=context;
+
         Log.v("SUBHA", "ForgotpassAsynTask");
         PACKAGE_NAME=context.getPackageName();
         Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);

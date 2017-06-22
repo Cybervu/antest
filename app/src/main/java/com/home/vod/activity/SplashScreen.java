@@ -158,20 +158,20 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
             if (countryCodeStr == null) {
                 if (isNetwork == true) {
-                    GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this);
+                    GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this,this);
                     asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
                 } else {
                     noInternetLayout.setVisibility(View.VISIBLE);
                     geoBlockedLayout.setVisibility(View.GONE);
                 }
             } else {
-                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this);
+                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this,this);
                 asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
             }
         } else {
             if (isNetwork == true) {
 
-                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this);
+                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this,this);
                 asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
             } else {
@@ -217,7 +217,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             CheckGeoBlockInputModel checkGeoBlockInputModel=new CheckGeoBlockInputModel();
             checkGeoBlockInputModel.setAuthToken(Util.authTokenStr);
             checkGeoBlockInputModel.setIp(ipAddressStr);
-            CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel,this);
+            CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel,this,this);
             asynGetCountry.executeOnExecutor(threadPoolExecutor);
         }
     }
@@ -242,7 +242,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                     SubscriptionPlanInputModel planListInput=new SubscriptionPlanInputModel();
                     planListInput.setAuthToken(Util.authTokenStr);
                     planListInput.setLang(Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                    GetPlanListAsynctask asynGetPlanid= new GetPlanListAsynctask(planListInput,this);
+                    GetPlanListAsynctask asynGetPlanid= new GetPlanListAsynctask(planListInput,this,this);
                     asynGetPlanid.executeOnExecutor(threadPoolExecutor);
                 }
 
@@ -273,7 +273,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         IsRegistrationEnabledInputModel isRegistrationEnabledInputModel=new IsRegistrationEnabledInputModel();
         isRegistrationEnabledInputModel.setAuthToken(Util.authTokenStr);
-        IsRegistrationEnabledAsynTask asynIsRegistrationEnabled=new IsRegistrationEnabledAsynTask(isRegistrationEnabledInputModel,this);
+        IsRegistrationEnabledAsynTask asynIsRegistrationEnabled=new IsRegistrationEnabledAsynTask(isRegistrationEnabledInputModel,this,this);
         asynIsRegistrationEnabled.executeOnExecutor(threadPoolExecutor);
     }
 
@@ -294,7 +294,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         isLoginPrefEditor.commit();
         LanguageListInputModel languageListInputModel=new LanguageListInputModel();
         languageListInputModel.setAuthToken(Util.authTokenStr);
-        GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel,this);
+        GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel,this,this);
         asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
 
     }
@@ -445,7 +445,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                     get_userProfile_input.setEmail(get_userProfile_input.getEmail());
                     get_userProfile_input.setUser_id(get_userProfile_input.getEmail());
                     get_userProfile_input.setLang_code(get_userProfile_input.getLang_code());
-                    GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input,this);
+                    GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input,this,this);
                     asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
 
                 } else {
@@ -1553,7 +1553,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             GenreListInput genreListInput=new GenreListInput();
             genreListInput.setAuthToken(Util.authTokenStr);
 
-            GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput,SplashScreen.this);
+            GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput,SplashScreen.this,SplashScreen.this);
             asynGetGenreList.executeOnExecutor(threadPoolExecutor);
 
 

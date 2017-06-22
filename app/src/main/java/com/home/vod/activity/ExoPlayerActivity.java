@@ -741,7 +741,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 videoLogsInputModel.setDeviceType("2");
                                 videoLogsInputModel.setVideoLogId(videoLogId);
 
-                                GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this);
+                                GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this,ExoPlayerActivity.this);
                                 asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                             }
 
@@ -779,7 +779,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                     videoLogsInputModel.setDeviceType("2");
                                     videoLogsInputModel.setVideoLogId(videoLogId);
 
-                                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this);
+                                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this,ExoPlayerActivity.this);
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
 
@@ -804,7 +804,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 //        emVideoView.setVideoURI(Uri.parse("https://redirector.googlevideo.com/videoplayback?mime=video%2Fmp4&gir=yes&key=yt6&requiressl=yes&initcwndbps=5801250&gcr=us&ratebypass=yes&dur=14097.298&lmt=1492322340213750&source=youtube&clen=695864911&id=o-AKWpvS-A4M1BMyXQj_FgFCgNeVAkhhIz6HNbSx6IzIp-&mm=31&mn=sn-p5qs7nee&ei=klkZWYjnN4jC1wK24b6wAQ&ms=au&ipbits=0&pl=24&mv=m&expire=1494855155&ip=159.253.144.86&sparams=clen%2Cdur%2Cei%2Cgcr%2Cgir%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cupn%2Cexpire&signature=410B1D5E19A19F646D628A43F6198997F430002C.AE2553E2A5C08FE91736B24A5C57DD8CA8C20A01&itag=18&upn=iPbZvZf33FA&mt=1494833478&title=Baahubali+2+-+The+Conclusion+Pre+Release+Event+LIVE+360%C2%B0.mp4"));
 
 
-        asynGetIpAddress = new GetIpAddressAsynTask(this);
+        asynGetIpAddress = new GetIpAddressAsynTask(this,this);
         asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
     }
 
@@ -830,7 +830,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         videoBufferLogsInputModel.setBufferEndTime(String.valueOf(playerPosition));
         videoBufferLogsInputModel.setBufferLogUniqueId(videoBufferLogUniqueId);
         videoBufferLogsInputModel.setLocation(Location);
-        GetVideoBufferLogsAsynTask asyncVideoBufferLogDetails = new GetVideoBufferLogsAsynTask(videoBufferLogsInputModel,this);
+        GetVideoBufferLogsAsynTask asyncVideoBufferLogDetails = new GetVideoBufferLogsAsynTask(videoBufferLogsInputModel,this,this);
         asyncVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
 
         return;
@@ -1108,7 +1108,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                     videoLogsInputModel.setDeviceType("2");
                                     videoLogsInputModel.setVideoLogId(videoLogId);
 
-                                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this);
+                                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this,ExoPlayerActivity.this);
                                     watchStatus = "complete";
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else if (currentPositionStr > 0 && currentPositionStr % 60 == 0) {
@@ -1126,7 +1126,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                     videoLogsInputModel.setDeviceType("2");
                                     videoLogsInputModel.setVideoLogId(videoLogId);
 
-                                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this);
+                                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this,ExoPlayerActivity.this);
                                     watchStatus = "halfplay";
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -2132,7 +2132,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     videoLogsInputModel.setDeviceType("2");
                     videoLogsInputModel.setVideoLogId(videoLogId);
 
-                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this);
+                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this,ExoPlayerActivity.this);
                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                 }
 
@@ -2291,7 +2291,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             videoLogsInputModel.setDeviceType("2");
             videoLogsInputModel.setVideoLogId(videoLogId);
 
-            GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this);
+            GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this,ExoPlayerActivity.this);
             asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
             super.onPostExecute(result);

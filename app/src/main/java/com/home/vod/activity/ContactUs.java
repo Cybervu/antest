@@ -233,7 +233,7 @@ public class ContactUs extends Fragment implements ContactUsAsynTask.ContactUs {
             contactUsInputModel.setName(String.valueOf(regNameStr));
             contactUsInputModel.setMessage(String.valueOf(regMessageStr));
             contactUsInputModel.setLang_code(Util.getTextofLanguage(context,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-            ContactUsAsynTask asynContactUs = new ContactUsAsynTask(contactUsInputModel, context);
+            ContactUsAsynTask asynContactUs = new ContactUsAsynTask(contactUsInputModel, this,context);
             asynContactUs.execute();
 
         }else{

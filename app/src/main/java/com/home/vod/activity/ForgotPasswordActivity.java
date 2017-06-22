@@ -149,7 +149,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
                 forgotpassword_input.setAuthToken(Util.authTokenStr);
                 forgotpassword_input.setLang_code(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                 forgotpassword_input.setEmail(loginEmailStr);
-                ForgotpassAsynTask asyncPasswordForgot = new ForgotpassAsynTask(forgotpassword_input,this);
+                ForgotpassAsynTask asyncPasswordForgot = new ForgotpassAsynTask(forgotpassword_input,this,this);
                 asyncPasswordForgot.executeOnExecutor(threadPoolExecutor);
             } else {
 

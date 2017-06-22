@@ -33,9 +33,12 @@ public class GetIpAddressAsynTask extends AsyncTask<Void,Void ,Void > {
     }
 
     private IpAddress listener;
+    private Context context;
 
-    public GetIpAddressAsynTask(Context context) {
-        this.listener = (IpAddress) context;
+    public GetIpAddressAsynTask(IpAddress listener,Context context) {
+        this.listener = listener;
+        this.context=context;
+
         PACKAGE_NAME=context.getPackageName();
 
     }

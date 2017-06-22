@@ -36,9 +36,11 @@ public class DeleteInvoicePdfAsynTask extends AsyncTask<DeleteInvoicePdfInputMod
     }
 
     private DeleteInvoicePdf listener;
+    private Context context;
 
-    public DeleteInvoicePdfAsynTask(DeleteInvoicePdfInputModel deleteInvoicePdfInputModel, Context context) {
-        this.listener = (DeleteInvoicePdf) context;
+    public DeleteInvoicePdfAsynTask(DeleteInvoicePdfInputModel deleteInvoicePdfInputModel,DeleteInvoicePdf listener, Context context) {
+        this.listener = listener;
+        this.context=context;
 
         this.deleteInvoicePdfInputModel = deleteInvoicePdfInputModel;
         PACKAGE_NAME=context.getPackageName();

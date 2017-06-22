@@ -28,21 +28,26 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
     Registration_input registration_input;
     String responseStr;
     int status;
-    String message,PACKAGE_NAME;
+    String message, PACKAGE_NAME;
+
     public interface RegistrationDetails {
         void onRegistrationDetailsPreExecuteStarted();
+
         void onRegistrationDetailsPostExecuteCompleted(Registration_output registration_output, int status, String message);
     }
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private RegistrationDetails listener;
-    Registration_output registration_output=new Registration_output();
+    private Context context;
+    Registration_output registration_output = new Registration_output();
 
-    public RegistrationAsynTask(Registration_input registration_input, Context context) {
-        this.listener = (RegistrationDetails)context;
+    public RegistrationAsynTask(Registration_input registration_input, RegistrationDetails listener, Context context) {
+        this.listener = listener;
+        this.context = context;
+
         this.registration_input = registration_input;
-        PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
+        PACKAGE_NAME = context.getPackageName();
+        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
         Log.v("SUBHA", "ResistrationAsynTask");
 
     }
@@ -51,15 +56,14 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
     protected Void doInBackground(Registration_input... params) {
 
 
-
         try {
-            HttpClient httpclient=new DefaultHttpClient();
+            HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getRegisterUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader("authToken", this.registration_input.getAuthToken());
             httppost.addHeader("email", this.registration_input.getEmail());
-            httppost.addHeader("password",this.registration_input.getPassword());
-            httppost.addHeader("name",this.registration_input.getName());
+            httppost.addHeader("password", this.registration_input.getPassword());
+            httppost.addHeader("name", this.registration_input.getName());
 
             // Execute HTTP Post Request
             try {
@@ -67,20 +71,19 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
                 responseStr = EntityUtils.toString(response.getEntity());
 
 
-            } catch (org.apache.http.conn.ConnectTimeoutException e){
+            } catch (org.apache.http.conn.ConnectTimeoutException e) {
 
                 status = 0;
                 message = "Error";
 
 
-
-            }catch (IOException e) {
+            } catch (IOException e) {
                 status = 0;
                 message = "Error";
             }
 
-            JSONObject mainJson =null;
-            if(responseStr!=null) {
+            JSONObject mainJson = null;
+            if (responseStr != null) {
                 mainJson = new JSONObject(responseStr);
                 status = Integer.parseInt(mainJson.optString("code"));
 
@@ -92,7 +95,7 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
 
                 }
                 if ((mainJson.has("display_name")) && mainJson.getString("display_name").trim() != null && !mainJson.getString("display_name").trim().isEmpty() && !mainJson.getString("display_name").trim().equals("null") && !mainJson.getString("display_name").trim().matches("")) {
-                  String hh=mainJson.getString("display_name");
+                    String hh = mainJson.getString("display_name");
                     registration_output.setDisplay_name(mainJson.getString("display_name"));
 
 
@@ -136,9 +139,7 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
 
                 }
 
-            }
-
-        else{
+            } else {
                 responseStr = "0";
                 status = 0;
                 message = "Error";
@@ -147,10 +148,8 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
 
             responseStr = "0";
             status = 0;
-            message = "Error";            }
-
-        catch (Exception e)
-        {
+            message = "Error";
+        } catch (Exception e) {
 
             responseStr = "0";
             status = 0;
@@ -160,20 +159,20 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
 
 
     }
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onRegistrationDetailsPreExecuteStarted();
 
         status = 0;
-        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
-        {
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onRegistrationDetailsPostExecuteCompleted(registration_output, status, message);
             return;
         }
-        if(CommonConstants.hashKey.equals("")) {
+        if (CommonConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onRegistrationDetailsPostExecuteCompleted(registration_output, status, message);

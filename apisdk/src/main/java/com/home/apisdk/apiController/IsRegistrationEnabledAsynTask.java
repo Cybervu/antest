@@ -36,10 +36,13 @@ public class IsRegistrationEnabledAsynTask extends AsyncTask<IsRegistrationEnabl
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private IsRegistrationenabled listener;
+    private Context context;
     IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel=new IsRegistrationEnabledOutputModel();
 
-    public IsRegistrationEnabledAsynTask(IsRegistrationEnabledInputModel isRegistrationEnabledInputModel, Context context) {
-        this.listener = (IsRegistrationenabled)context;
+    public IsRegistrationEnabledAsynTask(IsRegistrationEnabledInputModel isRegistrationEnabledInputModel,IsRegistrationenabled listener, Context context) {
+        this.listener = listener;
+        this.context=context;
+
         this.isRegistrationEnabledInputModel = isRegistrationEnabledInputModel;
         PACKAGE_NAME=context.getPackageName();
         Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);

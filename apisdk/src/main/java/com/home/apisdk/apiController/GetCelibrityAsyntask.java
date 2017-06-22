@@ -37,10 +37,13 @@ public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel,Void ,Vo
     }
 
     private GetCelibrity listener;
+    private Context context;
     ArrayList<CelibrityOutputModel> celibrityOutputModel = new ArrayList<CelibrityOutputModel>();
 
-    public GetCelibrityAsyntask(CelibrityInputModel celibrityInputModel, Context context) {
-        this.listener = (GetCelibrity) context;
+    public GetCelibrityAsyntask(CelibrityInputModel celibrityInputModel,GetCelibrity listener, Context context) {
+        this.listener = listener;
+        this.context=context;
+
 
         this.celibrityInputModel = celibrityInputModel;
         PACKAGE_NAME=context.getPackageName();

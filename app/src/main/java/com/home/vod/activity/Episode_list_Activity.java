@@ -527,7 +527,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                             getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                             getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                             getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,Episode_list_Activity.this);
+                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,Episode_list_Activity.this,this);
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
                             Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -578,7 +578,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,Episode_list_Activity.this);
+                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,Episode_list_Activity.this,this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                 } else {
                     Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -1105,7 +1105,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this);
+                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this,this);
                                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                                 } else {
                                     ValidateUserInput validateUserInput=new ValidateUserInput();
@@ -1115,7 +1115,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                                     validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
                                     validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
                                     validateUserInput.setLanguageCode(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                                    GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput,this);
+                                    GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput,this,this);
                                     asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                                 }
                             } else {
@@ -1159,7 +1159,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,this);
+                VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,this,this);
                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
             } else {
@@ -3423,7 +3423,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 } else {
                     LanguageListInputModel languageListInputMode=new LanguageListInputModel();
                     languageListInputMode.setAuthToken(Util.authTokenStr);
-                    GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputMode,this);
+                    GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputMode,this,this);
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
                 return false;
@@ -3457,7 +3457,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         logoutInput.setAuthToken(Util.authTokenStr);
                         logoutInput.setLogin_history_id(loginHistoryIdStr);
                         logoutInput.setLang_code(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                        LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput,Episode_list_Activity.this);
+                        LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput,Episode_list_Activity.this,Episode_list_Activity.this);
                         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
 
 

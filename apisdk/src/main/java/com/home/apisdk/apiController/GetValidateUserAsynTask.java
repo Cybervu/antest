@@ -41,10 +41,13 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private GetValidateUser listener;
+    private Context context;
     ValidateUserOutput validateUserOutput=new ValidateUserOutput();
 
-    public GetValidateUserAsynTask(ValidateUserInput validateUserInput, Context context) {
-        this.listener = (GetValidateUser)context;
+    public GetValidateUserAsynTask(ValidateUserInput validateUserInput,GetValidateUser listener, Context context) {
+        this.listener = listener;
+        this.context=context;
+
         this.validateUserInput = validateUserInput;
         PACKAGE_NAME=context.getPackageName();
 

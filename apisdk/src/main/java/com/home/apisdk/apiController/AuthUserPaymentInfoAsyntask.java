@@ -35,10 +35,12 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
     }
 
     private AuthUserPaymentInfo listener;
+    private Context context;
     AuthUserPaymentInfoOutputModel authUserPaymentInfoOutputModel = new AuthUserPaymentInfoOutputModel();
 
-    public AuthUserPaymentInfoAsyntask(AuthUserPaymentInfoInputModel authUserPaymentInfoInputModel, Context context) {
-        this.listener = (AuthUserPaymentInfo) context;
+    public AuthUserPaymentInfoAsyntask(AuthUserPaymentInfoInputModel authUserPaymentInfoInputModel,AuthUserPaymentInfo listener, Context context) {
+        this.listener = listener;
+        this.context = context;
 
         this.authUserPaymentInfoInputModel = authUserPaymentInfoInputModel;
         PACKAGE_NAME=context.getPackageName();

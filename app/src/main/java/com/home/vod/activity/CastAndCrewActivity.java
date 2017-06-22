@@ -171,7 +171,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         celibrityInputModel.setAuthToken(Util.authTokenStr);
         celibrityInputModel.setMovie_id(getIntent().getStringExtra("cast_movie_id"));
         celibrityInputModel.setLang_code(Util.getTextofLanguage(CastAndCrewActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-        GetCelibrityAsyntask asynGetCsatDetails = new GetCelibrityAsyntask(celibrityInputModel,this);
+        GetCelibrityAsyntask asynGetCsatDetails = new GetCelibrityAsyntask(celibrityInputModel,this,this);
         asynGetCsatDetails.executeOnExecutor(threadPoolExecutor);
 
     }

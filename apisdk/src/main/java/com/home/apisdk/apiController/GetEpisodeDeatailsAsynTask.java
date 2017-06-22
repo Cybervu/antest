@@ -39,10 +39,12 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private GetEpisodeDetails listener;
+    private Context context;
     ArrayList<Episode_Details_output> episode_details_output=new ArrayList<Episode_Details_output>();
 
-    public GetEpisodeDeatailsAsynTask(Episode_Details_input episode_details_input, Context context) {
-        this.listener = (GetEpisodeDetails)context;
+    public GetEpisodeDeatailsAsynTask(Episode_Details_input episode_details_input,GetEpisodeDetails listener, Context context) {
+        this.listener=listener;
+        this.context=context;
         this.episode_details_input = episode_details_input;
         PACKAGE_NAME=context.getPackageName();
         Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);

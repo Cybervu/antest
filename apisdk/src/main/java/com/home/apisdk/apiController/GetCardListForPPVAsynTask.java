@@ -39,10 +39,13 @@ public class GetCardListForPPVAsynTask extends AsyncTask<GetCardListForPPVInputM
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
         private GetCardListForPPV listener;
+        private Context context;
         ArrayList<GetCardListForPPVOutputModel> getCardListForPPVOutputModel=new ArrayList<GetCardListForPPVOutputModel>();
 
-        public GetCardListForPPVAsynTask(GetCardListForPPVInputModel getCardListForPPVInputModel, Context context) {
-            this.listener = (GetCardListForPPV) context;
+        public GetCardListForPPVAsynTask(GetCardListForPPVInputModel getCardListForPPVInputModel,GetCardListForPPV listener, Context context) {
+            this.listener = listener;
+            this.context=context;
+
 
             this.getCardListForPPVInputModel = getCardListForPPVInputModel;
             PACKAGE_NAME=context.getPackageName();
