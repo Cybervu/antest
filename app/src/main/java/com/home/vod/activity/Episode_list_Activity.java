@@ -77,6 +77,7 @@ import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.model.LanguageModel;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -2629,7 +2630,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         }
 
                         if (isPPV == 1 || isAPV == 1) {
-                            Log.v("SUBHA", "currency");
+                            LogUtil.showLog("SUBHA", "currency");
 
                             JSONObject currencyJson = null;
                             if (myJson.has("currency") && myJson.getString("currency") != null && !myJson.getString("currency").equals("null")) {
@@ -2639,7 +2640,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                                 if (currencyJson.has("id") && currencyJson.getString("id").trim() != null && !currencyJson.getString("id").trim().isEmpty() && !currencyJson.getString("id").trim().equals("null") && !currencyJson.getString("id").trim().matches("")) {
                                     // currencyIdStr = currencyJson.getString("id");
                                     currencymodel.setCurrencyId(currencyJson.getString("id"));
-                                    Log.v("SUBHA", "currency id" + currencymodel.getCurrencyId());
+                                    LogUtil.showLog("SUBHA", "currency id" + currencymodel.getCurrencyId());
 
                                 } else {
                                     // currencyIdStr = "";
@@ -4534,7 +4535,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 if (!mediaStorageDir.exists()) {
                     if (!mediaStorageDir.mkdirs()) {
-                        Log.d("App", "failed to create directory");
+                        LogUtil.showLog("App", "failed to create directory");
                     }
                 }
 
@@ -4566,7 +4567,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
         @Override
         protected void onPostExecute(String file_url) {
-            Log.v("SUBHA", "Download Completed");
+            LogUtil.showLog("SUBHA", "Download Completed");
             FakeSubTitlePath.remove(0);
             if (FakeSubTitlePath.size() > 0) {
                 Download_SubTitle(FakeSubTitlePath.get(0).trim());
