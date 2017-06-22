@@ -82,6 +82,8 @@ public class GetImageForDownloadAsynTask extends AsyncTask<GetImageForDownloadIn
                 myJson = new JSONObject(responseStr);
                 status = Integer.parseInt(myJson.optString("code"));
                 message = myJson.optString("status");
+            }else {
+                status=0;
             }
 
 

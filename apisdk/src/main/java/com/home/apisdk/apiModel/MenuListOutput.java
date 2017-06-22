@@ -6,7 +6,24 @@ package com.home.apisdk.apiModel;
 
 public class MenuListOutput {
 
-    String link_type,display_name,permalink;
+    String link_type,display_name,permalink,url;
+    boolean isEnable;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public boolean isEnable() {
+        return isEnable;
+    }
+
+    public void setEnable(boolean enable) {
+        isEnable = enable;
+    }
 
     public String getPermalink() {
         return permalink;
