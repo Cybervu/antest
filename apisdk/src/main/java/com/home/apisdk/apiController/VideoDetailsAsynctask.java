@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by MUVI on 1/20/2017.
@@ -27,6 +28,11 @@ import java.io.IOException;
 public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void, Void> {
 
     public GetVideoDetailsInput getVideoDetailsInput;
+    ArrayList<String> SubTitleName = new ArrayList<>();
+    ArrayList<String> SubTitlePath = new ArrayList<>();
+    ArrayList<String> FakeSubTitlePath = new ArrayList<>();
+    ArrayList<String> ResolutionFormat = new ArrayList<>();
+    ArrayList<String>ResolutionUrl = new ArrayList<>();
     String PACKAGE_NAME, message, responseStr, status;
     JSONArray SubtitleJosnArray = null;
     JSONArray ResolutionJosnArray = null;
@@ -85,6 +91,8 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                 status = "";
 
             }
+            JSONArray SubtitleJosnArray = null;
+            JSONArray ResolutionJosnArray = null;
             JSONObject myJson = null;
             if (responseStr != null) {
                 myJson = new JSONObject(responseStr);
@@ -101,11 +109,51 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                     get_video_details_output.setVideoResolution(myJson.optString("videoResolution"));
                     get_video_details_output.setVideoUrl(myJson.optString("videoUrl"));
                     get_video_details_output.setEmed_url(myJson.optString("emed_url"));
+                    get_video_details_output.setPlayed_length(myJson.optString("played_length"));
+                    get_video_details_output.setThirdparty_url(myJson.optString("thirdparty_url"));
 
                 } catch (Exception e) {
                     code = 0;
                     message = "";
                     status = "";
+                }
+                if(SubtitleJosnArray!=null)
+                {
+                    if(SubtitleJosnArray.length()>0)
+                    {
+                        for(int i=0;i<SubtitleJosnArray.length();i++)
+                        {
+                            SubTitleName.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
+                            FakeSubTitlePath.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
+
+
+                        }
+                    }
+                }
+
+                /******Resolution****/
+
+                if(ResolutionJosnArray!=null)
+                {
+                    if(ResolutionJosnArray.length()>0)
+                    {
+                        for(int i=0;i<ResolutionJosnArray.length();i++)
+                        {
+                            if((ResolutionJosnArray.getJSONObject(i).optString("resolution").trim()).equals("BEST"))
+                            {
+                                ResolutionFormat.add(ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
+                            }
+                            else
+                            {
+                                ResolutionFormat.add((ResolutionJosnArray.getJSONObject(i).optString("resolution").trim())+"p");
+                            }
+
+                            ResolutionUrl.add(ResolutionJosnArray.getJSONObject(i).optString("url").trim());
+
+                            Log.v("SUBHA","Resolution Format Name ="+ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
+                            Log.v("SUBHA","Resolution url ="+ResolutionJosnArray.getJSONObject(i).optString("url").trim());
+                        }
+                    }
                 }
 
             }

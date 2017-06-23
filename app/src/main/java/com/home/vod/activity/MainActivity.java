@@ -34,9 +34,12 @@ import android.widget.Toast;
 
 
 import com.home.apisdk.apiController.GetImageForDownloadAsynTask;
+import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetMenuListAsynctask;
 import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiModel.GetImageForDownloadOutputModel;
+import com.home.apisdk.apiModel.LanguageListInputModel;
+import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
 import com.home.apisdk.apiModel.MenuListInput;
 import com.home.apisdk.apiModel.MenuListOutput;
@@ -73,7 +76,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,
-        LogoutAsynctask.Logout, GetMenuListAsynctask.GetMenuList {
+        LogoutAsynctask.Logout, GetMenuListAsynctask.GetMenuList, GetLanguageListAsynTask.GetLanguageList {
 
 
     public MainActivity() {
@@ -171,7 +174,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     int check = 0;
     public static int isNavigated = 0;
     String Default_Language = "";
-    public static ArrayList<NavDrawerItem> menuList  = new ArrayList<>();
+    public ArrayList<NavDrawerItem> menuList = new ArrayList<>();
     private String imageUrlStr;
     // public static SharedPreferences dataPref;
     int state = 0;
@@ -223,6 +226,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        LogUtil.showLog("Abhi","Toolbar");
 
       /*  *//**** chromecast*************//*
 
@@ -272,7 +276,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         noInternetLayout.setVisibility(View.GONE);
 
         boolean isNetwork = Util.checkNetwork(MainActivity.this);
-        if (isNetwork==true) {
+        if (isNetwork == true) {
             if (asynLoadMenuItems != null) {
                 asynLoadMenuItems = null;
             }
@@ -455,7 +459,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                     ShowLanguagePopup();
 
                 } else {
-                    AsynGetLanguageList asynGetLanguageList = new AsynGetLanguageList();
+                    LanguageListInputModel languageListInputModel=new LanguageListInputModel();
+                    languageListInputModel.setAuthToken(Util.authTokenStr);
+                    GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel,this,this);
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
                 return false;
@@ -767,7 +773,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
             internetSpeedDialog = new ProgressBarHandler(MainActivity.this);
             internetSpeedDialog.show();
-            LogUtil.showLog("Alok","onGetMenuListPreExecuteStarted");
+            LogUtil.showLog("Alok", "onGetMenuListPreExecuteStarted");
 
 
         } catch (IllegalArgumentException ex) {
@@ -775,14 +781,14 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             noInternetLayout.setVisibility(View.VISIBLE);
             DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
             dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            LogUtil.showLog("Alok","onGetMenuListPreExecuteStarted IllegalArgumentException");
+            LogUtil.showLog("Alok", "onGetMenuListPreExecuteStarted IllegalArgumentException");
         }
     }
 
     @Override
     public void onGetMenuListPostExecuteCompleted(ArrayList<MenuListOutput> menuListOutputList, ArrayList<MenuListOutput> footermenuListOutputList, int status, String message) {
 
-        LogUtil.showLog("Alok","onGetMenuListPostExecuteCompleted");
+        LogUtil.showLog("Alok", "onGetMenuListPostExecuteCompleted");
         if (status == 0) {
             noInternetLayout.setVisibility(View.VISIBLE);
             DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -792,17 +798,18 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         } else {
             menuList.add(new NavDrawerItem(Util.getTextofLanguage(MainActivity.this, Util.HOME, Util.DEFAULT_HOME), "-101", true, "-101"));
             for (MenuListOutput menuListOutput : menuListOutputList) {
+                LogUtil.showLog("Alok", "menuListOutputList ::" + menuListOutput.getPermalink());
                 if (menuListOutput.getLink_type() != null && !menuListOutput.getLink_type().equalsIgnoreCase("") && menuListOutput.getLink_type().equalsIgnoreCase("0")) {
                     menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getLink_type()));
                 }
             }
 
             menuList.add(new NavDrawerItem(Util.getTextofLanguage(MainActivity.this, Util.MY_LIBRARY, Util.DEFAULT_MY_LIBRARY), "102", true, "102"));
-            LogUtil.showLog("Alok","getTextofLanguage MY_LIBRARY");
+            LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
 
             for (MenuListOutput menuListOutput : footermenuListOutputList) {
-                LogUtil.showLog("Alok","footermenuListOutputList ::"+menuListOutput.getDisplay_name());
-                if (menuListOutput.getLink_type() != null && !menuListOutput.getLink_type().equalsIgnoreCase("")) {
+                LogUtil.showLog("Alok", "footermenuListOutputList ::" + menuListOutput.getPermalink());
+                if (menuListOutput.getUrl() != null && !menuListOutput.getUrl().equalsIgnoreCase("")) {
                     menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getUrl()));
                 }
             }
@@ -818,6 +825,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
             drawerFragment = (FragmentDrawer)
                     getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+            drawerFragment.setData(menuList);
             drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
             drawerFragment.setDrawerListener(MainActivity.this);
             displayView(0);
@@ -1827,6 +1835,25 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     }
 
+    @Override
+    public void onGetLanguageListPreExecuteStarted() {
+        progressBarHandler = new ProgressBarHandler(MainActivity.this);
+        progressBarHandler.show();
+    }
+
+    @Override
+    public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
+
+        if (progressBarHandler.isShowing()) {
+            progressBarHandler.hide();
+            progressBarHandler = null;
+
+        }
+        else {
+            noInternetLayout.setVisibility(View.GONE);
+        }
+    }
+
     public static class RecyclerTouchListener1 implements RecyclerView.OnItemTouchListener {
 
         private GestureDetector gestureDetector;
@@ -1877,126 +1904,126 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     }
 
 
-    private class AsynGetLanguageList extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int status;
-
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = Util.rootUrl().trim() + Util.LanguageList.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-
-
-                // Execute HTTP Post Request
-                try {
-
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = (EntityUtils.toString(response.getEntity())).trim();
-                } catch (Exception e) {
-                }
-                if (responseStr != null) {
-                    JSONObject json = new JSONObject(responseStr);
-                    try {
-                        status = Integer.parseInt(json.optString("code"));
-                        Default_Language = json.optString("default_lang");
-                        if (!Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, "").equals("")) {
-                            Default_Language = Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE);
-                        }
-
-                    } catch (Exception e) {
-                        status = 0;
-                    }
-                }
-
-            } catch (Exception e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        noInternetLayout.setVisibility(View.GONE);
-
-                    }
-                });
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if (progressBarHandler.isShowing()) {
-                progressBarHandler.hide();
-                progressBarHandler = null;
-
-            }
-
-            if (responseStr == null) {
-                noInternetLayout.setVisibility(View.GONE);
-            } else {
-                if (status > 0 && status == 200) {
-
-                    try {
-                        JSONObject json = new JSONObject(responseStr);
-                        JSONArray jsonArray = json.getJSONArray("lang_list");
-                        ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
-
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            String language_id = jsonArray.getJSONObject(i).optString("code").trim();
-                            String language_name = jsonArray.getJSONObject(i).optString("language").trim();
-
-
-                            LanguageModel languageModel = new LanguageModel();
-                            languageModel.setLanguageId(language_id);
-                            languageModel.setLanguageName(language_name);
-
-                            if (Default_Language.equalsIgnoreCase(language_id)) {
-                                languageModel.setIsSelected(true);
-                            } else {
-                                languageModel.setIsSelected(false);
-                            }
-                            languageModels.add(languageModel);
-                        }
-
-                        Util.languageModel = languageModels;
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        noInternetLayout.setVisibility(View.GONE);
-                    }
-
-
-                 /*   if(!default_Language.equals("en")) {
-                        //                  Call For Language Translation.
-                        AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
-                        asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
-
-                    }else{
-
-                    }*/
-
-                } else {
-                    noInternetLayout.setVisibility(View.GONE);
-                }
-            }
-            ShowLanguagePopup();
-
-
-        }
-
-        protected void onPreExecute() {
-
-            progressBarHandler = new ProgressBarHandler(MainActivity.this);
-            progressBarHandler.show();
-
-        }
-    }
+//    private class AsynGetLanguageList extends AsyncTask<Void, Void, Void> {
+//        String responseStr;
+//        int status;
+//
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.LanguageList.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//
+//
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = (EntityUtils.toString(response.getEntity())).trim();
+//                } catch (Exception e) {
+//                }
+//                if (responseStr != null) {
+//                    JSONObject json = new JSONObject(responseStr);
+//                    try {
+//                        status = Integer.parseInt(json.optString("code"));
+//                        Default_Language = json.optString("default_lang");
+//                        if (!Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, "").equals("")) {
+//                            Default_Language = Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE);
+//                        }
+//
+//                    } catch (Exception e) {
+//                        status = 0;
+//                    }
+//                }
+//
+//            } catch (Exception e) {
+//                runOnUiThread(new Runnable() {
+//                    public void run() {
+//                        noInternetLayout.setVisibility(View.GONE);
+//
+//                    }
+//                });
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            if (progressBarHandler.isShowing()) {
+//                progressBarHandler.hide();
+//                progressBarHandler = null;
+//
+//            }
+//
+//            if (responseStr == null) {
+//                noInternetLayout.setVisibility(View.GONE);
+//            } else {
+//                if (status > 0 && status == 200) {
+//
+//                    try {
+//                        JSONObject json = new JSONObject(responseStr);
+//                        JSONArray jsonArray = json.getJSONArray("lang_list");
+//                        ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
+//
+//                        for (int i = 0; i < jsonArray.length(); i++) {
+//                            String language_id = jsonArray.getJSONObject(i).optString("code").trim();
+//                            String language_name = jsonArray.getJSONObject(i).optString("language").trim();
+//
+//
+//                            LanguageModel languageModel = new LanguageModel();
+//                            languageModel.setLanguageId(language_id);
+//                            languageModel.setLanguageName(language_name);
+//
+//                            if (Default_Language.equalsIgnoreCase(language_id)) {
+//                                languageModel.setIsSelected(true);
+//                            } else {
+//                                languageModel.setIsSelected(false);
+//                            }
+//                            languageModels.add(languageModel);
+//                        }
+//
+//                        Util.languageModel = languageModels;
+//
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                        noInternetLayout.setVisibility(View.GONE);
+//                    }
+//
+//
+//                 /*   if(!default_Language.equals("en")) {
+//                        //                  Call For Language Translation.
+//                        AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
+//                        asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
+//
+//                    }else{
+//
+//                    }*/
+//
+//                } else {
+//                    noInternetLayout.setVisibility(View.GONE);
+//                }
+//            }
+//            ShowLanguagePopup();
+//
+//
+//        }
+//
+//        protected void onPreExecute() {
+//
+//            progressBarHandler = new ProgressBarHandler(MainActivity.this);
+//            progressBarHandler.show();
+//
+//        }
+//    }
 
 
     private class AsynGetTransalatedLanguage extends AsyncTask<Void, Void, Void> {

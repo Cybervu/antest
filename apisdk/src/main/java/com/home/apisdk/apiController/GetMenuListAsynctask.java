@@ -88,67 +88,50 @@ public class GetMenuListAsynctask extends AsyncTask<MenuListInput,Void ,Void > {
                 message = myJson.optString("msg");
             }
 
-                if (code == 200) {
+            if (code == 200) {
 
-                    JSONArray jsonMainNode = myJson.getJSONArray("menu");
-                    JSONArray jsonFooterNode = myJson.getJSONArray("footer_menu");
-
-                    int lengthJsonArr = jsonMainNode.length();
-                    for (int i = 0; i < lengthJsonArr; i++) {
-                        JSONObject jsonChildNode;
-                        try {
-                            jsonChildNode = jsonMainNode.getJSONObject(i);
-                            MenuListOutput content = new MenuListOutput();
-
-                            if ((jsonChildNode.has("link_type")) && jsonChildNode.optString("link_type").trim() != null && !jsonChildNode.optString("link_type").trim().isEmpty() && !jsonChildNode.optString("link_type").trim().equals("null") && !jsonChildNode.optString("link_type").trim().matches("")) {
-                                content.setLink_type(jsonChildNode.optString("link_type"));
-
-                            }
-                            if ((jsonChildNode.has("display_name")) && jsonChildNode.optString("display_name").trim() != null && !jsonChildNode.optString("display_name").trim().isEmpty() && !jsonChildNode.optString("display_name").trim().equals("null") && !jsonChildNode.optString("display_name").trim().matches("")) {
-                                content.setDisplay_name(jsonChildNode.optString("display_name"));
-                            }
-                            if ((jsonChildNode.has("permalink")) && jsonChildNode.optString("permalink").trim() != null && !jsonChildNode.optString("permalink").trim().isEmpty() && !jsonChildNode.optString("permalink").trim().equals("null") && !jsonChildNode.optString("null").trim().matches("")) {
-                                content.setPermalink(jsonChildNode.optString("permalink"));
-                            }
-                            content.setEnable(true);
-                            menuListOutput.add(content);
-                        } catch (Exception e) {
-                            code = 0;
-                            message = "";
-                        }
-                    }
-
-
-                    /*** footer menu******/
-                    for (int i = 0; i < jsonFooterNode.length(); i++) {
-                        JSONObject jsonChildNode;
-                        try {
-                            jsonChildNode = jsonFooterNode.getJSONObject(i);
-                            MenuListOutput content = new MenuListOutput();
-
-                            if ((jsonChildNode.has("display_name")) && jsonChildNode.optString("display_name").trim() != null && !jsonChildNode.optString("display_name").trim().isEmpty() && !jsonChildNode.optString("display_name").trim().equals("null") && !jsonChildNode.optString("display_name").trim().matches("")) {
-                                content.setDisplay_name(jsonChildNode.optString("display_name"));
-                            }
-                             if((jsonChildNode.has("permalink")) && jsonChildNode.optString("permalink").trim() != null && !jsonChildNode.optString("permalink").trim().isEmpty() && !jsonChildNode.optString("permalink").trim().equals("null") && !jsonChildNode.optString("null").trim().matches("")) {
-                                content.setPermalink(jsonChildNode.optString("permalink"));
-                            }
-                            if ((jsonChildNode.has("url")) && jsonChildNode.optString("url").trim() != null && !jsonChildNode.optString("url").trim().isEmpty() && !jsonChildNode.optString("url").trim().equals("null") && !jsonChildNode.optString("url").trim().matches("")) {
-                                content.setUrl(jsonChildNode.optString("url"));
-
-                            }
-
-                            content.setEnable(false);
-                          footermenuListOutput.add(content);
-
-                        } catch (Exception e) {
-                            code = 0;
-                            message = "";
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-
+                JSONArray jsonMainNode = myJson.getJSONArray("menu");
+                JSONArray jsonFooterNode = myJson.getJSONArray("footer_menu");
+                int jsonFooterNodeArr = jsonFooterNode.length();
+                int lengthJsonArr = jsonMainNode.length();
+                for (int i = 0; i < lengthJsonArr; i++) {
+                    JSONObject jsonChildNode;
+                    try {
+                        jsonChildNode = jsonMainNode.getJSONObject(i);
+                        MenuListOutput content = new MenuListOutput();
+                        content.setLink_type(jsonChildNode.optString("link_type"));
+                        content.setDisplay_name(jsonChildNode.optString("display_name"));
+                        content.setPermalink(jsonChildNode.optString("permalink"));
+                        content.setEnable(true);
+                        menuListOutput.add(content);
+                    } catch (Exception e) {
+                        code = 0;
+                        message = "";
                     }
                 }
+
+
+                /*** footer menu******/
+                for (int i = 0; i < jsonFooterNodeArr; i++) {
+                    JSONObject jsonChildNode;
+                    try {
+                        jsonChildNode = jsonFooterNode.getJSONObject(i);
+                        MenuListOutput content = new MenuListOutput();
+                        content.setDisplay_name(jsonChildNode.optString("display_name"));
+                        content.setPermalink(jsonChildNode.optString("permalink"));
+                        content.setUrl(jsonChildNode.optString("url"));
+                        content.setEnable(false);
+                        footermenuListOutput.add(content);
+
+                    } catch (Exception e) {
+                        code = 0;
+                        message = "";
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+                }
+            }
         } catch (Exception e) {
             code = 0;
             message = "";
