@@ -42,6 +42,18 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.home.apisdk.apiController.GetValidateUserAsynTask;
+import com.home.apisdk.apiController.RegistrationAsynTask;
+import com.home.apisdk.apiController.SocialAuthAsynTask;
+import com.home.apisdk.apiController.VideoDetailsAsynctask;
+import com.home.apisdk.apiModel.GetVideoDetailsInput;
+import com.home.apisdk.apiModel.Get_Video_Details_Output;
+import com.home.apisdk.apiModel.Registration_input;
+import com.home.apisdk.apiModel.Registration_output;
+import com.home.apisdk.apiModel.SocialAuthInputModel;
+import com.home.apisdk.apiModel.SocialAuthOutputModel;
+import com.home.apisdk.apiModel.ValidateUserInput;
+import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.R;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -78,12 +90,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements RegistrationAsynTask.RegistrationDetails, VideoDetailsAsynctask.VideoDetails,
+        GetValidateUserAsynTask.GetValidateUser,SocialAuthAsynTask.SocialAuth {
     String UniversalErrorMessage = "";
     String UniversalIsSubscribed = "";
-    String deviceName="";
-    int countryPosition =0;
-    int langPosition =0;
+    String deviceName = "";
+    ProgressBarHandler pDialog;
+    int countryPosition = 0;
+    int langPosition = 0;
     /*********fb****/
 
     String fbUserId = "";
@@ -93,17 +107,17 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressBarHandler progressDialog;
     private CallbackManager callbackManager;
     AsynCheckFbUserDetails asynCheckFbUserDetails;
-    AsynFbRegDetails asynFbRegDetails;
+    SocialAuthAsynTask asynFbRegDetails;
     LoginButton loginWithFacebookButton;
     AlertDialog alert;
-    String priceForUnsubscribedStr,priceFosubscribedStr;
+    String priceForUnsubscribedStr, priceFosubscribedStr;
     String PlanId = "";
     /*********fb****/
        /*subtitle-------------------------------------*/
 
     String filename = "";
     static File mediaStorageDir;
-
+    String loginHistoryIdStr;
     ArrayList<String> SubTitleName = new ArrayList<>();
     ArrayList<String> SubTitlePath = new ArrayList<>();
     ArrayList<String> FakeSubTitlePath = new ArrayList<>();
@@ -128,8 +142,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     */
 /**
-     * List of various states that we can be in
-     *//*
+ * List of various states that we can be in
+ *//*
 
     public enum PlaybackState {
         PLAYING, PAUSED, BUFFERING, IDLE
@@ -217,7 +231,7 @@ public class RegisterActivity extends AppCompatActivity {
                 mSessionManagerListener, CastSession.class);
 
         */
-/***************chromecast**********************//*
+    /***************chromecast**********************//*
 
 
     }
@@ -228,17 +242,19 @@ public class RegisterActivity extends AppCompatActivity {
 */
 
 
-    AsynRegistrationDetails asyncReg;
-    AsynLoadVideoUrls asynLoadVideoUrls;
-    AsynValidateUserDetails asynValidateUserDetails;
+    RegistrationAsynTask asyncReg;
+    VideoDetailsAsynctask asynLoadVideoUrls;
+    GetValidateUserAsynTask asynValidateUserDetails;
     String movieVideoUrlStr = "";
     private ImageView registerImageView;
     private EditText editEmail, editName, editPassword, editConfirmPassword;
     private Button registerButton;
-    private TextView alreadyMemmberText , loginTextView;
-    String regNameStr,regEmailStr,regPasswordStr,regConfirmPasswordStr;
+    private TextView alreadyMemmberText, loginTextView;
+    String regNameStr, regEmailStr, regPasswordStr, regConfirmPasswordStr;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
+    String registrationIdStr;
+    String isSubscribedStr;
     int keepAliveTime = 10;
     SharedPreferences pref;
     Toolbar mActionBarToolbar;
@@ -248,12 +264,12 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     // Added for country and language spinner
-    Spinner country_spinner,language_spinner;
-    ArrayAdapter<String> Language_arrayAdapter,Country_arrayAdapter;
+    Spinner country_spinner, language_spinner;
+    ArrayAdapter<String> Language_arrayAdapter, Country_arrayAdapter;
 
-    String Selected_Language,Selected_Country,Selected_Language_Id,Selected_Country_Id;
+    String Selected_Language_Id, Selected_Country_Id;
     SharedPreferences countryPref;
-    List<String> Country_List,Country_Code_List,Language_List,Language_Code_List;
+    List<String> Country_List, Country_Code_List, Language_List, Language_Code_List;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,9 +278,6 @@ public class RegisterActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         /*********fb****/
         setContentView(R.layout.activity_register);
-
-
-
 
 
         BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
@@ -278,9 +291,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .trim()).equals("1")) {
             mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-        }
-        else
-        {
+        } else {
             mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }
 
@@ -304,45 +315,45 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton = (Button) findViewById(R.id.registerButton);
         alreadyMemmberText = (TextView) findViewById(R.id.alreadyMemberText);
         loginTextView = (TextView) findViewById(R.id.alreadyHaveALoginButton);
-        Typeface editNameTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface editNameTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         editName.setTypeface(editNameTypeface);
 
-        Typeface editEmailStrTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface editEmailStrTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         editEmail.setTypeface(editEmailStrTypeface);
 
 
-        Typeface editPasswordTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface editPasswordTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         editPassword.setTypeface(editPasswordTypeface);
 
 
-        Typeface editConfirmPasswordTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface editConfirmPasswordTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         editConfirmPassword.setTypeface(editConfirmPasswordTypeface);
-        Typeface registerButtonTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface registerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         registerButton.setTypeface(registerButtonTypeface);
 
 
-        Typeface alreadyMemmberTextTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface alreadyMemmberTextTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         alreadyMemmberText.setTypeface(alreadyMemmberTextTypeface);
 
 
-        Typeface loginTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface loginTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         loginTextView.setTypeface(loginTextViewTypeface);
 
         editName.setHint(Util.getTextofLanguage(RegisterActivity.this, Util.NAME_HINT, Util.DEFAULT_NAME_HINT));
         editEmail.setHint(Util.getTextofLanguage(RegisterActivity.this, Util.TEXT_EMIAL, Util.DEFAULT_TEXT_EMIAL));
         editPassword.setHint(Util.getTextofLanguage(RegisterActivity.this, Util.TEXT_PASSWORD, Util.DEFAULT_TEXT_PASSWORD));
-        editConfirmPassword.setHint(Util.getTextofLanguage(RegisterActivity.this,Util.CONFIRM_PASSWORD,Util.DEFAULT_CONFIRM_PASSWORD));
+        editConfirmPassword.setHint(Util.getTextofLanguage(RegisterActivity.this, Util.CONFIRM_PASSWORD, Util.DEFAULT_CONFIRM_PASSWORD));
         registerButton.setText(Util.getTextofLanguage(RegisterActivity.this, Util.BTN_REGISTER, Util.DEFAULT_BTN_REGISTER));
         alreadyMemmberText.setText(Util.getTextofLanguage(RegisterActivity.this, Util.ALREADY_MEMBER, Util.DEFAULT_ALREADY_MEMBER));
         loginTextView.setText(Util.getTextofLanguage(RegisterActivity.this, Util.LOGIN, Util.DEFAULT_LOGIN));
 
-           /**********fb*********/
+        /**********fb*********/
         loginWithFacebookButton = (LoginButton) findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
-        TextView fbLoginTextView= (TextView) findViewById(R.id.fbLoginTextView);
-        Typeface loginWithFbButtonTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        TextView fbLoginTextView = (TextView) findViewById(R.id.fbLoginTextView);
+        Typeface loginWithFbButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         fbLoginTextView.setTypeface(loginWithFbButtonTypeface);
-            /**********fb*********/
+        /**********fb*********/
 
 
        /* Toolbar mActionBarToolbar= (Toolbar) findViewById(R.id.toolbar);
@@ -353,7 +364,6 @@ public class RegisterActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });*/
-
 
 
         pref = getSharedPreferences(Util.LOGIN_PREF, 0);
@@ -384,12 +394,12 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         /************fb************/
-        callbackManager= CallbackManager.Factory.create();
+        callbackManager = CallbackManager.Factory.create();
 
 
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
 
-        btnLogin= (LinearLayout) findViewById(R.id.btnLogin);
+        btnLogin = (LinearLayout) findViewById(R.id.btnLogin);
         btnLogin.setVisibility(View.GONE);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -419,18 +429,18 @@ public class RegisterActivity extends AppCompatActivity {
         Language_Code_List = Arrays.asList(getResources().getStringArray(R.array.languagesCode));
 
 
-
         Language_arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.country_language_spinner, Language_List) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
-                Typeface externalFont = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
                 ((TextView) v).setTypeface(externalFont);
                 return v;
             }
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v =super.getDropDownView(position, convertView, parent);
 
-                Typeface externalFont1 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont1 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
                 ((TextView) v).setTypeface(externalFont1);
 
                 return v;
@@ -443,14 +453,15 @@ public class RegisterActivity extends AppCompatActivity {
         Country_arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.country_language_spinner, Country_List) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
-                Typeface externalFont = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
                 ((TextView) v).setTypeface(externalFont);
                 return v;
             }
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v =super.getDropDownView(position, convertView, parent);
 
-                Typeface externalFont1 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont1 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
                 ((TextView) v).setTypeface(externalFont1);
 
                 return v;
@@ -461,26 +472,21 @@ public class RegisterActivity extends AppCompatActivity {
         country_spinner.setAdapter(Country_arrayAdapter);
 
         Selected_Country_Id = countryPref.getString("countryCode", "0");
-        LogUtil.showLog("BIBHU","primary Selected_Country_Id="+Selected_Country_Id);
-        if(Selected_Country_Id.equals("0"))
-        {
+        LogUtil.showLog("BIBHU", "primary Selected_Country_Id=" + Selected_Country_Id);
+        if (Selected_Country_Id.equals("0")) {
             country_spinner.setSelection(224);
             Selected_Country_Id = Country_Code_List.get(224);
-            LogUtil.showLog("BIBHU","country not  matche"+"=="+Selected_Country_Id);
-        }
-        else
-        {
-            for(int i=0;i<Country_Code_List.size();i++)
-            {
+            LogUtil.showLog("BIBHU", "country not  matche" + "==" + Selected_Country_Id);
+        } else {
+            for (int i = 0; i < Country_Code_List.size(); i++) {
 
-                LogUtil.showLog("BIBHU","Country names ="+Country_Code_List.get(i));
+                LogUtil.showLog("BIBHU", "Country names =" + Country_Code_List.get(i));
 
-                if(Selected_Country_Id.trim().equals(Country_Code_List.get(i)))
-                {
+                if (Selected_Country_Id.trim().equals(Country_Code_List.get(i))) {
                     country_spinner.setSelection(i);
                     Selected_Country_Id = Country_Code_List.get(i);
 
-                    LogUtil.showLog("BIBHU","country  matched ="+Selected_Country_Id);
+                    LogUtil.showLog("BIBHU", "country  matched =" + Selected_Country_Id);
                 }
             }
         }
@@ -632,10 +638,22 @@ public class RegisterActivity extends AppCompatActivity {
                 boolean isValidEmail = Util.isValidMail(regEmailStr);
                 if (isValidEmail) {
                     if (regPasswordStr.equals(regConfirmPasswordStr)) {
-                        asyncReg = new AsynRegistrationDetails();
+                        Registration_input registration_input = new Registration_input();
+                        registration_input.setAuthToken(Util.authTokenStr);
+                        registration_input.setName(regNameStr);
+                        registration_input.setEmail(regEmailStr);
+                        registration_input.setPassword(regPasswordStr);
+                        registration_input.setCustom_country(Selected_Country_Id);
+                        registration_input.setCustom_languages(Selected_Language_Id);
+                        registration_input.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                        registration_input.setGoogle_id(Util.getTextofLanguage(RegisterActivity.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+                        registration_input.setDevice_type("1");
+                        registration_input.setLang_code(Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+
+                        asyncReg = new RegistrationAsynTask(registration_input, this, this);
                         asyncReg.executeOnExecutor(threadPoolExecutor);
                     } else {
-                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this,Util.PASSWORDS_DO_NOT_MATCH,Util.DEFAULT_PASSWORDS_DO_NOT_MATCH), Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.PASSWORDS_DO_NOT_MATCH, Util.DEFAULT_PASSWORDS_DO_NOT_MATCH), Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.OOPS_INVALID_EMAIL, Util.DEFAULT_OOPS_INVALID_EMAIL), Toast.LENGTH_LONG).show();
@@ -651,422 +669,183 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRegistrationDetailsPreExecuteStarted() {
 
-    private class AsynRegistrationDetails extends AsyncTask<Void, Void, Void> {
+        pDialog = new ProgressBarHandler(RegisterActivity.this);
+        pDialog.show();
 
-        ProgressBarHandler pDialog;
+    }
 
-        int status;
-        String responseStr;
-        String registrationIdStr;
-        String isSubscribedStr;
-        String loginHistoryIdStr;
-        JSONObject myJson = null;
+    @Override
+    public void onRegistrationDetailsPostExecuteCompleted(Registration_output registration_output, int status, String message) {
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            String urlRouteList = Util.rootUrl().trim()+Util.registrationUrl.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("name", regNameStr);
-                httppost.addHeader("email", regEmailStr);
-                httppost.addHeader("password", regPasswordStr);
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("lang_code",Util.getTextofLanguage(RegisterActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                httppost.addHeader("custom_country", Selected_Country_Id);
-                httppost.addHeader("custom_languages",Selected_Language_Id);
-
-                // Added For FCM
-
-                httppost.addHeader("device_id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                httppost.addHeader("google_id", Util.getTextofLanguage(RegisterActivity.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
-                httppost.addHeader("device_type","1");
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (pDialog != null && pDialog.isShowing()) {
-                                pDialog.hide();
-                                pDialog = null;
-                            }
-                            status = 0;
-                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
+        if (status == 0) {
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.ERROR_IN_REGISTRATION, Util.DEFAULT_ERROR_IN_REGISTRATION));
+            dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE));
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
                         }
-
                     });
-
-                } catch (IOException e) {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                    status = 0;
-                    e.printStackTrace();
-                }
-                if(responseStr!=null){
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                    registrationIdStr = myJson.optString("id");
-                    isSubscribedStr = myJson.optString("isSubscribed");
-                    UniversalIsSubscribed = isSubscribedStr;
-                    loginHistoryIdStr = myJson.optString("login_history_id");
-
-                }
-
-            }
-            catch (Exception e) {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-                status = 0;
-            }
-
-            return null;
+            dlgAlert.create().show();
         }
+        if (status > 0) {
 
-
-        protected void onPostExecute(Void result) {
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                status = 0;
-
-            }
-            if (responseStr == null) {
-                status = 0;
-
-            }
-            if (status == 0) {
+            if (status == 422) {
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.ERROR_IN_REGISTRATION, Util.DEFAULT_ERROR_IN_REGISTRATION));
-                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE));
+                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
+                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
                 dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
                         });
                 dlgAlert.create().show();
-            }
-            if (status > 0) {
 
-                if (status == 422) {
-                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
-                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    dlgAlert.create().show();
+            } else if (status == 200) {
 
-                } else if (status == 200) {
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("PREFS_LOGGEDIN_KEY", "1");
+                editor.putString("PREFS_LOGGEDIN_ID_KEY", registrationIdStr);
+                editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY", editPassword.getText().toString().trim());
+                editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY", isSubscribedStr);
+                editor.putString("PREFS_LOGIN_HISTORYID_KEY", loginHistoryIdStr);
 
-                    String displayNameStr = myJson.optString("display_name");
-                    String emailFromApiStr = myJson.optString("email");
-                    String profileImageStr = myJson.optString("profile_image");
+                Date todayDate = new Date();
+                String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
+                editor.putString("date", todayStr.trim());
+                editor.commit();
 
 
-                    // Take appropiate step here.
-
-
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putString("PREFS_LOGGEDIN_KEY", "1");
-                    editor.putString("PREFS_LOGGEDIN_ID_KEY", registrationIdStr);
-                    editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY", editPassword.getText().toString().trim());
-                    editor.putString("PREFS_LOGIN_EMAIL_ID_KEY", emailFromApiStr);
-                    editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", displayNameStr);
-                    editor.putString("PREFS_LOGIN_PROFILE_IMAGE_KEY", profileImageStr);
-                    editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY", isSubscribedStr);
-                    editor.putString("PREFS_LOGIN_HISTORYID_KEY", loginHistoryIdStr);
-
-                    Date todayDate = new Date();
-                    String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
-                    editor.putString("date", todayStr.trim());
-                    editor.commit();
-
-
-                    if (Util.checkNetwork(RegisterActivity.this) == true) {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                    } else {
-                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                    }
-
-                    if (Util.checkNetwork(RegisterActivity.this) == true) {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-
-                    }
-
-
-                    if(Util.getTextofLanguage(RegisterActivity.this,Util.IS_RESTRICT_DEVICE,Util.DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1"))
-                    {
-                        // Call For Check Api.
-                        AsynCheckDevice asynCheckDevice = new AsynCheckDevice();
-                        asynCheckDevice.executeOnExecutor(threadPoolExecutor);
-                    }
-                    else {
-                        if(Util.check_for_subscription == 1)
-                        {
-                            // Go for subscription
-
-                            if (Util.checkNetwork(RegisterActivity.this) == true) {
-                                if (Util.dataModel.getIsFreeContent() == 1) {
-                                    asynLoadVideoUrls = new AsynLoadVideoUrls();
-                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                } else {
-                                    asynValidateUserDetails = new AsynValidateUserDetails();
-                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                                }
-                            } else {
-                                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                            }
-
-                        }
-                        else {
-
-                            if (PlanId.equals("1") && isSubscribedStr.equals("0")) {
-                                Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Intent in = new Intent(RegisterActivity.this, MainActivity.class);
-                                in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(in);
-                                finish();
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressBarHandler(RegisterActivity.this);
-            pDialog.show();
-        }
-
-
-    }
-
-
-    private class AsynLoadVideoUrls extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-        String responseStr;
-        int statusCode;
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.loadVideoUrl.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("content_uniq_id", Util.dataModel.getMovieUniqueId().trim());
-                httppost.addHeader("stream_uniq_id", Util.dataModel.getStreamUniqueId().trim());
-                httppost.addHeader("internet_speed", MainActivity.internetSpeed.trim());
-                httppost.addHeader("user_id",pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
-
-                // Execute HTTP Post Request
-                try {
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (pDialog != null && pDialog.isShowing()) {
-                                pDialog.hide();
-                                pDialog = null;
-                            }
-                            responseStr = "0";
-                            Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                        }
-
-                    });
-
-                }catch (IOException e) {
+                if (Util.checkNetwork(RegisterActivity.this) == true) {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
                         pDialog = null;
                     }
-                    responseStr = "0";
-                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                    e.printStackTrace();
+                } else {
+                    Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 }
 
-                /**** subtitles************/
-
-                JSONArray SubtitleJosnArray = null;
-                JSONArray ResolutionJosnArray = null;
-                JSONObject myJson =null;
-                if(responseStr!=null){
-                    myJson = new JSONObject(responseStr);
-                    SubtitleJosnArray = myJson.optJSONArray("subTitle");
-                    ResolutionJosnArray = myJson.optJSONArray("videoDetails");
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                }
-             /*   JSONObject myJson =null;
-                if(responseStr!=null){
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                }*/
-
-                if (statusCode >= 0) {
-                    if (statusCode == 200) {
-                        if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
-                            if ((myJson.has("videoUrl")) && myJson.getString("videoUrl").trim() != null && !myJson.getString("videoUrl").trim().isEmpty() && !myJson.getString("videoUrl").trim().equals("null") && !myJson.getString("videoUrl").trim().matches("")) {
-                                Util.dataModel.setVideoUrl(myJson.getString("videoUrl"));
-
-
-                            }
-                            else{
-                                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-
-                            }
-                        }else{
-                            if ((myJson.has("thirdparty_url")) && myJson.getString("thirdparty_url").trim() != null && !myJson.getString("thirdparty_url").trim().isEmpty() && !myJson.getString("thirdparty_url").trim().equals("null") && !myJson.getString("thirdparty_url").trim().matches("")) {
-                                Util.dataModel.setVideoUrl(myJson.getString("thirdparty_url"));
-
-                            }
-                            else{
-                                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-
-                            }
-                        }
-                        if ((myJson.has("videoResolution")) && myJson.getString("videoResolution").trim() != null && !myJson.getString("videoResolution").trim().isEmpty() && !myJson.getString("videoResolution").trim().equals("null") && !myJson.getString("videoResolution").trim().matches("")) {
-                            Util.dataModel.setVideoResolution(myJson.getString("videoResolution"));
-
-                        }
-                        if ((myJson.has("played_length")) && myJson.getString("played_length").trim() != null && !myJson.getString("played_length").trim().isEmpty() && !myJson.getString("played_length").trim().equals("null") && !myJson.getString("played_length").trim().matches("")) {
-                            Util.dataModel.setPlayPos(Util.isDouble(myJson.getString("played_length")));
-
-
-
-                        }
-                        /**** subtitles************/
-                        if(SubtitleJosnArray!=null)
-                        {
-                            if(SubtitleJosnArray.length()>0)
-                            {
-                                for(int i=0;i<SubtitleJosnArray.length();i++)
-                                {
-                                    SubTitleName.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
-                                    FakeSubTitlePath.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
-
-
-                                }
-                            }
-                        }
-                        /**** subtitles************/
-
-                        if(ResolutionJosnArray!=null)
-                        {
-                            if(ResolutionJosnArray.length()>0)
-                            {
-                                for(int i=0;i<ResolutionJosnArray.length();i++)
-                                {
-                                    if((ResolutionJosnArray.getJSONObject(i).optString("resolution").trim()).equals("BEST"))
-                                    {
-                                        ResolutionFormat.add(ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
-                                    }
-                                    else
-                                    {
-                                        ResolutionFormat.add((ResolutionJosnArray.getJSONObject(i).optString("resolution").trim())+"p");
-                                    }
-
-                                    ResolutionUrl.add(ResolutionJosnArray.getJSONObject(i).optString("url").trim());
-
-                                }
-                            }
-                        }
-
+                if (Util.checkNetwork(RegisterActivity.this) == true) {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
                     }
 
                 }
-                else {
 
-                    responseStr = "0";
-                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+
+                if (Util.getTextofLanguage(RegisterActivity.this, Util.IS_RESTRICT_DEVICE, Util.DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
+                    // Call For Check Api.
+                    AsynCheckDevice asynCheckDevice = new AsynCheckDevice();
+                    asynCheckDevice.executeOnExecutor(threadPoolExecutor);
+                } else {
+                    if (Util.check_for_subscription == 1) {
+                        // Go for subscription
+
+                        if (Util.checkNetwork(RegisterActivity.this) == true) {
+                            if (Util.dataModel.getIsFreeContent() == 1) {
+                                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                                getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
+                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                            } else {
+                                ValidateUserInput validateUserInput = new ValidateUserInput();
+                                validateUserInput.setAuthToken(Util.authTokenStr);
+                                validateUserInput.setUserId(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                                validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
+                                validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
+                                validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
+                                validateUserInput.setEpisodeStreamUniqueId( Util.dataModel.getEpisode_id());
+                                validateUserInput.setLanguageCode(Util.getTextofLanguage(RegisterActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                                asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput,RegisterActivity.this,RegisterActivity.this);
+                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                            }
+                        } else {
+                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        }
+
+                    } else {
+
+                        if (PlanId.equals("1") && isSubscribedStr.equals("0")) {
+                            Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Intent in = new Intent(RegisterActivity.this, MainActivity.class);
+                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(in);
+                            finish();
+                        }
+                    }
                 }
-            } catch (JSONException e1) {
+
+            }
+        }
+    }
+
+    @Override
+    public void onVideoDetailsPreExecuteStarted() {
+        SubTitleName.clear();
+        SubTitlePath.clear();
+        ResolutionUrl.clear();
+        ResolutionFormat.clear();
+        pDialog = new ProgressBarHandler(RegisterActivity.this);
+        pDialog.show();
+    }
+
+    @Override
+    public void onVideoDetailsPostExecuteCompleted(Get_Video_Details_Output get_video_details_output, int code, String status, String message) {
+        if (status == null) {
+            status = "0";
+            Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+
+            //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+        }
+
+        if ((status.trim().equalsIgnoreCase("0"))) {
+            try {
                 if (pDialog != null && pDialog.isShowing()) {
                     pDialog.hide();
                     pDialog = null;
                 }
-                responseStr = "0";
+            } catch (IllegalArgumentException ex) {
                 Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                e1.printStackTrace();
+                // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
             }
+            Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+            //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+            dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            finish();
+                            overridePendingTransition(0, 0);
+                        }
+                    });
+            dlgAlert.create().show();
+        } else {
 
-            catch (Exception e)
-            {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-                responseStr = "0";
-                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-
-                e.printStackTrace();
-
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-
-      /*  try{
-            if(pDialog.isShowing())
-                pDialog.dismiss();
-        }
-        catch(IllegalArgumentException ex)
-        {
-            responseStr = "0";
-            movieVideoUrlStr = getResources().getString(R.string.no_data_str);
-        }*/
-            if (responseStr == null) {
-                responseStr = "0";
-                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-
-                //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
-            }
-
-            if ((responseStr.trim().equalsIgnoreCase("0"))) {
+            if (Util.dataModel.getVideoUrl() == null) {
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
@@ -1074,82 +853,54 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 } catch (IllegalArgumentException ex) {
                     Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                    // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
                 }
-                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this,Util.SORRY,Util.DEFAULT_SORRY));
+                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
                 dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                                 finish();
-                                overridePendingTransition(0,0);
+                                overridePendingTransition(0, 0);
+                            }
+                        });
+                dlgAlert.create().show();
+            } else if (Util.dataModel.getVideoUrl().matches("") || Util.dataModel.getVideoUrl().equalsIgnoreCase(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                finish();
+                                overridePendingTransition(0, 0);
                             }
                         });
                 dlgAlert.create().show();
             } else {
-
-                if (Util.dataModel.getVideoUrl() == null) {
-                    try {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
                     }
-                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                    finish();
-                                    overridePendingTransition(0,0);
-                                }
-                            });
-                    dlgAlert.create().show();
-                } else if (Util.dataModel.getVideoUrl().matches("") || Util.dataModel.getVideoUrl().equalsIgnoreCase(Util.getTextofLanguage(RegisterActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA))) {
-                    try {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                    }
-                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                    finish();
-                                    overridePendingTransition(0,0);
-                                }
-                            });
-                    dlgAlert.create().show();
-                } else {
-                    try {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                    }
-                    if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                } catch (IllegalArgumentException ex) {
+                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                }
+                if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
                         /*if (mCastSession != null && mCastSession.isConnected()) {
 
 
@@ -1180,8 +931,9 @@ public class RegisterActivity extends AppCompatActivity {
                             removeFocusFromViews();
                             finish();
                             overridePendingTransition(0, 0);
-                        }*/ {
-                            final Intent playVideoIntent = new Intent(RegisterActivity.this, ExoPlayerActivity.class);
+                        }*/
+                    {
+                        final Intent playVideoIntent = new Intent(RegisterActivity.this, ExoPlayerActivity.class);
                            /* runOnUiThread(new Runnable() {
                                 public void run() {
                                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1194,75 +946,40 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 }
                             });*/
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    if(FakeSubTitlePath.size()>0)
-                                    {
-                                        // This Portion Will Be changed Later.
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                if (FakeSubTitlePath.size() > 0) {
+                                    // This Portion Will Be changed Later.
 
-                                        File dir = new File(Environment.getExternalStorageDirectory()+"/Android/data/" + getApplicationContext().getPackageName().trim() + "/SubTitleList/");
-                                        if (dir.isDirectory())
-                                        {
-                                            String[] children = dir.list();
-                                            for (int i = 0; i < children.length; i++)
-                                            {
-                                                new File(dir, children[i]).delete();
-                                            }
+                                    File dir = new File(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/SubTitleList/");
+                                    if (dir.isDirectory()) {
+                                        String[] children = dir.list();
+                                        for (int i = 0; i < children.length; i++) {
+                                            new File(dir, children[i]).delete();
                                         }
-
-                                        progressBarHandler = new ProgressBarHandler(RegisterActivity.this);
-                                        progressBarHandler.show();
-                                        Download_SubTitle(FakeSubTitlePath.get(0).trim());
-                                    }
-                                    else
-                                    {
-                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                        playVideoIntent.putExtra("SubTitleName", SubTitleName);
-                                        playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-                                        playVideoIntent.putExtra("ResolutionFormat",ResolutionFormat);
-                                        playVideoIntent.putExtra("ResolutionUrl",ResolutionUrl);
-                                        startActivity(playVideoIntent);
-                                        removeFocusFromViews();
-                                        finish();
-                                        overridePendingTransition(0, 0);
                                     }
 
+                                    progressBarHandler = new ProgressBarHandler(RegisterActivity.this);
+                                    progressBarHandler.show();
+                                    Download_SubTitle(FakeSubTitlePath.get(0).trim());
+                                } else {
+                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    playVideoIntent.putExtra("SubTitleName", SubTitleName);
+                                    playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
+                                    playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
+                                    playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);
+                                    startActivity(playVideoIntent);
+                                    removeFocusFromViews();
+                                    finish();
+                                    overridePendingTransition(0, 0);
                                 }
-                            });
-                        }
-                    }else{
-                        if (Util.dataModel.getVideoUrl().contains("://www.youtube") || Util.dataModel.getVideoUrl().contains("://www.youtu.be")){
-                            if(Util.dataModel.getVideoUrl().contains("live_stream?channel")) {
-                                final Intent playVideoIntent = new Intent(RegisterActivity.this, ThirdPartyPlayer.class);
-                                runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                        removeFocusFromViews();
-
-                                        startActivity(playVideoIntent);
-                                        finish();
-                                        overridePendingTransition(0,0);
-
-                                    }
-                                });
-                            }else{
-
-                                final Intent playVideoIntent = new Intent(RegisterActivity.this, YouTubeAPIActivity.class);
-                                runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                        removeFocusFromViews();
-
-                                        startActivity(playVideoIntent);
-                                        finish();
-                                        overridePendingTransition(0,0);
-
-
-                                    }
-                                });
 
                             }
-                        }else{
+                        });
+                    }
+                } else {
+                    if (Util.dataModel.getVideoUrl().contains("://www.youtube") || Util.dataModel.getVideoUrl().contains("://www.youtu.be")) {
+                        if (Util.dataModel.getVideoUrl().contains("live_stream?channel")) {
                             final Intent playVideoIntent = new Intent(RegisterActivity.this, ThirdPartyPlayer.class);
                             runOnUiThread(new Runnable() {
                                 public void run() {
@@ -1271,137 +988,57 @@ public class RegisterActivity extends AppCompatActivity {
 
                                     startActivity(playVideoIntent);
                                     finish();
-                                    overridePendingTransition(0,0);
+                                    overridePendingTransition(0, 0);
 
                                 }
                             });
+                        } else {
+
+                            final Intent playVideoIntent = new Intent(RegisterActivity.this, YouTubeAPIActivity.class);
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    removeFocusFromViews();
+
+                                    startActivity(playVideoIntent);
+                                    finish();
+                                    overridePendingTransition(0, 0);
+
+
+                                }
+                            });
+
                         }
+                    } else {
+                        final Intent playVideoIntent = new Intent(RegisterActivity.this, ThirdPartyPlayer.class);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                removeFocusFromViews();
+
+                                startActivity(playVideoIntent);
+                                finish();
+                                overridePendingTransition(0, 0);
+
+                            }
+                        });
                     }
                 }
-
-
             }
+
+
         }
-
-        @Override
-        protected void onPreExecute() {
-
-            SubTitleName.clear();
-            SubTitlePath.clear();
-            ResolutionUrl.clear();
-            ResolutionFormat.clear();
-            pDialog = new ProgressBarHandler(RegisterActivity.this);
-            pDialog.show();
-        }
-
-
     }
 
+    @Override
+    public void onGetValidateUserPreExecuteStarted() {
+        pDialog = new ProgressBarHandler(RegisterActivity.this);
+        pDialog.show();
+    }
 
-
-    private class AsynValidateUserDetails extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-
-        int status;
-        String validUserStr;
-        String userMessage;
-        String responseStr;
-        String loggedInIdStr;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            if (pref != null) {
-                loggedInIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-            }
-
-
-
-            String urlRouteList = Util.rootUrl().trim()+Util.userValidationUrl.trim();
-            try {
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("user_id", loggedInIdStr.trim());
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("movie_id", Util.dataModel.getMovieUniqueId().trim());
-                httppost.addHeader("purchase_type", Util.dataModel.getPurchase_type());
-                httppost.addHeader("season_id", Util.dataModel.getSeason_id());
-                httppost.addHeader("episode_id", Util.dataModel.getEpisode_id());
-                SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-             /*   if (countryPref != null) {
-                    String countryCodeStr = countryPref.getString("countryCode", null);
-                    httppost.addHeader("country", countryCodeStr);
-                }else{
-                    httppost.addHeader("country", "IN");
-
-                }    */
-
-                httppost.addHeader("lang_code",Util.getTextofLanguage(RegisterActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    StringBuilder sb = new StringBuilder();
-
-                    BufferedReader reader =
-                            new BufferedReader(new InputStreamReader(response.getEntity().getContent()), 65728);
-                    String line = null;
-
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line);
-                    }
-
-                    responseStr = sb.toString();
-
-
-                } catch (final org.apache.http.conn.ConnectTimeoutException e){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (pDialog != null && pDialog.isShowing()) {
-                                pDialog.hide();
-                                pDialog = null;
-                            }
-                            status = 0;
-                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                    status = 0;
-
-                    e.printStackTrace();
-                }
-                if(responseStr!=null){
-                    JSONObject myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                    validUserStr = myJson.optString("status");
-                    userMessage = myJson.optString("msg");
-
-                }
-
-            }
-            catch (Exception e) {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-                status = 0;
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
+    @Override
+    public void onGetValidateUserPostExecuteCompleted(ValidateUserOutput validateUserOutput, int status, String message) {
+        {
 
 
             String Subscription_Str = pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", "0");
@@ -1416,7 +1053,7 @@ public class RegisterActivity extends AppCompatActivity {
                 status = 0;
             }
 
-            if (responseStr == null) {
+            if (validateUserOutput == null) {
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
@@ -1482,8 +1119,8 @@ public class RegisterActivity extends AppCompatActivity {
                         status = 0;
                     }
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this);
-                    if (userMessage != null && userMessage.equalsIgnoreCase("")) {
-                        dlgAlert.setMessage(userMessage);
+                    if (message != null && message.equalsIgnoreCase("")) {
+                        dlgAlert.setMessage(message);
                     } else {
                         dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, Util.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
 
@@ -1501,7 +1138,7 @@ public class RegisterActivity extends AppCompatActivity {
                     dlgAlert.create().show();
                 } else if (status == 429) {
 
-                    if (validUserStr != null) {
+                    if (validateUserOutput.getValiduser_str() != null) {
                         try {
                             if (pDialog != null && pDialog.isShowing()) {
                                 pDialog.hide();
@@ -1511,49 +1148,41 @@ public class RegisterActivity extends AppCompatActivity {
                             status = 0;
                         }
 
-                        if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK")))
-                        {
+                        if ((validateUserOutput.getValiduser_str().trim().equalsIgnoreCase("OK")) || (validateUserOutput.getValiduser_str().trim().matches("OK")) || (validateUserOutput.getValiduser_str().trim().equals("OK"))) {
                             if (Util.checkNetwork(RegisterActivity.this) == true) {
-                                asynLoadVideoUrls = new AsynLoadVideoUrls();
+                                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                                getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
                                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                             } else {
                                 Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                                 onBackPressed();
                             }
-                        }
-                        else {
+                        } else {
 
-                            if ((userMessage.trim().equalsIgnoreCase("Unpaid")) || (userMessage.trim().matches("Unpaid")) || (userMessage.trim().equals("Unpaid")))
-                            {
-                                if(Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1)
-                                {
-                                    if(Util.dataModel.getContentTypesId() == 3)
-                                    {
+                            if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
+                                if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                                    if (Util.dataModel.getContentTypesId() == 3) {
                                         // Show Popup
                                         ShowPpvPopUp();
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         // Go to ppv Payment
                                         payment_for_single_part();
                                     }
-                                }
-                                else if(PlanId.equals("1") && Subscription_Str.equals("0"))
-                                {
-                                    Intent intent = new Intent(RegisterActivity.this,SubscriptionActivity.class);
+                                } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
+                                    Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     startActivity(intent);
                                     finish();
-                                }
-                                else
-                                {
-                                    if(Util.dataModel.getContentTypesId() == 3)
-                                    {
+                                } else {
+                                    if (Util.dataModel.getContentTypesId() == 3) {
                                         // Show Popup
                                         ShowPpvPopUp();
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         // Go to ppv Payment
                                         payment_for_single_part();
                                     }
@@ -1563,31 +1192,22 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
 
-                }
-                else if(Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1)
-                {
-                    if(Util.dataModel.getContentTypesId() == 3)
-                    {
+                } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                    if (Util.dataModel.getContentTypesId() == 3) {
                         // Show Popup
                         ShowPpvPopUp();
-                    }
-                    else
-                    {
+                    } else {
                         // Go to ppv Payment
                         payment_for_single_part();
                     }
-                }
-                else if(PlanId.equals("1") && Subscription_Str.equals("0"))
-                {
-                    Intent intent = new Intent(RegisterActivity.this,SubscriptionActivity.class);
+                } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
+                    Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
                     finish();
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
 
-                }
-                else if(Util.dataModel.getIsConverted() == 0)
-                {
+                } else if (Util.dataModel.getIsConverted() == 0) {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this);
                     dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
                     dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
@@ -1601,11 +1221,15 @@ public class RegisterActivity extends AppCompatActivity {
                                 }
                             });
                     dlgAlert.create().show();
-                }
-                else
-                {
+                } else {
                     if (Util.checkNetwork(RegisterActivity.this) == true) {
-                        asynLoadVideoUrls = new AsynLoadVideoUrls();
+                        GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                        getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                        getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                        getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                        getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                        getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                        asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
                         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                     } else {
                         Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -1616,16 +1240,947 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
         }
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressBarHandler(RegisterActivity.this);
-            pDialog.show();
-
-        }
-
-
     }
+
+
+//    private class AsynRegistrationDetails extends AsyncTask<Void, Void, Void> {
+//
+//        ProgressBarHandler pDialog;
+//
+//        int status;
+//        String responseStr;
+//        String registrationIdStr;
+//        String isSubscribedStr;
+//        String loginHistoryIdStr;
+//        JSONObject myJson = null;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            String urlRouteList = Util.rootUrl().trim()+Util.registrationUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("name", regNameStr);
+//                httppost.addHeader("email", regEmailStr);
+//                httppost.addHeader("password", regPasswordStr);
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("lang_code",Util.getTextofLanguage(RegisterActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("custom_country", Selected_Country_Id);
+//                httppost.addHeader("custom_languages",Selected_Language_Id);
+//
+//                // Added For FCM
+//
+//                httppost.addHeader("device_id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+//                httppost.addHeader("google_id", Util.getTextofLanguage(RegisterActivity.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
+//                httppost.addHeader("device_type","1");
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e){
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (pDialog != null && pDialog.isShowing()) {
+//                                pDialog.hide();
+//                                pDialog = null;
+//                            }
+//                            status = 0;
+//                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                    status = 0;
+//                    e.printStackTrace();
+//                }
+//                if(responseStr!=null){
+//                    myJson = new JSONObject(responseStr);
+//                    status = Integer.parseInt(myJson.optString("code"));
+//                    registrationIdStr = myJson.optString("id");
+//                    isSubscribedStr = myJson.optString("isSubscribed");
+//                    UniversalIsSubscribed = isSubscribedStr;
+//                    loginHistoryIdStr = myJson.optString("login_history_id");
+//
+//                }
+//
+//            }
+//            catch (Exception e) {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//                status = 0;
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//            try {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//            } catch (IllegalArgumentException ex) {
+//                status = 0;
+//
+//            }
+//            if (responseStr == null) {
+//                status = 0;
+//
+//            }
+//            if (status == 0) {
+//                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
+//                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.ERROR_IN_REGISTRATION, Util.DEFAULT_ERROR_IN_REGISTRATION));
+//                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE));
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            }
+//            if (status > 0) {
+//
+//                if (status == 422) {
+//                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
+//                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
+//                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setCancelable(false);
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                }
+//                            });
+//                    dlgAlert.create().show();
+//
+//                } else if (status == 200) {
+//
+//                    String displayNameStr = myJson.optString("display_name");
+//                    String emailFromApiStr = myJson.optString("email");
+//                    String profileImageStr = myJson.optString("profile_image");
+//
+//
+//                    // Take appropiate step here.
+//
+//
+//                    SharedPreferences.Editor editor = pref.edit();
+//                    editor.putString("PREFS_LOGGEDIN_KEY", "1");
+//                    editor.putString("PREFS_LOGGEDIN_ID_KEY", registrationIdStr);
+//                    editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY", editPassword.getText().toString().trim());
+//                    editor.putString("PREFS_LOGIN_EMAIL_ID_KEY", emailFromApiStr);
+//                    editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", displayNameStr);
+//                    editor.putString("PREFS_LOGIN_PROFILE_IMAGE_KEY", profileImageStr);
+//                    editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY", isSubscribedStr);
+//                    editor.putString("PREFS_LOGIN_HISTORYID_KEY", loginHistoryIdStr);
+//
+//                    Date todayDate = new Date();
+//                    String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
+//                    editor.putString("date", todayStr.trim());
+//                    editor.commit();
+//
+//
+//                    if (Util.checkNetwork(RegisterActivity.this) == true) {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                    } else {
+//                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    if (Util.checkNetwork(RegisterActivity.this) == true) {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//
+//                    }
+//
+//
+//                    if(Util.getTextofLanguage(RegisterActivity.this,Util.IS_RESTRICT_DEVICE,Util.DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1"))
+//                    {
+//                        // Call For Check Api.
+//                        AsynCheckDevice asynCheckDevice = new AsynCheckDevice();
+//                        asynCheckDevice.executeOnExecutor(threadPoolExecutor);
+//                    }
+//                    else {
+//                        if(Util.check_for_subscription == 1)
+//                        {
+//                            // Go for subscription
+//
+//                            if (Util.checkNetwork(RegisterActivity.this) == true) {
+//                                if (Util.dataModel.getIsFreeContent() == 1) {
+//                                    asynLoadVideoUrls = new AsynLoadVideoUrls();
+//                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+//                                } else {
+//                                    asynValidateUserDetails = new AsynValidateUserDetails();
+//                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+//                                }
+//                            } else {
+//                                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            }
+//
+//                        }
+//                        else {
+//
+//                            if (PlanId.equals("1") && isSubscribedStr.equals("0")) {
+//                                Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
+//                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                startActivity(intent);
+//                                finish();
+//                            } else {
+//                                Intent in = new Intent(RegisterActivity.this, MainActivity.class);
+//                                in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                startActivity(in);
+//                                finish();
+//                            }
+//                        }
+//                    }
+//
+//                }
+// }
+
+//        @Override
+//        protected void onPreExecute() {
+//            pDialog = new ProgressBarHandler(RegisterActivity.this);
+//            pDialog.show();
+//        }
+//
+//
+//    }
+
+
+//    private class AsynLoadVideoUrls extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler pDialog;
+//        String responseStr;
+//        int statusCode;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.loadVideoUrl.trim());
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("content_uniq_id", Util.dataModel.getMovieUniqueId().trim());
+//                httppost.addHeader("stream_uniq_id", Util.dataModel.getStreamUniqueId().trim());
+//                httppost.addHeader("internet_speed", MainActivity.internetSpeed.trim());
+//                httppost.addHeader("user_id", pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+//
+//                // Execute HTTP Post Request
+//                try {
+//
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (pDialog != null && pDialog.isShowing()) {
+//                                pDialog.hide();
+//                                pDialog = null;
+//                            }
+//                            responseStr = "0";
+//                            Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                    responseStr = "0";
+//                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    e.printStackTrace();
+//                }
+//
+//                /**** subtitles************/
+//
+//                JSONArray SubtitleJosnArray = null;
+//                JSONArray ResolutionJosnArray = null;
+//                JSONObject myJson = null;
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    SubtitleJosnArray = myJson.optJSONArray("subTitle");
+//                    ResolutionJosnArray = myJson.optJSONArray("videoDetails");
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//                }
+//             /*   JSONObject myJson =null;
+//                if(responseStr!=null){
+//                    myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//                }*/
+//
+//                if (statusCode >= 0) {
+//                    if (statusCode == 200) {
+//                        if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+//                            if ((myJson.has("videoUrl")) && myJson.getString("videoUrl").trim() != null && !myJson.getString("videoUrl").trim().isEmpty() && !myJson.getString("videoUrl").trim().equals("null") && !myJson.getString("videoUrl").trim().matches("")) {
+//                                Util.dataModel.setVideoUrl(myJson.getString("videoUrl"));
+//
+//
+//                            } else {
+//                                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//
+//                            }
+//                        } else {
+//                            if ((myJson.has("thirdparty_url")) && myJson.getString("thirdparty_url").trim() != null && !myJson.getString("thirdparty_url").trim().isEmpty() && !myJson.getString("thirdparty_url").trim().equals("null") && !myJson.getString("thirdparty_url").trim().matches("")) {
+//                                Util.dataModel.setVideoUrl(myJson.getString("thirdparty_url"));
+//
+//                            } else {
+//                                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//
+//                            }
+//                        }
+//                        if ((myJson.has("videoResolution")) && myJson.getString("videoResolution").trim() != null && !myJson.getString("videoResolution").trim().isEmpty() && !myJson.getString("videoResolution").trim().equals("null") && !myJson.getString("videoResolution").trim().matches("")) {
+//                            Util.dataModel.setVideoResolution(myJson.getString("videoResolution"));
+//
+//                        }
+//                        if ((myJson.has("played_length")) && myJson.getString("played_length").trim() != null && !myJson.getString("played_length").trim().isEmpty() && !myJson.getString("played_length").trim().equals("null") && !myJson.getString("played_length").trim().matches("")) {
+//                            Util.dataModel.setPlayPos(Util.isDouble(myJson.getString("played_length")));
+//
+//
+//                        }
+//                        /**** subtitles************/
+//                        if (SubtitleJosnArray != null) {
+//                            if (SubtitleJosnArray.length() > 0) {
+//                                for (int i = 0; i < SubtitleJosnArray.length(); i++) {
+//                                    SubTitleName.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
+//                                    FakeSubTitlePath.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
+//
+//
+//                                }
+//                            }
+//                        }
+//                        /**** subtitles************/
+//
+//                        if (ResolutionJosnArray != null) {
+//                            if (ResolutionJosnArray.length() > 0) {
+//                                for (int i = 0; i < ResolutionJosnArray.length(); i++) {
+//                                    if ((ResolutionJosnArray.getJSONObject(i).optString("resolution").trim()).equals("BEST")) {
+//                                        ResolutionFormat.add(ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
+//                                    } else {
+//                                        ResolutionFormat.add((ResolutionJosnArray.getJSONObject(i).optString("resolution").trim()) + "p");
+//                                    }
+//
+//                                    ResolutionUrl.add(ResolutionJosnArray.getJSONObject(i).optString("url").trim());
+//
+//                                }
+//                            }
+//                        }
+//
+//                    }
+//
+//                } else {
+//
+//                    responseStr = "0";
+//                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                }
+//            } catch (JSONException e1) {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//                responseStr = "0";
+//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                e1.printStackTrace();
+//            } catch (Exception e) {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//                responseStr = "0";
+//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//
+//                e.printStackTrace();
+//
+//            }
+//            return null;
+//
+//        }
+//
+//        protected void onPostExecute(Void result) {
+//
+//      /*  try{
+//            if(pDialog.isShowing())
+//                pDialog.dismiss();
+//        }
+//        catch(IllegalArgumentException ex)
+//        {
+//            responseStr = "0";
+//            movieVideoUrlStr = getResources().getString(R.string.no_data_str);
+//        }*/
+//            if (responseStr == null) {
+//                responseStr = "0";
+//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//
+//                //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+//            }
+//
+//            if ((responseStr.trim().equalsIgnoreCase("0"))) {
+//                try {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                } catch (IllegalArgumentException ex) {
+//                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+//                }
+//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+//                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
+//                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+//                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                                finish();
+//                                overridePendingTransition(0, 0);
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            } else {
+//
+//                if (Util.dataModel.getVideoUrl() == null) {
+//                    try {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                    } catch (IllegalArgumentException ex) {
+//                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    }
+//                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
+//                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+//                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setCancelable(false);
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                    finish();
+//                                    overridePendingTransition(0, 0);
+//                                }
+//                            });
+//                    dlgAlert.create().show();
+//                } else if (Util.dataModel.getVideoUrl().matches("") || Util.dataModel.getVideoUrl().equalsIgnoreCase(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+//                    try {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                    } catch (IllegalArgumentException ex) {
+//                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    }
+//                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
+//                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+//                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setCancelable(false);
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                    finish();
+//                                    overridePendingTransition(0, 0);
+//                                }
+//                            });
+//                    dlgAlert.create().show();
+//                } else {
+//                    try {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                    } catch (IllegalArgumentException ex) {
+//                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    }
+//                    if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+//                        /*if (mCastSession != null && mCastSession.isConnected()) {
+//
+//
+//                            MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+//
+//                            movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, Util.dataModel.getVideoStory());
+//                            movieMetadata.putString(MediaMetadata.KEY_TITLE, Util.dataModel.getVideoTitle());
+//                            movieMetadata.addImage(new WebImage(Uri.parse(Util.dataModel.getPosterImageId())));
+//                            movieMetadata.addImage(new WebImage(Uri.parse(Util.dataModel.getPosterImageId())));
+//                            JSONObject jsonObj = null;
+//                            try {
+//                                jsonObj = new JSONObject();
+//                                jsonObj.put("description", Util.dataModel.getVideoTitle());
+//                            } catch (JSONException e) {
+//                            }
+//
+//                            mediaInfo = new MediaInfo.Builder(Util.dataModel.getVideoUrl().trim())
+//                                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+//                                    .setContentType("videos/mp4")
+//                                    .setMetadata(movieMetadata)
+//                                    .setStreamDuration(15 * 1000)
+//                                    .setCustomData(jsonObj)
+//                                    .build();
+//                            mSelectedMedia = mediaInfo;
+//
+//
+//                            togglePlayback();
+//                            removeFocusFromViews();
+//                            finish();
+//                            overridePendingTransition(0, 0);
+//                        }*/
+//                        {
+//                            final Intent playVideoIntent = new Intent(RegisterActivity.this, ExoPlayerActivity.class);
+//                           /* runOnUiThread(new Runnable() {
+//                                public void run() {
+//                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                    removeFocusFromViews();
+//
+//                                    startActivity(playVideoIntent);
+//                                    finish();
+//                                    overridePendingTransition(0, 0);
+//
+//
+//                                }
+//                            });*/
+//                            runOnUiThread(new Runnable() {
+//                                public void run() {
+//                                    if (FakeSubTitlePath.size() > 0) {
+//                                        // This Portion Will Be changed Later.
+//
+//                                        File dir = new File(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/SubTitleList/");
+//                                        if (dir.isDirectory()) {
+//                                            String[] children = dir.list();
+//                                            for (int i = 0; i < children.length; i++) {
+//                                                new File(dir, children[i]).delete();
+//                                            }
+//                                        }
+//
+//                                        progressBarHandler = new ProgressBarHandler(RegisterActivity.this);
+//                                        progressBarHandler.show();
+//                                        Download_SubTitle(FakeSubTitlePath.get(0).trim());
+//                                    } else {
+//                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                        playVideoIntent.putExtra("SubTitleName", SubTitleName);
+//                                        playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
+//                                        playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
+//                                        playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);
+//                                        startActivity(playVideoIntent);
+//                                        removeFocusFromViews();
+//                                        finish();
+//                                        overridePendingTransition(0, 0);
+//                                    }
+//
+//                                }
+//                            });
+//                        }
+//                    } else {
+//                        if (Util.dataModel.getVideoUrl().contains("://www.youtube") || Util.dataModel.getVideoUrl().contains("://www.youtu.be")) {
+//                            if (Util.dataModel.getVideoUrl().contains("live_stream?channel")) {
+//                                final Intent playVideoIntent = new Intent(RegisterActivity.this, ThirdPartyPlayer.class);
+//                                runOnUiThread(new Runnable() {
+//                                    public void run() {
+//                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                        removeFocusFromViews();
+//
+//                                        startActivity(playVideoIntent);
+//                                        finish();
+//                                        overridePendingTransition(0, 0);
+//
+//                                    }
+//                                });
+//                            } else {
+//
+//                                final Intent playVideoIntent = new Intent(RegisterActivity.this, YouTubeAPIActivity.class);
+//                                runOnUiThread(new Runnable() {
+//                                    public void run() {
+//                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                        removeFocusFromViews();
+//
+//                                        startActivity(playVideoIntent);
+//                                        finish();
+//                                        overridePendingTransition(0, 0);
+//
+//
+//                                    }
+//                                });
+//
+//                            }
+//                        } else {
+//                            final Intent playVideoIntent = new Intent(RegisterActivity.this, ThirdPartyPlayer.class);
+//                            runOnUiThread(new Runnable() {
+//                                public void run() {
+//                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                    removeFocusFromViews();
+//
+//                                    startActivity(playVideoIntent);
+//                                    finish();
+//                                    overridePendingTransition(0, 0);
+//
+//                                }
+//                            });
+//                        }
+//                    }
+//                }
+//
+//
+//            }
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//
+//            SubTitleName.clear();
+//            SubTitlePath.clear();
+//            ResolutionUrl.clear();
+//            ResolutionFormat.clear();
+//            pDialog = new ProgressBarHandler(RegisterActivity.this);
+//            pDialog.show();
+//        }
+//
+//
+//    }
+
+//
+//    private class AsynValidateUserDetails extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler pDialog;
+//
+//        int status;
+//        String validUserStr;
+//        String userMessage;
+//        String responseStr;
+//        String loggedInIdStr;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            if (pref != null) {
+//                loggedInIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+//            }
+//
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.userValidationUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("user_id", loggedInIdStr.trim());
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("movie_id", Util.dataModel.getMovieUniqueId().trim());
+//                httppost.addHeader("purchase_type", Util.dataModel.getPurchase_type());
+//                httppost.addHeader("season_id", Util.dataModel.getSeason_id());
+//                httppost.addHeader("episode_id", Util.dataModel.getEpisode_id());
+//                SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
+//             /*   if (countryPref != null) {
+//                    String countryCodeStr = countryPref.getString("countryCode", null);
+//                    httppost.addHeader("country", countryCodeStr);
+//                }else{
+//                    httppost.addHeader("country", "IN");
+//
+//                }    */
+//
+//                httppost.addHeader("lang_code", Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    StringBuilder sb = new StringBuilder();
+//
+//                    BufferedReader reader =
+//                            new BufferedReader(new InputStreamReader(response.getEntity().getContent()), 65728);
+//                    String line = null;
+//
+//                    while ((line = reader.readLine()) != null) {
+//                        sb.append(line);
+//                    }
+//
+//                    responseStr = sb.toString();
+//
+//
+//                } catch (final org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (pDialog != null && pDialog.isShowing()) {
+//                                pDialog.hide();
+//                                pDialog = null;
+//                            }
+//                            status = 0;
+//                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                    status = 0;
+//
+//                    e.printStackTrace();
+//                }
+//                if (responseStr != null) {
+//                    JSONObject myJson = new JSONObject(responseStr);
+//                    status = Integer.parseInt(myJson.optString("code"));
+//                    validUserStr = myJson.optString("status");
+//                    userMessage = myJson.optString("msg");
+//
+//                }
+//
+//            } catch (Exception e) {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//                status = 0;
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//
+//            String Subscription_Str = pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", "0");
+//
+//
+//            try {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//            } catch (IllegalArgumentException ex) {
+//                status = 0;
+//            }
+//
+//            if (responseStr == null) {
+//                try {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                } catch (IllegalArgumentException ex) {
+//                    status = 0;
+//                }
+//                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this);
+//                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
+//                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                                Intent in = new Intent(RegisterActivity.this, MainActivity.class);
+//                                in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                startActivity(in);
+//                                finish();
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            } else if (status <= 0) {
+//                try {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                } catch (IllegalArgumentException ex) {
+//                    status = 0;
+//                }
+//                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this);
+//                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
+//                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                                Intent in = new Intent(RegisterActivity.this, MainActivity.class);
+//                                in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                startActivity(in);
+//                                finish();
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            }
+//
+//            if (status > 0) {
+//                if (status == 427) {
+//
+//                    try {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                    } catch (IllegalArgumentException ex) {
+//                        status = 0;
+//                    }
+//                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this);
+//                    if (userMessage != null && userMessage.equalsIgnoreCase("")) {
+//                        dlgAlert.setMessage(userMessage);
+//                    } else {
+//                        dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, Util.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
+//
+//                    }
+//                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setCancelable(false);
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                    onBackPressed();
+//                                }
+//                            });
+//                    dlgAlert.create().show();
+//                } else if (status == 429) {
+//
+//                    if (validUserStr != null) {
+//                        try {
+//                            if (pDialog != null && pDialog.isShowing()) {
+//                                pDialog.hide();
+//                                pDialog = null;
+//                            }
+//                        } catch (IllegalArgumentException ex) {
+//                            status = 0;
+//                        }
+//
+//                        if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
+//                            if (Util.checkNetwork(RegisterActivity.this) == true) {
+//                                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+//                                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+//                                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+//                                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+//                                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+//                                getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+//                                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,RegisterActivity.this,RegisterActivity.this);
+//                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+//                            } else {
+//                                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                                onBackPressed();
+//                            }
+//                        } else {
+//
+//                            if ((userMessage.trim().equalsIgnoreCase("Unpaid")) || (userMessage.trim().matches("Unpaid")) || (userMessage.trim().equals("Unpaid"))) {
+//                                if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+//                                    if (Util.dataModel.getContentTypesId() == 3) {
+//                                        // Show Popup
+//                                        ShowPpvPopUp();
+//                                    } else {
+//                                        // Go to ppv Payment
+//                                        payment_for_single_part();
+//                                    }
+//                                } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
+//                                    Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
+//                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                    startActivity(intent);
+//                                    finish();
+//                                } else {
+//                                    if (Util.dataModel.getContentTypesId() == 3) {
+//                                        // Show Popup
+//                                        ShowPpvPopUp();
+//                                    } else {
+//                                        // Go to ppv Payment
+//                                        payment_for_single_part();
+//                                    }
+//                                }
+//                            }
+//
+//                        }
+//                    }
+//
+//                } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+//                    if (Util.dataModel.getContentTypesId() == 3) {
+//                        // Show Popup
+//                        ShowPpvPopUp();
+//                    } else {
+//                        // Go to ppv Payment
+//                        payment_for_single_part();
+//                    }
+//                } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
+//                    Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                    startActivity(intent);
+//                    finish();
+//                    overridePendingTransition(0, 0);
+//
+//                } else if (Util.dataModel.getIsConverted() == 0) {
+//                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this);
+//                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+//                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setCancelable(false);
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                    onBackPressed();
+//                                }
+//                            });
+//                    dlgAlert.create().show();
+//                } else {
+//                    if (Util.checkNetwork(RegisterActivity.this) == true) {
+//                        GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+//                        getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+//                        getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+//                        getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+//                        getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+//                        getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+//                        asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,RegisterActivity.this,RegisterActivity.this);
+//                        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+//                    } else {
+//                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                        onBackPressed();
+//                    }
+//                }
+//
+//            }
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            pDialog = new ProgressBarHandler(RegisterActivity.this);
+//            pDialog.show();
+//
+//        }
+//
+//
+//    }
 
     private void payment_for_single_part() {
         {
@@ -1652,8 +2207,8 @@ public class RegisterActivity extends AppCompatActivity {
             Util.selected_episode_id = "0";
             Util.selected_season_id = "0";
 
-            Log.v("SUBHA","priceFosubscribedStr="+priceFosubscribedStr);
-            Log.v("SUBHA","priceForUnsubscribedStr="+priceForUnsubscribedStr);
+            Log.v("SUBHA", "priceFosubscribedStr=" + priceFosubscribedStr);
+            Log.v("SUBHA", "priceForUnsubscribedStr=" + priceForUnsubscribedStr);
 
             final Intent showPaymentIntent = new Intent(RegisterActivity.this, PPvPaymentInfoActivity.class);
             showPaymentIntent.putExtra("muviuniqueid", Util.dataModel.getMovieUniqueId().trim());
@@ -1663,7 +2218,7 @@ public class RegisterActivity extends AppCompatActivity {
             showPaymentIntent.putExtra("planUnSubscribedPrice", priceForUnsubscribedStr);
             showPaymentIntent.putExtra("planSubscribedPrice", priceFosubscribedStr);
             showPaymentIntent.putExtra("currencyId", Util.currencyModel.getCurrencyId());
-            showPaymentIntent.putExtra("currencyCountryCode",Util.currencyModel.getCurrencyCode());
+            showPaymentIntent.putExtra("currencyCountryCode", Util.currencyModel.getCurrencyCode());
             showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getCurrencySymbol());
             showPaymentIntent.putExtra("showName", Util.dataModel.getVideoTitle());
             showPaymentIntent.putExtra("isPPV", Util.dataModel.getIsPPV());
@@ -1710,87 +2265,66 @@ public class RegisterActivity extends AppCompatActivity {
             Button payNowButton = (Button) convertView.findViewById(R.id.payNowButton);
 
 
-            if (Util.dataModel.getIsAPV() == 1)
-            {
-                if(Util.apvModel.getIsEpisode() == 1)
-                {
+            if (Util.dataModel.getIsAPV() == 1) {
+                if (Util.apvModel.getIsEpisode() == 1) {
                     episodeRadioButton.setVisibility(View.VISIBLE);
                     episodePriceTextView.setVisibility(View.VISIBLE);
-                }
-                else
-                {
+                } else {
                     episodeRadioButton.setVisibility(View.GONE);
                     episodePriceTextView.setVisibility(View.GONE);
                 }
-                if(Util.apvModel.getIsSeason() == 1)
-                {
+                if (Util.apvModel.getIsSeason() == 1) {
                     seasonRadioButton.setVisibility(View.VISIBLE);
                     seasonPriceTextView.setVisibility(View.VISIBLE);
-                }
-                else
-                {
+                } else {
                     seasonRadioButton.setVisibility(View.GONE);
                     seasonPriceTextView.setVisibility(View.GONE);
                 }
-                if(Util.apvModel.getIsShow() == 1)
-                {
+                if (Util.apvModel.getIsShow() == 1) {
                     completeRadioButton.setVisibility(View.VISIBLE);
                     completePriceTextView.setVisibility(View.VISIBLE);
-                }
-                else
-                {
+                } else {
                     completeRadioButton.setVisibility(View.GONE);
                     completePriceTextView.setVisibility(View.GONE);
                 }
-            }
-            else
-            {
-                if(Util.ppvModel.getIsEpisode() == 1)
-                {
+            } else {
+                if (Util.ppvModel.getIsEpisode() == 1) {
                     episodeRadioButton.setVisibility(View.VISIBLE);
                     episodePriceTextView.setVisibility(View.VISIBLE);
-                }
-                else
-                {
+                } else {
                     episodeRadioButton.setVisibility(View.GONE);
                     episodePriceTextView.setVisibility(View.GONE);
                 }
-                if(Util.ppvModel.getIsSeason() == 1)
-                {
+                if (Util.ppvModel.getIsSeason() == 1) {
                     seasonRadioButton.setVisibility(View.VISIBLE);
                     seasonPriceTextView.setVisibility(View.VISIBLE);
-                }
-                else
-                {
+                } else {
                     seasonRadioButton.setVisibility(View.GONE);
                     seasonPriceTextView.setVisibility(View.GONE);
                 }
-                if(Util.ppvModel.getIsShow() == 1)
-                {
+                if (Util.ppvModel.getIsShow() == 1) {
                     completeRadioButton.setVisibility(View.VISIBLE);
                     completePriceTextView.setVisibility(View.VISIBLE);
-                }
-                else
-                {
+                } else {
                     completeRadioButton.setVisibility(View.GONE);
                     completePriceTextView.setVisibility(View.GONE);
                 }
             }
 
 
-            completeRadioButton.setText("  " +Util.dataModel.getEpisode_title().trim() + " Complete Season ");
-            seasonRadioButton.setText("  "+Util.dataModel.getEpisode_title().trim() + " Season " + Util.dataModel.getEpisode_series_no().trim() + " ");
-            episodeRadioButton.setText("  "+Util.dataModel.getEpisode_title().trim() + " S" + Util.dataModel.getEpisode_series_no().trim() + " E " + Util.dataModel.getEpisode_no().trim() + " ");
+            completeRadioButton.setText("  " + Util.dataModel.getEpisode_title().trim() + " Complete Season ");
+            seasonRadioButton.setText("  " + Util.dataModel.getEpisode_title().trim() + " Season " + Util.dataModel.getEpisode_series_no().trim() + " ");
+            episodeRadioButton.setText("  " + Util.dataModel.getEpisode_title().trim() + " S" + Util.dataModel.getEpisode_series_no().trim() + " E " + Util.dataModel.getEpisode_no().trim() + " ");
 
 
             if (Util.dataModel.getIsAPV() == 1) {
                 episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvEpisodeUnsubscribedStr());
-                seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " +Util.apvModel.getApvSeasonUnsubscribedStr());
+                seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvSeasonUnsubscribedStr());
                 completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvShowUnsubscribedStr());
             } else {
                 episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvEpisodeUnsubscribedStr());
                 seasonPriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvSeasonUnsubscribedStr());
-                completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " +Util.ppvModel.getPpvShowUnsubscribedStr());
+                completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.ppvModel.getPpvShowUnsubscribedStr());
             }
 
 
@@ -1847,16 +2381,14 @@ public class RegisterActivity extends AppCompatActivity {
                     priceFosubscribedStr = Util.ppvModel.getPpvShowSubscribedStr();
                 }
 
-            }
-            else
-            {
+            } else {
                 if (seasonRadioButton.getVisibility() == View.VISIBLE) {
 
                     completeRadioButton.setChecked(false);
                     seasonRadioButton.setChecked(true);
                     episodeRadioButton.setChecked(false);
 
-                    if (Util.dataModel.getIsAPV()== 1) {
+                    if (Util.dataModel.getIsAPV() == 1) {
                         priceForUnsubscribedStr = Util.apvModel.getApvSeasonUnsubscribedStr();
                         priceFosubscribedStr = Util.apvModel.getApvSeasonSubscribedStr();
 
@@ -1865,14 +2397,12 @@ public class RegisterActivity extends AppCompatActivity {
                         priceFosubscribedStr = Util.ppvModel.getPpvSeasonSubscribedStr();
                     }
 
-                }
-                else
-                {
+                } else {
                     completeRadioButton.setChecked(false);
                     seasonRadioButton.setChecked(false);
                     episodeRadioButton.setChecked(true);
 
-                    if (Util.dataModel.getIsAPV()== 1) {
+                    if (Util.dataModel.getIsAPV() == 1) {
                         priceForUnsubscribedStr = Util.apvModel.getApvEpisodeUnsubscribedStr();
                         priceFosubscribedStr = Util.apvModel.getApvEpisodeSubscribedStr();
 
@@ -1914,7 +2444,7 @@ public class RegisterActivity extends AppCompatActivity {
                     completeRadioButton.setChecked(false);
                     seasonRadioButton.setChecked(false);
 
-                    if (Util.dataModel.getIsAPV()== 1) {
+                    if (Util.dataModel.getIsAPV() == 1) {
                         priceForUnsubscribedStr = Util.apvModel.getApvEpisodeUnsubscribedStr();
                         priceFosubscribedStr = Util.apvModel.getApvEpisodeSubscribedStr();
 
@@ -1930,7 +2460,7 @@ public class RegisterActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     episodeRadioButton.setChecked(false);
                     completeRadioButton.setChecked(false);
-                    if (Util.dataModel.getIsAPV()== 1) {
+                    if (Util.dataModel.getIsAPV() == 1) {
                         priceForUnsubscribedStr = Util.apvModel.getApvSeasonUnsubscribedStr();
                         priceFosubscribedStr = Util.apvModel.getApvSeasonSubscribedStr();
 
@@ -1947,18 +2477,13 @@ public class RegisterActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
 
-                    if(completeRadioButton.isChecked())
-                    {
+                    if (completeRadioButton.isChecked()) {
                         Util.selected_episode_id = "0";
                         Util.selected_season_id = "0";
-                    }
-                    else if(seasonRadioButton.isChecked())
-                    {
+                    } else if (seasonRadioButton.isChecked()) {
                         Util.selected_episode_id = "0";
 
-                    }
-                    else
-                    {
+                    } else {
                         Util.selected_episode_id = Util.dataModel.getStreamUniqueId();
                         Util.selected_season_id = Util.dataModel.getEpisode_series_no();
                     }
@@ -1973,7 +2498,7 @@ public class RegisterActivity extends AppCompatActivity {
                     showPaymentIntent.putExtra("planUnSubscribedPrice", priceForUnsubscribedStr);
                     showPaymentIntent.putExtra("planSubscribedPrice", priceFosubscribedStr);
                     showPaymentIntent.putExtra("currencyId", Util.currencyModel.getCurrencyId());
-                    showPaymentIntent.putExtra("currencyCountryCode",Util.currencyModel.getCurrencyCode());
+                    showPaymentIntent.putExtra("currencyCountryCode", Util.currencyModel.getCurrencyCode());
                     showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getCurrencySymbol());
                     showPaymentIntent.putExtra("showName", Util.dataModel.getEpisode_title());
                     showPaymentIntent.putExtra("seriesNumber", Util.dataModel.getEpisode_series_no());
@@ -1997,15 +2522,14 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     @Override
-    public void onBackPressed()
-    {
-        if (asynValidateUserDetails!=null){
+    public void onBackPressed() {
+        if (asynValidateUserDetails != null) {
             asynValidateUserDetails.cancel(true);
         }
-        if (asynLoadVideoUrls!=null){
+        if (asynLoadVideoUrls != null) {
             asynLoadVideoUrls.cancel(true);
         }
-        if (asyncReg!=null){
+        if (asyncReg != null) {
             asyncReg.cancel(true);
         }
         View view = this.getCurrentFocus();
@@ -2017,7 +2541,8 @@ public class RegisterActivity extends AppCompatActivity {
         overridePendingTransition(0, 0);
         super.onBackPressed();
     }
-    public void removeFocusFromViews(){
+
+    public void removeFocusFromViews() {
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -2320,6 +2845,159 @@ public class RegisterActivity extends AppCompatActivity {
         new DownloadFileFromURL().execute(Url);
     }
 
+    @Override
+    public void onSocialAuthPreExecuteStarted() {
+        pDialog = new ProgressBarHandler(RegisterActivity.this);
+        pDialog.show();
+
+    }
+
+    @Override
+    public void onSocialAuthPostExecuteCompleted(SocialAuthOutputModel socialAuthOutputModel, int status, String message) {
+        if (status == 0) {
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.ERROR_IN_REGISTRATION, Util.DEFAULT_ERROR_IN_REGISTRATION));
+            dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE));
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
+        }
+        if (status > 0) {
+
+            if (status == 422) {
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
+                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                dlgAlert.create().show();
+
+            } else if (status == 200) {
+
+                SharedPreferences.Editor editor = pref.edit();
+
+
+                Date todayDate = new Date();
+                String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
+                editor.putString("date", todayStr.trim());
+                editor.commit();
+
+                if (Util.check_for_subscription == 1) {
+                    // Go for subscription
+
+                    if (Util.checkNetwork(RegisterActivity.this) == true) {
+                        if (Util.dataModel.getIsFreeContent() == 1) {
+                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                            getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                            getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                            asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                        } else {
+                            ValidateUserInput validateUserInput = new ValidateUserInput();
+                            validateUserInput.setAuthToken(Util.authTokenStr);
+                            validateUserInput.setUserId(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                            validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
+                            validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
+                            validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
+                            validateUserInput.setEpisodeStreamUniqueId( Util.dataModel.getEpisode_id());
+                            validateUserInput.setLanguageCode(Util.getTextofLanguage(RegisterActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                            asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput,RegisterActivity.this,RegisterActivity.this);
+                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                        }
+                    } else {
+                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    }
+
+                } else {
+                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    removeFocusFromViews();
+                    startActivity(intent);
+                    finish();
+                    overridePendingTransition(0, 0);
+                }
+
+
+                if (Util.checkNetwork(RegisterActivity.this) == true) {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } else {
+                    Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                }
+
+                if (Util.checkNetwork(RegisterActivity.this) == true) {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                   /*  int planId = ((Global) getApplicationContext()).getPlanId();
+                        int isSubscribedDataStr = 0;
+                        if (pref != null) {
+                            isSubscribedDataStr = Integer.parseInt(pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", null));
+                        }
+
+                        if (isFreeContent == 1){
+                            movieVideoUrlStr = null;
+                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                        }
+                        else if (isAPV == 0 && isPPV == 0 && isConverted == 1 &&  planId == 0){
+
+                            movieVideoUrlStr = null;
+                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                        }else if (isAPV == 0 && isPPV == 0 && isConverted == 1 &&  planId == 1 && isSubscribedDataStr == 0 ){
+                            final Intent subsc = new Intent(RegisterActivity.this, SubscriptionActivity.class);
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    subsc.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(subsc);
+
+                                }
+                            });
+
+                            movieVideoUrlStr = null;
+                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+
+                        }else if (isAPV == 0 && isPPV == 0 && isConverted == 1 &&  planId == 1 && isSubscribedDataStr == 1 ){
+
+                            movieVideoUrlStr = null;
+                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+
+                        }else {
+
+                            AsynValidateUserDetails asynValidateUserDetails = new AsynValidateUserDetails();
+                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                        }
+                    }else {
+                        Toast.makeText(RegisterActivity.this, getResources().getString(R.string.no_internet_connection_str), Toast.LENGTH_LONG).show();
+                    }*/
+
+
+                }
+            }
+
+        }
+    }
+
 
     class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
@@ -2353,8 +3031,8 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
 
-                SubTitlePath.add(mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis()+".vtt");
-                OutputStream output = new FileOutputStream(mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis()+".vtt");
+                SubTitlePath.add(mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".vtt");
+                OutputStream output = new FileOutputStream(mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".vtt");
 
                 byte data[] = new byte[1024];
                 long total = 0;
@@ -2375,28 +3053,25 @@ public class RegisterActivity extends AppCompatActivity {
 
             return null;
         }
+
         protected void onProgressUpdate(String... progress) {
         }
 
         @Override
         protected void onPostExecute(String file_url) {
             FakeSubTitlePath.remove(0);
-            if(FakeSubTitlePath.size()>0)
-            {
+            if (FakeSubTitlePath.size() > 0) {
                 Download_SubTitle(FakeSubTitlePath.get(0).trim());
-            }
-            else
-            {
-                if(progressBarHandler!=null && progressBarHandler.isShowing())
-                {
+            } else {
+                if (progressBarHandler != null && progressBarHandler.isShowing()) {
                     progressBarHandler.hide();
                 }
                 Intent playVideoIntent = new Intent(RegisterActivity.this, ExoPlayerActivity.class);
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 playVideoIntent.putExtra("SubTitleName", SubTitleName);
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-                playVideoIntent.putExtra("ResolutionFormat",ResolutionFormat);
-                playVideoIntent.putExtra("ResolutionUrl",ResolutionUrl);
+                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
+                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);
                 startActivity(playVideoIntent);
                 removeFocusFromViews();
                 finish();
@@ -2404,7 +3079,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
     }
-
 
 
     private FacebookCallback<LoginResult> mCallBack = new FacebookCallback<LoginResult>() {
@@ -2425,7 +3099,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             JSONObject json = response.getJSONObject();
                             try {
-                                if(json != null){
+                                if (json != null) {
 
 
                                     if ((json.has("name")) && json.getString("name").trim() != null && !json.getString("name").trim().isEmpty() && !json.getString("name").trim().equals("null") && !json.getString("name").trim().matches("")) {
@@ -2454,8 +3128,6 @@ public class RegisterActivity extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
-
 
 
 //
@@ -2504,18 +3176,18 @@ public class RegisterActivity extends AppCompatActivity {
 
             String urlRouteList = Util.rootUrl().trim() + Util.fbUserExistsUrl.trim();
             try {
-                HttpClient httpclient=new DefaultHttpClient();
+                HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("fb_userid",fbUserId.trim());
+                httppost.addHeader("fb_userid", fbUserId.trim());
 
                 // Execute HTTP Post Request
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
 
                     status = 0;
 
@@ -2523,14 +3195,13 @@ public class RegisterActivity extends AppCompatActivity {
                     status = 0;
                     e.printStackTrace();
                 }
-                if(responseStr!=null){
+                if (responseStr != null) {
                     myJson = new JSONObject(responseStr);
                     status = Integer.parseInt(myJson.optString("code"));
                     isNewUserStr = Integer.parseInt(myJson.optString("is_newuser"));
                 }
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 status = 0;
 
             }
@@ -2542,7 +3213,7 @@ public class RegisterActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
 
 
-            if(responseStr == null){
+            if (responseStr == null) {
                 status = 0;
 
             }
@@ -2554,9 +3225,9 @@ public class RegisterActivity extends AppCompatActivity {
                 android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
                 dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK));
+                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -2587,11 +3258,18 @@ public class RegisterActivity extends AppCompatActivity {
                             });
                     dlgAlert.create().show();
                 }*/
-                asynFbRegDetails = new AsynFbRegDetails();
+                SocialAuthInputModel socialAuthInputModel=new SocialAuthInputModel();
+                socialAuthInputModel.setAuthToken(Util.authTokenStr);
+                socialAuthInputModel.setName(fbName.trim());
+                socialAuthInputModel.setEmail(fbEmail.trim());
+                socialAuthInputModel.setPassword("");
+                socialAuthInputModel.setFb_userid(fbUserId.trim());
+                socialAuthInputModel.setLanguage(Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                asynFbRegDetails = new SocialAuthAsynTask(socialAuthInputModel,RegisterActivity.this,RegisterActivity.this);
                 asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
 
 
-            }else{
+            } else {
                 if (pDialog != null && pDialog.isShowing()) {
                     pDialog.hide();
                     pDialog = null;
@@ -2601,7 +3279,7 @@ public class RegisterActivity extends AppCompatActivity {
                 dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
                 dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -2611,13 +3289,12 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
 
-
         }
 
         @Override
         protected void onPreExecute() {
             AccessToken accessToken = AccessToken.getCurrentAccessToken();
-            if(accessToken != null){
+            if (accessToken != null) {
                 LoginManager.getInstance().logOut();
             }
             pDialog = new ProgressBarHandler(RegisterActivity.this);
@@ -2627,244 +3304,254 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
+//    private class AsynFbRegDetails extends AsyncTask<Void, Void, Void> {
+//        // ProgressDialog pDialog;
+//        ProgressBarHandler pDialog;
+//        int statusCode;
+//        String loggedInIdStr;
+//        String responseStr;
+//        String isSubscribedStr;
+//        String loginHistoryIdStr;
+//
+//        JSONObject myJson = null;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.fbRegUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("name", fbName.trim());
+//                httppost.addHeader("email", fbEmail.trim());
+//                httppost.addHeader("password", "");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("fb_userid", fbUserId.trim());
+//                httppost.addHeader("lang_code", Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            statusCode = 0;
+//                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    statusCode = 0;
+//
+//                    e.printStackTrace();
+//                }
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//                    loggedInIdStr = myJson.optString("id");
+//                    isSubscribedStr = myJson.optString("isSubscribed");
+//                    UniversalIsSubscribed = isSubscribedStr;
+//                    if (myJson.has("login_history_id")) {
+//                        loginHistoryIdStr = myJson.optString("login_history_id");
+//                    }
+//
+//
+//                }
+//
+//            } catch (Exception e) {
+//                statusCode = 0;
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            try {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//            } catch (IllegalArgumentException ex) {
+//                statusCode = 0;
+//
+//            }
+//            if (responseStr == null) {
+//                statusCode = 0;
+//
+//            }
+//            if (statusCode == 0) {
+//                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
+//                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.ERROR_IN_REGISTRATION, Util.DEFAULT_ERROR_IN_REGISTRATION));
+//                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE));
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            }
+//            if (statusCode > 0) {
+//
+//                if (statusCode == 422) {
+//                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
+//                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
+//                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setCancelable(false);
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                }
+//                            });
+//                    dlgAlert.create().show();
+//
+//                } else if (statusCode == 200) {
+//
+//                    String displayNameStr = myJson.optString("display_name");
+//                    String emailFromApiStr = myJson.optString("email");
+//                    String profileImageStr = myJson.optString("profile_image");
+//                    SharedPreferences.Editor editor = pref.edit();
+//
+//                    editor.putString("PREFS_LOGGEDIN_KEY", "1");
+//                    editor.putString("PREFS_LOGGEDIN_ID_KEY", loggedInIdStr);
+//                    editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY", "");
+//                    editor.putString("PREFS_LOGIN_EMAIL_ID_KEY", emailFromApiStr);
+//                    editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", displayNameStr);
+//                    editor.putString("PREFS_LOGIN_PROFILE_IMAGE_KEY", profileImageStr);
+//                    editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY", isSubscribedStr);
+//                    editor.putString("PREFS_LOGIN_HISTORYID_KEY", loginHistoryIdStr);
+//
+//
+//                    Date todayDate = new Date();
+//                    String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
+//                    editor.putString("date", todayStr.trim());
+//                    editor.commit();
+//
+//                    if (Util.check_for_subscription == 1) {
+//                        // Go for subscription
+//
+//                        if (Util.checkNetwork(RegisterActivity.this) == true) {
+//                            if (Util.dataModel.getIsFreeContent() == 1) {
+//                                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+//                                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+//                                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+//                                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+//                                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+//                                getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+//                                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
+//                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+//                            } else {
+//                                ValidateUserInput validateUserInput = new ValidateUserInput();
+//                                validateUserInput.setAuthToken(Util.authTokenStr);
+//                                validateUserInput.setUserId(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+//                                validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
+//                                validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
+//                                validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
+//                                validateUserInput.setEpisodeStreamUniqueId( Util.dataModel.getEpisode_id());
+//                                validateUserInput.setLanguageCode(Util.getTextofLanguage(RegisterActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                                asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput,RegisterActivity.this,RegisterActivity.this);
+//                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+//                            }
+//                        } else {
+//                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                        }
+//
+//                    } else {
+//                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+//                        removeFocusFromViews();
+//                        startActivity(intent);
+//                        finish();
+//                        overridePendingTransition(0, 0);
+//                    }
+//
+//
+//                    if (Util.checkNetwork(RegisterActivity.this) == true) {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                    } else {
+//                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    if (Util.checkNetwork(RegisterActivity.this) == true) {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                   /*  int planId = ((Global) getApplicationContext()).getPlanId();
+//                        int isSubscribedDataStr = 0;
+//                        if (pref != null) {
+//                            isSubscribedDataStr = Integer.parseInt(pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", null));
+//                        }
+//
+//                        if (isFreeContent == 1){
+//                            movieVideoUrlStr = null;
+//                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+//                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+//                        }
+//                        else if (isAPV == 0 && isPPV == 0 && isConverted == 1 &&  planId == 0){
+//
+//                            movieVideoUrlStr = null;
+//                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+//                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+//                        }else if (isAPV == 0 && isPPV == 0 && isConverted == 1 &&  planId == 1 && isSubscribedDataStr == 0 ){
+//                            final Intent subsc = new Intent(RegisterActivity.this, SubscriptionActivity.class);
+//                            runOnUiThread(new Runnable() {
+//                                public void run() {
+//                                    subsc.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                    startActivity(subsc);
+//
+//                                }
+//                            });
+//
+//                            movieVideoUrlStr = null;
+//                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+//                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+//
+//                        }else if (isAPV == 0 && isPPV == 0 && isConverted == 1 &&  planId == 1 && isSubscribedDataStr == 1 ){
+//
+//                            movieVideoUrlStr = null;
+//                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+//                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+//
+//                        }else {
+//
+//                            AsynValidateUserDetails asynValidateUserDetails = new AsynValidateUserDetails();
+//                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+//                        }
+//                    }else {
+//                        Toast.makeText(RegisterActivity.this, getResources().getString(R.string.no_internet_connection_str), Toast.LENGTH_LONG).show();
+//                    }*/
+//
+//
+//                    }
+//                }
+//
+//            }
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            pDialog = new ProgressBarHandler(RegisterActivity.this);
+//            pDialog.show();
+//
+//        }
+//    }
 
-
-    private class AsynFbRegDetails extends AsyncTask<Void, Void, Void> {
-        // ProgressDialog pDialog;
-        ProgressBarHandler pDialog;
-        int statusCode;
-        String loggedInIdStr;
-        String responseStr;
-        String isSubscribedStr;
-        String loginHistoryIdStr;
-
-        JSONObject myJson = null;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = Util.rootUrl().trim() + Util.fbRegUrl.trim();
-            try {
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("name", fbName.trim());
-                httppost.addHeader("email", fbEmail.trim());
-                httppost.addHeader("password","");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("fb_userid", fbUserId.trim());
-                httppost.addHeader("lang_code", Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            statusCode = 0;
-                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    statusCode = 0;
-
-                    e.printStackTrace();
-                }
-                if(responseStr!=null){
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                    loggedInIdStr = myJson.optString("id");
-                    isSubscribedStr = myJson.optString("isSubscribed");
-                    UniversalIsSubscribed = isSubscribedStr;
-                    if (myJson.has("login_history_id")) {
-                        loginHistoryIdStr = myJson.optString("login_history_id");
-                    }
-
-
-                }
-
-            }
-            catch (Exception e) {
-                statusCode = 0;
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                statusCode = 0;
-
-            }
-            if (responseStr == null) {
-                statusCode = 0;
-
-            }
-            if (statusCode == 0) {
-                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.ERROR_IN_REGISTRATION, Util.DEFAULT_ERROR_IN_REGISTRATION));
-                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                dlgAlert.create().show();
-            }
-            if (statusCode > 0) {
-
-                if (statusCode == 422) {
-                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
-                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    dlgAlert.create().show();
-
-                } else if (statusCode == 200) {
-
-                    String displayNameStr = myJson.optString("display_name");
-                    String emailFromApiStr = myJson.optString("email");
-                    String profileImageStr = myJson.optString("profile_image");
-                    SharedPreferences.Editor editor = pref.edit();
-
-                    editor.putString("PREFS_LOGGEDIN_KEY","1");
-                    editor.putString("PREFS_LOGGEDIN_ID_KEY",loggedInIdStr);
-                    editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY","");
-                    editor.putString("PREFS_LOGIN_EMAIL_ID_KEY", emailFromApiStr);
-                    editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", displayNameStr);
-                    editor.putString("PREFS_LOGIN_PROFILE_IMAGE_KEY", profileImageStr);
-                    editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY",isSubscribedStr);
-                    editor.putString("PREFS_LOGIN_HISTORYID_KEY",loginHistoryIdStr);
-
-
-                    Date todayDate = new Date();
-                    String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
-                    editor.putString("date", todayStr.trim());
-                    editor.commit();
-
-                    if(Util.check_for_subscription == 1)
-                    {
-                        // Go for subscription
-
-                        if (Util.checkNetwork(RegisterActivity.this) == true) {
-                            if (Util.dataModel.getIsFreeContent() == 1) {
-                                asynLoadVideoUrls = new AsynLoadVideoUrls();
-                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                            } else {
-                                asynValidateUserDetails = new AsynValidateUserDetails();
-                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                            }
-                        } else {
-                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                    else {
-                        Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
-                        removeFocusFromViews();
-                        startActivity(intent);
-                        finish();
-                        overridePendingTransition(0,0);
-                    }
-
-
-                    if (Util.checkNetwork(RegisterActivity.this) == true) {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                    } else {
-                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                    }
-
-                    if (Util.checkNetwork(RegisterActivity.this) == true) {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                   /*  int planId = ((Global) getApplicationContext()).getPlanId();
-                        int isSubscribedDataStr = 0;
-                        if (pref != null) {
-                            isSubscribedDataStr = Integer.parseInt(pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", null));
-                        }
-
-                        if (isFreeContent == 1){
-                            movieVideoUrlStr = null;
-                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                        }
-                        else if (isAPV == 0 && isPPV == 0 && isConverted == 1 &&  planId == 0){
-
-                            movieVideoUrlStr = null;
-                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                        }else if (isAPV == 0 && isPPV == 0 && isConverted == 1 &&  planId == 1 && isSubscribedDataStr == 0 ){
-                            final Intent subsc = new Intent(RegisterActivity.this, SubscriptionActivity.class);
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    subsc.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(subsc);
-
-                                }
-                            });
-
-                            movieVideoUrlStr = null;
-                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-
-                        }else if (isAPV == 0 && isPPV == 0 && isConverted == 1 &&  planId == 1 && isSubscribedDataStr == 1 ){
-
-                            movieVideoUrlStr = null;
-                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-
-                        }else {
-
-                            AsynValidateUserDetails asynValidateUserDetails = new AsynValidateUserDetails();
-                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                        }
-                    }else {
-                        Toast.makeText(RegisterActivity.this, getResources().getString(R.string.no_internet_connection_str), Toast.LENGTH_LONG).show();
-                    }*/
-
-
-                    }
-                }
-
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressBarHandler(RegisterActivity.this);
-            pDialog.show();
-
-        }
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -2872,10 +3559,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-
     // Following Code Has Been Added For The Device Management
-    private class AsynCheckDevice extends AsyncTask<Void, Void, Void>
-    {
+    private class AsynCheckDevice extends AsyncTask<Void, Void, Void> {
         ProgressBarHandler pDialog;
 
         int statusCode;
@@ -2889,7 +3574,7 @@ public class RegisterActivity extends AppCompatActivity {
                 userIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
             }
 
-            String urlRouteList = Util.rootUrl().trim()+Util.CheckDevice.trim();
+            String urlRouteList = Util.rootUrl().trim() + Util.CheckDevice.trim();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
@@ -2897,10 +3582,10 @@ public class RegisterActivity extends AppCompatActivity {
                 httppost.addHeader("user_id", userIdStr.trim());
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
                 httppost.addHeader("device", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                httppost.addHeader("google_id", Util.getTextofLanguage(RegisterActivity.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
-                httppost.addHeader("device_type","1");
-                httppost.addHeader("lang_code",Util.getTextofLanguage(RegisterActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                httppost.addHeader("device_info",deviceName+","+Util.getTextofLanguage(RegisterActivity.this, Util.ANDROID_VERSION,Util.DEFAULT_ANDROID_VERSION)+" "+ Build.VERSION.RELEASE);
+                httppost.addHeader("google_id", Util.getTextofLanguage(RegisterActivity.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+                httppost.addHeader("device_type", "1");
+                httppost.addHeader("lang_code", Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("device_info", deviceName + "," + Util.getTextofLanguage(RegisterActivity.this, Util.ANDROID_VERSION, Util.DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
 
 
                 // Execute HTTP Post Request
@@ -2908,7 +3593,7 @@ public class RegisterActivity extends AppCompatActivity {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -2923,13 +3608,12 @@ public class RegisterActivity extends AppCompatActivity {
 
                     e.printStackTrace();
                 }
-                if(responseStr!=null) {
+                if (responseStr != null) {
                     myJson = new JSONObject(responseStr);
                     statusCode = Integer.parseInt(myJson.optString("code"));
                     UniversalErrorMessage = myJson.optString("msg");
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 statusCode = 0;
             }
             return null;
@@ -2947,34 +3631,46 @@ public class RegisterActivity extends AppCompatActivity {
                 statusCode = 0;
             }
 
-            if(responseStr == null){
+            if (responseStr == null) {
                 // Call For Logout
                 LogOut();
             }
 
             if (statusCode > 0) {
-                if (statusCode == 200){
+                if (statusCode == 200) {
 
                     // Allow The User To Login
 
-                    if(Util.check_for_subscription == 1)
-                    {
+                    if (Util.check_for_subscription == 1) {
                         // Go for subscription
 
                         if (Util.checkNetwork(RegisterActivity.this) == true) {
                             if (Util.dataModel.getIsFreeContent() == 1) {
-                                asynLoadVideoUrls = new AsynLoadVideoUrls();
+                                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                                getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
                                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                             } else {
-                                asynValidateUserDetails = new AsynValidateUserDetails();
+                                ValidateUserInput validateUserInput = new ValidateUserInput();
+                                validateUserInput.setAuthToken(Util.authTokenStr);
+                                validateUserInput.setUserId(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                                validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
+                                validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
+                                validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
+                                validateUserInput.setEpisodeStreamUniqueId( Util.dataModel.getEpisode_id());
+                                validateUserInput.setLanguageCode(Util.getTextofLanguage(RegisterActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                                asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput,RegisterActivity.this,RegisterActivity.this);
                                 asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                             }
                         } else {
                             Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
 
-                    }
-                    else {
+                    } else {
 
                         if (PlanId.equals("1") && UniversalIsSubscribed.equals("0")) {
                             Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
@@ -2989,13 +3685,12 @@ public class RegisterActivity extends AppCompatActivity {
                             finish();
                         }
                     }
-                }
-                else{
+                } else {
                     // Call For Logout
 
                     LogOut();
                 }
-            }else{
+            } else {
                 // Call For Logout
                 LogOut();
             }
@@ -3009,9 +3704,8 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    public void LogOut()
-    {
-        AsynLogoutDetails asynLogoutDetails=new AsynLogoutDetails();
+    public void LogOut() {
+        AsynLogoutDetails asynLogoutDetails = new AsynLogoutDetails();
         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
     }
 
@@ -3025,21 +3719,20 @@ public class RegisterActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
 
-            String urlRouteList =Util.rootUrl().trim()+Util.logoutUrl.trim();
+            String urlRouteList = Util.rootUrl().trim() + Util.logoutUrl.trim();
             try {
-                HttpClient httpclient=new DefaultHttpClient();
+                HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("login_history_id",loginHistoryIdStr);
-                httppost.addHeader("lang_code",Util.getTextofLanguage(RegisterActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
+                httppost.addHeader("login_history_id", loginHistoryIdStr);
+                httppost.addHeader("lang_code", Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -3048,13 +3741,13 @@ public class RegisterActivity extends AppCompatActivity {
                                 pDialog = null;
                             }
                             responseCode = 0;
-                            Toast.makeText(RegisterActivity.this,Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 
                         }
 
                     });
 
-                }catch (IOException e) {
+                } catch (IOException e) {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
                         pDialog = null;
@@ -3062,13 +3755,12 @@ public class RegisterActivity extends AppCompatActivity {
                     responseCode = 0;
                     e.printStackTrace();
                 }
-                if(responseStr!=null){
+                if (responseStr != null) {
                     JSONObject myJson = new JSONObject(responseStr);
                     responseCode = Integer.parseInt(myJson.optString("code"));
                 }
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 if (pDialog != null && pDialog.isShowing()) {
                     pDialog.hide();
                     pDialog = null;
@@ -3089,15 +3781,15 @@ public class RegisterActivity extends AppCompatActivity {
 
                 }
             } catch (IllegalArgumentException ex) {
-                Toast.makeText(RegisterActivity.this,Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
             }
-            if(responseStr == null){
-                Toast.makeText(RegisterActivity.this,Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+            if (responseStr == null) {
+                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
             }
             if (responseCode == 0) {
-                Toast.makeText(RegisterActivity.this,Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
             }
             if (responseCode > 0) {
@@ -3106,7 +3798,7 @@ public class RegisterActivity extends AppCompatActivity {
                     editor.clear();
                     editor.commit();
                     SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                    if (loginPref!=null) {
+                    if (loginPref != null) {
                         SharedPreferences.Editor countryEditor = loginPref.edit();
                         countryEditor.clear();
                         countryEditor.commit();
@@ -3115,9 +3807,9 @@ public class RegisterActivity extends AppCompatActivity {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
                     dlgAlert.setMessage(UniversalErrorMessage);
                     dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -3125,9 +3817,8 @@ public class RegisterActivity extends AppCompatActivity {
                             });
                     dlgAlert.create().show();
 
-                }
-                else {
-                    Toast.makeText(RegisterActivity.this,Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
                 }
             }

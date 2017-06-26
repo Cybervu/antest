@@ -145,6 +145,12 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                         contentDetailsOutput.setMuviUniqId("");
 
                     }
+                    if ((mainJson.has("video_duration")) && mainJson.getString("video_duration").trim() != null && !mainJson.getString("video_duration").trim().isEmpty() && !mainJson.getString("video_duration").trim().equals("null") && !mainJson.getString("video_duration").trim().matches("")) {
+                        contentDetailsOutput.setMuviUniqId(mainJson.getString("video_duration"));
+                    } else {
+                        contentDetailsOutput.setMuviUniqId("");
+
+                    }
 
                     if ((mainJson.has("movieUrl")) && mainJson.getString("movieUrl").trim() != null && !mainJson.getString("movieUrl").trim().isEmpty() && !mainJson.getString("movieUrl").trim().equals("null") && !mainJson.getString("movieUrl").trim().matches("")) {
                         contentDetailsOutput.setMovieUrl(mainJson.getString("movieUrl"));
@@ -185,6 +191,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                         contentDetailsOutput.setIsPpv(0);
 
                     }
+
                     if ((mainJson.has("is_converted")) && mainJson.getString("is_converted").trim() != null && !mainJson.getString("is_converted").trim().isEmpty() && !mainJson.getString("is_converted").trim().equals("null") && !mainJson.getString("is_converted").trim().matches("")) {
                         contentDetailsOutput.setIsConverted(Integer.parseInt(mainJson.getString("is_converted")));
                     } else {

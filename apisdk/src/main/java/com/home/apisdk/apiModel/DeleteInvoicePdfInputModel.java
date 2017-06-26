@@ -6,6 +6,16 @@ package com.home.apisdk.apiModel;
 public class DeleteInvoicePdfInputModel {
     String authToken;
 
+    public String getLanguage_code() {
+        return Language_code;
+    }
+
+    public void setLanguage_code(String language_code) {
+        Language_code = language_code;
+    }
+
+    String Language_code;
+
     public String getFilepath() {
         return filepath;
     }

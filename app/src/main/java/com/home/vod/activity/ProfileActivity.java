@@ -26,6 +26,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.home.apisdk.apiController.UpadteUserProfileAsynctask;
+import com.home.apisdk.apiModel.Update_UserProfile_Output;
 import com.home.vod.R;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -51,13 +53,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements UpadteUserProfileAsynctask.Update_UserProfile {
     SharedPreferences loginPref;
 
     ImageView bannerImageView;
     EditText editOldPassword, editNewPassword, editProfileNameEditText;
     EditText emailAddressEditText;
-    Button changePassword, update_profile,manage_devices;
+    Button changePassword, update_profile, manage_devices;
 
     String Name, Password;
     boolean password_visibility = false;
@@ -65,6 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
     String User_Id = "";
     String Email_Id = "";
     TextView name_of_user;
+    ProgressBarHandler pDialog;
 
 
     // load asynctask
@@ -75,12 +78,12 @@ public class ProfileActivity extends AppCompatActivity {
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
     // Added for country and language spinner
-    Spinner country_spinner,language_spinner;
-    ArrayAdapter<String> Language_arrayAdapter,Country_arrayAdapter;
+    Spinner country_spinner, language_spinner;
+    ArrayAdapter<String> Language_arrayAdapter, Country_arrayAdapter;
 
-    String Selected_Language,Selected_Country="0",Selected_Language_Id,Selected_Country_Id;
+    String Selected_Language, Selected_Country = "0", Selected_Language_Id, Selected_Country_Id;
     SharedPreferences countryPref;
-    List<String> Country_List,Country_Code_List,Language_List,Language_Code_List;
+    List<String> Country_List, Country_Code_List, Language_List, Language_Code_List;
 
 
     @Override
@@ -99,45 +102,44 @@ public class ProfileActivity extends AppCompatActivity {
         manage_devices = (Button) findViewById(R.id.manage_devices);
 
 
-        if(!Util.getTextofLanguage(ProfileActivity.this,Util.IS_RESTRICT_DEVICE,Util.DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1"))
-        {
+        if (!Util.getTextofLanguage(ProfileActivity.this, Util.IS_RESTRICT_DEVICE, Util.DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
             manage_devices.setVisibility(View.GONE);
         }
 
         editOldPassword.setVisibility(View.GONE);
         editNewPassword.setVisibility(View.GONE);
-        name_of_user = (TextView)findViewById(R.id.name_of_user);
+        name_of_user = (TextView) findViewById(R.id.name_of_user);
 
         country_spinner = (Spinner) findViewById(R.id.countrySpinner);
         language_spinner = (Spinner) findViewById(R.id.languageSpinner);
 
 
-        Typeface editProfileNameEditTextTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface editProfileNameEditTextTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         editProfileNameEditText.setTypeface(editProfileNameEditTextTypeface);
 
 
-        Typeface editOldPasswordTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface editOldPasswordTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         editOldPassword.setTypeface(editOldPasswordTypeface);
 
 
-        Typeface editNewPasswordTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface editNewPasswordTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         editNewPassword.setTypeface(editNewPasswordTypeface);
 
 
-        Typeface changePasswordTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        Typeface changePasswordTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         changePassword.setTypeface(changePasswordTypeface);
         update_profile.setTypeface(changePasswordTypeface);
         manage_devices.setTypeface(changePasswordTypeface);
 
-        editProfileNameEditText.setHint(Util.getTextofLanguage(ProfileActivity.this,Util.NAME_HINT,Util.DEFAULT_NAME_HINT));
-        editOldPassword.setHint(Util.getTextofLanguage(ProfileActivity.this,Util.OLD_PASSWORD,Util.DEFAULT_OLD_PASSWORD));
-        editNewPassword.setHint(Util.getTextofLanguage(ProfileActivity.this,Util.NEW_PASSWORD,Util.DEFAULT_NEW_PASSWORD));
-        changePassword.setText(Util.getTextofLanguage(ProfileActivity.this,Util.CHANGE_PASSWORD,Util.DEFAULT_CHANGE_PASSWORD));
-        update_profile.setText(Util.getTextofLanguage(ProfileActivity.this,Util.UPDATE_PROFILE,Util.DEFAULT_UPDATE_PROFILE));
-        manage_devices.setText(Util.getTextofLanguage(ProfileActivity.this,Util.MANAGE_DEVICE,Util.DEFAULT_MANAGE_DEVICE));
+        editProfileNameEditText.setHint(Util.getTextofLanguage(ProfileActivity.this, Util.NAME_HINT, Util.DEFAULT_NAME_HINT));
+        editOldPassword.setHint(Util.getTextofLanguage(ProfileActivity.this, Util.OLD_PASSWORD, Util.DEFAULT_OLD_PASSWORD));
+        editNewPassword.setHint(Util.getTextofLanguage(ProfileActivity.this, Util.NEW_PASSWORD, Util.DEFAULT_NEW_PASSWORD));
+        changePassword.setText(Util.getTextofLanguage(ProfileActivity.this, Util.CHANGE_PASSWORD, Util.DEFAULT_CHANGE_PASSWORD));
+        update_profile.setText(Util.getTextofLanguage(ProfileActivity.this, Util.UPDATE_PROFILE, Util.DEFAULT_UPDATE_PROFILE));
+        manage_devices.setText(Util.getTextofLanguage(ProfileActivity.this, Util.MANAGE_DEVICE, Util.DEFAULT_MANAGE_DEVICE));
 
 
-        Toolbar mActionBarToolbar= (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,22 +157,20 @@ public class ProfileActivity extends AppCompatActivity {
             Email_Id = loginPref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
         }
 
-            manage_devices.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    boolean isNetwork = Util.checkNetwork(ProfileActivity.this);
-                    if(isNetwork)
-                    {
-                        Intent intent = new Intent(ProfileActivity.this,ManageDevices.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
-                    }
-                    else {
-                        Toast.makeText(ProfileActivity.this,Util.getTextofLanguage(ProfileActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                    }
-
+        manage_devices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isNetwork = Util.checkNetwork(ProfileActivity.this);
+                if (isNetwork) {
+                    Intent intent = new Intent(ProfileActivity.this, ManageDevices.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(ProfileActivity.this, Util.getTextofLanguage(ProfileActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 }
-            });
+
+            }
+        });
 
         // This is used for language and country spunner
 
@@ -182,19 +182,18 @@ public class ProfileActivity extends AppCompatActivity {
         Language_Code_List = Arrays.asList(getResources().getStringArray(R.array.languagesCode));
 
 
-
-
         Language_arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.country_language_spinner, Language_List) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
-                Typeface externalFont = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
                 ((TextView) v).setTypeface(externalFont);
                 return v;
             }
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v =super.getDropDownView(position, convertView, parent);
 
-                Typeface externalFont1 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont1 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
                 ((TextView) v).setTypeface(externalFont1);
 
                 return v;
@@ -207,14 +206,15 @@ public class ProfileActivity extends AppCompatActivity {
         Country_arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.country_language_spinner, Country_List) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
-                Typeface externalFont = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
                 ((TextView) v).setTypeface(externalFont);
                 return v;
             }
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v =super.getDropDownView(position, convertView, parent);
 
-                Typeface externalFont1 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont1 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
                 ((TextView) v).setTypeface(externalFont1);
 
                 return v;
@@ -253,7 +253,6 @@ public class ProfileActivity extends AppCompatActivity {
 // =======End ===========================//
 
 
-
         AsynLoadProfileDetails asynLoadProfileDetails = new AsynLoadProfileDetails();
         asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -275,10 +274,9 @@ public class ProfileActivity extends AppCompatActivity {
 
                             return;
 
-                        }
-                        else{
+                        } else {
                             boolean isNetwork = Util.checkNetwork(ProfileActivity.this);
-                            if (isNetwork ) {
+                            if (isNetwork) {
                                 UpdateProfile();
                                 editOldPassword.setText("");
                                 editNewPassword.setText("");
@@ -324,14 +322,13 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(editProfileNameEditText.getText().toString().matches("")){
-                    ShowDialog(Util.getTextofLanguage(ProfileActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ProfileActivity.this,Util.NAME_HINT,Util.DEFAULT_NAME_HINT));
+                if (editProfileNameEditText.getText().toString().matches("")) {
+                    ShowDialog(Util.getTextofLanguage(ProfileActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE), Util.getTextofLanguage(ProfileActivity.this, Util.NAME_HINT, Util.DEFAULT_NAME_HINT));
 
-                }
-                else if (!editOldPassword.getText().toString().matches(editNewPassword.getText().toString().trim())){
-                    ShowDialog(Util.getTextofLanguage(ProfileActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ProfileActivity.this,Util.PASSWORDS_DO_NOT_MATCH,Util.DEFAULT_PASSWORDS_DO_NOT_MATCH));
+                } else if (!editOldPassword.getText().toString().matches(editNewPassword.getText().toString().trim())) {
+                    ShowDialog(Util.getTextofLanguage(ProfileActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE), Util.getTextofLanguage(ProfileActivity.this, Util.PASSWORDS_DO_NOT_MATCH, Util.DEFAULT_PASSWORDS_DO_NOT_MATCH));
 
-                }else{
+                } else {
                     boolean isNetwork = Util.checkNetwork(ProfileActivity.this);
                     if (isNetwork) {
                         UpdateProfile();
@@ -384,9 +381,9 @@ public class ProfileActivity extends AppCompatActivity {
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
         dlgAlert.setMessage(msg);
         dlgAlert.setTitle(Title);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+        dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
         dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+        dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -398,6 +395,31 @@ public class ProfileActivity extends AppCompatActivity {
     public void UpdateProfile() {
         AsynUpdateProfile asyncLoadVideos = new AsynUpdateProfile();
         asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
+    }
+
+    @Override
+    public void onUpdateUserProfilePreExecuteStarted() {
+        pDialog = new ProgressBarHandler(ProfileActivity.this);
+        pDialog.show();
+    }
+
+    @Override
+    public void onUpdateUserProfilePostExecuteCompleted(Update_UserProfile_Output update_userProfile_output, int code, String message) {
+
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
+        dlgAlert.setMessage(Util.getTextofLanguage(ProfileActivity.this, Util.UPDATE_PROFILE_ALERT, Util.DEFAULT_UPDATE_PROFILE_ALERT));
+        dlgAlert.setTitle(Util.getTextofLanguage(ProfileActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+        dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+        dlgAlert.setCancelable(false);
+        dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        editOldPassword.setText("");
+                        editNewPassword.setText("");
+                    }
+                });
+        dlgAlert.create().show();
     }
 
     private class AsynUpdateProfile extends AsyncTask<Void, Void, Void> {
@@ -417,7 +439,7 @@ public class ProfileActivity extends AppCompatActivity {
                 loggedInIdStr = loginPref.getString("PREFS_LOGGEDIN_ID_KEY", null);
             }
 
-            String urlRouteList = Util.rootUrl().trim()+Util.updateProfileUrl.trim();
+            String urlRouteList = Util.rootUrl().trim() + Util.updateProfileUrl.trim();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
@@ -425,20 +447,20 @@ public class ProfileActivity extends AppCompatActivity {
                 httppost.addHeader("user_id", User_Id.trim());
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
                 httppost.addHeader("name", nameStr.trim());
-                if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")){
+                if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")) {
                     httppost.addHeader("password", confirmPasswordStr.trim());
                 }
-                httppost.addHeader("lang_code",Util.getTextofLanguage(ProfileActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("lang_code", Util.getTextofLanguage(ProfileActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
                 httppost.addHeader("custom_country", Selected_Country_Id);
-                httppost.addHeader("custom_languages",Selected_Language_Id);
+                httppost.addHeader("custom_languages", Selected_Language_Id);
 
                 // Execute HTTP Post Request
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -456,14 +478,13 @@ public class ProfileActivity extends AppCompatActivity {
 
                     e.printStackTrace();
                 }
-                if(responseStr!=null) {
+                if (responseStr != null) {
                     myJson = new JSONObject(responseStr);
                     statusCode = Integer.parseInt(myJson.optString("code"));
 
                 }
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 statusCode = 0;
 
             }
@@ -474,7 +495,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         protected void onPostExecute(Void result) {
 
-            if(responseStr == null){
+            if (responseStr == null) {
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
@@ -487,9 +508,9 @@ public class ProfileActivity extends AppCompatActivity {
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(Util.getTextofLanguage(ProfileActivity.this, Util.UPDATE_PROFILE_ALERT, Util.DEFAULT_UPDATE_PROFILE_ALERT));
                 dlgAlert.setTitle(Util.getTextofLanguage(ProfileActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -502,7 +523,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             if (statusCode > 0) {
 
-                if (statusCode == 200){
+                if (statusCode == 200) {
                     try {
                         if (pDialog != null && pDialog.isShowing()) {
                             pDialog.hide();
@@ -514,7 +535,7 @@ public class ProfileActivity extends AppCompatActivity {
                             String displayNameStr = myJson.optString("name");
                             editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", displayNameStr);
                         }
-                        if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")){
+                        if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")) {
                             editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY", confirmPasswordStr.trim());
 
                         }
@@ -525,7 +546,7 @@ public class ProfileActivity extends AppCompatActivity {
                         String displayNameStr = myJson.optString("display_name");
                         editor.putString("name", displayNameStr);
                     }
-                    if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")){
+                    if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")) {
                         editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY", confirmPasswordStr.trim());
 
                     }
@@ -537,22 +558,22 @@ public class ProfileActivity extends AppCompatActivity {
                     Toast.makeText(ProfileActivity.this, Util.getTextofLanguage(ProfileActivity.this, Util.PROFILE_UPDATED, Util.DEFAULT_PROFILE_UPDATED), Toast.LENGTH_SHORT).show();
                     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-                    if (name_of_user!=null) {
+                    if (name_of_user != null) {
                         name_of_user.clearFocus();
                         name_of_user.setCursorVisible(false);
                     }
-                    if (editOldPassword!=null) {
+                    if (editOldPassword != null) {
                         editOldPassword.clearFocus();
 
                     }
-                    if (editNewPassword!=null) {
+                    if (editNewPassword != null) {
                         editNewPassword.clearFocus();
                     }
                    /* if (fullNameEditText != null) fullNameEditText.clearFocus();
                     if (passwordEditText != null) passwordEditText.clearFocus();
                     if (confirmPasswordEditText != null) confirmPasswordEditText.clearFocus();*/
 
-                }else{
+                } else {
 
                     try {
                         if (pDialog != null && pDialog.isShowing()) {
@@ -566,9 +587,9 @@ public class ProfileActivity extends AppCompatActivity {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
                     dlgAlert.setMessage(Util.getTextofLanguage(ProfileActivity.this, Util.UPDATE_PROFILE_ALERT, Util.DEFAULT_UPDATE_PROFILE_ALERT));
                     dlgAlert.setTitle(Util.getTextofLanguage(ProfileActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -580,7 +601,7 @@ public class ProfileActivity extends AppCompatActivity {
                             });
                     dlgAlert.create().show();
                 }
-            }else{
+            } else {
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
@@ -592,9 +613,9 @@ public class ProfileActivity extends AppCompatActivity {
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(Util.getTextofLanguage(ProfileActivity.this, Util.UPDATE_PROFILE_ALERT, Util.DEFAULT_UPDATE_PROFILE_ALERT));
                 dlgAlert.setTitle(Util.getTextofLanguage(ProfileActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -635,16 +656,15 @@ public class ProfileActivity extends AppCompatActivity {
                 HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.loadProfileUrl.trim());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id",User_Id);
-                httppost.addHeader("email",Email_Id);
-                httppost.addHeader("lang_code",Util.getTextofLanguage(ProfileActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("user_id", User_Id);
+                httppost.addHeader("email", Email_Id);
+                httppost.addHeader("lang_code", Util.getTextofLanguage(ProfileActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
                 // Execute HTTP Post Request
                 try {
 
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-
 
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
@@ -663,7 +683,7 @@ public class ProfileActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                Log.v("BIBHU","responseStr ="+responseStr);
+                Log.v("BIBHU", "responseStr =" + responseStr);
 
                 JSONObject myJson = null;
                 if (responseStr != null) {
@@ -704,15 +724,13 @@ public class ProfileActivity extends AppCompatActivity {
 
                             if (languageJson.length() > 0) {
                                 Selected_Language_Id = languageJson.optString(0);
-                                Log.v("BIBHU","Selected_Language_Id st jon parsing ="+Selected_Language_Id);
+                                Log.v("BIBHU", "Selected_Language_Id st jon parsing =" + Selected_Language_Id);
                             } else {
                                 langStr = "";
                             }
                         } else {
                             langStr = "";
                         }
-
-
 
 
                         if ((myJson.has("custom_country")) && myJson.optString("custom_country").trim() != null && !myJson.optString("custom_country").trim().isEmpty() && !myJson.optString("custom_country").trim().equals("null") && !myJson.optString("custom_country").trim().matches("")) {
@@ -776,44 +794,32 @@ public class ProfileActivity extends AppCompatActivity {
             } else {
 
 
-                if(Selected_Country_Id.equals("0"))
-                {
+                if (Selected_Country_Id.equals("0")) {
                     country_spinner.setSelection(224);
                     Selected_Country_Id = Country_Code_List.get(224);
-                    Log.v("BIBHU","country not  matched ="+Selected_Country+"=="+Selected_Country_Id);
-                }
-                else
-                {
-                    for(int i=0;i<Country_Code_List.size();i++)
-                    {
-                        if(Selected_Country_Id.trim().equals(Country_Code_List.get(i)))
-                        {
+                    Log.v("BIBHU", "country not  matched =" + Selected_Country + "==" + Selected_Country_Id);
+                } else {
+                    for (int i = 0; i < Country_Code_List.size(); i++) {
+                        if (Selected_Country_Id.trim().equals(Country_Code_List.get(i))) {
                             country_spinner.setSelection(i);
                             Selected_Country_Id = Country_Code_List.get(i);
 
-                            Log.v("BIBHU","country  matched ="+Selected_Country_Id+"=="+Selected_Country_Id);
+                            Log.v("BIBHU", "country  matched =" + Selected_Country_Id + "==" + Selected_Country_Id);
                         }
                     }
                 }
                 Country_arrayAdapter.notifyDataSetChanged();
 
 
+                for (int i = 0; i < Language_Code_List.size(); i++) {
+                    if (Selected_Language_Id.trim().equals(Language_Code_List.get(i))) {
+                        language_spinner.setSelection(i);
+                        Selected_Language_Id = Language_Code_List.get(i);
 
-                    for(int i=0;i<Language_Code_List.size();i++)
-                    {
-                        if(Selected_Language_Id.trim().equals(Language_Code_List.get(i)))
-                        {
-                            language_spinner.setSelection(i);
-                            Selected_Language_Id = Language_Code_List.get(i);
-
-                            Log.v("BIBHU","Selected_Language_Id ="+Selected_Language_Id);
-                        }
+                        Log.v("BIBHU", "Selected_Language_Id =" + Selected_Language_Id);
                     }
-                    Language_arrayAdapter.notifyDataSetChanged();
-
-
-
-
+                }
+                Language_arrayAdapter.notifyDataSetChanged();
 
 
                 editProfileNameEditText.setText(name);
@@ -885,14 +891,15 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     }
+
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         finish();
         overridePendingTransition(0, 0);
         super.onBackPressed();
     }
-    public void removeFocusFromViews(){
+
+    public void removeFocusFromViews() {
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);

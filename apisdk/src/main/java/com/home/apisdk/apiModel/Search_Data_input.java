@@ -4,7 +4,20 @@ package com.home.apisdk.apiModel;
  * Created by Muvi on 9/29/2016.
  */
 public class Search_Data_input {
-    String limit="10",authToken,offset="0",q;
+    String limit="10";
+    String authToken;
+    String offset="0";
+    String q;
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    String country;
 
    /* public Search_Data_input(String limit, String authToken, String offset, String q) {
         this.limit = limit;

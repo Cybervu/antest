@@ -72,6 +72,7 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
             httppost.addHeader("limit", this.search_data_input.getLimit());
             httppost.addHeader("offset", this.search_data_input.getOffset());
             httppost.addHeader("q", this.search_data_input.getQ());
+            httppost.addHeader("country",this.search_data_input.getCountry());
 
 
             // Execute HTTP Post Request
@@ -147,6 +148,35 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
                                 content.setIs_episode(jsonChildNode.getString("is_episode"));
 
                             }
+                            if ((jsonChildNode.has("thirdparty_url")) && jsonChildNode.getString("thirdparty_url").trim() != null && !jsonChildNode.getString("thirdparty_url").trim().isEmpty() && !jsonChildNode.getString("thirdparty_url").trim().equals("null") && !jsonChildNode.getString("thirdparty_url").trim().matches("")) {
+                                content.setThirdparty_url(jsonChildNode.getString("thirdparty_url"));
+
+                            }
+                            if ((jsonChildNode.has("episode_title")) && jsonChildNode.getString("episode_title").trim() != null && !jsonChildNode.getString("episode_title").trim().isEmpty() && !jsonChildNode.getString("episode_title").trim().equals("null") && !jsonChildNode.getString("episode_title").trim().matches("")) {
+                                content.setEpisode_title(jsonChildNode.getString("episode_title"));
+
+                            }
+                            if ((jsonChildNode.has("name")) && jsonChildNode.getString("name").trim() != null && !jsonChildNode.getString("name").trim().isEmpty() && !jsonChildNode.getString("name").trim().equals("null") && !jsonChildNode.getString("name").trim().matches("")) {
+                                content.setName(jsonChildNode.getString("name"));
+
+                            }
+                            if ((jsonChildNode.has("display_name")) && jsonChildNode.getString("display_name").trim() != null && !jsonChildNode.getString("display_name").trim().isEmpty() && !jsonChildNode.getString("display_name").trim().equals("null") && !jsonChildNode.getString("display_name").trim().matches("")) {
+                                content.setDisplay_name(jsonChildNode.getString("display_name"));
+
+                            }
+                            if ((jsonChildNode.has("embeddedUrl")) && jsonChildNode.getString("embeddedUrl").trim() != null && !jsonChildNode.getString("embeddedUrl").trim().isEmpty() && !jsonChildNode.getString("embeddedUrl").trim().equals("null") && !jsonChildNode.getString("embeddedUrl").trim().matches("")) {
+                                content.setEmbeddedUrl(jsonChildNode.getString("embeddedUrl"));
+
+                            }
+                            if ((jsonChildNode.has("muvi_uniq_id")) && jsonChildNode.getString("muvi_uniq_id").trim() != null && !jsonChildNode.getString("muvi_uniq_id").trim().isEmpty() && !jsonChildNode.getString("muvi_uniq_id").trim().equals("null") && !jsonChildNode.getString("muvi_uniq_id").trim().matches("")) {
+                                content.setMovie_id(jsonChildNode.getString("muvi_uniq_id"));
+
+                            }
+
+                            if ((jsonChildNode.has("muvi_stream_uniq_id")) && jsonChildNode.getString("muvi_stream_uniq_id").trim() != null && !jsonChildNode.getString("muvi_stream_uniq_id").trim().isEmpty() && !jsonChildNode.getString("muvi_stream_uniq_id").trim().equals("null") && !jsonChildNode.getString("muvi_stream_uniq_id").trim().matches("")) {
+                                content.setMovie_stream_uniq_id(jsonChildNode.getString("muvi_stream_uniq_id"));
+
+                            }
                             search_data_otputs.add(content);
                         } catch (Exception e) {
                             status = 0;
@@ -177,17 +207,17 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
 
         status = 0;
         totalItems = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
-            this.cancel(true);
-            message = "Packge Name Not Matched";
-            listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);
-            return;
-        }
-        if (CommonConstants.hashKey.equals("")) {
-            this.cancel(true);
-            message = "Hash Key Is Not Available. Please Initialize The SDK";
-            listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);
-        }
+//        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+//            this.cancel(true);
+//            message = "Packge Name Not Matched";
+//            listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);
+//            return;
+//        }
+//        if (CommonConstants.hashKey.equals("")) {
+//            this.cancel(true);
+//            message = "Hash Key Is Not Available. Please Initialize The SDK";
+//            listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);
+//        }
     }
 
 

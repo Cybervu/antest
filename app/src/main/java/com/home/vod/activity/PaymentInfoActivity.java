@@ -30,9 +30,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.home.apisdk.apiController.VideoDetailsAsynctask;
+import com.home.apisdk.apiModel.GetVideoDetailsInput;
+import com.home.apisdk.apiModel.Get_Video_Details_Output;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.model.CardModel;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -56,7 +60,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 
-public class PaymentInfoActivity extends ActionBarActivity {
+public class PaymentInfoActivity extends ActionBarActivity implements VideoDetailsAsynctask.VideoDetails {
     CardModel[] cardSavedArray;
 
     ProgressDialog pDialog;
@@ -564,6 +568,166 @@ public class PaymentInfoActivity extends ActionBarActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    @Override
+    public void onVideoDetailsPreExecuteStarted() {
+        pDialog=new ProgressDialog(PaymentInfoActivity.this);
+        pDialog.show();
+    }
+
+    @Override
+    public void onVideoDetailsPostExecuteCompleted(Get_Video_Details_Output get_video_details_output, int code, String status, String message) {
+        {
+
+      /*  try{
+            if(pDialog.isShowing())
+                pDialog.dismiss();
+        }
+        catch(IllegalArgumentException ex)
+        {
+            responseStr = "0";
+            movieVideoUrlStr = getResources().getString(R.string.no_data_str);
+        }*/
+            if (status == null) {
+                status = "0";
+                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+            }
+
+            if ((status.trim().equalsIgnoreCase("0"))) {
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+                }
+                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
+                dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                finish();
+                            }
+                        });
+                dlgAlert.create().show();
+            } else {
+
+                if (Util.dataModel.getVideoUrl() == null) {
+                    try {
+                        if (pDialog != null && pDialog.isShowing()) {
+                            pDialog.hide();
+                            pDialog = null;
+                        }
+                    } catch (IllegalArgumentException ex) {
+                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    }
+                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
+                    dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                    dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setCancelable(false);
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                    finish();
+                                }
+                            });
+                    dlgAlert.create().show();
+                } else if (Util.dataModel.getVideoUrl().matches("") || Util.dataModel.getVideoUrl().equalsIgnoreCase(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                    try {
+                        if (pDialog != null && pDialog.isShowing()) {
+                            pDialog.hide();
+                            pDialog = null;
+                        }
+                    } catch (IllegalArgumentException ex) {
+                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    }
+                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
+                    dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                    dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setCancelable(false);
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                    finish();
+                                }
+                            });
+                    dlgAlert.create().show();
+                } else {
+                    try {
+                        if (pDialog != null && pDialog.isShowing()) {
+                            pDialog.hide();
+                            pDialog = null;
+                        }
+                    } catch (IllegalArgumentException ex) {
+                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    }
+                    if (!videoUrlStr.equals("")) {
+                        final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(playVideoIntent);
+                                finish();
+
+                            }
+                        });
+                    }else{
+                        if (Util.dataModel.getVideoUrl().contains("://www.youtube") || Util.dataModel.getVideoUrl().contains("://www.youtu.be")){
+                            if(Util.dataModel.getVideoUrl().contains("live_stream?channel")) {
+                                final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ThirdPartyPlayer.class);
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        startActivity(playVideoIntent);
+                                        finish();
+
+                                    }
+                                });
+                            }else{
+
+                                final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, YouTubeAPIActivity.class);
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        startActivity(playVideoIntent);
+                                        finish();
+
+
+                                    }
+                                });
+
+                            }
+                        }else{
+                            final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ThirdPartyPlayer.class);
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(playVideoIntent);
+                                    finish();
+
+                                }
+                            });
+                        }
+                    }
+                }
+
+
+            }
+        }
+    }
+
 
     private class AsynPaymentInfoDetails extends AsyncTask<Void, Void, Void> {
         ProgressBarHandler progressBarHandler;
@@ -591,13 +755,13 @@ public class PaymentInfoActivity extends ActionBarActivity {
                 httppost.addHeader("email", emailIdStr);
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
 
-            /*    Log.v("SUBHA", "nameOnCardStr = " + nameOnCardStr);
-                Log.v("SUBHA", "expiryMonth = " + String.valueOf(expiryMonthStr).trim());
-                Log.v("SUBHA", "expiryYear = " + String.valueOf(expiryYearStr).trim());
-                Log.v("SUBHA", "cardNumber = " + cardNumberStr);
-                Log.v("SUBHA", "cvv = " + securityCodeStr);
-                Log.v("SUBHA", "email = " + emailIdStr);
-                Log.v("SUBHA", "authToken = " + Util.authTokenStr.trim());
+            /*    LogUtil.showLog("SUBHA", "nameOnCardStr = " + nameOnCardStr);
+                LogUtil.showLog("SUBHA", "expiryMonth = " + String.valueOf(expiryMonthStr).trim());
+                LogUtil.showLog("SUBHA", "expiryYear = " + String.valueOf(expiryYearStr).trim());
+                LogUtil.showLog("SUBHA", "cardNumber = " + cardNumberStr);
+                LogUtil.showLog("SUBHA", "cvv = " + securityCodeStr);
+                LogUtil.showLog("SUBHA", "email = " + emailIdStr);
+                LogUtil.showLog("SUBHA", "authToken = " + Util.authTokenStr.trim());
 */
 
                 // Execute HTTP Post Request
@@ -605,7 +769,7 @@ public class PaymentInfoActivity extends ActionBarActivity {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                    Log.v("SUBHA", "response of card validation = " + responseStr);
+                    LogUtil.showLog("SUBHA", "response of card validation = " + responseStr);
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     runOnUiThread(new Runnable() {
@@ -781,57 +945,57 @@ public class PaymentInfoActivity extends ActionBarActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Log.v("SUBHA", "payment at doInBackground called ");
+            LogUtil.showLog("SUBHA", "payment at doInBackground called ");
             String userIdStr = loginPref.getString("PREFS_LOGGEDIN_ID_KEY", null);
             String emailIdSubStr = loginPref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
 
             String urlRouteList = Util.rootUrl().trim() + Util.subscriptionUrl.trim();
-            Log.v("SUBHA", "payment at urlRouteList = "+urlRouteList);
+            LogUtil.showLog("SUBHA", "payment at urlRouteList = "+urlRouteList);
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
-                Log.v("SUBHA", "=========== 1");
+                LogUtil.showLog("SUBHA", "=========== 1");
                 httppost.addHeader("card_name", nameOnCardStr);
-                Log.v("SUBHA", "=========== 11");
+                LogUtil.showLog("SUBHA", "=========== 11");
                 httppost.addHeader("exp_month", String.valueOf(expiryMonthStr).trim());
-                Log.v("SUBHA", "=========== 111");
+                LogUtil.showLog("SUBHA", "=========== 111");
                 httppost.addHeader("card_number", cardNumberStr);
-                Log.v("SUBHA", "=========== 1111");
+                LogUtil.showLog("SUBHA", "=========== 1111");
                 httppost.addHeader("exp_year", String.valueOf(expiryYearStr).trim());
-                Log.v("SUBHA", "=========== 2");
+                LogUtil.showLog("SUBHA", "=========== 2");
                 httppost.addHeader("email", emailIdSubStr.trim()); //Null pointer
               //  httppost.addHeader("movie_id", muviUniqueIdStr.trim());
                 httppost.addHeader("user_id", userIdStr.trim());
-                Log.v("SUBHA", "=========== 22="+ emailIdSubStr.trim());
+                LogUtil.showLog("SUBHA", "=========== 22="+ emailIdSubStr.trim());
                 if (isCouponCodeAdded == true) {
                     httppost.addHeader("coupon_code", validCouponCode);
-                    Log.v("SUBHA", "=========== 222");
+                    LogUtil.showLog("SUBHA", "=========== 222");
                 } else {
-                    Log.v("SUBHA", "=========== 2222");
+                    LogUtil.showLog("SUBHA", "=========== 2222");
                     httppost.addHeader("coupon_code", "");
                 }
-                Log.v("SUBHA", "=========== 22222");
+                LogUtil.showLog("SUBHA", "=========== 22222");
                 httppost.addHeader("card_type", cardTypeStr.trim());
-                Log.v("SUBHA", "=========== 3");
+                LogUtil.showLog("SUBHA", "=========== 3");
                 httppost.addHeader("card_last_fourdigit", cardLastFourDigitStr.trim());
-                Log.v("SUBHA", "=========== 33");
+                LogUtil.showLog("SUBHA", "=========== 33");
                 httppost.addHeader("profile_id", profileIdStr.trim());
-                Log.v("SUBHA", "=========== 333");
+                LogUtil.showLog("SUBHA", "=========== 333");
                 httppost.addHeader("token", tokenStr.trim());
-                Log.v("SUBHA", "=========== 3333="+tokenStr.trim());
+                LogUtil.showLog("SUBHA", "=========== 3333="+tokenStr.trim());
                 httppost.addHeader("cvv", securityCardStr);
                 // httppost.addHeader("country",currencyCountryCodeStr.trim());
-                Log.v("SUBHA", "=========== 33333");
+                LogUtil.showLog("SUBHA", "=========== 33333");
                 httppost.addHeader("country", countryPref.getString("countryCode", null));
-                Log.v("SUBHA", "=========== 4");
+                LogUtil.showLog("SUBHA", "=========== 4");
                 httppost.addHeader("season_id", "0");
-                Log.v("SUBHA", "=========== 44");
+                LogUtil.showLog("SUBHA", "=========== 44");
                 httppost.addHeader("episode_id", "0");
-                Log.v("SUBHA", "=========== 444");
+                LogUtil.showLog("SUBHA", "=========== 444");
                 httppost.addHeader("currency_id", currencyIdStr.trim());
-                Log.v("SUBHA", "=========== 4444");
+                LogUtil.showLog("SUBHA", "=========== 4444");
 
                 httppost.addHeader("plan_id", getIntent().getStringExtra("selected_plan_id").toString().trim());
                 httppost.addHeader("name", loginPref.getString("PREFS_LOGIN_DISPLAY_NAME_KEY", ""));
@@ -843,10 +1007,10 @@ public class PaymentInfoActivity extends ActionBarActivity {
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("SUBHA", "response of payment = " + responseStr);
+                    LogUtil.showLog("SUBHA", "response of payment = " + responseStr);
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    Log.v("SUBHA","error2="+e.toString());
+                    LogUtil.showLog("SUBHA","error2="+e.toString());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -866,10 +1030,10 @@ public class PaymentInfoActivity extends ActionBarActivity {
                     if (progressBarHandler.isShowing())
                         progressBarHandler.hide();
                     e.printStackTrace();
-                    Log.v("SUBHA","error1="+e.toString());
+                    LogUtil.showLog("SUBHA","error1="+e.toString());
                 }
 
-                Log.v("SUBHA", "response of payment = " + responseStr);
+                LogUtil.showLog("SUBHA", "response of payment = " + responseStr);
 
                 if (responseStr != null) {
                     JSONObject myJson = new JSONObject(responseStr);
@@ -881,7 +1045,7 @@ public class PaymentInfoActivity extends ActionBarActivity {
                 if (progressBarHandler.isShowing())
                     progressBarHandler.hide();
                 status = 0;
-                Log.v("SUBHA","error="+e.toString());
+                LogUtil.showLog("SUBHA","error="+e.toString());
             }
 
             return null;
@@ -927,8 +1091,13 @@ public class PaymentInfoActivity extends ActionBarActivity {
                     {
                         if (Util.checkNetwork(PaymentInfoActivity.this) == true) {
 
+                            GetVideoDetailsInput getVideoDetailsInput=new GetVideoDetailsInput();
+                            getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
 
-                                AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+                                VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,PaymentInfoActivity.this,PaymentInfoActivity.this);
                                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
                         } else {
@@ -1089,277 +1258,277 @@ public class PaymentInfoActivity extends ActionBarActivity {
     }*/
 
 
-    private class AsynLoadVideoUrls extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-        String responseStr;
-        int statusCode;
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.loadVideoUrl.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("content_uniq_id", Util.dataModel.getMovieUniqueId().trim());
-                httppost.addHeader("stream_uniq_id", Util.dataModel.getStreamUniqueId().trim());
-                httppost.addHeader("internet_speed",MainActivity.internetSpeed.trim());
-
-                // Execute HTTP Post Request
-                try {
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (pDialog != null && pDialog.isShowing()) {
-                                pDialog.hide();
-                                pDialog = null;
-                            }
-                            responseStr = "0";
-                            Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                            Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                        }
-
-                    });
-
-                }catch (IOException e) {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                    responseStr = "0";
-                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                    e.printStackTrace();
-                }
-
-                JSONObject myJson =null;
-                if(responseStr!=null){
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                }
-
-                if (statusCode >= 0) {
-                    if (statusCode == 200) {
-                        if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
-                            if ((myJson.has("videoUrl")) && myJson.getString("videoUrl").trim() != null && !myJson.getString("videoUrl").trim().isEmpty() && !myJson.getString("videoUrl").trim().equals("null") && !myJson.getString("videoUrl").trim().matches("")) {
-                                Util.dataModel.setVideoUrl(myJson.getString("videoUrl"));
-                                videoUrlStr = myJson.getString("videoUrl");
-                            }
-                            else{
-                                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                            }
-                        }else{
-                            if ((myJson.has("thirdparty_url")) && myJson.getString("thirdparty_url").trim() != null && !myJson.getString("thirdparty_url").trim().isEmpty() && !myJson.getString("thirdparty_url").trim().equals("null") && !myJson.getString("thirdparty_url").trim().matches("")) {
-                                Util.dataModel.setVideoUrl(myJson.getString("thirdparty_url"));
-
-
-                            }
-                            else{
-                                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-
-                            }
-                        }
-                        if ((myJson.has("videoResolution")) && myJson.getString("videoResolution").trim() != null && !myJson.getString("videoResolution").trim().isEmpty() && !myJson.getString("videoResolution").trim().equals("null") && !myJson.getString("videoResolution").trim().matches("")) {
-                            Util.dataModel.setVideoResolution(myJson.getString("videoResolution"));
-
-                        }
-
-                    }
-
-                }
-                else {
-
-                    responseStr = "0";
-                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                }
-            } catch (JSONException e1) {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-                responseStr = "0";
-                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                e1.printStackTrace();
-            }
-
-            catch (Exception e)
-            {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-                responseStr = "0";
-                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-
-                e.printStackTrace();
-
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-
-      /*  try{
-            if(pDialog.isShowing())
-                pDialog.dismiss();
-        }
-        catch(IllegalArgumentException ex)
-        {
-            responseStr = "0";
-            movieVideoUrlStr = getResources().getString(R.string.no_data_str);
-        }*/
-            if (responseStr == null) {
-                responseStr = "0";
-                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
-            }
-
-            if ((responseStr.trim().equalsIgnoreCase("0"))) {
-                try {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                } catch (IllegalArgumentException ex) {
-                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                    // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
-                }
-                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
-                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
-                dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
-                dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                finish();
-                            }
-                        });
-                dlgAlert.create().show();
-            } else {
-
-                if (Util.dataModel.getVideoUrl() == null) {
-                    try {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                    }
-                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
-                    dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                    dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                    finish();
-                                }
-                            });
-                    dlgAlert.create().show();
-                } else if (Util.dataModel.getVideoUrl().matches("") || Util.dataModel.getVideoUrl().equalsIgnoreCase(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
-                    try {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                    }
-                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
-                    dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                    dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                    finish();
-                                }
-                            });
-                    dlgAlert.create().show();
-                } else {
-                    try {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                    }
-                    if (!videoUrlStr.equals("")) {
-                        final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(playVideoIntent);
-                                finish();
-
-                            }
-                        });
-                    }else{
-                        if (Util.dataModel.getVideoUrl().contains("://www.youtube") || Util.dataModel.getVideoUrl().contains("://www.youtu.be")){
-                            if(Util.dataModel.getVideoUrl().contains("live_stream?channel")) {
-                                final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ThirdPartyPlayer.class);
-                                runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                        startActivity(playVideoIntent);
-                                        finish();
-
-                                    }
-                                });
-                            }else{
-
-                                final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, YouTubeAPIActivity.class);
-                                runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                        startActivity(playVideoIntent);
-                                        finish();
-
-
-                                    }
-                                });
-
-                            }
-                        }else{
-                            final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ThirdPartyPlayer.class);
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(playVideoIntent);
-                                    finish();
-
-                                }
-                            });
-                        }
-                    }
-                }
-
-
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressBarHandler(PaymentInfoActivity.this);
-            pDialog.show();
-
-        }
-
-
-    }
+//    private class AsynLoadVideoUrls extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler pDialog;
+//        String responseStr;
+//        int statusCode;
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            try {
+//                HttpClient httpclient=new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.loadVideoUrl.trim());
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("content_uniq_id", Util.dataModel.getMovieUniqueId().trim());
+//                httppost.addHeader("stream_uniq_id", Util.dataModel.getStreamUniqueId().trim());
+//                httppost.addHeader("internet_speed",MainActivity.internetSpeed.trim());
+//
+//                // Execute HTTP Post Request
+//                try {
+//
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e){
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (pDialog != null && pDialog.isShowing()) {
+//                                pDialog.hide();
+//                                pDialog = null;
+//                            }
+//                            responseStr = "0";
+//                            Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                            Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//                        }
+//
+//                    });
+//
+//                }catch (IOException e) {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                    responseStr = "0";
+//                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    e.printStackTrace();
+//                }
+//
+//                JSONObject myJson =null;
+//                if(responseStr!=null){
+//                    myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//                }
+//
+//                if (statusCode >= 0) {
+//                    if (statusCode == 200) {
+//                        if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+//                            if ((myJson.has("videoUrl")) && myJson.getString("videoUrl").trim() != null && !myJson.getString("videoUrl").trim().isEmpty() && !myJson.getString("videoUrl").trim().equals("null") && !myJson.getString("videoUrl").trim().matches("")) {
+//                                Util.dataModel.setVideoUrl(myJson.getString("videoUrl"));
+//                                videoUrlStr = myJson.getString("videoUrl");
+//                            }
+//                            else{
+//                                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                            }
+//                        }else{
+//                            if ((myJson.has("thirdparty_url")) && myJson.getString("thirdparty_url").trim() != null && !myJson.getString("thirdparty_url").trim().isEmpty() && !myJson.getString("thirdparty_url").trim().equals("null") && !myJson.getString("thirdparty_url").trim().matches("")) {
+//                                Util.dataModel.setVideoUrl(myJson.getString("thirdparty_url"));
+//
+//
+//                            }
+//                            else{
+//                                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//
+//                            }
+//                        }
+//                        if ((myJson.has("videoResolution")) && myJson.getString("videoResolution").trim() != null && !myJson.getString("videoResolution").trim().isEmpty() && !myJson.getString("videoResolution").trim().equals("null") && !myJson.getString("videoResolution").trim().matches("")) {
+//                            Util.dataModel.setVideoResolution(myJson.getString("videoResolution"));
+//
+//                        }
+//
+//                    }
+//
+//                }
+//                else {
+//
+//                    responseStr = "0";
+//                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                }
+//            } catch (JSONException e1) {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//                responseStr = "0";
+//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                e1.printStackTrace();
+//            }
+//
+//            catch (Exception e)
+//            {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//                responseStr = "0";
+//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//
+//                e.printStackTrace();
+//
+//            }
+//            return null;
+//
+//        }
+//
+//        protected void onPostExecute(Void result) {
+//
+//      /*  try{
+//            if(pDialog.isShowing())
+//                pDialog.dismiss();
+//        }
+//        catch(IllegalArgumentException ex)
+//        {
+//            responseStr = "0";
+//            movieVideoUrlStr = getResources().getString(R.string.no_data_str);
+//        }*/
+//            if (responseStr == null) {
+//                responseStr = "0";
+//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+//            }
+//
+//            if ((responseStr.trim().equalsIgnoreCase("0"))) {
+//                try {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                } catch (IllegalArgumentException ex) {
+//                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+//                }
+//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+//                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
+//                dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+//                dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                                finish();
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            } else {
+//
+//                if (Util.dataModel.getVideoUrl() == null) {
+//                    try {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                    } catch (IllegalArgumentException ex) {
+//                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    }
+//                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
+//                    dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+//                    dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setCancelable(false);
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                    finish();
+//                                }
+//                            });
+//                    dlgAlert.create().show();
+//                } else if (Util.dataModel.getVideoUrl().matches("") || Util.dataModel.getVideoUrl().equalsIgnoreCase(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+//                    try {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                    } catch (IllegalArgumentException ex) {
+//                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    }
+//                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
+//                    dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+//                    dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setCancelable(false);
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                    finish();
+//                                }
+//                            });
+//                    dlgAlert.create().show();
+//                } else {
+//                    try {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                    } catch (IllegalArgumentException ex) {
+//                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    }
+//                    if (!videoUrlStr.equals("")) {
+//                        final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+//                        runOnUiThread(new Runnable() {
+//                            public void run() {
+//                                playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                startActivity(playVideoIntent);
+//                                finish();
+//
+//                            }
+//                        });
+//                    }else{
+//                        if (Util.dataModel.getVideoUrl().contains("://www.youtube") || Util.dataModel.getVideoUrl().contains("://www.youtu.be")){
+//                            if(Util.dataModel.getVideoUrl().contains("live_stream?channel")) {
+//                                final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ThirdPartyPlayer.class);
+//                                runOnUiThread(new Runnable() {
+//                                    public void run() {
+//                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                        startActivity(playVideoIntent);
+//                                        finish();
+//
+//                                    }
+//                                });
+//                            }else{
+//
+//                                final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, YouTubeAPIActivity.class);
+//                                runOnUiThread(new Runnable() {
+//                                    public void run() {
+//                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                        startActivity(playVideoIntent);
+//                                        finish();
+//
+//
+//                                    }
+//                                });
+//
+//                            }
+//                        }else{
+//                            final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ThirdPartyPlayer.class);
+//                            runOnUiThread(new Runnable() {
+//                                public void run() {
+//                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                    startActivity(playVideoIntent);
+//                                    finish();
+//
+//                                }
+//                            });
+//                        }
+//                    }
+//                }
+//
+//
+//            }
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            pDialog = new ProgressBarHandler(PaymentInfoActivity.this);
+//            pDialog.show();
+//
+//        }
+//
+//
+//    }
 }

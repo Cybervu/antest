@@ -64,6 +64,12 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
             httppost.addHeader("email", this.registration_input.getEmail());
             httppost.addHeader("password", this.registration_input.getPassword());
             httppost.addHeader("name", this.registration_input.getName());
+            httppost.addHeader("lang_code",this.registration_input.getLang_code());
+            httppost.addHeader("custom_country",this.registration_input.getCustom_country());
+            httppost.addHeader("custom_languages",this.registration_input.getCustom_languages());
+            httppost.addHeader("device_id",this.registration_input.getDevice_id());
+            httppost.addHeader("google_id",this.registration_input.getGoogle_id());
+            httppost.addHeader("device_type",this.registration_input.getDevice_type());
 
             // Execute HTTP Post Request
             try {
@@ -166,18 +172,18 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
         listener.onRegistrationDetailsPreExecuteStarted();
 
         status = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
-            this.cancel(true);
-            message = "Packge Name Not Matched";
-            listener.onRegistrationDetailsPostExecuteCompleted(registration_output, status, message);
-            return;
-        }
-        if (CommonConstants.hashKey.equals("")) {
-            this.cancel(true);
-            message = "Hash Key Is Not Available. Please Initialize The SDK";
-            listener.onRegistrationDetailsPostExecuteCompleted(registration_output, status, message);
-
-        }
+//        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+//            this.cancel(true);
+//            message = "Packge Name Not Matched";
+//            listener.onRegistrationDetailsPostExecuteCompleted(registration_output, status, message);
+//            return;
+//        }
+//        if (CommonConstants.hashKey.equals("")) {
+//            this.cancel(true);
+//            message = "Hash Key Is Not Available. Please Initialize The SDK";
+//            listener.onRegistrationDetailsPostExecuteCompleted(registration_output, status, message);
+//
+//        }
     }
 
     @Override

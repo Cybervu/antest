@@ -64,6 +64,8 @@ public class PurchaseHistoryAsyntask extends AsyncTask<PurchaseHistoryInputModel
 
             httppost.addHeader("authToken", this.purchaseHistoryInputModel.getAuthToken());
             httppost.addHeader("user_id", this.purchaseHistoryInputModel.getUser_id());
+            httppost.addHeader("lang_code",this.purchaseHistoryInputModel.getLang_code());
+            httppost.addHeader("id",this.purchaseHistoryInputModel.getId());
 
 
             try {

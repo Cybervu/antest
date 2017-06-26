@@ -6,7 +6,38 @@ package com.home.apisdk.apiModel;
 
 public class Update_UserProfile_Input {
 
-    String authToken,user_id,name,password;
+    String authToken;
+    String user_id;
+    String name;
+    String password;
+    String lang_code;
+
+    public String getLang_code() {
+        return lang_code;
+    }
+
+    public void setLang_code(String lang_code) {
+        this.lang_code = lang_code;
+    }
+
+    public String getCustom_country() {
+        return custom_country;
+    }
+
+    public void setCustom_country(String custom_country) {
+        this.custom_country = custom_country;
+    }
+
+    public String getCustom_languages() {
+        return custom_languages;
+    }
+
+    public void setCustom_languages(String custom_languages) {
+        this.custom_languages = custom_languages;
+    }
+
+    String custom_country;
+    String custom_languages;
     public void setName(String name){
         this.name = name;
     }

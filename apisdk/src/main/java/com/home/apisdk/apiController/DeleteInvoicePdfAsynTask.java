@@ -59,6 +59,7 @@ public class DeleteInvoicePdfAsynTask extends AsyncTask<DeleteInvoicePdfInputMod
 
             httppost.addHeader("authToken", this.deleteInvoicePdfInputModel.getAuthToken());
             httppost.addHeader("filepath", this.deleteInvoicePdfInputModel.getFilepath());
+            httppost.addHeader("lang_code",this.deleteInvoicePdfInputModel.getLanguage_code());
 
 
             // Execute HTTP Post Request
