@@ -41,6 +41,11 @@ import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+import com.home.apisdk.apiController.GetLanguageListAsynTask;
+import com.home.apisdk.apiController.LogoutAsynctask;
+import com.home.apisdk.apiModel.LanguageListInputModel;
+import com.home.apisdk.apiModel.LanguageListOutputModel;
+import com.home.apisdk.apiModel.LogoutInput;
 import com.home.vod.R;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
@@ -77,7 +82,7 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 
-public class ViewMoreActivity extends AppCompatActivity {
+public class ViewMoreActivity extends AppCompatActivity implements LogoutAsynctask.Logout,GetLanguageListAsynTask.GetLanguageList {
     public static ProgressBarHandler progressBarHandler;
     String email,id;
     LanguageCustomAdapter languageCustomAdapter;
@@ -85,6 +90,7 @@ public class ViewMoreActivity extends AppCompatActivity {
     String Previous_Selected_Language="";
     int  prevPosition = 0;
     AlertDialog alert;
+    ProgressBarHandler pDialog;
 
 
     ProgressBarHandler videoPDialog;
@@ -571,6 +577,111 @@ public class ViewMoreActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    @Override
+    public void onLogoutPreExecuteStarted() {
+        pDialog = new ProgressBarHandler(ViewMoreActivity.this);
+        pDialog.show();
+    }
+
+    @Override
+    public void onLogoutPostExecuteCompleted(int code, String status, String message) {
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+
+            }
+        } catch (IllegalArgumentException ex) {
+            Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+        }
+        if(status == null){
+            Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+        }
+        if (code == 0) {
+            Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+        }
+        if (code > 0) {
+            if (code == 200) {
+                SharedPreferences.Editor editor = pref.edit();
+                editor.clear();
+                editor.commit();
+                SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
+                if (loginPref!=null) {
+                    SharedPreferences.Editor countryEditor = loginPref.edit();
+                    countryEditor.clear();
+                    countryEditor.commit();
+                }
+                 /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
+                    if (countryPref!=null) {
+                        SharedPreferences.Editor countryEditor = countryPref.edit();
+                        countryEditor.clear();
+                        countryEditor.commit();
+                    }*/
+                if ((Util.getTextofLanguage(ViewMoreActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
+                        .trim()).equals("1")) {
+                    final Intent startIntent = new Intent(ViewMoreActivity.this, SplashScreen.class);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(startIntent);
+                            Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                            finish();
+
+                        }
+                    });
+                }
+                else
+                {
+                    final Intent startIntent = new Intent(ViewMoreActivity.this, MainActivity.class);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(startIntent);
+                            Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                            finish();
+
+                        }
+                    });
+                }
+
+            }
+            else {
+                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+            }
+        }
+
+    }
+
+    @Override
+    public void onGetLanguageListPreExecuteStarted() {
+
+        progressBarHandler = new ProgressBarHandler(ViewMoreActivity.this);
+        progressBarHandler.show();
+
+    }
+
+    @Override
+    public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
+        if(progressBarHandler.isShowing())
+        {
+            progressBarHandler.hide();
+            progressBarHandler = null;
+
+        }
+
+        else {
+        }
+    ShowLanguagePopup();
+
+
+}
 
 
     private class AsynLoadVideos extends AsyncTask<Void, Void, Void> {
@@ -1489,7 +1600,9 @@ public class ViewMoreActivity extends AppCompatActivity {
                     ShowLanguagePopup();
 
                 }else {
-                    AsynGetLanguageList asynGetLanguageList = new AsynGetLanguageList();
+                    LanguageListInputModel languageListInputModel=new LanguageListInputModel();
+                    languageListInputModel.setAuthToken(Util.authTokenStr);
+                    GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel,this,this);
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
                 return false;
@@ -1519,7 +1632,11 @@ public class ViewMoreActivity extends AppCompatActivity {
                         // Do nothing but close the dialog
 
                         // dialog.cancel();
-                        AsynLogoutDetails asynLogoutDetails=new AsynLogoutDetails();
+                        LogoutInput logoutInput=new LogoutInput();
+                        logoutInput.setAuthToken(Util.authTokenStr);
+                        logoutInput.setLogin_history_id(pref.getString("PREFS_LOGIN_HISTORYID_KEY", null));
+                        logoutInput.setLang_code(Util.getTextofLanguage(ViewMoreActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                        LogoutAsynctask asynLogoutDetails=new LogoutAsynctask(logoutInput,ViewMoreActivity.this,ViewMoreActivity.this);
                         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
 
 
@@ -1549,152 +1666,152 @@ public class ViewMoreActivity extends AppCompatActivity {
 
         return false;
     }
-    private class AsynLogoutDetails extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-        int responseCode;
-        String loginHistoryIdStr = pref.getString("PREFS_LOGIN_HISTORYID_KEY", null);
-        String responseStr;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-
-            String urlRouteList =Util.rootUrl().trim()+Util.logoutUrl.trim();
-            try {
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("login_history_id",loginHistoryIdStr);
-                httppost.addHeader("lang_code",Util.getTextofLanguage(ViewMoreActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (pDialog != null && pDialog.isShowing()) {
-                                pDialog.hide();
-                                pDialog = null;
-                            }
-                            responseCode = 0;
-                            Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                        }
-
-                    });
-
-                }catch (IOException e) {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                    responseCode = 0;
-                    e.printStackTrace();
-                }
-                if(responseStr!=null){
-                    JSONObject myJson = new JSONObject(responseStr);
-                    responseCode = Integer.parseInt(myJson.optString("code"));
-                }
-
-            }
-            catch (Exception e) {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-                responseCode = 0;
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-
-                }
-            } catch (IllegalArgumentException ex) {
-                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-
-            }
-            if(responseStr == null){
-                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-
-            }
-            if (responseCode == 0) {
-                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-
-            }
-            if (responseCode > 0) {
-                if (responseCode == 200) {
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.clear();
-                    editor.commit();
-                    SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                    if (loginPref!=null) {
-                        SharedPreferences.Editor countryEditor = loginPref.edit();
-                        countryEditor.clear();
-                        countryEditor.commit();
-                    }
-                 /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-                    if (countryPref!=null) {
-                        SharedPreferences.Editor countryEditor = countryPref.edit();
-                        countryEditor.clear();
-                        countryEditor.commit();
-                    }*/
-                    if ((Util.getTextofLanguage(ViewMoreActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
-                            .trim()).equals("1")) {
-                        final Intent startIntent = new Intent(ViewMoreActivity.this, SplashScreen.class);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(startIntent);
-                                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
-                                finish();
-
-                            }
-                        });
-                    }
-                    else
-                    {
-                        final Intent startIntent = new Intent(ViewMoreActivity.this, MainActivity.class);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(startIntent);
-                                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
-                                finish();
-
-                            }
-                        });
-                    }
-
-                }
-                else {
-                    Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-
-                }
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            pDialog = new ProgressBarHandler(ViewMoreActivity.this);
-            pDialog.show();
-        }
-    }
+//    private class AsynLogoutDetails extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler pDialog;
+//        int responseCode;
+//        String loginHistoryIdStr = pref.getString("PREFS_LOGIN_HISTORYID_KEY", null);
+//        String responseStr;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//
+//            String urlRouteList =Util.rootUrl().trim()+Util.logoutUrl.trim();
+//            try {
+//                HttpClient httpclient=new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("login_history_id",loginHistoryIdStr);
+//                httppost.addHeader("lang_code",Util.getTextofLanguage(ViewMoreActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//                } catch (org.apache.http.conn.ConnectTimeoutException e){
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (pDialog != null && pDialog.isShowing()) {
+//                                pDialog.hide();
+//                                pDialog = null;
+//                            }
+//                            responseCode = 0;
+//                            Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//                        }
+//
+//                    });
+//
+//                }catch (IOException e) {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                    responseCode = 0;
+//                    e.printStackTrace();
+//                }
+//                if(responseStr!=null){
+//                    JSONObject myJson = new JSONObject(responseStr);
+//                    responseCode = Integer.parseInt(myJson.optString("code"));
+//                }
+//
+//            }
+//            catch (Exception e) {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//                responseCode = 0;
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//            try {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//
+//                }
+//            } catch (IllegalArgumentException ex) {
+//                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//
+//            }
+//            if(responseStr == null){
+//                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//
+//            }
+//            if (responseCode == 0) {
+//                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//
+//            }
+//            if (responseCode > 0) {
+//                if (responseCode == 200) {
+//                    SharedPreferences.Editor editor = pref.edit();
+//                    editor.clear();
+//                    editor.commit();
+//                    SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
+//                    if (loginPref!=null) {
+//                        SharedPreferences.Editor countryEditor = loginPref.edit();
+//                        countryEditor.clear();
+//                        countryEditor.commit();
+//                    }
+//                 /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
+//                    if (countryPref!=null) {
+//                        SharedPreferences.Editor countryEditor = countryPref.edit();
+//                        countryEditor.clear();
+//                        countryEditor.commit();
+//                    }*/
+//                    if ((Util.getTextofLanguage(ViewMoreActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
+//                            .trim()).equals("1")) {
+//                        final Intent startIntent = new Intent(ViewMoreActivity.this, SplashScreen.class);
+//                        runOnUiThread(new Runnable() {
+//                            public void run() {
+//                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                startActivity(startIntent);
+//                                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+//                                finish();
+//
+//                            }
+//                        });
+//                    }
+//                    else
+//                    {
+//                        final Intent startIntent = new Intent(ViewMoreActivity.this, MainActivity.class);
+//                        runOnUiThread(new Runnable() {
+//                            public void run() {
+//                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                startActivity(startIntent);
+//                                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+//                                finish();
+//
+//                            }
+//                        });
+//                    }
+//
+//                }
+//                else {
+//                    Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//
+//                }
+//            }
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//
+//            pDialog = new ProgressBarHandler(ViewMoreActivity.this);
+//            pDialog.show();
+//        }
+//    }
 
     public void ShowLanguagePopup()
     {
@@ -1879,127 +1996,127 @@ public class ViewMoreActivity extends AppCompatActivity {
     }
 
 
-    private class AsynGetLanguageList extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int status;
-
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList =Util.rootUrl().trim()+Util.LanguageList.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-
-
-                // Execute HTTP Post Request
-                try {
-
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = (EntityUtils.toString(response.getEntity())).trim();
-                } catch (Exception e) {
-                }
-                if (responseStr != null) {
-                    JSONObject json = new JSONObject(responseStr);
-                    try {
-                        status = Integer.parseInt(json.optString("code"));
-                        Default_Language = json.optString("default_lang");
-                        if(!Util.getTextofLanguage(ViewMoreActivity.this,Util.SELECTED_LANGUAGE_CODE,"").equals(""))
-                        {
-                            Default_Language = Util.getTextofLanguage(ViewMoreActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE);
-                        }
-
-                    } catch (Exception e) {
-                        status = 0;
-                    }
-                }
-
-            } catch (Exception e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-
-                    }
-                });
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if(progressBarHandler.isShowing())
-            {
-                progressBarHandler.hide();
-                progressBarHandler = null;
-
-            }
-
-            if (responseStr == null) {
-            } else {
-                if (status > 0 && status == 200) {
-
-                    try {
-                        JSONObject json = new JSONObject(responseStr);
-                        JSONArray jsonArray = json.getJSONArray("lang_list");
-                        ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
-
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            String language_id = jsonArray.getJSONObject(i).optString("code").trim();
-                            String language_name = jsonArray.getJSONObject(i).optString("language").trim();
-
-
-                            LanguageModel languageModel = new LanguageModel();
-                            languageModel.setLanguageId(language_id);
-                            languageModel.setLanguageName(language_name);
-
-                            if(Default_Language.equalsIgnoreCase(language_id))
-                            {
-                                languageModel.setIsSelected(true);
-                            }
-                            else
-                            {
-                                languageModel.setIsSelected(false);
-                            }
-                            languageModels.add(languageModel);
-                        }
-
-                        Util.languageModel = languageModels;
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                 /*   if(!default_Language.equals("en")) {
-                        //                  Call For Language Translation.
-                        AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
-                        asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
-
-                    }else{
-
-                    }*/
-
-                } else {
-                }
-            }
-            ShowLanguagePopup();
-
-
-        }
-
-        protected void onPreExecute() {
-
-            progressBarHandler = new ProgressBarHandler(ViewMoreActivity.this);
-            progressBarHandler.show();
-
-        }
-    }
+//    private class AsynGetLanguageList extends AsyncTask<Void, Void, Void> {
+//        String responseStr;
+//        int status;
+//
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList =Util.rootUrl().trim()+Util.LanguageList.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//
+//
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = (EntityUtils.toString(response.getEntity())).trim();
+//                } catch (Exception e) {
+//                }
+//                if (responseStr != null) {
+//                    JSONObject json = new JSONObject(responseStr);
+//                    try {
+//                        status = Integer.parseInt(json.optString("code"));
+//                        Default_Language = json.optString("default_lang");
+//                        if(!Util.getTextofLanguage(ViewMoreActivity.this,Util.SELECTED_LANGUAGE_CODE,"").equals(""))
+//                        {
+//                            Default_Language = Util.getTextofLanguage(ViewMoreActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE);
+//                        }
+//
+//                    } catch (Exception e) {
+//                        status = 0;
+//                    }
+//                }
+//
+//            } catch (Exception e) {
+//                runOnUiThread(new Runnable() {
+//                    public void run() {
+//
+//                    }
+//                });
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            if(progressBarHandler.isShowing())
+//            {
+//                progressBarHandler.hide();
+//                progressBarHandler = null;
+//
+//            }
+//
+//            if (responseStr == null) {
+//            } else {
+//                if (status > 0 && status == 200) {
+//
+//                    try {
+//                        JSONObject json = new JSONObject(responseStr);
+//                        JSONArray jsonArray = json.getJSONArray("lang_list");
+//                        ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
+//
+//                        for (int i = 0; i < jsonArray.length(); i++) {
+//                            String language_id = jsonArray.getJSONObject(i).optString("code").trim();
+//                            String language_name = jsonArray.getJSONObject(i).optString("language").trim();
+//
+//
+//                            LanguageModel languageModel = new LanguageModel();
+//                            languageModel.setLanguageId(language_id);
+//                            languageModel.setLanguageName(language_name);
+//
+//                            if(Default_Language.equalsIgnoreCase(language_id))
+//                            {
+//                                languageModel.setIsSelected(true);
+//                            }
+//                            else
+//                            {
+//                                languageModel.setIsSelected(false);
+//                            }
+//                            languageModels.add(languageModel);
+//                        }
+//
+//                        Util.languageModel = languageModels;
+//
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//
+//                 /*   if(!default_Language.equals("en")) {
+//                        //                  Call For Language Translation.
+//                        AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
+//                        asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
+//
+//                    }else{
+//
+//                    }*/
+//
+//                } else {
+//                }
+//            }
+//            ShowLanguagePopup();
+//
+//
+//        }
+//
+//        protected void onPreExecute() {
+//
+//            progressBarHandler = new ProgressBarHandler(ViewMoreActivity.this);
+//            progressBarHandler.show();
+//
+//        }
+//    }
 
 
 

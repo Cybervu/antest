@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.home.vod.R;
 import com.home.vod.adapter.DeviceListAdapter;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -114,7 +115,7 @@ public class ManageDevices extends AppCompatActivity {
 
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("BIBHU","responseStr of device list ="+responseStr);
+                    LogUtil.showLog("BIBHU","responseStr of device list ="+responseStr);
 
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {

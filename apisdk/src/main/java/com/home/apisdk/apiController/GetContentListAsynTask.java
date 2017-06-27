@@ -70,6 +70,7 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
             httppost.addHeader("offset", this.contentListInput.getOffset());
             httppost.addHeader("orderby", this.contentListInput.getOrderby());
             httppost.addHeader("country", this.contentListInput.getCountry());
+            httppost.addHeader("lang_code",this.contentListInput.getLanguage());
 
             // Execute HTTP Post Request
             try {

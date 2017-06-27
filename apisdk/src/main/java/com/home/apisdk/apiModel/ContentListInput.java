@@ -5,7 +5,20 @@ package com.home.apisdk.apiModel;
  */
 public class ContentListInput {
     String limit = "10",offset = "0";
-    String orderby,authToken,permalink,country;
+    String orderby;
+    String authToken;
+    String permalink;
+    String country;
+
+    public String getLanguage() {
+        return Language;
+    }
+
+    public void setLanguage(String language) {
+        Language = language;
+    }
+
+    String Language;
 
     /*public ContentListInput(String authToken,String permalink,String limit, String offset, String orderby , String country) {
         this.limit = limit;
