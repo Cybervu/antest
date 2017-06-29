@@ -94,64 +94,64 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
                 status = Integer.parseInt(mainJson.optString("code"));
 
 
-                if ((mainJson.has("email")) && mainJson.getString("email").trim() != null && !mainJson.getString("email").trim().isEmpty() && !mainJson.getString("email").trim().equals("null") && !mainJson.getString("email").trim().matches("")) {
-                    socialAuthOutputModel.setEmail(mainJson.getString("email"));
+                if ((mainJson.has("email")) && mainJson.optString("email").trim() != null && !mainJson.optString("email").trim().isEmpty() && !mainJson.optString("email").trim().equals("null") && !mainJson.optString("email").trim().matches("")) {
+                    socialAuthOutputModel.setEmail(mainJson.optString("email"));
                 } else {
                     socialAuthOutputModel.setEmail("");
 
                 }
-                if ((mainJson.has("display_name")) && mainJson.getString("display_name").trim() != null && !mainJson.getString("display_name").trim().isEmpty() && !mainJson.getString("display_name").trim().equals("null") && !mainJson.getString("display_name").trim().matches("")) {
+                if ((mainJson.has("display_name")) && mainJson.optString("display_name").trim() != null && !mainJson.optString("display_name").trim().isEmpty() && !mainJson.optString("display_name").trim().equals("null") && !mainJson.optString("display_name").trim().matches("")) {
 
-                    socialAuthOutputModel.setDisplay_name(mainJson.getString("display_name"));
+                    socialAuthOutputModel.setDisplay_name(mainJson.optString("display_name"));
 
 
                 } else {
                     socialAuthOutputModel.setDisplay_name("");
 
                 }
-                if ((mainJson.has("profile_image")) && mainJson.getString("profile_image").trim() != null && !mainJson.getString("profile_image").trim().isEmpty() && !mainJson.getString("profile_image").trim().equals("null") && !mainJson.getString("profile_image").trim().matches("")) {
-                    socialAuthOutputModel.setProfile_image(mainJson.getString("profile_image"));
+                if ((mainJson.has("profile_image")) && mainJson.optString("profile_image").trim() != null && !mainJson.optString("profile_image").trim().isEmpty() && !mainJson.optString("profile_image").trim().equals("null") && !mainJson.optString("profile_image").trim().matches("")) {
+                    socialAuthOutputModel.setProfile_image(mainJson.optString("profile_image"));
 
 
                 } else {
                     socialAuthOutputModel.setProfile_image("");
 
                 }
-                if ((mainJson.has("isSubscribed")) && mainJson.getString("isSubscribed").trim() != null && !mainJson.getString("isSubscribed").trim().isEmpty() && !mainJson.getString("isSubscribed").trim().equals("null") && !mainJson.getString("isSubscribed").trim().matches("")) {
-                    socialAuthOutputModel.setIsSubscribed(mainJson.getString("isSubscribed"));
+                if ((mainJson.has("isSubscribed")) && mainJson.optString("isSubscribed").trim() != null && !mainJson.optString("isSubscribed").trim().isEmpty() && !mainJson.optString("isSubscribed").trim().equals("null") && !mainJson.optString("isSubscribed").trim().matches("")) {
+                    socialAuthOutputModel.setIsSubscribed(mainJson.optString("isSubscribed"));
                 } else {
                     socialAuthOutputModel.setIsSubscribed("");
 
                 }
-                if ((mainJson.has("nick_name")) && mainJson.getString("nick_name").trim() != null && !mainJson.getString("nick_name").trim().isEmpty() && !mainJson.getString("nick_name").trim().equals("null") && !mainJson.getString("nick_name").trim().matches("")) {
-                    socialAuthOutputModel.setNick_name(mainJson.getString("nick_name"));
+                if ((mainJson.has("nick_name")) && mainJson.optString("nick_name").trim() != null && !mainJson.optString("nick_name").trim().isEmpty() && !mainJson.optString("nick_name").trim().equals("null") && !mainJson.optString("nick_name").trim().matches("")) {
+                    socialAuthOutputModel.setNick_name(mainJson.optString("nick_name"));
                 } else {
                     socialAuthOutputModel.setNick_name("");
 
                 }
 
-                if ((mainJson.has("studio_id")) && mainJson.getString("studio_id").trim() != null && !mainJson.getString("studio_id").trim().isEmpty() && !mainJson.getString("studio_id").trim().equals("null") && !mainJson.getString("studio_id").trim().matches("")) {
-                    socialAuthOutputModel.setStudio_id(mainJson.getString("studio_id"));
+                if ((mainJson.has("studio_id")) && mainJson.optString("studio_id").trim() != null && !mainJson.optString("studio_id").trim().isEmpty() && !mainJson.optString("studio_id").trim().equals("null") && !mainJson.optString("studio_id").trim().matches("")) {
+                    socialAuthOutputModel.setStudio_id(mainJson.optString("studio_id"));
 
                 } else {
                     socialAuthOutputModel.setStudio_id("");
 
                 }
 
-                if ((mainJson.has("msg")) && mainJson.getString("msg").trim() != null && !mainJson.getString("msg").trim().isEmpty() && !mainJson.getString("msg").trim().equals("null") && !mainJson.getString("msg").trim().matches("")) {
-                    socialAuthOutputModel.setMsg(mainJson.getString("msg"));
+                if ((mainJson.has("msg")) && mainJson.optString("msg").trim() != null && !mainJson.optString("msg").trim().isEmpty() && !mainJson.optString("msg").trim().equals("null") && !mainJson.optString("msg").trim().matches("")) {
+                    socialAuthOutputModel.setMsg(mainJson.optString("msg"));
                 } else {
                     socialAuthOutputModel.setMsg("");
 
                 }
-                if ((mainJson.has("login_history_id")) && mainJson.getString("login_history_id").trim() != null && !mainJson.getString("login_history_id").trim().isEmpty() && !mainJson.getString("login_history_id").trim().equals("null") && !mainJson.getString("login_history_id").trim().matches("")) {
-                    socialAuthOutputModel.setLogin_history_id(mainJson.getString("login_history_id"));
+                if ((mainJson.has("login_history_id")) && mainJson.optString("login_history_id").trim() != null && !mainJson.optString("login_history_id").trim().isEmpty() && !mainJson.optString("login_history_id").trim().equals("null") && !mainJson.optString("login_history_id").trim().matches("")) {
+                    socialAuthOutputModel.setLogin_history_id(mainJson.optString("login_history_id"));
                 } else {
                     socialAuthOutputModel.setLogin_history_id("");
 
                 }
-                if ((mainJson.has("id")) && mainJson.getString("id").trim() != null && !mainJson.getString("id").trim().isEmpty() && !mainJson.getString("id").trim().equals("null") && !mainJson.getString("id").trim().matches("")) {
-                    socialAuthOutputModel.setId(mainJson.getString("id"));
+                if ((mainJson.has("id")) && mainJson.optString("id").trim() != null && !mainJson.optString("id").trim().isEmpty() && !mainJson.optString("id").trim().equals("null") && !mainJson.optString("id").trim().matches("")) {
+                    socialAuthOutputModel.setId(mainJson.optString("id"));
                 } else {
                     socialAuthOutputModel.setId("");
 

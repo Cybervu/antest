@@ -114,8 +114,8 @@ public class HomePageAsynTask extends AsyncTask<HomePageInputModel, Void, Void> 
                             if (lengthBannerImagesArray > 0) {
                                 for (int i = 0; i < lengthBannerImagesArray; i++) {
                                     HomePageBannerModel homePageBannerModel = new HomePageBannerModel();
-                                    homePageBannerModel.setMobile_view(jsonBannerImageNode.getJSONObject(i).getString("mobile_view"));
-                                    homePageBannerModel.setOriginal(jsonBannerImageNode.getJSONObject(i).getString("original"));
+                                    homePageBannerModel.setMobile_view(jsonBannerImageNode.getJSONObject(i).optString("mobile_view"));
+                                    homePageBannerModel.setOriginal(jsonBannerImageNode.getJSONObject(i).optString("original"));
                                     homePageBannerModelArrayList.add(homePageBannerModel);
 
                                 }
@@ -149,20 +149,20 @@ public class HomePageAsynTask extends AsyncTask<HomePageInputModel, Void, Void> 
 
                                 HomePageSectionModel sectionModel = new HomePageSectionModel();
 
-                                 if((jsonChildNode.has("studio_id")) && jsonChildNode.getString("studio_id").trim() != null && !jsonChildNode.getString("studio_id").trim().isEmpty() && !jsonChildNode.getString("studio_id").trim().equals("null") && !jsonChildNode.getString("studio_id").trim().matches("")) {
-                                    sectionModel.setStudio_id(jsonChildNode.getString("studio_id"));
+                                 if((jsonChildNode.has("studio_id")) && jsonChildNode.optString("studio_id").trim() != null && !jsonChildNode.optString("studio_id").trim().isEmpty() && !jsonChildNode.optString("studio_id").trim().equals("null") && !jsonChildNode.optString("studio_id").trim().matches("")) {
+                                    sectionModel.setStudio_id(jsonChildNode.optString("studio_id"));
 
                                 }
-                                if ((jsonChildNode.has("language_id")) && jsonChildNode.getString("language_id").trim() != null && !jsonChildNode.getString("language_id").trim().isEmpty() && !jsonChildNode.getString("language_id").trim().equals("null") && !jsonChildNode.getString("language_id").trim().matches("")) {
-                                    sectionModel.setLanguage_id(jsonChildNode.getString("language_id"));
+                                if ((jsonChildNode.has("language_id")) && jsonChildNode.optString("language_id").trim() != null && !jsonChildNode.optString("language_id").trim().isEmpty() && !jsonChildNode.optString("language_id").trim().equals("null") && !jsonChildNode.optString("language_id").trim().matches("")) {
+                                    sectionModel.setLanguage_id(jsonChildNode.optString("language_id"));
 
                                 }
-                                if ((jsonChildNode.has("title")) && jsonChildNode.getString("title").trim() != null && !jsonChildNode.getString("title").trim().isEmpty() && !jsonChildNode.getString("title").trim().equals("null") && !jsonChildNode.getString("title").trim().matches("")) {
-                                    sectionModel.setTitle(jsonChildNode.getString("title"));
+                                if ((jsonChildNode.has("title")) && jsonChildNode.optString("title").trim() != null && !jsonChildNode.optString("title").trim().isEmpty() && !jsonChildNode.optString("title").trim().equals("null") && !jsonChildNode.optString("title").trim().matches("")) {
+                                    sectionModel.setTitle(jsonChildNode.optString("title"));
 
                                 }
-                                if ((jsonChildNode.has("section_id")) && jsonChildNode.getString("section_id").trim() != null && !jsonChildNode.getString("section_id").trim().isEmpty() && !jsonChildNode.getString("section_id").trim().equals("null") && !jsonChildNode.getString("section_id").trim().matches("")) {
-                                    sectionModel.setSection_id(jsonChildNode.getString("section_id"));
+                                if ((jsonChildNode.has("section_id")) && jsonChildNode.optString("section_id").trim() != null && !jsonChildNode.optString("section_id").trim().isEmpty() && !jsonChildNode.optString("section_id").trim().equals("null") && !jsonChildNode.optString("section_id").trim().matches("")) {
+                                    sectionModel.setSection_id(jsonChildNode.optString("section_id"));
 
                                 }
 

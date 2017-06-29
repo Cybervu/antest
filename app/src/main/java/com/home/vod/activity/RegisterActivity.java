@@ -716,9 +716,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                 editor.putString("PREFS_LOGGEDIN_KEY", "1");
                 editor.putString("PREFS_LOGGEDIN_ID_KEY", registrationIdStr);
                 editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY", editPassword.getText().toString().trim());
+                editor.putString("PREFS_LOGIN_EMAIL_ID_KEY", registration_output.getEmail());
+                editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", registration_output.getDisplay_name());
+                editor.putString("PREFS_LOGIN_PROFILE_IMAGE_KEY", registration_output.getProfile_image());
                 editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY", isSubscribedStr);
                 editor.putString("PREFS_LOGIN_HISTORYID_KEY", loginHistoryIdStr);
-
                 Date todayDate = new Date();
                 String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
                 editor.putString("date", todayStr.trim());
@@ -1042,16 +1044,6 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
 
             String Subscription_Str = pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", "0");
-
-
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                status = 0;
-            }
 
             if (validateUserOutput == null) {
                 try {

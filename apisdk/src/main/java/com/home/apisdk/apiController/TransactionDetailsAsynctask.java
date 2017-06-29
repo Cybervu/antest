@@ -93,58 +93,58 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
                 if (status == 200) {
 
                     JSONObject mainJson = myJson.getJSONObject("section");
-                    if ((mainJson.has("order_number")) && mainJson.getString("order_number").trim() != null && !mainJson.getString("order_number").trim().isEmpty() && !mainJson.getString("order_number").trim().equals("null") && !mainJson.getString("order_number").trim().matches("")) {
-                        transactionOutputModel.setOrder_number(mainJson.getString("order_number"));
+                    if ((mainJson.has("order_number")) && mainJson.optString("order_number").trim() != null && !mainJson.optString("order_number").trim().isEmpty() && !mainJson.optString("order_number").trim().equals("null") && !mainJson.optString("order_number").trim().matches("")) {
+                        transactionOutputModel.setOrder_number(mainJson.optString("order_number"));
                     } else {
                         transactionOutputModel.setOrder_number("");
 
                     }
-                    if ((mainJson.has("movie_id")) && mainJson.getString("movie_id").trim() != null && !mainJson.getString("movie_id").trim().isEmpty() && !mainJson.getString("movie_id").trim().equals("null") && !mainJson.getString("movie_id").trim().matches("")) {
-                        transactionOutputModel.setMovie_id(mainJson.getString("movie_id"));
+                    if ((mainJson.has("movie_id")) && mainJson.optString("movie_id").trim() != null && !mainJson.optString("movie_id").trim().isEmpty() && !mainJson.optString("movie_id").trim().equals("null") && !mainJson.optString("movie_id").trim().matches("")) {
+                        transactionOutputModel.setMovie_id(mainJson.optString("movie_id"));
 
 
                     } else {
                         transactionOutputModel.setMovie_id("");
 
                     }
-                    if ((mainJson.has("transaction_date")) && mainJson.getString("transaction_date").trim() != null && !mainJson.getString("transaction_date").trim().isEmpty() && !mainJson.getString("transaction_date").trim().equals("null") && !mainJson.getString("transaction_date").trim().matches("")) {
-                        transactionOutputModel.setTransaction_date(mainJson.getString("transaction_date"));
+                    if ((mainJson.has("transaction_date")) && mainJson.optString("transaction_date").trim() != null && !mainJson.optString("transaction_date").trim().isEmpty() && !mainJson.optString("transaction_date").trim().equals("null") && !mainJson.optString("transaction_date").trim().matches("")) {
+                        transactionOutputModel.setTransaction_date(mainJson.optString("transaction_date"));
 
 
                     } else {
                         transactionOutputModel.setTransaction_date("");
 
                     }
-                    if ((mainJson.has("transaction_status")) && mainJson.getString("transaction_status").trim() != null && !mainJson.getString("transaction_status").trim().isEmpty() && !mainJson.getString("transaction_status").trim().equals("null") && !mainJson.getString("transaction_status").trim().matches("")) {
-                        transactionOutputModel.setTransaction_status(mainJson.getString("transaction_status"));
+                    if ((mainJson.has("transaction_status")) && mainJson.optString("transaction_status").trim() != null && !mainJson.optString("transaction_status").trim().isEmpty() && !mainJson.optString("transaction_status").trim().equals("null") && !mainJson.optString("transaction_status").trim().matches("")) {
+                        transactionOutputModel.setTransaction_status(mainJson.optString("transaction_status"));
                     } else {
                         transactionOutputModel.setTransaction_status("");
 
                     }
-                    if ((mainJson.has("plan_name")) && mainJson.getString("plan_name").trim() != null && !mainJson.getString("plan_name").trim().isEmpty() && !mainJson.getString("plan_name").trim().equals("null") && !mainJson.getString("plan_name").trim().matches("")) {
-                        transactionOutputModel.setPlan_name(mainJson.getString("plan_name"));
+                    if ((mainJson.has("plan_name")) && mainJson.optString("plan_name").trim() != null && !mainJson.optString("plan_name").trim().isEmpty() && !mainJson.optString("plan_name").trim().equals("null") && !mainJson.optString("plan_name").trim().matches("")) {
+                        transactionOutputModel.setPlan_name(mainJson.optString("plan_name"));
                     } else {
                         transactionOutputModel.setPlan_name("");
 
                     }
 
-                    if ((mainJson.has("currency_symbol")) && mainJson.getString("currency_symbol").trim() != null && !mainJson.getString("currency_symbol").trim().isEmpty() && !mainJson.getString("currency_symbol").trim().equals("null") && !mainJson.getString("currency_symbol").trim().matches("")) {
-                        transactionOutputModel.setCurrency_symbol(mainJson.getString("currency_symbol"));
+                    if ((mainJson.has("currency_symbol")) && mainJson.optString("currency_symbol").trim() != null && !mainJson.optString("currency_symbol").trim().isEmpty() && !mainJson.optString("currency_symbol").trim().equals("null") && !mainJson.optString("currency_symbol").trim().matches("")) {
+                        transactionOutputModel.setCurrency_symbol(mainJson.optString("currency_symbol"));
 
                     } else {
                         transactionOutputModel.setCurrency_symbol("");
 
                     }
 
-                    if ((mainJson.has("currency_code")) && mainJson.getString("currency_code").trim() != null && !mainJson.getString("currency_code").trim().isEmpty() && !mainJson.getString("currency_code").trim().equals("null") && !mainJson.getString("currency_code").trim().matches("")) {
-                        transactionOutputModel.setCurrency_code(mainJson.getString("currency_code"));
+                    if ((mainJson.has("currency_code")) && mainJson.optString("currency_code").trim() != null && !mainJson.optString("currency_code").trim().isEmpty() && !mainJson.optString("currency_code").trim().equals("null") && !mainJson.optString("currency_code").trim().matches("")) {
+                        transactionOutputModel.setCurrency_code(mainJson.optString("currency_code"));
                     } else {
                         transactionOutputModel.setCurrency_code("");
 
                     }
 
-                    if ((mainJson.has("amount")) && mainJson.getString("amount").trim() != null && !mainJson.getString("amount").trim().isEmpty() && !mainJson.getString("amount").trim().equals("null") && !mainJson.getString("amount").trim().matches("")) {
-                        transactionOutputModel.setAmount(mainJson.getString("amount"));
+                    if ((mainJson.has("amount")) && mainJson.optString("amount").trim() != null && !mainJson.optString("amount").trim().isEmpty() && !mainJson.optString("amount").trim().equals("null") && !mainJson.optString("amount").trim().matches("")) {
+                        transactionOutputModel.setAmount(mainJson.optString("amount"));
 
                     } else {
                         transactionOutputModel.setAmount("");

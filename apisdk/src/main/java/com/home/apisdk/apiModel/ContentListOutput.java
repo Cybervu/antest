@@ -4,9 +4,24 @@ package com.home.apisdk.apiModel;
  * Created by Muvi on 9/21/2016.
  */
 public class ContentListOutput{
-    String movieId,
-            permalink,name,story,releaseDate,
-            contentTypesId,posterUrl,genre;
+    String movieId;
+    String permalink;
+    String name;
+    String story;
+    String releaseDate;
+    String contentTypesId;
+    String posterUrl;
+    String genre;
+
+    public String getIsEpisodeStr() {
+        return isEpisodeStr;
+    }
+
+    public void setIsEpisodeStr(String isEpisodeStr) {
+        this.isEpisodeStr = isEpisodeStr;
+    }
+
+    String isEpisodeStr;
     int isConverted,isPPV,isAPV;
 
     public int getIsPPV() {

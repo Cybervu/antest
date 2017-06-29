@@ -93,8 +93,8 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
 
                 status = Integer.parseInt(mainJson.optString("code"));
 
-                if ((mainJson.has("msg")) && mainJson.getString("msg").trim() != null && !mainJson.getString("msg").trim().isEmpty() && !mainJson.getString("msg").trim().equals("null") && !mainJson.getString("msg").trim().matches("")) {
-                    forgotpassword_output.setMsg(mainJson.getString("msg"));
+                if ((mainJson.has("msg")) && mainJson.optString("msg").trim() != null && !mainJson.optString("msg").trim().isEmpty() && !mainJson.optString("msg").trim().equals("null") && !mainJson.optString("msg").trim().matches("")) {
+                    forgotpassword_output.setMsg(mainJson.optString("msg"));
                 } else {
                     forgotpassword_output.setMsg("");
                 }

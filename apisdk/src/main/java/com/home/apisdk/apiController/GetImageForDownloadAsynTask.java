@@ -88,8 +88,8 @@ public class GetImageForDownloadAsynTask extends AsyncTask<GetImageForDownloadIn
 
 
             if (status == 200) {
-                if ((myJson.has("image_url")) && myJson.getString("image_url").trim() != null && !myJson.getString("image_url").trim().isEmpty() && !myJson.getString("image_url").trim().equals("null") && !myJson.getString("image_url").trim().matches("")) {
-                    getImageForDownloadOutputModel.setImageUrl(myJson.getString("image_url"));
+                if ((myJson.has("image_url")) && myJson.optString("image_url").trim() != null && !myJson.optString("image_url").trim().isEmpty() && !myJson.optString("image_url").trim().equals("null") && !myJson.optString("image_url").trim().matches("")) {
+                    getImageForDownloadOutputModel.setImageUrl(myJson.optString("image_url"));
                 }
 
             }

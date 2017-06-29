@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.home.apisdk.apiController.UpadteUserProfileAsynctask;
+import com.home.apisdk.apiModel.Update_UserProfile_Input;
 import com.home.apisdk.apiModel.Update_UserProfile_Output;
 import com.home.vod.R;
 import com.home.vod.util.ProgressBarHandler;
@@ -393,7 +394,18 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
     }
 
     public void UpdateProfile() {
-        AsynUpdateProfile asyncLoadVideos = new AsynUpdateProfile();
+        Update_UserProfile_Input update_userProfile_input=new Update_UserProfile_Input();
+        update_userProfile_input.setAuthToken(Util.authTokenStr);
+        update_userProfile_input.setUser_id(User_Id.trim());
+        update_userProfile_input.setName(editProfileNameEditText.getText().toString().trim());
+        String confirmPasswordStr = editNewPassword.getText().toString().trim();
+        if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")){
+            update_userProfile_input.setPassword(confirmPasswordStr.trim());
+        }
+        update_userProfile_input.setLang_code(Util.getTextofLanguage(ProfileActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        update_userProfile_input.setCustom_country(Selected_Country_Id);
+        update_userProfile_input.setCustom_languages(Selected_Language_Id);
+        UpadteUserProfileAsynctask asyncLoadVideos = new UpadteUserProfileAsynctask(update_userProfile_input,this,this);
         asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
     }
 
@@ -406,236 +418,275 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
     @Override
     public void onUpdateUserProfilePostExecuteCompleted(Update_UserProfile_Output update_userProfile_output, int code, String message) {
 
-        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
-        dlgAlert.setMessage(Util.getTextofLanguage(ProfileActivity.this, Util.UPDATE_PROFILE_ALERT, Util.DEFAULT_UPDATE_PROFILE_ALERT));
-        dlgAlert.setTitle(Util.getTextofLanguage(ProfileActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-        dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        editOldPassword.setText("");
-                        editNewPassword.setText("");
-                    }
-                });
-        dlgAlert.create().show();
-    }
-
-    private class AsynUpdateProfile extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-
-        int statusCode;
-        String loggedInIdStr;
-        String confirmPasswordStr = editNewPassword.getText().toString().trim();
-        String nameStr = editProfileNameEditText.getText().toString().trim();
-
-        String responseStr;
-        JSONObject myJson = null;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            if (loginPref != null) {
-                loggedInIdStr = loginPref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-            }
-
-            String urlRouteList = Util.rootUrl().trim() + Util.updateProfileUrl.trim();
+        if(update_userProfile_output == null){
             try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("user_id", User_Id.trim());
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("name", nameStr.trim());
-                if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")) {
-                    httppost.addHeader("password", confirmPasswordStr.trim());
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
                 }
-                httppost.addHeader("lang_code", Util.getTextofLanguage(ProfileActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+            } catch (IllegalArgumentException ex) {
+                code = 0;
 
-                httppost.addHeader("custom_country", Selected_Country_Id);
-                httppost.addHeader("custom_languages", Selected_Language_Id);
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            statusCode = 0;
+            }
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(Util.getTextofLanguage(ProfileActivity.this, Util.UPDATE_PROFILE_ALERT, Util.DEFAULT_UPDATE_PROFILE_ALERT));
+            dlgAlert.setTitle(Util.getTextofLanguage(ProfileActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
                             editOldPassword.setText("");
                             editNewPassword.setText("");
-                            Toast.makeText(ProfileActivity.this, Util.getTextofLanguage(ProfileActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
                         }
-
                     });
+            dlgAlert.create().show();
+        }
+        else{
 
-                } catch (IOException e) {
-                    statusCode = 0;
-
-                    e.printStackTrace();
+            try {
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
                 }
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-
-                }
-
-            } catch (Exception e) {
-                statusCode = 0;
+            } catch (IllegalArgumentException ex) {
+                code = 0;
 
             }
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(Util.getTextofLanguage(ProfileActivity.this, Util.UPDATE_PROFILE_ALERT, Util.DEFAULT_UPDATE_PROFILE_ALERT));
+            dlgAlert.setTitle(Util.getTextofLanguage(ProfileActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            editOldPassword.setText("");
+                            editNewPassword.setText("");
 
-            return null;
+
+                        }
+                    });
+            dlgAlert.create().show();
         }
-
-
-        protected void onPostExecute(Void result) {
-
-            if (responseStr == null) {
-                try {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                } catch (IllegalArgumentException ex) {
-                    statusCode = 0;
-
-                }
-                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(ProfileActivity.this, Util.UPDATE_PROFILE_ALERT, Util.DEFAULT_UPDATE_PROFILE_ALERT));
-                dlgAlert.setTitle(Util.getTextofLanguage(ProfileActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                editOldPassword.setText("");
-                                editNewPassword.setText("");
-                            }
-                        });
-                dlgAlert.create().show();
-            }
-
-            if (statusCode > 0) {
-
-                if (statusCode == 200) {
-                    try {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        SharedPreferences.Editor editor = loginPref.edit();
-                        if (myJson.has("name")) {
-                            String displayNameStr = myJson.optString("name");
-                            editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", displayNameStr);
-                        }
-                        if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")) {
-                            editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY", confirmPasswordStr.trim());
-
-                        }
-                        editor.commit();
-                    }
-                    SharedPreferences.Editor editor = loginPref.edit();
-                    if (myJson.has("name")) {
-                        String displayNameStr = myJson.optString("display_name");
-                        editor.putString("name", displayNameStr);
-                    }
-                    if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")) {
-                        editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY", confirmPasswordStr.trim());
-
-                    }
-
-                    editor.commit();
-                    name_of_user.setText(editProfileNameEditText.getText().toString().trim());
-
-
-                    Toast.makeText(ProfileActivity.this, Util.getTextofLanguage(ProfileActivity.this, Util.PROFILE_UPDATED, Util.DEFAULT_PROFILE_UPDATED), Toast.LENGTH_SHORT).show();
-                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-                    if (name_of_user != null) {
-                        name_of_user.clearFocus();
-                        name_of_user.setCursorVisible(false);
-                    }
-                    if (editOldPassword != null) {
-                        editOldPassword.clearFocus();
-
-                    }
-                    if (editNewPassword != null) {
-                        editNewPassword.clearFocus();
-                    }
-                   /* if (fullNameEditText != null) fullNameEditText.clearFocus();
-                    if (passwordEditText != null) passwordEditText.clearFocus();
-                    if (confirmPasswordEditText != null) confirmPasswordEditText.clearFocus();*/
-
-                } else {
-
-                    try {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        statusCode = 0;
-
-                    }
-                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(ProfileActivity.this, Util.UPDATE_PROFILE_ALERT, Util.DEFAULT_UPDATE_PROFILE_ALERT));
-                    dlgAlert.setTitle(Util.getTextofLanguage(ProfileActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                    editOldPassword.setText("");
-                                    editNewPassword.setText("");
-
-
-                                }
-                            });
-                    dlgAlert.create().show();
-                }
-            } else {
-                try {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                } catch (IllegalArgumentException ex) {
-
-                }
-                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(ProfileActivity.this, Util.UPDATE_PROFILE_ALERT, Util.DEFAULT_UPDATE_PROFILE_ALERT));
-                dlgAlert.setTitle(Util.getTextofLanguage(ProfileActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                editOldPassword.setText("");
-                                editNewPassword.setText("");
-                            }
-                        });
-                dlgAlert.create().show();
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressBarHandler(ProfileActivity.this);
-            pDialog.show();
-        }
-
-
     }
+//
+//    private class AsynUpdateProfile extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler pDialog;
+//
+//        int statusCode;
+//        String loggedInIdStr;
+//        String confirmPasswordStr = editNewPassword.getText().toString().trim();
+//        String nameStr = editProfileNameEditText.getText().toString().trim();
+//
+//        String responseStr;
+//        JSONObject myJson = null;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            if (loginPref != null) {
+//                loggedInIdStr = loginPref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+//            }
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.updateProfileUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("user_id", User_Id.trim());
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("name", nameStr.trim());
+//                if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")) {
+//                    httppost.addHeader("password", confirmPasswordStr.trim());
+//                }
+//                httppost.addHeader("lang_code", Util.getTextofLanguage(ProfileActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//                httppost.addHeader("custom_country", Selected_Country_Id);
+//                httppost.addHeader("custom_languages", Selected_Language_Id);
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            statusCode = 0;
+//                            editOldPassword.setText("");
+//                            editNewPassword.setText("");
+//                            Toast.makeText(ProfileActivity.this, Util.getTextofLanguage(ProfileActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    statusCode = 0;
+//
+//                    e.printStackTrace();
+//                }
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//
+//                }
+//
+//            } catch (Exception e) {
+//                statusCode = 0;
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            if (responseStr == null) {
+//                try {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                } catch (IllegalArgumentException ex) {
+//                    statusCode = 0;
+//
+//                }
+//                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
+//                dlgAlert.setMessage(Util.getTextofLanguage(ProfileActivity.this, Util.UPDATE_PROFILE_ALERT, Util.DEFAULT_UPDATE_PROFILE_ALERT));
+//                dlgAlert.setTitle(Util.getTextofLanguage(ProfileActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                                editOldPassword.setText("");
+//                                editNewPassword.setText("");
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            }
+//
+//            if (statusCode > 0) {
+//
+//                if (statusCode == 200) {
+//                    try {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                    } catch (IllegalArgumentException ex) {
+//                        SharedPreferences.Editor editor = loginPref.edit();
+//                        if (myJson.has("name")) {
+//                            String displayNameStr = myJson.optString("name");
+//                            editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", displayNameStr);
+//                        }
+//                        if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")) {
+//                            editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY", confirmPasswordStr.trim());
+//
+//                        }
+//                        editor.commit();
+//                    }
+//                    SharedPreferences.Editor editor = loginPref.edit();
+//                    if (myJson.has("name")) {
+//                        String displayNameStr = myJson.optString("display_name");
+//                        editor.putString("name", displayNameStr);
+//                    }
+//                    if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")) {
+//                        editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY", confirmPasswordStr.trim());
+//
+//                    }
+//
+//                    editor.commit();
+//                    name_of_user.setText(editProfileNameEditText.getText().toString().trim());
+//
+//
+//                    Toast.makeText(ProfileActivity.this, Util.getTextofLanguage(ProfileActivity.this, Util.PROFILE_UPDATED, Util.DEFAULT_PROFILE_UPDATED), Toast.LENGTH_SHORT).show();
+//                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//
+//                    if (name_of_user != null) {
+//                        name_of_user.clearFocus();
+//                        name_of_user.setCursorVisible(false);
+//                    }
+//                    if (editOldPassword != null) {
+//                        editOldPassword.clearFocus();
+//
+//                    }
+//                    if (editNewPassword != null) {
+//                        editNewPassword.clearFocus();
+//                    }
+//                   /* if (fullNameEditText != null) fullNameEditText.clearFocus();
+//                    if (passwordEditText != null) passwordEditText.clearFocus();
+//                    if (confirmPasswordEditText != null) confirmPasswordEditText.clearFocus();*/
+//
+//                } else {
+//
+//                    try {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                    } catch (IllegalArgumentException ex) {
+//                        statusCode = 0;
+//
+//                    }
+//                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
+//                    dlgAlert.setMessage(Util.getTextofLanguage(ProfileActivity.this, Util.UPDATE_PROFILE_ALERT, Util.DEFAULT_UPDATE_PROFILE_ALERT));
+//                    dlgAlert.setTitle(Util.getTextofLanguage(ProfileActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setCancelable(false);
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                    editOldPassword.setText("");
+//                                    editNewPassword.setText("");
+//
+//
+//                                }
+//                            });
+//                    dlgAlert.create().show();
+//                }
+//            } else {
+//                try {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                } catch (IllegalArgumentException ex) {
+//
+//                }
+//                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
+//                dlgAlert.setMessage(Util.getTextofLanguage(ProfileActivity.this, Util.UPDATE_PROFILE_ALERT, Util.DEFAULT_UPDATE_PROFILE_ALERT));
+//                dlgAlert.setTitle(Util.getTextofLanguage(ProfileActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                                editOldPassword.setText("");
+//                                editNewPassword.setText("");
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            }
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            pDialog = new ProgressBarHandler(ProfileActivity.this);
+//            pDialog.show();
+//        }
+//
+//
+//    }
     //Getting Profile Details from The Api
 
     private class AsynLoadProfileDetails extends AsyncTask<Void, Void, Void> {

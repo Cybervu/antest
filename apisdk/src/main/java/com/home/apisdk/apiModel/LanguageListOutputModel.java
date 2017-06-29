@@ -9,6 +9,16 @@ public class LanguageListOutputModel {
     String languageCode;
     String languageName;
 
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    private boolean isSelected;
+
     public String getLanguageCode() {
         return languageCode;
     }

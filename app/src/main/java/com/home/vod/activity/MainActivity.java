@@ -175,6 +175,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     public static int isNavigated = 0;
     String Default_Language = "";
     public ArrayList<NavDrawerItem> menuList = new ArrayList<>();
+    public ArrayList<LanguageModel> languageModels = new ArrayList<>();
     private String imageUrlStr;
     // public static SharedPreferences dataPref;
     int state = 0;
@@ -226,7 +227,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        LogUtil.showLog("Abhi","Toolbar");
+        LogUtil.showLog("Abhi", "Toolbar");
 
       /*  *//**** chromecast*************//*
 
@@ -459,9 +460,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                     ShowLanguagePopup();
 
                 } else {
-                    LanguageListInputModel languageListInputModel=new LanguageListInputModel();
+                    LanguageListInputModel languageListInputModel = new LanguageListInputModel();
                     languageListInputModel.setAuthToken(Util.authTokenStr);
-                    GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel,this,this);
+                    GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
                 return false;
@@ -493,8 +494,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                         // dialog.cancel();
                         LogoutInput logoutInput = new LogoutInput();
                         logoutInput.setAuthToken(Util.authTokenStr);
-                        logoutInput.setLogin_history_id(pref.getString("PREFS_LOGIN_HISTORYID_KEY", null));
+                        LogUtil.showLog("Abhi", Util.authTokenStr);
+                        String loginHistoryIdStr = pref.getString("PREFS_LOGIN_HISTORYID_KEY", null);
+                        logoutInput.setLogin_history_id(loginHistoryIdStr);
                         logoutInput.setLang_code(Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                        LogUtil.showLog("Abhi", Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MainActivity.this, MainActivity.this);
                         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -1844,14 +1848,27 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
 
-        if (progressBarHandler.isShowing()) {
-            progressBarHandler.hide();
-            progressBarHandler = null;
+        ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
 
+        for (int i = 0; i < languageListOutputArray.size(); i++) {
+            String language_id = languageListOutputArray.get(i).getLanguageCode();
+            String language_name = languageListOutputArray.get(i).getLanguageName();
+
+
+            LanguageModel languageModel = new LanguageModel();
+            languageModel.setLanguageId(language_id);
+            languageModel.setLanguageName(language_name);
+
+            if (Default_Language.equalsIgnoreCase(language_id)) {
+                languageModel.setIsSelected(true);
+            } else {
+                languageModel.setIsSelected(false);
+            }
+            languageModels.add(languageModel);
         }
-        else {
-            noInternetLayout.setVisibility(View.GONE);
-        }
+
+        Util.languageModel = languageModels;
+        ShowLanguagePopup();
     }
 
     public static class RecyclerTouchListener1 implements RecyclerView.OnItemTouchListener {

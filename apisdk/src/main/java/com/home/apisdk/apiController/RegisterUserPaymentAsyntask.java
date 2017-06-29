@@ -103,8 +103,8 @@ public class RegisterUserPaymentAsyntask extends AsyncTask<RegisterUserPaymentIn
             }
 
             if (code == 200) {
-                if ((myJson.has("msg")) && myJson.getString("msg").trim() != null && !myJson.getString("msg").trim().isEmpty() && !myJson.getString("msg").trim().equals("null") && !myJson.getString("msg").trim().matches("")) {
-                    registerUserPaymentOutputModel.setMsg(myJson.getString("msg"));
+                if ((myJson.has("msg")) && myJson.optString("msg").trim() != null && !myJson.optString("msg").trim().isEmpty() && !myJson.optString("msg").trim().equals("null") && !myJson.optString("msg").trim().matches("")) {
+                    registerUserPaymentOutputModel.setMsg(myJson.optString("msg"));
                 }
 
             }

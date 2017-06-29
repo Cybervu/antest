@@ -92,13 +92,13 @@ public class ValidateCouponCodeAsynTask extends AsyncTask<ValidateCouponCodeInpu
             }
 
 
-            if ((myJson.has("discount_type")) && myJson.getString("discount_type").trim() != null && !myJson.getString("discount_type").trim().isEmpty() && !myJson.getString("discount_type").trim().equals("null") && !myJson.getString("discount_type").trim().matches("")) {
-                // String discountTypeStr = myJson.getString("discount_type").trim();
-                validateCouponCodeOutputModel.setDiscount_type(myJson.getString("discount_type").trim());
+            if ((myJson.has("discount_type")) && myJson.optString("discount_type").trim() != null && !myJson.optString("discount_type").trim().isEmpty() && !myJson.optString("discount_type").trim().equals("null") && !myJson.optString("discount_type").trim().matches("")) {
+                // String discountTypeStr = myJson.optString("discount_type").trim();
+                validateCouponCodeOutputModel.setDiscount_type(myJson.optString("discount_type").trim());
 
-                if ((myJson.has("discount")) && myJson.getString("discount").trim() != null && !myJson.getString("discount").trim().isEmpty() && !myJson.getString("discount").trim().equals("null") && !myJson.getString("discount").trim().matches("")) {
+                if ((myJson.has("discount")) && myJson.optString("discount").trim() != null && !myJson.optString("discount").trim().isEmpty() && !myJson.optString("discount").trim().equals("null") && !myJson.optString("discount").trim().matches("")) {
 
-                    validateCouponCodeOutputModel.setDiscount(myJson.getString("discount").trim());
+                    validateCouponCodeOutputModel.setDiscount(myJson.optString("discount").trim());
 
 
                 }

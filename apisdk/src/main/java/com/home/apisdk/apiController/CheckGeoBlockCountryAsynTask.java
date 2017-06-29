@@ -85,10 +85,10 @@ public class CheckGeoBlockCountryAsynTask extends AsyncTask<CheckGeoBlockInputMo
                 if (responseStr != null) {
                     Object json = new JSONTokener(responseStr).nextValue();
                     if (json instanceof JSONObject){
-                        String statusStr = ((JSONObject) json).getString("code");
+                        String statusStr = ((JSONObject) json).optString("code");
                         status = Integer.parseInt(statusStr);
                         if (status == 200){
-                            countryCode = ((JSONObject) json).getString("country");
+                            countryCode = ((JSONObject) json).optString("country");
                             checkGeoBlockOutputModel.setCountrycode(countryCode);
                         }
 

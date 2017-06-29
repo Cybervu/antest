@@ -120,17 +120,17 @@ public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Inp
         super.onPreExecute();
         listener.onUpdateUserProfilePreExecuteStarted();
         code = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
-            this.cancel(true);
-            message = "Packge Name Not Matched";
-            listener.onUpdateUserProfilePostExecuteCompleted(update_userProfile_output, code, message);
-            return;
-        }
-        if (CommonConstants.hashKey.equals("")) {
-            this.cancel(true);
-            message = "Hash Key Is Not Available. Please Initialize The SDK";
-            listener.onUpdateUserProfilePostExecuteCompleted(update_userProfile_output, code, message);
-        }
+//        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+//            this.cancel(true);
+//            message = "Packge Name Not Matched";
+//            listener.onUpdateUserProfilePostExecuteCompleted(update_userProfile_output, code, message);
+//            return;
+//        }
+//        if (CommonConstants.hashKey.equals("")) {
+//            this.cancel(true);
+//            message = "Hash Key Is Not Available. Please Initialize The SDK";
+//            listener.onUpdateUserProfilePostExecuteCompleted(update_userProfile_output, code, message);
+//        }
     }
 
     @Override

@@ -123,9 +123,9 @@ public class GetVideoLogsAsynTask extends AsyncTask<VideoLogsInputModel, Void, V
                 status = Integer.parseInt(mainJson.optString("code"));
 
 
-                if ((mainJson.has("log_id")) && mainJson.getString("log_id").trim() != null && !mainJson.getString("log_id").trim().isEmpty() && !mainJson.getString("log_id").trim().equals("null") && !mainJson.getString("log_id").trim().matches("")) {
+                if ((mainJson.has("log_id")) && mainJson.optString("log_id").trim() != null && !mainJson.optString("log_id").trim().isEmpty() && !mainJson.optString("log_id").trim().equals("null") && !mainJson.optString("log_id").trim().matches("")) {
                     ;
-                    videoLogId = mainJson.getString("log_id");
+                    videoLogId = mainJson.optString("log_id");
                 }
 
             } else {

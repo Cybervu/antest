@@ -137,14 +137,15 @@ public class GetLanguageListAsynTask extends AsyncTask<LanguageListInputModel, V
                         jsonChildNode = jsonMainNode.getJSONObject(i);
                         LanguageListOutputModel languageListOutputModel = new LanguageListOutputModel();
 
-                        Log.v("SUBHA", "LAN_CODE" + jsonChildNode.getString("code"));
-                        if ((jsonChildNode.has("code")) && jsonChildNode.getString("code").trim() != null && !jsonChildNode.getString("code").trim().isEmpty() && !jsonChildNode.getString("code").trim().equals("null") && !jsonChildNode.getString("code").trim().matches("")) {
-                            languageListOutputModel.setLanguageCode(jsonChildNode.getString("code"));
+                        Log.v("SUBHA", "LAN_CODE" + jsonChildNode.optString("code"));
+                        if ((jsonChildNode.has("code")) && jsonChildNode.optString("code").trim() != null && !jsonChildNode.optString("code").trim().isEmpty() && !jsonChildNode.optString("code").trim().equals("null") && !jsonChildNode.optString("code").trim().matches("")) {
+                            languageListOutputModel.setLanguageCode(jsonChildNode.optString("code"));
 
                         }
-                        if ((jsonChildNode.has("language")) && jsonChildNode.getString("language").trim() != null && !jsonChildNode.getString("language").trim().isEmpty() && !jsonChildNode.getString("language").trim().equals("null") && !jsonChildNode.getString("language").trim().matches("")) {
-                            languageListOutputModel.setLanguageName(jsonChildNode.getString("language"));
+                        if ((jsonChildNode.has("language")) && jsonChildNode.optString("language").trim() != null && !jsonChildNode.optString("language").trim().isEmpty() && !jsonChildNode.optString("language").trim().equals("null") && !jsonChildNode.optString("language").trim().matches("")) {
+                            languageListOutputModel.setLanguageName(jsonChildNode.optString("language"));
                         }
+
 
                         languageListOutputArray.add(languageListOutputModel);
                     } catch (Exception e) {

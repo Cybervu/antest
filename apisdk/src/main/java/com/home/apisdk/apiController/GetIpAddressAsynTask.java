@@ -88,7 +88,7 @@ public class GetIpAddressAsynTask extends AsyncTask<Void,Void ,Void > {
                 if (json instanceof JSONObject) {
                     statusCode = 200;
                     message = "Success";
-                    ipAddressStr = ((JSONObject) json).getString("ip");
+                    ipAddressStr = ((JSONObject) json).optString("ip");
 
                 }
 

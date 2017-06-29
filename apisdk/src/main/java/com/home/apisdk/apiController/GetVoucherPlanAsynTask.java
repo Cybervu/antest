@@ -90,14 +90,14 @@ public class GetVoucherPlanAsynTask extends AsyncTask<GetVoucherPlanInputModel, 
 
 
             if (status == 200) {
-                if ((myJson.has("is_show")) && myJson.getString("is_show").trim() != null && !myJson.getString("is_show").trim().isEmpty() && !myJson.getString("is_show").trim().equals("null") && !myJson.getString("is_show").trim().matches("")) {
-                    getVoucherPlanOutputModel.setIs_show(myJson.getString("is_show"));
+                if ((myJson.has("is_show")) && myJson.optString("is_show").trim() != null && !myJson.optString("is_show").trim().isEmpty() && !myJson.optString("is_show").trim().equals("null") && !myJson.optString("is_show").trim().matches("")) {
+                    getVoucherPlanOutputModel.setIs_show(myJson.optString("is_show"));
                 }
-                if ((myJson.has("is_episode")) && myJson.getString("is_episode").trim() != null && !myJson.getString("is_episode").trim().isEmpty() && !myJson.getString("is_episode").trim().equals("null") && !myJson.getString("is_episode").trim().matches("")) {
-                    getVoucherPlanOutputModel.setIs_episode(myJson.getString("is_episode"));
+                if ((myJson.has("is_episode")) && myJson.optString("is_episode").trim() != null && !myJson.optString("is_episode").trim().isEmpty() && !myJson.optString("is_episode").trim().equals("null") && !myJson.optString("is_episode").trim().matches("")) {
+                    getVoucherPlanOutputModel.setIs_episode(myJson.optString("is_episode"));
                 }
-                if ((myJson.has("is_season")) && myJson.getString("is_season").trim() != null && !myJson.getString("is_season").trim().isEmpty() && !myJson.getString("is_season").trim().equals("null") && !myJson.getString("is_season").trim().matches("")) {
-                    getVoucherPlanOutputModel.setIs_season(myJson.getString("is_season"));
+                if ((myJson.has("is_season")) && myJson.optString("is_season").trim() != null && !myJson.optString("is_season").trim().isEmpty() && !myJson.optString("is_season").trim().equals("null") && !myJson.optString("is_season").trim().matches("")) {
+                    getVoucherPlanOutputModel.setIs_season(myJson.optString("is_season"));
                 }
 
             }

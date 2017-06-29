@@ -158,19 +158,19 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
             if(responseStr!=null) {
                 mainJson = new JSONObject(responseStr);
                 status = Integer.parseInt(mainJson.optString("code"));
-                if ((mainJson.has("msg")) && mainJson.getString("msg").trim() != null && !mainJson.getString("msg").trim().isEmpty() && !mainJson.getString("msg").trim().equals("null") && !mainJson.getString("msg").trim().matches("")) {
-                    validateUserOutput.setMessage(mainJson.getString("msg"));
-                    message = mainJson.getString("msg");
+                if ((mainJson.has("msg")) && mainJson.optString("msg").trim() != null && !mainJson.optString("msg").trim().isEmpty() && !mainJson.optString("msg").trim().equals("null") && !mainJson.optString("msg").trim().matches("")) {
+                    validateUserOutput.setMessage(mainJson.optString("msg"));
+                    message = mainJson.optString("msg");
 
                 }
-                if ((mainJson.has("member_subscribed")) && mainJson.getString("member_subscribed").trim() != null && !mainJson.getString("member_subscribed").trim().isEmpty() && !mainJson.getString("member_subscribed").trim().equals("null") && !mainJson.getString("member_subscribed").trim().matches("")) {
-                    validateUserOutput.setMessage(mainJson.getString("member_subscribed"));
+                if ((mainJson.has("member_subscribed")) && mainJson.optString("member_subscribed").trim() != null && !mainJson.optString("member_subscribed").trim().isEmpty() && !mainJson.optString("member_subscribed").trim().equals("null") && !mainJson.optString("member_subscribed").trim().matches("")) {
+                    validateUserOutput.setMessage(mainJson.optString("member_subscribed"));
 
                 }
 
-                if ((mainJson.has("status")) && mainJson.getString("status").trim() != null && !mainJson.getString("msg").trim().isEmpty() && !mainJson.getString("msg").trim().equals("null") && !mainJson.getString("msg").trim().matches("")) {
-                    validateUserOutput.setMessage(mainJson.getString("status"));
-                    validuser_str = mainJson.getString("status");
+                if ((mainJson.has("status")) && mainJson.optString("status").trim() != null && !mainJson.optString("msg").trim().isEmpty() && !mainJson.optString("msg").trim().equals("null") && !mainJson.optString("msg").trim().matches("")) {
+                    validateUserOutput.setMessage(mainJson.optString("status"));
+                    validuser_str = mainJson.optString("status");
 
                 }
             }

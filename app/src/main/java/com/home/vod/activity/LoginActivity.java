@@ -106,7 +106,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     static File mediaStorageDir;
     String UniversalErrorMessage = "";
     String UniversalIsSubscribed = "";
-
+    String loggedInIdStr;
     ArrayList<String> SubTitleName = new ArrayList<>();
     ArrayList<String> SubTitlePath = new ArrayList<>();
     ArrayList<String> FakeSubTitlePath = new ArrayList<>();
@@ -133,6 +133,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             if (status == 200){
 
                 editor.putString("PREFS_LOGGEDIN_KEY","1");
+                editor.putString("PREFS_LOGGEDIN_ID_KEY",loggedInIdStr);
                 editor.putString("PREFS_LOGGEDIN_ID_KEY",login_output.getId());
                 editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY","");
                 editor.putString("PREFS_LOGIN_EMAIL_ID_KEY", login_output.getEmail());

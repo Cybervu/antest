@@ -95,27 +95,27 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
 
                 if (myJson.has("card")) {
                     mainJson = myJson.getJSONObject("card");
-                    if (mainJson.has("status") && mainJson.getString("status").trim() != null && !mainJson.getString("status").trim().isEmpty() && !mainJson.getString("status").trim().equals("null") && !mainJson.getString("status").trim().matches("")) {
-                        authUserPaymentInfoOutputModel.setStatus(mainJson.getString("status"));
+                    if (mainJson.has("status") && mainJson.optString("status").trim() != null && !mainJson.optString("status").trim().isEmpty() && !mainJson.optString("status").trim().equals("null") && !mainJson.optString("status").trim().matches("")) {
+                        authUserPaymentInfoOutputModel.setStatus(mainJson.optString("status"));
                     }
 
-                    if (mainJson.has("token") && mainJson.getString("token").trim() != null && !mainJson.getString("token").trim().isEmpty() && !mainJson.getString("token").trim().equals("null") && !mainJson.getString("token").trim().matches("")) {
-                        authUserPaymentInfoOutputModel.setToken(mainJson.getString("token"));
+                    if (mainJson.has("token") && mainJson.optString("token").trim() != null && !mainJson.optString("token").trim().isEmpty() && !mainJson.optString("token").trim().equals("null") && !mainJson.optString("token").trim().matches("")) {
+                        authUserPaymentInfoOutputModel.setToken(mainJson.optString("token"));
                     }
 
-                    if (mainJson.has("response_text") && mainJson.getString("response_text").trim() != null && !mainJson.getString("response_text").trim().isEmpty() && !mainJson.getString("response_text").trim().equals("null") && !mainJson.getString("response_text").trim().matches("")) {
-                        authUserPaymentInfoOutputModel.setResponse_text( mainJson.getString("response_text"));
+                    if (mainJson.has("response_text") && mainJson.optString("response_text").trim() != null && !mainJson.optString("response_text").trim().isEmpty() && !mainJson.optString("response_text").trim().equals("null") && !mainJson.optString("response_text").trim().matches("")) {
+                        authUserPaymentInfoOutputModel.setResponse_text( mainJson.optString("response_text"));
                     }
 
-                    if (mainJson.has("profile_id") && mainJson.getString("profile_id").trim() != null && !mainJson.getString("profile_id").trim().isEmpty() && !mainJson.getString("profile_id").trim().equals("null") && !mainJson.getString("profile_id").trim().matches("")) {
-                        authUserPaymentInfoOutputModel.setProfile_id(mainJson.getString("profile_id"));
+                    if (mainJson.has("profile_id") && mainJson.optString("profile_id").trim() != null && !mainJson.optString("profile_id").trim().isEmpty() && !mainJson.optString("profile_id").trim().equals("null") && !mainJson.optString("profile_id").trim().matches("")) {
+                        authUserPaymentInfoOutputModel.setProfile_id(mainJson.optString("profile_id"));
                     }
-                    if (mainJson.has("card_last_fourdigit") && mainJson.getString("card_last_fourdigit").trim() != null && !mainJson.getString("card_last_fourdigit").trim().isEmpty() && !mainJson.getString("card_last_fourdigit").trim().equals("null") && !mainJson.getString("card_last_fourdigit").trim().matches("")) {
-                        authUserPaymentInfoOutputModel.setCard_last_fourdigit( mainJson.getString("card_last_fourdigit"));
+                    if (mainJson.has("card_last_fourdigit") && mainJson.optString("card_last_fourdigit").trim() != null && !mainJson.optString("card_last_fourdigit").trim().isEmpty() && !mainJson.optString("card_last_fourdigit").trim().equals("null") && !mainJson.optString("card_last_fourdigit").trim().matches("")) {
+                        authUserPaymentInfoOutputModel.setCard_last_fourdigit( mainJson.optString("card_last_fourdigit"));
                     }
 
-                    if (mainJson.has("card_type") && mainJson.getString("card_type").trim() != null && !mainJson.getString("card_type").trim().isEmpty() && !mainJson.getString("card_type").trim().equals("null") && !mainJson.getString("card_type").trim().matches("")) {
-                        authUserPaymentInfoOutputModel.setCard_type(mainJson.getString("card_type"));
+                    if (mainJson.has("card_type") && mainJson.optString("card_type").trim() != null && !mainJson.optString("card_type").trim().isEmpty() && !mainJson.optString("card_type").trim().equals("null") && !mainJson.optString("card_type").trim().matches("")) {
+                        authUserPaymentInfoOutputModel.setCard_type(mainJson.optString("card_type"));
                     }
                 }
 

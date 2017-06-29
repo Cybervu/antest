@@ -101,55 +101,55 @@ public class GetPlanListAsynctask extends AsyncTask<SubscriptionPlanInputModel, 
                         jsonChildNode = jsonMainNode.getJSONObject(i);
                         SubscriptionPlanOutputModel content = new SubscriptionPlanOutputModel();
 
-                        if ((jsonChildNode.has("id")) && jsonChildNode.getString("id").trim() != null && !jsonChildNode.getString("id").trim().isEmpty() && !jsonChildNode.getString("id").trim().equals("null") && !jsonChildNode.getString("id").trim().matches("")) {
-                            content.setId(jsonChildNode.getString("id"));
+                        if ((jsonChildNode.has("id")) && jsonChildNode.optString("id").trim() != null && !jsonChildNode.optString("id").trim().isEmpty() && !jsonChildNode.optString("id").trim().equals("null") && !jsonChildNode.optString("id").trim().matches("")) {
+                            content.setId(jsonChildNode.optString("id"));
 
                         }
-                        if ((jsonChildNode.has("name")) && jsonChildNode.getString("name").trim() != null && !jsonChildNode.getString("name").trim().isEmpty() && !jsonChildNode.getString("name").trim().equals("null") && !jsonChildNode.getString("name").trim().matches("")) {
-                            content.setName(jsonChildNode.getString("name"));
+                        if ((jsonChildNode.has("name")) && jsonChildNode.optString("name").trim() != null && !jsonChildNode.optString("name").trim().isEmpty() && !jsonChildNode.optString("name").trim().equals("null") && !jsonChildNode.optString("name").trim().matches("")) {
+                            content.setName(jsonChildNode.optString("name"));
                         }
-                        if ((jsonChildNode.has("recurrence")) && jsonChildNode.getString("recurrence").trim() != null && !jsonChildNode.getString("recurrence").trim().isEmpty() && !jsonChildNode.getString("recurrence").trim().equals("null") && !jsonChildNode.getString("recurrence").trim().matches("")) {
-                            content.setRecurrence(jsonChildNode.getString("recurrence"));
+                        if ((jsonChildNode.has("recurrence")) && jsonChildNode.optString("recurrence").trim() != null && !jsonChildNode.optString("recurrence").trim().isEmpty() && !jsonChildNode.optString("recurrence").trim().equals("null") && !jsonChildNode.optString("recurrence").trim().matches("")) {
+                            content.setRecurrence(jsonChildNode.optString("recurrence"));
                         }
-                        if ((jsonChildNode.has("frequency")) && jsonChildNode.getString("frequency").trim() != null && !jsonChildNode.getString("frequency").trim().isEmpty() && !jsonChildNode.getString("frequency").trim().equals("null") && !jsonChildNode.getString("frequency").trim().matches("")) {
-                            content.setFrequency(jsonChildNode.getString("frequency"));
+                        if ((jsonChildNode.has("frequency")) && jsonChildNode.optString("frequency").trim() != null && !jsonChildNode.optString("frequency").trim().isEmpty() && !jsonChildNode.optString("frequency").trim().equals("null") && !jsonChildNode.optString("frequency").trim().matches("")) {
+                            content.setFrequency(jsonChildNode.optString("frequency"));
                         }
-                        if ((jsonChildNode.has("studio_id")) && jsonChildNode.getString("studio_id").trim() != null && !jsonChildNode.getString("studio_id").trim().isEmpty() && !jsonChildNode.getString("studio_id").trim().equals("null") && !jsonChildNode.getString("studio_id").trim().matches("")) {
-                            content.setStudio_id(jsonChildNode.getString("studio_id"));
+                        if ((jsonChildNode.has("studio_id")) && jsonChildNode.optString("studio_id").trim() != null && !jsonChildNode.optString("studio_id").trim().isEmpty() && !jsonChildNode.optString("studio_id").trim().equals("null") && !jsonChildNode.optString("studio_id").trim().matches("")) {
+                            content.setStudio_id(jsonChildNode.optString("studio_id"));
                         }
-                        if ((jsonChildNode.has("status")) && jsonChildNode.getString("status").trim() != null && !jsonChildNode.getString("status").trim().isEmpty() && !jsonChildNode.getString("status").trim().equals("null") && !jsonChildNode.getString("status").trim().matches("")) {
-                            content.setStatus(jsonChildNode.getString("status"));
+                        if ((jsonChildNode.has("status")) && jsonChildNode.optString("status").trim() != null && !jsonChildNode.optString("status").trim().isEmpty() && !jsonChildNode.optString("status").trim().equals("null") && !jsonChildNode.optString("status").trim().matches("")) {
+                            content.setStatus(jsonChildNode.optString("status"));
                         }
-                        if ((jsonChildNode.has("language_id")) && jsonChildNode.getString("language_id").trim() != null && !jsonChildNode.getString("language_id").trim().isEmpty() && !jsonChildNode.getString("language_id").trim().equals("null") && !jsonChildNode.getString("language_id").trim().matches("")) {
-                            content.setLanguage_id(jsonChildNode.getString("language_id"));
+                        if ((jsonChildNode.has("language_id")) && jsonChildNode.optString("language_id").trim() != null && !jsonChildNode.optString("language_id").trim().isEmpty() && !jsonChildNode.optString("language_id").trim().equals("null") && !jsonChildNode.optString("language_id").trim().matches("")) {
+                            content.setLanguage_id(jsonChildNode.optString("language_id"));
                         }
-                        if ((jsonChildNode.has("price")) && jsonChildNode.getString("price").trim() != null && !jsonChildNode.getString("price").trim().isEmpty() && !jsonChildNode.getString("price").trim().equals("null") && !jsonChildNode.getString("price").trim().matches("")) {
-                            content.setPrice(jsonChildNode.getString("price"));
+                        if ((jsonChildNode.has("price")) && jsonChildNode.optString("price").trim() != null && !jsonChildNode.optString("price").trim().isEmpty() && !jsonChildNode.optString("price").trim().equals("null") && !jsonChildNode.optString("price").trim().matches("")) {
+                            content.setPrice(jsonChildNode.optString("price"));
                         }
-                        if ((jsonChildNode.has("trial_period")) && jsonChildNode.getString("trial_period").trim() != null && !jsonChildNode.getString("trial_period").trim().isEmpty() && !jsonChildNode.getString("trial_period").trim().equals("null") && !jsonChildNode.getString("trial_period").trim().matches("")) {
-                            content.setTrial_period(jsonChildNode.getString("trial_period"));
+                        if ((jsonChildNode.has("trial_period")) && jsonChildNode.optString("trial_period").trim() != null && !jsonChildNode.optString("trial_period").trim().isEmpty() && !jsonChildNode.optString("trial_period").trim().equals("null") && !jsonChildNode.optString("trial_period").trim().matches("")) {
+                            content.setTrial_period(jsonChildNode.optString("trial_period"));
                         }
-                        if ((jsonChildNode.has("trial_recurrence")) && jsonChildNode.getString("trial_recurrence").trim() != null && !jsonChildNode.getString("trial_recurrence").trim().isEmpty() && !jsonChildNode.getString("trial_recurrence").trim().equals("null") && !jsonChildNode.getString("trial_recurrence").trim().matches("")) {
-                            content.setTrial_recurrence(jsonChildNode.getString("trial_recurrence"));
+                        if ((jsonChildNode.has("trial_recurrence")) && jsonChildNode.optString("trial_recurrence").trim() != null && !jsonChildNode.optString("trial_recurrence").trim().isEmpty() && !jsonChildNode.optString("trial_recurrence").trim().equals("null") && !jsonChildNode.optString("trial_recurrence").trim().matches("")) {
+                            content.setTrial_recurrence(jsonChildNode.optString("trial_recurrence"));
                         }
 
 
                         if (jsonChildNode.has("currency")) {
                             JSONObject currencyJson = jsonChildNode.getJSONObject("currency");
                             CurrencyModel currencyModel = new CurrencyModel();
-                            if (currencyJson.has("id") && currencyJson.getString("id").trim() != null && !currencyJson.getString("id").trim().isEmpty() && !currencyJson.getString("id").trim().equals("null") && !currencyJson.getString("id").trim().matches("")) {
-                                currencyModel.setCurrencyId(currencyJson.getString("id"));
+                            if (currencyJson.has("id") && currencyJson.optString("id").trim() != null && !currencyJson.optString("id").trim().isEmpty() && !currencyJson.optString("id").trim().equals("null") && !currencyJson.optString("id").trim().matches("")) {
+                                currencyModel.setCurrencyId(currencyJson.optString("id"));
                             } else {
                                 currencyModel.setCurrencyId("");
 
                             }
-                            if (currencyJson.has("country_code") && currencyJson.getString("country_code").trim() != null && !currencyJson.getString("country_code").trim().isEmpty() && !currencyJson.getString("country_code").trim().equals("null") && !currencyJson.getString("country_code").trim().matches("")) {
-                                currencyModel.setCurrencyCode(currencyJson.getString("country_code"));
+                            if (currencyJson.has("country_code") && currencyJson.optString("country_code").trim() != null && !currencyJson.optString("country_code").trim().isEmpty() && !currencyJson.optString("country_code").trim().equals("null") && !currencyJson.optString("country_code").trim().matches("")) {
+                                currencyModel.setCurrencyCode(currencyJson.optString("country_code"));
                             } else {
                                 currencyModel.setCurrencyCode("");
                             }
-                            if (currencyJson.has("symbol") && currencyJson.getString("symbol").trim() != null && !currencyJson.getString("symbol").trim().isEmpty() && !currencyJson.getString("symbol").trim().equals("null") && !currencyJson.getString("symbol").trim().matches("")) {
-                                currencyModel.setCurrencySymbol(currencyJson.getString("symbol"));
+                            if (currencyJson.has("symbol") && currencyJson.optString("symbol").trim() != null && !currencyJson.optString("symbol").trim().isEmpty() && !currencyJson.optString("symbol").trim().equals("null") && !currencyJson.optString("symbol").trim().matches("")) {
+                                currencyModel.setCurrencySymbol(currencyJson.optString("symbol"));
                             } else {
                                 currencyModel.setCurrencySymbol("");
                             }
