@@ -43,6 +43,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.home.vod.R;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -128,8 +129,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     */
 /**
-     * List of various states that we can be in
-     *//*
+ * List of various states that we can be in
+ *//*
 
     public enum PlaybackState {
         PLAYING, PAUSED, BUFFERING, IDLE
@@ -217,7 +218,7 @@ public class RegisterActivity extends AppCompatActivity {
                 mSessionManagerListener, CastSession.class);
 
         */
-/***************chromecast**********************//*
+    /***************chromecast**********************//*
 
 
     }
@@ -240,7 +241,7 @@ public class RegisterActivity extends AppCompatActivity {
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     int keepAliveTime = 10;
-    SharedPreferences pref;
+    PreferenceManager preferenceManager;
     Toolbar mActionBarToolbar;
 
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
@@ -252,7 +253,6 @@ public class RegisterActivity extends AppCompatActivity {
     ArrayAdapter<String> Language_arrayAdapter,Country_arrayAdapter;
 
     String Selected_Language,Selected_Country,Selected_Language_Id,Selected_Country_Id;
-    SharedPreferences countryPref;
     List<String> Country_List,Country_Code_List,Language_List,Language_Code_List;
 
     @Override
@@ -264,7 +264,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
 
-
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
 
         BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
@@ -336,13 +336,13 @@ public class RegisterActivity extends AppCompatActivity {
         alreadyMemmberText.setText(Util.getTextofLanguage(RegisterActivity.this, Util.ALREADY_MEMBER, Util.DEFAULT_ALREADY_MEMBER));
         loginTextView.setText(Util.getTextofLanguage(RegisterActivity.this, Util.LOGIN, Util.DEFAULT_LOGIN));
 
-           /**********fb*********/
+        /**********fb*********/
         loginWithFacebookButton = (LoginButton) findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
         TextView fbLoginTextView= (TextView) findViewById(R.id.fbLoginTextView);
         Typeface loginWithFbButtonTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
         fbLoginTextView.setTypeface(loginWithFbButtonTypeface);
-            /**********fb*********/
+        /**********fb*********/
 
 
        /* Toolbar mActionBarToolbar= (Toolbar) findViewById(R.id.toolbar);
@@ -356,7 +356,6 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
         PlanId = (Util.getTextofLanguage(RegisterActivity.this, Util.PLAN_ID, Util.DEFAULT_PLAN_ID)).trim();
         loginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -411,7 +410,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         // This is used for language and country spunner
 
-        countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0);
 
         Country_List = Arrays.asList(getResources().getStringArray(R.array.country));
         Country_Code_List = Arrays.asList(getResources().getStringArray(R.array.countrycode));
@@ -460,7 +458,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         country_spinner.setAdapter(Country_arrayAdapter);
 
-        Selected_Country_Id = countryPref.getString("countryCode", "0");
+        Selected_Country_Id =
+        preferenceManager.getCountryCodeFromPref();
         LogUtil.showLog("BIBHU","primary Selected_Country_Id="+Selected_Country_Id);
         if(Selected_Country_Id.equals("0"))
         {
@@ -790,21 +789,18 @@ public class RegisterActivity extends AppCompatActivity {
 
                     // Take appropiate step here.
 
-
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putString("PREFS_LOGGEDIN_KEY", "1");
-                    editor.putString("PREFS_LOGGEDIN_ID_KEY", registrationIdStr);
-                    editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY", editPassword.getText().toString().trim());
-                    editor.putString("PREFS_LOGIN_EMAIL_ID_KEY", emailFromApiStr);
-                    editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", displayNameStr);
-                    editor.putString("PREFS_LOGIN_PROFILE_IMAGE_KEY", profileImageStr);
-                    editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY", isSubscribedStr);
-                    editor.putString("PREFS_LOGIN_HISTORYID_KEY", loginHistoryIdStr);
+                    preferenceManager.setLogInStatusToPref("1");
+                    preferenceManager.setUserIdToPref(registrationIdStr);
+                    preferenceManager.setPwdToPref(editPassword.getText().toString().trim());
+                    preferenceManager.setEmailIdToPref(emailFromApiStr);
+                    preferenceManager.setDispNameToPref(displayNameStr);
+                    preferenceManager.setLoginProfImgoPref(profileImageStr);
+                    preferenceManager.setIsSubscribedToPref(isSubscribedStr);
+                    preferenceManager.setLoginHistIdPref(loginHistoryIdStr);
 
                     Date todayDate = new Date();
                     String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
-                    editor.putString("date", todayStr.trim());
-                    editor.commit();
+                    preferenceManager.setLoginDatePref(todayStr);
 
 
                     if (Util.checkNetwork(RegisterActivity.this) == true) {
@@ -894,7 +890,7 @@ public class RegisterActivity extends AppCompatActivity {
                 httppost.addHeader("content_uniq_id", Util.dataModel.getMovieUniqueId().trim());
                 httppost.addHeader("stream_uniq_id", Util.dataModel.getStreamUniqueId().trim());
                 httppost.addHeader("internet_speed", MainActivity.internetSpeed.trim());
-                httppost.addHeader("user_id",pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                httppost.addHeader("user_id",preferenceManager.getUseridFromPref());
 
                 // Execute HTTP Post Request
                 try {
@@ -1311,8 +1307,8 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            if (pref != null) {
-                loggedInIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+            if (preferenceManager != null) {
+                loggedInIdStr = preferenceManager.getUseridFromPref();
             }
 
 
@@ -1328,14 +1324,6 @@ public class RegisterActivity extends AppCompatActivity {
                 httppost.addHeader("purchase_type", Util.dataModel.getPurchase_type());
                 httppost.addHeader("season_id", Util.dataModel.getSeason_id());
                 httppost.addHeader("episode_id", Util.dataModel.getEpisode_id());
-                SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-             /*   if (countryPref != null) {
-                    String countryCodeStr = countryPref.getString("countryCode", null);
-                    httppost.addHeader("country", countryCodeStr);
-                }else{
-                    httppost.addHeader("country", "IN");
-
-                }    */
 
                 httppost.addHeader("lang_code",Util.getTextofLanguage(RegisterActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
@@ -1404,7 +1392,7 @@ public class RegisterActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
 
 
-            String Subscription_Str = pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", "0");
+            String Subscription_Str = preferenceManager.getIsSubscribedFromPref();
 
 
             try {
@@ -2749,22 +2737,20 @@ public class RegisterActivity extends AppCompatActivity {
                     String displayNameStr = myJson.optString("display_name");
                     String emailFromApiStr = myJson.optString("email");
                     String profileImageStr = myJson.optString("profile_image");
-                    SharedPreferences.Editor editor = pref.edit();
 
-                    editor.putString("PREFS_LOGGEDIN_KEY","1");
-                    editor.putString("PREFS_LOGGEDIN_ID_KEY",loggedInIdStr);
-                    editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY","");
-                    editor.putString("PREFS_LOGIN_EMAIL_ID_KEY", emailFromApiStr);
-                    editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", displayNameStr);
-                    editor.putString("PREFS_LOGIN_PROFILE_IMAGE_KEY", profileImageStr);
-                    editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY",isSubscribedStr);
-                    editor.putString("PREFS_LOGIN_HISTORYID_KEY",loginHistoryIdStr);
-
+                    preferenceManager.setLogInStatusToPref("1");
+                    preferenceManager.setUserIdToPref(loggedInIdStr);
+                    preferenceManager.setPwdToPref("");
+                    preferenceManager.setEmailIdToPref(emailFromApiStr);
+                    preferenceManager.setDispNameToPref(displayNameStr);
+                    preferenceManager.setLoginProfImgoPref(profileImageStr);
+                    preferenceManager.setIsSubscribedToPref(isSubscribedStr);
+                    preferenceManager.setLoginHistIdPref(loginHistoryIdStr);
 
                     Date todayDate = new Date();
                     String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
-                    editor.putString("date", todayStr.trim());
-                    editor.commit();
+
+                    preferenceManager.setLoginDatePref(todayStr.trim());
 
                     if(Util.check_for_subscription == 1)
                     {
@@ -2885,8 +2871,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (pref != null) {
-                userIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+            if (preferenceManager != null) {
+                userIdStr = preferenceManager.getUseridFromPref();
             }
 
             String urlRouteList = Util.rootUrl().trim()+Util.CheckDevice.trim();
@@ -3018,7 +3004,7 @@ public class RegisterActivity extends AppCompatActivity {
     private class AsynLogoutDetails extends AsyncTask<Void, Void, Void> {
         ProgressBarHandler pDialog;
         int responseCode;
-        String loginHistoryIdStr = pref.getString("PREFS_LOGIN_HISTORYID_KEY", null);
+        String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
         String responseStr;
 
         @Override
@@ -3102,15 +3088,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
             if (responseCode > 0) {
                 if (responseCode == 200) {
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.clear();
-                    editor.commit();
-                    SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                    if (loginPref!=null) {
-                        SharedPreferences.Editor countryEditor = loginPref.edit();
-                        countryEditor.clear();
-                        countryEditor.commit();
-                    }
+                    preferenceManager.clearLoginPref();
 
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
                     dlgAlert.setMessage(UniversalErrorMessage);

@@ -16,6 +16,7 @@ import android.webkit.WebViewClient;
 
 
 import com.home.vod.R;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -58,6 +59,7 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
 
     AsynGetIpAddress asynGetIpAddress;
     AsyncVideoLogDetails asyncVideoLogDetails;
+    PreferenceManager preferenceManager;
 
     @SuppressLint("JavascriptInterface")
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -68,7 +70,7 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
         setContentView(R.layout.activity_third_party_player);
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
     /*    mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mActionBarToolbar != null) {
@@ -292,13 +294,14 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
-                SharedPreferences pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-                if (pref!=null){
-                    userIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+
+                if (preferenceManager!=null){
+                    userIdStr = preferenceManager.getUseridFromPref();
                 }else{
                     userIdStr="";
 
                 }
+
                 httppost.addHeader("user_id", userIdStr.trim());
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", Util.dataModel.getMovieUniqueId().trim());

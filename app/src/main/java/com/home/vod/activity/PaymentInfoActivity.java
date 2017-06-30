@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.model.CardModel;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -65,7 +66,7 @@ public class PaymentInfoActivity extends ActionBarActivity {
 
     String videoResolution = "BEST";
 
-    SharedPreferences loginPref, countryPref;
+    PreferenceManager preferenceManager;
 
     Toolbar mActionBarToolbar;
     boolean isCouponCodeAdded = false;
@@ -201,10 +202,7 @@ public class PaymentInfoActivity extends ActionBarActivity {
 
         }
 
-        countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0);
-
-        loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
         if (getIntent().getStringExtra("currencyId") != null) {
             currencyIdStr = getIntent().getStringExtra("currencyId");
@@ -570,7 +568,7 @@ public class PaymentInfoActivity extends ActionBarActivity {
         int status;
         String responseStr;
         String responseMessageStr;
-        String emailIdStr = loginPref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
+        String emailIdStr = preferenceManager.getEmailIdFromPref();
 
         String nameOnCardStr = nameOnCardEditText.getText().toString().trim();
         String cardNumberStr = cardNumberEditText.getText().toString().trim();
@@ -772,7 +770,7 @@ public class PaymentInfoActivity extends ActionBarActivity {
     }
 
     private class AsynSubscriptionRegDetails extends AsyncTask<Void, Void, Void> {
-       ProgressBarHandler progressBarHandler;
+        ProgressBarHandler progressBarHandler;
         int status;
         String responseStr;
         String nameOnCardStr = nameOnCardEditText.getText().toString().trim();
@@ -782,8 +780,8 @@ public class PaymentInfoActivity extends ActionBarActivity {
         @Override
         protected Void doInBackground(Void... params) {
             Log.v("SUBHA", "payment at doInBackground called ");
-            String userIdStr = loginPref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-            String emailIdSubStr = loginPref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
+            String userIdStr = preferenceManager.getUseridFromPref();
+            String emailIdSubStr = preferenceManager.getEmailIdFromPref();
 
             String urlRouteList = Util.rootUrl().trim() + Util.subscriptionUrl.trim();
             Log.v("SUBHA", "payment at urlRouteList = "+urlRouteList);
@@ -802,7 +800,7 @@ public class PaymentInfoActivity extends ActionBarActivity {
                 httppost.addHeader("exp_year", String.valueOf(expiryYearStr).trim());
                 Log.v("SUBHA", "=========== 2");
                 httppost.addHeader("email", emailIdSubStr.trim()); //Null pointer
-              //  httppost.addHeader("movie_id", muviUniqueIdStr.trim());
+                //  httppost.addHeader("movie_id", muviUniqueIdStr.trim());
                 httppost.addHeader("user_id", userIdStr.trim());
                 Log.v("SUBHA", "=========== 22="+ emailIdSubStr.trim());
                 if (isCouponCodeAdded == true) {
@@ -824,7 +822,7 @@ public class PaymentInfoActivity extends ActionBarActivity {
                 httppost.addHeader("cvv", securityCardStr);
                 // httppost.addHeader("country",currencyCountryCodeStr.trim());
                 Log.v("SUBHA", "=========== 33333");
-                httppost.addHeader("country", countryPref.getString("countryCode", null));
+                httppost.addHeader("country", preferenceManager.getCountryCodeFromPref());
                 Log.v("SUBHA", "=========== 4");
                 httppost.addHeader("season_id", "0");
                 Log.v("SUBHA", "=========== 44");
@@ -834,7 +832,7 @@ public class PaymentInfoActivity extends ActionBarActivity {
                 Log.v("SUBHA", "=========== 4444");
 
                 httppost.addHeader("plan_id", getIntent().getStringExtra("selected_plan_id").toString().trim());
-                httppost.addHeader("name", loginPref.getString("PREFS_LOGIN_DISPLAY_NAME_KEY", ""));
+                httppost.addHeader("name", preferenceManager.getDispNameFromPref());
 
 //                httppost.addHeader("is_save_this_card", isCheckedToSavetheCard.trim());
 
@@ -928,8 +926,8 @@ public class PaymentInfoActivity extends ActionBarActivity {
                         if (Util.checkNetwork(PaymentInfoActivity.this) == true) {
 
 
-                                AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
-                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
                         } else {
                             Intent intent = new Intent(PaymentInfoActivity.this,MainActivity.class);
@@ -967,9 +965,9 @@ public class PaymentInfoActivity extends ActionBarActivity {
 
         @Override
         protected void onPreExecute() {
-          progressBarHandler = new ProgressBarHandler(PaymentInfoActivity.this);
+            progressBarHandler = new ProgressBarHandler(PaymentInfoActivity.this);
             progressBarHandler.show();
-            
+
         }
 
 

@@ -9,6 +9,7 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.home.vod.activity.MainActivity;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.Util;
 
 import org.json.JSONException;
@@ -18,6 +19,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "BIBHU2";
     String MESSAGE = "";
+
 
 
     @Override
@@ -83,14 +85,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 }
             });*/
 
-            SharedPreferences pref = getApplicationContext().getSharedPreferences(Util.LOGIN_PREF, 0);
-            String loggedInStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", "0");
+            PreferenceManager preferenceManager = PreferenceManager.getPreferenceManager(this);
+            String loggedInStr =  preferenceManager.getUseridFromPref();
 
-            if (pref != null) {
+            if (preferenceManager != null) {
                 if(loggedInStr.trim().equals(user_id.trim())){
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.clear();
-                    editor.commit();
+
+                    preferenceManager.clearLoginPref();;
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

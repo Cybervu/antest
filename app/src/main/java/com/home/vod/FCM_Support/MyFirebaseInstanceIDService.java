@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.Util;
 
 import org.apache.http.HttpResponse;
@@ -32,7 +33,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private static final String TAG = "BIBHU2";
     String device_id = "";
     String loggedInStr=null;
-    SharedPreferences pref;
+    PreferenceManager preferenceManager;
     String refreshedToken;
 
     // load asynctask
@@ -46,8 +47,8 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     public void onCreate() {
         super.onCreate();
 
-        pref = getApplicationContext().getSharedPreferences(Util.LOGIN_PREF, 0);
-        loggedInStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
+        loggedInStr = preferenceManager.getUseridFromPref();
 
         Log.e(TAG, "On create called="+loggedInStr);
         Log.e(TAG, "refreshedToken="+refreshedToken);

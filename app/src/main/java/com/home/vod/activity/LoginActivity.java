@@ -63,6 +63,7 @@ import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.R;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -128,25 +129,19 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         if (status > 0) {
 
-            SharedPreferences.Editor editor = pref.edit();
+           // SharedPreferences.Editor editor = pref.edit();
 
             if (status == 200){
 
-                editor.putString("PREFS_LOGGEDIN_KEY","1");
-                editor.putString("PREFS_LOGGEDIN_ID_KEY",login_output.getId());
-                editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY","");
-                editor.putString("PREFS_LOGIN_EMAIL_ID_KEY", login_output.getEmail());
-                editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", login_output.getDisplay_name());
-                editor.putString("PREFS_LOGIN_PROFILE_IMAGE_KEY", login_output.getProfile_image());
-                // editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY",loginPasswordEditText.getText().toString().trim());
-                editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY",login_output.getIsSubscribed());
-                editor.putString("PREFS_LOGIN_HISTORYID_KEY",login_output.getLogin_history_id());
 
-
-                Date todayDate = new Date();
-                String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
-                editor.putString("date", todayStr.trim());
-                editor.commit();
+                preferenceManager.setLogInStatusToPref("1");
+                preferenceManager.setUserIdToPref(login_output.getId());
+                preferenceManager.setPwdToPref("");
+                preferenceManager.setEmailIdToPref(login_output.getEmail());
+                preferenceManager.setDispNameToPref(login_output.getDisplay_name());
+                preferenceManager.setLoginProfImgoPref(login_output.getProfile_image());
+                preferenceManager.setIsSubscribedToPref(login_output.getIsSubscribed());
+                preferenceManager.setLoginHistIdPref(login_output.getLogin_history_id());
 
 
 
@@ -737,15 +732,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         }
         if (code > 0) {
             if (code == 200) {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.clear();
-                editor.commit();
-                SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                if (loginPref!=null) {
-                    SharedPreferences.Editor countryEditor = loginPref.edit();
-                    countryEditor.clear();
-                    countryEditor.commit();
-                }
+               preferenceManager.clearLoginPref();
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(UniversalErrorMessage);
@@ -869,7 +856,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     int keepAliveTime = 10;
-    SharedPreferences pref;
+    //SharedPreferences pref;
     String regEmailStr,regPasswordStr;
     Toolbar mActionBarToolbar;
 
@@ -885,6 +872,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     AlertDialog alert;
     String priceForUnsubscribedStr,priceFosubscribedStr;
     String deviceName="";
+
+    PreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1010,7 +999,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
 
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3599,27 +3588,21 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
             if (statusCode > 0) {
 
-                SharedPreferences.Editor editor = pref.edit();
+            //    SharedPreferences.Editor editor = pref.edit();
 
                 if (statusCode == 200){
                     String displayNameStr = myJson.optString("display_name");
                     String emailFromApiStr = myJson.optString("email");
                     String profileImageStr = myJson.optString("profile_image");
 
-                    editor.putString("PREFS_LOGGEDIN_KEY","1");
-                    editor.putString("PREFS_LOGGEDIN_ID_KEY",loggedInIdStr);
-                    editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY","");
-                    editor.putString("PREFS_LOGIN_EMAIL_ID_KEY", emailFromApiStr);
-                    editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", displayNameStr);
-                    editor.putString("PREFS_LOGIN_PROFILE_IMAGE_KEY", profileImageStr);
-                    editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY",isSubscribedStr);
-                    editor.putString("PREFS_LOGIN_HISTORYID_KEY",loginHistoryIdStr);
-
-
-                    Date todayDate = new Date();
-                    String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
-                    editor.putString("date", todayStr.trim());
-                    editor.commit();
+                    preferenceManager.setLogInStatusToPref("1");
+                    preferenceManager.setUserIdToPref(loggedInIdStr);
+                    preferenceManager.setPwdToPref("");
+                    preferenceManager.setEmailIdToPref(emailFromApiStr);
+                    preferenceManager.setDispNameToPref(displayNameStr);
+                    preferenceManager.setLoginProfImgoPref(profileImageStr);
+                    preferenceManager.setIsSubscribedToPref(isSubscribedStr);
+                    preferenceManager.setLoginHistIdPref(loginHistoryIdStr);
 
 
 
@@ -3981,7 +3964,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         episodeRadioButton.setText("  "+Util.dataModel.getEpisode_title().trim() + " S" + Util.dataModel.getEpisode_series_no().trim() + " E " + Util.dataModel.getEpisode_no().trim() + " ");
 
 
-        String subscriptionStr = pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", "0");
+        String subscriptionStr = preferenceManager.getIsSubscribedFromPref();
+
         if(subscriptionStr.trim().equals("1")){
             if (Util.dataModel.getIsAPV() == 1) {
 
@@ -4283,8 +4267,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (pref != null) {
-              userIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+            if (preferenceManager != null) {
+              userIdStr = preferenceManager.getUseridFromPref();
             }
 
             String urlRouteList = Util.rootUrl().trim()+Util.CheckDevice.trim();
@@ -4313,6 +4297,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         public void run() {
                             statusCode = 0;
                             Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+
+
                         }
 
                     });

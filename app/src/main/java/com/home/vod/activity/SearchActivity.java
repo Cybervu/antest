@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.home.vod.R;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.model.GridItem;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -86,7 +87,7 @@ public class SearchActivity extends AppCompatActivity {
     String videoImageStrToHeight;
     int videoHeight = 185;
     int videoWidth = 256;
-    SharedPreferences pref;
+    // SharedPreferences pref;
     GridItem itemToPlay;
 
     private static int firstVisibleInListview;
@@ -154,6 +155,7 @@ public class SearchActivity extends AppCompatActivity {
     //private String movieThirdPartyUrl = "";
     TextView noDataTextView;
     TextView noInternetTextView;
+    PreferenceManager preferenceManager;
 
     public SearchActivity() {
         // Required empty public constructor
@@ -177,7 +179,7 @@ public class SearchActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
         posterUrl = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
 
@@ -460,14 +462,16 @@ public class SearchActivity extends AppCompatActivity {
                 httppost.addHeader("q", searchTextStr.trim());
                 //httppost.addHeader("deviceType", "roku");
 
-                SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-                if (countryPref != null) {
-                    String countryCodeStr = countryPref.getString("countryCode", null);
+                String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+
+                if (countryCodeStr != null) {
+
                     httppost.addHeader("country", countryCodeStr);
                 }else{
                     httppost.addHeader("country", "IN");
 
-                }                httppost.addHeader("lang_code", Util.getTextofLanguage(SearchActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                }
+                httppost.addHeader("lang_code", Util.getTextofLanguage(SearchActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
                 // Execute HTTP Post Request
@@ -998,21 +1002,21 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-        public void onResume() {
-            super.onResume();
-            //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+    public void onResume() {
+        super.onResume();
+        //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
 
 
-        }
+    }
 
-        @Override
-        public void onSaveInstanceState(Bundle outState) {
-            super.onSaveInstanceState(outState);
-            // save RecyclerView state
-            mBundleRecyclerViewState = new Bundle();
-            Parcelable listState = gridView.onSaveInstanceState();
-            mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
-        }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // save RecyclerView state
+        mBundleRecyclerViewState = new Bundle();
+        Parcelable listState = gridView.onSaveInstanceState();
+        mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
+    }
    /* @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -1040,56 +1044,56 @@ public class SearchActivity extends AppCompatActivity {
     }*/
 
 
-        //load video urls as per resolution
+    //load video urls as per resolution
 
-        public interface ClickListener {
-            void onClick(View view, int position);
+    public interface ClickListener {
+        void onClick(View view, int position);
 
-            void onLongClick(View view, int position);
-        }
+        void onLongClick(View view, int position);
+    }
 
-        public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
-            private GestureDetector gestureDetector;
-            private ClickListener clickListener;
+        private GestureDetector gestureDetector;
+        private ClickListener clickListener;
 
-            public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
-                this.clickListener = clickListener;
-                gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                    @Override
-                    public boolean onSingleTapUp(MotionEvent e) {
-                        return true;
-                    }
-
-                    @Override
-                    public void onLongPress(MotionEvent e) {
-                        View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                        if (child != null && clickListener != null) {
-                            clickListener.onLongClick(child, recyclerView.getChildPosition(child));
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
-                View child = rv.findChildViewUnder(e.getX(), e.getY());
-                if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                    clickListener.onClick(child, rv.getChildPosition(child));
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
+            this.clickListener = clickListener;
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
                 }
-                return false;
-            }
 
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                    if (child != null && clickListener != null) {
+                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
+                    }
+                }
+            });
         }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
+                clickListener.onClick(child, rv.getChildPosition(child));
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
+    }
 
 
 
@@ -1370,7 +1374,7 @@ public class SearchActivity extends AppCompatActivity {
 
     }*/
 
-        //Registration
+    //Registration
    /* private class AsynRegistrationDetails extends AsyncTask<Void, Void, Void> {
         ProgressDialog pDialog;
 
@@ -1852,23 +1856,23 @@ public class SearchActivity extends AppCompatActivity {
 */
 
 
-        public void resetData() {
-            if (itemData != null && itemData.size() > 0) {
-                itemData.clear();
-            }
-            firstTime = true;
-
-            offset = 1;
-            isLoading = false;
-            listSize = 0;
-            if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                limit = 20;
-            } else {
-                limit = 15;
-            }
-            itemsInServer = 0;
-            isSearched = false;
+    public void resetData() {
+        if (itemData != null && itemData.size() > 0) {
+            itemData.clear();
         }
+        firstTime = true;
 
+        offset = 1;
+        isLoading = false;
+        listSize = 0;
+        if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+            limit = 20;
+        } else {
+            limit = 15;
+        }
+        itemsInServer = 0;
+        isSearched = false;
     }
+
+}
 

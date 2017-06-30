@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.home.vod.R;
 import com.home.vod.model.ListItem;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.Util;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class GenreFilterAdapter extends RecyclerView.Adapter<GenreFilterAdapter.
     private Context context;
 
     private ArrayList<ListItem> moviesList;
+    PreferenceManager preferenceManager;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView filterTextName;
@@ -47,6 +49,7 @@ public class GenreFilterAdapter extends RecyclerView.Adapter<GenreFilterAdapter.
     public GenreFilterAdapter(ArrayList<ListItem> moviesList, Context context) {
         this.context = context;
         this.moviesList = moviesList;
+        preferenceManager = PreferenceManager.getPreferenceManager(context);
     }
 
     @Override
@@ -62,9 +65,8 @@ public class GenreFilterAdapter extends RecyclerView.Adapter<GenreFilterAdapter.
         ListItem movie = moviesList.get(position);
 
 
-        SharedPreferences isLoginPref = context.getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0); // 0 - for private mode
 
-        String genreString = isLoginPref.getString(Util.GENRE_ARRAY_PREF_KEY, null);
+        String genreString = preferenceManager.getGenreArrayFromPref();
         final String[] genreTempArr = genreString.split(",");
 
         if (movie.isSelected() == false){

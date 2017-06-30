@@ -21,6 +21,7 @@ import com.home.vod.R;
 import com.home.vod.activity.MovieDetailsActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.model.SingleItemModel;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
@@ -37,7 +38,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
 
 
-    SharedPreferences pref;
+    PreferenceManager preferenceManager;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     int keepAliveTime = 10;
@@ -66,6 +67,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
         this.itemsList = itemsList;
         this.mContext = context;
         this.layoutname = layoutname;
+        preferenceManager =  PreferenceManager.getPreferenceManager(context);
 
     }
    /* @Override
@@ -145,7 +147,6 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    pref = mContext.getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
                     String moviePermalink = itemsList.get(position).getPermalink();
                     String movieTypeId = itemsList.get(position).getVideoTypeId();
 

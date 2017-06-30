@@ -64,6 +64,7 @@ import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.model.LanguageModel;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -161,7 +162,7 @@ public class Episode_list_Activity extends AppCompatActivity {
 
     ProgressBarHandler pDialog;
     RelativeLayout footerView;
-    SharedPreferences pref;
+    private PreferenceManager preferenceManager;
     String PlanId = "";
     String videoUrlStr ="";
     String priceForUnsubscribedStr,priceFosubscribedStr;
@@ -308,8 +309,9 @@ public class Episode_list_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.episode_listing);
-        isLoginPref = getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0);
-        isLogin = isLoginPref.getInt(Util.IS_LOGIN_PREF_KEY, 0);
+
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
+        isLogin = preferenceManager.getLoginFeatureFromPref();
 
 
        /* mCastStateListener = new CastStateListener() {
@@ -373,7 +375,6 @@ public class Episode_list_Activity extends AppCompatActivity {
         PlanId = (Util.getTextofLanguage(Episode_list_Activity.this, Util.PLAN_ID, Util.DEFAULT_PLAN_ID)).trim();
 
         resetData();
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
 
         boolean isNetwork = Util.checkNetwork(Episode_list_Activity.this);
         if(isNetwork == true ) {
@@ -593,8 +594,8 @@ public class Episode_list_Activity extends AppCompatActivity {
         ResolutionFormat.clear();
 
         if(isLogin == 1) {
-            if (pref != null) {
-                String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
+            if (preferenceManager != null) {
+                String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
                 if (loggedInStr == null) {
                     Intent i = new Intent(Episode_list_Activity.this, RegisterActivity.class);
@@ -602,44 +603,19 @@ public class Episode_list_Activity extends AppCompatActivity {
                     startActivity(i);
                     //showLoginDialog();
                 } else {
-                    String loggedinDateStr = pref.getString("date", null);
-                    if (loggedinDateStr != null) {
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                        Date loggedInDate = null;
-                        try {
-                            loggedInDate = formatter.parse(loggedinDateStr);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        Date today = new Date();
-                        long differenceInDays = (int) Util.calculateDays(loggedInDate, today) + 1;
-                        if (differenceInDays >= 7) {
-                            SharedPreferences.Editor editor = pref.edit();
-                            editor.clear();
-                            editor.commit();
+                    if (Util.checkNetwork(Episode_list_Activity.this) == true) {
 
-                            Intent i = new Intent(Episode_list_Activity.this, RegisterActivity.class);
-                            Util.check_for_subscription = 1;
-
-                            startActivity(i);
+                        if (isFreeContent == 1) {
+                            asynLoadVideoUrls = new AsynLoadVideoUrls();
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
-
-                            if (Util.checkNetwork(Episode_list_Activity.this) == true) {
-
-                                if (isFreeContent == 1) {
-                                    asynLoadVideoUrls = new AsynLoadVideoUrls();
-                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                } else {
-                                    asynValidateUserDetails = new AsynValidateUserDetails();
-                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                                }
-                            } else {
-                                Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                            }
-
-
+                            asynValidateUserDetails = new AsynValidateUserDetails();
+                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                         }
+                    } else {
+                        Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
+
                 }
             } else {
 
@@ -677,7 +653,7 @@ public class Episode_list_Activity extends AppCompatActivity {
                 httppost.addHeader("content_uniq_id", Util.dataModel.getMovieUniqueId().trim());
                 httppost.addHeader("stream_uniq_id", Util.dataModel.getStreamUniqueId().trim());
                 httppost.addHeader("internet_speed", MainActivity.internetSpeed.trim());
-                httppost.addHeader("user_id",pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                httppost.addHeader("user_id",preferenceManager.getUseridFromPref());
 
                 // Execute HTTP Post Request
                 try {
@@ -1060,9 +1036,7 @@ public class Episode_list_Activity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            if (pref != null) {
-                loggedInIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-            }
+                loggedInIdStr = preferenceManager.getUseridFromPref();
 
 
             String urlRouteList = Util.rootUrl().trim() + Util.userValidationUrl.trim();
@@ -1076,7 +1050,7 @@ public class Episode_list_Activity extends AppCompatActivity {
                 httppost.addHeader("purchase_type", Util.dataModel.getPurchase_type());
                 httppost.addHeader("season_id", Util.dataModel.getSeason_id());
                 httppost.addHeader("episode_id", Util.dataModel.getEpisode_id());
-                SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
+
              /*   if (countryPref != null) {
                     String countryCodeStr = countryPref.getString("countryCode", null);
                     httppost.addHeader("country", countryCodeStr);
@@ -1150,7 +1124,7 @@ public class Episode_list_Activity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
 
 
-            String Subscription_Str = pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", "0");
+            String Subscription_Str = preferenceManager.getIsSubscribedFromPref();
 
 
             try {
@@ -1860,14 +1834,15 @@ public class Episode_list_Activity extends AppCompatActivity {
                 httppost.addHeader("limit", String.valueOf(limit));
                 httppost.addHeader("offset", String.valueOf(offset));
                 //httppost.addHeader("deviceType", "roku");
-                SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-                if (countryPref != null) {
-                    String countryCodeStr = countryPref.getString("countryCode", null);
+                String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+                if (countryCodeStr != null) {
+
                     httppost.addHeader("country", countryCodeStr);
                 }else{
                     httppost.addHeader("country", "IN");
 
-                }                httppost.addHeader("lang_code",Util.getTextofLanguage(Episode_list_Activity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                }
+                httppost.addHeader("lang_code",Util.getTextofLanguage(Episode_list_Activity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
                 if(!getIntent().getStringExtra(Util.SEASON_INTENT_KEY).equals("")){
 
@@ -2651,7 +2626,7 @@ public class Episode_list_Activity extends AppCompatActivity {
             completePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " +Util.ppvModel.getPpvShowUnsubscribedStr());
         }*/
 
-        String subscriptionStr = pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", "0");
+        String subscriptionStr = preferenceManager.getIsSubscribedFromPref();
 
         if(subscriptionStr.trim().equals("1")){
             if (Util.dataModel.getIsAPV() == 1) {
@@ -2868,14 +2843,12 @@ public class Episode_list_Activity extends AppCompatActivity {
         item.setVisible(false);
 
         mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(Episode_list_Activity.this, menu, R.id.media_route_menu_item);
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-        String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
-        id = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-        email=pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
 
+        String loggedInStr = preferenceManager.getLoginStatusFromPref();
+        id = preferenceManager.getUseridFromPref();
+        email=preferenceManager.getEmailIdFromPref();
 
-        SharedPreferences language_list_pref = getSharedPreferences(Util.LANGUAGE_LIST_PREF, 0);
-        if(language_list_pref.getString("total_language","0").equals("1"))
+        if(preferenceManager.getLanguageListFromPref().equals("1"))
             (menu.findItem(R.id.menu_item_language)).setVisible(false);
 
 
@@ -3550,7 +3523,7 @@ public class Episode_list_Activity extends AppCompatActivity {
     private class AsynLogoutDetails extends AsyncTask<Void, Void, Void> {
         ProgressBarHandler pDialog;
         int responseCode;
-        String loginHistoryIdStr = pref.getString("PREFS_LOGIN_HISTORYID_KEY", null);
+        String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
         String responseStr;
 
         @Override
@@ -3633,15 +3606,7 @@ public class Episode_list_Activity extends AppCompatActivity {
             }
             if (responseCode > 0) {
                 if (responseCode == 200) {
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.clear();
-                    editor.commit();
-                    SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                    if (loginPref!=null) {
-                        SharedPreferences.Editor countryEditor = loginPref.edit();
-                        countryEditor.clear();
-                        countryEditor.commit();
-                    }
+                    preferenceManager.clearLoginPref();
                  /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
                     if (countryPref!=null) {
                         SharedPreferences.Editor countryEditor = countryPref.edit();

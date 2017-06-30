@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.home.vod.R;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Callback;
@@ -79,7 +80,7 @@ public class ProfileActivity extends AppCompatActivity {
     ArrayAdapter<String> Language_arrayAdapter,Country_arrayAdapter;
 
     String Selected_Language,Selected_Country="0",Selected_Language_Id,Selected_Country_Id;
-    SharedPreferences countryPref;
+    PreferenceManager preferenceManager;
     List<String> Country_List,Country_Code_List,Language_List,Language_Code_List;
 
 
@@ -87,7 +88,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        loginPref = getSharedPreferences(Util.LOGIN_PREF, 0);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         editNewPassword = (EditText) findViewById(R.id.editNewPassword);
@@ -147,8 +148,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
-       /* User_Id = getIntent().getStringExtra("LOGID");
-        Email_Id = getIntent().getStringExtra("EMAIL");
+       /* userId = getIntent().getStringExtra("LOGID");
+        emailId = getIntent().getStringExtra("EMAIL");
 */
         if (loginPref != null) {
             User_Id = loginPref.getString("PREFS_LOGGEDIN_ID_KEY", null);
@@ -174,7 +175,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         // This is used for language and country spunner
 
-        countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0);
 
         Country_List = Arrays.asList(getResources().getStringArray(R.array.country));
         Country_Code_List = Arrays.asList(getResources().getStringArray(R.array.countrycode));

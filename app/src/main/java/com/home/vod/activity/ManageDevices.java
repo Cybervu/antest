@@ -1,6 +1,5 @@
 package com.home.vod.activity;
 
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +15,7 @@ import android.widget.Toast;
 
 import com.home.vod.R;
 import com.home.vod.adapter.DeviceListAdapter;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -38,9 +38,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ManageDevices extends AppCompatActivity {
-    SharedPreferences loginPref;
-    String User_Id = "";
-    String Email_Id = "";
+    String userId = "";
+    String emailId = "";
     TextView name_of_user;
 
 
@@ -57,13 +56,13 @@ public class ManageDevices extends AppCompatActivity {
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-
+   private PreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_devices);
-        loginPref = getSharedPreferences(Util.LOGIN_PREF, 0);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
         device_list = (ListView) findViewById(R.id.device_list);
         manage_device_text = (TextView) findViewById(R.id.manage_device_text);
 
@@ -82,10 +81,8 @@ public class ManageDevices extends AppCompatActivity {
             }
         });
 
-        if (loginPref != null) {
-            User_Id = loginPref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-            Email_Id = loginPref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
-        }
+            userId = preferenceManager.getUseridFromPref();
+            emailId = preferenceManager.getEmailIdFromPref();
 
         AsynLoadRegisteredDevices asynLoadRegisteredDevices = new AsynLoadRegisteredDevices();
         asynLoadRegisteredDevices.executeOnExecutor(threadPoolExecutor);
@@ -105,7 +102,7 @@ public class ManageDevices extends AppCompatActivity {
                 HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.ManageDevices.trim());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id",User_Id);
+                httppost.addHeader("user_id", userId);
                 httppost.addHeader("device", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
                 httppost.addHeader("lang_code",Util.getTextofLanguage(ManageDevices.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 

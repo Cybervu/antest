@@ -232,6 +232,9 @@
             android:name=".activity.ManageDevices"
             android:label=""
             android:screenOrientation="portrait" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="5ade002b6ada291c993af0c4732c69e8034b9e3e" />
     </application>
 
 </manifest>

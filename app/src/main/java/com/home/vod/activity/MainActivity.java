@@ -37,6 +37,7 @@ import com.home.vod.R;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.model.NavDrawerItem;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -167,7 +168,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     int state=0;
     LanguageCustomAdapter languageCustomAdapter;
     public static ProgressBarHandler internetSpeedDialog;
-    SharedPreferences pref;
     //Load on background thread
     /*Asynctask on background thread*/
     int corePoolSize = 60;
@@ -196,8 +196,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     AlertDialog alert;
     String Previous_Selected_Language="";
     TextView noInternetTextView;
-    SharedPreferences isLoginPref;
+   // SharedPreferences isLoginPref;
     public static ProgressBarHandler progressBarHandler;
+    PreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,9 +242,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         *//**** chromecast*************//*
 */
 
-        isLoginPref = getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0); // 0 - for private mode
-
-        isLogin = isLoginPref.getInt(Util.IS_LOGIN_PREF_KEY, 0);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
+        isLogin = preferenceManager.getLoginFeatureFromPref();
         // dataPref = getApplicationContext().getSharedPreferences("DrawerState", 0);
 
 
@@ -333,14 +333,19 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         MenuItem item,item1,item2,item3,item4,item5,item6;
         item= menu.findItem(R.id.action_filter);
         item.setVisible(false);
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-        loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
-        id = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
 
-        email=pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
-        SharedPreferences language_list_pref = getSharedPreferences(Util.LANGUAGE_LIST_PREF, 0);
+
+        loggedInStr = preferenceManager.getLoginStatusFromPref();
+        id = preferenceManager.getUseridFromPref();
+        email=preferenceManager.getEmailIdFromPref();
+
+       // SharedPreferences language_list_pref = getSharedPreferences(Util.LANGUAGE_LIST_PREF, 0);
+
+
         (menu.findItem(R.id.menu_item_language)).setTitle(Util.getTextofLanguage(MainActivity.this, Util.LANGUAGE_POPUP_LANGUAGE, Util.DEFAULT_LANGUAGE_POPUP_LANGUAGE));
-        if(language_list_pref.getString("total_language","0").equals("1"))
+
+
+        if(preferenceManager.getLanguageListFromPref().equals("1"))
             (menu.findItem(R.id.menu_item_language)).setVisible(false);
 
         if(loggedInStr!=null){
@@ -955,7 +960,7 @@ if(pDialog!=null && pDialog.isShowing()){
     private class AsynLogoutDetails extends AsyncTask<Void, Void, Void> {
         ProgressBarHandler pDialog;
         int responseCode;
-        String loginHistoryIdStr = pref.getString("PREFS_LOGIN_HISTORYID_KEY", null);
+        String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
         String responseStr;
 
         @Override
@@ -1038,22 +1043,7 @@ if(pDialog!=null && pDialog.isShowing()){
             }
             if (responseCode > 0) {
                 if (responseCode == 200) {
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.clear();
-                    editor.commit();
-                    SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                    if (loginPref!=null) {
-                        SharedPreferences.Editor countryEditor = loginPref.edit();
-                        countryEditor.clear();
-                        countryEditor.commit();
-                    }
-                 /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-                    if (countryPref!=null) {
-                        SharedPreferences.Editor countryEditor = countryPref.edit();
-                        countryEditor.clear();
-                        countryEditor.commit();
-                    }*/
-
+                   preferenceManager.clearLoginPref();
                     if ((Util.getTextofLanguage(MainActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
                             .trim()).equals("1")) {
                         final Intent startIntent = new Intent(MainActivity.this, SplashScreen.class);
@@ -1117,9 +1107,9 @@ if(pDialog!=null && pDialog.isShowing()){
                 HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.loadMenuUrl.trim());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
-                SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-                if (countryPref != null) {
-                    String countryCodeStr = countryPref.getString("countryCode", null);
+
+                String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+                if (countryCodeStr != null) {
                     httppost.addHeader("country", countryCodeStr);
                 }else{
                     httppost.addHeader("country", "IN");

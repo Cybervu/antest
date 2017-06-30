@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import com.home.vod.R;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.subtitle_support.Caption;
 import com.home.vod.subtitle_support.FormatSRT;
 import com.home.vod.subtitle_support.FormatSRT_WithoutCaption;
@@ -150,7 +151,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-    SharedPreferences pref;
+    PreferenceManager preferenceManager;
     //Toolbar mActionBarToolbar;
     LinearLayout linearLayout1;
 
@@ -220,16 +221,18 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         movieId = Util.dataModel.getMovieUniqueId();
         episodeId = Util.dataModel.getEpisode_id();
 
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-        if (pref != null) {
-            emailIdStr = pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
-            userIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
+        emailIdStr = preferenceManager.getEmailIdFromPref();
+        userIdStr = preferenceManager.getUseridFromPref();
 
-        } else {
+
+        if (emailIdStr == null) {
             emailIdStr = "";
-            userIdStr = "";
-        }
 
+        } if (userIdStr == null) {
+            userIdStr = "";
+
+        }
 
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
         subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
@@ -2139,19 +2142,13 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         }
 
         protected void onPostExecute(Void result) {
-
-
             if (isLogin.equals("1")) {
                 // Call the next Api and Allow the app as usual
                 // Do nothing
             } else if (isLogin.equals("0")) {
                 //Logout the user
-                SharedPreferences.Editor editor = pref.edit();
-                editor.clear();
-                editor.commit();
-
+               preferenceManager.clearLoginPref();
                 Toast.makeText(getApplicationContext(),Util.getTextofLanguage(MyLibraryPlayer.this,Util.LOGIN_STATUS_MESSAGE,Util.DEFAULT_LOGIN_STATUS_MESSAGE), Toast.LENGTH_LONG).show();
-
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 

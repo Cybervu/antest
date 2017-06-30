@@ -44,6 +44,7 @@ import com.home.vod.R;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.LanguageModel;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ExpandableTextView;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -141,7 +142,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             currencySymbolStr;
     String movieUniqueId = "";
     int isFreeContent,isPPV,isConverted,contentTypesId,isAPV;
-    SharedPreferences pref;
+    PreferenceManager preferenceManager;
     RelativeLayout noInternetConnectionLayout,noDataLayout,iconImageRelativeLayout,bannerImageRelativeLayout;
     LinearLayout story_layout;
     int corePoolSize = 60;
@@ -188,12 +189,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
         MenuItem item,item1,item2,item3,item4,item5,item6;
         item= menu.findItem(R.id.action_filter);
         item.setVisible(false);
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-        String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
-        id = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-        email=pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
-        SharedPreferences language_list_pref = getSharedPreferences(Util.LANGUAGE_LIST_PREF, 0);
-        if(language_list_pref.getString("total_language","0").equals("1"))
+        String loggedInStr = preferenceManager.getLoginStatusFromPref();
+
+        id = preferenceManager.getUseridFromPref();
+        email=preferenceManager.getEmailIdFromPref();
+
+
+        if(preferenceManager.getLanguageListFromPref().equals("1"))
             (menu.findItem(R.id.menu_item_language)).setVisible(false);
 
         if(loggedInStr!=null){
@@ -354,7 +356,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private class AsynLogoutDetails extends AsyncTask<Void, Void, Void> {
         ProgressBarHandler pDialog;
         int responseCode;
-        String loginHistoryIdStr = pref.getString("PREFS_LOGIN_HISTORYID_KEY", null);
+        String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
         String responseStr;
 
         @Override
@@ -437,15 +439,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
             if (responseCode > 0) {
                 if (responseCode == 200) {
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.clear();
-                    editor.commit();
-                    SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                    if (loginPref!=null) {
-                        SharedPreferences.Editor countryEditor = loginPref.edit();
-                        countryEditor.clear();
-                        countryEditor.commit();
-                    }
+                    preferenceManager.clearLoginPref();
                  /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
                     if (countryPref!=null) {
                         SharedPreferences.Editor countryEditor = countryPref.edit();
@@ -628,12 +622,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
         iconImageRelativeLayout = (RelativeLayout) findViewById(R.id.iconImageRelativeLayout);
         bannerImageRelativeLayout = (RelativeLayout) findViewById(R.id.bannerImageRelativeLayout);
         story_layout = (LinearLayout) findViewById(R.id.story_layout);
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
+
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
+
         permalinkStr = getIntent().getStringExtra(Util.PERMALINK_INTENT_KEY);
         // isLogin = ((Global) getApplicationContext()).getIsLogin();
-        SharedPreferences isLoginPref = getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0); // 0 - for private mode
 
-        isLogin = isLoginPref.getInt(Util.IS_LOGIN_PREF_KEY, 0);
+        isLogin = preferenceManager.getLoginFeatureFromPref();
 
         ppvmodel = new PPVModel();
         advmodel = new APVModel();
@@ -675,8 +670,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 ResolutionFormat.clear();
 
                 if(isLogin == 1) {
-                    if (pref != null) {
-                        String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
+                    if (preferenceManager != null) {
+                        String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
                         if (loggedInStr == null) {
 
@@ -691,50 +686,20 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             });
                             //showLoginDialog();
                         } else {
-                            String loggedinDateStr = pref.getString("date", null);
-                            if (loggedinDateStr != null) {
-                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                                Date loggedInDate = null;
-                                try {
-                                    loggedInDate = formatter.parse(loggedinDateStr);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                Date today = new Date();
-                                long differenceInDays = (int) Util.calculateDays(loggedInDate, today) + 1;
-                                if (differenceInDays >= 7) {
-                                    SharedPreferences.Editor editor = pref.edit();
-                                    editor.clear();
-                                    editor.commit();
 
-                                    final Intent registerActivity = new Intent(MovieDetailsActivity.this, RegisterActivity.class);
-                                    runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                            Util.check_for_subscription = 1;
+                            if (Util.checkNetwork(MovieDetailsActivity.this) == true) {
 
-                                            startActivity(registerActivity);
-
-                                        }
-                                    });
+                                if (Util.dataModel.getIsFreeContent() == 1) {
+                                    asynLoadVideoUrls = new AsynLoadVideoUrls();
+                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                                 } else {
-
-                                    if (Util.checkNetwork(MovieDetailsActivity.this) == true) {
-
-                                        if (Util.dataModel.getIsFreeContent() == 1) {
-                                            asynLoadVideoUrls = new AsynLoadVideoUrls();
-                                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                        } else {
-                                            asynValidateUserDetails = new AsynValidateUserDetails();
-                                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                                        }
-                                    } else {
-                                        Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                                    }
-
-
+                                    asynValidateUserDetails = new AsynValidateUserDetails();
+                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                                 }
+                            } else {
+                                Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                             }
+
                         }
                     } else {
 
@@ -798,8 +763,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 Util.dataModel = dbModel;
 
                 if (isLogin == 1) {
-                    if (pref != null) {
-                        String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
+                    if (preferenceManager != null) {
+                        String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
                         if (loggedInStr == null) {
 
@@ -814,49 +779,17 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             });
                             //showLoginDialog();
                         } else {
-                            String loggedinDateStr = pref.getString("date", null);
-                            if (loggedinDateStr != null) {
-                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                                Date loggedInDate = null;
-                                try {
-                                    loggedInDate = formatter.parse(loggedinDateStr);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                Date today = new Date();
-                                long differenceInDays = (int) Util.calculateDays(loggedInDate, today) + 1;
-                                if (differenceInDays >= 7) {
-                                    SharedPreferences.Editor editor = pref.edit();
-                                    editor.clear();
-                                    editor.commit();
+                            if (Util.checkNetwork(MovieDetailsActivity.this) == true) {
 
-                                    final Intent registerActivity = new Intent(MovieDetailsActivity.this, RegisterActivity.class);
-                                    runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                            Util.check_for_subscription = 1;
-
-                                            startActivity(registerActivity);
-
-                                        }
-                                    });
+                                if (Util.dataModel.getIsFreeContent() == 1) {
+                                    asynLoadVideoUrls = new AsynLoadVideoUrls();
+                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                                 } else {
-
-                                    if (Util.checkNetwork(MovieDetailsActivity.this) == true) {
-
-                                        if (Util.dataModel.getIsFreeContent() == 1) {
-                                            asynLoadVideoUrls = new AsynLoadVideoUrls();
-                                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                        } else {
-                                            asynValidateUserDetails = new AsynValidateUserDetails();
-                                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                                        }
-                                    } else {
-                                        Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                                    }
-
-
+                                    asynValidateUserDetails = new AsynValidateUserDetails();
+                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                                 }
+                            } else {
+                                Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                             }
                         }
                     } else {
@@ -882,7 +815,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
                     } else {
-                        Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        Toast.makeText(MovieDetailsActivity.this,
+                                Util.getTextofLanguage(MovieDetailsActivity.this,
+                                        Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -1247,9 +1182,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
                 httppost.addHeader("permalink",permalinkStr);
 
-                SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-                if (countryPref != null) {
-                    String countryCodeStr = countryPref.getString("countryCode", null);
+                String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+
+                if (countryCodeStr != null) {
+
                     httppost.addHeader("country", countryCodeStr);
                 }else{
                     httppost.addHeader("country", "IN");
@@ -2039,8 +1975,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            if (pref != null) {
-                loggedInIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+            if (preferenceManager != null) {
+                loggedInIdStr = preferenceManager.getUseridFromPref();
             }
 
 
@@ -2115,9 +2051,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     if ((myJson.has("member_subscribed")) && myJson.getString("member_subscribed").trim() != null && !myJson.getString("member_subscribed").trim().isEmpty() && !myJson.getString("member_subscribed").trim().equals("null") && !myJson.getString("member_subscribed").trim().matches("")) {
 
                         isMemberSubscribed = myJson.optString("member_subscribed");
-                        SharedPreferences.Editor editor = pref.edit();
-                        editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY",isMemberSubscribed);
-                        editor.commit();
+                        preferenceManager.setIsSubscribedToPref(isMemberSubscribed);
                     }
 
                 }
@@ -2138,9 +2072,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         protected void onPostExecute(Void result) {
 
-
-            String Subscription_Str = pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", "0");
-
+            String Subscription_Str = preferenceManager.getIsSubscribedFromPref();
 
             try {
                 if (pDialog != null && pDialog.isShowing()) {
@@ -2395,7 +2327,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 httppost.addHeader("content_uniq_id", Util.dataModel.getMovieUniqueId().trim());
                 httppost.addHeader("stream_uniq_id", Util.dataModel.getStreamUniqueId().trim());
                 httppost.addHeader("internet_speed",MainActivity.internetSpeed.trim());
-                httppost.addHeader("user_id",pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                httppost.addHeader("user_id",preferenceManager.getUseridFromPref());
 
                 // Execute HTTP Post Request
                 try {

@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
 import com.home.apisdk.apiController.GetGenreListAsynctask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
@@ -37,25 +36,21 @@ import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.SubscriptionPlanInputModel;
 import com.home.apisdk.apiModel.SubscriptionPlanOutputModel;
-import com.home.vod.BuildConfig;
 import com.home.vod.R;
 import com.home.vod.model.LanguageModel;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -99,12 +94,13 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     int maximumPoolSize = 80;
     int keepAliveTime = 10;
     String ipAddressStr;
-    SharedPreferences pref;
-    SharedPreferences countryPref;
-    SharedPreferences isLoginPref;
-    SharedPreferences language_list_pref;
+    //  SharedPreferences pref;
+    //  SharedPreferences countryPref;
+   // SharedPreferences isLoginPref;
+   // SharedPreferences language_list_pref;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
+    PreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,15 +142,13 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.mainlayout);
 
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-        countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-        isLoginPref = getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0);
-        language_list_pref = getSharedPreferences(Util.LANGUAGE_LIST_PREF, 0);
+
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
 
 
-        if (countryPref != null) {
-            String countryCodeStr = countryPref.getString("countryCode", null);
+        if (preferenceManager != null) {
+            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
 
             if (countryCodeStr == null) {
                 if (isNetwork == true) {
@@ -235,16 +229,12 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             geoBlockedLayout.setVisibility(View.VISIBLE);
         } else {
             if (status > 0 && status == 200) {
-                if (countryPref != null) {
-                    SharedPreferences.Editor countryEditor = countryPref.edit();
-                    countryEditor.putString("countryCode", checkGeoBlockOutputModel.getCountrycode().trim());
-                    countryEditor.commit();
-                    SubscriptionPlanInputModel planListInput=new SubscriptionPlanInputModel();
-                    planListInput.setAuthToken(Util.authTokenStr);
-                    planListInput.setLang(Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                    GetPlanListAsynctask asynGetPlanid= new GetPlanListAsynctask(planListInput,this);
-                    asynGetPlanid.executeOnExecutor(threadPoolExecutor);
-                }
+                preferenceManager.setCountryCodeToPref(checkGeoBlockOutputModel.getCountrycode().trim());
+                SubscriptionPlanInputModel planListInput=new SubscriptionPlanInputModel();
+                planListInput.setAuthToken(Util.authTokenStr);
+                planListInput.setLang(Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                GetPlanListAsynctask asynGetPlanid= new GetPlanListAsynctask(planListInput,this);
+                asynGetPlanid.executeOnExecutor(threadPoolExecutor);
 
             } else {
                 noInternetLayout.setVisibility(View.GONE);
@@ -288,10 +278,12 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_RESTRICT_DEVICE, isRegistrationEnabledOutputModel.getIsRestrictDevice());
         Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_ONE_STEP_REGISTRATION,""+isRegistrationEnabledOutputModel.getSignup_step());
         Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_MYLIBRARY, ""+isRegistrationEnabledOutputModel.getIsMylibrary());
-        SharedPreferences.Editor isLoginPrefEditor = isLoginPref.edit();
-        isLoginPrefEditor.putInt(Util.IS_LOGIN_PREF_KEY, isRegistrationEnabledOutputModel.getIs_login());
 
-        isLoginPrefEditor.commit();
+
+        preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
+
+
+
         LanguageListInputModel languageListInputModel=new LanguageListInputModel();
         languageListInputModel.setAuthToken(Util.authTokenStr);
         GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel,this);
@@ -328,9 +320,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
 
         if (languageModels.size() == 1) {
-            SharedPreferences.Editor countryEditor = language_list_pref.edit();
-            countryEditor.putString("total_language", "1");
-            countryEditor.commit();
+            preferenceManager.setLanguageListToPref("1");
         }
         if (Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, "").equalsIgnoreCase("")) {
             Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, defaultLanguage);
@@ -416,18 +406,20 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         }
 
-        SharedPreferences.Editor isLoginPrefEditor = isLoginPref.edit();
+
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < genreArrToSend.length; i++) {
             sb.append(genreArrToSend[i]).append(",");
         }
-        isLoginPrefEditor.putString(Util.GENRE_ARRAY_PREF_KEY, sb.toString());
+
+        preferenceManager.setGenreArrayToPref(sb.toString());
+
         StringBuilder sb1 = new StringBuilder();
         for (int i = 0; i < genreValueArrayToSend.length; i++) {
             sb1.append(genreValueArrayToSend[i]).append(",");
         }
-        isLoginPrefEditor.putString(Util.GENRE_VALUES_ARRAY_PREF_KEY, sb1.toString());
-        isLoginPrefEditor.commit();
+
+        preferenceManager.setGenreValuesArrayToPref(sb1.toString());
 
         // This Code Is Done For The One Step Registration.
 
@@ -435,9 +427,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         if ((Util.getTextofLanguage(SplashScreen.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
 
-            if (pref != null) {
-                User_Id = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-                Email_Id = pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
+            if (preferenceManager != null) {
+                User_Id = preferenceManager.getUseridFromPref();
+                Email_Id = preferenceManager.getEmailIdFromPref();
 
                 if (User_Id != null && Email_Id != null) {
                     Get_UserProfile_Input get_userProfile_input=new Get_UserProfile_Input();
@@ -967,10 +959,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //                    .trim()).equals("1")) {
 //
 //                if (pref != null) {
-//                    User_Id = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-//                    Email_Id = pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
+//                    userId = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+//                    emailId = pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
 //
-//                    if (User_Id != null && Email_Id != null) {
+//                    if (userId != null && emailId != null) {
 //
 //                        AsynLoadProfileDetails asynLoadProfileDetails = new AsynLoadProfileDetails();
 //                        asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
@@ -1616,7 +1608,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         if (!Util.getTextofLanguage(SplashScreen.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN).equals("0")) {
             Log.v("BIBHU2", "google_id already created =" + Util.getTextofLanguage(SplashScreen.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
-            String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
+            String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
 
             if ((Util.getTextofLanguage(SplashScreen.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
@@ -1678,7 +1670,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                         finish();
                         overridePendingTransition(0,0);
 
-                        String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
+                        String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
                         if ((Util.getTextofLanguage(SplashScreen.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
                                 .trim()).equals("1")) {
@@ -1737,8 +1729,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.loadProfileUrl.trim());
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //                httppost.addHeader("authToken", Util.authTokenStr.trim());
-//                httppost.addHeader("user_id", User_Id);
-//                httppost.addHeader("email", Email_Id);
+//                httppost.addHeader("user_id", userId);
+//                httppost.addHeader("email", emailId);
 //                httppost.addHeader("lang_code", Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //                // Execute HTTP Post Request

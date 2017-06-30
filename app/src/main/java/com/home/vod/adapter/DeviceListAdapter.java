@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.home.vod.R;
 import com.home.vod.activity.ManageDevices;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -46,7 +47,7 @@ public class DeviceListAdapter extends BaseAdapter {
 
     String devie_id="";
 
-    SharedPreferences pref;
+    PreferenceManager preferenceManager;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     int keepAliveTime = 10;
@@ -60,6 +61,7 @@ public class DeviceListAdapter extends BaseAdapter {
         this.deviceName = deviceName;
         this.deviceInfo = deviceInfo;
         this.deviceFlag = deviceFlag;
+        preferenceManager = PreferenceManager.getPreferenceManager(mContext);
     }
 
     @Override
@@ -156,11 +158,10 @@ public class DeviceListAdapter extends BaseAdapter {
                 HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.RemoveDevice.trim());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id",pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                httppost.addHeader("user_id",preferenceManager.getUseridFromPref());
                 httppost.addHeader("device",devie_id);
                 httppost.addHeader("lang_code",Util.getTextofLanguage(mContext,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
-                Log.v("BIBHU","user_id="+pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
                 Log.v("BIBHU","devie_id="+devie_id);
 
                 // Execute HTTP Post Request
@@ -261,7 +262,6 @@ public class DeviceListAdapter extends BaseAdapter {
         @Override
         protected void onPreExecute() {
 
-            pref = mContext.getSharedPreferences(Util.LOGIN_PREF, 0);
 
             pDialog = new ProgressBarHandler(mContext);
             pDialog.show();

@@ -1,6 +1,5 @@
 package com.home.vod.activity;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.ActionBarOverlayLayout;
@@ -13,6 +12,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayer.Provider;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.home.vod.R;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
 
@@ -57,6 +57,7 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
     private YouTubePlayer YPlayer;
     private static final String YoutubeDeveloperKey = "AIzaSyDy9dfNlSYnHlUsM28ayyPH7a7dMIfFoYg-0";
     private static final int RECOVERY_DIALOG_REQUEST = 1;
+    private PreferenceManager preferenceManager;
 
 
     @Override
@@ -66,6 +67,7 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
         fragmentYoutube = (YouTubePlayerFragment)getFragmentManager().findFragmentById(R.id.youtubeplayerfragment);
 
         fragmentYoutube.initialize(YoutubeDeveloperKey, this);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
         if (Util.dataModel.getVideoUrl().matches("")){
             onBackPressed();
@@ -241,9 +243,8 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
-                SharedPreferences pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-                if (pref!=null){
-                    userIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+                if (preferenceManager!=null){
+                    userIdStr = preferenceManager.getUseridFromPref();
                 }else{
                     userIdStr="";
 

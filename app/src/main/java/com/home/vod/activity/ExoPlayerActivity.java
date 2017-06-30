@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import com.home.vod.R;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.subtitle_support.Caption;
 import com.home.vod.subtitle_support.FormatSRT;
 import com.home.vod.subtitle_support.FormatSRT_WithoutCaption;
@@ -137,8 +138,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-    SharedPreferences pref;
+    //SharedPreferences pref;
     //Toolbar mActionBarToolbar;
+    private PreferenceManager preferenceManager;
     LinearLayout linearLayout1;
 
     TextView videoTitle, GenreTextView, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView,
@@ -200,10 +202,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         movieId = Util.dataModel.getMovieUniqueId();
         episodeId = Util.dataModel.getEpisode_id();
 
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-        if (pref != null) {
-            emailIdStr = pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
-            userIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
+
+        if (preferenceManager != null) {
+            emailIdStr = preferenceManager.getEmailIdFromPref();
+            userIdStr = preferenceManager.getUseridFromPref();
 
         } else {
             emailIdStr = "";
@@ -2430,9 +2433,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 // Do nothing
             } else if (isLogin.equals("0")) {
                 //Logout the user
-                SharedPreferences.Editor editor = pref.edit();
-                editor.clear();
-                editor.commit();
+               preferenceManager.clearLoginPref();
 
                 Toast.makeText(getApplicationContext(),Util.getTextofLanguage(ExoPlayerActivity.this,Util.LOGIN_STATUS_MESSAGE,Util.DEFAULT_LOGIN_STATUS_MESSAGE), Toast.LENGTH_LONG).show();
 

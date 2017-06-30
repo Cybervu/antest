@@ -52,6 +52,7 @@ import com.home.vod.adapter.GenreFilterAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.GridItem;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -106,7 +107,7 @@ public class MyLibraryFragment extends Fragment {
     String videoImageStrToHeight;
     int videoHeight = 185;
     int videoWidth = 256;
-    SharedPreferences pref;
+    private PreferenceManager preferenceManager;
     GridItem itemToPlay;
     private ProgressBarHandler pDialog;
     private static int firstVisibleInListview;
@@ -219,7 +220,7 @@ public class MyLibraryFragment extends Fragment {
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);
         genreListData.setItemAnimator(new DefaultItemAnimator());
-        pref = context.getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
+        preferenceManager = PreferenceManager.getPreferenceManager(getActivity()) ;// 0 - for private mode
         sectionTitle =(TextView)rootView.findViewById(R.id.sectionTitle);
         posterUrl = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
 
@@ -419,7 +420,7 @@ public class MyLibraryFragment extends Fragment {
                             asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 
                         } else {
-                           AsynValidateUserDetails asynValidateUserDetails = new AsynValidateUserDetails();
+                            AsynValidateUserDetails asynValidateUserDetails = new AsynValidateUserDetails();
                             asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                         }
 
@@ -519,16 +520,15 @@ public class MyLibraryFragment extends Fragment {
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id",pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                httppost.addHeader("user_id",preferenceManager.getUseridFromPref());
 
 
                 httppost.addHeader("limit", String.valueOf(limit));
                 httppost.addHeader("offset", String.valueOf(offset));
 
-                SharedPreferences countryPref = context.getSharedPreferences(Util.COUNTRY_PREF, 0);
+                String countryCodeStr = preferenceManager.getCountryCodeFromPref();
 
-                if (countryPref != null) {
-                    String countryCodeStr = countryPref.getString("countryCode", null);
+                if (countryCodeStr != null) {
                     httppost.addHeader("country", countryCodeStr);
                 } else {
                     httppost.addHeader("country", "IN");
@@ -1138,7 +1138,7 @@ public class MyLibraryFragment extends Fragment {
                 httppost.addHeader("content_uniq_id",movieUniqueId);
                 httppost.addHeader("stream_uniq_id",movieStreamUniqueId);
                 httppost.addHeader("internet_speed",MainActivity.internetSpeed.trim());
-                httppost.addHeader("user_id",pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                httppost.addHeader("user_id",preferenceManager.getUseridFromPref());
 
 
 
@@ -1530,12 +1530,7 @@ public class MyLibraryFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            if (pref != null) {
-                loggedInIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-            }
-
-
-
+                loggedInIdStr = preferenceManager.getUseridFromPref();
             try {
                 String urlRouteList = Util.rootUrl().trim()+Util.userValidationUrl.trim();
                 HttpClient httpclient=new DefaultHttpClient();
@@ -1545,7 +1540,7 @@ public class MyLibraryFragment extends Fragment {
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
                 httppost.addHeader("movie_id", movieUniqueId.trim());
                 httppost.addHeader("purchase_type","episode");
-                 httppost.addHeader("season_id",""+season_id);
+                httppost.addHeader("season_id",""+season_id);
                 httppost.addHeader("episode_id",movieStreamUniqueId);
                 httppost.addHeader("lang_code",Util.getTextofLanguage(getActivity(),Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
@@ -1994,6 +1989,6 @@ public class MyLibraryFragment extends Fragment {
 
         }
     }
-    
+
 
 }

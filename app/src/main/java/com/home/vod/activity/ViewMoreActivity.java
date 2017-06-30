@@ -47,6 +47,7 @@ import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.GridItem;
 import com.home.vod.model.LanguageModel;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
@@ -94,7 +95,7 @@ public class ViewMoreActivity extends AppCompatActivity {
 
     int  videoHeight = 185;
     int  videoWidth = 256;
-    SharedPreferences pref;
+    PreferenceManager preferenceManager;
     GridItem itemToPlay;
     Toolbar mActionBarToolbar;
     GridLayoutManager mLayoutManager;
@@ -161,6 +162,7 @@ public class ViewMoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_more);
 
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
@@ -174,9 +176,8 @@ public class ViewMoreActivity extends AppCompatActivity {
             sectionId = getIntent().getStringExtra("SectionId");
 
         }
-        SharedPreferences isLoginPref = getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0); // 0 - for private mode
 
-        isLogin = isLoginPref.getInt(Util.IS_LOGIN_PREF_KEY, 0);
+        isLogin = preferenceManager.getLoginFeatureFromPref();
         sectionTitle = (TextView)findViewById(R.id.sectionTitle);
         Typeface castDescriptionTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
         sectionTitle.setTypeface(castDescriptionTypeface);
@@ -1002,12 +1003,10 @@ public class ViewMoreActivity extends AppCompatActivity {
         MenuItem item,item1,item2,item3,item4,item5,item6;
         item= menu.findItem(R.id.action_filter);
         item.setVisible(false);
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-        String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
-        String id = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-        String email=pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
-        SharedPreferences language_list_pref = getSharedPreferences(Util.LANGUAGE_LIST_PREF, 0);
-        if(language_list_pref.getString("total_language","0").equals("1"))
+        String loggedInStr = preferenceManager.getLoginStatusFromPref();
+        String id = preferenceManager.getUseridFromPref();
+        String email=preferenceManager.getEmailIdFromPref();
+        if(preferenceManager.getLanguageListFromPref().equals("1"))
             (menu.findItem(R.id.menu_item_language)).setVisible(false);
 
         if(loggedInStr!=null){
@@ -1552,7 +1551,7 @@ public class ViewMoreActivity extends AppCompatActivity {
     private class AsynLogoutDetails extends AsyncTask<Void, Void, Void> {
         ProgressBarHandler pDialog;
         int responseCode;
-        String loginHistoryIdStr = pref.getString("PREFS_LOGIN_HISTORYID_KEY", null);
+        String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
         String responseStr;
 
         @Override
@@ -1635,15 +1634,7 @@ public class ViewMoreActivity extends AppCompatActivity {
             }
             if (responseCode > 0) {
                 if (responseCode == 200) {
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.clear();
-                    editor.commit();
-                    SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                    if (loginPref!=null) {
-                        SharedPreferences.Editor countryEditor = loginPref.edit();
-                        countryEditor.clear();
-                        countryEditor.commit();
-                    }
+                   preferenceManager.clearLoginPref();
                  /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
                     if (countryPref!=null) {
                         SharedPreferences.Editor countryEditor = countryPref.edit();

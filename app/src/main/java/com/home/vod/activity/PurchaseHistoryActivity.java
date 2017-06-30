@@ -21,6 +21,7 @@ import com.home.vod.R;
 import com.home.vod.adapter.PurchaseHistoryAdapter;
 import com.home.vod.model.PurchaseHistoryModel;
 import com.home.vod.model.RecyclerItemClickListener;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -61,7 +62,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
     private String currency_code  = "";
     String user_id = "";
     TextView purchaseHistoryTitleTextView,no_internet_text;
-    SharedPreferences pref;
+    PreferenceManager preferenceManager;
     PurchaseHistoryModel purchaseHistoryModel;
     ArrayList<String> Id_Purchase_History;
 
@@ -81,8 +82,8 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
         no_internet_text.setText(Util.getTextofLanguage(PurchaseHistoryActivity.this,Util.NO_INTERNET_NO_DATA,Util.DEFAULT_NO_INTERNET_NO_DATA));
         tryAgainButton.setText(Util.getTextofLanguage(PurchaseHistoryActivity.this,Util.TRY_AGAIN,Util.DEFAULT_TRY_AGAIN));
 
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-        user_id = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
+        user_id = preferenceManager.getUseridFromPref();
 
 
         Typeface typeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));

@@ -45,6 +45,7 @@ import com.home.vod.adapter.GenreFilterAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.model.GridItem;
 import com.home.vod.model.ListItem;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
@@ -198,7 +199,7 @@ public class VideosListFragment extends Fragment {
     String videoImageStrToHeight;
     int  videoHeight = 185;
     int  videoWidth = 256;
-    SharedPreferences pref;
+    PreferenceManager preferenceManager;
     GridItem itemToPlay;
     private ProgressBarHandler pDialog;
     private static int firstVisibleInListview;
@@ -328,7 +329,6 @@ public class VideosListFragment extends Fragment {
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);
         genreListData.setItemAnimator(new DefaultItemAnimator());
-        pref = context.getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
 
         posterUrl = Util.getTextofLanguage(context,Util.NO_DATA,Util.DEFAULT_NO_DATA);
 
@@ -610,10 +610,10 @@ public class VideosListFragment extends Fragment {
 
         final ArrayList<ListItem> mdata = new ArrayList<ListItem>();
         genreArray = new ArrayList<String>();
-        SharedPreferences isLoginPref = context.getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0); // 0 - for private mode
+       // SharedPreferences isLoginPref = context.getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0); // 0 - for private mode
 
-        String genreString = isLoginPref.getString(Util.GENRE_ARRAY_PREF_KEY, null);
-        String genreValuesString = isLoginPref.getString(Util.GENRE_VALUES_ARRAY_PREF_KEY, null);
+        String genreString = preferenceManager.getGenreArrayFromPref();
+        String genreValuesString = preferenceManager.getGenreValuesArrayFromPref();
         final String[] genreTempArr = genreString.split(",");
         String[] genreValuesTempArr = genreValuesString.split(",");
 
@@ -836,21 +836,16 @@ public class VideosListFragment extends Fragment {
                 }
 
 
-                SharedPreferences countryPref = context.getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-                if (countryPref != null) {
-                    String countryCodeStr = countryPref.getString("countryCode", null);
+                String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+
+                if (countryCodeStr != null) {
+
                     httppost.addHeader("country", countryCodeStr);
                 }else{
                     httppost.addHeader("country", "IN");
 
                 }
-                if (pref != null) {
-                    String loggedLanguageStr = pref.getString("PREFS_LOGIN_LANGUAGE_KEY", null);
-                    if (loggedLanguageStr == null) {
-                    } else {
-                        httppost.addHeader("lang_code",loggedLanguageStr);
-                    }
-                }
+
                 // Execute HTTP Post Request
                 try {
                     HttpResponse response = httpclient.execute(httppost);
@@ -1212,9 +1207,10 @@ public class VideosListFragment extends Fragment {
                 httppost.addHeader("offset", String.valueOf(offset));
                 //httppost.addHeader("orderby", "");
                 // httppost.addHeader("deviceType", "roku");
-                SharedPreferences countryPref = context.getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-                if (countryPref != null) {
-                    String countryCodeStr = countryPref.getString("countryCode", null);
+                String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+
+                if (countryCodeStr != null) {
+
                     httppost.addHeader("country", countryCodeStr);
                 }else{
                     httppost.addHeader("country", "IN");
