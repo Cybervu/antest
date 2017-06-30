@@ -82,7 +82,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     ProgressBarHandler pDialog;
     private boolean mIsScrollingUp;
     private int mLastFirstVisibleItem;
-    int scrolledPosition=0;
+    int scrolledPosition = 0;
     boolean scrolling;
 
     String videoImageStrToHeight;
@@ -222,7 +222,6 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         resetData();
 
 
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -342,7 +341,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                         if (isNetwork == true) {
 
                             // default data
-                            Search_Data_input search_data_input=new Search_Data_input();
+                            Search_Data_input search_data_input = new Search_Data_input();
                             search_data_input.setAuthToken(Util.authTokenStr);
                             search_data_input.setLimit(String.valueOf(limit));
                             search_data_input.setOffset(String.valueOf(offset));
@@ -351,10 +350,10 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             if (countryPref != null) {
                                 String countryCodeStr = countryPref.getString("countryCode", null);
                                 search_data_input.setCountry(countryCodeStr);
-                            }else{
+                            } else {
                                 search_data_input.setCountry("IN");
                             }
-                            SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input,SearchActivity.this,SearchActivity.this);
+                            SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input, SearchActivity.this, SearchActivity.this);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
 
@@ -465,27 +464,44 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     @Override
     public void onSearchDataPostExecuteCompleted(ArrayList<Search_Data_otput> contentListOutputArray, int status, int totalItems, String message) {
 
-        if (itemData.size() <= 0) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    noDataLayout.setVisibility(View.VISIBLE);
-                    noInternetConnectionLayout.setVisibility(View.GONE);
-                    gridView.setVisibility(View.GONE);
-                    footerView.setVisibility(View.GONE);
-                }
-            });
 
-        } else {
+            if (contentListOutputArray.size() <= 0) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        noDataLayout.setVisibility(View.VISIBLE);
+                        noInternetConnectionLayout.setVisibility(View.GONE);
+                        gridView.setVisibility(View.GONE);
+                        footerView.setVisibility(View.GONE);
+                    }
+                });
 
-            gridView.setVisibility(View.VISIBLE);
-            noInternetConnectionLayout.setVisibility(View.GONE);
-            noDataLayout.setVisibility(View.GONE);
-            videoWidth = 312;
-            videoHeight = 560;
+            } else {
 
-            AsynLOADUI loadui = new AsynLOADUI();
-            loadui.executeOnExecutor(threadPoolExecutor);
+                for (int i=0;i<contentListOutputArray.size();i++) {
+
+
+                gridView.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                noDataLayout.setVisibility(View.GONE);
+                videoWidth = 312;
+                videoHeight = 560;
+
+                    String videoImageStr=contentListOutputArray.get(i).getPoster_url();
+                    String videoName=contentListOutputArray.get(i).getName();
+                    String videoTypeIdStr=contentListOutputArray.get(i).getContent_type_id();
+                    String videoGenreStr=contentListOutputArray.get(i).getGenre();
+                    String videoPermalinkStr=contentListOutputArray.get(i).getPermalink();
+                    String isEpisodeStr=contentListOutputArray.get(i).getIs_episode();
+                    int isConverted=contentListOutputArray.get(i).getIs_converted();
+                    int isPPV=contentListOutputArray.get(i).getIs_ppv();
+                    int isAPV=contentListOutputArray.get(i).getIs_advance();
+                    itemData.add(new GridItem(videoImageStr, videoName, "", videoTypeIdStr, videoGenreStr, "", videoPermalinkStr,isEpisodeStr,"","",isConverted,isPPV,isAPV));
+
+                AsynLOADUI loadui = new AsynLOADUI();
+                loadui.executeOnExecutor(threadPoolExecutor);
+
+            }
 
         }
     }
@@ -898,7 +914,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             gridView.setVisibility(View.GONE);
 
                         } else {
-                            Search_Data_input search_data_input=new Search_Data_input();
+                            Search_Data_input search_data_input = new Search_Data_input();
                             search_data_input.setAuthToken(Util.authTokenStr);
                             search_data_input.setLimit(String.valueOf(limit));
                             search_data_input.setOffset(String.valueOf(offset));
@@ -907,10 +923,10 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             if (countryPref != null) {
                                 String countryCodeStr = countryPref.getString("countryCode", null);
                                 search_data_input.setCountry(countryCodeStr);
-                            }else{
+                            } else {
                                 search_data_input.setCountry("IN");
                             }
-                            SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input,SearchActivity.this,SearchActivity.this);
+                            SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input, SearchActivity.this, SearchActivity.this);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
                         }
@@ -1010,7 +1026,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(SearchActivity.this, R.layout.nexus_videos_grid_layout_land, itemData);
-                    }else{
+                    } else {
                         customGridAdapter = new VideoFilterAdapter(SearchActivity.this, R.layout.videos_280_grid_layout, itemData);
 
                     }
@@ -1018,7 +1034,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(SearchActivity.this, R.layout.nexus_videos_grid_layout, itemData);
-                    }else{
+                    } else {
                         customGridAdapter = new VideoFilterAdapter(SearchActivity.this, R.layout.videos_grid_layout, itemData);
 
                     }
@@ -1051,7 +1067,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(SearchActivity.this, R.layout.nexus_videos_grid_layout_land, itemData);
-                    }else{
+                    } else {
                         customGridAdapter = new VideoFilterAdapter(SearchActivity.this, R.layout.videos_280_grid_layout, itemData);
 
                     }
@@ -1059,7 +1075,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(SearchActivity.this, R.layout.nexus_videos_grid_layout, itemData);
-                    }else{
+                    } else {
                         customGridAdapter = new VideoFilterAdapter(SearchActivity.this, R.layout.videos_grid_layout, itemData);
 
                     }
@@ -1073,21 +1089,21 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         }
     }
 
-        public void onResume() {
-            super.onResume();
-            //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
+    public void onResume() {
+        super.onResume();
+        //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
 
 
-        }
+    }
 
-        @Override
-        public void onSaveInstanceState(Bundle outState) {
-            super.onSaveInstanceState(outState);
-            // save RecyclerView state
-            mBundleRecyclerViewState = new Bundle();
-            Parcelable listState = gridView.onSaveInstanceState();
-            mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
-        }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // save RecyclerView state
+        mBundleRecyclerViewState = new Bundle();
+        Parcelable listState = gridView.onSaveInstanceState();
+        mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
+    }
    /* @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -1115,56 +1131,56 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     }*/
 
 
-        //load video urls as per resolution
+    //load video urls as per resolution
 
-        public interface ClickListener {
-            void onClick(View view, int position);
+    public interface ClickListener {
+        void onClick(View view, int position);
 
-            void onLongClick(View view, int position);
-        }
+        void onLongClick(View view, int position);
+    }
 
-        public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
-            private GestureDetector gestureDetector;
-            private ClickListener clickListener;
+        private GestureDetector gestureDetector;
+        private ClickListener clickListener;
 
-            public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
-                this.clickListener = clickListener;
-                gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                    @Override
-                    public boolean onSingleTapUp(MotionEvent e) {
-                        return true;
-                    }
-
-                    @Override
-                    public void onLongPress(MotionEvent e) {
-                        View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                        if (child != null && clickListener != null) {
-                            clickListener.onLongClick(child, recyclerView.getChildPosition(child));
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
-                View child = rv.findChildViewUnder(e.getX(), e.getY());
-                if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                    clickListener.onClick(child, rv.getChildPosition(child));
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
+            this.clickListener = clickListener;
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
                 }
-                return false;
-            }
 
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                    if (child != null && clickListener != null) {
+                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
+                    }
+                }
+            });
         }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
+                clickListener.onClick(child, rv.getChildPosition(child));
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
+    }
 
 
 
@@ -1445,7 +1461,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
     }*/
 
-        //Registration
+    //Registration
    /* private class AsynRegistrationDetails extends AsyncTask<Void, Void, Void> {
         ProgressDialog pDialog;
 
@@ -1927,23 +1943,23 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 */
 
 
-        public void resetData() {
-            if (itemData != null && itemData.size() > 0) {
-                itemData.clear();
-            }
-            firstTime = true;
-
-            offset = 1;
-            isLoading = false;
-            listSize = 0;
-            if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                limit = 20;
-            } else {
-                limit = 15;
-            }
-            itemsInServer = 0;
-            isSearched = false;
+    public void resetData() {
+        if (itemData != null && itemData.size() > 0) {
+            itemData.clear();
         }
+        firstTime = true;
 
+        offset = 1;
+        isLoading = false;
+        listSize = 0;
+        if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+            limit = 20;
+        } else {
+            limit = 15;
+        }
+        itemsInServer = 0;
+        isSearched = false;
     }
+
+}
 

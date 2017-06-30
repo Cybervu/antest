@@ -495,8 +495,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                         LogoutInput logoutInput = new LogoutInput();
                         logoutInput.setAuthToken(Util.authTokenStr);
                         LogUtil.showLog("Abhi", Util.authTokenStr);
-                        String loginHistoryIdStr = pref.getString("PREFS_LOGIN_HISTORYID_KEY", null);
-                        logoutInput.setLogin_history_id(loginHistoryIdStr);
+                        String loginHistoryId = pref.getString("PREFS_LOGIN_HISTORYID_KEY", null);
+                        logoutInput.setLogin_history_id(loginHistoryId);
                         logoutInput.setLang_code(Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogUtil.showLog("Abhi", Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MainActivity.this, MainActivity.this);

@@ -30,6 +30,7 @@ import com.home.apisdk.apiController.UpadteUserProfileAsynctask;
 import com.home.apisdk.apiModel.Update_UserProfile_Input;
 import com.home.apisdk.apiModel.Update_UserProfile_Output;
 import com.home.vod.R;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Callback;
@@ -734,7 +735,7 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
                     e.printStackTrace();
                 }
 
-                Log.v("BIBHU", "responseStr =" + responseStr);
+                LogUtil.showLog("BIBHU", "responseStr =" + responseStr);
 
                 JSONObject myJson = null;
                 if (responseStr != null) {
@@ -775,7 +776,7 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
 
                             if (languageJson.length() > 0) {
                                 Selected_Language_Id = languageJson.optString(0);
-                                Log.v("BIBHU", "Selected_Language_Id st jon parsing =" + Selected_Language_Id);
+                                LogUtil.showLog("BIBHU", "Selected_Language_Id st jon parsing =" + Selected_Language_Id);
                             } else {
                                 langStr = "";
                             }
@@ -848,14 +849,14 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
                 if (Selected_Country_Id.equals("0")) {
                     country_spinner.setSelection(224);
                     Selected_Country_Id = Country_Code_List.get(224);
-                    Log.v("BIBHU", "country not  matched =" + Selected_Country + "==" + Selected_Country_Id);
+                    LogUtil.showLog("BIBHU", "country not  matched =" + Selected_Country + "==" + Selected_Country_Id);
                 } else {
                     for (int i = 0; i < Country_Code_List.size(); i++) {
                         if (Selected_Country_Id.trim().equals(Country_Code_List.get(i))) {
                             country_spinner.setSelection(i);
                             Selected_Country_Id = Country_Code_List.get(i);
 
-                            Log.v("BIBHU", "country  matched =" + Selected_Country_Id + "==" + Selected_Country_Id);
+                            LogUtil.showLog("BIBHU", "country  matched =" + Selected_Country_Id + "==" + Selected_Country_Id);
                         }
                     }
                 }
@@ -867,7 +868,7 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
                         language_spinner.setSelection(i);
                         Selected_Language_Id = Language_Code_List.get(i);
 
-                        Log.v("BIBHU", "Selected_Language_Id =" + Selected_Language_Id);
+                        LogUtil.showLog("BIBHU", "Selected_Language_Id =" + Selected_Language_Id);
                     }
                 }
                 Language_arrayAdapter.notifyDataSetChanged();
