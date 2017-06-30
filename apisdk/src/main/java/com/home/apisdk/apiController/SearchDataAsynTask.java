@@ -73,6 +73,7 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
             httppost.addHeader("offset", this.search_data_input.getOffset());
             httppost.addHeader("q", this.search_data_input.getQ());
             httppost.addHeader("country",this.search_data_input.getCountry());
+            httppost.addHeader("lang_code",this.search_data_input.getLanguage_code());
 
 
             // Execute HTTP Post Request
@@ -144,6 +145,7 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
                                 content.setIs_ppv(Integer.parseInt(jsonChildNode.optString("is_ppv")));
 
                             }
+
                             if ((jsonChildNode.has("is_episode")) && jsonChildNode.optString("is_episode").trim() != null && !jsonChildNode.optString("is_episode").trim().isEmpty() && !jsonChildNode.optString("is_episode").trim().equals("null") && !jsonChildNode.optString("is_episode").trim().matches("")) {
                                 content.setIs_episode(jsonChildNode.optString("is_episode"));
 
@@ -173,8 +175,8 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
 
                             }
 
-                            if ((jsonChildNode.has("muvi_stream_uniq_id")) && jsonChildNode.optString("muvi_stream_uniq_id").trim() != null && !jsonChildNode.optString("muvi_stream_uniq_id").trim().isEmpty() && !jsonChildNode.optString("muvi_stream_uniq_id").trim().equals("null") && !jsonChildNode.optString("muvi_stream_uniq_id").trim().matches("")) {
-                                content.setMovie_stream_uniq_id(jsonChildNode.optString("muvi_stream_uniq_id"));
+                            if ((jsonChildNode.has("movie_stream_uniq_id")) && jsonChildNode.optString("movie_stream_uniq_id").trim() != null && !jsonChildNode.optString("movie_stream_uniq_id").trim().isEmpty() && !jsonChildNode.optString("movie_stream_uniq_id").trim().equals("null") && !jsonChildNode.optString("movie_stream_uniq_id").trim().matches("")) {
+                                content.setMovie_stream_uniq_id(jsonChildNode.optString("movie_stream_uniq_id"));
 
                             }
                             search_data_otputs.add(content);

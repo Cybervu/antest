@@ -6,6 +6,11 @@ package com.home.apisdk.apiModel;
 public class Search_Data_otput{
     int is_converted=0;
     int is_ppv=0;
+
+    public int getIs_advance() {
+        return is_advance;
+    }
+
     int is_advance=0;
     String movie_id;
     String movie_stream_id;

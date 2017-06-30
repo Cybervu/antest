@@ -9,6 +9,16 @@ public class Search_Data_input {
     String offset="0";
     String q;
 
+    public String getLanguage_code() {
+        return language_code;
+    }
+
+    public void setLanguage_code(String language_code) {
+        this.language_code = language_code;
+    }
+
+    String language_code;
+
     public String getCountry() {
         return country;
     }
