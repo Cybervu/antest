@@ -607,21 +607,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
         }
         if (code > 0) {
             if (code == 200) {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.clear();
-                editor.commit();
-                SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                if (loginPref!=null) {
-                    SharedPreferences.Editor countryEditor = loginPref.edit();
-                    countryEditor.clear();
-                    countryEditor.commit();
-                }
-                 /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-                    if (countryPref!=null) {
-                        SharedPreferences.Editor countryEditor = countryPref.edit();
-                        countryEditor.clear();
-                        countryEditor.commit();
-                    }*/
+                preferenceManager.clearLoginPref();
                 if ((Util.getTextofLanguage(ViewMoreActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
                     final Intent startIntent = new Intent(ViewMoreActivity.this, SplashScreen.class);
@@ -1633,7 +1619,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
                         // dialog.cancel();
                         LogoutInput logoutInput=new LogoutInput();
                         logoutInput.setAuthToken(Util.authTokenStr);
-                        logoutInput.setLogin_history_id(pref.getString("PREFS_LOGIN_HISTORYID_KEY", null));
+                        logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
                         logoutInput.setLang_code(Util.getTextofLanguage(ViewMoreActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails=new LogoutAsynctask(logoutInput,ViewMoreActivity.this,ViewMoreActivity.this);
                         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);

@@ -78,18 +78,6 @@ public class FragmentDrawer extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (MainActivity.menuList !=null && MainActivity.menuList.size() > 0){
-            titles = MainActivity.menuList;
-            // navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
-        }else{
-            titles = null;
-        }
-       // titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels);
-       // navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
-
-
-
     }
 
     @Override

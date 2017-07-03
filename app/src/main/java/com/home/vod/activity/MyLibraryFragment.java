@@ -423,7 +423,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);*/
                             ValidateUserInput validateUserInput=new ValidateUserInput();
                             validateUserInput.setAuthToken(Util.authTokenStr);
-                            validateUserInput.setUserId(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                             validateUserInput.setMuviUniqueId(movieUniqueId.trim());
                             validateUserInput.setPurchaseType("episode");
                             validateUserInput.setSeasonId(""+season_id);
@@ -435,7 +435,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         } else {
                             ValidateUserInput validateUserInput=new ValidateUserInput();
                             validateUserInput.setAuthToken(Util.authTokenStr);
-                            validateUserInput.setUserId(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                             validateUserInput.setMuviUniqueId(movieUniqueId.trim());
                             validateUserInput.setPurchaseType("episode");
                             validateUserInput.setSeasonId(""+season_id);
@@ -923,7 +923,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         getVideoDetailsInput.setContent_uniq_id(movieUniqueId);
                         getVideoDetailsInput.setStream_uniq_id(movieStreamUniqueId);
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                        getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                        getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                         VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MyLibraryFragment.this, context);
                         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                     } else {

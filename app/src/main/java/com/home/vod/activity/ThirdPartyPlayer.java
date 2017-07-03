@@ -210,12 +210,9 @@ public class ThirdPartyPlayer extends ActionBarActivity implements GetIpAddressA
     public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
         String userIdStr;
         if (!ipAddressStr.matches("")) {
-            SharedPreferences pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-            if (pref!=null){
-                userIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-            }else{
+            userIdStr = preferenceManager.getUseridFromPref();
+            if (userIdStr==null){
                 userIdStr="";
-
             }
             VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
             videoLogsInputModel.setAuthToken(Util.authTokenStr);

@@ -336,7 +336,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         // dialog.cancel();
                         LogoutInput logoutInput = new LogoutInput();
                         logoutInput.setAuthToken(Util.authTokenStr);
-                        logoutInput.setLogin_history_id(pref.getString("PREFS_LOGIN_HISTORYID_KEY", null));
+                        logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
                         logoutInput.setLang_code(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
@@ -386,21 +386,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
         if (code > 0) {
             if (code == 200) {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.clear();
-                editor.commit();
-                SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                if (loginPref != null) {
-                    SharedPreferences.Editor countryEditor = loginPref.edit();
-                    countryEditor.clear();
-                    countryEditor.commit();
-                }
-                 /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-                    if (countryPref!=null) {
-                        SharedPreferences.Editor countryEditor = countryPref.edit();
-                        countryEditor.clear();
-                        countryEditor.commit();
-                    }*/
+                preferenceManager.clearLoginPref();
                 if ((Util.getTextofLanguage(MovieDetailsActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
                     final Intent startIntent = new Intent(MovieDetailsActivity.this, SplashScreen.class);
@@ -784,7 +770,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                         if (Util.dataModel.getIsFreeContent() == 1) {
                                             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                                             getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                                            getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                                             getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                             getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                             getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -794,7 +780,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                             ValidateUserInput validateUserInput = new ValidateUserInput();
                                             validateUserInput.setAuthToken(Util.authTokenStr);
                                             if (preferenceManager != null) {
-                                                loggedInIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+                                                loggedInIdStr = preferenceManager.getUseridFromPref();
                                             }
                                             validateUserInput.setUserId(loggedInIdStr.trim());
                                             validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
@@ -831,7 +817,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                         getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                        getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                        getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                         getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -897,7 +883,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                         if (Util.dataModel.getIsFreeContent() == 1) {
                                             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                                             getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                                            getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                                             getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                             getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                             getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -906,10 +892,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                         } else {
                                             ValidateUserInput validateUserInput = new ValidateUserInput();
                                             validateUserInput.setAuthToken(Util.authTokenStr);
-                                            if (pref != null) {
-                                                loggedInIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-                                            }
-                                            validateUserInput.setUserId(loggedInIdStr.trim());
+                                            validateUserInput.setUserId(preferenceManager.getUseridFromPref().trim());
                                             validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
                                             validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                                             validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
@@ -923,7 +906,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                     }
 
 
-                                }
+
                         }
                     } else {
 
@@ -946,7 +929,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                         getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                        getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                        getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                         getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -1309,7 +1292,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
     @Override
     public void onGetValidateUserPostExecuteCompleted(ValidateUserOutput validateUserOutput, int status, String message) {
-        String Subscription_Str = pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", "0");
+        String Subscription_Str = preferenceManager.getIsSubscribedFromPref();
 
         if (validateUserOutput == null) {
             try {
@@ -1406,7 +1389,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         if (Util.checkNetwork(MovieDetailsActivity.this) == true) {
                             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                             getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                            getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                             getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                             getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                             getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -1458,7 +1441,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 if (Util.checkNetwork(MovieDetailsActivity.this) == true) {
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                    getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());

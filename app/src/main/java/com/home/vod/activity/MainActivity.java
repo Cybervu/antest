@@ -283,8 +283,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             }
             MenuListInput menuListInput = new MenuListInput();
             menuListInput.setAuthToken(Util.authTokenStr);
-            SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-            String countryCodeStr = countryPref.getString("countryCode", null);
+            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
             if (countryCodeStr == null) {
                 menuListInput.setCountry("IN");
             }
@@ -500,7 +499,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                         LogoutInput logoutInput = new LogoutInput();
                         logoutInput.setAuthToken(Util.authTokenStr);
                         LogUtil.showLog("Abhi", Util.authTokenStr);
-                        String loginHistoryIdStr = pref.getString("PREFS_LOGIN_HISTORYID_KEY", null);
+                        String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
                         logoutInput.setLogin_history_id(loginHistoryIdStr);
                         logoutInput.setLang_code(Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogUtil.showLog("Abhi", Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
@@ -717,21 +716,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
         if (code > 0) {
             if (code == 200) {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.clear();
-                editor.commit();
-                SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                if (loginPref != null) {
-                    SharedPreferences.Editor countryEditor = loginPref.edit();
-                    countryEditor.clear();
-                    countryEditor.commit();
-                }
-                 /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-                    if (countryPref!=null) {
-                        SharedPreferences.Editor countryEditor = countryPref.edit();
-                        countryEditor.clear();
-                        countryEditor.commit();
-                    }*/
+               preferenceManager.clearLoginPref();
 
                 if ((Util.getTextofLanguage(MainActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {

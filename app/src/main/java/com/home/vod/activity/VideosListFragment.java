@@ -374,9 +374,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         String strtext = getArguments().getString("item");
         contentListInput.setPermalink(strtext.trim());
         contentListInput.setLanguage(Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-        SharedPreferences countryPref = context.getSharedPreferences(Util.COUNTRY_PREF, 0);
-        if (countryPref != null) {
-            String countryCodeStr = countryPref.getString("countryCode", null);
+
+        String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+        if (countryCodeStr != null) {
+
             contentListInput.setCountry(countryCodeStr);
         } else {
             contentListInput.setCountry("IN");
@@ -488,13 +489,13 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                             String strtext = getArguments().getString("item");
                             contentListInput.setPermalink(strtext.trim());
                             contentListInput.setLanguage(Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                            SharedPreferences countryPref = context.getSharedPreferences(Util.COUNTRY_PREF, 0);
-                            if (countryPref != null) {
-                                String countryCodeStr = countryPref.getString("countryCode", null);
+                            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+                            if (countryCodeStr != null) {
                                 contentListInput.setCountry(countryCodeStr);
-                            } else {
+                            }else{
                                 contentListInput.setCountry("IN");
                             }
+
                             asynLoadVideos = new GetContentListAsynTask(contentListInput, VideosListFragment.this, context);
                             asynLoadVideos.executeOnExecutor(threadPoolExecutor);
 

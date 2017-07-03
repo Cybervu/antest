@@ -428,7 +428,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     @Override
     public void onGetValidateUserPostExecuteCompleted(ValidateUserOutput validateUserOutput, int status, String message) {
 
-        String Subscription_Str = pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", "0");
+        String Subscription_Str = preferenceManager.getIsSubscribedFromPref();
         if (validateUserOutput == null) {
             try {
                 if (pDialog != null && pDialog.isShowing()) {
@@ -524,7 +524,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         if (Util.checkNetwork(Episode_list_Activity.this) == true) {
                             GetVideoDetailsInput getVideoDetailsInput=new GetVideoDetailsInput();
                             getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                            getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                             getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                             getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                             getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -575,7 +575,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 if (Util.checkNetwork(Episode_list_Activity.this) == true) {
                     GetVideoDetailsInput getVideoDetailsInput=new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                    getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -633,15 +633,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         }
         if (code > 0) {
             if (code == 200) {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.clear();
-                editor.commit();
-                SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                if (loginPref != null) {
-                    SharedPreferences.Editor countryEditor = loginPref.edit();
-                    countryEditor.clear();
-                    countryEditor.commit();
-                }
+               preferenceManager.clearLoginPref();
                  /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
                     if (countryPref!=null) {
                         SharedPreferences.Editor countryEditor = countryPref.edit();
@@ -1015,6 +1007,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
     }
 
+
+
     public void clickItem(EpisodesListModel item) {
 
 
@@ -1081,7 +1075,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                                 if (isFreeContent == 1) {
                                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                                     getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                                    getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -1099,27 +1093,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                                     asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                                 }
                             } else {
-                                Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                            }
-
-//                            httppost.addHeader("user_id", loggedInIdStr.trim());
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
-//                httppost.addHeader("movie_id", Util.dataModel.getMovieUniqueId().trim());
-//                httppost.addHeader("purchase_type", Util.dataModel.getPurchase_type());
-//                httppost.addHeader("season_id", Util.dataModel.getSeason_id());
-//                httppost.addHeader("episode_id", Util.dataModel.getEpisode_id());
-//                SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-//             /*   if (countryPref != null) {
-//                    String countryCodeStr = countryPref.getString("countryCode", null);
-//                    httppost.addHeader("country", countryCodeStr);
-//                }else{
-//                    httppost.addHeader("country", "IN");
-//
-//                }    */
-//
-//                httppost.addHeader("lang_code", Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-//
-                        }
+                        Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
                 }
             } else {
@@ -1135,7 +1109,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 GetVideoDetailsInput getVideoDetailsInput=new GetVideoDetailsInput();
                 getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -1146,7 +1120,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
             }
         }
-    }
+        }
 
 
 //    private class AsynLoadVideoUrls extends AsyncTask<Void, Void, Void> {
@@ -3432,7 +3406,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         // dialog.cancel();
                         LogoutInput logoutInput=new LogoutInput();
                         logoutInput.setAuthToken(Util.authTokenStr);
-                        logoutInput.setLogin_history_id(loginHistoryIdStr);
+                        logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
                         logoutInput.setLang_code(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput,Episode_list_Activity.this,Episode_list_Activity.this);
                         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
@@ -3575,6 +3549,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         });
 
     }
+
 
 //    private class AsynGetLanguageList extends AsyncTask<Void, Void, Void> {
 //        String responseStr;

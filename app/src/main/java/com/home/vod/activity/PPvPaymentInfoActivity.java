@@ -186,11 +186,6 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
         purchaseTextView = (TextView) findViewById(R.id.purchaseTextView);
 
 
-        loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-
-
-
-
         if (getIntent().getStringExtra("muviuniqueid") != null) {
             muviUniqueIdStr = getIntent().getStringExtra("muviuniqueid");
         } else {

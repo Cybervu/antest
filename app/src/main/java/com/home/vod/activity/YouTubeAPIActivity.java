@@ -171,9 +171,8 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
             videoLogsInputModel.setIpAddress(ipAddressStr.trim());
             videoLogsInputModel.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
             videoLogsInputModel.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id().trim());
-            SharedPreferences pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-            if (pref!=null){
-                userIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+            if (preferenceManager!=null){
+                userIdStr = preferenceManager.getUseridFromPref();
             }else{
                 userIdStr="";
 

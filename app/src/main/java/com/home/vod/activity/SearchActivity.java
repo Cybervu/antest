@@ -349,9 +349,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             search_data_input.setLimit(String.valueOf(limit));
                             search_data_input.setOffset(String.valueOf(offset));
                             search_data_input.setQ(searchTextStr.trim());
-                            SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0);
-                            if (countryPref != null) {
-                                String countryCodeStr = countryPref.getString("countryCode", null);
+                            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+                            if (countryCodeStr != null) {
                                 search_data_input.setCountry(countryCodeStr);
                             }else{
                                 search_data_input.setCountry("IN");
@@ -905,9 +904,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             search_data_input.setLimit(String.valueOf(limit));
                             search_data_input.setOffset(String.valueOf(offset));
                             search_data_input.setQ(searchTextStr.trim());
-                            SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0);
-                            if (countryPref != null) {
-                                String countryCodeStr = countryPref.getString("countryCode", null);
+                            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+                            if (countryCodeStr != null) {
                                 search_data_input.setCountry(countryCodeStr);
                             }else{
                                 search_data_input.setCountry("IN");

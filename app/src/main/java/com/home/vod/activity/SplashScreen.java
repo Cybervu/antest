@@ -239,7 +239,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 SubscriptionPlanInputModel planListInput=new SubscriptionPlanInputModel();
                 planListInput.setAuthToken(Util.authTokenStr);
                 planListInput.setLang(Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                GetPlanListAsynctask asynGetPlanid= new GetPlanListAsynctask(planListInput,this);
+                GetPlanListAsynctask asynGetPlanid= new GetPlanListAsynctask(planListInput,SplashScreen.this,SplashScreen.this);
                 asynGetPlanid.executeOnExecutor(threadPoolExecutor);
 
             } else {
