@@ -58,6 +58,7 @@ import com.home.vod.model.DataModel;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ExpandableTextView;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -783,11 +784,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                                 loggedInIdStr = preferenceManager.getUseridFromPref();
                                             }
                                             validateUserInput.setUserId(loggedInIdStr.trim());
-                                            Util.dataModel.setMovieUniqueId(validateUserInput.getMuviUniqueId());
                                             validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                                            Util.dataModel.setPurchase_type(validateUserInput.getPurchaseType());
                                             validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                                            Util.dataModel.setSeason_id(validateUserInput.getSeasonId());
                                             validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
                                             validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
                                             validateUserInput.setLanguageCode(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
@@ -1296,6 +1294,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     @Override
     public void onGetValidateUserPostExecuteCompleted(ValidateUserOutput validateUserOutput, int status, String message) {
         String Subscription_Str = preferenceManager.getIsSubscribedFromPref();
+        String validUserStr=validateUserOutput.getValiduser_str();
 
         if (validateUserOutput == null) {
             try {
@@ -1378,7 +1377,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 dlgAlert.create().show();
             } else if (status == 429) {
 
-                if (validateUserOutput.getValiduser_str() != null) {
+                  if (validUserStr != null) {
+
                     try {
                         if (pDialog != null && pDialog.isShowing()) {
                             pDialog.hide();
@@ -1388,7 +1388,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         status = 0;
                     }
 
-                    if ((validateUserOutput.getValiduser_str().trim().equalsIgnoreCase("OK")) || (validateUserOutput.getValiduser_str().trim().matches("OK")) || (validateUserOutput.getValiduser_str().trim().equals("OK"))) {
+                    if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
                         if (Util.checkNetwork(MovieDetailsActivity.this) == true) {
                             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                             getVideoDetailsInput.setAuthToken(Util.authTokenStr);

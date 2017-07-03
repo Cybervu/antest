@@ -33,7 +33,7 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
     String responseStr;
     int status;
     String message,PACKAGE_NAME;
-    String validuser_str;
+    String validuser_str,isSubscribed;
     public interface GetValidateUser{
         void onGetValidateUserPreExecuteStarted();
         void onGetValidateUserPostExecuteCompleted(ValidateUserOutput validateUserOutput, int status, String message);
@@ -164,12 +164,13 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
 
                 }
                 if ((mainJson.has("member_subscribed")) && mainJson.optString("member_subscribed").trim() != null && !mainJson.optString("member_subscribed").trim().isEmpty() && !mainJson.optString("member_subscribed").trim().equals("null") && !mainJson.optString("member_subscribed").trim().matches("")) {
-                    validateUserOutput.setMessage(mainJson.optString("member_subscribed"));
+                    validateUserOutput.setIsMemberSubscribed(mainJson.optString("member_subscribed"));
+                    isSubscribed=mainJson.optString("member_subscribed");
 
                 }
 
-                if ((mainJson.has("status")) && mainJson.optString("status").trim() != null && !mainJson.optString("msg").trim().isEmpty() && !mainJson.optString("msg").trim().equals("null") && !mainJson.optString("msg").trim().matches("")) {
-                    validateUserOutput.setMessage(mainJson.optString("status"));
+                if ((mainJson.has("status")) && mainJson.optString("status").trim() != null && !mainJson.optString("status").trim().isEmpty() && !mainJson.optString("status").trim().equals("null") && !mainJson.optString("status").trim().matches("")) {
+                    validateUserOutput.setValiduser_str(mainJson.optString("status"));
                     validuser_str = mainJson.optString("status");
 
                 }

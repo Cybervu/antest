@@ -296,6 +296,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_videos, container, false);
         context = getActivity();
+        preferenceManager = PreferenceManager.getPreferenceManager(context);
         //for search for each activity
         setHasOptionsMenu(true);
 /*
