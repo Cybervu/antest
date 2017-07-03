@@ -25,43 +25,49 @@ import java.io.IOException;
  * Created by Muvi on 12/16/2016.
  */
 public class LoginAsynTask extends AsyncTask<Login_input, Void, Void> {
-     Login_input login_input;
+    Login_input login_input;
 
     String responseStr;
     int status;
-    String message,PACKAGE_NAME;
-    public interface LoinDetails{
+    String message, PACKAGE_NAME;
+
+    public interface LoinDetails {
         void onLoginPreExecuteStarted();
+
         void onLoginPostExecuteCompleted(Login_output login_output, int status, String message);
     }
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private LoinDetails listener;
-    Login_output login_output=new Login_output();
+    private Context context;
+    Login_output login_output = new Login_output();
 
-    public LoginAsynTask(Login_input login_input, Context context) {
-        this.listener = (LoinDetails)context;
+    public LoginAsynTask(Login_input login_input, LoinDetails listener, Context context) {
+        this.listener = listener;
+        this.context = context;
+
         this.login_input = login_input;
         Log.v("SUBHA", "LoginAsynTask");
-        PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
+        PACKAGE_NAME = context.getPackageName();
+        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
 
     }
+
     @Override
     protected Void doInBackground(Login_input... params) {
 
 
         try {
-            HttpClient httpclient=new DefaultHttpClient();
+            HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getLoginUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader("authToken", this.login_input.getAuthToken());
             httppost.addHeader("email", this.login_input.getEmail());
-            httppost.addHeader("password",this.login_input.getPassword());
-            httppost.addHeader("lang_code",this.login_input.getLang_code());
-            httppost.addHeader("device_id",this.login_input.getDevice_id());
-            httppost.addHeader("google_id",this.login_input.getGoogle_id());
-            httppost.addHeader("device_type","1");
+            httppost.addHeader("password", this.login_input.getPassword());
+            httppost.addHeader("lang_code", this.login_input.getLang_code());
+            httppost.addHeader("device_id", this.login_input.getDevice_id());
+            httppost.addHeader("google_id", this.login_input.getGoogle_id());
+            httppost.addHeader("device_type", "1");
 
             // Execute HTTP Post Request
             try {
@@ -69,20 +75,19 @@ public class LoginAsynTask extends AsyncTask<Login_input, Void, Void> {
                 responseStr = EntityUtils.toString(response.getEntity());
 
 
-            } catch (org.apache.http.conn.ConnectTimeoutException e){
+            } catch (org.apache.http.conn.ConnectTimeoutException e) {
 
                 status = 0;
                 message = "Error";
 
 
-
-            }catch (IOException e) {
+            } catch (IOException e) {
                 status = 0;
                 message = "Error";
             }
 
-            JSONObject mainJson =null;
-            if(responseStr!=null) {
+            JSONObject mainJson = null;
+            if (responseStr != null) {
                 mainJson = new JSONObject(responseStr);
                 status = Integer.parseInt(mainJson.optString("code"));
 
@@ -94,7 +99,7 @@ public class LoginAsynTask extends AsyncTask<Login_input, Void, Void> {
 
                 }
                 if ((mainJson.has("display_name")) && mainJson.optString("display_name").trim() != null && !mainJson.optString("display_name").trim().isEmpty() && !mainJson.optString("display_name").trim().equals("null") && !mainJson.optString("display_name").trim().matches("")) {
-                    String hh=mainJson.optString("display_name");
+                    String hh = mainJson.optString("display_name");
                     login_output.setDisplay_name(mainJson.optString("display_name"));
 
 
@@ -150,9 +155,7 @@ public class LoginAsynTask extends AsyncTask<Login_input, Void, Void> {
 
                 }
 
-            }
-
-            else{
+            } else {
                 responseStr = "0";
                 status = 0;
                 message = "Error";
@@ -161,10 +164,8 @@ public class LoginAsynTask extends AsyncTask<Login_input, Void, Void> {
 
             responseStr = "0";
             status = 0;
-            message = "Error";            }
-
-        catch (Exception e)
-        {
+            message = "Error";
+        } catch (Exception e) {
 
             responseStr = "0";
             status = 0;
@@ -174,28 +175,26 @@ public class LoginAsynTask extends AsyncTask<Login_input, Void, Void> {
 
 
     }
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onLoginPreExecuteStarted();
 
         status = 0;
-//        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
-//        {
+//        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
 //            this.cancel(true);
 //            message = "Packge Name Not Matched";
 //            listener.onLoginPostExecuteCompleted(login_output, status, message);
 //            return;
 //        }
-//        if(CommonConstants.hashKey.equals(""))
-//        {
+//        if (CommonConstants.hashKey.equals("")) {
 //            this.cancel(true);
 //            message = "Hash Key Is Not Available. Please Initialize The SDK";
 //            listener.onLoginPostExecuteCompleted(login_output, status, message);
 //        }
 
     }
-
 
 
     @Override

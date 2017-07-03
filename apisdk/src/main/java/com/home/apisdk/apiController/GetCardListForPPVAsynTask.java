@@ -39,10 +39,13 @@ public class GetCardListForPPVAsynTask extends AsyncTask<GetCardListForPPVInputM
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
         private GetCardListForPPV listener;
+        private Context context;
         ArrayList<GetCardListForPPVOutputModel> getCardListForPPVOutputModel=new ArrayList<GetCardListForPPVOutputModel>();
 
-        public GetCardListForPPVAsynTask(GetCardListForPPVInputModel getCardListForPPVInputModel, Context context) {
-            this.listener = (GetCardListForPPV) context;
+        public GetCardListForPPVAsynTask(GetCardListForPPVInputModel getCardListForPPVInputModel,GetCardListForPPV listener, Context context) {
+            this.listener = listener;
+            this.context=context;
+
 
             this.getCardListForPPVInputModel = getCardListForPPVInputModel;
             PACKAGE_NAME=context.getPackageName();
@@ -100,12 +103,12 @@ public class GetCardListForPPVAsynTask extends AsyncTask<GetCardListForPPVInputM
                                 jsonChildNode = jsonMainNode.getJSONObject(i);
                                 GetCardListForPPVOutputModel content = new GetCardListForPPVOutputModel();
 
-                                if ((jsonChildNode.has("card_last_fourdigit")) && jsonChildNode.getString("card_last_fourdigit").trim() != null && !jsonChildNode.getString("card_last_fourdigit").trim().isEmpty() && !jsonChildNode.getString("card_last_fourdigit").trim().equals("null") && !jsonChildNode.getString("card_last_fourdigit").trim().matches("")) {
-                                    content.setCard_last_fourdigit(jsonChildNode.getString("card_last_fourdigit"));
+                                if ((jsonChildNode.has("card_last_fourdigit")) && jsonChildNode.optString("card_last_fourdigit").trim() != null && !jsonChildNode.optString("card_last_fourdigit").trim().isEmpty() && !jsonChildNode.optString("card_last_fourdigit").trim().equals("null") && !jsonChildNode.optString("card_last_fourdigit").trim().matches("")) {
+                                    content.setCard_last_fourdigit(jsonChildNode.optString("card_last_fourdigit"));
 
                                 }
-                                if ((jsonChildNode.has("card_id")) && jsonChildNode.getString("card_id").trim() != null && !jsonChildNode.getString("card_id").trim().isEmpty() && !jsonChildNode.getString("card_id").trim().equals("null") && !jsonChildNode.getString("card_id").trim().matches("")) {
-                                    content.setCard_id(jsonChildNode.getString("card_id"));
+                                if ((jsonChildNode.has("card_id")) && jsonChildNode.optString("card_id").trim() != null && !jsonChildNode.optString("card_id").trim().isEmpty() && !jsonChildNode.optString("card_id").trim().equals("null") && !jsonChildNode.optString("card_id").trim().matches("")) {
+                                    content.setCard_id(jsonChildNode.optString("card_id"));
                                 }
 
                                 getCardListForPPVOutputModel.add(content);

@@ -9,6 +9,26 @@ public class PurchaseHistoryInputModel {
     String authToken;
     String user_id;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    String id;
+
+    public String getLang_code() {
+        return Lang_code;
+    }
+
+    public void setLang_code(String lang_code) {
+        Lang_code = lang_code;
+    }
+
+    String Lang_code;
+
 
     public String getUser_id() {
         return user_id;

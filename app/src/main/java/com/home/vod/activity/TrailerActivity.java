@@ -26,6 +26,9 @@ import android.widget.Toast;
 
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.home.apisdk.apiController.GetIpAddressAsynTask;
+import com.home.apisdk.apiController.GetVideoLogsAsynTask;
+import com.home.apisdk.apiModel.VideoLogsInputModel;
 import com.home.vod.R;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ExpandableTextView;
@@ -77,7 +80,7 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
     }
 }*/
 
-public class TrailerActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener {
+public class TrailerActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener,GetVideoLogsAsynTask.GetVideoLogs,GetIpAddressAsynTask.IpAddress {
    // int played_length = 0;
     int playerStartPosition = 0;
     ImageView subtitle_change_btn;
@@ -94,10 +97,10 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     String userIdStr = "";
     String movieId = "";
     String episodeId = "0";
-    AsyncVideoLogDetails asyncVideoLogDetails;
+    GetVideoLogsAsynTask asyncVideoLogDetails;
     AsyncFFVideoLogDetails asyncFFVideoLogDetails;
 
-    AsynGetIpAddress asynGetIpAddress;
+    GetIpAddressAsynTask asynGetIpAddress;
 
     ImageButton back, center_play_pause;
     ImageView compress_expand;
@@ -652,7 +655,17 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                     if (content_types_id == 4) {
 
 
-                        asyncVideoLogDetails = new AsyncVideoLogDetails();
+                        VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
+                        videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                        videoLogsInputModel.setIpAddress(ipAddressStr.trim());
+                        videoLogsInputModel.setMuviUniqueId(movieId.trim());
+                        videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
+                        videoLogsInputModel.setPlayedLength(String.valueOf(playerPosition));
+                        videoLogsInputModel.setWatchStatus(watchStatus);
+                        videoLogsInputModel.setDeviceType("2");
+                        videoLogsInputModel.setVideoLogId(videoLogId);
+                        videoLogsInputModel.setUserId(userIdStr.trim());
+                        asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,TrailerActivity.this,TrailerActivity.this);
                         asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
                         emVideoView.start();
@@ -672,8 +685,18 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                             updateProgressBar();
 
 
-                                asyncVideoLogDetails = new AsyncVideoLogDetails();
-                                asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+                        VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
+                        videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                        videoLogsInputModel.setIpAddress(ipAddressStr.trim());
+                        videoLogsInputModel.setMuviUniqueId(movieId.trim());
+                        videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
+                        videoLogsInputModel.setPlayedLength(String.valueOf(playerPosition));
+                        videoLogsInputModel.setWatchStatus(watchStatus);
+                        videoLogsInputModel.setDeviceType("2");
+                        videoLogsInputModel.setVideoLogId(videoLogId);
+                        videoLogsInputModel.setUserId(userIdStr.trim());
+                        asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,TrailerActivity.this,TrailerActivity.this);
+                        asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
 
 
@@ -711,98 +734,107 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
     }
 
-
-
-
-    private class AsyncVideoLogDetails extends AsyncTask<Void, Void, Void> {
-        //  ProgressDialog pDialog;
-        String responseStr;
-        int statusCode = 0;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", userIdStr.trim());
-                httppost.addHeader("ip_address", ipAddressStr.trim());
-                httppost.addHeader("movie_id", movieId.trim());
-                httppost.addHeader("episode_id", episodeId.trim());
-                httppost.addHeader("played_length", String.valueOf(playerPosition));
-                httppost.addHeader("watch_status", watchStatus);
-                httppost.addHeader("device_type", "2");
-                httppost.addHeader("log_id", videoLogId);
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            videoLogId = "0";
-
-                        }
-
-                    });
-
-                } catch (Exception e) {
-                    videoLogId = "0";
-                    e.printStackTrace();
-
-                }
-                if (responseStr != null) {
-                    JSONObject myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                    if (statusCode == 200) {
-                        videoLogId = myJson.optString("log_id");
-                    } else {
-                        videoLogId = "0";
-                    }
-
-                }
-
-            } catch (Exception e) {
-                videoLogId = "0";
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-         /*   try {
-                if (pDialog.isShowing())
-                    pDialog.dismiss();
-            } catch (IllegalArgumentException ex) {
-                videoLogId = "0";
-            }*/
-            if (responseStr == null) {
-                videoLogId = "0";
-
-            }
-            startTimer();
-            return;
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            stoptimertask();
-        }
-
-
+    @Override
+    public void onGetVideoLogsPreExecuteStarted() {
+        stoptimertask();
     }
+
+    @Override
+    public void onGetVideoLogsPostExecuteCompleted(int status, String message, String videoLogId) {
+        startTimer();
+        return;
+    }
+
+
+//    private class AsyncVideoLogDetails extends AsyncTask<Void, Void, Void> {
+//        //  ProgressDialog pDialog;
+//        String responseStr;
+//        int statusCode = 0;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("user_id", userIdStr.trim());
+//                httppost.addHeader("ip_address", ipAddressStr.trim());
+//                httppost.addHeader("movie_id", movieId.trim());
+//                httppost.addHeader("episode_id", episodeId.trim());
+//                httppost.addHeader("played_length", String.valueOf(playerPosition));
+//                httppost.addHeader("watch_status", watchStatus);
+//                httppost.addHeader("device_type", "2");
+//                httppost.addHeader("log_id", videoLogId);
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            videoLogId = "0";
+//
+//                        }
+//
+//                    });
+//
+//                } catch (Exception e) {
+//                    videoLogId = "0";
+//                    e.printStackTrace();
+//
+//                }
+//                if (responseStr != null) {
+//                    JSONObject myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//                    if (statusCode == 200) {
+//                        videoLogId = myJson.optString("log_id");
+//                    } else {
+//                        videoLogId = "0";
+//                    }
+//
+//                }
+//
+//            } catch (Exception e) {
+//                videoLogId = "0";
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//         /*   try {
+//                if (pDialog.isShowing())
+//                    pDialog.dismiss();
+//            } catch (IllegalArgumentException ex) {
+//                videoLogId = "0";
+//            }*/
+//            if (responseStr == null) {
+//                videoLogId = "0";
+//
+//            }
+//            startTimer();
+//            return;
+//
+//
+//        }
+
+//        @Override
+//        protected void onPreExecute() {
+//            stoptimertask();
+//        }
+//
+//
+//    }
 
 
     public void startTimer() {
@@ -856,11 +888,31 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
-                                    asyncVideoLogDetails = new AsyncVideoLogDetails();
+                                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
+                                    videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                                    videoLogsInputModel.setIpAddress(ipAddressStr.trim());
+                                    videoLogsInputModel.setMuviUniqueId(movieId.trim());
+                                    videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
+                                    videoLogsInputModel.setPlayedLength(String.valueOf(playerPosition));
+                                    videoLogsInputModel.setWatchStatus(watchStatus);
+                                    videoLogsInputModel.setDeviceType("2");
+                                    videoLogsInputModel.setVideoLogId(videoLogId);
+                                    videoLogsInputModel.setUserId(userIdStr.trim());
+                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,TrailerActivity.this,TrailerActivity.this);
                                     watchStatus = "complete";
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else if (currentPositionStr > 0 && currentPositionStr % 60 == 0) {
-                                    asyncVideoLogDetails = new AsyncVideoLogDetails();
+                                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
+                                    videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                                    videoLogsInputModel.setIpAddress(ipAddressStr.trim());
+                                    videoLogsInputModel.setMuviUniqueId(movieId.trim());
+                                    videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
+                                    videoLogsInputModel.setPlayedLength(String.valueOf(playerPosition));
+                                    videoLogsInputModel.setWatchStatus(watchStatus);
+                                    videoLogsInputModel.setDeviceType("2");
+                                    videoLogsInputModel.setVideoLogId(videoLogId);
+                                    videoLogsInputModel.setUserId(userIdStr.trim());
+                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,TrailerActivity.this,TrailerActivity.this);
                                     watchStatus = "halfplay";
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -872,6 +924,17 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                 });
             }
         };
+    }
+
+    @Override
+    public void onIPAddressPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
+
+        return;
     }
 
     private class AsyncFFVideoLogDetails extends AsyncTask<Void, Void, Void> {
@@ -1090,75 +1153,75 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
     }
 
-
-    private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-
-                // Execute HTTP Post Request
-                try {
-                    URL myurl = new URL(Util.loadIPUrl);
-                    HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
-                    InputStream ins = con.getInputStream();
-                    InputStreamReader isr = new InputStreamReader(ins);
-                    BufferedReader in = new BufferedReader(isr);
-
-                    String inputLine;
-
-                    while ((inputLine = in.readLine()) != null) {
-                        System.out.println(inputLine);
-                        responseStr = inputLine;
-                    }
-
-                    in.close();
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    ipAddressStr = "";
-
-                } catch (UnsupportedEncodingException e) {
-
-                    ipAddressStr = "";
-
-                } catch (IOException e) {
-                    ipAddressStr = "";
-
-                }
-                if (responseStr != null) {
-                    Object json = new JSONTokener(responseStr).nextValue();
-                    if (json instanceof JSONObject) {
-                        ipAddressStr = ((JSONObject) json).getString("ip");
-
-                    }
-
-                }
-
-            } catch (Exception e) {
-                ipAddressStr = "";
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if (responseStr == null) {
-                ipAddressStr = "";
-            }
-            return;
-        }
-
-        protected void onPreExecute() {
-
-        }
-    }
+//
+//    private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
+//        String responseStr;
+//
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            try {
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    URL myurl = new URL(Util.loadIPUrl);
+//                    HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
+//                    InputStream ins = con.getInputStream();
+//                    InputStreamReader isr = new InputStreamReader(ins);
+//                    BufferedReader in = new BufferedReader(isr);
+//
+//                    String inputLine;
+//
+//                    while ((inputLine = in.readLine()) != null) {
+//                        System.out.println(inputLine);
+//                        responseStr = inputLine;
+//                    }
+//
+//                    in.close();
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    ipAddressStr = "";
+//
+//                } catch (UnsupportedEncodingException e) {
+//
+//                    ipAddressStr = "";
+//
+//                } catch (IOException e) {
+//                    ipAddressStr = "";
+//
+//                }
+//                if (responseStr != null) {
+//                    Object json = new JSONTokener(responseStr).nextValue();
+//                    if (json instanceof JSONObject) {
+//                        ipAddressStr = ((JSONObject) json).getString("ip");
+//
+//                    }
+//
+//                }
+//
+//            } catch (Exception e) {
+//                ipAddressStr = "";
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            if (responseStr == null) {
+//                ipAddressStr = "";
+//            }
+//            return;
+//        }
+//
+//        protected void onPreExecute() {
+//
+//        }
+//    }
 
 
     private void updateProgressBar() {

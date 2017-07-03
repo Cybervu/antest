@@ -40,11 +40,14 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private ForgotpassDetails listener;
+    private Context context;
     Forgotpassword_output forgotpassword_output=new Forgotpassword_output();
 
-    public ForgotpassAsynTask(Forgotpassword_input forgotpassword_input, Context context) {
+    public ForgotpassAsynTask(Forgotpassword_input forgotpassword_input,ForgotpassDetails listener, Context context) {
         this.forgotpassword_input = forgotpassword_input;
-        this.listener = (ForgotpassDetails) context;
+        this.listener = listener;
+        this.context=context;
+
         Log.v("SUBHA", "ForgotpassAsynTask");
         PACKAGE_NAME=context.getPackageName();
         Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
@@ -61,6 +64,11 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
             httppost.addHeader("authToken", this.forgotpassword_input.getAuthToken());
             httppost.addHeader("email", this.forgotpassword_input.getEmail());
             httppost.addHeader("lang_code",this.forgotpassword_input.getLang_code());
+
+            Log.v("SUBHA", "responseStr"+this.forgotpassword_input.getAuthToken());
+            Log.v("SUBHA", "responseStr"+this.forgotpassword_input.getEmail());
+            Log.v("SUBHA", "responseStr"+this.forgotpassword_input.getLang_code());
+
 
 
             // Execute HTTP Post Request
@@ -85,8 +93,8 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
 
                 status = Integer.parseInt(mainJson.optString("code"));
 
-                if ((mainJson.has("msg")) && mainJson.getString("msg").trim() != null && !mainJson.getString("msg").trim().isEmpty() && !mainJson.getString("msg").trim().equals("null") && !mainJson.getString("msg").trim().matches("")) {
-                    forgotpassword_output.setMsg(mainJson.getString("msg"));
+                if ((mainJson.has("msg")) && mainJson.optString("msg").trim() != null && !mainJson.optString("msg").trim().isEmpty() && !mainJson.optString("msg").trim().equals("null") && !mainJson.optString("msg").trim().matches("")) {
+                    forgotpassword_output.setMsg(mainJson.optString("msg"));
                 } else {
                     forgotpassword_output.setMsg("");
                 }

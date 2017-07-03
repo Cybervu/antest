@@ -41,10 +41,13 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private GetValidateUser listener;
+    private Context context;
     ValidateUserOutput validateUserOutput=new ValidateUserOutput();
 
-    public GetValidateUserAsynTask(ValidateUserInput validateUserInput, Context context) {
-        this.listener = (GetValidateUser)context;
+    public GetValidateUserAsynTask(ValidateUserInput validateUserInput,GetValidateUser listener, Context context) {
+        this.listener = listener;
+        this.context=context;
+
         this.validateUserInput = validateUserInput;
         PACKAGE_NAME=context.getPackageName();
 
@@ -84,7 +87,9 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
                         .appendQueryParameter("purchase_type", this.validateUserInput.getPurchaseType());
                 String query = builder.build().getEncodedQuery();
 
-
+                Log.v("SUBHA", "authToken" +this.validateUserInput.getAuthToken());
+                Log.v("SUBHA", "user_id" +this.validateUserInput.getUserId());
+                Log.v("SUBHA", "movie_id" +this.validateUserInput.getMuviUniqueId());
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
@@ -153,19 +158,19 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
             if(responseStr!=null) {
                 mainJson = new JSONObject(responseStr);
                 status = Integer.parseInt(mainJson.optString("code"));
-                if ((mainJson.has("msg")) && mainJson.getString("msg").trim() != null && !mainJson.getString("msg").trim().isEmpty() && !mainJson.getString("msg").trim().equals("null") && !mainJson.getString("msg").trim().matches("")) {
-                    validateUserOutput.setMessage(mainJson.getString("msg"));
-                    message = mainJson.getString("msg");
+                if ((mainJson.has("msg")) && mainJson.optString("msg").trim() != null && !mainJson.optString("msg").trim().isEmpty() && !mainJson.optString("msg").trim().equals("null") && !mainJson.optString("msg").trim().matches("")) {
+                    validateUserOutput.setMessage(mainJson.optString("msg"));
+                    message = mainJson.optString("msg");
 
                 }
-                if ((mainJson.has("member_subscribed")) && mainJson.getString("member_subscribed").trim() != null && !mainJson.getString("member_subscribed").trim().isEmpty() && !mainJson.getString("member_subscribed").trim().equals("null") && !mainJson.getString("member_subscribed").trim().matches("")) {
-                    validateUserOutput.setMessage(mainJson.getString("member_subscribed"));
+                if ((mainJson.has("member_subscribed")) && mainJson.optString("member_subscribed").trim() != null && !mainJson.optString("member_subscribed").trim().isEmpty() && !mainJson.optString("member_subscribed").trim().equals("null") && !mainJson.optString("member_subscribed").trim().matches("")) {
+                    validateUserOutput.setMessage(mainJson.optString("member_subscribed"));
 
                 }
 
-                if ((mainJson.has("status")) && mainJson.getString("status").trim() != null && !mainJson.getString("msg").trim().isEmpty() && !mainJson.getString("msg").trim().equals("null") && !mainJson.getString("msg").trim().matches("")) {
-                    validateUserOutput.setMessage(mainJson.getString("status"));
-                    validuser_str = mainJson.getString("status");
+                if ((mainJson.has("status")) && mainJson.optString("status").trim() != null && !mainJson.optString("msg").trim().isEmpty() && !mainJson.optString("msg").trim().equals("null") && !mainJson.optString("msg").trim().matches("")) {
+                    validateUserOutput.setMessage(mainJson.optString("status"));
+                    validuser_str = mainJson.optString("status");
 
                 }
             }

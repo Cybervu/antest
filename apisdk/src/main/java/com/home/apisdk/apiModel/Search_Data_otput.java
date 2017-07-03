@@ -7,11 +7,51 @@ public class Search_Data_otput{
     int is_converted=0;
     int is_ppv=0;
     int is_advance=0;
-    String movie_id,movie_stream_id,
-            episode_story,is_episode,permalink,name,display_name,content_type_id,full_movie,story,
-            genre,release_date,content_types_id,episode_title,episode_number,video_url,details_permalink,
-            movie_stream_uniq_id,muvi_uniq_id,ppv_plan_id,rolltype,roll_after,video_duration,movieid,geocategory_id,
-            studio_id,category_id,country_code,ip,embeddedUrl,viewcount,uniq_view_count,poster_url,actor,isFreeContent
+    String movie_id;
+    String movie_stream_id;
+    String episode_story;
+    String is_episode;
+    String permalink;
+    String name;
+    String display_name;
+    String content_type_id;
+    String full_movie;
+    String story;
+    String genre;
+    String release_date;
+    String content_types_id;
+    String episode_title;
+    String episode_number;
+    String video_url;
+    String details_permalink;
+    String movie_stream_uniq_id;
+    String muvi_uniq_id;
+    String ppv_plan_id;
+    String rolltype;
+    String roll_after;
+    String video_duration;
+    String movieid;
+    String geocategory_id;
+    String studio_id;
+    String category_id;
+    String country_code;
+    String ip;
+    String embeddedUrl;
+    String viewcount;
+    String uniq_view_count;
+    String poster_url;
+    String actor;
+    String isFreeContent;
+
+    public String getThirdparty_url() {
+        return thirdparty_url;
+    }
+
+    public void setThirdparty_url(String thirdparty_url) {
+        this.thirdparty_url = thirdparty_url;
+    }
+
+    String thirdparty_url
             ;
 
     public String getMovie_id() {

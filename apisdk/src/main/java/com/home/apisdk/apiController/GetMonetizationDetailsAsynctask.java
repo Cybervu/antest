@@ -37,10 +37,13 @@ public class GetMonetizationDetailsAsynctask extends AsyncTask<GetMonetizationDe
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private GetMonetizationDetails listener;
+    private Context context;
     GetMonetizationDetailsOutputModel getMonetizationDetailsOutputModel=new GetMonetizationDetailsOutputModel();
 
-    public GetMonetizationDetailsAsynctask(GetMonetizationDetailsInputModel getMonetizationDetailsInputModel, Context context) {
-        this.listener = (GetMonetizationDetails) context;
+    public GetMonetizationDetailsAsynctask(GetMonetizationDetailsInputModel getMonetizationDetailsInputModel,GetMonetizationDetails listener, Context context) {
+        this.listener = listener;
+        this.context=context;
+
         this.getMonetizationDetailsInputModel = getMonetizationDetailsInputModel;
         PACKAGE_NAME=context.getPackageName();
         Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
@@ -93,8 +96,8 @@ public class GetMonetizationDetailsAsynctask extends AsyncTask<GetMonetizationDe
                 if (status == 200) {
 
                     JSONObject mainJson = myJson.getJSONObject("monetization_plans");
-                    if ((mainJson.has("voucher")) && mainJson.getString("voucher").trim() != null && !mainJson.getString("voucher").trim().isEmpty() && !mainJson.getString("voucher").trim().equals("null") && !mainJson.getString("voucher").trim().matches("")) {
-                        getMonetizationDetailsOutputModel.setVoucher(mainJson.getString("voucher"));
+                    if ((mainJson.has("voucher")) && mainJson.optString("voucher").trim() != null && !mainJson.optString("voucher").trim().isEmpty() && !mainJson.optString("voucher").trim().equals("null") && !mainJson.optString("voucher").trim().matches("")) {
+                        getMonetizationDetailsOutputModel.setVoucher(mainJson.optString("voucher"));
                     }else{
                         getMonetizationDetailsOutputModel.setVoucher("");
 

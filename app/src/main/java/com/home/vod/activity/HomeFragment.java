@@ -33,6 +33,7 @@ import com.home.vod.adapter.RecyclerViewDataAdapter;
 import com.home.vod.model.GetMenuItem;
 import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
@@ -228,8 +229,8 @@ public class HomeFragment extends Fragment {
         setHasOptionsMenu(true);
         Util.image_orentiation.clear();
 
-        Log.v("BIBHU2","device_id already created ="+ Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
-        Log.v("BIBHU2","google_id already created ="+Util.getTextofLanguage(getActivity(),Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
+        LogUtil.showLog("BIBHU2","device_id already created ="+ Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
+        LogUtil.showLog("BIBHU2","google_id already created ="+Util.getTextofLanguage(getActivity(),Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
 
 
 
@@ -646,8 +647,8 @@ public class HomeFragment extends Fragment {
 
             }
 
-            Log.v("SUBHA", "HHH"+videoWidth+videoHeight);
-            Log.v("SUBHA", "vertical"+ MainActivity.vertical);
+            LogUtil.showLog("SUBHA", "HHH"+videoWidth+videoHeight);
+            LogUtil.showLog("SUBHA", "vertical"+ MainActivity.vertical);
 
             if (getView() != null) {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -1597,8 +1598,8 @@ public boolean onOptionsItemSelected(MenuItem item) {
                 videoWidth = bmp.getWidth();
 
 
-                Log.v("SUBHA", "videoHeight=============="+videoHeight);
-                Log.v("SUBHA", "videoWidth=============="+videoWidth);
+                LogUtil.showLog("SUBHA", "videoHeight=============="+videoHeight);
+                LogUtil.showLog("SUBHA", "videoWidth=============="+videoWidth);
 
                 return null;
             } catch (Exception e) {
@@ -1616,7 +1617,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
                 phandler.hide();
             }
 
-            Log.v("SUBHA", "HHH");
+            LogUtil.showLog("SUBHA", "HHH");
             loadui = new AsynLOADUI();
             loadui.executeOnExecutor(threadPoolExecutor);
         }

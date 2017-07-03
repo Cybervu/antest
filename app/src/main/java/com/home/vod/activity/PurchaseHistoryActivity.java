@@ -17,6 +17,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.home.apisdk.apiController.PurchaseHistoryAsyntask;
+import com.home.apisdk.apiModel.PurchaseHistoryInputModel;
+import com.home.apisdk.apiModel.PurchaseHistoryOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.PurchaseHistoryAdapter;
 import com.home.vod.model.PurchaseHistoryModel;
@@ -42,7 +45,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class PurchaseHistoryActivity extends AppCompatActivity {
+public class PurchaseHistoryActivity extends AppCompatActivity implements PurchaseHistoryAsyntask.PurchaseHistory {
     Toolbar mActionBarToolbar;
     RecyclerView recyclerView;
     ArrayList<PurchaseHistoryModel> purchaseData = new ArrayList<PurchaseHistoryModel>();
@@ -50,7 +53,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
     LinearLayout primary_layout;
     Button tryAgainButton;
     boolean isNetwork;
-
+    ProgressBarHandler pDialog;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     int keepAliveTime = 10;
@@ -160,169 +163,187 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
     {
         noInternet.setVisibility(View.GONE);
         primary_layout.setVisibility(View.VISIBLE);
-
-        AsynGetPurchaseDetails asynGetPurchaseDetail = new AsynGetPurchaseDetails();
+        PurchaseHistoryInputModel purchaseHistoryInputModel=new PurchaseHistoryInputModel();
+        purchaseHistoryInputModel.setUser_id(user_id);
+        purchaseHistoryInputModel.setAuthToken(Util.authTokenStr);
+        purchaseHistoryInputModel.setLang_code(Util.getTextofLanguage(PurchaseHistoryActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        PurchaseHistoryAsyntask asynGetPurchaseDetail = new PurchaseHistoryAsyntask(purchaseHistoryInputModel,this,this);
         asynGetPurchaseDetail.executeOnExecutor(threadPoolExecutor);
+    }
+
+    @Override
+    public void onPurchaseHistoryPreExecuteStarted() {
+        pDialog = new ProgressBarHandler(PurchaseHistoryActivity.this);
+        pDialog.show();
+    }
+
+    @Override
+    public void onPurchaseHistoryPostExecuteCompleted(ArrayList<PurchaseHistoryOutputModel> purchaseHistoryOutputModel, int status) {
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        PurchaseHistoryAdapter purchaseHistoryAdapter = new PurchaseHistoryAdapter(PurchaseHistoryActivity.this,purchaseData);
+        recyclerView.setAdapter(purchaseHistoryAdapter);
     }
 
     //Asyntask for getDetails of the csat and crew members.
 
-    private class AsynGetPurchaseDetails extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-        String responseStr = "";
-        int status;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.PurchaseHistory.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken",Util.authTokenStr);
-                httppost.addHeader("user_id",user_id);
-                httppost.addHeader("lang_code",Util.getTextofLanguage(PurchaseHistoryActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (Exception e){
-
-                }
-
-                JSONObject myJson =null;
-                if(responseStr!=null){
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                }
-                if (status > 0) {
-                    if (status == 200) {
-                        Id_Purchase_History = new ArrayList<>();
-                        JSONArray jsonArray = myJson.getJSONArray("section");
-                        for(int i=0 ;i<jsonArray.length();i++)
-                        {
-                            Invoice = jsonArray.getJSONObject(i).optString("invoice_id");
-                            if(Invoice.equals("") || Invoice==null || Invoice.equals("null"))
-                                Invoice = "";
-                            Id = jsonArray.getJSONObject(i).optString("id");
-                            if(Id.equals("") || Id==null || Id.equals("null"))
-                                Id = "";
-
-                            Id_Purchase_History.add(Id);
-                            Log.v("SUBHA","ID =========================== "+Id);
-
-                            PutrcahseDate = jsonArray.getJSONObject(i).optString("transaction_date");
-                            if(PutrcahseDate.equals("") || PutrcahseDate==null || PutrcahseDate.equals("null"))
-                                PutrcahseDate = "";
-
-                            TranactionStatus = jsonArray.getJSONObject(i).optString("transaction_status");
-                            if(TranactionStatus.equals("") || TranactionStatus==null || TranactionStatus.equals("null"))
-                                TranactionStatus = "";
-
-                            Ppvstatus = jsonArray.getJSONObject(i).optString("statusppv");
-                            if(Ppvstatus.equals("") || Ppvstatus==null || Ppvstatus.equals("null"))
-                                Ppvstatus = "";
-
-                            Currency_symbol = (jsonArray.getJSONObject(i).optString("currency_symbol")).trim();
-                            if(Currency_symbol.equals("") || Currency_symbol==null || Currency_symbol.equals("null"))
-                                Currency_symbol = "";
-
-                            Log.v("SUBHA","currency_symbol = "+Currency_symbol);
-
-                            currency_code = jsonArray.getJSONObject(i).optString("currency_code");
-                            if(currency_code.equals("") || currency_code==null || currency_code.equals("null"))
-                                currency_code = "";
-
-                            Log.v("SUBHA","currency_code = "+currency_code);
-
-
-                            Amount = jsonArray.getJSONObject(i).optString("amount");
-                            if(Amount.equals("") || Amount==null || Amount.equals("null"))
-                                Amount = "";
-                            else{
-
-                                if(Currency_symbol.equals("") || Currency_symbol==null || Currency_symbol.trim().equals(null))
-                                {
-                                    Amount = currency_code+ " "+ Amount;
-                                }
-                                else
-                                {
-                                    Amount = Currency_symbol+ " "+ Amount;
-                                }
-                            }
-
-                            Log.v("SUBHA","amount"+ Amount);
-
-
-                            purchaseHistoryModel = new PurchaseHistoryModel(Invoice,Id,PutrcahseDate,TranactionStatus,Amount,Ppvstatus);
-                            purchaseData.add(purchaseHistoryModel);
-
-                        }
-
-
-
-                    }else{  responseStr = "0";}
-                }
-                else{
-                    responseStr = "0";
-
-                }
-            } catch (final JSONException e1) {
-                responseStr = "0";
-            }
-            catch (Exception e)
-            {
-                responseStr = "0";
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-
-            try{
-                if(pDialog.isShowing())
-                    pDialog.hide();
-            }
-            catch(IllegalArgumentException ex)
-            {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        primary_layout.setVisibility(View.GONE);
-                        noInternet.setVisibility(View.VISIBLE);
-
-                    }
-
-                });
-                responseStr = "0";
-            }
-            if(responseStr == null)
-                responseStr = "0";
-
-            if((responseStr.trim().equals("0"))){
-                primary_layout.setVisibility(View.GONE);
-                noInternet.setVisibility(View.VISIBLE);
-            }else{
-                // Set the recycler adapter here.
-
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                recyclerView.setLayoutManager(layoutManager);
-                PurchaseHistoryAdapter purchaseHistoryAdapter = new PurchaseHistoryAdapter(PurchaseHistoryActivity.this,purchaseData);
-                recyclerView.setAdapter(purchaseHistoryAdapter);
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            pDialog = new ProgressBarHandler(PurchaseHistoryActivity.this);
-            pDialog.show();
-        }
-    }
+//    private class AsynGetPurchaseDetails extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler pDialog;
+//        String responseStr = "";
+//        int status;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            try {
+//                HttpClient httpclient=new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.PurchaseHistory.trim());
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken",Util.authTokenStr);
+//                httppost.addHeader("user_id",user_id);
+//                httppost.addHeader("lang_code",Util.getTextofLanguage(PurchaseHistoryActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//                } catch (Exception e){
+//
+//                }
+//
+//                JSONObject myJson =null;
+//                if(responseStr!=null){
+//                    myJson = new JSONObject(responseStr);
+//                    status = Integer.parseInt(myJson.optString("code"));
+//                }
+//                if (status > 0) {
+//                    if (status == 200) {
+//                        Id_Purchase_History = new ArrayList<>();
+//                        JSONArray jsonArray = myJson.getJSONArray("section");
+//                        for(int i=0 ;i<jsonArray.length();i++)
+//                        {
+//                            Invoice = jsonArray.getJSONObject(i).optString("invoice_id");
+//                            if(Invoice.equals("") || Invoice==null || Invoice.equals("null"))
+//                                Invoice = "";
+//                            Id = jsonArray.getJSONObject(i).optString("id");
+//                            if(Id.equals("") || Id==null || Id.equals("null"))
+//                                Id = "";
+//
+//                            Id_Purchase_History.add(Id);
+//                            Log.v("SUBHA","ID =========================== "+Id);
+//
+//                            PutrcahseDate = jsonArray.getJSONObject(i).optString("transaction_date");
+//                            if(PutrcahseDate.equals("") || PutrcahseDate==null || PutrcahseDate.equals("null"))
+//                                PutrcahseDate = "";
+//
+//                            TranactionStatus = jsonArray.getJSONObject(i).optString("transaction_status");
+//                            if(TranactionStatus.equals("") || TranactionStatus==null || TranactionStatus.equals("null"))
+//                                TranactionStatus = "";
+//
+//                            Ppvstatus = jsonArray.getJSONObject(i).optString("statusppv");
+//                            if(Ppvstatus.equals("") || Ppvstatus==null || Ppvstatus.equals("null"))
+//                                Ppvstatus = "";
+//
+//                            Currency_symbol = (jsonArray.getJSONObject(i).optString("currency_symbol")).trim();
+//                            if(Currency_symbol.equals("") || Currency_symbol==null || Currency_symbol.equals("null"))
+//                                Currency_symbol = "";
+//
+//                            Log.v("SUBHA","currency_symbol = "+Currency_symbol);
+//
+//                            currency_code = jsonArray.getJSONObject(i).optString("currency_code");
+//                            if(currency_code.equals("") || currency_code==null || currency_code.equals("null"))
+//                                currency_code = "";
+//
+//                            Log.v("SUBHA","currency_code = "+currency_code);
+//
+//
+//                            Amount = jsonArray.getJSONObject(i).optString("amount");
+//                            if(Amount.equals("") || Amount==null || Amount.equals("null"))
+//                                Amount = "";
+//                            else{
+//
+//                                if(Currency_symbol.equals("") || Currency_symbol==null || Currency_symbol.trim().equals(null))
+//                                {
+//                                    Amount = currency_code+ " "+ Amount;
+//                                }
+//                                else
+//                                {
+//                                    Amount = Currency_symbol+ " "+ Amount;
+//                                }
+//                            }
+//
+//                            Log.v("SUBHA","amount"+ Amount);
+//
+//
+//                            purchaseHistoryModel = new PurchaseHistoryModel(Invoice,Id,PutrcahseDate,TranactionStatus,Amount,Ppvstatus);
+//                            purchaseData.add(purchaseHistoryModel);
+//
+//                        }
+//
+//
+//
+//                    }else{  responseStr = "0";}
+//                }
+//                else{
+//                    responseStr = "0";
+//
+//                }
+//            } catch (final JSONException e1) {
+//                responseStr = "0";
+//            }
+//            catch (Exception e)
+//            {
+//                responseStr = "0";
+//            }
+//            return null;
+//
+//        }
+//
+//        protected void onPostExecute(Void result) {
+//
+//            try{
+//                if(pDialog.isShowing())
+//                    pDialog.hide();
+//            }
+//            catch(IllegalArgumentException ex)
+//            {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        primary_layout.setVisibility(View.GONE);
+//                        noInternet.setVisibility(View.VISIBLE);
+//
+//                    }
+//
+//                });
+//                responseStr = "0";
+//            }
+//            if(responseStr == null)
+//                responseStr = "0";
+//
+//            if((responseStr.trim().equals("0"))){
+//                primary_layout.setVisibility(View.GONE);
+//                noInternet.setVisibility(View.VISIBLE);
+//            }else{
+//                // Set the recycler adapter here.
+//
+//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//                recyclerView.setLayoutManager(layoutManager);
+//                PurchaseHistoryAdapter purchaseHistoryAdapter = new PurchaseHistoryAdapter(PurchaseHistoryActivity.this,purchaseData);
+//                recyclerView.setAdapter(purchaseHistoryAdapter);
+//            }
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//
+//            pDialog = new ProgressBarHandler(PurchaseHistoryActivity.this);
+//            pDialog.show();
+//        }
+//    }
 
     @Override
     public void onBackPressed()

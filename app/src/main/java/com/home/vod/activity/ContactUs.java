@@ -19,6 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.home.apisdk.apiController.ContactUsAsynTask;
+import com.home.apisdk.apiModel.ContactUsInputModel;
+import com.home.apisdk.apiModel.ContactUsOutputModel;
 import com.home.vod.R;
 import com.home.vod.util.Util;
 
@@ -36,7 +39,7 @@ import java.io.IOException;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactUs extends Fragment {
+public class ContactUs extends Fragment implements ContactUsAsynTask.ContactUs {
     Context context;
     String regEmailStr, regNameStr,regMessageStr;
     EditText editEmailStr, editNameStr,editMessageStr;
@@ -44,7 +47,7 @@ public class ContactUs extends Fragment {
     Button submit;
     String sucessMsg,statusmsg;
     String contEmail;
-    AsynContactUs asynContactUs;
+    ContactUsAsynTask asynContactUs;
     boolean validate = true;
 
 
@@ -224,7 +227,13 @@ public class ContactUs extends Fragment {
 
         boolean isNetwork = Util.checkNetwork(getActivity());
         if (isNetwork){
-            asynContactUs = new AsynContactUs();
+            ContactUsInputModel contactUsInputModel=new ContactUsInputModel();
+            contactUsInputModel.setAuthToken(Util.authTokenStr);
+            contactUsInputModel.setEmail(String.valueOf(regEmailStr));
+            contactUsInputModel.setName(String.valueOf(regNameStr));
+            contactUsInputModel.setMessage(String.valueOf(regMessageStr));
+            contactUsInputModel.setLang_code(Util.getTextofLanguage(context,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+            ContactUsAsynTask asynContactUs = new ContactUsAsynTask(contactUsInputModel, this,context);
             asynContactUs.execute();
 
         }else{
@@ -260,82 +269,13 @@ public class ContactUs extends Fragment {
 //        return isNetwork;
     }
 
-
-private class AsynContactUs extends AsyncTask<String, Void, Void> {
-//    ProgressBarHandler pDialog;
-    String contName;
-    JSONObject myJson = null;
-    int status;
-
-    String contMessage;
-    String responseStr;
-
-//    @Override
-//    protected void onPreExecute() {
-//        pDialog = new ProgressBarHandler(getActivity().getBaseContext());
-//        pDialog.show();
-//        Log.v("NIhar","onpreExecution");
-//    }
-
     @Override
-    protected Void doInBackground(String... params) {
+    public void onContactUsPreExecuteStarted() {
 
-        String urlRouteList = Util.rootUrl().trim() + Util.ContactUs.trim();
-
-        try {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(urlRouteList);
-            httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader("authToken", Util.authTokenStr.trim());
-            httppost.addHeader("name", String.valueOf(regNameStr));
-            httppost.addHeader("email", String.valueOf(regEmailStr));
-            httppost.addHeader("message", String.valueOf(regMessageStr));
-            httppost.addHeader("lang_code",Util.getTextofLanguage(context,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-            try {
-                HttpResponse response = httpclient.execute(httppost);
-                responseStr = EntityUtils.toString(response.getEntity());
-
-
-            } catch (org.apache.http.conn.ConnectTimeoutException e) {
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (pDialog != null && pDialog.isShowing()) {
-//                            pDialog.hide();
-//                            pDialog = null;
-//                        }
-//                        status = 0;
-//
-//                    }
-//
-//                });
-            }
-        } catch (IOException e) {
-//            if (pDialog != null && pDialog.isShowing()) {
-//                pDialog.hide();
-//                pDialog = null;
-//            }
-//            status = 0;
-            e.printStackTrace();
-        }
-        if (responseStr != null) {
-            try {
-                myJson = new JSONObject(responseStr);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            status = Integer.parseInt(myJson.optString("code"));
-            sucessMsg = myJson.optString("success_msg");
-            statusmsg = myJson.optString("status");
-
-
-        }
-        return null;
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
+    public void onContactUsPostExecuteCompleted(ContactUsOutputModel contactUsOutputModel, int code, String message, String status) {
         Toast.makeText(getActivity(), sucessMsg, Toast.LENGTH_SHORT).show();
 
 //        try {
@@ -358,5 +298,104 @@ private class AsynContactUs extends AsyncTask<String, Void, Void> {
         editEmailStr.setError(null);
 
     }
-}
+
+
+//    private class AsynContactUs extends AsyncTask<String, Void, Void> {
+////    ProgressBarHandler pDialog;
+//    String contName;
+//    JSONObject myJson = null;
+//    int status;
+//
+//    String contMessage;
+//    String responseStr;
+//
+////    @Override
+////    protected void onPreExecute() {
+////        pDialog = new ProgressBarHandler(getActivity().getBaseContext());
+////        pDialog.show();
+////        Log.v("NIhar","onpreExecution");
+////    }
+//
+//    @Override
+//    protected Void doInBackground(String... params) {
+//
+//        String urlRouteList = Util.rootUrl().trim() + Util.ContactUs.trim();
+//
+//        try {
+//            HttpClient httpclient = new DefaultHttpClient();
+//            HttpPost httppost = new HttpPost(urlRouteList);
+//            httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//            httppost.addHeader("authToken", Util.authTokenStr.trim());
+//            httppost.addHeader("name", String.valueOf(regNameStr));
+//            httppost.addHeader("email", String.valueOf(regEmailStr));
+//            httppost.addHeader("message", String.valueOf(regMessageStr));
+//            httppost.addHeader("lang_code",Util.getTextofLanguage(context,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//            try {
+//                HttpResponse response = httpclient.execute(httppost);
+//                responseStr = EntityUtils.toString(response.getEntity());
+//
+//
+//            } catch (org.apache.http.conn.ConnectTimeoutException e) {
+////                getActivity().runOnUiThread(new Runnable() {
+////                    @Override
+////                    public void run() {
+////                        if (pDialog != null && pDialog.isShowing()) {
+////                            pDialog.hide();
+////                            pDialog = null;
+////                        }
+////                        status = 0;
+////
+////                    }
+////
+////                });
+//            }
+//        } catch (IOException e) {
+////            if (pDialog != null && pDialog.isShowing()) {
+////                pDialog.hide();
+////                pDialog = null;
+////            }
+////            status = 0;
+//            e.printStackTrace();
+//        }
+//        if (responseStr != null) {
+//            try {
+//                myJson = new JSONObject(responseStr);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            status = Integer.parseInt(myJson.optString("code"));
+//            sucessMsg = myJson.optString("success_msg");
+//            statusmsg = myJson.optString("status");
+//
+//
+//        }
+//        return null;
+//    }
+//
+//    @Override
+//    protected void onPostExecute(Void aVoid) {
+//        Toast.makeText(getActivity(), sucessMsg, Toast.LENGTH_SHORT).show();
+//
+////        try {
+////            if (pDialog != null && pDialog.isShowing()) {
+////                pDialog.hide();
+////                pDialog = null;
+////            }
+////        } catch (IllegalArgumentException ex) {
+////            status = 0;
+////
+////        }
+////        if (status == 0) {
+////
+////        }
+//        editMessageStr.setText("");
+//        editNameStr.setText("");
+//        editEmailStr.setText("");
+//        editMessageStr.setError(null);
+//        editNameStr.setError(null);
+//        editEmailStr.setError(null);
+//
+//    }
+//}
 }

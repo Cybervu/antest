@@ -23,6 +23,7 @@ import com.home.vod.R;
 import com.home.vod.adapter.NavigationDrawerAdapter;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class FragmentDrawer extends Fragment {
 
         // preparing navigation drawer items
         for (int i = 0; i < titles.size(); i++) {
+            LogUtil.showLog("alok getData ::",titles.get(i).getTitle());
             NavDrawerItem navItem = new NavDrawerItem();
             navItem.setTitle(titles.get(i).getTitle());
             navItem.setIsEnabled(titles.get(i).getIsEnabled());
@@ -65,6 +67,12 @@ public class FragmentDrawer extends Fragment {
             data.add(navItem);
         }
         return data;
+    }
+
+    public void  setData(ArrayList<NavDrawerItem> titles){
+
+        LogUtil.showLog("alok setData ::",titles.get(titles.size()-1).getTitle());
+        this.titles=titles;
     }
 
     @Override
@@ -118,24 +126,25 @@ public class FragmentDrawer extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                if (MainActivity.menuList != null && MainActivity.menuList.size() > 0) {
-                    titles = MainActivity.menuList;
+               /* if (MainActivity.menuList != null && MainActivity.menuList.size() > 0) {
+                    titles = MainActivity.menuList;*/
                     // navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
 
                     boolean mylibrary_title_added = false;
                     Util.my_library_visibility = false;
 
                     for (int i = 0; i < titles.size(); i++) {
+                        LogUtil.showLog("alok setUp ::",titles.get(i).getTitle());
                         if (titles.get(i).getTitle().trim().equals(Util.getTextofLanguage(getActivity(),Util.MY_LIBRARY,Util.DEFAULT_MY_LIBRARY))) {
-                            Log.v("SUBHA", "IS_MYLIBRARY =" + Util.getTextofLanguage(getActivity(), Util.IS_MYLIBRARY, Util.DEFAULT_IS_MYLIBRARY));
-                            Log.v("SUBHA", "loggedInStr value =" + loggedInStr);
+                            LogUtil.showLog("SUBHA", "IS_MYLIBRARY =" + Util.getTextofLanguage(getActivity(), Util.IS_MYLIBRARY, Util.DEFAULT_IS_MYLIBRARY));
+                            LogUtil.showLog("SUBHA", "loggedInStr value =" + loggedInStr);
                             mylibrary_title_added = true;
 
                             if (Util.getTextofLanguage(getActivity(), Util.IS_MYLIBRARY, Util.DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
 
                             } else {
                                 titles.remove(i);
-                                Log.v("SUBHA", "My lib removed");
+                                LogUtil.showLog("SUBHA", "My lib removed");
                             }
                         }
                     }
@@ -149,7 +158,7 @@ public class FragmentDrawer extends Fragment {
                                     if (Util.getTextofLanguage(getActivity(), Util.IS_MYLIBRARY, Util.DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
                                         titles.add(i,new NavDrawerItem(Util.getTextofLanguage(getActivity(), Util.MY_LIBRARY, Util.DEFAULT_MY_LIBRARY), "102", true, "102"));
                                         mylibrary_title_added = true;
-                                        Log.v("SUBHA", "My lib added");
+                                        LogUtil.showLog("SUBHA", "My lib added");
                                     }
                                 }
                             }
@@ -159,9 +168,9 @@ public class FragmentDrawer extends Fragment {
                     // titles.add(new NavDrawerItem(Util.getTextofLanguage(getActivity(),Util.ABOUT_US,Util.DEFAULT_ABOUT_US),"103",true,"103"));
 
 
-                } else {
+               /* } else {
                     titles = null;
-                }
+                }*/
 
                 adapter = new NavigationDrawerAdapter(getActivity(), getData());
                 recyclerView.setAdapter(adapter);

@@ -30,6 +30,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.home.apisdk.apiController.DeleteInvoicePdfAsynTask;
+import com.home.apisdk.apiController.PurchaseHistoryAsyntask;
+import com.home.apisdk.apiModel.DeleteInvoicePdfInputModel;
+import com.home.apisdk.apiModel.DeleteInvoicePdfOutputModel;
+import com.home.apisdk.apiModel.PurchaseHistoryInputModel;
+import com.home.apisdk.apiModel.PurchaseHistoryOutputModel;
 import com.home.vod.R;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -51,6 +57,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -59,7 +66,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 
-public class TransactionDetailsActivity extends AppCompatActivity {
+public class TransactionDetailsActivity extends AppCompatActivity implements DeleteInvoicePdfAsynTask.DeleteInvoicePdf, PurchaseHistoryAsyntask.PurchaseHistory {
     Toolbar mActionBarToolbar;
     TextView transactionTitleTextView;
     LinearLayout transactionDateLayout, transactionOrderLayout, transactionAmountLayout, transactionInvoiceLayout,
@@ -115,14 +122,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         mActionBarToolbar.setTitle("");
 
 
-
         noInternet = (RelativeLayout) findViewById(R.id.noInternet);
         primary_layout = (LinearLayout) findViewById(R.id.primary_layout);
         tryAgainButton = (Button) findViewById(R.id.tryAgainButton);
         no_internet_text = (TextView) findViewById(R.id.no_internet_text);
 
-        no_internet_text.setText(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.NO_INTERNET_NO_DATA,Util.DEFAULT_NO_INTERNET_NO_DATA));
-        tryAgainButton.setText(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.TRY_AGAIN,Util.DEFAULT_TRY_AGAIN));
+        no_internet_text.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.NO_INTERNET_NO_DATA, Util.DEFAULT_NO_INTERNET_NO_DATA));
+        tryAgainButton.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.TRY_AGAIN, Util.DEFAULT_TRY_AGAIN));
 
 
         transactionDateLayout = (LinearLayout) findViewById(R.id.transactionDateLayout);
@@ -133,50 +139,48 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         transactionPLanNameLayout = (LinearLayout) findViewById(R.id.transactionPLanNameLayout);
 
 
-
-
         transactionDateTitleTextView = (TextView) findViewById(R.id.transactionDateTitleTextView);
-        Typeface typeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        Typeface typeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionDateTitleTextView.setTypeface(typeface);
-        transactionDateTitleTextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.TRANSACTION_DATE,Util.DEFAULT_TRANSACTION_DATE)+" :");
+        transactionDateTitleTextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.TRANSACTION_DATE, Util.DEFAULT_TRANSACTION_DATE) + " :");
 
         transactionOrderTitletextView = (TextView) findViewById(R.id.transactionOrderTitletextView);
-        Typeface typeface1 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        Typeface typeface1 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionOrderTitletextView.setTypeface(typeface1);
-        transactionOrderTitletextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.ORDER,Util.DEFAULT_ORDER)+" :");
+        transactionOrderTitletextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.ORDER, Util.DEFAULT_ORDER) + " :");
 
         transactionAmountTitletextView = (TextView) findViewById(R.id.transactionAmountTitletextView);
-        Typeface typeface2 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        Typeface typeface2 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionAmountTitletextView.setTypeface(typeface2);
-        transactionAmountTitletextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.AMOUNT,Util.DEFAULT_AMOUNT)+" :");
+        transactionAmountTitletextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.AMOUNT, Util.DEFAULT_AMOUNT) + " :");
 
 
         transactionInvoiceTitletextView = (TextView) findViewById(R.id.transactionInvoiceTitletextView);
-        Typeface typeface3 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        Typeface typeface3 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionInvoiceTitletextView.setTypeface(typeface3);
-        transactionInvoiceTitletextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.INVOICE,Util.DEFAULT_INVOICE)+" :");
+        transactionInvoiceTitletextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.INVOICE, Util.DEFAULT_INVOICE) + " :");
 
         transactionStatusTitletextView = (TextView) findViewById(R.id.transactionStatusTitletextView);
-        Typeface typeface4 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        Typeface typeface4 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionStatusTitletextView.setTypeface(typeface4);
-        transactionStatusTitletextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.TRANSACTION_STATUS,Util.DEFAULT_TRANSACTION_STATUS)+" :");
+        transactionStatusTitletextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.TRANSACTION_STATUS, Util.DEFAULT_TRANSACTION_STATUS) + " :");
 
         transactionPlanNameTitleTextView = (TextView) findViewById(R.id.transactionPlanNameTitleTextView);
-        Typeface typeface5 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        Typeface typeface5 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionPlanNameTitleTextView.setTypeface(typeface5);
-        transactionPlanNameTitleTextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.PLAN_NAME,Util.DEFAULT_PLAN_NAME)+" :");
+        transactionPlanNameTitleTextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.PLAN_NAME, Util.DEFAULT_PLAN_NAME) + " :");
 
         transactionTitleTextView = (TextView) findViewById(R.id.transactionTitleTextView);
-        Typeface typeface6 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        Typeface typeface6 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionTitleTextView.setTypeface(typeface6);
-        transactionTitleTextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.TRANASCTION_DETAIL,Util.DEFAULT_TRANASCTION_DETAIL));
+        transactionTitleTextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.TRANASCTION_DETAIL, Util.DEFAULT_TRANASCTION_DETAIL));
 
         transactionDownloadButton = (Button) findViewById(R.id.transactionDownloadButton);
-        Typeface typeface7 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        Typeface typeface7 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionDownloadButton.setTypeface(typeface7);
-        transactionDownloadButton.setText(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.DOWNLOAD_BUTTON_TITLE,Util.DEFAULT_DOWNLOAD_BUTTON_TITLE));
+        transactionDownloadButton.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.DOWNLOAD_BUTTON_TITLE, Util.DEFAULT_DOWNLOAD_BUTTON_TITLE));
 
-        Typeface typeface8 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface typeface8 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 
         transactionDateTextView = (TextView) findViewById(R.id.transactionDateTextView);
         transactionOrdertextView = (TextView) findViewById(R.id.transactionOrdertextView);
@@ -222,8 +226,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-
-                if (ContextCompat.checkSelfPermission(TransactionDetailsActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(TransactionDetailsActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(TransactionDetailsActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         ActivityCompat.requestPermissions(TransactionDetailsActivity.this,
                                 new String[]{Manifest.permission
@@ -240,13 +243,11 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                         if (!Download_Url.equals(""))
                             DownloadTransactionDetails();
                         else
-                            Toast.makeText(getApplicationContext(),Util.getTextofLanguage(TransactionDetailsActivity.this,Util.NO_PDF,Util.DEFAULT_NO_PDF), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), Util.getTextofLanguage(TransactionDetailsActivity.this, Util.NO_PDF, Util.DEFAULT_NO_PDF), Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(getApplicationContext(),Util.getTextofLanguage(TransactionDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), Util.getTextofLanguage(TransactionDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
                 }
-
-
 
 
             }
@@ -257,9 +258,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     public void DownloadTransactionDetails() {
 
         registerReceiver(InternetStatus, new IntentFilter("android.net.wifi.STATE_CHANGE"));
-        new DownloadFileFromURL().execute(Util.Dwonload_pdf_rootUrl+Download_Url);
+        new DownloadFileFromURL().execute(Util.Dwonload_pdf_rootUrl + Download_Url);
 
-        Log.v("SUBHA","Url="+Util.Dwonload_pdf_rootUrl+Download_Url);
+        Log.v("SUBHA", "Url=" + Util.Dwonload_pdf_rootUrl + Download_Url);
 
     }
 
@@ -271,7 +272,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             if (!Util.checkNetwork(TransactionDetailsActivity.this)) {
                 if (pDialog.isShowing() && pDialog != null) {
 
-                    showDialog(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.DOWNLOAD_INTERRUPTED,Util.DEFAULT_DOWNLOAD_INTERRUPTED), 0);
+                    showDialog(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.DOWNLOAD_INTERRUPTED, Util.DEFAULT_DOWNLOAD_INTERRUPTED), 0);
                     unregisterReceiver(InternetStatus);
                     pDialog.setProgress(0);
                     progressStatus = 0;
@@ -280,6 +281,49 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    public void onDeleteInvoicePdfPreExecuteStarted() {
+        Ph = new ProgressBarHandler(TransactionDetailsActivity.this);
+        Ph.show();
+    }
+
+    @Override
+    public void onDeleteInvoicePdfPostExecuteCompleted(DeleteInvoicePdfOutputModel deleteInvoicePdfOutputModel, int code, String message, String status) {
+        try {
+            if (Ph.isShowing())
+                Ph.hide();
+        } catch (IllegalArgumentException ex) {
+
+            deletion_success = false;
+        }
+        if (status == null)
+            deletion_success = false;
+
+        if (deletion_success) {
+            // Do whatever u want to do
+            finish();
+        }
+    }
+
+    @Override
+    public void onPurchaseHistoryPreExecuteStarted() {
+        Ph = new ProgressBarHandler(TransactionDetailsActivity.this);
+        Ph.show();
+    }
+
+    @Override
+    public void onPurchaseHistoryPostExecuteCompleted(ArrayList<PurchaseHistoryOutputModel> purchaseHistoryOutputModel, int status) {
+        transactionDateTextView.setText(TransactionDate);
+        transactionOrdertextView.setText(OredrId);
+        transactionAmounttextView.setText(Amount);
+        transactionInvoicetextView.setText(Invoice);
+        transactionStatustextView.setText(TransactionStatus);
+        transactionPlanNameTextView.setText(PlanName);
+
+        DownloadDocumentDetails downloadDocumentDetails = new DownloadDocumentDetails();
+        downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);
+    }
 
     class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
@@ -360,7 +404,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
             if ((Integer.parseInt(progress[0])) == 100) {
 
-                showDialog(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.DOWNLOAD_COMPLETED,Util.DEFAULT_DOWNLOAD_COMPLETED), 1);
+                showDialog(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.DOWNLOAD_COMPLETED, Util.DEFAULT_DOWNLOAD_COMPLETED), 1);
 
                 unregisterReceiver(InternetStatus);
                 pDialog.setProgress(0);
@@ -382,7 +426,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after the file was downloaded
 
-            Log.v("SUBHA","Download Completed");
+            Log.v("SUBHA", "Download Completed");
 
         }
     }
@@ -390,83 +434,83 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     //Asyntask to get Transaction Details.
 
-    private class Deletepdf extends AsyncTask<Void, Void, Void> {
-
-        String responseStr = "";
-        int status;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.DeleteInvoicePath.trim());//hv to cahnge
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr);
-                httppost.addHeader("filepath", Download_Url);
-                httppost.addHeader("lang_code",Util.getTextofLanguage(TransactionDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                    Log.v("SUBHA", "responseStr Delete Invoice Path=" + responseStr);
-                } catch (Exception e) {
-
-                }
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                }
-                if (status > 0) {
-                    if (status == 200) {
-
-                        deletion_success = true;
-
-                    } else {
-                        deletion_success = false;
-                    }
-                } else {
-                    deletion_success = false;
-
-                }
-            } catch (final JSONException e1) {
-                deletion_success = false;
-            } catch (Exception e) {
-                deletion_success = false;
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-
-            try {
-                if (Ph.isShowing())
-                    Ph.hide();
-            } catch (IllegalArgumentException ex) {
-
-                deletion_success = false;
-            }
-            if (responseStr == null)
-                deletion_success = false;
-
-            if (deletion_success) {
-                // Do whatever u want to do
-                finish();
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            Ph = new ProgressBarHandler(TransactionDetailsActivity.this);
-            Ph.show();
-
-        }
-    }
+//    private class Deletepdf extends AsyncTask<Void, Void, Void> {
+//
+//        String responseStr = "";
+//        int status;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.DeleteInvoicePath.trim());//hv to cahnge
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr);
+//                httppost.addHeader("filepath", Download_Url);
+//                httppost.addHeader("lang_code",Util.getTextofLanguage(TransactionDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//                    Log.v("SUBHA", "responseStr Delete Invoice Path=" + responseStr);
+//                } catch (Exception e) {
+//
+//                }
+//
+//                JSONObject myJson = null;
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    status = Integer.parseInt(myJson.optString("code"));
+//                }
+//                if (status > 0) {
+//                    if (status == 200) {
+//
+//                        deletion_success = true;
+//
+//                    } else {
+//                        deletion_success = false;
+//                    }
+//                } else {
+//                    deletion_success = false;
+//
+//                }
+//            } catch (final JSONException e1) {
+//                deletion_success = false;
+//            } catch (Exception e) {
+//                deletion_success = false;
+//            }
+//            return null;
+//        }
+//
+//        protected void onPostExecute(Void result) {
+//
+//            try {
+//                if (Ph.isShowing())
+//                    Ph.hide();
+//            } catch (IllegalArgumentException ex) {
+//
+//                deletion_success = false;
+//            }
+//            if (responseStr == null)
+//                deletion_success = false;
+//
+//            if (deletion_success) {
+//                // Do whatever u want to do
+//                finish();
+//            }
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//
+//            Ph = new ProgressBarHandler(TransactionDetailsActivity.this);
+//            Ph.show();
+//
+//        }
+//    }
 
 
     @Override
@@ -491,183 +535,184 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     public void GetPurchaseHistoryDetails() {
         noInternet.setVisibility(View.GONE);
         primary_layout.setVisibility(View.VISIBLE);
-
-        AsynGetTransactionDetails asynGetTransactionDetails = new AsynGetTransactionDetails();
+        PurchaseHistoryInputModel purchaseHistoryInputModel=new PurchaseHistoryInputModel();
+        purchaseHistoryInputModel.setAuthToken(Util.authTokenStr);
+        purchaseHistoryInputModel.setLang_code(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        purchaseHistoryInputModel.setUser_id(user_id);
+        purchaseHistoryInputModel.setId(id);
+        PurchaseHistoryAsyntask asynGetTransactionDetails = new PurchaseHistoryAsyntask(purchaseHistoryInputModel,this,this);
         asynGetTransactionDetails.executeOnExecutor(threadPoolExecutor);
     }
 
 
     //Asyntask to get Transaction Details.
 
-    private class AsynGetTransactionDetails extends AsyncTask<Void, Void, Void> {
-
-        String responseStr = "";
-        int status;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.PurchaseHistoryDetails.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr);
-                httppost.addHeader("user_id", user_id);
-                httppost.addHeader("id", id);
-                httppost.addHeader("lang_code",Util.getTextofLanguage(TransactionDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                    Log.v("SUBHA", "responseStr transcation Details=" + responseStr);
-                } catch (Exception e) {
-
-                }
-
-                JSONObject myJson = null;
-                JSONObject myJson1 = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                    myJson1 = myJson.getJSONObject("section");
-
-//                    TransactionDate,OredrId,Amount,Invoice,TransactionStatus,PlanName;
-                }
-                if (status > 0) {
-                    if (status == 200) {
-
-
-                        OredrId = myJson1.optString("order_number");
-                        if (OredrId.equals("") || OredrId == null || OredrId.equals("null"))
-                            OredrId = "";
-
-                        Invoice = myJson1.optString("invoice_id");
-                        if (Invoice.equals("") || Invoice == null || Invoice.equals("null"))
-                            Invoice = "";
-
-                        TransactionDate = myJson1.optString("transaction_date");
-                        if (TransactionDate.equals("") || TransactionDate == null || TransactionDate.equals("null"))
-                            TransactionDate = "";
-
-
-                        if(!TransactionDate.equals(""))
-                        {
-                            String date=TransactionDate.trim();
-                            SimpleDateFormat spf=new SimpleDateFormat("MMMM dd,yyyy hh:mm:ss aaa");
-                            Date newDate=spf.parse(date);
-                            spf= new SimpleDateFormat("MMMM dd,yyyy");
-                            date = spf.format(newDate);
-                            Log.v("SUBHA","Transaction Date = "+date);
-                        }
-
-
-
-                        TransactionStatus = myJson1.optString("transaction_status");
-                        if (TransactionStatus.equals("") || TransactionStatus == null || TransactionStatus.equals("null"))
-                            TransactionStatus = "";
-
-                        PlanName = myJson1.optString("plan_name");
-                        if (PlanName.equals("") || PlanName == null || PlanName.equals("null"))
-                            PlanName = "";
-
-                        Currency_symbol = myJson1.optString("currency_symbol");
-                        if (Currency_symbol.equals("") || Currency_symbol == null || Currency_symbol.equals("null"))
-                            Currency_symbol = "";
-
-                        Log.v("SUBHA", "currency_symbol = " + Currency_symbol);
-
-                        currency_code = myJson1.optString("currency_code");
-                        if (currency_code.equals("") || currency_code == null || currency_code.equals("null"))
-                            currency_code = "";
-
-                        Log.v("SUBHA", "currency_code = " + currency_code);
-
-
-                        Amount = myJson1.optString("amount");
-                        if (Amount.equals("") || Amount == null || Amount.equals("null"))
-                            Amount = "";
-                        else {
-
-                            if (Currency_symbol.equals("") || Currency_symbol == null || Currency_symbol.trim().equals(null)) {
-                                Amount = currency_code + " " + Amount;
-                            } else {
-                                Amount = Currency_symbol + " " + Amount;
-                            }
-                        }
-
-                        Log.v("SUBHA", "amount" + Amount);
-
-
-                    } else {
-                        responseStr = "0";
-                    }
-                } else {
-                    responseStr = "0";
-
-                }
-            } catch (final JSONException e1) {
-                responseStr = "0";
-            } catch (Exception e) {
-                responseStr = "0";
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-
-          /*  try{
-                if( progressDialog.isShowing())
-                    progressDialog.dismiss();
-            }
-            catch(IllegalArgumentException ex)
-            {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        primary_layout.setVisibility(View.GONE);
-                        noInternet.setVisibility(View.VISIBLE);
-
-                    }
-
-                });
-                responseStr = "0";
-            }*/
-            if (responseStr == null)
-                responseStr = "0";
-
-            if ((responseStr.trim().equals("0"))) {
-                primary_layout.setVisibility(View.GONE);
-                noInternet.setVisibility(View.VISIBLE);
-
-                if (Ph.isShowing())
-                    Ph.hide();
-
-            } else {
-                transactionDateTextView.setText(TransactionDate);
-                transactionOrdertextView.setText(OredrId);
-                transactionAmounttextView.setText(Amount);
-                transactionInvoicetextView.setText(Invoice);
-                transactionStatustextView.setText(TransactionStatus);
-                transactionPlanNameTextView.setText(PlanName);
-
-                DownloadDocumentDetails downloadDocumentDetails = new DownloadDocumentDetails();
-                downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);
-
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            Ph = new ProgressBarHandler(TransactionDetailsActivity.this);
-            Ph.show();
-        }
-    }
+//    private class AsynGetTransactionDetails extends AsyncTask<Void, Void, Void> {
+//
+//        String responseStr = "";
+//        int status;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.PurchaseHistoryDetails.trim());
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr);
+//                httppost.addHeader("user_id", user_id);
+//                httppost.addHeader("id", id);
+//                httppost.addHeader("lang_code", Util.getTextofLanguage(TransactionDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//                    Log.v("SUBHA", "responseStr transcation Details=" + responseStr);
+//                } catch (Exception e) {
+//
+//                }
+//
+//                JSONObject myJson = null;
+//                JSONObject myJson1 = null;
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    status = Integer.parseInt(myJson.optString("code"));
+//                    myJson1 = myJson.getJSONObject("section");
+//
+////                    TransactionDate,OredrId,Amount,Invoice,TransactionStatus,PlanName;
+//                }
+//                if (status > 0) {
+//                    if (status == 200) {
+//
+//
+//                        OredrId = myJson1.optString("order_number");
+//                        if (OredrId.equals("") || OredrId == null || OredrId.equals("null"))
+//                            OredrId = "";
+//
+//                        Invoice = myJson1.optString("invoice_id");
+//                        if (Invoice.equals("") || Invoice == null || Invoice.equals("null"))
+//                            Invoice = "";
+//
+//                        TransactionDate = myJson1.optString("transaction_date");
+//                        if (TransactionDate.equals("") || TransactionDate == null || TransactionDate.equals("null"))
+//                            TransactionDate = "";
+//
+//
+//                        if (!TransactionDate.equals("")) {
+//                            String date = TransactionDate.trim();
+//                            SimpleDateFormat spf = new SimpleDateFormat("MMMM dd,yyyy hh:mm:ss aaa");
+//                            Date newDate = spf.parse(date);
+//                            spf = new SimpleDateFormat("MMMM dd,yyyy");
+//                            date = spf.format(newDate);
+//                            Log.v("SUBHA", "Transaction Date = " + date);
+//                        }
+//
+//
+//                        TransactionStatus = myJson1.optString("transaction_status");
+//                        if (TransactionStatus.equals("") || TransactionStatus == null || TransactionStatus.equals("null"))
+//                            TransactionStatus = "";
+//
+//                        PlanName = myJson1.optString("plan_name");
+//                        if (PlanName.equals("") || PlanName == null || PlanName.equals("null"))
+//                            PlanName = "";
+//
+//                        Currency_symbol = myJson1.optString("currency_symbol");
+//                        if (Currency_symbol.equals("") || Currency_symbol == null || Currency_symbol.equals("null"))
+//                            Currency_symbol = "";
+//
+//                        Log.v("SUBHA", "currency_symbol = " + Currency_symbol);
+//
+//                        currency_code = myJson1.optString("currency_code");
+//                        if (currency_code.equals("") || currency_code == null || currency_code.equals("null"))
+//                            currency_code = "";
+//
+//                        Log.v("SUBHA", "currency_code = " + currency_code);
+//
+//
+//                        Amount = myJson1.optString("amount");
+//                        if (Amount.equals("") || Amount == null || Amount.equals("null"))
+//                            Amount = "";
+//                        else {
+//
+//                            if (Currency_symbol.equals("") || Currency_symbol == null || Currency_symbol.trim().equals(null)) {
+//                                Amount = currency_code + " " + Amount;
+//                            } else {
+//                                Amount = Currency_symbol + " " + Amount;
+//                            }
+//                        }
+//
+//                        Log.v("SUBHA", "amount" + Amount);
+//
+//
+//                    } else {
+//                        responseStr = "0";
+//                    }
+//                } else {
+//                    responseStr = "0";
+//
+//                }
+//            } catch (final JSONException e1) {
+//                responseStr = "0";
+//            } catch (Exception e) {
+//                responseStr = "0";
+//            }
+//            return null;
+//
+//        }
+//
+//        protected void onPostExecute(Void result) {
+//
+//          /*  try{
+//                if( progressDialog.isShowing())
+//                    progressDialog.dismiss();
+//            }
+//            catch(IllegalArgumentException ex)
+//            {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        primary_layout.setVisibility(View.GONE);
+//                        noInternet.setVisibility(View.VISIBLE);
+//
+//                    }
+//
+//                });
+//                responseStr = "0";
+//            }*/
+//            if (responseStr == null)
+//                responseStr = "0";
+//
+//            if ((responseStr.trim().equals("0"))) {
+//                primary_layout.setVisibility(View.GONE);
+//                noInternet.setVisibility(View.VISIBLE);
+//
+//                if (Ph.isShowing())
+//                    Ph.hide();
+//
+//            } else {
+//                transactionDateTextView.setText(TransactionDate);
+//                transactionOrdertextView.setText(OredrId);
+//                transactionAmounttextView.setText(Amount);
+//                transactionInvoicetextView.setText(Invoice);
+//                transactionStatustextView.setText(TransactionStatus);
+//                transactionPlanNameTextView.setText(PlanName);
+//
+//                DownloadDocumentDetails downloadDocumentDetails = new DownloadDocumentDetails();
+//                downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);
+//
+//            }
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//
+//            Ph = new ProgressBarHandler(TransactionDetailsActivity.this);
+//            Ph.show();
+//        }
+//    }
 
 
     //Asyntask to get Transaction Details.
@@ -688,8 +733,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 httppost.addHeader("user_id", user_id);
                 httppost.addHeader("id", id);
                 httppost.addHeader("device_type", "app");
-                httppost.addHeader("lang_code",Util.getTextofLanguage(TransactionDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
+                httppost.addHeader("lang_code", Util.getTextofLanguage(TransactionDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
                 // Execute HTTP Post Request
@@ -775,15 +819,19 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     public void showDialog(String msg, final int deletevalue) {
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(TransactionDetailsActivity.this);
         dlgAlert.setMessage(msg);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+        dlgAlert.setPositiveButton(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
         dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+        dlgAlert.setPositiveButton(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
 
                         if (deletevalue == 1) {
-                            Deletepdf deletepdf = new Deletepdf();
+                            DeleteInvoicePdfInputModel deleteInvoicePdfInputModel = new DeleteInvoicePdfInputModel();
+                            deleteInvoicePdfInputModel.setAuthToken(Util.authTokenStr);
+                            deleteInvoicePdfInputModel.setFilepath(Download_Url);
+                            deleteInvoicePdfInputModel.setLanguage_code(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                            DeleteInvoicePdfAsynTask deletepdf = new DeleteInvoicePdfAsynTask(deleteInvoicePdfInputModel, TransactionDetailsActivity.this, TransactionDetailsActivity.this);
                             deletepdf.executeOnExecutor(threadPoolExecutor);
                         }
                     }
@@ -806,24 +854,21 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         switch (requestCode) {
             case 111: {
 
-                if(grantResults.length>0)
-                {
+                if (grantResults.length > 0) {
                     if ((grantResults.length > 0) && (grantResults[0]) == PackageManager.PERMISSION_GRANTED) {
                         //Call whatever you want
                         if (Util.checkNetwork(TransactionDetailsActivity.this)) {
                             if (!Download_Url.equals(""))
                                 DownloadTransactionDetails();
                             else
-                                Toast.makeText(getApplicationContext(),Util.getTextofLanguage(TransactionDetailsActivity.this,Util.NO_PDF,Util.DEFAULT_NO_PDF), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), Util.getTextofLanguage(TransactionDetailsActivity.this, Util.NO_PDF, Util.DEFAULT_NO_PDF), Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(getApplicationContext(),Util.getTextofLanguage(TransactionDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), Util.getTextofLanguage(TransactionDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
                     } else {
                         finish();
                     }
-                }
-                else
-                {
+                } else {
                     finish();
                 }
 

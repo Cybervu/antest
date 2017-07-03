@@ -28,23 +28,27 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
     TransactionInputModel transactionInputModel;
     String responseStr;
     int status;
-    String message,PACKAGE_NAME;
+    String message, PACKAGE_NAME;
 
     public interface Transaction {
         void onTransactionPreExecuteStarted();
+
         void onTransactionPostExecuteCompleted(TransactionOutputModel transactionOutputModel, int status, String message);
     }
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private Transaction listener;
-    TransactionOutputModel transactionOutputModel=new TransactionOutputModel();
+    private Context context;
+    TransactionOutputModel transactionOutputModel = new TransactionOutputModel();
 
-    public TransactionDetailsAsynctask(TransactionInputModel transactionInputModel, Context context) {
-        this.listener = (Transaction) context;
+    public TransactionDetailsAsynctask(TransactionInputModel transactionInputModel, Transaction listener, Context context) {
+        this.listener = listener;
+        this.context = context;
+
         this.transactionInputModel = transactionInputModel;
-        PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
-        Log.v("SUBHA","transaction");
+        PACKAGE_NAME = context.getPackageName();
+        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
+        Log.v("SUBHA", "transaction");
 
 
     }
@@ -53,12 +57,12 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
     protected Void doInBackground(TransactionInputModel... params) {
 
         try {
-            HttpClient httpclient=new DefaultHttpClient();
+            HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getTransactionUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader("authToken", this.transactionInputModel.getAuthToken());
-            httppost.addHeader("user_id",this.transactionInputModel.getUser_id());
-            httppost.addHeader("id",this.transactionInputModel.getId());
+            httppost.addHeader("user_id", this.transactionInputModel.getUser_id());
+            httppost.addHeader("id", this.transactionInputModel.getId());
 
             // Execute HTTP Post Request
             try {
@@ -66,20 +70,19 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
                 responseStr = EntityUtils.toString(response.getEntity());
 
 
-            } catch (org.apache.http.conn.ConnectTimeoutException e){
+            } catch (org.apache.http.conn.ConnectTimeoutException e) {
 
                 status = 0;
                 message = "Error";
 
 
-
-            }catch (IOException e) {
+            } catch (IOException e) {
                 status = 0;
                 message = "Error";
             }
 
-            JSONObject myJson =null;
-            if(responseStr!=null){
+            JSONObject myJson = null;
+            if (responseStr != null) {
                 myJson = new JSONObject(responseStr);
                 status = Integer.parseInt(myJson.optString("code"));
                 message = myJson.optString("msg");
@@ -90,73 +93,67 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
                 if (status == 200) {
 
                     JSONObject mainJson = myJson.getJSONObject("section");
-                    if ((mainJson.has("order_number")) && mainJson.getString("order_number").trim() != null && !mainJson.getString("order_number").trim().isEmpty() && !mainJson.getString("order_number").trim().equals("null") && !mainJson.getString("order_number").trim().matches("")) {
-                        transactionOutputModel.setOrder_number(mainJson.getString("order_number"));
-                    }else{
+                    if ((mainJson.has("order_number")) && mainJson.optString("order_number").trim() != null && !mainJson.optString("order_number").trim().isEmpty() && !mainJson.optString("order_number").trim().equals("null") && !mainJson.optString("order_number").trim().matches("")) {
+                        transactionOutputModel.setOrder_number(mainJson.optString("order_number"));
+                    } else {
                         transactionOutputModel.setOrder_number("");
 
                     }
-                    if ((mainJson.has("movie_id")) && mainJson.getString("movie_id").trim() != null && !mainJson.getString("movie_id").trim().isEmpty() && !mainJson.getString("movie_id").trim().equals("null") && !mainJson.getString("movie_id").trim().matches("")) {
-                        transactionOutputModel.setMovie_id(mainJson.getString("movie_id"));
+                    if ((mainJson.has("movie_id")) && mainJson.optString("movie_id").trim() != null && !mainJson.optString("movie_id").trim().isEmpty() && !mainJson.optString("movie_id").trim().equals("null") && !mainJson.optString("movie_id").trim().matches("")) {
+                        transactionOutputModel.setMovie_id(mainJson.optString("movie_id"));
 
 
-                    }else{
+                    } else {
                         transactionOutputModel.setMovie_id("");
 
                     }
-                    if ((mainJson.has("transaction_date")) && mainJson.getString("transaction_date").trim() != null && !mainJson.getString("transaction_date").trim().isEmpty() && !mainJson.getString("transaction_date").trim().equals("null") && !mainJson.getString("transaction_date").trim().matches("")) {
-                        transactionOutputModel.setTransaction_date(mainJson.getString("transaction_date"));
+                    if ((mainJson.has("transaction_date")) && mainJson.optString("transaction_date").trim() != null && !mainJson.optString("transaction_date").trim().isEmpty() && !mainJson.optString("transaction_date").trim().equals("null") && !mainJson.optString("transaction_date").trim().matches("")) {
+                        transactionOutputModel.setTransaction_date(mainJson.optString("transaction_date"));
 
 
-                    }else{
+                    } else {
                         transactionOutputModel.setTransaction_date("");
 
                     }
-                    if ((mainJson.has("transaction_status")) && mainJson.getString("transaction_status").trim() != null && !mainJson.getString("transaction_status").trim().isEmpty() && !mainJson.getString("transaction_status").trim().equals("null") && !mainJson.getString("transaction_status").trim().matches("")) {
-                        transactionOutputModel.setTransaction_status(mainJson.getString("transaction_status"));
-                    }else{
+                    if ((mainJson.has("transaction_status")) && mainJson.optString("transaction_status").trim() != null && !mainJson.optString("transaction_status").trim().isEmpty() && !mainJson.optString("transaction_status").trim().equals("null") && !mainJson.optString("transaction_status").trim().matches("")) {
+                        transactionOutputModel.setTransaction_status(mainJson.optString("transaction_status"));
+                    } else {
                         transactionOutputModel.setTransaction_status("");
 
                     }
-                    if ((mainJson.has("plan_name")) && mainJson.getString("plan_name").trim() != null && !mainJson.getString("plan_name").trim().isEmpty() && !mainJson.getString("plan_name").trim().equals("null") && !mainJson.getString("plan_name").trim().matches("")) {
-                        transactionOutputModel.setPlan_name(mainJson.getString("plan_name"));
-                    }else{
+                    if ((mainJson.has("plan_name")) && mainJson.optString("plan_name").trim() != null && !mainJson.optString("plan_name").trim().isEmpty() && !mainJson.optString("plan_name").trim().equals("null") && !mainJson.optString("plan_name").trim().matches("")) {
+                        transactionOutputModel.setPlan_name(mainJson.optString("plan_name"));
+                    } else {
                         transactionOutputModel.setPlan_name("");
 
                     }
 
-                    if ((mainJson.has("currency_symbol")) && mainJson.getString("currency_symbol").trim() != null && !mainJson.getString("currency_symbol").trim().isEmpty() && !mainJson.getString("currency_symbol").trim().equals("null") && !mainJson.getString("currency_symbol").trim().matches("")) {
-                        transactionOutputModel.setCurrency_symbol(mainJson.getString("currency_symbol"));
+                    if ((mainJson.has("currency_symbol")) && mainJson.optString("currency_symbol").trim() != null && !mainJson.optString("currency_symbol").trim().isEmpty() && !mainJson.optString("currency_symbol").trim().equals("null") && !mainJson.optString("currency_symbol").trim().matches("")) {
+                        transactionOutputModel.setCurrency_symbol(mainJson.optString("currency_symbol"));
 
-                    }else{
+                    } else {
                         transactionOutputModel.setCurrency_symbol("");
 
                     }
 
-                    if ((mainJson.has("currency_code")) && mainJson.getString("currency_code").trim() != null && !mainJson.getString("currency_code").trim().isEmpty() && !mainJson.getString("currency_code").trim().equals("null") && !mainJson.getString("currency_code").trim().matches("")) {
-                        transactionOutputModel.setCurrency_code(mainJson.getString("currency_code"));
-                    }else{
+                    if ((mainJson.has("currency_code")) && mainJson.optString("currency_code").trim() != null && !mainJson.optString("currency_code").trim().isEmpty() && !mainJson.optString("currency_code").trim().equals("null") && !mainJson.optString("currency_code").trim().matches("")) {
+                        transactionOutputModel.setCurrency_code(mainJson.optString("currency_code"));
+                    } else {
                         transactionOutputModel.setCurrency_code("");
 
                     }
 
-                    if ((mainJson.has("amount")) && mainJson.getString("amount").trim() != null && !mainJson.getString("amount").trim().isEmpty() && !mainJson.getString("amount").trim().equals("null") && !mainJson.getString("amount").trim().matches("")) {
-                        transactionOutputModel.setAmount(mainJson.getString("amount"));
+                    if ((mainJson.has("amount")) && mainJson.optString("amount").trim() != null && !mainJson.optString("amount").trim().isEmpty() && !mainJson.optString("amount").trim().equals("null") && !mainJson.optString("amount").trim().matches("")) {
+                        transactionOutputModel.setAmount(mainJson.optString("amount"));
 
-                    }
-                    else{
+                    } else {
                         transactionOutputModel.setAmount("");
 
                     }
 
 
-
-
-
                 }
-            }
-
-            else{
+            } else {
 
                 responseStr = "0";
                 status = 0;
@@ -166,10 +163,8 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
 
             responseStr = "0";
             status = 0;
-            message = "Error";            }
-
-        catch (Exception e)
-        {
+            message = "Error";
+        } catch (Exception e) {
 
             responseStr = "0";
             status = 0;
@@ -199,15 +194,14 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onTransactionPostExecuteCompleted(transactionOutputModel,status,message);
         }*/
-        listener.onTransactionPostExecuteCompleted(transactionOutputModel,status,message);
+        listener.onTransactionPostExecuteCompleted(transactionOutputModel, status, message);
 
     }
 
 
-
     @Override
     protected void onPostExecute(Void result) {
-        listener.onTransactionPostExecuteCompleted(transactionOutputModel,status,message);
+        listener.onTransactionPostExecuteCompleted(transactionOutputModel, status, message);
 
     }
 

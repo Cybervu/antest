@@ -23,27 +23,31 @@ import java.io.IOException;
  * Created by MUVI on 1/20/2017.
  */
 
-public class RegisterUserPaymentAsyntask extends AsyncTask<RegisterUserPaymentInputModel,Void ,Void > {
+public class RegisterUserPaymentAsyntask extends AsyncTask<RegisterUserPaymentInputModel, Void, Void> {
 
     public RegisterUserPaymentInputModel registerUserPaymentInputModel;
-    String PACKAGE_NAME,message,responseStr;
+    String PACKAGE_NAME, message, responseStr;
     int code;
 
-    public interface RegisterUserPayment{
+    public interface RegisterUserPayment {
         void onRegisterUserPaymentPreExecuteStarted();
+
         void onRegisterUserPaymentPostExecuteCompleted(RegisterUserPaymentOutputModel registerUserPaymentOutputModel, int status);
     }
 
     private RegisterUserPayment listener;
-   RegisterUserPaymentOutputModel registerUserPaymentOutputModel = new RegisterUserPaymentOutputModel();
+    private Context context;
+    RegisterUserPaymentOutputModel registerUserPaymentOutputModel = new RegisterUserPaymentOutputModel();
 
-    public RegisterUserPaymentAsyntask(RegisterUserPaymentInputModel registerUserPaymentInputModel, Context context) {
-        this.listener = (RegisterUserPayment) context;
+    public RegisterUserPaymentAsyntask(RegisterUserPaymentInputModel registerUserPaymentInputModel, RegisterUserPayment listener, Context context) {
+        this.listener = listener;
+        this.context = context;
+
 
         this.registerUserPaymentInputModel = registerUserPaymentInputModel;
-        PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
-        Log.v("SUBHA","register user payment");
+        PACKAGE_NAME = context.getPackageName();
+        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
+        Log.v("SUBHA", "register user payment");
 
     }
 
@@ -99,8 +103,8 @@ public class RegisterUserPaymentAsyntask extends AsyncTask<RegisterUserPaymentIn
             }
 
             if (code == 200) {
-                if ((myJson.has("msg")) && myJson.getString("msg").trim() != null && !myJson.getString("msg").trim().isEmpty() && !myJson.getString("msg").trim().equals("null") && !myJson.getString("msg").trim().matches("")) {
-                    registerUserPaymentOutputModel.setMsg(myJson.getString("msg"));
+                if ((myJson.has("msg")) && myJson.optString("msg").trim() != null && !myJson.optString("msg").trim().isEmpty() && !myJson.optString("msg").trim().equals("null") && !myJson.optString("msg").trim().matches("")) {
+                    registerUserPaymentOutputModel.setMsg(myJson.optString("msg"));
                 }
 
             }
@@ -118,7 +122,7 @@ public class RegisterUserPaymentAsyntask extends AsyncTask<RegisterUserPaymentIn
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onRegisterUserPaymentPreExecuteStarted();
-        code= 0;
+        code = 0;
      /*   if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
@@ -135,6 +139,6 @@ public class RegisterUserPaymentAsyntask extends AsyncTask<RegisterUserPaymentIn
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onRegisterUserPaymentPostExecuteCompleted(registerUserPaymentOutputModel,code);
+        listener.onRegisterUserPaymentPostExecuteCompleted(registerUserPaymentOutputModel, code);
     }
 }

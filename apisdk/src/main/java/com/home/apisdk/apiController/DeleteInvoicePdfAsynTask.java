@@ -36,9 +36,11 @@ public class DeleteInvoicePdfAsynTask extends AsyncTask<DeleteInvoicePdfInputMod
     }
 
     private DeleteInvoicePdf listener;
+    private Context context;
 
-    public DeleteInvoicePdfAsynTask(DeleteInvoicePdfInputModel deleteInvoicePdfInputModel, Context context) {
-        this.listener = (DeleteInvoicePdf) context;
+    public DeleteInvoicePdfAsynTask(DeleteInvoicePdfInputModel deleteInvoicePdfInputModel,DeleteInvoicePdf listener, Context context) {
+        this.listener = listener;
+        this.context=context;
 
         this.deleteInvoicePdfInputModel = deleteInvoicePdfInputModel;
         PACKAGE_NAME=context.getPackageName();
@@ -57,6 +59,7 @@ public class DeleteInvoicePdfAsynTask extends AsyncTask<DeleteInvoicePdfInputMod
 
             httppost.addHeader("authToken", this.deleteInvoicePdfInputModel.getAuthToken());
             httppost.addHeader("filepath", this.deleteInvoicePdfInputModel.getFilepath());
+            httppost.addHeader("lang_code",this.deleteInvoicePdfInputModel.getLanguage_code());
 
 
             // Execute HTTP Post Request

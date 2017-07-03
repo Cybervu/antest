@@ -4,7 +4,26 @@ package com.home.apisdk.apiModel;
  * Created by Muvi on 10/4/2016.
  */
 public class Registration_output  {
-    String id,email,display_name,nick_name,studio_id,profile_image,isSubscribed,code,status,msg;
+    String id;
+    String email;
+    String display_name;
+    String nick_name;
+    String studio_id;
+    String profile_image;
+    String isSubscribed;
+    String code;
+    String status;
+    String msg;
+
+    public String getLogin_history_id() {
+        return login_history_id;
+    }
+
+    public void setLogin_history_id(String login_history_id) {
+        this.login_history_id = login_history_id;
+    }
+
+    String login_history_id;
 
     public String getId() {
         return id;

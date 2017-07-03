@@ -27,81 +27,87 @@ public class GetImageForDownloadAsynTask extends AsyncTask<GetImageForDownloadIn
     GetImageForDownloadInputModel getImageForDownloadInputModel;
     String responseStr;
     int status;
-    String message,PACKAGE_NAME;
+    String message, PACKAGE_NAME;
 
     public interface GetImageForDownload {
         void onGetImageForDownloadPreExecuteStarted();
+
         void onGetImageForDownloadPostExecuteCompleted(GetImageForDownloadOutputModel getImageForDownloadOutputModel, int status, String message);
     }
 
-        private GetImageForDownload listener;
-        GetImageForDownloadOutputModel getImageForDownloadOutputModel=new GetImageForDownloadOutputModel();
+    private GetImageForDownload listener;
+    private Context context;
+    GetImageForDownloadOutputModel getImageForDownloadOutputModel = new GetImageForDownloadOutputModel();
 
-        public GetImageForDownloadAsynTask(GetImageForDownloadInputModel getImageForDownloadInputModel, Context context) {
-            this.listener = (GetImageForDownload) context;
+    public GetImageForDownloadAsynTask(GetImageForDownloadInputModel getImageForDownloadInputModel, GetImageForDownload listener, Context context) {
+        this.listener = listener;
+        this.context=context;
 
-            this.getImageForDownloadInputModel = getImageForDownloadInputModel;
-            PACKAGE_NAME=context.getPackageName();
-            Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
-            Log.v("SUBHA","getFeatureContentAsynTask");
 
-        }
+        this.getImageForDownloadInputModel = getImageForDownloadInputModel;
+        PACKAGE_NAME = context.getPackageName();
+        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
+        Log.v("SUBHA", "getFeatureContentAsynTask");
 
-        @Override
-        protected Void doInBackground(GetImageForDownloadInputModel... params) {
+    }
 
+    @Override
+    protected Void doInBackground(GetImageForDownloadInputModel... params) {
+
+        try {
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(APIUrlConstant.getGetImageForDownloadUrl());
+            httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+
+            httppost.addHeader("authToken", this.getImageForDownloadInputModel.getAuthToken());
+
+
+            // Execute HTTP Post Request
             try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(APIUrlConstant.getGetImageForDownloadUrl());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+                HttpResponse response = httpclient.execute(httppost);
+                responseStr = EntityUtils.toString(response.getEntity());
+                Log.v("SUBHA", "RES" + responseStr);
 
-                httppost.addHeader("authToken", this.getImageForDownloadInputModel.getAuthToken());
+            } catch (org.apache.http.conn.ConnectTimeoutException e) {
+                status = 0;
+                message = "";
 
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("SUBHA", "RES" + responseStr);
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    status = 0;
-                    message = "";
-
-                } catch (IOException e) {
-                    status = 0;
-                    message = "";
-                }
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                    message = myJson.optString("status");
-                }
-
-
-                    if (status == 200) {
-                        if ((myJson.has("image_url")) && myJson.getString("image_url").trim() != null && !myJson.getString("image_url").trim().isEmpty() && !myJson.getString("image_url").trim().equals("null") && !myJson.getString("image_url").trim().matches("")) {
-                            getImageForDownloadOutputModel.setImageUrl(myJson.getString("image_url"));
-                        }
-
-                    }
-
-            } catch (Exception e) {
+            } catch (IOException e) {
                 status = 0;
                 message = "";
             }
-            return null;
 
-        }
+            JSONObject myJson = null;
+            if (responseStr != null) {
+                myJson = new JSONObject(responseStr);
+                status = Integer.parseInt(myJson.optString("code"));
+                message = myJson.optString("status");
+            }else {
+                status=0;
+            }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            listener.onGetImageForDownloadPreExecuteStarted();
-            responseStr = "0";
+
+            if (status == 200) {
+                if ((myJson.has("image_url")) && myJson.optString("image_url").trim() != null && !myJson.optString("image_url").trim().isEmpty() && !myJson.optString("image_url").trim().equals("null") && !myJson.optString("image_url").trim().matches("")) {
+                    getImageForDownloadOutputModel.setImageUrl(myJson.optString("image_url"));
+                }
+
+            }
+
+        } catch (Exception e) {
             status = 0;
+            message = "";
+        }
+        return null;
+
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        listener.onGetImageForDownloadPreExecuteStarted();
+        responseStr = "0";
+        status = 0;
            /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
@@ -117,15 +123,14 @@ public class GetImageForDownloadAsynTask extends AsyncTask<GetImageForDownloadIn
             }*/
 
 
-        }
+    }
 
 
+    @Override
+    protected void onPostExecute(Void result) {
+        listener.onGetImageForDownloadPostExecuteCompleted(getImageForDownloadOutputModel, status, message);
 
-        @Override
-        protected void onPostExecute(Void result) {
-            listener.onGetImageForDownloadPostExecuteCompleted(getImageForDownloadOutputModel,status,message);
-
-        }
+    }
 
     //}
 }

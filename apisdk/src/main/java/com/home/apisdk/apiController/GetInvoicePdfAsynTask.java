@@ -23,27 +23,30 @@ import java.io.IOException;
  * Created by MUVI on 1/20/2017.
  */
 
-public class GetInvoicePdfAsynTask extends AsyncTask<GetInvoicePdfInputModel,Void ,Void > {
+public class GetInvoicePdfAsynTask extends AsyncTask<GetInvoicePdfInputModel, Void, Void> {
 
     public GetInvoicePdfInputModel getInvoicePdfInputModel;
-    String PACKAGE_NAME,message,responseStr,status;
+    String PACKAGE_NAME, message, responseStr, status;
     int code;
     GetInvoicePdfOutputModel getInvoicePdfOutputModel;
 
-    public interface GetInvoicePdf{
+    public interface GetInvoicePdf {
         void onGetInvoicePdfPreExecuteStarted();
+
         void onGetInvoicePdfPostExecuteCompleted(GetInvoicePdfOutputModel getInvoicePdfOutputModel, int code, String message, String status);
     }
 
     private GetInvoicePdf listener;
+    private Context context;
 
-    public GetInvoicePdfAsynTask(GetInvoicePdfInputModel getInvoicePdfInputModel, Context context) {
-        this.listener = (GetInvoicePdf) context;
+    public GetInvoicePdfAsynTask(GetInvoicePdfInputModel getInvoicePdfInputModel, GetInvoicePdf listener, Context context) {
+        this.listener = listener;
+        this.context = context;
 
         this.getInvoicePdfInputModel = getInvoicePdfInputModel;
-        PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
-        Log.v("SUBHA","getinvoicepdf");
+        PACKAGE_NAME = context.getPackageName();
+        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
+        Log.v("SUBHA", "getinvoicepdf");
 
     }
 
@@ -84,12 +87,12 @@ public class GetInvoicePdfAsynTask extends AsyncTask<GetInvoicePdfInputModel,Voi
                 message = myJson.optString("status");
             }
 
-                if (code == 200) {
+            if (code == 200) {
 
-                            getInvoicePdfOutputModel = new GetInvoicePdfOutputModel();
-                    getInvoicePdfOutputModel.setSection(myJson.optString("section"));
+                getInvoicePdfOutputModel = new GetInvoicePdfOutputModel();
+                getInvoicePdfOutputModel.setSection(myJson.optString("section"));
 
-                }
+            }
         } catch (Exception e) {
             code = 0;
             message = "";
@@ -97,11 +100,12 @@ public class GetInvoicePdfAsynTask extends AsyncTask<GetInvoicePdfInputModel,Voi
         }
         return null;
     }
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onGetInvoicePdfPreExecuteStarted();
-        code= 0;
+        code = 0;
        /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
@@ -121,6 +125,6 @@ public class GetInvoicePdfAsynTask extends AsyncTask<GetInvoicePdfInputModel,Voi
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onGetInvoicePdfPostExecuteCompleted(getInvoicePdfOutputModel,code,message,status);
+        listener.onGetInvoicePdfPostExecuteCompleted(getInvoicePdfOutputModel, code, message, status);
     }
 }

@@ -40,10 +40,13 @@ public class GetVideoBufferLogsAsynTask extends AsyncTask<VideoBufferLogsInputMo
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private GetVideoBufferLogs listener;
+    private Context context;
     VideoBufferLogsOutputModel videoBufferLogsOutputModel=new VideoBufferLogsOutputModel();
 
-    public GetVideoBufferLogsAsynTask(VideoBufferLogsInputModel videoBufferLogsInputModel, Context context) {
-        this.listener = (GetVideoBufferLogs)context;
+    public GetVideoBufferLogsAsynTask(VideoBufferLogsInputModel videoBufferLogsInputModel,GetVideoBufferLogs listener, Context context) {
+        this.listener = listener;
+        this.context=context;
+
         this.videoBufferLogsInputModel = videoBufferLogsInputModel;
         Log.v("SUBHA", "LoginAsynTask");
         PACKAGE_NAME=context.getPackageName();
@@ -123,16 +126,16 @@ public class GetVideoBufferLogsAsynTask extends AsyncTask<VideoBufferLogsInputMo
                 status = Integer.parseInt(mainJson.optString("code"));
 
 
-                if ((mainJson.has("log_id")) && mainJson.getString("log_id").trim() != null && !mainJson.getString("log_id").trim().isEmpty() && !mainJson.getString("log_id").trim().equals("null") && !mainJson.getString("log_id").trim().matches("")) {
-                    videoBufferLogsOutputModel.setBufferLogId(mainJson.getString("log_id"));
+                if ((mainJson.has("log_id")) && mainJson.optString("log_id").trim() != null && !mainJson.optString("log_id").trim().isEmpty() && !mainJson.optString("log_id").trim().equals("null") && !mainJson.optString("log_id").trim().matches("")) {
+                    videoBufferLogsOutputModel.setBufferLogId(mainJson.optString("log_id"));
 
                 }
-                if ((mainJson.has("log_unique_id")) && mainJson.getString("log_unique_id").trim() != null && !mainJson.getString("log_unique_id").trim().isEmpty() && !mainJson.getString("log_unique_id").trim().equals("null") && !mainJson.getString("log_unique_id").trim().matches("")) {
-                    videoBufferLogsOutputModel.setBufferLogUniqueId(mainJson.getString("log_unique_id"));
+                if ((mainJson.has("log_unique_id")) && mainJson.optString("log_unique_id").trim() != null && !mainJson.optString("log_unique_id").trim().isEmpty() && !mainJson.optString("log_unique_id").trim().equals("null") && !mainJson.optString("log_unique_id").trim().matches("")) {
+                    videoBufferLogsOutputModel.setBufferLogUniqueId(mainJson.optString("log_unique_id"));
 
                 }
-                if ((mainJson.has("location")) && mainJson.getString("location").trim() != null && !mainJson.getString("location").trim().isEmpty() && !mainJson.getString("location").trim().equals("null") && !mainJson.getString("location").trim().matches("")) {
-                    videoBufferLogsOutputModel.setBufferLocation(mainJson.getString("location"));
+                if ((mainJson.has("location")) && mainJson.optString("location").trim() != null && !mainJson.optString("location").trim().isEmpty() && !mainJson.optString("location").trim().equals("null") && !mainJson.optString("location").trim().matches("")) {
+                    videoBufferLogsOutputModel.setBufferLocation(mainJson.optString("location"));
 
                 }
 

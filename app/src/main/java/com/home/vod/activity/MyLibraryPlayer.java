@@ -32,6 +32,10 @@ import android.widget.Toast;
 
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.home.apisdk.apiController.GetIpAddressAsynTask;
+import com.home.apisdk.apiController.GetVideoLogsAsynTask;
+import com.home.apisdk.apiController.MyLibraryAsynTask;
+import com.home.apisdk.apiModel.VideoLogsInputModel;
 import com.home.vod.R;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.subtitle_support.Caption;
@@ -39,6 +43,7 @@ import com.home.vod.subtitle_support.FormatSRT;
 import com.home.vod.subtitle_support.FormatSRT_WithoutCaption;
 import com.home.vod.subtitle_support.TimedTextObject;
 import com.home.vod.util.ExpandableTextView;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
@@ -96,7 +101,8 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
     }
 }*/
 
-public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener {
+public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener,GetVideoLogsAsynTask.GetVideoLogs,
+        GetIpAddressAsynTask.IpAddress{
     int played_length = 0;
     int playerStartPosition = 0;
 
@@ -112,10 +118,10 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     String userIdStr = "";
     String movieId = "";
     String episodeId = "0";
-    AsyncVideoLogDetails asyncVideoLogDetails;
+    GetVideoLogsAsynTask asyncVideoLogDetails;
     AsyncFFVideoLogDetails asyncFFVideoLogDetails;
 
-    AsynGetIpAddress asynGetIpAddress;
+    GetIpAddressAsynTask asynGetIpAddress;
 
     ImageButton back, center_play_pause;
     ImageView compress_expand;
@@ -369,7 +375,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         {
             // Add your code
-            Log.v("SUBHA","resolution image Invisible called");
+            LogUtil.showLog("SUBHA","resolution image Invisible called");
         }
         else
         {
@@ -382,7 +388,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             Collections.reverse(ResolutionFormat);
             for(int m=0;m<ResolutionFormat.size();m++)
             {
-                Log.v("BIBHU","RESOLUTION FORMAT======"+ResolutionFormat.get(m));
+                LogUtil.showLog("BIBHU","RESOLUTION FORMAT======"+ResolutionFormat.get(m));
             }
         }
         if(ResolutionUrl.size()>0)
@@ -390,7 +396,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             Collections.reverse(ResolutionUrl);
             for(int n=0;n<ResolutionUrl.size();n++)
             {
-                Log.v("BIBHU","RESOLUTION URL======"+ResolutionUrl.get(n));
+                LogUtil.showLog("BIBHU","RESOLUTION URL======"+ResolutionUrl.get(n));
             }
         }
 
@@ -405,7 +411,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         if((SubTitlePath.size()<1) && (ResolutionUrl.size()<1))
         {
             subtitle_change_btn.setVisibility(View.INVISIBLE);
-            Log.v("SUBHA","CC Invisible called");
+            LogUtil.showLog("SUBHA","CC Invisible called");
         }
 
 
@@ -715,8 +721,8 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             @Override
             public void onPrepared() {
 
-                Log.v("SUBHA","This is the first calling point");
-                Log.v("SUBHA","Played Length ="+Util.dataModel.getPlayPos());
+                LogUtil.showLog("SUBHA","This is the first calling point");
+                LogUtil.showLog("SUBHA","Played Length ="+Util.dataModel.getPlayPos());
 
                 if(change_resolution)
                 {
@@ -773,7 +779,17 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                 subsFetchTask.execute();
                             }
                             else {
-                                asyncVideoLogDetails = new AsyncVideoLogDetails();
+                                VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                                videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                                videoLogsInputModel.setUserId(userIdStr.trim());
+                                videoLogsInputModel.setIpAddress(ipAddressStr.trim());
+                                videoLogsInputModel.setMuviUniqueId(movieId.trim());
+                                videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
+                                videoLogsInputModel.setPlayedLength(String.valueOf(playerPosition));
+                                videoLogsInputModel.setWatchStatus(watchStatus);
+                                videoLogsInputModel.setDeviceType("2");
+                                videoLogsInputModel.setVideoLogId(videoLogId);
+                                asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, MyLibraryPlayer.this,MyLibraryPlayer.this);
                                 asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                             }
 
@@ -802,7 +818,17 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                     subsFetchTask.execute();
                                 }
                                 else {
-                                    asyncVideoLogDetails = new AsyncVideoLogDetails();
+                                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                                    videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                                    videoLogsInputModel.setUserId(userIdStr.trim());
+                                    videoLogsInputModel.setIpAddress(ipAddressStr.trim());
+                                    videoLogsInputModel.setMuviUniqueId(movieId.trim());
+                                    videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
+                                    videoLogsInputModel.setPlayedLength(String.valueOf(playerPosition));
+                                    videoLogsInputModel.setWatchStatus(watchStatus);
+                                    videoLogsInputModel.setDeviceType("2");
+                                    videoLogsInputModel.setVideoLogId(videoLogId);
+                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,MyLibraryPlayer.this,MyLibraryPlayer.this);
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
 
@@ -830,103 +856,115 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
     }
 
-
-
-
-    private class AsyncVideoLogDetails extends AsyncTask<Void, Void, Void> {
-        //  ProgressDialog pDialog;
-        String responseStr;
-        int statusCode = 0;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", userIdStr.trim());
-                httppost.addHeader("ip_address", ipAddressStr.trim());
-                httppost.addHeader("movie_id", movieId.trim());
-                httppost.addHeader("episode_id", episodeId.trim());
-                httppost.addHeader("played_length", String.valueOf(playerPosition));
-                httppost.addHeader("watch_status", watchStatus);
-                httppost.addHeader("device_type", "2");
-                httppost.addHeader("log_id", videoLogId);
-
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("SUBHA", "PLAY responseStr" + responseStr);
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            videoLogId = "0";
-
-                        }
-
-                    });
-
-                } catch (Exception e) {
-                    videoLogId = "0";
-                    e.printStackTrace();
-
-                    Log.v("SUBHA", "Exception of videoplayer" + e.toString());
-                }
-                if (responseStr != null) {
-                    JSONObject myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                    if (statusCode == 200) {
-                        videoLogId = myJson.optString("log_id");
-                    } else {
-                        videoLogId = "0";
-                    }
-
-                }
-
-            } catch (Exception e) {
-                videoLogId = "0";
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-         /*   try {
-                if (pDialog.isShowing())
-                    pDialog.dismiss();
-            } catch (IllegalArgumentException ex) {
-                videoLogId = "0";
-            }*/
-            if (responseStr == null) {
-                videoLogId = "0";
-
-            }
-            startTimer();
-            return;
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            Log.v("SUBHA", "onPreExecute");
-            stoptimertask();
-            Log.v("SUBHA", "onPreExecute1");
-        }
-
-
+    @Override
+    public void onGetVideoLogsPreExecuteStarted() {
+        LogUtil.showLog("SUBHA", "onPreExecute");
+        stoptimertask();
+        LogUtil.showLog("SUBHA", "onPreExecute1");
     }
+
+    @Override
+    public void onGetVideoLogsPostExecuteCompleted(int status, String message, String videoLogId) {
+
+        startTimer();
+        return;
+    }
+
+
+//    private class AsyncVideoLogDetails extends AsyncTask<Void, Void, Void> {
+//        //  ProgressDialog pDialog;
+//        String responseStr;
+//        int statusCode = 0;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("user_id", userIdStr.trim());
+//                httppost.addHeader("ip_address", ipAddressStr.trim());
+//                httppost.addHeader("movie_id", movieId.trim());
+//                httppost.addHeader("episode_id", episodeId.trim());
+//                httppost.addHeader("played_length", String.valueOf(playerPosition));
+//                httppost.addHeader("watch_status", watchStatus);
+//                httppost.addHeader("device_type", "2");
+//                httppost.addHeader("log_id", videoLogId);
+//
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//                    Log.v("SUBHA", "PLAY responseStr" + responseStr);
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            videoLogId = "0";
+//
+//                        }
+//
+//                    });
+//
+//                } catch (Exception e) {
+//                    videoLogId = "0";
+//                    e.printStackTrace();
+//
+//                    Log.v("SUBHA", "Exception of videoplayer" + e.toString());
+//                }
+//                if (responseStr != null) {
+//                    JSONObject myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//                    if (statusCode == 200) {
+//                        videoLogId = myJson.optString("log_id");
+//                    } else {
+//                        videoLogId = "0";
+//                    }
+//
+//                }
+//
+//            } catch (Exception e) {
+//                videoLogId = "0";
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//         /*   try {
+//                if (pDialog.isShowing())
+//                    pDialog.dismiss();
+//            } catch (IllegalArgumentException ex) {
+//                videoLogId = "0";
+//            }*/
+//            if (responseStr == null) {
+//                videoLogId = "0";
+//
+//            }
+//            startTimer();
+//            return;
+//
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            Log.v("SUBHA", "onPreExecute");
+//            stoptimertask();
+//            Log.v("SUBHA", "onPreExecute1");
+//        }
+//
+//
+//    }
 
 
     public void startTimer() {
@@ -980,11 +1018,31 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
-                                    asyncVideoLogDetails = new AsyncVideoLogDetails();
+                                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                                    videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                                    videoLogsInputModel.setUserId(userIdStr.trim());
+                                    videoLogsInputModel.setIpAddress(ipAddressStr.trim());
+                                    videoLogsInputModel.setMuviUniqueId(movieId.trim());
+                                    videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
+                                    videoLogsInputModel.setPlayedLength(String.valueOf(playerPosition));
+                                    videoLogsInputModel.setWatchStatus(watchStatus);
+                                    videoLogsInputModel.setDeviceType("2");
+                                    videoLogsInputModel.setVideoLogId(videoLogId);
+                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,MyLibraryPlayer.this,MyLibraryPlayer.this);
                                     watchStatus = "complete";
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else if (currentPositionStr > 0 && currentPositionStr % 60 == 0) {
-                                    asyncVideoLogDetails = new AsyncVideoLogDetails();
+                                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                                    videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                                    videoLogsInputModel.setUserId(userIdStr.trim());
+                                    videoLogsInputModel.setIpAddress(ipAddressStr.trim());
+                                    videoLogsInputModel.setMuviUniqueId(movieId.trim());
+                                    videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
+                                    videoLogsInputModel.setPlayedLength(String.valueOf(playerPosition));
+                                    videoLogsInputModel.setWatchStatus(watchStatus);
+                                    videoLogsInputModel.setDeviceType("2");
+                                    videoLogsInputModel.setVideoLogId(videoLogId);
+                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,MyLibraryPlayer.this,MyLibraryPlayer.this);
                                     watchStatus = "halfplay";
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -996,6 +1054,16 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 });
             }
         };
+    }
+
+    @Override
+    public void onIPAddressPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
+        ipAddressTextView.setText(ipAddressStr);
     }
 
     private class AsyncFFVideoLogDetails extends AsyncTask<Void, Void, Void> {
@@ -1137,74 +1205,74 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     }
 
 
-    private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-
-                // Execute HTTP Post Request
-                try {
-                    URL myurl = new URL(Util.loadIPUrl);
-                    HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
-                    InputStream ins = con.getInputStream();
-                    InputStreamReader isr = new InputStreamReader(ins);
-                    BufferedReader in = new BufferedReader(isr);
-
-                    String inputLine;
-
-                    while ((inputLine = in.readLine()) != null) {
-                        System.out.println(inputLine);
-                        responseStr = inputLine;
-                    }
-
-                    in.close();
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    ipAddressStr = "";
-
-                } catch (UnsupportedEncodingException e) {
-
-                    ipAddressStr = "";
-
-                } catch (IOException e) {
-                    ipAddressStr = "";
-
-                }
-                if (responseStr != null) {
-                    Object json = new JSONTokener(responseStr).nextValue();
-                    if (json instanceof JSONObject) {
-                        ipAddressStr = ((JSONObject) json).getString("ip");
-                    }
-                }
-
-            } catch (Exception e) {
-                ipAddressStr = "";
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            ipAddressTextView.setText(ipAddressStr);
-
-            if (responseStr == null) {
-                ipAddressStr = "";
-            }
-            return;
-        }
-
-        protected void onPreExecute() {
-
-        }
-    }
+//    private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
+//        String responseStr;
+//
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            try {
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    URL myurl = new URL(Util.loadIPUrl);
+//                    HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
+//                    InputStream ins = con.getInputStream();
+//                    InputStreamReader isr = new InputStreamReader(ins);
+//                    BufferedReader in = new BufferedReader(isr);
+//
+//                    String inputLine;
+//
+//                    while ((inputLine = in.readLine()) != null) {
+//                        System.out.println(inputLine);
+//                        responseStr = inputLine;
+//                    }
+//
+//                    in.close();
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    ipAddressStr = "";
+//
+//                } catch (UnsupportedEncodingException e) {
+//
+//                    ipAddressStr = "";
+//
+//                } catch (IOException e) {
+//                    ipAddressStr = "";
+//
+//                }
+//                if (responseStr != null) {
+//                    Object json = new JSONTokener(responseStr).nextValue();
+//                    if (json instanceof JSONObject) {
+//                        ipAddressStr = ((JSONObject) json).getString("ip");
+//                    }
+//                }
+//
+//            } catch (Exception e) {
+//                ipAddressStr = "";
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            ipAddressTextView.setText(ipAddressStr);
+//
+//            if (responseStr == null) {
+//                ipAddressStr = "";
+//            }
+//            return;
+//        }
+//
+//        protected void onPreExecute() {
+//
+//        }
+//    }
 
 
     private void updateProgressBar() {
@@ -1728,7 +1796,17 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     subsFetchTask.execute();
                 }
                 else {
-                    asyncVideoLogDetails = new AsyncVideoLogDetails();
+                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                    videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                    videoLogsInputModel.setUserId(userIdStr.trim());
+                    videoLogsInputModel.setIpAddress(ipAddressStr.trim());
+                    videoLogsInputModel.setMuviUniqueId(movieId.trim());
+                    videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
+                    videoLogsInputModel.setPlayedLength(String.valueOf(playerPosition));
+                    videoLogsInputModel.setWatchStatus(watchStatus);
+                    videoLogsInputModel.setDeviceType("2");
+                    videoLogsInputModel.setVideoLogId(videoLogId);
+                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,this,this);
                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                 }
 
@@ -1759,7 +1837,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                 subsFetchTask = new SubtitleProcessingTask(data.getStringExtra("position"));
                                 subsFetchTask.execute();
                             }catch (Exception e){
-                                Log.v("SUBHA","Exception of subtitle change process ="+e.toString());}
+                                LogUtil.showLog("SUBHA","Exception of subtitle change process ="+e.toString());}
 
                         }
 
@@ -1815,7 +1893,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         protected void onPreExecute() {
 //            subtitleText.setText("Loading subtitles..");
             super.onPreExecute();
-            Log.v("SUBHA","SubTitlePath size at pre execute==="+SubTitlePath.size());
+            LogUtil.showLog("SUBHA","SubTitlePath size at pre execute==="+SubTitlePath.size());
         }
 
         @Override
@@ -1823,7 +1901,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             // int count;
             try {
 
-                Log.v("SUBHA","Subtitle_Path ========"+Subtitle_Path);
+                LogUtil.showLog("SUBHA","Subtitle_Path ========"+Subtitle_Path);
 
 				/*
 				 * if you want to download file from Internet, use commented
@@ -1858,13 +1936,13 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 if(callWithoutCaption)
                 {
-                    Log.v("BIBHU","Without Caption Called");
+                    LogUtil.showLog("BIBHU","Without Caption Called");
                     FormatSRT_WithoutCaption formatSRT = new FormatSRT_WithoutCaption();
                     srt = formatSRT.parseFile("sample", fIn);
                 }
                 else
                 {
-                    Log.v("BIBHU","With Caption Called");
+                    LogUtil.showLog("BIBHU","With Caption Called");
                     FormatSRT formatSRT = new FormatSRT();
                     srt = formatSRT.parseFile("sample", fIn);
                 }
@@ -1873,7 +1951,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e("SUBHA", "error in downloadinf subs");
+                LogUtil.showLog("SUBHA", "error in downloadinf subs");
             }
             return null;
         }
@@ -1886,7 +1964,17 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 //                Toast.makeText(getApplicationContext(), "subtitles loaded!!",Toast.LENGTH_SHORT).show();
             }
 
-            asyncVideoLogDetails = new AsyncVideoLogDetails();
+            VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+            videoLogsInputModel.setAuthToken(Util.authTokenStr);
+            videoLogsInputModel.setUserId(userIdStr.trim());
+            videoLogsInputModel.setIpAddress(ipAddressStr.trim());
+            videoLogsInputModel.setMuviUniqueId(movieId.trim());
+            videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
+            videoLogsInputModel.setPlayedLength(String.valueOf(playerPosition));
+            videoLogsInputModel.setWatchStatus(watchStatus);
+            videoLogsInputModel.setDeviceType("2");
+            videoLogsInputModel.setVideoLogId(videoLogId);
+            asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,MyLibraryPlayer.this,MyLibraryPlayer.this);
             asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
             super.onPostExecute(result);
@@ -1955,8 +2043,8 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
 //        String Subtitle_Path = Environment.getExternalStorageDirectory().toString()+"/"+"sub.vtt";
 
-        Log.v("BIBHU","Subtitle_Path at CheckSubTitleParsingType = "+Subtitle_Path);
-        Log.v("BIBHU","Subtitle_Path at CheckSubTitleParsingType size = "+SubTitlePath.size());
+        LogUtil.showLog("BIBHU","Subtitle_Path at CheckSubTitleParsingType = "+Subtitle_Path);
+        LogUtil.showLog("BIBHU","Subtitle_Path at CheckSubTitleParsingType size = "+SubTitlePath.size());
 
         callWithoutCaption = true;
 
@@ -1987,7 +2075,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         {
             try
             {
-                Log.v("BIBHU","Testing Liane at Mainactivity = "+TestingLine.toString());
+                LogUtil.showLog("BIBHU","Testing Liane at Mainactivity = "+TestingLine.toString());
 
                 if(Integer.parseInt(TestingLine.toString().trim())==captionNumber)
                 {
@@ -2002,7 +2090,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     e1.printStackTrace();
                 }
                 testinglinecounter++;
-                Log.v("BIBHU","Total no of line at Mainactivity = "+testinglinecounter);
+                LogUtil.showLog("BIBHU","Total no of line at Mainactivity = "+testinglinecounter);
             }
         }
     }
@@ -2038,20 +2126,20 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             final int yUp =  new Random().nextInt((max - min) + 1) + min;
 
 
-            Log.v("BIBHU" ,"=========================================="+"\n");
+            LogUtil.showLog("BIBHU" ,"=========================================="+"\n");
 
-            Log.v("BIBHU" ,"mainLayout_width  ==="+mainLayout_width);
-            Log.v("BIBHU" ,"mainLayout_height  ==="+mainLayout_height);
+            LogUtil.showLog("BIBHU" ,"mainLayout_width  ==="+mainLayout_width);
+            LogUtil.showLog("BIBHU" ,"mainLayout_height  ==="+mainLayout_height);
 
-            Log.v("BIBHU" ,"childLayout_width  ==="+childLayout_width);
-            Log.v("BIBHU" ,"childLayout_height  ==="+childLayout_height);
+            LogUtil.showLog("BIBHU" ,"childLayout_width  ==="+childLayout_width);
+            LogUtil.showLog("BIBHU" ,"childLayout_height  ==="+childLayout_height);
 
 
-            Log.v("BIBHU" ,"xLeft  ==="+xLeft);
-            Log.v("BIBHU" ,"yUp  ==="+yUp);
+            LogUtil.showLog("BIBHU" ,"xLeft  ==="+xLeft);
+            LogUtil.showLog("BIBHU" ,"yUp  ==="+yUp);
 
-            Log.v("BIBHU" ,"width addition  ==="+(childLayout_width+xLeft));
-            Log.v("BIBHU" ,"height addition   ==="+(childLayout_height+yUp));
+            LogUtil.showLog("BIBHU" ,"width addition  ==="+(childLayout_width+xLeft));
+            LogUtil.showLog("BIBHU" ,"height addition   ==="+(childLayout_height+yUp));
 
             if((mainLayout_width>(childLayout_width+xLeft)) && (mainLayout_height>(childLayout_height+yUp)))
             {

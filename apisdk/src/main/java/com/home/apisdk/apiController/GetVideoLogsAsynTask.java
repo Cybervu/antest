@@ -31,24 +31,30 @@ public class GetVideoLogsAsynTask extends AsyncTask<VideoLogsInputModel, Void, V
 
     String responseStr;
     int status;
-    String message,PACKAGE_NAME;
+    String message, PACKAGE_NAME;
     String videoLogId = "";
-    public interface GetVideoLogs{
+
+    public interface GetVideoLogs {
         void onGetVideoLogsPreExecuteStarted();
+
         void onGetVideoLogsPostExecuteCompleted(int status, String message, String videoLogId);
     }
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private GetVideoLogs listener;
+    private Context context;
 
-    public GetVideoLogsAsynTask(VideoLogsInputModel videoLogsInputModel, Context context) {
-        this.listener = (GetVideoLogs)context;
+    public GetVideoLogsAsynTask(VideoLogsInputModel videoLogsInputModel, GetVideoLogs listener, Context context) {
+        this.listener = listener;
+        this.context = context;
+
         this.videoLogsInputModel = videoLogsInputModel;
         Log.v("SUBHA", "LoginAsynTask");
-        PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
+        PACKAGE_NAME = context.getPackageName();
+        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
 
     }
+
     @Override
     protected Void doInBackground(VideoLogsInputModel... params) {
 
@@ -94,37 +100,35 @@ public class GetVideoLogsAsynTask extends AsyncTask<VideoLogsInputModel, Void, V
                 while ((inputLine = in.readLine()) != null) {
                     System.out.println(inputLine);
                     responseStr = inputLine;
-                    Log.v("SUBHA", "responseStr" +responseStr);
+                    Log.v("SUBHA", "responseStr" + responseStr);
 
                 }
                 in.close();
 
 
-            } catch (org.apache.http.conn.ConnectTimeoutException e){
+            } catch (org.apache.http.conn.ConnectTimeoutException e) {
 
                 status = 0;
                 message = "Error";
 
 
-
-            }catch (IOException e) {
+            } catch (IOException e) {
                 status = 0;
                 message = "Error";
             }
 
-            JSONObject mainJson =null;
-            if(responseStr!=null) {
+            JSONObject mainJson = null;
+            if (responseStr != null) {
                 mainJson = new JSONObject(responseStr);
                 status = Integer.parseInt(mainJson.optString("code"));
 
 
-                if ((mainJson.has("log_id")) && mainJson.getString("log_id").trim() != null && !mainJson.getString("log_id").trim().isEmpty() && !mainJson.getString("log_id").trim().equals("null") && !mainJson.getString("log_id").trim().matches("")) {
-;                    videoLogId = mainJson.getString("log_id");
+                if ((mainJson.has("log_id")) && mainJson.optString("log_id").trim() != null && !mainJson.optString("log_id").trim().isEmpty() && !mainJson.optString("log_id").trim().equals("null") && !mainJson.optString("log_id").trim().matches("")) {
+                    ;
+                    videoLogId = mainJson.optString("log_id");
                 }
 
-            }
-
-            else{
+            } else {
                 responseStr = "0";
                 status = 0;
                 message = "Error";
@@ -133,10 +137,8 @@ public class GetVideoLogsAsynTask extends AsyncTask<VideoLogsInputModel, Void, V
 
             responseStr = "0";
             status = 0;
-            message = "Error";            }
-
-        catch (Exception e)
-        {
+            message = "Error";
+        } catch (Exception e) {
 
             responseStr = "0";
             status = 0;
@@ -146,6 +148,7 @@ public class GetVideoLogsAsynTask extends AsyncTask<VideoLogsInputModel, Void, V
 
 
     }
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -167,7 +170,6 @@ public class GetVideoLogsAsynTask extends AsyncTask<VideoLogsInputModel, Void, V
         }*/
 
     }
-
 
 
     @Override

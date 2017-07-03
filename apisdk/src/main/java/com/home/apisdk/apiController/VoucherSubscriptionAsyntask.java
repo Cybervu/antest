@@ -23,27 +23,31 @@ import java.io.IOException;
  * Created by MUVI on 1/20/2017.
  */
 
-public class VoucherSubscriptionAsyntask extends AsyncTask<VoucherSubscriptionInputModel,Void ,Void > {
+public class VoucherSubscriptionAsyntask extends AsyncTask<VoucherSubscriptionInputModel, Void, Void> {
 
     public VoucherSubscriptionInputModel voucherSubscriptionInputModel;
-    String PACKAGE_NAME,message,responseStr;
+    String PACKAGE_NAME, message, responseStr;
     int code;
 
-    public interface VoucherSubscription{
+    public interface VoucherSubscription {
         void onVoucherSubscriptionPreExecuteStarted();
+
         void onVoucherSubscriptionPostExecuteCompleted(VoucherSubscriptionOutputModel voucherSubscriptionOutputModel, int status);
     }
 
     private VoucherSubscription listener;
+    private Context context;
     VoucherSubscriptionOutputModel voucherSubscriptionOutputModel = new VoucherSubscriptionOutputModel();
 
-    public VoucherSubscriptionAsyntask(VoucherSubscriptionInputModel voucherSubscriptionInputModel, Context context) {
-        this.listener = (VoucherSubscription) context;
+    public VoucherSubscriptionAsyntask(VoucherSubscriptionInputModel voucherSubscriptionInputModel, VoucherSubscription listener, Context context) {
+        this.listener = listener;
+        this.context = context;
+
 
         this.voucherSubscriptionInputModel = voucherSubscriptionInputModel;
-        PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
-        Log.v("SUBHA","register user payment");
+        PACKAGE_NAME = context.getPackageName();
+        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
+        Log.v("SUBHA", "register user payment");
 
     }
 
@@ -88,8 +92,8 @@ public class VoucherSubscriptionAsyntask extends AsyncTask<VoucherSubscriptionIn
 
             }
 
-            if ((myJson.has("msg")) && myJson.getString("msg").trim() != null && !myJson.getString("msg").trim().isEmpty() && !myJson.getString("msg").trim().equals("null") && !myJson.getString("msg").trim().matches("")) {
-                    voucherSubscriptionOutputModel.setMsg(myJson.getString("msg"));
+            if ((myJson.has("msg")) && myJson.optString("msg").trim() != null && !myJson.optString("msg").trim().isEmpty() && !myJson.optString("msg").trim().equals("null") && !myJson.optString("msg").trim().matches("")) {
+                voucherSubscriptionOutputModel.setMsg(myJson.optString("msg"));
             }
 
         } catch (Exception e) {
@@ -105,7 +109,7 @@ public class VoucherSubscriptionAsyntask extends AsyncTask<VoucherSubscriptionIn
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onVoucherSubscriptionPreExecuteStarted();
-        code= 0;
+        code = 0;
      /*   if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
@@ -122,6 +126,6 @@ public class VoucherSubscriptionAsyntask extends AsyncTask<VoucherSubscriptionIn
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onVoucherSubscriptionPostExecuteCompleted(voucherSubscriptionOutputModel,code);
+        listener.onVoucherSubscriptionPostExecuteCompleted(voucherSubscriptionOutputModel, code);
     }
 }

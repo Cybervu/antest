@@ -38,10 +38,12 @@ public class GetGenreListAsynctask extends AsyncTask<GenreListInput,Void ,Void >
     }
 
     private GenreList listener;
+    private Context context;
     ArrayList<GenreListOutput> genreListOutput = new ArrayList<GenreListOutput>();
 
-    public GetGenreListAsynctask(GenreListInput genreListInput, Context context) {
-        this.listener = (GenreList) context;
+    public GetGenreListAsynctask(GenreListInput genreListInput, GenreList listener, Context context) {
+        this.listener = listener;
+        this.context=context;
 
         this.genreListInput = genreListInput;
         PACKAGE_NAME=context.getPackageName();

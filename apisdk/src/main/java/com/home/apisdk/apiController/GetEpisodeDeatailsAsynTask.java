@@ -39,10 +39,12 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private GetEpisodeDetails listener;
+    private Context context;
     ArrayList<Episode_Details_output> episode_details_output=new ArrayList<Episode_Details_output>();
 
-    public GetEpisodeDeatailsAsynTask(Episode_Details_input episode_details_input, Context context) {
-        this.listener = (GetEpisodeDetails)context;
+    public GetEpisodeDeatailsAsynTask(Episode_Details_input episode_details_input,GetEpisodeDetails listener, Context context) {
+        this.listener=listener;
+        this.context=context;
         this.episode_details_input = episode_details_input;
         PACKAGE_NAME=context.getPackageName();
         Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
@@ -85,7 +87,7 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
                 status = Integer.parseInt(myJson.optString("code"));
                 message = myJson.optString("msg");
                 is_ppv= Integer.parseInt(myJson.optString("is_ppv"));
-                permalink=myJson.getString("permalink");
+                permalink=myJson.optString("permalink");
                 item_count= Integer.parseInt(myJson.optString("item_count"));
 
             }
@@ -102,37 +104,37 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
                             jsonChildNode = jsonMainNode.getJSONObject(i);
                             Episode_Details_output content = new Episode_Details_output();
 
-                            if ((jsonChildNode.has("episode_title")) && jsonChildNode.getString("episode_title").trim() != null && !jsonChildNode.getString("episode_title").trim().isEmpty() && !jsonChildNode.getString("episode_title").trim().equals("null") && !jsonChildNode.getString("episode_title").trim().matches("")) {
-                               // String episode_title=jsonChildNode.getString("episode_title");
-                                content.setEpisode_title(jsonChildNode.getString("episode_title"));
+                            if ((jsonChildNode.has("episode_title")) && jsonChildNode.optString("episode_title").trim() != null && !jsonChildNode.optString("episode_title").trim().isEmpty() && !jsonChildNode.optString("episode_title").trim().equals("null") && !jsonChildNode.optString("episode_title").trim().matches("")) {
+                               // String episode_title=jsonChildNode.optString("episode_title");
+                                content.setEpisode_title(jsonChildNode.optString("episode_title"));
                             }
-                            if ((jsonChildNode.has("poster_url")) && jsonChildNode.getString("poster_url").trim() != null && !jsonChildNode.getString("poster_url").trim().isEmpty() && !jsonChildNode.getString("poster_url").trim().equals("null") && !jsonChildNode.getString("poster_url").trim().matches("")) {
-                                content.setPoster_url(jsonChildNode.getString("poster_url"));
+                            if ((jsonChildNode.has("poster_url")) && jsonChildNode.optString("poster_url").trim() != null && !jsonChildNode.optString("poster_url").trim().isEmpty() && !jsonChildNode.optString("poster_url").trim().equals("null") && !jsonChildNode.optString("poster_url").trim().matches("")) {
+                                content.setPoster_url(jsonChildNode.optString("poster_url"));
 
                             }
-                            if ((jsonChildNode.has("episode_story")) && jsonChildNode.getString("episode_story").trim() != null && !jsonChildNode.getString("episode_story").trim().isEmpty() && !jsonChildNode.getString("episode_story").trim().equals("null") && !jsonChildNode.getString("episode_story").trim().matches("")) {
-                                content.setPermalink(jsonChildNode.getString("episode_story"));
+                            if ((jsonChildNode.has("episode_story")) && jsonChildNode.optString("episode_story").trim() != null && !jsonChildNode.optString("episode_story").trim().isEmpty() && !jsonChildNode.optString("episode_story").trim().equals("null") && !jsonChildNode.optString("episode_story").trim().matches("")) {
+                                content.setPermalink(jsonChildNode.optString("episode_story"));
                             }
-                           if ((jsonChildNode.has("embeddedUrl")) && jsonChildNode.getString("embeddedUrl").trim() != null && !jsonChildNode.getString("embeddedUrl").trim().isEmpty() && !jsonChildNode.getString("embeddedUrl").trim().equals("null") && !jsonChildNode.getString("embeddedUrl").trim().matches("")) {
-                                content.setEmbeddedUrl(jsonChildNode.getString("embeddedUrl"));
+                           if ((jsonChildNode.has("embeddedUrl")) && jsonChildNode.optString("embeddedUrl").trim() != null && !jsonChildNode.optString("embeddedUrl").trim().isEmpty() && !jsonChildNode.optString("embeddedUrl").trim().equals("null") && !jsonChildNode.optString("embeddedUrl").trim().matches("")) {
+                                content.setEmbeddedUrl(jsonChildNode.optString("embeddedUrl"));
 
                             }
                             //videoTypeIdStr = "1";
 
-                            if ((jsonChildNode.has("video_duration")) && jsonChildNode.getString("video_duration").trim() != null && !jsonChildNode.getString("video_duration").trim().isEmpty() && !jsonChildNode.getString("video_duration").trim().equals("null") && !jsonChildNode.getString("video_duration").trim().matches("")) {
-                                content.setVideo_duration(jsonChildNode.getString("video_duration"));
+                            if ((jsonChildNode.has("video_duration")) && jsonChildNode.optString("video_duration").trim() != null && !jsonChildNode.optString("video_duration").trim().isEmpty() && !jsonChildNode.optString("video_duration").trim().equals("null") && !jsonChildNode.optString("video_duration").trim().matches("")) {
+                                content.setVideo_duration(jsonChildNode.optString("video_duration"));
 
                             }
-                           /*  if ((jsonChildNode.has("is_advance")) && jsonChildNode.getString("is_advance").trim() != null && !jsonChildNode.getString("is_advance").trim().isEmpty() && !jsonChildNode.getString("is_advance").trim().equals("null") && !jsonChildNode.getString("is_advance").trim().matches("")) {
-                                content.setIsAPV(Integer.parseInt(jsonChildNode.getString("is_advance")));
+                           /*  if ((jsonChildNode.has("is_advance")) && jsonChildNode.optString("is_advance").trim() != null && !jsonChildNode.optString("is_advance").trim().isEmpty() && !jsonChildNode.optString("is_advance").trim().equals("null") && !jsonChildNode.optString("is_advance").trim().matches("")) {
+                                content.setIsAPV(Integer.parseInt(jsonChildNode.optString("is_advance")));
 
                             }
-                            if ((jsonChildNode.has("is_ppv")) && jsonChildNode.getString("is_ppv").trim() != null && !jsonChildNode.getString("is_ppv").trim().isEmpty() && !jsonChildNode.getString("is_ppv").trim().equals("null") && !jsonChildNode.getString("is_ppv").trim().matches("")) {
-                                content.setIsPPV(Integer.parseInt(jsonChildNode.getString("is_ppv")));
+                            if ((jsonChildNode.has("is_ppv")) && jsonChildNode.optString("is_ppv").trim() != null && !jsonChildNode.optString("is_ppv").trim().isEmpty() && !jsonChildNode.optString("is_ppv").trim().equals("null") && !jsonChildNode.optString("is_ppv").trim().matches("")) {
+                                content.setIsPPV(Integer.parseInt(jsonChildNode.optString("is_ppv")));
 
                             }
-                            if ((jsonChildNode.has("is_episode")) && jsonChildNode.getString("is_episode").trim() != null && !jsonChildNode.getString("is_episode").trim().isEmpty() && !jsonChildNode.getString("is_episode").trim().equals("null") && !jsonChildNode.getString("is_episode").trim().matches("")) {
-                                content.setContentTypesId(jsonChildNode.getString("is_episode"));
+                            if ((jsonChildNode.has("is_episode")) && jsonChildNode.optString("is_episode").trim() != null && !jsonChildNode.optString("is_episode").trim().isEmpty() && !jsonChildNode.optString("is_episode").trim().equals("null") && !jsonChildNode.optString("is_episode").trim().matches("")) {
+                                content.setContentTypesId(jsonChildNode.optString("is_episode"));
 
                             }*/
                            episode_details_output.add(content);

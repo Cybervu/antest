@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.home.vod.R;
 import com.home.vod.model.NavDrawerItem;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
 import java.util.Collections;
@@ -47,6 +48,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     public void onBindViewHolder(MyViewHolder holder, int position) {
         NavDrawerItem current = data.get(position);
         holder.title.setText(current.getTitle().toString().toLowerCase());
+        LogUtil.showLog("Alok ::",current.getTitle());
 
 /*
 

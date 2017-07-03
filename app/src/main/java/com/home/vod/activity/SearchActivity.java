@@ -35,6 +35,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.home.apisdk.apiController.SearchDataAsynTask;
+import com.home.apisdk.apiModel.Search_Data_input;
+import com.home.apisdk.apiModel.Search_Data_otput;
 import com.home.vod.R;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.model.GridItem;
@@ -73,12 +76,11 @@ import com.twotoasters.jazzylistview.JazzyHelper;
 /**
  * Created by user on 28-06-2015.
  */
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements SearchDataAsynTask.SearchData {
     ProgressBarHandler videoPDialog;
     private static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";
     int previousTotal = 0;
-    ProgressBarHandler gDialog;
-
+    ProgressBarHandler pDialog;
     private boolean mIsScrollingUp;
     private int mLastFirstVisibleItem;
     int scrolledPosition=0;
@@ -342,8 +344,20 @@ public class SearchActivity extends AppCompatActivity {
                         if (isNetwork == true) {
 
                             // default data
-                            AsynLoadSearchVideos asyncSearchLoadVideos = new AsynLoadSearchVideos();
-                            asyncSearchLoadVideos.executeOnExecutor(threadPoolExecutor);
+                            Search_Data_input search_data_input=new Search_Data_input();
+                            search_data_input.setAuthToken(Util.authTokenStr);
+                            search_data_input.setLimit(String.valueOf(limit));
+                            search_data_input.setOffset(String.valueOf(offset));
+                            search_data_input.setQ(searchTextStr.trim());
+                            SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0);
+                            if (countryPref != null) {
+                                String countryCodeStr = countryPref.getString("countryCode", null);
+                                search_data_input.setCountry(countryCodeStr);
+                            }else{
+                                search_data_input.setCountry("IN");
+                            }
+                            SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input,SearchActivity.this,SearchActivity.this);
+                            asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
 
                             scrolling = false;
@@ -428,290 +442,9 @@ public class SearchActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    //load searched videos
-    private class AsynLoadSearchVideos extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-        String responseStr;
-        int status;
-        String videoGenreStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        String videoName = "";
-        String videoImageStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        String videoPermalinkStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        String videoTypeStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        String videoTypeIdStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        String videoUrlStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        String isEpisodeStr = "";
-        String movieUniqueIdStr = "";
-        String movieStreamUniqueIdStr = "";
-        int isConverted = 0;
-        int isAPV = 0;
-        int isPPV = 0;
-        String movieThirdPartyUrl = "";
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = Util.rootUrl().trim() + Util.searchUrl.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("limit", String.valueOf(limit));
-                httppost.addHeader("offset", String.valueOf(offset));
-                httppost.addHeader("q", searchTextStr.trim());
-                //httppost.addHeader("deviceType", "roku");
-
-                String countryCodeStr = preferenceManager.getCountryCodeFromPref();
-
-                if (countryCodeStr != null) {
-
-                    httppost.addHeader("country", countryCodeStr);
-                }else{
-                    httppost.addHeader("country", "IN");
-
-                }
-                httppost.addHeader("lang_code", Util.getTextofLanguage(SearchActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (itemData != null) {
-                                noDataLayout.setVisibility(View.GONE);
-                                noInternetConnectionLayout.setVisibility(View.GONE);
-                                gridView.setVisibility(View.VISIBLE);
-                                footerView.setVisibility(View.GONE);
-
-                            } else {
-                                noDataLayout.setVisibility(View.GONE);
-                                noInternetConnectionLayout.setVisibility(View.VISIBLE);
-                                gridView.setVisibility(View.VISIBLE);
-                                footerView.setVisibility(View.GONE);
-                            }
-
-                            Toast.makeText(SearchActivity.this, Util.getTextofLanguage(SearchActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            noDataLayout.setVisibility(View.VISIBLE);
-                            noInternetConnectionLayout.setVisibility(View.GONE);
-                            gridView.setVisibility(View.GONE);
-                            footerView.setVisibility(View.GONE);
-                        }
-                    });
-                    e.printStackTrace();
-                }
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                    String items = myJson.optString("item_count");
-                    itemsInServer = Integer.parseInt(items);
-                }
-
-                if (status > 0) {
-                    if (status == 200) {
-                        JSONArray jsonMainNode = myJson.getJSONArray("search");
-                        int lengthJsonArr = jsonMainNode.length();
-                        for (int i = 0; i < lengthJsonArr; i++) {
-                            JSONObject jsonChildNode;
-                            try {
-                                jsonChildNode = jsonMainNode.getJSONObject(i);
-                                if ((jsonChildNode.has("thirdparty_url")) && jsonChildNode.getString("thirdparty_url").trim() != null && !jsonChildNode.getString("thirdparty_url").trim().isEmpty() && !jsonChildNode.getString("thirdparty_url").trim().equals("null") && !jsonChildNode.getString("thirdparty_url").trim().matches("")) {
-                                    movieThirdPartyUrl = jsonChildNode.getString("thirdparty_url");
-
-                                }
-                                if ((jsonChildNode.has("genre")) && jsonChildNode.getString("genre").trim() != null && !jsonChildNode.getString("genre").trim().isEmpty() && !jsonChildNode.getString("genre").trim().equals("null") && !jsonChildNode.getString("genre").trim().matches("")) {
-                                    videoGenreStr = jsonChildNode.getString("genre");
-
-                                }
-                                if ((jsonChildNode.has("episode_title")) && jsonChildNode.getString("episode_title").trim() != null && !jsonChildNode.getString("episode_title").trim().isEmpty() && !jsonChildNode.getString("episode_title").trim().equals("null") && !jsonChildNode.getString("episode_title").trim().matches("")) {
-                                    videoName = jsonChildNode.getString("episode_title");
-
-                                } else {
-                                    if ((jsonChildNode.has("name")) && jsonChildNode.getString("name").trim() != null && !jsonChildNode.getString("name").trim().isEmpty() && !jsonChildNode.getString("name").trim().equals("null") && !jsonChildNode.getString("name").trim().matches("")) {
-                                        videoName = jsonChildNode.getString("name");
-
-                                    }
-                                }
-                                if ((jsonChildNode.has("poster_url")) && jsonChildNode.getString("poster_url").trim() != null && !jsonChildNode.getString("poster_url").trim().isEmpty() && !jsonChildNode.getString("poster_url").trim().equals("null") && !jsonChildNode.getString("poster_url").trim().matches("")) {
-                                    videoImageStr = jsonChildNode.getString("poster_url");
-                                    //videoImageStr = videoImageStr.replace("episode", "original");
-
-                                }
-                                if ((jsonChildNode.has("permalink")) && jsonChildNode.getString("permalink").trim() != null && !jsonChildNode.getString("permalink").trim().isEmpty() && !jsonChildNode.getString("permalink").trim().equals("null") && !jsonChildNode.getString("permalink").trim().matches("")) {
-                                    videoPermalinkStr = jsonChildNode.getString("permalink");
-
-                                }
-                                if ((jsonChildNode.has("display_name")) && jsonChildNode.getString("display_name").trim() != null && !jsonChildNode.getString("display_name").trim().isEmpty() && !jsonChildNode.getString("display_name").trim().equals("null") && !jsonChildNode.getString("display_name").trim().matches("")) {
-                                    videoTypeStr = jsonChildNode.getString("display_name");
-
-                                }
-                                if ((jsonChildNode.has("content_types_id")) && jsonChildNode.getString("content_types_id").trim() != null && !jsonChildNode.getString("content_types_id").trim().isEmpty() && !jsonChildNode.getString("content_types_id").trim().equals("null") && !jsonChildNode.getString("content_types_id").trim().matches("")) {
-                                    videoTypeIdStr = jsonChildNode.getString("content_types_id");
-
-                                }
-                                //videoTypeIdStr = "1";
-
-                                if ((jsonChildNode.has("embeddedUrl")) && jsonChildNode.getString("embeddedUrl").trim() != null && !jsonChildNode.getString("embeddedUrl").trim().isEmpty() && !jsonChildNode.getString("embeddedUrl").trim().equals("null") && !jsonChildNode.getString("embeddedUrl").trim().matches("")) {
-                                    videoUrlStr = jsonChildNode.getString("embeddedUrl");
-
-                                }
-                                if ((jsonChildNode.has("is_episode")) && jsonChildNode.getString("is_episode").trim() != null && !jsonChildNode.getString("is_episode").trim().isEmpty() && !jsonChildNode.getString("is_episode").trim().equals("null") && !jsonChildNode.getString("is_episode").trim().matches("")) {
-                                    isEpisodeStr = jsonChildNode.getString("is_episode");
-
-                                }
-                                if ((jsonChildNode.has("muvi_uniq_id")) && jsonChildNode.getString("muvi_uniq_id").trim() != null && !jsonChildNode.getString("muvi_uniq_id").trim().isEmpty() && !jsonChildNode.getString("muvi_uniq_id").trim().equals("null") && !jsonChildNode.getString("muvi_uniq_id").trim().matches("")) {
-                                    movieUniqueIdStr = jsonChildNode.getString("muvi_uniq_id");
-
-                                }
-                                if ((jsonChildNode.has("movie_stream_uniq_id")) && jsonChildNode.getString("movie_stream_uniq_id").trim() != null && !jsonChildNode.getString("movie_stream_uniq_id").trim().isEmpty() && !jsonChildNode.getString("movie_stream_uniq_id").trim().equals("null") && !jsonChildNode.getString("movie_stream_uniq_id").trim().matches("")) {
-                                    movieStreamUniqueIdStr = jsonChildNode.getString("movie_stream_uniq_id");
-
-                                }
-                                if ((jsonChildNode.has("is_converted")) && jsonChildNode.getString("is_converted").trim() != null && !jsonChildNode.getString("is_converted").trim().isEmpty() && !jsonChildNode.getString("is_converted").trim().equals("null") && !jsonChildNode.getString("is_converted").trim().matches("")) {
-                                    isConverted = Integer.parseInt(jsonChildNode.getString("is_converted"));
-
-                                }
-                                if ((jsonChildNode.has("is_advance")) && jsonChildNode.getString("is_advance").trim() != null && !jsonChildNode.getString("is_advance").trim().isEmpty() && !jsonChildNode.getString("is_advance").trim().equals("null") && !jsonChildNode.getString("is_advance").trim().matches("")) {
-                                    isAPV = Integer.parseInt(jsonChildNode.getString("is_advance"));
-
-                                }
-                                if ((jsonChildNode.has("is_ppv")) && jsonChildNode.getString("is_ppv").trim() != null && !jsonChildNode.getString("is_ppv").trim().isEmpty() && !jsonChildNode.getString("is_ppv").trim().equals("null") && !jsonChildNode.getString("is_ppv").trim().matches("")) {
-                                    isPPV = Integer.parseInt(jsonChildNode.getString("is_ppv"));
-
-                                }
-
-                                itemData.add(new GridItem(videoImageStr, videoName, "", videoTypeIdStr, videoGenreStr, "", videoPermalinkStr,isEpisodeStr,"","",isConverted,isPPV,isAPV));
-
-                            } catch (Exception e) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        noDataLayout.setVisibility(View.VISIBLE);
-                                        noInternetConnectionLayout.setVisibility(View.GONE);
-                                        gridView.setVisibility(View.GONE);
-                                        footerView.setVisibility(View.GONE);
-                                    }
-                                });
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-                        }
-                    } else {
-                        responseStr = "0";
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                noDataLayout.setVisibility(View.VISIBLE);
-                                noInternetConnectionLayout.setVisibility(View.GONE);
-                                gridView.setVisibility(View.GONE);
-                                footerView.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-                }
-            } catch (Exception e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        noDataLayout.setVisibility(View.VISIBLE);
-                        noInternetConnectionLayout.setVisibility(View.GONE);
-                        gridView.setVisibility(View.GONE);
-                        footerView.setVisibility(View.GONE);
-                    }
-                });
-                e.printStackTrace();
-
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-
-            try {
-
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        noDataLayout.setVisibility(View.VISIBLE);
-                        noInternetConnectionLayout.setVisibility(View.GONE);
-                        gridView.setVisibility(View.GONE);
-                        footerView.setVisibility(View.GONE);
-                    }
-                });
-            }
-
-            if (responseStr == null) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        noDataLayout.setVisibility(View.VISIBLE);
-                        noInternetConnectionLayout.setVisibility(View.GONE);
-                        gridView.setVisibility(View.GONE);
-                        footerView.setVisibility(View.GONE);
-                    }
-                });
-                responseStr = "0";
-            }
-            if ((responseStr.trim().equals("0"))) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        noDataLayout.setVisibility(View.VISIBLE);
-                        noInternetConnectionLayout.setVisibility(View.GONE);
-                        gridView.setVisibility(View.GONE);
-                        footerView.setVisibility(View.GONE);
-                    }
-                });
-            } else {
-                if (itemData.size() <= 0) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            noDataLayout.setVisibility(View.VISIBLE);
-                            noInternetConnectionLayout.setVisibility(View.GONE);
-                            gridView.setVisibility(View.GONE);
-                            footerView.setVisibility(View.GONE);
-                        }
-                    });
-
-                } else {
-
-                    gridView.setVisibility(View.VISIBLE);
-                    noInternetConnectionLayout.setVisibility(View.GONE);
-                    noDataLayout.setVisibility(View.GONE);
-                    videoWidth = 312;
-                    videoHeight = 560;
-
-                    AsynLOADUI loadui = new AsynLOADUI();
-                    loadui.executeOnExecutor(threadPoolExecutor);
-
-                }
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
+    @Override
+    public void onSearchDataPreexecute() {
+        {
             if (MainActivity.internetSpeedDialog != null && MainActivity.internetSpeedDialog.isShowing()) {
                 pDialog = MainActivity.internetSpeedDialog;
             } else {
@@ -729,9 +462,337 @@ public class SearchActivity extends AppCompatActivity {
 
 
         }
-
-
     }
+
+    @Override
+    public void onSearchDataPostExecuteCompleted(ArrayList<Search_Data_otput> contentListOutputArray, int status, int totalItems, String message) {
+
+        if (itemData.size() <= 0) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    gridView.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
+                }
+            });
+
+        } else {
+
+            gridView.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.GONE);
+            videoWidth = 312;
+            videoHeight = 560;
+
+            AsynLOADUI loadui = new AsynLOADUI();
+            loadui.executeOnExecutor(threadPoolExecutor);
+
+        }
+    }
+    //load searched videos
+//    private class AsynLoadSearchVideos extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler pDialog;
+//        String responseStr;
+//        int status;
+//        String videoGenreStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoName = "";
+//        String videoImageStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoPermalinkStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoTypeStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoTypeIdStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoUrlStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+//        String isEpisodeStr = "";
+//        String movieUniqueIdStr = "";
+//        String movieStreamUniqueIdStr = "";
+//        int isConverted = 0;
+//        int isAPV = 0;
+//        int isPPV = 0;
+//        String movieThirdPartyUrl = "";
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.searchUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("limit", String.valueOf(limit));
+//                httppost.addHeader("offset", String.valueOf(offset));
+//                httppost.addHeader("q", searchTextStr.trim());
+//                //httppost.addHeader("deviceType", "roku");
+//
+//                SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
+//                if (countryPref != null) {
+//                    String countryCodeStr = countryPref.getString("countryCode", null);
+//                    httppost.addHeader("country", countryCodeStr);
+//                }else{
+//                    httppost.addHeader("country", "IN");
+//
+//                }                httppost.addHeader("lang_code", Util.getTextofLanguage(SearchActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (itemData != null) {
+//                                noDataLayout.setVisibility(View.GONE);
+//                                noInternetConnectionLayout.setVisibility(View.GONE);
+//                                gridView.setVisibility(View.VISIBLE);
+//                                footerView.setVisibility(View.GONE);
+//
+//                            } else {
+//                                noDataLayout.setVisibility(View.GONE);
+//                                noInternetConnectionLayout.setVisibility(View.VISIBLE);
+//                                gridView.setVisibility(View.VISIBLE);
+//                                footerView.setVisibility(View.GONE);
+//                            }
+//
+//                            Toast.makeText(SearchActivity.this, Util.getTextofLanguage(SearchActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            noDataLayout.setVisibility(View.VISIBLE);
+//                            noInternetConnectionLayout.setVisibility(View.GONE);
+//                            gridView.setVisibility(View.GONE);
+//                            footerView.setVisibility(View.GONE);
+//                        }
+//                    });
+//                    e.printStackTrace();
+//                }
+//
+//                JSONObject myJson = null;
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    status = Integer.parseInt(myJson.optString("code"));
+//                    String items = myJson.optString("item_count");
+//                    itemsInServer = Integer.parseInt(items);
+//                }
+//
+//                if (status > 0) {
+//                    if (status == 200) {
+//                        JSONArray jsonMainNode = myJson.getJSONArray("search");
+//                        int lengthJsonArr = jsonMainNode.length();
+//                        for (int i = 0; i < lengthJsonArr; i++) {
+//                            JSONObject jsonChildNode;
+//                            try {
+//                                jsonChildNode = jsonMainNode.getJSONObject(i);
+//                                if ((jsonChildNode.has("thirdparty_url")) && jsonChildNode.getString("thirdparty_url").trim() != null && !jsonChildNode.getString("thirdparty_url").trim().isEmpty() && !jsonChildNode.getString("thirdparty_url").trim().equals("null") && !jsonChildNode.getString("thirdparty_url").trim().matches("")) {
+//                                    movieThirdPartyUrl = jsonChildNode.getString("thirdparty_url");
+//
+//                                }
+//                                if ((jsonChildNode.has("genre")) && jsonChildNode.getString("genre").trim() != null && !jsonChildNode.getString("genre").trim().isEmpty() && !jsonChildNode.getString("genre").trim().equals("null") && !jsonChildNode.getString("genre").trim().matches("")) {
+//                                    videoGenreStr = jsonChildNode.getString("genre");
+//
+//                                }
+//                                if ((jsonChildNode.has("episode_title")) && jsonChildNode.getString("episode_title").trim() != null && !jsonChildNode.getString("episode_title").trim().isEmpty() && !jsonChildNode.getString("episode_title").trim().equals("null") && !jsonChildNode.getString("episode_title").trim().matches("")) {
+//                                    videoName = jsonChildNode.getString("episode_title");
+//
+//                                } else {
+//                                    if ((jsonChildNode.has("name")) && jsonChildNode.getString("name").trim() != null && !jsonChildNode.getString("name").trim().isEmpty() && !jsonChildNode.getString("name").trim().equals("null") && !jsonChildNode.getString("name").trim().matches("")) {
+//                                        videoName = jsonChildNode.getString("name");
+//
+//                                    }
+//                                }
+//                                if ((jsonChildNode.has("poster_url")) && jsonChildNode.getString("poster_url").trim() != null && !jsonChildNode.getString("poster_url").trim().isEmpty() && !jsonChildNode.getString("poster_url").trim().equals("null") && !jsonChildNode.getString("poster_url").trim().matches("")) {
+//                                    videoImageStr = jsonChildNode.getString("poster_url");
+//                                    //videoImageStr = videoImageStr.replace("episode", "original");
+//
+//                                }
+//                                if ((jsonChildNode.has("permalink")) && jsonChildNode.getString("permalink").trim() != null && !jsonChildNode.getString("permalink").trim().isEmpty() && !jsonChildNode.getString("permalink").trim().equals("null") && !jsonChildNode.getString("permalink").trim().matches("")) {
+//                                    videoPermalinkStr = jsonChildNode.getString("permalink");
+//
+//                                }
+//                                if ((jsonChildNode.has("display_name")) && jsonChildNode.getString("display_name").trim() != null && !jsonChildNode.getString("display_name").trim().isEmpty() && !jsonChildNode.getString("display_name").trim().equals("null") && !jsonChildNode.getString("display_name").trim().matches("")) {
+//                                    videoTypeStr = jsonChildNode.getString("display_name");
+//
+//                                }
+//                                if ((jsonChildNode.has("content_types_id")) && jsonChildNode.getString("content_types_id").trim() != null && !jsonChildNode.getString("content_types_id").trim().isEmpty() && !jsonChildNode.getString("content_types_id").trim().equals("null") && !jsonChildNode.getString("content_types_id").trim().matches("")) {
+//                                    videoTypeIdStr = jsonChildNode.getString("content_types_id");
+//
+//                                }
+//                                //videoTypeIdStr = "1";
+//
+//                                if ((jsonChildNode.has("embeddedUrl")) && jsonChildNode.getString("embeddedUrl").trim() != null && !jsonChildNode.getString("embeddedUrl").trim().isEmpty() && !jsonChildNode.getString("embeddedUrl").trim().equals("null") && !jsonChildNode.getString("embeddedUrl").trim().matches("")) {
+//                                    videoUrlStr = jsonChildNode.getString("embeddedUrl");
+//
+//                                }
+//                                if ((jsonChildNode.has("is_episode")) && jsonChildNode.getString("is_episode").trim() != null && !jsonChildNode.getString("is_episode").trim().isEmpty() && !jsonChildNode.getString("is_episode").trim().equals("null") && !jsonChildNode.getString("is_episode").trim().matches("")) {
+//                                    isEpisodeStr = jsonChildNode.getString("is_episode");
+//
+//                                }
+//                                if ((jsonChildNode.has("muvi_uniq_id")) && jsonChildNode.getString("muvi_uniq_id").trim() != null && !jsonChildNode.getString("muvi_uniq_id").trim().isEmpty() && !jsonChildNode.getString("muvi_uniq_id").trim().equals("null") && !jsonChildNode.getString("muvi_uniq_id").trim().matches("")) {
+//                                    movieUniqueIdStr = jsonChildNode.getString("muvi_uniq_id");
+//
+//                                }
+//                                if ((jsonChildNode.has("movie_stream_uniq_id")) && jsonChildNode.getString("movie_stream_uniq_id").trim() != null && !jsonChildNode.getString("movie_stream_uniq_id").trim().isEmpty() && !jsonChildNode.getString("movie_stream_uniq_id").trim().equals("null") && !jsonChildNode.getString("movie_stream_uniq_id").trim().matches("")) {
+//                                    movieStreamUniqueIdStr = jsonChildNode.getString("movie_stream_uniq_id");
+//
+//                                }
+//                                if ((jsonChildNode.has("is_converted")) && jsonChildNode.getString("is_converted").trim() != null && !jsonChildNode.getString("is_converted").trim().isEmpty() && !jsonChildNode.getString("is_converted").trim().equals("null") && !jsonChildNode.getString("is_converted").trim().matches("")) {
+//                                    isConverted = Integer.parseInt(jsonChildNode.getString("is_converted"));
+//
+//                                }
+//                                if ((jsonChildNode.has("is_advance")) && jsonChildNode.getString("is_advance").trim() != null && !jsonChildNode.getString("is_advance").trim().isEmpty() && !jsonChildNode.getString("is_advance").trim().equals("null") && !jsonChildNode.getString("is_advance").trim().matches("")) {
+//                                    isAPV = Integer.parseInt(jsonChildNode.getString("is_advance"));
+//
+//                                }
+//                                if ((jsonChildNode.has("is_ppv")) && jsonChildNode.getString("is_ppv").trim() != null && !jsonChildNode.getString("is_ppv").trim().isEmpty() && !jsonChildNode.getString("is_ppv").trim().equals("null") && !jsonChildNode.getString("is_ppv").trim().matches("")) {
+//                                    isPPV = Integer.parseInt(jsonChildNode.getString("is_ppv"));
+//
+//                                }
+//
+//                                itemData.add(new GridItem(videoImageStr, videoName, "", videoTypeIdStr, videoGenreStr, "", videoPermalinkStr,isEpisodeStr,"","",isConverted,isPPV,isAPV));
+//
+//                            } catch (Exception e) {
+//                                runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        noDataLayout.setVisibility(View.VISIBLE);
+//                                        noInternetConnectionLayout.setVisibility(View.GONE);
+//                                        gridView.setVisibility(View.GONE);
+//                                        footerView.setVisibility(View.GONE);
+//                                    }
+//                                });
+//                                // TODO Auto-generated catch block
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    } else {
+//                        responseStr = "0";
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                noDataLayout.setVisibility(View.VISIBLE);
+//                                noInternetConnectionLayout.setVisibility(View.GONE);
+//                                gridView.setVisibility(View.GONE);
+//                                footerView.setVisibility(View.GONE);
+//                            }
+//                        });
+//                    }
+//                }
+//            } catch (Exception e) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        noDataLayout.setVisibility(View.VISIBLE);
+//                        noInternetConnectionLayout.setVisibility(View.GONE);
+//                        gridView.setVisibility(View.GONE);
+//                        footerView.setVisibility(View.GONE);
+//                    }
+//                });
+//                e.printStackTrace();
+//
+//            }
+//            return null;
+//
+//        }
+//
+//        protected void onPostExecute(Void result) {
+//
+//            try {
+//
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//            } catch (IllegalArgumentException ex) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        noDataLayout.setVisibility(View.VISIBLE);
+//                        noInternetConnectionLayout.setVisibility(View.GONE);
+//                        gridView.setVisibility(View.GONE);
+//                        footerView.setVisibility(View.GONE);
+//                    }
+//                });
+//            }
+//
+//            if (responseStr == null) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        noDataLayout.setVisibility(View.VISIBLE);
+//                        noInternetConnectionLayout.setVisibility(View.GONE);
+//                        gridView.setVisibility(View.GONE);
+//                        footerView.setVisibility(View.GONE);
+//                    }
+//                });
+//                responseStr = "0";
+//            }
+//            if ((responseStr.trim().equals("0"))) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        noDataLayout.setVisibility(View.VISIBLE);
+//                        noInternetConnectionLayout.setVisibility(View.GONE);
+//                        gridView.setVisibility(View.GONE);
+//                        footerView.setVisibility(View.GONE);
+//                    }
+//                });
+//            } else {
+//                if (itemData.size() <= 0) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            noDataLayout.setVisibility(View.VISIBLE);
+//                            noInternetConnectionLayout.setVisibility(View.GONE);
+//                            gridView.setVisibility(View.GONE);
+//                            footerView.setVisibility(View.GONE);
+//                        }
+//                    });
+//
+//                } else {
+//
+//                    gridView.setVisibility(View.VISIBLE);
+//                    noInternetConnectionLayout.setVisibility(View.GONE);
+//                    noDataLayout.setVisibility(View.GONE);
+//                    videoWidth = 312;
+//                    videoHeight = 560;
+//
+//                    AsynLOADUI loadui = new AsynLOADUI();
+//                    loadui.executeOnExecutor(threadPoolExecutor);
+//
+//                }
+//            }
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            if (MainActivity.internetSpeedDialog != null && MainActivity.internetSpeedDialog.isShowing()) {
+//                pDialog = MainActivity.internetSpeedDialog;
+//            } else {
+//                pDialog = new ProgressBarHandler(SearchActivity.this);
+//
+//                if (listSize == 0) {
+//
+//                    pDialog.show();
+//                    footerView.setVisibility(View.GONE);
+//                } else {
+//                    pDialog.hide();
+//                    footerView.setVisibility(View.VISIBLE);
+//                }
+//            }
+//
+//
+//        }
+//
+//
+//    }
 
 
     /* @Override
@@ -839,7 +900,19 @@ public class SearchActivity extends AppCompatActivity {
                             gridView.setVisibility(View.GONE);
 
                         } else {
-                            AsynLoadSearchVideos asyncLoadVideos = new AsynLoadSearchVideos();
+                            Search_Data_input search_data_input=new Search_Data_input();
+                            search_data_input.setAuthToken(Util.authTokenStr);
+                            search_data_input.setLimit(String.valueOf(limit));
+                            search_data_input.setOffset(String.valueOf(offset));
+                            search_data_input.setQ(searchTextStr.trim());
+                            SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0);
+                            if (countryPref != null) {
+                                String countryCodeStr = countryPref.getString("countryCode", null);
+                                search_data_input.setCountry(countryCodeStr);
+                            }else{
+                                search_data_input.setCountry("IN");
+                            }
+                            SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input,SearchActivity.this,SearchActivity.this);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
                         }

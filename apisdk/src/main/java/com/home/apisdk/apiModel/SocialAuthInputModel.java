@@ -9,7 +9,15 @@ public class SocialAuthInputModel {
     String password;
     String name;
     String fb_userid;
+    String Language;
 
+    public String getLanguage() {
+        return Language;
+    }
+
+    public void setLanguage(String language) {
+        Language = language;
+    }
 
     public String getFb_userid() {
         return fb_userid;

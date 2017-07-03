@@ -30,24 +30,27 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
     String responseStr;
     int status;
     int totalItems;
-    String message,PACKAGE_NAME;
-
+    String message, PACKAGE_NAME;
 
 
     public interface SearchData {
         void onSearchDataPreexecute();
+
         void onSearchDataPostExecuteCompleted(ArrayList<Search_Data_otput> contentListOutputArray, int status, int totalItems, String message);
     }
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
     private SearchData listener;
-    ArrayList<Search_Data_otput> search_data_otputs=new ArrayList<Search_Data_otput>();
+    private Context context;
+    ArrayList<Search_Data_otput> search_data_otputs = new ArrayList<Search_Data_otput>();
 
-    public SearchDataAsynTask(Search_Data_input search_data_input, Context context) {
-        this.listener=(SearchData)context;
+    public SearchDataAsynTask(Search_Data_input search_data_input, SearchData listener, Context context) {
+        this.listener = listener;
+        this.context = context;
+
         this.search_data_input = search_data_input;
-        PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
+        PACKAGE_NAME = context.getPackageName();
+        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
     }
    /* public SearchDataAsynTask(Search_Data_input search_data_input,SearchData listener) {
         this.listener = listener;
@@ -60,112 +63,142 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
     @Override
     protected Void doInBackground(Search_Data_input... params) {
 
+        try {
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(APIUrlConstant.getSearchDataUrl());
+            httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+
+            httppost.addHeader("authToken", this.search_data_input.getAuthToken());
+            httppost.addHeader("limit", this.search_data_input.getLimit());
+            httppost.addHeader("offset", this.search_data_input.getOffset());
+            httppost.addHeader("q", this.search_data_input.getQ());
+            httppost.addHeader("country",this.search_data_input.getCountry());
+
+
+            // Execute HTTP Post Request
             try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(APIUrlConstant.getSearchDataUrl());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+                HttpResponse response = httpclient.execute(httppost);
+                responseStr = EntityUtils.toString(response.getEntity());
+                Log.v("SUBHA", "RES" + responseStr);
 
-                httppost.addHeader("authToken", this.search_data_input.getAuthToken());
-                httppost.addHeader("limit", this.search_data_input.getLimit());
-                httppost.addHeader("offset", this.search_data_input.getOffset());
-                httppost.addHeader("q", this.search_data_input.getQ());
+            } catch (org.apache.http.conn.ConnectTimeoutException e) {
+                status = 0;
+                totalItems = 0;
+                message = "";
 
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("SUBHA", "RES" + responseStr);
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    status = 0;
-                    totalItems = 0;
-                    message = "";
-
-                } catch (IOException e) {
-                    status = 0;
-                    totalItems = 0;
-                    message = "";
-                }
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                    totalItems = Integer.parseInt(myJson.optString("item_count"));
-                    message = myJson.optString("msg");
-                }
-
-                if (status > 0) {
-                    if (status == 200) {
-
-                        JSONArray jsonMainNode = myJson.getJSONArray("search");
-
-                        int lengthJsonArr = jsonMainNode.length();
-                        for (int i = 0; i < lengthJsonArr; i++) {
-                            JSONObject jsonChildNode;
-                            try {
-                                jsonChildNode = jsonMainNode.getJSONObject(i);
-                                Search_Data_otput content = new Search_Data_otput();
-
-                                if ((jsonChildNode.has("genre")) && jsonChildNode.getString("genre").trim() != null && !jsonChildNode.getString("genre").trim().isEmpty() && !jsonChildNode.getString("genre").trim().equals("null") && !jsonChildNode.getString("genre").trim().matches("")) {
-                                    content.setGenre(jsonChildNode.getString("genre"));
-
-                                }
-                                if ((jsonChildNode.has("name")) && jsonChildNode.getString("name").trim() != null && !jsonChildNode.getString("name").trim().isEmpty() && !jsonChildNode.getString("name").trim().equals("null") && !jsonChildNode.getString("name").trim().matches("")) {
-                                    content.setName(jsonChildNode.getString("name"));
-                                }
-                                if ((jsonChildNode.has("poster_url")) && jsonChildNode.getString("poster_url").trim() != null && !jsonChildNode.getString("poster_url").trim().isEmpty() && !jsonChildNode.getString("poster_url").trim().equals("null") && !jsonChildNode.getString("poster_url").trim().matches("")) {
-                                    content.setPoster_url(jsonChildNode.getString("poster_url"));
-
-                                }
-                                if ((jsonChildNode.has("permalink")) && jsonChildNode.getString("permalink").trim() != null && !jsonChildNode.getString("permalink").trim().isEmpty() && !jsonChildNode.getString("permalink").trim().equals("null") && !jsonChildNode.getString("permalink").trim().matches("")) {
-                                    content.setPermalink(jsonChildNode.getString("permalink"));
-                                }
-                                if ((jsonChildNode.has("content_types_id")) && jsonChildNode.getString("content_types_id").trim() != null && !jsonChildNode.getString("content_types_id").trim().isEmpty() && !jsonChildNode.getString("content_types_id").trim().equals("null") && !jsonChildNode.getString("content_types_id").trim().matches("")) {
-                                    content.setContent_types_id(jsonChildNode.getString("content_types_id"));
-
-                                }
-                                //videoTypeIdStr = "1";
-
-                                if ((jsonChildNode.has("is_converted")) && jsonChildNode.getString("is_converted").trim() != null && !jsonChildNode.getString("is_converted").trim().isEmpty() && !jsonChildNode.getString("is_converted").trim().equals("null") && !jsonChildNode.getString("is_converted").trim().matches("")) {
-                                    content.setIs_converted(Integer.parseInt(jsonChildNode.getString("is_converted")));
-
-                                }
-                                if ((jsonChildNode.has("is_advance")) && jsonChildNode.getString("is_advance").trim() != null && !jsonChildNode.getString("is_advance").trim().isEmpty() && !jsonChildNode.getString("is_advance").trim().equals("null") && !jsonChildNode.getString("is_advance").trim().matches("")) {
-                                    content.setIs_advance(Integer.parseInt(jsonChildNode.getString("is_advance")));
-
-                                }
-                                if ((jsonChildNode.has("is_ppv")) && jsonChildNode.getString("is_ppv").trim() != null && !jsonChildNode.getString("is_ppv").trim().isEmpty() && !jsonChildNode.getString("is_ppv").trim().equals("null") && !jsonChildNode.getString("is_ppv").trim().matches("")) {
-                                    content.setIs_ppv(Integer.parseInt(jsonChildNode.getString("is_ppv")));
-
-                                }
-                                if ((jsonChildNode.has("is_episode")) && jsonChildNode.getString("is_episode").trim() != null && !jsonChildNode.getString("is_episode").trim().isEmpty() && !jsonChildNode.getString("is_episode").trim().equals("null") && !jsonChildNode.getString("is_episode").trim().matches("")) {
-                                    content.setIs_episode(jsonChildNode.getString("is_episode"));
-
-                                }
-                                search_data_otputs.add(content);
-                            } catch (Exception e) {
-                                status = 0;
-                                totalItems = 0;
-                                message = "";
-                            }
-                        }
-                    } else {
-                        responseStr = "0";
-                        status = 0;
-                        totalItems = 0;
-                        message = "";
-                    }
-                }
-            } catch (Exception e) {
+            } catch (IOException e) {
                 status = 0;
                 totalItems = 0;
                 message = "";
             }
-            return null;
 
+            JSONObject myJson = null;
+            if (responseStr != null) {
+                myJson = new JSONObject(responseStr);
+                status = Integer.parseInt(myJson.optString("code"));
+                totalItems = Integer.parseInt(myJson.optString("item_count"));
+                message = myJson.optString("msg");
+            }
+
+            if (status > 0) {
+                if (status == 200) {
+
+                    JSONArray jsonMainNode = myJson.getJSONArray("search");
+
+                    int lengthJsonArr = jsonMainNode.length();
+                    for (int i = 0; i < lengthJsonArr; i++) {
+                        JSONObject jsonChildNode;
+                        try {
+                            jsonChildNode = jsonMainNode.getJSONObject(i);
+                            Search_Data_otput content = new Search_Data_otput();
+
+                            if ((jsonChildNode.has("genre")) && jsonChildNode.optString("genre").trim() != null && !jsonChildNode.optString("genre").trim().isEmpty() && !jsonChildNode.optString("genre").trim().equals("null") && !jsonChildNode.optString("genre").trim().matches("")) {
+                                content.setGenre(jsonChildNode.optString("genre"));
+
+                            }
+                            if ((jsonChildNode.has("name")) && jsonChildNode.optString("name").trim() != null && !jsonChildNode.optString("name").trim().isEmpty() && !jsonChildNode.optString("name").trim().equals("null") && !jsonChildNode.optString("name").trim().matches("")) {
+                                content.setName(jsonChildNode.optString("name"));
+                            }
+                            if ((jsonChildNode.has("poster_url")) && jsonChildNode.optString("poster_url").trim() != null && !jsonChildNode.optString("poster_url").trim().isEmpty() && !jsonChildNode.optString("poster_url").trim().equals("null") && !jsonChildNode.optString("poster_url").trim().matches("")) {
+                                content.setPoster_url(jsonChildNode.optString("poster_url"));
+
+                            }
+                            if ((jsonChildNode.has("permalink")) && jsonChildNode.optString("permalink").trim() != null && !jsonChildNode.optString("permalink").trim().isEmpty() && !jsonChildNode.optString("permalink").trim().equals("null") && !jsonChildNode.optString("permalink").trim().matches("")) {
+                                content.setPermalink(jsonChildNode.optString("permalink"));
+                            }
+                            if ((jsonChildNode.has("content_types_id")) && jsonChildNode.optString("content_types_id").trim() != null && !jsonChildNode.optString("content_types_id").trim().isEmpty() && !jsonChildNode.optString("content_types_id").trim().equals("null") && !jsonChildNode.optString("content_types_id").trim().matches("")) {
+                                content.setContent_types_id(jsonChildNode.optString("content_types_id"));
+
+                            }
+                            //videoTypeIdStr = "1";
+
+                            if ((jsonChildNode.has("is_converted")) && jsonChildNode.optString("is_converted").trim() != null && !jsonChildNode.optString("is_converted").trim().isEmpty() && !jsonChildNode.optString("is_converted").trim().equals("null") && !jsonChildNode.optString("is_converted").trim().matches("")) {
+                                content.setIs_converted(Integer.parseInt(jsonChildNode.optString("is_converted")));
+
+                            }
+                            if ((jsonChildNode.has("is_advance")) && jsonChildNode.optString("is_advance").trim() != null && !jsonChildNode.optString("is_advance").trim().isEmpty() && !jsonChildNode.optString("is_advance").trim().equals("null") && !jsonChildNode.optString("is_advance").trim().matches("")) {
+                                content.setIs_advance(Integer.parseInt(jsonChildNode.optString("is_advance")));
+
+                            }
+                            if ((jsonChildNode.has("is_ppv")) && jsonChildNode.optString("is_ppv").trim() != null && !jsonChildNode.optString("is_ppv").trim().isEmpty() && !jsonChildNode.optString("is_ppv").trim().equals("null") && !jsonChildNode.optString("is_ppv").trim().matches("")) {
+                                content.setIs_ppv(Integer.parseInt(jsonChildNode.optString("is_ppv")));
+
+                            }
+                            if ((jsonChildNode.has("is_episode")) && jsonChildNode.optString("is_episode").trim() != null && !jsonChildNode.optString("is_episode").trim().isEmpty() && !jsonChildNode.optString("is_episode").trim().equals("null") && !jsonChildNode.optString("is_episode").trim().matches("")) {
+                                content.setIs_episode(jsonChildNode.optString("is_episode"));
+
+                            }
+                            if ((jsonChildNode.has("thirdparty_url")) && jsonChildNode.optString("thirdparty_url").trim() != null && !jsonChildNode.optString("thirdparty_url").trim().isEmpty() && !jsonChildNode.optString("thirdparty_url").trim().equals("null") && !jsonChildNode.optString("thirdparty_url").trim().matches("")) {
+                                content.setThirdparty_url(jsonChildNode.optString("thirdparty_url"));
+
+                            }
+                            if ((jsonChildNode.has("episode_title")) && jsonChildNode.optString("episode_title").trim() != null && !jsonChildNode.optString("episode_title").trim().isEmpty() && !jsonChildNode.optString("episode_title").trim().equals("null") && !jsonChildNode.optString("episode_title").trim().matches("")) {
+                                content.setEpisode_title(jsonChildNode.optString("episode_title"));
+
+                            }
+                            if ((jsonChildNode.has("name")) && jsonChildNode.optString("name").trim() != null && !jsonChildNode.optString("name").trim().isEmpty() && !jsonChildNode.optString("name").trim().equals("null") && !jsonChildNode.optString("name").trim().matches("")) {
+                                content.setName(jsonChildNode.optString("name"));
+
+                            }
+                            if ((jsonChildNode.has("display_name")) && jsonChildNode.optString("display_name").trim() != null && !jsonChildNode.optString("display_name").trim().isEmpty() && !jsonChildNode.optString("display_name").trim().equals("null") && !jsonChildNode.optString("display_name").trim().matches("")) {
+                                content.setDisplay_name(jsonChildNode.optString("display_name"));
+
+                            }
+                            if ((jsonChildNode.has("embeddedUrl")) && jsonChildNode.optString("embeddedUrl").trim() != null && !jsonChildNode.optString("embeddedUrl").trim().isEmpty() && !jsonChildNode.optString("embeddedUrl").trim().equals("null") && !jsonChildNode.optString("embeddedUrl").trim().matches("")) {
+                                content.setEmbeddedUrl(jsonChildNode.optString("embeddedUrl"));
+
+                            }
+                            if ((jsonChildNode.has("muvi_uniq_id")) && jsonChildNode.optString("muvi_uniq_id").trim() != null && !jsonChildNode.optString("muvi_uniq_id").trim().isEmpty() && !jsonChildNode.optString("muvi_uniq_id").trim().equals("null") && !jsonChildNode.optString("muvi_uniq_id").trim().matches("")) {
+                                content.setMovie_id(jsonChildNode.optString("muvi_uniq_id"));
+
+                            }
+
+                            if ((jsonChildNode.has("muvi_stream_uniq_id")) && jsonChildNode.optString("muvi_stream_uniq_id").trim() != null && !jsonChildNode.optString("muvi_stream_uniq_id").trim().isEmpty() && !jsonChildNode.optString("muvi_stream_uniq_id").trim().equals("null") && !jsonChildNode.optString("muvi_stream_uniq_id").trim().matches("")) {
+                                content.setMovie_stream_uniq_id(jsonChildNode.optString("muvi_stream_uniq_id"));
+
+                            }
+                            search_data_otputs.add(content);
+                        } catch (Exception e) {
+                            status = 0;
+                            totalItems = 0;
+                            message = "";
+                        }
+                    }
+                } else {
+                    responseStr = "0";
+                    status = 0;
+                    totalItems = 0;
+                    message = "";
+                }
+            }
+        } catch (Exception e) {
+            status = 0;
+            totalItems = 0;
+            message = "";
         }
+        return null;
+
+    }
 
     @Override
     protected void onPreExecute() {
@@ -174,21 +207,18 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
 
         status = 0;
         totalItems = 0;
-        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
-        {
-            this.cancel(true);
-            message = "Packge Name Not Matched";
-            listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);
-            return;
-        }
-        if(CommonConstants.hashKey.equals(""))
-        {
-            this.cancel(true);
-            message = "Hash Key Is Not Available. Please Initialize The SDK";
-            listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);
-        }
+//        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+//            this.cancel(true);
+//            message = "Packge Name Not Matched";
+//            listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);
+//            return;
+//        }
+//        if (CommonConstants.hashKey.equals("")) {
+//            this.cancel(true);
+//            message = "Hash Key Is Not Available. Please Initialize The SDK";
+//            listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);
+//        }
     }
-
 
 
     @Override

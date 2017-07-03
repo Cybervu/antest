@@ -37,9 +37,12 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
     }
 
     private GetStaticPageDetails listener;
+    private Context context;
 
-    public GetStaticPagesDetailsAsynTask(GetStaticPagesDeatilsModelInput getStaticPagesDeatilsModelInput, Context context) {
-        this.listener = (GetStaticPageDetails) context;
+    public GetStaticPagesDetailsAsynTask(GetStaticPagesDeatilsModelInput getStaticPagesDeatilsModelInput, GetStaticPageDetails listener, Context context) {
+        this.listener = listener;
+        this.context = context;
+
 
         this.getStaticPagesDeatilsModelInput = getStaticPagesDeatilsModelInput;
         PACKAGE_NAME = context.getPackageName();
@@ -89,22 +92,21 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
                 Log.v("SUBHA", "code = " + status);
                 JSONObject mainJson = myJson.getJSONObject("page_details");
                 getStaticPageDetailsModelOutput = new GetStaticPageDetailsModelOutput();
-                if ((mainJson.has("content")) && mainJson.getString("content").trim() != null && !mainJson.getString("content").trim().isEmpty() && !mainJson.getString("content").trim().equals("null") && !mainJson.getString("content").trim().matches("")) {
-                    Log.v("SUBHA", "mainJson.has(\"content\") = " + mainJson.getString("content"));
+                if ((mainJson.has("content")) && mainJson.optString("content").trim() != null && !mainJson.optString("content").trim().isEmpty() && !mainJson.optString("content").trim().equals("null") && !mainJson.optString("content").trim().matches("")) {
+                    Log.v("SUBHA", "mainJson.has(\"content\") = " + mainJson.optString("content"));
 
-                    getStaticPageDetailsModelOutput.setContent(mainJson.getString("content"));
+                    getStaticPageDetailsModelOutput.setContent(mainJson.optString("content"));
 
                 } else {
                     getStaticPageDetailsModelOutput.setContent("");
 
                 }
-                if ((mainJson.has("title")) && mainJson.getString("title").trim() != null && !mainJson.getString("title").trim().isEmpty() && !mainJson.getString("title").trim().equals("null") && !mainJson.getString("title").trim().matches("")) {
-                    getStaticPageDetailsModelOutput.setTitle(mainJson.getString("title"));
+                if ((mainJson.has("title")) && mainJson.optString("title").trim() != null && !mainJson.optString("title").trim().isEmpty() && !mainJson.optString("title").trim().equals("null") && !mainJson.optString("title").trim().matches("")) {
+                    getStaticPageDetailsModelOutput.setTitle(mainJson.optString("title"));
                 } else {
                     getStaticPageDetailsModelOutput.setTitle("");
 
                 }
-
 
 
             }

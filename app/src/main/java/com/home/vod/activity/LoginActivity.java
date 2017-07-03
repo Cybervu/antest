@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     static File mediaStorageDir;
     String UniversalErrorMessage = "";
     String UniversalIsSubscribed = "";
-
+    String loggedInIdStr;
     ArrayList<String> SubTitleName = new ArrayList<>();
     ArrayList<String> SubTitlePath = new ArrayList<>();
     ArrayList<String> FakeSubTitlePath = new ArrayList<>();
@@ -172,7 +172,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
                                     getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
                                     getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
-                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,this);
+                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,this,this);
                                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                                 } else {
                                     ValidateUserInput validateUserInput=new ValidateUserInput();
@@ -183,7 +183,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     validateUserInput.setSeasonId(validateUserInput.getSeasonId());
                                     validateUserInput.setLanguageCode(validateUserInput.getLanguageCode());
                                     validateUserInput.setPurchaseType(validateUserInput.getPurchaseType());
-                                    GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput,this);
+                                    GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput,this,this);
                                     asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 
                                 }
@@ -386,7 +386,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
                             getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
                             getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
-                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,this);
+                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,this,this);
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
                             Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -460,7 +460,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
                     getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
                     getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
-                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,this);
+                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,this,this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                 } else {
                     Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -1387,7 +1387,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     login_input.setAuthToken(Util.authTokenStr);
                     login_input.setEmail(regEmailStr);
                     login_input.setPassword(regPasswordStr);
-                    LoginAsynTask asyncReg= new LoginAsynTask(login_input,this);
+                    LoginAsynTask asyncReg= new LoginAsynTask(login_input,this,this);
                     asyncReg.executeOnExecutor(threadPoolExecutor);
                 }
                 else
@@ -3625,7 +3625,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
                                     getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
                                     getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
-                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,LoginActivity.this);
+                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,LoginActivity.this,LoginActivity.this);
                                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                                 } else {
                                     ValidateUserInput validateUserInput=new ValidateUserInput();
@@ -3636,7 +3636,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     validateUserInput.setSeasonId(validateUserInput.getSeasonId());
                                     validateUserInput.setLanguageCode(validateUserInput.getLanguageCode());
                                     validateUserInput.setPurchaseType(validateUserInput.getPurchaseType());
-                                    GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput,LoginActivity.this);
+                                    GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput,LoginActivity.this,LoginActivity.this);
                                     asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                                 }
                             } else {
@@ -4352,7 +4352,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
                                 getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
                                 getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
-                                VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,LoginActivity.this);
+                                VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,LoginActivity.this,LoginActivity.this);
                                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                             } else {
                                 ValidateUserInput validateUserInput=new ValidateUserInput();
@@ -4363,7 +4363,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 validateUserInput.setSeasonId(validateUserInput.getSeasonId());
                                 validateUserInput.setLanguageCode(validateUserInput.getLanguageCode());
                                 validateUserInput.setPurchaseType(validateUserInput.getPurchaseType());
-                                GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput,LoginActivity.this);
+                                GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput,LoginActivity.this,LoginActivity.this);
                                 asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 
                             }
@@ -4413,7 +4413,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         logoutInput.setAuthToken(Util.authTokenStr);
         logoutInput.setLogin_history_id(logoutInput.getLogin_history_id());
         logoutInput.setLang_code(logoutInput.getLang_code());
-        LogoutAsynctask asynLogoutDetails=new LogoutAsynctask(logoutInput,this);
+        LogoutAsynctask asynLogoutDetails=new LogoutAsynctask(logoutInput,this,this);
         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
     }
 

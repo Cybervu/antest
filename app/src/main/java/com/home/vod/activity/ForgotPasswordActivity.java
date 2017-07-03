@@ -137,7 +137,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         });
     }
 
-
     public void forgotPasswordButtonClicked() {
 
         loginEmailStr = editEmailStr.getText().toString().trim();
@@ -148,9 +147,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
             if (isValidEmail == true) {
                 Forgotpassword_input forgotpassword_input=new Forgotpassword_input();
                 forgotpassword_input.setAuthToken(Util.authTokenStr);
-                forgotpassword_input.setLang_code(forgotpassword_input.getLang_code());
-                forgotpassword_input.setEmail(forgotpassword_input.getEmail());
-                ForgotpassAsynTask asyncPasswordForgot = new ForgotpassAsynTask(forgotpassword_input,this);
+                forgotpassword_input.setLang_code(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                forgotpassword_input.setEmail(loginEmailStr);
+                ForgotpassAsynTask asyncPasswordForgot = new ForgotpassAsynTask(forgotpassword_input,this,this);
                 asyncPasswordForgot.executeOnExecutor(threadPoolExecutor);
             } else {
 
