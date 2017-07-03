@@ -36,6 +36,7 @@ import com.home.apisdk.apiModel.Get_Video_Details_Output;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.model.CardModel;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -69,7 +70,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
     String videoResolution = "BEST";
 
-    SharedPreferences loginPref, countryPref;
+    PreferenceManager preferenceManager;
 
     Toolbar mActionBarToolbar;
     boolean isCouponCodeAdded = false;
@@ -205,10 +206,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
         }
 
-        countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0);
-
-        loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
         if (getIntent().getStringExtra("currencyId") != null) {
             currencyIdStr = getIntent().getStringExtra("currencyId");
@@ -734,7 +732,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
         int status;
         String responseStr;
         String responseMessageStr;
-        String emailIdStr = loginPref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
+        String emailIdStr = preferenceManager.getEmailIdFromPref();
 
         String nameOnCardStr = nameOnCardEditText.getText().toString().trim();
         String cardNumberStr = cardNumberEditText.getText().toString().trim();
@@ -755,13 +753,13 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 httppost.addHeader("email", emailIdStr);
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
 
-            /*    LogUtil.showLog("SUBHA", "nameOnCardStr = " + nameOnCardStr);
-                LogUtil.showLog("SUBHA", "expiryMonth = " + String.valueOf(expiryMonthStr).trim());
-                LogUtil.showLog("SUBHA", "expiryYear = " + String.valueOf(expiryYearStr).trim());
-                LogUtil.showLog("SUBHA", "cardNumber = " + cardNumberStr);
-                LogUtil.showLog("SUBHA", "cvv = " + securityCodeStr);
-                LogUtil.showLog("SUBHA", "email = " + emailIdStr);
-                LogUtil.showLog("SUBHA", "authToken = " + Util.authTokenStr.trim());
+            /*    Log.v("SUBHA", "nameOnCardStr = " + nameOnCardStr);
+                Log.v("SUBHA", "expiryMonth = " + String.valueOf(expiryMonthStr).trim());
+                Log.v("SUBHA", "expiryYear = " + String.valueOf(expiryYearStr).trim());
+                Log.v("SUBHA", "cardNumber = " + cardNumberStr);
+                Log.v("SUBHA", "cvv = " + securityCodeStr);
+                Log.v("SUBHA", "email = " + emailIdStr);
+                Log.v("SUBHA", "authToken = " + Util.authTokenStr.trim());
 */
 
                 // Execute HTTP Post Request
@@ -936,7 +934,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
     }
 
     private class AsynSubscriptionRegDetails extends AsyncTask<Void, Void, Void> {
-       ProgressBarHandler progressBarHandler;
+        ProgressBarHandler progressBarHandler;
         int status;
         String responseStr;
         String nameOnCardStr = nameOnCardEditText.getText().toString().trim();
@@ -945,9 +943,9 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
         @Override
         protected Void doInBackground(Void... params) {
-            LogUtil.showLog("SUBHA", "payment at doInBackground called ");
-            String userIdStr = loginPref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-            String emailIdSubStr = loginPref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
+            Log.v("SUBHA", "payment at doInBackground called ");
+            String userIdStr = preferenceManager.getUseridFromPref();
+            String emailIdSubStr = preferenceManager.getEmailIdFromPref();
 
             String urlRouteList = Util.rootUrl().trim() + Util.subscriptionUrl.trim();
             LogUtil.showLog("SUBHA", "payment at urlRouteList = "+urlRouteList);
@@ -987,9 +985,9 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 LogUtil.showLog("SUBHA", "=========== 3333="+tokenStr.trim());
                 httppost.addHeader("cvv", securityCardStr);
                 // httppost.addHeader("country",currencyCountryCodeStr.trim());
-                LogUtil.showLog("SUBHA", "=========== 33333");
-                httppost.addHeader("country", countryPref.getString("countryCode", null));
-                LogUtil.showLog("SUBHA", "=========== 4");
+                Log.v("SUBHA", "=========== 33333");
+                httppost.addHeader("country", preferenceManager.getCountryCodeFromPref());
+                Log.v("SUBHA", "=========== 4");
                 httppost.addHeader("season_id", "0");
                 LogUtil.showLog("SUBHA", "=========== 44");
                 httppost.addHeader("episode_id", "0");
@@ -998,7 +996,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 LogUtil.showLog("SUBHA", "=========== 4444");
 
                 httppost.addHeader("plan_id", getIntent().getStringExtra("selected_plan_id").toString().trim());
-                httppost.addHeader("name", loginPref.getString("PREFS_LOGIN_DISPLAY_NAME_KEY", ""));
+                httppost.addHeader("name", preferenceManager.getDispNameFromPref());
 
 //                httppost.addHeader("is_save_this_card", isCheckedToSavetheCard.trim());
 

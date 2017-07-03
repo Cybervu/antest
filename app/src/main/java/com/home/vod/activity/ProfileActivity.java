@@ -30,6 +30,7 @@ import com.home.apisdk.apiController.UpadteUserProfileAsynctask;
 import com.home.apisdk.apiModel.Update_UserProfile_Input;
 import com.home.apisdk.apiModel.Update_UserProfile_Output;
 import com.home.vod.R;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -61,7 +62,7 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
     ImageView bannerImageView;
     EditText editOldPassword, editNewPassword, editProfileNameEditText;
     EditText emailAddressEditText;
-    Button changePassword, update_profile, manage_devices;
+    Button changePassword, update_profile,manage_devices;
 
     String Name, Password;
     boolean password_visibility = false;
@@ -80,19 +81,19 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
     // Added for country and language spinner
-    Spinner country_spinner, language_spinner;
-    ArrayAdapter<String> Language_arrayAdapter, Country_arrayAdapter;
+    Spinner country_spinner,language_spinner;
+    ArrayAdapter<String> Language_arrayAdapter,Country_arrayAdapter;
 
-    String Selected_Language, Selected_Country = "0", Selected_Language_Id, Selected_Country_Id;
-    SharedPreferences countryPref;
-    List<String> Country_List, Country_Code_List, Language_List, Language_Code_List;
+    String Selected_Language,Selected_Country="0",Selected_Language_Id,Selected_Country_Id;
+    PreferenceManager preferenceManager;
+    List<String> Country_List,Country_Code_List,Language_List,Language_Code_List;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        loginPref = getSharedPreferences(Util.LOGIN_PREF, 0);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         editNewPassword = (EditText) findViewById(R.id.editNewPassword);
@@ -151,8 +152,8 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
         });
 
 
-       /* User_Id = getIntent().getStringExtra("LOGID");
-        Email_Id = getIntent().getStringExtra("EMAIL");
+       /* userId = getIntent().getStringExtra("LOGID");
+        emailId = getIntent().getStringExtra("EMAIL");
 */
         if (loginPref != null) {
             User_Id = loginPref.getString("PREFS_LOGGEDIN_ID_KEY", null);
@@ -176,7 +177,6 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
 
         // This is used for language and country spunner
 
-        countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0);
 
         Country_List = Arrays.asList(getResources().getStringArray(R.array.country));
         Country_Code_List = Arrays.asList(getResources().getStringArray(R.array.countrycode));
@@ -383,9 +383,9 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
         dlgAlert.setMessage(msg);
         dlgAlert.setTitle(Title);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+        dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
         dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+        dlgAlert.setPositiveButton(Util.getTextofLanguage(ProfileActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();

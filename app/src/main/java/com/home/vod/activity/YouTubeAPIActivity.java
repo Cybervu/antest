@@ -1,6 +1,5 @@
 package com.home.vod.activity;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.ActionBarOverlayLayout;
@@ -16,6 +15,7 @@ import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetVideoLogsAsynTask;
 import com.home.apisdk.apiModel.VideoLogsInputModel;
 import com.home.vod.R;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
 
@@ -62,6 +62,7 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
     private YouTubePlayer YPlayer;
     private static final String YoutubeDeveloperKey = "AIzaSyDy9dfNlSYnHlUsM28ayyPH7a7dMIfFoYg-0";
     private static final int RECOVERY_DIALOG_REQUEST = 1;
+    private PreferenceManager preferenceManager;
 
 
     @Override
@@ -71,6 +72,7 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
         fragmentYoutube = (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.youtubeplayerfragment);
 
         fragmentYoutube.initialize(YoutubeDeveloperKey, this);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
         if (Util.dataModel.getVideoUrl().matches("")) {
             onBackPressed();
@@ -169,9 +171,8 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
             videoLogsInputModel.setIpAddress(ipAddressStr.trim());
             videoLogsInputModel.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
             videoLogsInputModel.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id().trim());
-            SharedPreferences pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-            if (pref!=null){
-                userIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+            if (preferenceManager!=null){
+                userIdStr = preferenceManager.getUseridFromPref();
             }else{
                 userIdStr="";
 
@@ -365,10 +366,10 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
         }
     }*/
 
-    /*  protected YouTubePlayer.Provider getYouTubePlayerProvider() {
-          return (YouTubePlayerView) findViewById(R.id.youtubeplayerfragment);
-      }
-  */
+  /*  protected YouTubePlayer.Provider getYouTubePlayerProvider() {
+        return (YouTubePlayerView) findViewById(R.id.youtubeplayerfragment);
+    }
+*/
     @Override
     public void onInitializationSuccess(Provider provider,
                                         YouTubePlayer player, boolean wasRestored) {
@@ -378,7 +379,7 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
  * throughout the activity, and perform all the player actions like
  * play, pause and seeking to a position by code.
  */
-        // YPlayer.loadVideo(videoUrlStr);
+       // YPlayer.loadVideo(videoUrlStr);
         if (!wasRestored) {
             //YPlayer.cueVideo(videoUrlStr);
             YPlayer.loadVideo(Util.dataModel.getVideoUrl());
@@ -398,32 +399,30 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
     @Override
     public void onOrientationChange(int orientation) {
 
-        if (orientation == 90) {
+        if (orientation == 90){
 
 
-            if (YPlayer != null) {
+            if (YPlayer!=null) {
                 YPlayer.setFullscreen(true);
             }
             // Do some landscape stuff
         }
-        if (orientation == 270) {
-            if (YPlayer != null) {
+        if (orientation == 270){
+            if (YPlayer!=null) {
                 YPlayer.setFullscreen(true);
             }
 
             // Do some landscape stuff
-        }
-        if (orientation == 180) {
-            if (YPlayer != null) {
+        }  if (orientation == 180){
+            if (YPlayer!=null) {
                 YPlayer.setFullscreen(false);
 
             }
 
             // Do some landscape stuff
-        }
-        if (orientation == 0) {
+        } if (orientation == 0) {
 
-            if (YPlayer != null) {
+            if (YPlayer!=null) {
                 YPlayer.setFullscreen(false);
             }
 

@@ -52,6 +52,7 @@ import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.GridItem;
 import com.home.vod.model.LanguageModel;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
@@ -100,7 +101,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 
     int  videoHeight = 185;
     int  videoWidth = 256;
-    SharedPreferences pref;
+    PreferenceManager preferenceManager;
     GridItem itemToPlay;
     Toolbar mActionBarToolbar;
     GridLayoutManager mLayoutManager;
@@ -167,6 +168,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_more);
 
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
@@ -180,9 +182,8 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
             sectionId = getIntent().getStringExtra("SectionId");
 
         }
-        SharedPreferences isLoginPref = getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0); // 0 - for private mode
 
-        isLogin = isLoginPref.getInt(Util.IS_LOGIN_PREF_KEY, 0);
+        isLogin = preferenceManager.getLoginFeatureFromPref();
         sectionTitle = (TextView)findViewById(R.id.sectionTitle);
         Typeface castDescriptionTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
         sectionTitle.setTypeface(castDescriptionTypeface);
@@ -606,21 +607,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
         }
         if (code > 0) {
             if (code == 200) {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.clear();
-                editor.commit();
-                SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                if (loginPref!=null) {
-                    SharedPreferences.Editor countryEditor = loginPref.edit();
-                    countryEditor.clear();
-                    countryEditor.commit();
-                }
-                 /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-                    if (countryPref!=null) {
-                        SharedPreferences.Editor countryEditor = countryPref.edit();
-                        countryEditor.clear();
-                        countryEditor.commit();
-                    }*/
+                preferenceManager.clearLoginPref();
                 if ((Util.getTextofLanguage(ViewMoreActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
                     final Intent startIntent = new Intent(ViewMoreActivity.this, SplashScreen.class);
@@ -1113,12 +1100,10 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
         MenuItem item,item1,item2,item3,item4,item5,item6;
         item= menu.findItem(R.id.action_filter);
         item.setVisible(false);
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-        String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
-        String id = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-        String email=pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
-        SharedPreferences language_list_pref = getSharedPreferences(Util.LANGUAGE_LIST_PREF, 0);
-        if(language_list_pref.getString("total_language","0").equals("1"))
+        String loggedInStr = preferenceManager.getLoginStatusFromPref();
+        String id = preferenceManager.getUseridFromPref();
+        String email=preferenceManager.getEmailIdFromPref();
+        if(preferenceManager.getLanguageListFromPref().equals("1"))
             (menu.findItem(R.id.menu_item_language)).setVisible(false);
 
         if(loggedInStr!=null){
@@ -1634,7 +1619,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
                         // dialog.cancel();
                         LogoutInput logoutInput=new LogoutInput();
                         logoutInput.setAuthToken(Util.authTokenStr);
-                        logoutInput.setLogin_history_id(pref.getString("PREFS_LOGIN_HISTORYID_KEY", null));
+                        logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
                         logoutInput.setLang_code(Util.getTextofLanguage(ViewMoreActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails=new LogoutAsynctask(logoutInput,ViewMoreActivity.this,ViewMoreActivity.this);
                         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);

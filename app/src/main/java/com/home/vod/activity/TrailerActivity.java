@@ -30,6 +30,7 @@ import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetVideoLogsAsynTask;
 import com.home.apisdk.apiModel.VideoLogsInputModel;
 import com.home.vod.R;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ExpandableTextView;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
@@ -135,7 +136,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-    SharedPreferences pref;
+    PreferenceManager preferenceManager;
     //Toolbar mActionBarToolbar;
     LinearLayout linearLayout1;
 
@@ -170,10 +171,10 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
         movieId = Util.dataModel.getMovieUniqueId();
         episodeId = Util.dataModel.getEpisode_id();
 
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-        if (pref != null) {
-            emailIdStr = pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
-            userIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
+        if (preferenceManager != null) {
+            emailIdStr = preferenceManager.getEmailIdFromPref();
+            userIdStr = preferenceManager.getUseridFromPref();
 
         } else {
             emailIdStr = "";

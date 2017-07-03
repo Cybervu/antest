@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import com.home.vod.R;
 import com.home.vod.adapter.NavigationDrawerAdapter;
 import com.home.vod.model.NavDrawerItem;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
@@ -40,7 +41,6 @@ public class FragmentDrawer extends Fragment {
     String loggedInStr=null;
     private static ArrayList<NavDrawerItem> titles = null;
     private static TypedArray navMenuIcons;
-    SharedPreferences pref;
     private FragmentDrawerListener drawerListener;
 
     public FragmentDrawer() {
@@ -78,18 +78,6 @@ public class FragmentDrawer extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pref = getActivity().getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-     /*   if (MainActivity.menuList !=null && MainActivity.menuList.size() > 0){
-            titles = MainActivity.menuList;
-            // navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
-        }else{
-            titles = null;
-        }*/
-       // titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels);
-       // navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
-
-
-
     }
 
     @Override

@@ -19,6 +19,7 @@ import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetVideoLogsAsynTask;
 import com.home.apisdk.apiModel.VideoLogsInputModel;
 import com.home.vod.R;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -48,7 +49,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class ThirdPartyPlayer extends ActionBarActivity implements GetIpAddressAsynTask.IpAddress, GetVideoLogsAsynTask.GetVideoLogs {
     WebView mWebView;
-    // Toolbar mActionBarToolbar;
+   // Toolbar mActionBarToolbar;
     private ProgressBarHandler asyncpDialog;
     String frameVideo = "";
     String ipAddressStr = "";
@@ -59,6 +60,7 @@ public class ThirdPartyPlayer extends ActionBarActivity implements GetIpAddressA
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
+    PreferenceManager preferenceManager;
     GetIpAddressAsynTask asynGetIpAddress;
     GetVideoLogsAsynTask asyncVideoLogDetails;
 
@@ -71,7 +73,7 @@ public class ThirdPartyPlayer extends ActionBarActivity implements GetIpAddressA
         setContentView(R.layout.activity_third_party_player);
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
     /*    mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mActionBarToolbar != null) {
@@ -208,12 +210,9 @@ public class ThirdPartyPlayer extends ActionBarActivity implements GetIpAddressA
     public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
         String userIdStr;
         if (!ipAddressStr.matches("")) {
-            SharedPreferences pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-            if (pref!=null){
-                userIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-            }else{
+            userIdStr = preferenceManager.getUseridFromPref();
+            if (userIdStr==null){
                 userIdStr="";
-
             }
             VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
             videoLogsInputModel.setAuthToken(Util.authTokenStr);
@@ -406,11 +405,7 @@ public class ThirdPartyPlayer extends ActionBarActivity implements GetIpAddressA
             mContext = c;
         }
 
-        */
-
-    /**
-     * Show a toast from the web page
-     *//*
+        *//** Show a toast from the web page *//*
         @JavascriptInterface
         public void webViewFullscreen(){
 

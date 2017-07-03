@@ -58,6 +58,7 @@ import com.home.vod.adapter.GenreFilterAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.GridItem;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -112,7 +113,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     String videoImageStrToHeight;
     int videoHeight = 185;
     int videoWidth = 256;
-    SharedPreferences pref;
+    private PreferenceManager preferenceManager;
     GridItem itemToPlay;
     private ProgressBarHandler pDialog;
     private static int firstVisibleInListview;
@@ -138,6 +139,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     int limit = 10;
     int listSize = 0;
     int itemsInServer = 0;
+
 
 
     int season_id = 0;
@@ -224,8 +226,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);
         genreListData.setItemAnimator(new DefaultItemAnimator());
-        pref = context.getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-        sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
+        preferenceManager = PreferenceManager.getPreferenceManager(getActivity()) ;// 0 - for private mode
+        sectionTitle =(TextView)rootView.findViewById(R.id.sectionTitle);
         posterUrl = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
 
         gridView = (GridView) rootView.findViewById(R.id.imagesGridView);
@@ -247,14 +249,14 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         footerView.setVisibility(View.GONE);
         gridView.setVisibility(View.VISIBLE);
 
-        if (getArguments().getString("title") != null) {
+        if (getArguments().getString("title")!=null){
             titleListName = getArguments().getString("title");
             sectionTitle.setText(titleListName);
-        } else {
+        }else{
             sectionTitle.setText("");
 
         }
-        Typeface sectionTitleTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
+        Typeface sectionTitleTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         sectionTitle.setTypeface(sectionTitleTypeface);
 
         gridView.setAdapter(customGridAdapter);
@@ -373,7 +375,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 String isEpisode = item.getIsEpisode();
                 movieUniqueId = item.getMovieUniqueId();
                 movieStreamUniqueId = item.getMovieStreamUniqueId();
-                season_id = item.getIsAPV();
+                season_id  =  item.getIsAPV();
                 isFreeContent = item.getIsPPV();
 
                 SubTitleName.clear();
@@ -384,7 +386,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
 
                 if (moviePermalink.matches(Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
-                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(context, R.style.MyAlertDialogStyle);
+                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(context,R.style.MyAlertDialogStyle);
                     dlgAlert.setMessage(Util.getTextofLanguage(context, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
                     dlgAlert.setTitle(Util.getTextofLanguage(context, Util.SORRY, Util.DEFAULT_SORRY));
                     dlgAlert.setPositiveButton(Util.getTextofLanguage(context, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
@@ -415,12 +417,13 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         // Call Load Videos Url to play the Video
 
 
+
                         if (isFreeContent == 1) {
                             /*AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);*/
                             ValidateUserInput validateUserInput=new ValidateUserInput();
                             validateUserInput.setAuthToken(Util.authTokenStr);
-                            validateUserInput.setUserId(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                             validateUserInput.setMuviUniqueId(movieUniqueId.trim());
                             validateUserInput.setPurchaseType("episode");
                             validateUserInput.setSeasonId(""+season_id);
@@ -432,7 +435,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         } else {
                             ValidateUserInput validateUserInput=new ValidateUserInput();
                             validateUserInput.setAuthToken(Util.authTokenStr);
-                            validateUserInput.setUserId(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                             validateUserInput.setMuviUniqueId(movieUniqueId.trim());
                             validateUserInput.setPurchaseType("episode");
                             validateUserInput.setSeasonId(""+season_id);
@@ -920,7 +923,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         getVideoDetailsInput.setContent_uniq_id(movieUniqueId);
                         getVideoDetailsInput.setStream_uniq_id(movieStreamUniqueId);
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                        getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                        getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                         VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MyLibraryFragment.this, context);
                         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                     } else {
@@ -1005,16 +1008,15 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                httppost.addHeader("user_id",preferenceManager.getUseridFromPref());
 
 
                 httppost.addHeader("limit", String.valueOf(limit));
                 httppost.addHeader("offset", String.valueOf(offset));
 
-                SharedPreferences countryPref = context.getSharedPreferences(Util.COUNTRY_PREF, 0);
+                String countryCodeStr = preferenceManager.getCountryCodeFromPref();
 
-                if (countryPref != null) {
-                    String countryCodeStr = countryPref.getString("countryCode", null);
+                if (countryCodeStr != null) {
                     httppost.addHeader("country", countryCodeStr);
                 } else {
                     httppost.addHeader("country", "IN");
@@ -1131,7 +1133,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                                 }
 
 
-                                itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, movieUniqueId, movieStreamUniqueId, isConverted, isFreeContent, season_id));
+                                itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, movieUniqueId,movieStreamUniqueId, isConverted,isFreeContent, season_id));
                             } catch (Exception e) {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
@@ -1388,26 +1390,26 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
                 gridView.setGravity(Gravity.CENTER_HORIZONTAL);
 
-                if (getActivity() != null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+                if (getActivity()!=null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     if (videoWidth > videoHeight) {
                         gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     } else {
-                        if (density <= 1.5) {
+                        if (density <= 1.5){
                             gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 5);
 
-                        } else {
+                        }else {
                             gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
                         }
                     }
 
-                } else if (getActivity() != null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
+                } else if (getActivity() !=null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
                     if (videoWidth > videoHeight) {
                         gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
                     } else {
                         gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     }
 
-                } else if (getActivity() != null && (context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
+                } else if (getActivity()!=null && (context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
 
                     gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
 
@@ -1416,10 +1418,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     if (videoWidth > videoHeight) {
                         gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
                     } else {
-                        if (density <= 1.5) {
+                        if (density <= 1.5){
                             gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 6);
 
-                        } else {
+                        }else {
                             gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 5);
                         }
                     }
@@ -1429,7 +1431,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout_land, itemData);
-                    } else {
+                    }
+                    else{
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_280_grid_layout, itemData);
 
                     }
@@ -1438,7 +1441,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     if (density >= 3.5 && density <= 4.0) {
 
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout, itemData);
-                    } else {
+                    }else{
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
 
                     }
@@ -1457,7 +1460,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout_land, itemData);
-                    } else {
+                    } else{
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_280_grid_layout, itemData);
 
                     }
@@ -1465,7 +1468,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout, itemData);
-                    } else {
+                    } else{
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
 
                     }
@@ -1953,8 +1956,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     }
                 }
 
-                SubTitlePath.add(mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".vtt");
-                OutputStream output = new FileOutputStream(mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".vtt");
+                SubTitlePath.add(mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis()+".vtt");
+                OutputStream output = new FileOutputStream(mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis()+".vtt");
 
                 byte data[] = new byte[1024];
                 long total = 0;
@@ -1975,18 +1978,21 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
             return null;
         }
-
         protected void onProgressUpdate(String... progress) {
         }
 
         @Override
         protected void onPostExecute(String file_url) {
             FakeSubTitlePath.remove(0);
-            if (FakeSubTitlePath.size() > 0) {
+            if(FakeSubTitlePath.size()>0)
+            {
                 Download_SubTitle(FakeSubTitlePath.get(0).trim());
-            } else {
+            }
+            else
+            {
 
-                if (progressBarHandler != null && progressBarHandler.isShowing()) {
+                if(progressBarHandler!=null && progressBarHandler.isShowing())
+                {
                     progressBarHandler.hide();
                 }
                 Intent playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);

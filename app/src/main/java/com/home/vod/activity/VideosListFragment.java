@@ -48,6 +48,7 @@ import com.home.vod.adapter.GenreFilterAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.model.GridItem;
 import com.home.vod.model.ListItem;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
@@ -199,9 +200,9 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     private ProgressBarHandler gDialog;
     private SliderLayout mDemoSlider;
     String videoImageStrToHeight;
-    int videoHeight = 185;
-    int videoWidth = 256;
-    SharedPreferences pref;
+    int  videoHeight = 185;
+    int  videoWidth = 256;
+    PreferenceManager preferenceManager;
     GridItem itemToPlay;
     private ProgressBarHandler pDialog;
     private static int firstVisibleInListview;
@@ -325,14 +326,13 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 */
 
         TextView categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
+        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         categoryTitle.setTypeface(castDescriptionTypeface);
         categoryTitle.setText(getArguments().getString("title"));
         genreListData = (RecyclerView) rootView.findViewById(R.id.demoListView);
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);
         genreListData.setItemAnimator(new DefaultItemAnimator());
-        pref = context.getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
 
         posterUrl = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
 
@@ -343,12 +343,12 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         gridView.setItemAnimator(new DefaultItemAnimator());*/
         footerView = (RelativeLayout) rootView.findViewById(R.id.loadingPanel);
 
-        noInternetConnectionLayout = (RelativeLayout) rootView.findViewById(R.id.noInternet);
-        noDataLayout = (RelativeLayout) rootView.findViewById(R.id.noData);
-        noInternetTextView = (TextView) rootView.findViewById(R.id.noInternetTextView);
-        noDataTextView = (TextView) rootView.findViewById(R.id.noDataTextView);
-        noInternetTextView.setText(Util.getTextofLanguage(context, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
-        noDataTextView.setText(Util.getTextofLanguage(context, Util.NO_CONTENT, Util.DEFAULT_NO_CONTENT));
+        noInternetConnectionLayout = (RelativeLayout)rootView.findViewById(R.id.noInternet);
+        noDataLayout = (RelativeLayout)rootView.findViewById(R.id.noData);
+        noInternetTextView =(TextView)rootView.findViewById(R.id.noInternetTextView);
+        noDataTextView =(TextView)rootView.findViewById(R.id.noDataTextView);
+        noInternetTextView.setText(Util.getTextofLanguage(context,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION));
+        noDataTextView.setText(Util.getTextofLanguage(context,Util.NO_CONTENT,Util.DEFAULT_NO_CONTENT));
 
         noInternetConnectionLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
@@ -374,9 +374,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         String strtext = getArguments().getString("item");
         contentListInput.setPermalink(strtext.trim());
         contentListInput.setLanguage(Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-        SharedPreferences countryPref = context.getSharedPreferences(Util.COUNTRY_PREF, 0);
-        if (countryPref != null) {
-            String countryCodeStr = countryPref.getString("countryCode", null);
+
+        String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+        if (countryCodeStr != null) {
+
             contentListInput.setCountry(countryCodeStr);
         } else {
             contentListInput.setCountry("IN");
@@ -488,13 +489,13 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                             String strtext = getArguments().getString("item");
                             contentListInput.setPermalink(strtext.trim());
                             contentListInput.setLanguage(Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                            SharedPreferences countryPref = context.getSharedPreferences(Util.COUNTRY_PREF, 0);
-                            if (countryPref != null) {
-                                String countryCodeStr = countryPref.getString("countryCode", null);
+                            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+                            if (countryCodeStr != null) {
                                 contentListInput.setCountry(countryCodeStr);
-                            } else {
+                            }else{
                                 contentListInput.setCountry("IN");
                             }
+
                             asynLoadVideos = new GetContentListAsynTask(contentListInput, VideosListFragment.this, context);
                             asynLoadVideos.executeOnExecutor(threadPoolExecutor);
 
@@ -638,10 +639,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
         final ArrayList<ListItem> mdata = new ArrayList<ListItem>();
         genreArray = new ArrayList<String>();
-        SharedPreferences isLoginPref = context.getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0); // 0 - for private mode
+       // SharedPreferences isLoginPref = context.getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0); // 0 - for private mode
 
-        String genreString = isLoginPref.getString(Util.GENRE_ARRAY_PREF_KEY, null);
-        String genreValuesString = isLoginPref.getString(Util.GENRE_VALUES_ARRAY_PREF_KEY, null);
+        String genreString = preferenceManager.getGenreArrayFromPref();
+        String genreValuesString = preferenceManager.getGenreValuesArrayFromPref();
         final String[] genreTempArr = genreString.split(",");
         String[] genreValuesTempArr = genreValuesString.split(",");
 
@@ -863,38 +864,33 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 }
 
 
-                SharedPreferences countryPref = context.getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-                if (countryPref != null) {
-                    String countryCodeStr = countryPref.getString("countryCode", null);
+                String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+
+                if (countryCodeStr != null) {
+
                     httppost.addHeader("country", countryCodeStr);
                 } else {
                     httppost.addHeader("country", "IN");
 
                 }
-                if (pref != null) {
-                    String loggedLanguageStr = pref.getString("PREFS_LOGIN_LANGUAGE_KEY", null);
-                    if (loggedLanguageStr == null) {
-                    } else {
-                        httppost.addHeader("lang_code", loggedLanguageStr);
-                    }
-                }
+
                 // Execute HTTP Post Request
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+                } catch (org.apache.http.conn.ConnectTimeoutException e){
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
-                            if (itemData != null) {
+                            if (itemData!=null){
                                 noInternetConnectionLayout.setVisibility(View.GONE);
                                 gridView.setVisibility(View.VISIBLE);
                                 noDataLayout.setVisibility(View.GONE);
 
 
-                            } else {
+                            }else {
                                 noInternetConnectionLayout.setVisibility(View.VISIBLE);
                                 noDataLayout.setVisibility(View.GONE);
                                 gridView.setVisibility(View.GONE);
@@ -903,13 +899,13 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                             }
 
                             footerView.setVisibility(View.GONE);
-                            Toast.makeText(context, Util.getTextofLanguage(context, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context,Util.getTextofLanguage(context,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 
                         }
 
                     });
 
-                } catch (IOException e) {
+                }catch (IOException e) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -923,8 +919,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                     e.printStackTrace();
                 }
 
-                JSONObject myJson = null;
-                if (responseStr != null) {
+                JSONObject myJson =null;
+                if(responseStr!=null){
                     myJson = new JSONObject(responseStr);
                     status = Integer.parseInt(myJson.optString("status"));
                     String items = myJson.optString("item_count");
@@ -937,7 +933,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                         JSONArray jsonMainNode = myJson.getJSONArray("movieList");
 
                         int lengthJsonArr = jsonMainNode.length();
-                        for (int i = 0; i < lengthJsonArr; i++) {
+                        for(int i=0; i < lengthJsonArr; i++) {
                             JSONObject jsonChildNode;
                             try {
                                 jsonChildNode = jsonMainNode.getJSONObject(i);
@@ -981,7 +977,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
                                 }
 
-                                itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+                                itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr,isEpisodeStr,"","",isConverted,isPPV,isAPV));
                             } catch (Exception e) {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
@@ -997,7 +993,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                                 e.printStackTrace();
                             }
                         }
-                    } else {
+                    }
+                    else{
                         responseStr = "0";
                         getActivity().runOnUiThread(new Runnable() {
                             @Override

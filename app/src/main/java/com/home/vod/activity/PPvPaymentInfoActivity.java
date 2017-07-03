@@ -39,6 +39,7 @@ import com.home.apisdk.apiModel.ValidateCouponCodeOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.model.CardModel;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -72,7 +73,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
     String isCheckedToSavetheCard = "1";
     private boolean isCastConnected = false;
 
-    SharedPreferences loginPref, countryPref;
+    PreferenceManager preferenceManager;
 
     Toolbar mActionBarToolbar;
     boolean isCouponCodeAdded = false;
@@ -159,7 +160,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
         Log.v("SUBHA", "ppvpatment Activity episode Id =" + Util.selected_episode_id);
 
         videoPreview = Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
         //Set toolbar
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -183,9 +184,6 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 
 
         purchaseTextView = (TextView) findViewById(R.id.purchaseTextView);
-
-
-        loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
 
 
         if (getIntent().getStringExtra("muviuniqueid") != null) {
@@ -221,9 +219,9 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
             isConverted = getIntent().getIntExtra("isPPV", 0);
         }
 
-        if (loginPref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", null) != null) {
+        if (preferenceManager.getIsSubscribedFromPref() != null) {
             String isSubscribedStr = "0";
-            isSubscribedStr = loginPref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", null);
+            isSubscribedStr = preferenceManager.getIsSubscribedFromPref();
             if (isSubscribedStr.equalsIgnoreCase("1")) {
                 if (getIntent().getStringExtra("planSubscribedPrice") != null) {
                     chargedPrice = Float.parseFloat(getIntent().getStringExtra("planSubscribedPrice"));
@@ -312,7 +310,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
         selectShowRadioButton = (TextView) findViewById(R.id.showNameWithPrice);
         creditCardDetailsTitleTextView = (TextView) findViewById(R.id.creditCardDetailsTitleTextView);
 
-        Typeface typeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+        Typeface typeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
         applyButton.setTypeface(typeface);
         applyButton.setText(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.BUTTON_APPLY, Util.DEFAULT_BUTTON_APPLY));
 
@@ -335,7 +333,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 
         Typeface typeface7 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         saveCardCheckbox.setTypeface(typeface7);
-        saveCardCheckbox.setText(Util.getTextofLanguage(PPvPaymentInfoActivity.this, "  " + Util.SAVE_THIS_CARD, "  " + Util.DEFAULT_SAVE_THIS_CARD));
+        saveCardCheckbox.setText(Util.getTextofLanguage(PPvPaymentInfoActivity.this, "  "+Util.SAVE_THIS_CARD, "  "+Util.DEFAULT_SAVE_THIS_CARD));
+
 
 
         Calendar c = Calendar.getInstance();
@@ -349,7 +348,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
         }
 
 
-        cardExpiryMonthSpinnerAdapter = new ArrayAdapter<Integer>(this, R.layout.spinner_new, monthsIdArray);
+        cardExpiryMonthSpinnerAdapter = new ArrayAdapter<Integer>(this,R.layout.spinner_new, monthsIdArray);
         cardExpiryMonthSpinner.setAdapter(cardExpiryMonthSpinnerAdapter);
 
 
@@ -498,7 +497,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
             }
         });
         selectShowRadioButton.setText(videoName + " : " + currencySymbolStr + planPrice);
-        chargedPriceTextView.setText(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.CARD_WILL_CHARGE, Util.DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + chargedPrice);
+        chargedPriceTextView.setText(Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.CARD_WILL_CHARGE,Util.DEFAULT_CARD_WILL_CHARGE)+" " + currencySymbolStr + chargedPrice);
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -527,7 +526,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                 String couponCodeStr = couponCodeEditText.getText().toString().trim();
 
                 if (couponCodeStr.matches("")) {
-                    Toast.makeText(PPvPaymentInfoActivity.this, Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.COUPON_CODE_HINT, Util.DEFAULT_COUPON_CODE_HINT), Toast.LENGTH_LONG).show();
+                    Toast.makeText(PPvPaymentInfoActivity.this, Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.COUPON_CODE_HINT,Util.DEFAULT_COUPON_CODE_HINT), Toast.LENGTH_LONG).show();
 
                 } else {
                     boolean isNetwork = Util.checkNetwork(PPvPaymentInfoActivity.this);
@@ -590,13 +589,13 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 
 
                     if (nameOnCardStr.matches("")) {
-                        Toast.makeText(PPvPaymentInfoActivity.this, Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.CREDIT_CARD_NAME_HINT, Util.DEFAULT_CREDIT_CARD_NAME_HINT), Toast.LENGTH_LONG).show();
+                        Toast.makeText(PPvPaymentInfoActivity.this,Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.CREDIT_CARD_NAME_HINT,Util.DEFAULT_CREDIT_CARD_NAME_HINT), Toast.LENGTH_LONG).show();
 
                     } else if (cardNumberStr.matches("")) {
-                        Toast.makeText(PPvPaymentInfoActivity.this, Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.CREDIT_CARD_NUMBER_HINT, Util.DEFAULT_CREDIT_CARD_NUMBER_HINT), Toast.LENGTH_LONG).show();
+                        Toast.makeText(PPvPaymentInfoActivity.this,Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.CREDIT_CARD_NUMBER_HINT,Util.DEFAULT_CREDIT_CARD_NUMBER_HINT), Toast.LENGTH_LONG).show();
 
                     } else if (securityCodeStr.matches("")) {
-                        Toast.makeText(PPvPaymentInfoActivity.this, Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.CVV_ALERT, Util.DEFAULT_CVV_ALERT), Toast.LENGTH_LONG).show();
+                        Toast.makeText(PPvPaymentInfoActivity.this,Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.CVV_ALERT,Util.DEFAULT_CVV_ALERT), Toast.LENGTH_LONG).show();
 
 
                     } else if (expiryMonthStr <= 0) {
@@ -1023,7 +1022,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
-                String userIdStr = loginPref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+                String userIdStr =  preferenceManager.getUseridFromPref();
                 httppost.addHeader("user_id", userIdStr.trim());
 
                 // Execute HTTP Post Request
@@ -1159,7 +1158,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                     creditCardSaveSpinner.setVisibility(View.GONE);
 
                 } else {
-                    savedCards.add(0, new CardModel("0", Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.USE_NEW_CARD, Util.DEFAULT_USE_NEW_CARD)));
+                    savedCards.add(0, new CardModel("0",Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.USE_NEW_CARD,Util.DEFAULT_USE_NEW_CARD)));
                     cardSavedArray = savedCards.toArray(new CardModel[savedCards.size()]);
                     creditCardSaveSpinnerAdapter = new CardSpinnerAdapter(PPvPaymentInfoActivity.this, cardSavedArray);
                     //cardExpiryYearSpinnerAdapter = new CardSpinnerAdapter<Integer>(this, R.layout.spinner_new, yearArray);
@@ -1414,7 +1413,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 
         @Override
         protected Void doInBackground(Void... params) {
-            String userIdStr = loginPref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+            String userIdStr = preferenceManager.getUseridFromPref();
 
             try {
                 HttpClient httpclient = new DefaultHttpClient();
@@ -1570,13 +1569,13 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                 chargedPriceTextView.setText(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.CARD_WILL_CHARGE, Util.DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + chargedPrice);
                 isCouponCodeAdded = true;
                 validCouponCode = couponCodeEditText.getText().toString().trim();
-                Toast.makeText(PPvPaymentInfoActivity.this, Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.DISCOUNT_ON_COUPON, Util.DEFAULT_DISCOUNT_ON_COUPON), Toast.LENGTH_LONG).show();
+                Toast.makeText(PPvPaymentInfoActivity.this,Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.DISCOUNT_ON_COUPON,Util.DEFAULT_DISCOUNT_ON_COUPON), Toast.LENGTH_LONG).show();
                 if (chargedPrice <= 0.0f && isCouponCodeAdded == true) {
                     creditCardLayout.setVisibility(View.GONE);
 
                     //paywithCreditCardButton.setVisibility(View.GONE);
                     withoutCreditCardLayout.setVisibility(View.VISIBLE);
-                    withoutCreditCardChargedPriceTextView.setText(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.CARD_WILL_CHARGE, Util.DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + chargedPrice);
+                    withoutCreditCardChargedPriceTextView.setText(Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.CARD_WILL_CHARGE,Util.DEFAULT_CARD_WILL_CHARGE)+" : " + currencySymbolStr + chargedPrice);
                 }
             }
 
@@ -1610,10 +1609,9 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 
         @Override
         protected Void doInBackground(Void... params) {
-            SharedPreferences pref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-            if (pref != null) {
-                loggedInIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-                isSubscribedDataStr = pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", null);
+            if (preferenceManager != null) {
+                loggedInIdStr = preferenceManager.getUseridFromPref();
+                isSubscribedDataStr = preferenceManager.getIsSubscribedFromPref();
             }
 
 
@@ -1628,7 +1626,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                 httppost.addHeader("purchase_type", "show");
 
                 httppost.addHeader("season_id", "0");
-                httppost.addHeader("country", countryPref.getString("countryCode", null));
+                httppost.addHeader("country", preferenceManager.getIsSubscribedFromPref());
 
 
                 // Execute HTTP Post Request
@@ -1990,7 +1988,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
         int status;
         String responseStr;
         String responseMessageStr;
-        String emailIdStr = loginPref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
+        String emailIdStr = preferenceManager.getEmailIdFromPref();
 
         String nameOnCardStr = nameOnCardEditText.getText().toString().trim();
         String cardNumberStr = cardNumberEditText.getText().toString().trim();
@@ -2213,8 +2211,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
         @Override
         protected Void doInBackground(Void... params) {
 
-            String userIdStr = loginPref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-            String emailIdSubStr = loginPref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
+            String userIdStr = preferenceManager.getUseridFromPref();
+            String emailIdSubStr = preferenceManager.getEmailIdFromPref();
 
          /*   runOnUiThread(new Runnable() {
                 @Override
@@ -2261,7 +2259,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                 httppost.addHeader("cvv", "");
                 // httppost.addHeader("country","US");
 
-                httppost.addHeader("country", countryPref.getString("countryCode", null));
+                httppost.addHeader("country", preferenceManager.getCountryCodeFromPref());
                 //*********************************//
 
 //                httppost.addHeader("season_id", "0");
@@ -2492,8 +2490,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
         @Override
         protected Void doInBackground(Void... params) {
 
-            String userIdStr = loginPref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-            String emailIdSubStr = loginPref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
+            String userIdStr = preferenceManager.getUseridFromPref();
+            String emailIdSubStr = preferenceManager.getEmailIdFromPref();
            /* runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -2542,12 +2540,15 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                 httppost.addHeader("cvv", securityCardStr);
                 // httppost.addHeader("country",currencyCountryCodeStr.trim());
 
-                httppost.addHeader("country", countryPref.getString("countryCode", null));
+                httppost.addHeader("country", preferenceManager.getCountryCodeFromPref());
                 //*********************************// ((Global) getApplicationContext()).getCountryCode()
 //                httppost.addHeader("season_id", "0");
 //                httppost.addHeader("episode_id", "0");
-                httppost.addHeader("season_id", Util.selected_season_id);
-                httppost.addHeader("episode_id", Util.selected_episode_id);
+                httppost.addHeader("season_id",Util.selected_season_id);
+                httppost.addHeader("episode_id",Util.selected_episode_id);
+
+
+
 
 
                 if (isAPV == 1) {
@@ -2562,6 +2563,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
+
 
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {

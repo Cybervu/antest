@@ -57,6 +57,7 @@ import com.home.apisdk.apiModel.SocialAuthOutputModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.R;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -232,7 +233,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                 mSessionManagerListener, CastSession.class);
 
         */
-    /***************chromecast**********************//*
+/***************chromecast**********************//*
 
 
     }
@@ -257,7 +258,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
     String registrationIdStr;
     String isSubscribedStr;
     int keepAliveTime = 10;
-    SharedPreferences pref;
+    PreferenceManager preferenceManager;
     Toolbar mActionBarToolbar;
 
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
@@ -268,9 +269,8 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
     Spinner country_spinner, language_spinner;
     ArrayAdapter<String> Language_arrayAdapter, Country_arrayAdapter;
 
-    String Selected_Language_Id, Selected_Country_Id;
-    SharedPreferences countryPref;
-    List<String> Country_List, Country_Code_List, Language_List, Language_Code_List;
+    String Selected_Language,Selected_Country,Selected_Language_Id,Selected_Country_Id;
+    List<String> Country_List,Country_Code_List,Language_List,Language_Code_List;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,6 +279,9 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
         FacebookSdk.sdkInitialize(getApplicationContext());
         /*********fb****/
         setContentView(R.layout.activity_register);
+
+
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
 
         BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
@@ -367,7 +370,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
         });*/
 
 
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
+
         PlanId = (Util.getTextofLanguage(RegisterActivity.this, Util.PLAN_ID, Util.DEFAULT_PLAN_ID)).trim();
         loginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -395,12 +398,12 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
 
         /************fb************/
-        callbackManager = CallbackManager.Factory.create();
+        callbackManager= CallbackManager.Factory.create();
 
 
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
 
-        btnLogin = (LinearLayout) findViewById(R.id.btnLogin);
+        btnLogin= (LinearLayout) findViewById(R.id.btnLogin);
         btnLogin.setVisibility(View.GONE);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -422,7 +425,6 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
         // This is used for language and country spunner
 
-        countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0);
 
         Country_List = Arrays.asList(getResources().getStringArray(R.array.country));
         Country_Code_List = Arrays.asList(getResources().getStringArray(R.array.countrycode));
@@ -433,7 +435,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
         Language_arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.country_language_spinner, Language_List) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                Typeface externalFont = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
                 ((TextView) v).setTypeface(externalFont);
                 return v;
             }
@@ -472,9 +474,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
         country_spinner.setAdapter(Country_arrayAdapter);
 
-        Selected_Country_Id = countryPref.getString("countryCode", "0");
-        LogUtil.showLog("BIBHU", "primary Selected_Country_Id=" + Selected_Country_Id);
-        if (Selected_Country_Id.equals("0")) {
+        Selected_Country_Id =
+        preferenceManager.getCountryCodeFromPref();
+        LogUtil.showLog("BIBHU","primary Selected_Country_Id="+Selected_Country_Id);
+        if(Selected_Country_Id.equals("0"))
+        {
             country_spinner.setSelection(224);
             Selected_Country_Id = Country_Code_List.get(224);
             LogUtil.showLog("BIBHU", "country not  matche" + "==" + Selected_Country_Id);
@@ -713,22 +717,20 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
             } else if (status == 200) {
 
-                SharedPreferences.Editor editor = pref.edit();
-                String email=registration_output.getEmail();
-                String id=registration_output.getId();
-                String loginHistoryId=registration_output.getLogin_history_id();
-                editor.putString("PREFS_LOGGEDIN_KEY", "1");
-                editor.putString("PREFS_LOGGEDIN_ID_KEY", id);
-                editor.putString("PREFS_LOGGEDIN_PASSWORD_KEY", editPassword.getText().toString().trim());
-                editor.putString("PREFS_LOGIN_EMAIL_ID_KEY", email);
-                editor.putString("PREFS_LOGIN_DISPLAY_NAME_KEY", registration_output.getDisplay_name());
-                editor.putString("PREFS_LOGIN_PROFILE_IMAGE_KEY", registration_output.getProfile_image());
-                editor.putString("PREFS_LOGIN_ISSUBSCRIBED_KEY", isSubscribedStr);
-                editor.putString("PREFS_LOGIN_HISTORYID_KEY", loginHistoryId);
-                Date todayDate = new Date();
-                String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
-                editor.putString("date", todayStr.trim());
-                editor.commit();
+                    // Take appropiate step here.
+
+                    preferenceManager.setLogInStatusToPref("1");
+                    preferenceManager.setUserIdToPref(registrationIdStr);
+                    preferenceManager.setPwdToPref(editPassword.getText().toString().trim());
+                    preferenceManager.setEmailIdToPref(registration_output.getEmail());
+                    preferenceManager.setDispNameToPref(registration_output.getDisplay_name());
+                    preferenceManager.setLoginProfImgoPref(registration_output.getProfile_image());
+                    preferenceManager.setIsSubscribedToPref(isSubscribedStr);
+                    preferenceManager.setLoginHistIdPref(loginHistoryIdStr);
+
+                    Date todayDate = new Date();
+                    String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
+                    preferenceManager.setLoginDatePref(todayStr);
 
 
                 if (Util.checkNetwork(RegisterActivity.this) == true) {
@@ -764,13 +766,13 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                                 asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
                                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                             } else {
                                 ValidateUserInput validateUserInput = new ValidateUserInput();
                                 validateUserInput.setAuthToken(Util.authTokenStr);
-                                validateUserInput.setUserId(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                                 validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
                                 validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                                 validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
@@ -1047,7 +1049,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
         {
 
 
-            String Subscription_Str = pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", "0");
+            String Subscription_Str = preferenceManager.getIsSubscribedFromPref();
 
             if (validateUserOutput == null) {
                 try {
@@ -1151,7 +1153,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                                 asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
                                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                             } else {
@@ -1224,7 +1226,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                         getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                        getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                        getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                         asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
                         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                     } else {
@@ -2882,14 +2884,6 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
             } else if (status == 200) {
 
-                SharedPreferences.Editor editor = pref.edit();
-
-
-                Date todayDate = new Date();
-                String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
-                editor.putString("date", todayStr.trim());
-                editor.commit();
-
                 if (Util.check_for_subscription == 1) {
                     // Go for subscription
 
@@ -2900,13 +2894,13 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                             getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                             getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                             getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                            getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                             asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
                             ValidateUserInput validateUserInput = new ValidateUserInput();
                             validateUserInput.setAuthToken(Util.authTokenStr);
-                            validateUserInput.setUserId(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                             validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
                             validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                             validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
@@ -3111,8 +3105,8 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                                         fbEmail = fbName + "@facebook.com";
 
                                     }
-                                    if ((json.has("id")) && json.getString("id").trim() != null && !json.getString("id").trim().isEmpty() && !json.getString("id").trim().equals("null") && !json.getString("id").trim().matches("")) {
-                                        fbUserId = json.getString("id");
+                                    if ((json.has("id")) && json.optString("id").trim() != null && !json.optString("id").trim().isEmpty() && !json.optString("id").trim().equals("null") && !json.optString("id").trim().matches("")) {
+                                        fbUserId = json.optString("id");
                                     }
                                     registerButton.setVisibility(View.GONE);
                                     loginWithFacebookButton.setVisibility(View.GONE);
@@ -3568,8 +3562,8 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (pref != null) {
-                userIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+            if (preferenceManager != null) {
+                userIdStr = preferenceManager.getUseridFromPref();
             }
 
             String urlRouteList = Util.rootUrl().trim() + Util.CheckDevice.trim();
@@ -3649,13 +3643,13 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                                 asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
                                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                             } else {
                                 ValidateUserInput validateUserInput = new ValidateUserInput();
                                 validateUserInput.setAuthToken(Util.authTokenStr);
-                                validateUserInput.setUserId(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                                 validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
                                 validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                                 validateUserInput.setSeasonId(Util.dataModel.getSeason_id());

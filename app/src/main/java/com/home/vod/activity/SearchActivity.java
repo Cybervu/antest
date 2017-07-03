@@ -41,6 +41,7 @@ import com.home.apisdk.apiModel.Search_Data_otput;
 import com.home.vod.R;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.model.GridItem;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -88,7 +89,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     String videoImageStrToHeight;
     int videoHeight = 185;
     int videoWidth = 256;
-    SharedPreferences pref;
+    // SharedPreferences pref;
     GridItem itemToPlay;
 
     private static int firstVisibleInListview;
@@ -156,6 +157,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     //private String movieThirdPartyUrl = "";
     TextView noDataTextView;
     TextView noInternetTextView;
+    PreferenceManager preferenceManager;
 
     public SearchActivity() {
         // Required empty public constructor
@@ -179,7 +181,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                 onBackPressed();
             }
         });
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
         posterUrl = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
 
@@ -346,9 +348,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             search_data_input.setLimit(String.valueOf(limit));
                             search_data_input.setOffset(String.valueOf(offset));
                             search_data_input.setQ(searchTextStr.trim());
-                            SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0);
-                            if (countryPref != null) {
-                                String countryCodeStr = countryPref.getString("countryCode", null);
+                            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+                            if (countryCodeStr != null) {
                                 search_data_input.setCountry(countryCodeStr);
                             } else {
                                 search_data_input.setCountry("IN");
@@ -919,9 +920,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             search_data_input.setLimit(String.valueOf(limit));
                             search_data_input.setOffset(String.valueOf(offset));
                             search_data_input.setQ(searchTextStr.trim());
-                            SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0);
-                            if (countryPref != null) {
-                                String countryCodeStr = countryPref.getString("countryCode", null);
+                            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+                            if (countryCodeStr != null) {
                                 search_data_input.setCountry(countryCodeStr);
                             } else {
                                 search_data_input.setCountry("IN");

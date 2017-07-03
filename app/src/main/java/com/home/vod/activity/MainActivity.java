@@ -48,6 +48,7 @@ import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.util.LogUtil;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -181,7 +182,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     int state = 0;
     LanguageCustomAdapter languageCustomAdapter;
     public static ProgressBarHandler internetSpeedDialog;
-    SharedPreferences pref;
     //Load on background thread
     /*Asynctask on background thread*/
     int corePoolSize = 60;
@@ -210,8 +210,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     AlertDialog alert;
     String Previous_Selected_Language = "";
     TextView noInternetTextView;
-    SharedPreferences isLoginPref;
+   // SharedPreferences isLoginPref;
     public static ProgressBarHandler progressBarHandler;
+    PreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -256,9 +257,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         *//**** chromecast*************//*
 */
 
-        isLoginPref = getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0); // 0 - for private mode
-
-        isLogin = isLoginPref.getInt(Util.IS_LOGIN_PREF_KEY, 0);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
+        isLogin = preferenceManager.getLoginFeatureFromPref();
         // dataPref = getApplicationContext().getSharedPreferences("DrawerState", 0);
 
 
@@ -283,8 +283,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             }
             MenuListInput menuListInput = new MenuListInput();
             menuListInput.setAuthToken(Util.authTokenStr);
-            SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-            String countryCodeStr = countryPref.getString("countryCode", null);
+            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
             if (countryCodeStr == null) {
                 menuListInput.setCountry("IN");
             }
@@ -357,28 +356,33 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         MenuItem item, item1, item2, item3, item4, item5, item6;
         item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-        loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
-        id = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
 
-        email = pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
-        SharedPreferences language_list_pref = getSharedPreferences(Util.LANGUAGE_LIST_PREF, 0);
+
+        loggedInStr = preferenceManager.getLoginStatusFromPref();
+        id = preferenceManager.getUseridFromPref();
+        email=preferenceManager.getEmailIdFromPref();
+
+       // SharedPreferences language_list_pref = getSharedPreferences(Util.LANGUAGE_LIST_PREF, 0);
+
+
         (menu.findItem(R.id.menu_item_language)).setTitle(Util.getTextofLanguage(MainActivity.this, Util.LANGUAGE_POPUP_LANGUAGE, Util.DEFAULT_LANGUAGE_POPUP_LANGUAGE));
-        if (language_list_pref.getString("total_language", "0").equals("1"))
+
+
+        if(preferenceManager.getLanguageListFromPref().equals("1"))
             (menu.findItem(R.id.menu_item_language)).setVisible(false);
 
-        if (loggedInStr != null) {
-            item4 = menu.findItem(R.id.action_login);
-            item4.setTitle(Util.getTextofLanguage(MainActivity.this, Util.LANGUAGE_POPUP_LOGIN, Util.DEFAULT_LANGUAGE_POPUP_LOGIN));
+        if(loggedInStr!=null){
+            item4= menu.findItem(R.id.action_login);
+            item4.setTitle(Util.getTextofLanguage(MainActivity.this,Util.LANGUAGE_POPUP_LOGIN,Util.DEFAULT_LANGUAGE_POPUP_LOGIN));
             item4.setVisible(false);
-            item5 = menu.findItem(R.id.action_register);
-            item5.setTitle(Util.getTextofLanguage(MainActivity.this, Util.BTN_REGISTER, Util.DEFAULT_BTN_REGISTER));
+            item5= menu.findItem(R.id.action_register);
+            item5.setTitle(Util.getTextofLanguage(MainActivity.this,Util.BTN_REGISTER,Util.DEFAULT_BTN_REGISTER));
             item5.setVisible(false);
           /*  item6= menu.findItem(R.id.menu_item_language);
             item6.setTitle(Util.getTextofLanguage(MainActivity.this,Util.LANGUAGE_POPUP_LANGUAGE,Util.DEFAULT_LANGUAGE_POPUP_LANGUAGE));
             item6.setVisible(true);*/
             item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(Util.getTextofLanguage(MainActivity.this, Util.PROFILE, Util.DEFAULT_PROFILE));
+            item1.setTitle(Util.getTextofLanguage(MainActivity.this,Util.PROFILE,Util.DEFAULT_PROFILE));
             item1.setVisible(true);
 
             item2 = menu.findItem(R.id.action_purchage);
@@ -411,11 +415,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             item1 = menu.findItem(R.id.menu_item_profile);
             item1.setTitle(Util.getTextofLanguage(MainActivity.this, Util.PROFILE, Util.DEFAULT_PROFILE));
             item1.setVisible(false);
-            item2 = menu.findItem(R.id.action_purchage);
-            item2.setTitle(Util.getTextofLanguage(MainActivity.this, Util.PURCHASE_HISTORY, Util.DEFAULT_PURCHASE_HISTORY));
+            item2= menu.findItem(R.id.action_purchage);
+            item2.setTitle(Util.getTextofLanguage(MainActivity.this,Util.PURCHASE_HISTORY,Util.DEFAULT_PURCHASE_HISTORY));
             item2.setVisible(false);
-            item3 = menu.findItem(R.id.action_logout);
-            item3.setTitle(Util.getTextofLanguage(MainActivity.this, Util.LOGOUT, Util.DEFAULT_LOGOUT));
+            item3= menu.findItem(R.id.action_logout);
+            item3.setTitle(Util.getTextofLanguage(MainActivity.this,Util.LOGOUT,Util.DEFAULT_LOGOUT));
             item3.setVisible(false);
         }
         return true;
@@ -469,14 +473,14 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             case R.id.menu_item_profile:
 
                 Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
-                profileIntent.putExtra("EMAIL", email);
-                profileIntent.putExtra("LOGID", id);
+                profileIntent.putExtra("EMAIL",email);
+                profileIntent.putExtra("LOGID",id);
                 startActivity(profileIntent);
                 // Not implemented here
                 return false;
             case R.id.action_purchage:
 
-                Intent purchaseintent = new Intent(MainActivity.this, PurchaseHistoryActivity.class);
+               Intent purchaseintent = new Intent(MainActivity.this, PurchaseHistoryActivity.class);
                 startActivity(purchaseintent);
                 // Not implemented here
                 return false;
@@ -495,8 +499,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                         LogoutInput logoutInput = new LogoutInput();
                         logoutInput.setAuthToken(Util.authTokenStr);
                         LogUtil.showLog("Abhi", Util.authTokenStr);
-                        String loginHistoryId = pref.getString("PREFS_LOGIN_HISTORYID_KEY", null);
-                        logoutInput.setLogin_history_id(loginHistoryId);
+                        String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
+                        logoutInput.setLogin_history_id(loginHistoryIdStr);
                         logoutInput.setLang_code(Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogUtil.showLog("Abhi", Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MainActivity.this, MainActivity.this);
@@ -712,21 +716,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
         if (code > 0) {
             if (code == 200) {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.clear();
-                editor.commit();
-                SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                if (loginPref != null) {
-                    SharedPreferences.Editor countryEditor = loginPref.edit();
-                    countryEditor.clear();
-                    countryEditor.commit();
-                }
-                 /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-                    if (countryPref!=null) {
-                        SharedPreferences.Editor countryEditor = countryPref.edit();
-                        countryEditor.clear();
-                        countryEditor.commit();
-                    }*/
+               preferenceManager.clearLoginPref();
 
                 if ((Util.getTextofLanguage(MainActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
@@ -2059,6 +2049,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 httppost.addHeader("lang_code", Default_Language);
 
 
+
                 // Execute HTTP Post Request
                 try {
                     HttpResponse response = httpclient.execute(httppost);
@@ -2105,55 +2096,57 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                         JSONObject json = parent_json.getJSONObject("translation");
 
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.ALREADY_MEMBER, json.optString("already_member").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.ACTIAVTE_PLAN_TITLE, json.optString("activate_plan_title").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.TRANSACTION_STATUS_ACTIVE, json.optString("transaction_status_active").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.ADD_TO_FAV, json.optString("add_to_fav").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.ADDED_TO_FAV, json.optString("added_to_fav").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.ADVANCE_PURCHASE, json.optString("advance_purchase").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.ALERT, json.optString("alert").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.EPISODE_TITLE, json.optString("episodes_title").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SORT_ALPHA_A_Z, json.optString("sort_alpha_a_z").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SORT_ALPHA_Z_A, json.optString("sort_alpha_z_a").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.ALREADY_MEMBER,json.optString("already_member").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.ACTIAVTE_PLAN_TITLE,json.optString("activate_plan_title").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANSACTION_STATUS_ACTIVE,json.optString("transaction_status_active").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.ADD_TO_FAV,json.optString("add_to_fav").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.ADDED_TO_FAV,json.optString("added_to_fav").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.AMOUNT, json.optString("amount").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.COUPON_CANCELLED, json.optString("coupon_cancelled").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.BUTTON_APPLY, json.optString("btn_apply").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SIGN_OUT_WARNING, json.optString("sign_out_warning").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.DISCOUNT_ON_COUPON, json.optString("discount_on_coupon").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.ADVANCE_PURCHASE,json.optString("advance_purchase").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.ALERT,json.optString("alert").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.EPISODE_TITLE,json.optString("episodes_title").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SORT_ALPHA_A_Z,json.optString("sort_alpha_a_z").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SORT_ALPHA_Z_A,json.optString("sort_alpha_z_a").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.CREDIT_CARD_CVV_HINT, json.optString("credit_card_cvv_hint").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.CAST, json.optString("cast").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.CAST_CREW_BUTTON_TITLE, json.optString("cast_crew_button_title").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.CENSOR_RATING, json.optString("censor_rating").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.ENTER_EMPTY_FIELD, json.optString("enter_register_fields_data").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.AMOUNT,json.optString("amount").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.COUPON_CANCELLED,json.optString("coupon_cancelled").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.BUTTON_APPLY,json.optString("btn_apply").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SIGN_OUT_WARNING,json.optString("sign_out_warning").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.DISCOUNT_ON_COUPON,json.optString("discount_on_coupon").trim());
+
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.CREDIT_CARD_CVV_HINT,json.optString("credit_card_cvv_hint").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.CAST,json.optString("cast").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.CAST_CREW_BUTTON_TITLE,json.optString("cast_crew_button_title").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.CENSOR_RATING,json.optString("censor_rating").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.ENTER_EMPTY_FIELD,json.optString("enter_register_fields_data").trim());
 
 
-                        if (json.optString("change_password").trim() == null || json.optString("change_password").trim().equals("")) {
+                        if(json.optString("change_password").trim()==null || json.optString("change_password").trim().equals("")) {
                             Util.setLanguageSharedPrefernce(MainActivity.this, Util.CHANGE_PASSWORD, Util.DEFAULT_CHANGE_PASSWORD);
-                        } else {
+                        }
+                        else {
                             Util.setLanguageSharedPrefernce(MainActivity.this, Util.CHANGE_PASSWORD, json.optString("change_password").trim());
                         }
 
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.CONFIRM_PASSWORD, json.optString("confirm_password").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.CREDIT_CARD_DETAILS, json.optString("credit_card_detail").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.DIRECTOR, json.optString("director").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.DOWNLOAD_BUTTON_TITLE, json.optString("download_button_title").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.DESCRIPTION, json.optString("description").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.CONFIRM_PASSWORD,json.optString("confirm_password").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.CREDIT_CARD_DETAILS,json.optString("credit_card_detail").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.DIRECTOR,json.optString("director").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.DOWNLOAD_BUTTON_TITLE,json.optString("download_button_title").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.DESCRIPTION,json.optString("description").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.EMAIL_EXISTS, json.optString("email_exists").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.EMAIL_DOESNOT_EXISTS, json.optString("email_does_not_exist").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.EMAIL_PASSWORD_INVALID, json.optString("email_password_invalid").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.COUPON_CODE_HINT, json.optString("coupon_code_hint").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SEARCH_ALERT, json.optString("search_alert").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.EMAIL_EXISTS,json.optString("email_exists").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.EMAIL_DOESNOT_EXISTS,json.optString("email_does_not_exist").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.EMAIL_PASSWORD_INVALID,json.optString("email_password_invalid").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.COUPON_CODE_HINT,json.optString("coupon_code_hint").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SEARCH_ALERT,json.optString("search_alert").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.CREDIT_CARD_NUMBER_HINT, json.optString("credit_card_number_hint").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.TEXT_EMIAL, json.optString("text_email").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.NAME_HINT, json.optString("name_hint").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.CREDIT_CARD_NAME_HINT, json.optString("credit_card_name_hint").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.TEXT_PASSWORD, json.optString("text_password").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.CREDIT_CARD_NUMBER_HINT,json.optString("credit_card_number_hint").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.TEXT_EMIAL,json.optString("text_email").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.NAME_HINT,json.optString("name_hint").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.CREDIT_CARD_NAME_HINT,json.optString("credit_card_name_hint").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.TEXT_PASSWORD,json.optString("text_password").trim());
 
                         Util.setLanguageSharedPrefernce(MainActivity.this, Util.ERROR_IN_PAYMENT_VALIDATION, json.optString("error_in_payment_validation").trim());
                         Util.setLanguageSharedPrefernce(MainActivity.this, Util.ERROR_IN_REGISTRATION, json.optString("error_in_registration").trim());
@@ -2172,58 +2165,58 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                         Util.setLanguageSharedPrefernce(MainActivity.this, Util.LANGUAGE_POPUP_LANGUAGE, json.optString("language_popup_language").trim());
                         Util.setLanguageSharedPrefernce(MainActivity.this, Util.SORT_LAST_UPLOADED, json.optString("sort_last_uploaded").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.LANGUAGE_POPUP_LOGIN, json.optString("language_popup_login").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.LOGIN, json.optString("login").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.LOGOUT, json.optString("logout").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.LOGOUT_SUCCESS, json.optString("logout_success").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.MY_FAVOURITE, json.optString("my_favourite").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.LANGUAGE_POPUP_LOGIN,json.optString("language_popup_login").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.LOGIN,json.optString("login").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.LOGOUT,json.optString("logout").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.LOGOUT_SUCCESS,json.optString("logout_success").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.MY_FAVOURITE,json.optString("my_favourite").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.NEW_PASSWORD, json.optString("new_password").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.NEW_HERE_TITLE, json.optString("new_here_title").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.NO, json.optString("no").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.NO_DATA, json.optString("no_data").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.NO_INTERNET_CONNECTION, json.optString("no_internet_connection").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.NEW_PASSWORD,json.optString("new_password").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.NEW_HERE_TITLE,json.optString("new_here_title").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.NO,json.optString("no").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.NO_DATA,json.optString("no_data").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.NO_INTERNET_CONNECTION,json.optString("no_internet_connection").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.NO_INTERNET_NO_DATA, json.optString("no_internet_no_data").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.NO_DETAILS_AVAILABLE, json.optString("no_details_available").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.BUTTON_OK, json.optString("btn_ok").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.OLD_PASSWORD, json.optString("old_password").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.OOPS_INVALID_EMAIL, json.optString("oops_invalid_email").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.NO_INTERNET_NO_DATA,json.optString("no_internet_no_data").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.NO_DETAILS_AVAILABLE,json.optString("no_details_available").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.BUTTON_OK,json.optString("btn_ok").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.OLD_PASSWORD,json.optString("old_password").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.OOPS_INVALID_EMAIL,json.optString("oops_invalid_email").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.ORDER, json.optString("order").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.TRANSACTION_DETAILS_ORDER_ID, json.optString("transaction_detail_order_id").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.PASSWORD_RESET_LINK, json.optString("password_reset_link").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.PASSWORDS_DO_NOT_MATCH, json.optString("password_donot_match").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.PAY_BY_PAYPAL, json.optString("pay_by_paypal").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.ORDER,json.optString("order").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANSACTION_DETAILS_ORDER_ID,json.optString("transaction_detail_order_id").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.PASSWORD_RESET_LINK,json.optString("password_reset_link").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.PASSWORDS_DO_NOT_MATCH,json.optString("password_donot_match").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.PAY_BY_PAYPAL,json.optString("pay_by_paypal").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.BTN_PAYNOW, json.optString("btn_paynow").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.PAY_WITH_CREDIT_CARD, json.optString("pay_with_credit_card").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.PAYMENT_OPTIONS_TITLE, json.optString("payment_options_title").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.PLAN_NAME, json.optString("plan_name").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, json.optString("activate_subscription_watch_video").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.BTN_PAYNOW,json.optString("btn_paynow").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.PAY_WITH_CREDIT_CARD,json.optString("pay_with_credit_card").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.PAYMENT_OPTIONS_TITLE,json.optString("payment_options_title").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.PLAN_NAME,json.optString("plan_name").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,json.optString("activate_subscription_watch_video").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.COUPON_ALERT, json.optString("coupon_alert").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.VALID_CONFIRM_PASSWORD, json.optString("valid_confirm_password").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.PROFILE, json.optString("profile").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.PROFILE_UPDATED, json.optString("profile_updated").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.COUPON_ALERT,json.optString("coupon_alert").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.VALID_CONFIRM_PASSWORD,json.optString("valid_confirm_password").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.PROFILE,json.optString("profile").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.PROFILE_UPDATED,json.optString("profile_updated").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.PURCHASE, json.optString("purchase").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.TRANSACTION_DETAIL_PURCHASE_DATE, json.optString("transaction_detail_purchase_date").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.PURCHASE_HISTORY, json.optString("purchase_history").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.BTN_REGISTER, json.optString("btn_register").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SORT_RELEASE_DATE, json.optString("sort_release_date").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.PURCHASE,json.optString("purchase").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANSACTION_DETAIL_PURCHASE_DATE,json.optString("transaction_detail_purchase_date").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.PURCHASE_HISTORY,json.optString("purchase_history").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.BTN_REGISTER,json.optString("btn_register").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SORT_RELEASE_DATE,json.optString("sort_release_date").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SAVE_THIS_CARD, json.optString("save_this_card").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.TEXT_SEARCH_PLACEHOLDER, json.optString("text_search_placeholder").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SEASON, json.optString("season").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SELECT_OPTION_TITLE, json.optString("select_option_title").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SELECT_PLAN, json.optString("select_plan").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SAVE_THIS_CARD,json.optString("save_this_card").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.TEXT_SEARCH_PLACEHOLDER,json.optString("text_search_placeholder").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SEASON,json.optString("season").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SELECT_OPTION_TITLE,json.optString("select_option_title").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SELECT_PLAN,json.optString("select_plan").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SIGN_UP_TITLE, json.optString("signup_title").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SLOW_INTERNET_CONNECTION, json.optString("slow_internet_connection").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SLOW_ISSUE_INTERNET_CONNECTION, json.optString("slow_issue_internet_connection").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SORRY, json.optString("sorry").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.GEO_BLOCKED_ALERT, json.optString("geo_blocked_alert").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SIGN_UP_TITLE,json.optString("signup_title").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SLOW_INTERNET_CONNECTION,json.optString("slow_internet_connection").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SLOW_ISSUE_INTERNET_CONNECTION,json.optString("slow_issue_internet_connection").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SORRY,json.optString("sorry").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.GEO_BLOCKED_ALERT,json.optString("geo_blocked_alert").trim());
 
                         Util.setLanguageSharedPrefernce(MainActivity.this, Util.SIGN_OUT_ERROR, json.optString("sign_out_error").trim());
                         Util.setLanguageSharedPrefernce(MainActivity.this, Util.ALREADY_PURCHASE_THIS_CONTENT, json.optString("already_purchase_this_content").trim());
@@ -2231,33 +2224,33 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                         Util.setLanguageSharedPrefernce(MainActivity.this, Util.SORT_BY, json.optString("sort_by").trim());
                         Util.setLanguageSharedPrefernce(MainActivity.this, Util.STORY_TITLE, json.optString("story_title").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.BTN_SUBMIT, json.optString("btn_submit").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.TRANSACTION_STATUS, json.optString("transaction_success").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.VIDEO_ISSUE, json.optString("video_issue").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.NO_CONTENT, json.optString("no_content").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.NO_VIDEO_AVAILABLE, json.optString("no_video_available").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.BTN_SUBMIT,json.optString("btn_submit").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANSACTION_STATUS,json.optString("transaction_success").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.VIDEO_ISSUE,json.optString("video_issue").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.NO_CONTENT,json.optString("no_content").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.NO_VIDEO_AVAILABLE,json.optString("no_video_available").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, json.optString("content_not_available_in_your_country").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.TRANSACTION_DATE, json.optString("transaction_date").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.TRANASCTION_DETAIL, json.optString("transaction_detail").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.TRANSACTION_STATUS, json.optString("transaction_status").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.TRANSACTION, json.optString("transaction").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY,json.optString("content_not_available_in_your_country").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANSACTION_DATE,json.optString("transaction_date").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANASCTION_DETAIL,json.optString("transaction_detail").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANSACTION_STATUS,json.optString("transaction_status").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANSACTION,json.optString("transaction").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.TRY_AGAIN, json.optString("try_again").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.UNPAID, json.optString("unpaid").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.USE_NEW_CARD, json.optString("use_new_card").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.VIEW_MORE, json.optString("view_more").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.VIEW_TRAILER, json.optString("view_trailer").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRY_AGAIN,json.optString("try_again").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.UNPAID,json.optString("unpaid").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.USE_NEW_CARD,json.optString("use_new_card").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.VIEW_MORE,json.optString("view_more").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.VIEW_TRAILER,json.optString("view_trailer").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.WATCH, json.optString("watch").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.WATCH_NOW, json.optString("watch_now").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SIGN_OUT_ALERT, json.optString("sign_out_alert").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.UPDATE_PROFILE_ALERT, json.optString("update_profile_alert").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.YES, json.optString("yes").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.WATCH,json.optString("watch").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.WATCH_NOW,json.optString("watch_now").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SIGN_OUT_ALERT,json.optString("sign_out_alert").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.UPDATE_PROFILE_ALERT,json.optString("update_profile_alert").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.YES,json.optString("yes").trim());
 
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.PURCHASE_SUCCESS_ALERT, json.optString("purchase_success_alert").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.CARD_WILL_CHARGE, json.optString("card_will_charge").trim());
-                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SEARCH_HINT, json.optString("search_hint").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.PURCHASE_SUCCESS_ALERT,json.optString("purchase_success_alert").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.CARD_WILL_CHARGE,json.optString("card_will_charge").trim());
+                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.SEARCH_HINT,json.optString("search_hint").trim());
                         Util.setLanguageSharedPrefernce(MainActivity.this, Util.TERMS, json.optString("terms").trim());
                         Util.setLanguageSharedPrefernce(MainActivity.this, Util.UPDATE_PROFILE, json.optString("btn_update_profile").trim());
                         Util.setLanguageSharedPrefernce(MainActivity.this, Util.APP_ON, json.optString("app_on").trim());
@@ -2281,9 +2274,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
                         languageCustomAdapter.notifyDataSetChanged();
 
-                        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                        Intent intent = new Intent(MainActivity.this,MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
+
 
 
                     } catch (JSONException e) {
@@ -2297,6 +2291,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                     noInternetLayout.setVisibility(View.GONE);
                 }
             }
+
 
 
         }
