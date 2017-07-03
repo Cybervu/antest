@@ -1105,7 +1105,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             }
         } else {
             if (Util.checkNetwork(Episode_list_Activity.this) == true) {
-                // subhalaxmi
+                // MUVIlaxmi
 
                 GetVideoDetailsInput getVideoDetailsInput=new GetVideoDetailsInput();
                 getVideoDetailsInput.setAuthToken(Util.authTokenStr);
@@ -1222,8 +1222,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 //                                    SubTitleName.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
 //                                    FakeSubTitlePath.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
 //
-//                                    Log.v("SUBHA","SUbtitle Name ="+SubtitleJosnArray.getJSONObject(i).optString("language").trim());
-//                                    Log.v("SUBHA","SUbtitle FAke Path ="+SubtitleJosnArray.getJSONObject(i).optString("url").trim());
+//                                    Log.v("MUVI","SUbtitle Name ="+SubtitleJosnArray.getJSONObject(i).optString("language").trim());
+//                                    Log.v("MUVI","SUbtitle FAke Path ="+SubtitleJosnArray.getJSONObject(i).optString("url").trim());
 //                                }
 //                            }
 //                        }
@@ -2452,7 +2452,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                                     ppvmodel.setPpvPlanId("0");
 
                                 }
-                                //SubhaShree
+                                //MUVIShree
                                 if ((ppvJson.has("show_unsubscribed")) && ppvJson.getString("show_unsubscribed").trim() != null && !ppvJson.getString("show_unsubscribed").trim().isEmpty() && !ppvJson.getString("show_unsubscribed").trim().equals("null") && !ppvJson.getString("show_unsubscribed").trim().matches("")) {
                                     //  planIdStr = ppvJson.getString("id");
                                     ppvmodel.setPpvShowUnsubscribedStr(ppvJson.getString("show_unsubscribed"));
@@ -2584,7 +2584,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         }
 
                         if (isPPV == 1 || isAPV == 1) {
-                            LogUtil.showLog("SUBHA", "currency");
+                            LogUtil.showLog("MUVI", "currency");
 
                             JSONObject currencyJson = null;
                             if (myJson.has("currency") && myJson.getString("currency") != null && !myJson.getString("currency").equals("null")) {
@@ -2594,7 +2594,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                                 if (currencyJson.has("id") && currencyJson.getString("id").trim() != null && !currencyJson.getString("id").trim().isEmpty() && !currencyJson.getString("id").trim().equals("null") && !currencyJson.getString("id").trim().matches("")) {
                                     // currencyIdStr = currencyJson.getString("id");
                                     currencymodel.setCurrencyId(currencyJson.getString("id"));
-                                    LogUtil.showLog("SUBHA", "currency id" + currencymodel.getCurrencyId());
+                                    LogUtil.showLog("MUVI", "currency id" + currencymodel.getCurrencyId());
 
                                 } else {
                                     // currencyIdStr = "";
@@ -4523,7 +4523,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
         @Override
         protected void onPostExecute(String file_url) {
-            LogUtil.showLog("SUBHA", "Download Completed");
+            LogUtil.showLog("MUVI", "Download Completed");
             FakeSubTitlePath.remove(0);
             if (FakeSubTitlePath.size() > 0) {
                 Download_SubTitle(FakeSubTitlePath.get(0).trim());

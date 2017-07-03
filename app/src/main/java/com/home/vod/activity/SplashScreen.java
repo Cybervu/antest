@@ -123,7 +123,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                //  Log.v("SUBHA:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                //  Log.v("MUVI:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
 
             }
         } catch (PackageManager.NameNotFoundException e) {
@@ -260,10 +260,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         if (status > 0) {
             if (status == 200) {
                 Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PLAN_ID, "1");
-                LogUtil.showLog("SUBHA", "responsestring of plan id = 1");
+                LogUtil.showLog("MUVI", "responsestring of plan id = 1");
             } else {
                 Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PLAN_ID, "0");
-                LogUtil.showLog("SUBHA", "responsestring of plan id = 0");
+                LogUtil.showLog("MUVI", "responsestring of plan id = 0");
             }
         }
 
@@ -710,7 +710,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //                try {
 //                    HttpResponse response = httpclient.execute(httppost);
 //                    responseStr = EntityUtils.toString(response.getEntity());
-//                    Log.v("SUBHA", "responsestring of plan list = " + responseStr);
+//                    Log.v("MUVI", "responsestring of plan list = " + responseStr);
 //
 //
 //                } catch (org.apache.http.conn.ConnectTimeoutException e) {
@@ -748,10 +748,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //                if (status > 0) {
 //                    if (status == 200) {
 //                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PLAN_ID, "1");
-//                        Log.v("SUBHA", "responsestring of plan id = 1");
+//                        Log.v("MUVI", "responsestring of plan id = 1");
 //                    } else {
 //                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PLAN_ID, "0");
-//                        Log.v("SUBHA", "responsestring of plan id = 0");
+//                        Log.v("MUVI", "responsestring of plan id = 0");
 //                    }
 //                }
 //
@@ -779,7 +779,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //        }
 //    }
 
-    //subhashree genre
+    //MUVIshree genre
 
 //    private class AsynGetGenreList extends AsyncTask<Void, Void, Void> {
 //        String responseStr;

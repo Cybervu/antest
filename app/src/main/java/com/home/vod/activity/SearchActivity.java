@@ -204,7 +204,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         noDataLayout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
 
-        //subhalaxmi
+        //MUVIlaxmi
 
         //Detect Network Connection
 
@@ -1608,7 +1608,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     if (Util.checkNetwork(SearchActivity.this) == true) {
                         if (pDialog!=null && pDialog.isShowing())
                             pDialog.dismiss();
-                        // subhalaxmi
+                        // MUVIlaxmi
                         if (itemToPlay.ge == null) {
                             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(SearchActivity.this);
                             dlgAlert.setMessage(getResources().getString(R.string.no_video_available_str));

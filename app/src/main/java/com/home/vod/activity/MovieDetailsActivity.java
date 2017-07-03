@@ -814,7 +814,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     }
                 } else {
                     if (Util.checkNetwork(MovieDetailsActivity.this) == true) {
-                        // subhalaxmi
+                        // MUVIlaxmi
 
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                         getVideoDetailsInput.setAuthToken(Util.authTokenStr);
@@ -926,7 +926,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     }
                 } else {
                     if (Util.checkNetwork(MovieDetailsActivity.this) == true) {
-                        // subhalaxmi
+                        // MUVIlaxmi
 
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                         getVideoDetailsInput.setAuthToken(Util.authTokenStr);
@@ -2887,8 +2887,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 //
 //                                    ResolutionUrl.add(ResolutionJosnArray.getJSONObject(i).optString("url").trim());
 //
-//                                    Log.v("SUBHA","Resolution Format Name ="+ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
-//                                    Log.v("SUBHA","Resolution url ="+ResolutionJosnArray.getJSONObject(i).optString("url").trim());
+//                                    Log.v("MUVI","Resolution Format Name ="+ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
+//                                    Log.v("MUVI","Resolution url ="+ResolutionJosnArray.getJSONObject(i).optString("url").trim());
 //                                }
 //                            }
 //                        }

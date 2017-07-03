@@ -318,7 +318,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (ResolutionUrl.size() < 1)
 
         {
-            LogUtil.showLog("SUBHA", "resolution image Invisible called");
+            LogUtil.showLog("MUVI", "resolution image Invisible called");
         } else {
             ResolutionUrl.add(Util.dataModel.getVideoUrl().trim());
             ResolutionFormat.add("Auto");
@@ -342,7 +342,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         if ((SubTitlePath.size() < 1) && (ResolutionUrl.size() < 1)) {
             subtitle_change_btn.setVisibility(View.INVISIBLE);
-            LogUtil.showLog("SUBHA", "subtitle_image button Invisible called");
+            LogUtil.showLog("MUVI", "subtitle_image button Invisible called");
         }
 
         //=============================== End Resolution Change ===================================//
@@ -813,9 +813,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     @Override
     public void onGetVideoLogsPreExecuteStarted() {
-        LogUtil.showLog("SUBHA", "onPreExecute");
+        LogUtil.showLog("MUVI", "onPreExecute");
         stoptimertask();
-        LogUtil.showLog("SUBHA", "onPreExecute1");
+        LogUtil.showLog("MUVI", "onPreExecute1");
     }
 
     @Override
@@ -885,7 +885,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 //                try {
 //                    HttpResponse response = httpclient.execute(httppost);
 //                    responseStr = EntityUtils.toString(response.getEntity());
-//                    Log.v("SUBHA", "PLAY responseStr" + responseStr);
+//                    Log.v("MUVI", "PLAY responseStr" + responseStr);
 //
 //
 //                } catch (org.apache.http.conn.ConnectTimeoutException e) {
@@ -902,7 +902,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 //                    videoLogId = "0";
 //                    e.printStackTrace();
 //
-//                    Log.v("SUBHA", "Exception of videoplayer" + e.toString());
+//                    Log.v("MUVI", "Exception of videoplayer" + e.toString());
 //                }
 //                if (responseStr != null) {
 //                    JSONObject myJson = new JSONObject(responseStr);
@@ -937,9 +937,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 //
 //        @Override
 //        protected void onPreExecute() {
-//            Log.v("SUBHA", "onPreExecute");
+//            Log.v("MUVI", "onPreExecute");
 //            stoptimertask();
-//            Log.v("SUBHA", "onPreExecute1");
+//            Log.v("MUVI", "onPreExecute1");
 //        }
 //    }
 
@@ -1781,7 +1781,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     /* public void onBackPressed() {
          super.onBackPressed();
-         Log.v("SUBHA","HHVID"+videoLogId);
+         Log.v("MUVI","HHVID"+videoLogId);
          if (asynGetIpAddress!=null){
              asynGetIpAddress.cancel(true);
          }
@@ -2162,7 +2162,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 subsFetchTask = new SubtitleProcessingTask(data.getStringExtra("position"));
                                 subsFetchTask.execute();
                             } catch (Exception e) {
-                                Log.v("SUBHA", "Exception of subtitle change process =" + e.toString());
+                                Log.v("MUVI", "Exception of subtitle change process =" + e.toString());
                             }
                         }
                     }
@@ -2207,7 +2207,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         String Subtitle_Path = "";
 
         public SubtitleProcessingTask(String path) {
-//            Log.v("SUBHA","SubTitlePath size ==="+SubTitlePath.size());
+//            Log.v("MUVI","SubTitlePath size ==="+SubTitlePath.size());
 //             Subtitle_Path = Environment.getExternalStorageDirectory().toString()+"/"+"sub.vtt";
             Subtitle_Path = SubTitlePath.get((Integer.parseInt(path) - 1));
         }
@@ -2216,7 +2216,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         protected void onPreExecute() {
 //            subtitleText.setText("Loading subtitles..");
             super.onPreExecute();
-            Log.v("SUBHA", "SubTitlePath size at pre execute===" + SubTitlePath.size());
+            Log.v("MUVI", "SubTitlePath size at pre execute===" + SubTitlePath.size());
         }
 
         @Override
@@ -2224,7 +2224,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             // int count;
             try {
 
-                Log.v("SUBHA", "Subtitle_Path ========" + Subtitle_Path);
+                Log.v("MUVI", "Subtitle_Path ========" + Subtitle_Path);
 
 				/*
                  * if you want to download file from Internet, use commented
@@ -2270,7 +2270,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e("SUBHA", "error in downloadinf subs");
+                Log.e("MUVI", "error in downloadinf subs");
             }
             return null;
         }

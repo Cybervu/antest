@@ -298,7 +298,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
        /* if(SubTitlePath.size()<1)
         {
             subtitle_change_btn.setVisibility(View.INVISIBLE);
-            Log.v("SUBHA","CC Invisible called");
+            Log.v("MUVI","CC Invisible called");
         }*/
 
         subtitle_change_btn.setOnClickListener(new View.OnClickListener() {
@@ -311,7 +311,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     intent.putExtra("SubTitleName",SubTitleName);
                     intent.putExtra("SubTitlePath",SubTitlePath);
                     startActivityForResult(intent,222);
-                }catch (Exception e){Log.v("SUBHA","Exception of subtitle change click ="+e.toString());}*/
+                }catch (Exception e){Log.v("MUVI","Exception of subtitle change click ="+e.toString());}*/
 
 
                 Util.call_finish_at_onUserLeaveHint = false;
@@ -347,7 +347,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         {
             // Add your code
-            Log.v("SUBHA","resolution image Invisible called");
+            Log.v("MUVI","resolution image Invisible called");
         }
         else
         {
@@ -375,7 +375,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         {
             // Add your code
-            LogUtil.showLog("SUBHA","resolution image Invisible called");
+            LogUtil.showLog("MUVI","resolution image Invisible called");
         }
         else
         {
@@ -411,7 +411,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         if((SubTitlePath.size()<1) && (ResolutionUrl.size()<1))
         {
             subtitle_change_btn.setVisibility(View.INVISIBLE);
-            LogUtil.showLog("SUBHA","CC Invisible called");
+            LogUtil.showLog("MUVI","CC Invisible called");
         }
 
 
@@ -448,7 +448,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     intent.putExtra("ResolutionFormat",ResolutionFormat);
                     intent.putExtra("ResolutionUrl",ResolutionUrl);
                     startActivityForResult(intent,3333);*//*
-                }catch (Exception e){Log.v("SUBHA","Exception of subtitle change click ="+e.toString());}
+                }catch (Exception e){Log.v("MUVI","Exception of subtitle change click ="+e.toString());}
 
                 return false;
             }
@@ -721,8 +721,8 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             @Override
             public void onPrepared() {
 
-                LogUtil.showLog("SUBHA","This is the first calling point");
-                LogUtil.showLog("SUBHA","Played Length ="+Util.dataModel.getPlayPos());
+                LogUtil.showLog("MUVI","This is the first calling point");
+                LogUtil.showLog("MUVI","Played Length ="+Util.dataModel.getPlayPos());
 
                 if(change_resolution)
                 {
@@ -858,9 +858,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
     @Override
     public void onGetVideoLogsPreExecuteStarted() {
-        LogUtil.showLog("SUBHA", "onPreExecute");
+        LogUtil.showLog("MUVI", "onPreExecute");
         stoptimertask();
-        LogUtil.showLog("SUBHA", "onPreExecute1");
+        LogUtil.showLog("MUVI", "onPreExecute1");
     }
 
     @Override
@@ -900,7 +900,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 //                try {
 //                    HttpResponse response = httpclient.execute(httppost);
 //                    responseStr = EntityUtils.toString(response.getEntity());
-//                    Log.v("SUBHA", "PLAY responseStr" + responseStr);
+//                    Log.v("MUVI", "PLAY responseStr" + responseStr);
 //
 //
 //                } catch (org.apache.http.conn.ConnectTimeoutException e) {
@@ -917,7 +917,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 //                    videoLogId = "0";
 //                    e.printStackTrace();
 //
-//                    Log.v("SUBHA", "Exception of videoplayer" + e.toString());
+//                    Log.v("MUVI", "Exception of videoplayer" + e.toString());
 //                }
 //                if (responseStr != null) {
 //                    JSONObject myJson = new JSONObject(responseStr);
@@ -958,9 +958,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 //
 //        @Override
 //        protected void onPreExecute() {
-//            Log.v("SUBHA", "onPreExecute");
+//            Log.v("MUVI", "onPreExecute");
 //            stoptimertask();
-//            Log.v("SUBHA", "onPreExecute1");
+//            Log.v("MUVI", "onPreExecute1");
 //        }
 //
 //
@@ -1431,7 +1431,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
     /* public void onBackPressed() {
          super.onBackPressed();
-         Log.v("SUBHA","HHVID"+videoLogId);
+         Log.v("MUVI","HHVID"+videoLogId);
          if (asynGetIpAddress!=null){
              asynGetIpAddress.cancel(true);
          }
@@ -1616,7 +1616,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
    /* @Override
     public boolean onKeyDown(int keyCode, KeyEvent objEvent) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Log.v("SUBHA","FHFHFHCALLED");
+            Log.v("MUVI","FHFHFHCALLED");
             return true;
         }
         return super.onKeyUp(keyCode, objEvent);
@@ -1837,7 +1837,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                 subsFetchTask = new SubtitleProcessingTask(data.getStringExtra("position"));
                                 subsFetchTask.execute();
                             }catch (Exception e){
-                                LogUtil.showLog("SUBHA","Exception of subtitle change process ="+e.toString());}
+                                LogUtil.showLog("MUVI","Exception of subtitle change process ="+e.toString());}
 
                         }
 
@@ -1884,7 +1884,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         String Subtitle_Path = "";
         public SubtitleProcessingTask(String path) {
-//            Log.v("SUBHA","SubTitlePath size ==="+SubTitlePath.size());
+//            Log.v("MUVI","SubTitlePath size ==="+SubTitlePath.size());
 //             Subtitle_Path = Environment.getExternalStorageDirectory().toString()+"/"+"sub.vtt";
             Subtitle_Path = SubTitlePath.get((Integer.parseInt(path)-1));
         }
@@ -1893,7 +1893,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         protected void onPreExecute() {
 //            subtitleText.setText("Loading subtitles..");
             super.onPreExecute();
-            LogUtil.showLog("SUBHA","SubTitlePath size at pre execute==="+SubTitlePath.size());
+            LogUtil.showLog("MUVI","SubTitlePath size at pre execute==="+SubTitlePath.size());
         }
 
         @Override
@@ -1901,7 +1901,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             // int count;
             try {
 
-                LogUtil.showLog("SUBHA","Subtitle_Path ========"+Subtitle_Path);
+                LogUtil.showLog("MUVI","Subtitle_Path ========"+Subtitle_Path);
 
 				/*
 				 * if you want to download file from Internet, use commented
@@ -1951,7 +1951,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
             } catch (Exception e) {
                 e.printStackTrace();
-                LogUtil.showLog("SUBHA", "error in downloadinf subs");
+                LogUtil.showLog("MUVI", "error in downloadinf subs");
             }
             return null;
         }

@@ -211,7 +211,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
         noDataLayout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
 
-        //subhalaxmi
+        //MUVIlaxmi
         gridView.setVisibility(View.VISIBLE);
       /*  ArrayList<GridItem> tempData = new ArrayList<GridItem>();
 

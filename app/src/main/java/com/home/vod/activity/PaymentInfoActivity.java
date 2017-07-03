@@ -753,13 +753,13 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 httppost.addHeader("email", emailIdStr);
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
 
-            /*    Log.v("SUBHA", "nameOnCardStr = " + nameOnCardStr);
-                Log.v("SUBHA", "expiryMonth = " + String.valueOf(expiryMonthStr).trim());
-                Log.v("SUBHA", "expiryYear = " + String.valueOf(expiryYearStr).trim());
-                Log.v("SUBHA", "cardNumber = " + cardNumberStr);
-                Log.v("SUBHA", "cvv = " + securityCodeStr);
-                Log.v("SUBHA", "email = " + emailIdStr);
-                Log.v("SUBHA", "authToken = " + Util.authTokenStr.trim());
+            /*    Log.v("MUVI", "nameOnCardStr = " + nameOnCardStr);
+                Log.v("MUVI", "expiryMonth = " + String.valueOf(expiryMonthStr).trim());
+                Log.v("MUVI", "expiryYear = " + String.valueOf(expiryYearStr).trim());
+                Log.v("MUVI", "cardNumber = " + cardNumberStr);
+                Log.v("MUVI", "cvv = " + securityCodeStr);
+                Log.v("MUVI", "email = " + emailIdStr);
+                Log.v("MUVI", "authToken = " + Util.authTokenStr.trim());
 */
 
                 // Execute HTTP Post Request
@@ -767,7 +767,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                    LogUtil.showLog("SUBHA", "response of card validation = " + responseStr);
+                    LogUtil.showLog("MUVI", "response of card validation = " + responseStr);
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     runOnUiThread(new Runnable() {
@@ -943,57 +943,57 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
         @Override
         protected Void doInBackground(Void... params) {
-            Log.v("SUBHA", "payment at doInBackground called ");
+            Log.v("MUVI", "payment at doInBackground called ");
             String userIdStr = preferenceManager.getUseridFromPref();
             String emailIdSubStr = preferenceManager.getEmailIdFromPref();
 
             String urlRouteList = Util.rootUrl().trim() + Util.subscriptionUrl.trim();
-            LogUtil.showLog("SUBHA", "payment at urlRouteList = "+urlRouteList);
+            LogUtil.showLog("MUVI", "payment at urlRouteList = "+urlRouteList);
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
-                LogUtil.showLog("SUBHA", "=========== 1");
+                LogUtil.showLog("MUVI", "=========== 1");
                 httppost.addHeader("card_name", nameOnCardStr);
-                LogUtil.showLog("SUBHA", "=========== 11");
+                LogUtil.showLog("MUVI", "=========== 11");
                 httppost.addHeader("exp_month", String.valueOf(expiryMonthStr).trim());
-                LogUtil.showLog("SUBHA", "=========== 111");
+                LogUtil.showLog("MUVI", "=========== 111");
                 httppost.addHeader("card_number", cardNumberStr);
-                LogUtil.showLog("SUBHA", "=========== 1111");
+                LogUtil.showLog("MUVI", "=========== 1111");
                 httppost.addHeader("exp_year", String.valueOf(expiryYearStr).trim());
-                LogUtil.showLog("SUBHA", "=========== 2");
+                LogUtil.showLog("MUVI", "=========== 2");
                 httppost.addHeader("email", emailIdSubStr.trim()); //Null pointer
               //  httppost.addHeader("movie_id", muviUniqueIdStr.trim());
                 httppost.addHeader("user_id", userIdStr.trim());
-                LogUtil.showLog("SUBHA", "=========== 22="+ emailIdSubStr.trim());
+                LogUtil.showLog("MUVI", "=========== 22="+ emailIdSubStr.trim());
                 if (isCouponCodeAdded == true) {
                     httppost.addHeader("coupon_code", validCouponCode);
-                    LogUtil.showLog("SUBHA", "=========== 222");
+                    LogUtil.showLog("MUVI", "=========== 222");
                 } else {
-                    LogUtil.showLog("SUBHA", "=========== 2222");
+                    LogUtil.showLog("MUVI", "=========== 2222");
                     httppost.addHeader("coupon_code", "");
                 }
-                LogUtil.showLog("SUBHA", "=========== 22222");
+                LogUtil.showLog("MUVI", "=========== 22222");
                 httppost.addHeader("card_type", cardTypeStr.trim());
-                LogUtil.showLog("SUBHA", "=========== 3");
+                LogUtil.showLog("MUVI", "=========== 3");
                 httppost.addHeader("card_last_fourdigit", cardLastFourDigitStr.trim());
-                LogUtil.showLog("SUBHA", "=========== 33");
+                LogUtil.showLog("MUVI", "=========== 33");
                 httppost.addHeader("profile_id", profileIdStr.trim());
-                LogUtil.showLog("SUBHA", "=========== 333");
+                LogUtil.showLog("MUVI", "=========== 333");
                 httppost.addHeader("token", tokenStr.trim());
-                LogUtil.showLog("SUBHA", "=========== 3333="+tokenStr.trim());
+                LogUtil.showLog("MUVI", "=========== 3333="+tokenStr.trim());
                 httppost.addHeader("cvv", securityCardStr);
                 // httppost.addHeader("country",currencyCountryCodeStr.trim());
-                Log.v("SUBHA", "=========== 33333");
+                Log.v("MUVI", "=========== 33333");
                 httppost.addHeader("country", preferenceManager.getCountryCodeFromPref());
-                Log.v("SUBHA", "=========== 4");
+                Log.v("MUVI", "=========== 4");
                 httppost.addHeader("season_id", "0");
-                LogUtil.showLog("SUBHA", "=========== 44");
+                LogUtil.showLog("MUVI", "=========== 44");
                 httppost.addHeader("episode_id", "0");
-                LogUtil.showLog("SUBHA", "=========== 444");
+                LogUtil.showLog("MUVI", "=========== 444");
                 httppost.addHeader("currency_id", currencyIdStr.trim());
-                LogUtil.showLog("SUBHA", "=========== 4444");
+                LogUtil.showLog("MUVI", "=========== 4444");
 
                 httppost.addHeader("plan_id", getIntent().getStringExtra("selected_plan_id").toString().trim());
                 httppost.addHeader("name", preferenceManager.getDispNameFromPref());
@@ -1005,10 +1005,10 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                    LogUtil.showLog("SUBHA", "response of payment = " + responseStr);
+                    LogUtil.showLog("MUVI", "response of payment = " + responseStr);
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    LogUtil.showLog("SUBHA","error2="+e.toString());
+                    LogUtil.showLog("MUVI","error2="+e.toString());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -1028,10 +1028,10 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     if (progressBarHandler.isShowing())
                         progressBarHandler.hide();
                     e.printStackTrace();
-                    LogUtil.showLog("SUBHA","error1="+e.toString());
+                    LogUtil.showLog("MUVI","error1="+e.toString());
                 }
 
-                LogUtil.showLog("SUBHA", "response of payment = " + responseStr);
+                LogUtil.showLog("MUVI", "response of payment = " + responseStr);
 
                 if (responseStr != null) {
                     JSONObject myJson = new JSONObject(responseStr);
@@ -1043,7 +1043,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 if (progressBarHandler.isShowing())
                     progressBarHandler.hide();
                 status = 0;
-                LogUtil.showLog("SUBHA","error="+e.toString());
+                LogUtil.showLog("MUVI","error="+e.toString());
             }
 
             return null;

@@ -145,8 +145,8 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements Purcha
                         detailsIntent.putExtra("id",Id_Purchase_History.get(position));
                         detailsIntent.putExtra("user_id",user_id);
 
-                        Log.v("SUBHA","ID = "+Id_Purchase_History.get(position));
-                        Log.v("SUBHA","user_id = "+user_id);
+                        Log.v("MUVI","ID = "+Id_Purchase_History.get(position));
+                        Log.v("MUVI","user_id = "+user_id);
 
                         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(detailsIntent);
@@ -233,7 +233,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements Purcha
 //                                Id = "";
 //
 //                            Id_Purchase_History.add(Id);
-//                            Log.v("SUBHA","ID =========================== "+Id);
+//                            Log.v("MUVI","ID =========================== "+Id);
 //
 //                            PutrcahseDate = jsonArray.getJSONObject(i).optString("transaction_date");
 //                            if(PutrcahseDate.equals("") || PutrcahseDate==null || PutrcahseDate.equals("null"))
@@ -251,13 +251,13 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements Purcha
 //                            if(Currency_symbol.equals("") || Currency_symbol==null || Currency_symbol.equals("null"))
 //                                Currency_symbol = "";
 //
-//                            Log.v("SUBHA","currency_symbol = "+Currency_symbol);
+//                            Log.v("MUVI","currency_symbol = "+Currency_symbol);
 //
 //                            currency_code = jsonArray.getJSONObject(i).optString("currency_code");
 //                            if(currency_code.equals("") || currency_code==null || currency_code.equals("null"))
 //                                currency_code = "";
 //
-//                            Log.v("SUBHA","currency_code = "+currency_code);
+//                            Log.v("MUVI","currency_code = "+currency_code);
 //
 //
 //                            Amount = jsonArray.getJSONObject(i).optString("amount");
@@ -275,7 +275,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements Purcha
 //                                }
 //                            }
 //
-//                            Log.v("SUBHA","amount"+ Amount);
+//                            Log.v("MUVI","amount"+ Amount);
 //
 //
 //                            purchaseHistoryModel = new PurchaseHistoryModel(Invoice,Id,PutrcahseDate,TranactionStatus,Amount,Ppvstatus);

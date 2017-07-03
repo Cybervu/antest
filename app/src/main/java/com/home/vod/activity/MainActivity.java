@@ -306,7 +306,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }*/
 
 
-        //subhashree genre
+        //MUVIshree genre
        /* Bundle b=this.getIntent().getExtras();
 
         String[] genreArray = new String[0];

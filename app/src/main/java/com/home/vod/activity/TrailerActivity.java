@@ -366,7 +366,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
       /*  back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("SUBHA","CHFHFH");
+                Log.v("MUVI","CHFHFH");
                // onBackPressed();
                 backCalled();
             }
@@ -611,8 +611,8 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
 
 
-               /* Log.v("SUBHA","played_length"+played_length);
-                Log.v("SUBHA","emVideoView.getDuration()"+emVideoView.getDuration());
+               /* Log.v("MUVI","played_length"+played_length);
+                Log.v("MUVI","emVideoView.getDuration()"+emVideoView.getDuration());
                 int duration=emVideoView.getDuration()/1000;
                 int hours = duration / 3600;
                 int minutes = (duration / 60) - (hours * 60);
@@ -1377,7 +1377,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
     /* public void onBackPressed() {
          super.onBackPressed();
-         Log.v("SUBHA","HHVID"+videoLogId);
+         Log.v("MUVI","HHVID"+videoLogId);
          if (asynGetIpAddress!=null){
              asynGetIpAddress.cancel(true);
          }
@@ -1561,7 +1561,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
    /* @Override
     public boolean onKeyDown(int keyCode, KeyEvent objEvent) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Log.v("SUBHA","FHFHFHCALLED");
+            Log.v("MUVI","FHFHFHCALLED");
             return true;
         }
         return super.onKeyUp(keyCode, objEvent);

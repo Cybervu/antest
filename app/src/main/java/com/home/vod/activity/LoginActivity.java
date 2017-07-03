@@ -935,9 +935,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         });*/
 
 
-        /*Log.v("SUBHA","is Apv = "+ Util.dataModel.getIsAPV());
-        Log.v("SUBHA","is Apv = "+ Util.dataModel.getIsPPV());
-        Log.v("SUBHA","is Apv = "+ Util.dataModel.getContentTypesId());*/
+        /*Log.v("MUVI","is Apv = "+ Util.dataModel.getIsAPV());
+        Log.v("MUVI","is Apv = "+ Util.dataModel.getIsPPV());
+        Log.v("MUVI","is Apv = "+ Util.dataModel.getContentTypesId());*/
 
 
         Typeface editPasswordStrTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
@@ -1245,7 +1245,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 loginWithFacebookButton.invalidate();
 
                 if (AccessToken.getCurrentAccessToken() ==null) {
-                    Log.v("SUBHA","Gbb");
+                    Log.v("MUVI","Gbb");
 
                     loginWithFacebookButton.registerCallback(callbackManager, mCallBack);
                 }
@@ -4140,8 +4140,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         Util.selected_episode_id = "0";
         Util.selected_season_id = "0";
 
-        LogUtil.showLog("SUBHA", "priceFosubscribedStr=" + priceFosubscribedStr);
-        LogUtil.showLog("SUBHA", "priceForUnsubscribedStr=" + priceForUnsubscribedStr);
+        LogUtil.showLog("MUVI", "priceFosubscribedStr=" + priceFosubscribedStr);
+        LogUtil.showLog("MUVI", "priceForUnsubscribedStr=" + priceForUnsubscribedStr);
 
         final Intent showPaymentIntent = new Intent(LoginActivity.this, PPvPaymentInfoActivity.class);
         showPaymentIntent.putExtra("muviuniqueid", Util.dataModel.getMovieUniqueId().trim());

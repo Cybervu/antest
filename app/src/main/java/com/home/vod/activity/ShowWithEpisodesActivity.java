@@ -573,7 +573,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
                         });                 }
                 }else{
                     if (Util.checkNetwork(ShowWithEpisodesActivity.this) == true) {
-                        // subhalaxmi
+                        // MUVIlaxmi
 
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                         getVideoDetailsInput.setAuthToken(Util.authTokenStr);
@@ -609,7 +609,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
                 episode.putExtra(Util.SEASON_INTENT_KEY, Season_Value);
                 episode.putExtra("content_types_id", "" + contentTypesId);
 
-                Log.v("SUBHA", "season intent = " + Season_Value);
+                Log.v("MUVI", "season intent = " + Season_Value);
 
                 runOnUiThread(new Runnable() {
                     public void run() {
@@ -2045,7 +2045,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
                                     ppvmodel.setPpvPlanId("0");
 
                                 }
-                                //SubhaShree
+                                //MUVIShree
                                 if ((ppvJson.has("show_unsubscribed")) && ppvJson.getString("show_unsubscribed").trim() != null && !ppvJson.getString("show_unsubscribed").trim().isEmpty() && !ppvJson.getString("show_unsubscribed").trim().equals("null") && !ppvJson.getString("show_unsubscribed").trim().matches("")){
                                     //  planIdStr = ppvJson.getString("id");
                                     ppvmodel.setPpvShowUnsubscribedStr(ppvJson.getString("show_unsubscribed"));
@@ -2177,7 +2177,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
                         }
 
                         if(isPPV == 1 || isAPV == 1){
-                            Log.v("SUBHA","currency");
+                            Log.v("MUVI","currency");
 
                             JSONObject currencyJson = null;
                             if (myJson.has("currency") && myJson.getString("currency") != null && !myJson.getString("currency").equals("null")){
@@ -2187,7 +2187,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
                                 if (currencyJson.has("id") && currencyJson.getString("id").trim() != null && !currencyJson.getString("id").trim().isEmpty() && !currencyJson.getString("id").trim().equals("null") && !currencyJson.getString("id").trim().matches("")){
                                     // currencyIdStr = currencyJson.getString("id");
                                     currencymodel.setCurrencyId(currencyJson.getString("id"));
-                                    Log.v("SUBHA","currency id"+currencymodel.getCurrencyId());
+                                    Log.v("MUVI","currency id"+currencymodel.getCurrencyId());
 
                                 }else{
                                     // currencyIdStr = "";
@@ -2429,7 +2429,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
         ResolutionUrl.clear();
         ResolutionFormat.clear();
 
-        Log.v("SUBHA","content typesid = "+ contentTypesId);
+        Log.v("MUVI","content typesid = "+ contentTypesId);
 
         if(isLogin == 1) {
             if (preferenceManager != null) {
@@ -2651,8 +2651,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
 //
 //                                    ResolutionUrl.add(ResolutionJosnArray.getJSONObject(i).optString("url").trim());
 //
-//                                    Log.v("SUBHA","Resolution Format Name ="+ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
-//                                    Log.v("SUBHA","Resolution url ="+ResolutionJosnArray.getJSONObject(i).optString("url").trim());
+//                                    Log.v("MUVI","Resolution Format Name ="+ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
+//                                    Log.v("MUVI","Resolution url ="+ResolutionJosnArray.getJSONObject(i).optString("url").trim());
 //                                }
 //                            }
 //                        }
@@ -3487,20 +3487,20 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
                     if (completeRadioButton.isChecked()) {
                         Util.selected_episode_id = "0";
                         Util.selected_season_id = "0";
-                        Log.v("SUBHA", "called 1");
+                        Log.v("MUVI", "called 1");
                     } else if (seasonRadioButton.isChecked()) {
                         Util.selected_episode_id = "0";
                         Util.selected_season_id = "" + spinnerPosition;
-                        Log.v("SUBHA", "called 2");
+                        Log.v("MUVI", "called 2");
                     } else {
                         Util.selected_episode_id = Util.dataModel.getStreamUniqueId();
                         Util.selected_season_id = Util.dataModel.getEpisode_series_no();
-                        Log.v("SUBHA", "called 3");
+                        Log.v("MUVI", "called 3");
                     }
 
 
-                    Log.v("SUBHA", "Show withepisode  Activity Season Id =" + Util.selected_season_id);
-                    Log.v("SUBHA", "Show withepisode Activity episode Id =" + Util.selected_episode_id);
+                    Log.v("MUVI", "Show withepisode  Activity Season Id =" + Util.selected_season_id);
+                    Log.v("MUVI", "Show withepisode Activity episode Id =" + Util.selected_episode_id);
 
                     alert.dismiss();
                     final Intent showPaymentIntent = new Intent(ShowWithEpisodesActivity.this, PPvPaymentInfoActivity.class);

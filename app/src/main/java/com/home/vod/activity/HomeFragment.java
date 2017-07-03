@@ -500,8 +500,8 @@ public class HomeFragment extends Fragment {
 
 
                 *//*    loading_completed = loading_completed + 1;
-                    Log.v("SUBHA","loading_completed"+loading_completed);
-                    Log.v("SUBHA","ui_completed"+ui_completed);*//*
+                    Log.v("MUVI","loading_completed"+loading_completed);
+                    Log.v("MUVI","ui_completed"+ui_completed);*//*
 
                     // default data
                     asynLoadVideos = new AsynLoadVideos();
@@ -587,7 +587,7 @@ public class HomeFragment extends Fragment {
 
             }else {
                /* if (counter >= 0 && counter >= menuList.size()-1) {
-                    Log.v("SUBHA","COUNTER");
+                    Log.v("MUVI","COUNTER");
                     loading_completed = true;
                 }*/
             }
@@ -647,8 +647,8 @@ public class HomeFragment extends Fragment {
 
             }
 
-            LogUtil.showLog("SUBHA", "HHH"+videoWidth+videoHeight);
-            LogUtil.showLog("SUBHA", "vertical"+ MainActivity.vertical);
+            LogUtil.showLog("MUVI", "HHH"+videoWidth+videoHeight);
+            LogUtil.showLog("MUVI", "vertical"+ MainActivity.vertical);
 
             if (getView() != null) {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -696,7 +696,7 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
-                    Log.v("SUBHA", "onScrollStateChanged");
+                    Log.v("MUVI", "onScrollStateChanged");
                    *//* if (counter >= 0 && counter >= menuList.size()-1) {
                         adapter.swapItems();
                     }*//*
@@ -706,7 +706,7 @@ public class HomeFragment extends Fragment {
 
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                       Log.v("SUBHA","ONSCROLL");
+                       Log.v("MUVI","ONSCROLL");
                   *//*  if (counter >= 0 && counter >= menuList.size()-1) {
                         adapter.swapItems();
                     }*//*
@@ -729,8 +729,8 @@ public class HomeFragment extends Fragment {
 
 
                 /*    loading_completed = loading_completed + 1;
-                    Log.v("SUBHA","loading_completed"+loading_completed);
-                    Log.v("SUBHA","ui_completed"+ui_completed);*/
+                    Log.v("MUVI","loading_completed"+loading_completed);
+                    Log.v("MUVI","ui_completed"+ui_completed);*/
 
                     // default data
                     asynLoadVideos = new AsynLoadVideos();
@@ -1598,8 +1598,8 @@ public boolean onOptionsItemSelected(MenuItem item) {
                 videoWidth = bmp.getWidth();
 
 
-                LogUtil.showLog("SUBHA", "videoHeight=============="+videoHeight);
-                LogUtil.showLog("SUBHA", "videoWidth=============="+videoWidth);
+                LogUtil.showLog("MUVI", "videoHeight=============="+videoHeight);
+                LogUtil.showLog("MUVI", "videoWidth=============="+videoWidth);
 
                 return null;
             } catch (Exception e) {
@@ -1617,7 +1617,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
                 phandler.hide();
             }
 
-            LogUtil.showLog("SUBHA", "HHH");
+            LogUtil.showLog("MUVI", "HHH");
             loadui = new AsynLOADUI();
             loadui.executeOnExecutor(threadPoolExecutor);
         }
