@@ -50,8 +50,8 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
 
         this.myLibraryInputModel = myLibraryInputModel;
         PACKAGE_NAME = context.getPackageName();
-        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
-        Log.v("SUBHA", "GetContentListAsynTask");
+        Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
+        Log.v("MUVISDK", "GetContentListAsynTask");
 
     }
 
@@ -71,19 +71,19 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("SUBHA", "RES" + responseStr);
+                Log.v("MUVISDK", "RES" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 status = 0;
                 totalItems = 0;
                 message = "";
-                Log.v("SUBHA", "ConnectTimeoutException" + e.toString());
+                Log.v("MUVISDK", "ConnectTimeoutException" + e.toString());
 
             } catch (IOException e) {
                 status = 0;
                 totalItems = 0;
                 message = "";
-                Log.v("SUBHA", "IOException" + e.toString());
+                Log.v("MUVISDK", "IOException" + e.toString());
             }
 
             JSONObject myJson = null;
@@ -162,7 +162,7 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
             status = 0;
             totalItems = 0;
             message = "";
-            Log.v("SUBHA", "Exception" + e.toString());
+            Log.v("MUVISDK", "Exception" + e.toString());
         }
         return null;
 

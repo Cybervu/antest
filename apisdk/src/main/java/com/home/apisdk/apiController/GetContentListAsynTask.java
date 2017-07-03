@@ -51,8 +51,8 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
 
         this.contentListInput = contentListInput;
         PACKAGE_NAME = context.getPackageName();
-        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
-        Log.v("SUBHA", "GetContentListAsynTask");
+        Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
+        Log.v("MUVISDK", "GetContentListAsynTask");
 
     }
 
@@ -76,7 +76,7 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("SUBHA", "RES" + responseStr);
+                Log.v("MUVISDK", "RES" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 status = 0;

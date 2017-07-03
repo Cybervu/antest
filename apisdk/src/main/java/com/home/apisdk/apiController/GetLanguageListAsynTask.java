@@ -59,7 +59,7 @@ public class GetLanguageListAsynTask extends AsyncTask<LanguageListInputModel, V
 
     @Override
     protected Void doInBackground(LanguageListInputModel... params) {
-        Log.v("SUBHA", "this.languageListInputModel.getAuthToken()" + this.languageListInputModel.getAuthToken());
+        Log.v("MUVISDK", "this.languageListInputModel.getAuthToken()" + this.languageListInputModel.getAuthToken());
 
         try {
 
@@ -93,7 +93,7 @@ public class GetLanguageListAsynTask extends AsyncTask<LanguageListInputModel, V
                 while ((inputLine = in.readLine()) != null) {
                     System.out.println(inputLine);
                     responseStr = inputLine;
-                    Log.v("SUBHA", "responseStr" + responseStr);
+                    Log.v("MUVISDK", "responseStr" + responseStr);
 
                 }
                 in.close();
@@ -101,13 +101,13 @@ public class GetLanguageListAsynTask extends AsyncTask<LanguageListInputModel, V
             }
             // Execute HTTP Post Request
             catch (org.apache.http.conn.ConnectTimeoutException e) {
-                Log.v("SUBHA", "org.apache.http.conn.ConnectTimeoutException e" + e.toString());
+                Log.v("MUVISDK", "org.apache.http.conn.ConnectTimeoutException e" + e.toString());
 
                 status = 0;
                 message = "";
 
             } catch (IOException e) {
-                Log.v("SUBHA", "IOException" + e.toString());
+                Log.v("MUVISDK", "IOException" + e.toString());
 
                 status = 0;
                 message = "";
@@ -137,7 +137,7 @@ public class GetLanguageListAsynTask extends AsyncTask<LanguageListInputModel, V
                         jsonChildNode = jsonMainNode.getJSONObject(i);
                         LanguageListOutputModel languageListOutputModel = new LanguageListOutputModel();
 
-                        Log.v("SUBHA", "LAN_CODE" + jsonChildNode.optString("code"));
+                        Log.v("MUVISDK", "LAN_CODE" + jsonChildNode.optString("code"));
                         if ((jsonChildNode.has("code")) && jsonChildNode.optString("code").trim() != null && !jsonChildNode.optString("code").trim().isEmpty() && !jsonChildNode.optString("code").trim().equals("null") && !jsonChildNode.optString("code").trim().matches("")) {
                             languageListOutputModel.setLanguageCode(jsonChildNode.optString("code"));
 
@@ -156,7 +156,7 @@ public class GetLanguageListAsynTask extends AsyncTask<LanguageListInputModel, V
             }
 
         } catch (Exception e) {
-            Log.v("SUBHA", "Exception" + e.toString());
+            Log.v("MUVISDK", "Exception" + e.toString());
 
             status = 0;
             message = "";

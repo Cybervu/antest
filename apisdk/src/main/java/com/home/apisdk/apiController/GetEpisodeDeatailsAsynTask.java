@@ -47,8 +47,8 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
         this.context=context;
         this.episode_details_input = episode_details_input;
         PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
-        Log.v("SUBHA", "GetContentListAsynTask");
+        Log.v("MUVISDK", "pkgnm :"+PACKAGE_NAME);
+        Log.v("MUVISDK", "GetContentListAsynTask");
 
     }
 

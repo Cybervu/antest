@@ -47,8 +47,8 @@ public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Inp
 
         this.update_userProfile_input = update_userProfile_input;
         PACKAGE_NAME = context.getPackageName();
-        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
-        Log.v("SUBHA", "UpadteUserProfileAsynctask");
+        Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
+        Log.v("MUVISDK", "UpadteUserProfileAsynctask");
 
     }
 
@@ -72,7 +72,7 @@ public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Inp
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("SUBHA", "RES" + responseStr);
+                Log.v("MUVISDK", "RES" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 code = 0;
@@ -99,7 +99,7 @@ public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Inp
                     update_userProfile_output.setNick_name(myJson.optString("nick_name"));
                     update_userProfile_output.setProfile_image(myJson.optString("profile_image"));
 
-                    Log.v("SUBHA", "user_name====== " + myJson.optString("name"));
+                    Log.v("MUVISDK", "user_name====== " + myJson.optString("name"));
 
                 } catch (Exception e) {
                     code = 0;

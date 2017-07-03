@@ -46,8 +46,8 @@ public class GetMonetizationDetailsAsynctask extends AsyncTask<GetMonetizationDe
 
         this.getMonetizationDetailsInputModel = getMonetizationDetailsInputModel;
         PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
-        Log.v("SUBHA","transaction" + responseStr);
+        Log.v("MUVISDK", "pkgnm :"+PACKAGE_NAME);
+        Log.v("MUVISDK","transaction" + responseStr);
 
 
     }
@@ -83,7 +83,7 @@ public class GetMonetizationDetailsAsynctask extends AsyncTask<GetMonetizationDe
                 message = "Error";
             }
 
-            Log.v("SUBHA","response = "+ responseStr);
+            Log.v("MUVISDK","response = "+ responseStr);
             JSONObject myJson =null;
             if(responseStr!=null){
                 myJson = new JSONObject(responseStr);

@@ -47,8 +47,8 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
 
         this.registration_input = registration_input;
         PACKAGE_NAME = context.getPackageName();
-        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
-        Log.v("SUBHA", "ResistrationAsynTask");
+        Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
+        Log.v("MUVISDK", "ResistrationAsynTask");
 
     }
 

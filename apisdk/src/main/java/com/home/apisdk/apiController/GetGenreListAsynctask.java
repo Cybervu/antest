@@ -47,8 +47,8 @@ public class GetGenreListAsynctask extends AsyncTask<GenreListInput,Void ,Void >
 
         this.genreListInput = genreListInput;
         PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
-        Log.v("SUBHA","GetGenreListAsynctask");
+        Log.v("MUVISDK", "pkgnm :"+PACKAGE_NAME);
+        Log.v("MUVISDK","GetGenreListAsynctask");
 
     }
 
@@ -66,7 +66,7 @@ public class GetGenreListAsynctask extends AsyncTask<GenreListInput,Void ,Void >
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("SUBHA", "RES" + responseStr);
+                Log.v("MUVISDK", "RES" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 code = 0;
@@ -93,7 +93,7 @@ public class GetGenreListAsynctask extends AsyncTask<GenreListInput,Void ,Void >
                             GenreListOutput content = new GenreListOutput();
                             content.setGenre_name(jsonMainNode.get(i).toString());
 
-                            Log.v("SUBHA", "setGenre_name====== " +jsonMainNode.get(i).toString());
+                            Log.v("MUVISDK", "setGenre_name====== " +jsonMainNode.get(i).toString());
 
                             genreListOutput.add(content);
                         } catch (Exception e) {

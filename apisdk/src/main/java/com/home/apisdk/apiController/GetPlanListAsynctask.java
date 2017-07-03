@@ -48,15 +48,15 @@ public class GetPlanListAsynctask extends AsyncTask<SubscriptionPlanInputModel, 
 
         this.planListInput = planListInput;
         PACKAGE_NAME = context.getPackageName();
-        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
-        Log.v("SUBHA", "getPlanListAsynctask");
-        Log.v("SUBHA", "authToken = " + this.planListInput.getAuthToken());
+        Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
+        Log.v("MUVISDK", "getPlanListAsynctask");
+        Log.v("MUVISDK", "authToken = " + this.planListInput.getAuthToken());
     }
 
     @Override
     protected Void doInBackground(SubscriptionPlanInputModel... params) {
 
-        Log.v("SUBHA", "doInbkg....");
+        Log.v("MUVISDK", "doInbkg....");
         try {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getSubscriptionPlanLists());
@@ -65,12 +65,12 @@ public class GetPlanListAsynctask extends AsyncTask<SubscriptionPlanInputModel, 
             httppost.addHeader("authToken", this.planListInput.getAuthToken());
             httppost.addHeader("lang_code", this.planListInput.getLang());
 
-            Log.v("SUBHA", "authToken = " + this.planListInput.getAuthToken());
+            Log.v("MUVISDK", "authToken = " + this.planListInput.getAuthToken());
             // Execute HTTP Post Request
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("SUBHA", "RES" + responseStr);
+                Log.v("MUVISDK", "RES" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 code = 0;

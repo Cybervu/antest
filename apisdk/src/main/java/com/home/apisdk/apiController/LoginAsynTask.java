@@ -47,9 +47,9 @@ public class LoginAsynTask extends AsyncTask<Login_input, Void, Void> {
         this.context = context;
 
         this.login_input = login_input;
-        Log.v("SUBHA", "LoginAsynTask");
+        Log.v("MUVISDK", "LoginAsynTask");
         PACKAGE_NAME = context.getPackageName();
-        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
+        Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
 
     }
 

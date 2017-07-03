@@ -68,14 +68,14 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
                 conn.setRequestProperty("Accept", "application/json");
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
-                Log.v("SUBHA", "this.validateUserInput.getUserId()" + this.validateUserInput.getUserId());
-                Log.v("SUBHA","this.validateUserInput.getUserId()"+this.validateUserInput.getMuviUniqueId());
-                Log.v("SUBHA","this.validateUserInput.getUserId()"+this.validateUserInput.getAuthToken());
+                Log.v("MUVISDK", "this.validateUserInput.getUserId()" + this.validateUserInput.getUserId());
+                Log.v("MUVISDK","this.validateUserInput.getUserId()"+this.validateUserInput.getMuviUniqueId());
+                Log.v("MUVISDK","this.validateUserInput.getUserId()"+this.validateUserInput.getAuthToken());
 
-                Log.v("SUBHA","this.validateUserInput.getUserId()"+this.validateUserInput.getEpisodeStreamUniqueId());
-                Log.v("SUBHA","this.validateUserInput.getUserId()"+this.validateUserInput.getSeasonId());
-                Log.v("SUBHA","this.validateUserInput.getUserId()"+this.validateUserInput.getLanguageCode());
-                Log.v("SUBHA","this.validateUserInput.getUserId()"+this.validateUserInput.getPurchaseType());
+                Log.v("MUVISDK","this.validateUserInput.getUserId()"+this.validateUserInput.getEpisodeStreamUniqueId());
+                Log.v("MUVISDK","this.validateUserInput.getUserId()"+this.validateUserInput.getSeasonId());
+                Log.v("MUVISDK","this.validateUserInput.getUserId()"+this.validateUserInput.getLanguageCode());
+                Log.v("MUVISDK","this.validateUserInput.getUserId()"+this.validateUserInput.getPurchaseType());
 
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("authToken", this.validateUserInput.getAuthToken())
@@ -87,9 +87,9 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
                         .appendQueryParameter("purchase_type", this.validateUserInput.getPurchaseType());
                 String query = builder.build().getEncodedQuery();
 
-                Log.v("SUBHA", "authToken" +this.validateUserInput.getAuthToken());
-                Log.v("SUBHA", "user_id" +this.validateUserInput.getUserId());
-                Log.v("SUBHA", "movie_id" +this.validateUserInput.getMuviUniqueId());
+                Log.v("MUVISDK", "authToken" +this.validateUserInput.getAuthToken());
+                Log.v("MUVISDK", "user_id" +this.validateUserInput.getUserId());
+                Log.v("MUVISDK", "movie_id" +this.validateUserInput.getMuviUniqueId());
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
@@ -114,7 +114,7 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
                         while ((inputLine = in.readLine()) != null) {
                             System.out.println(inputLine);
                             responseStr = inputLine;
-                            Log.v("SUBHA", "responseStr" +responseStr);
+                            Log.v("MUVISDK", "responseStr" +responseStr);
 
                         }
                         in.close();
@@ -131,7 +131,7 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
                     while ((inputLine = in.readLine()) != null) {
                         System.out.println(inputLine);
                         responseStr = inputLine;
-                        Log.v("SUBHA", "responseStr" +responseStr);
+                        Log.v("MUVISDK", "responseStr" +responseStr);
 
                     }
                     in.close();
@@ -143,14 +143,14 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
 
                 status = 0;
                 message = "Error";
-                Log.v("SUBHA", "ConnectTimeoutException" +e);
+                Log.v("MUVISDK", "ConnectTimeoutException" +e);
 
 
 
             }catch (IOException e) {
                 status = 0;
                 message = "Error";
-                Log.v("SUBHA", "IOException" +e);
+                Log.v("MUVISDK", "IOException" +e);
 
             }
 
@@ -182,7 +182,7 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
                 message = "Error";
             }
         } catch (final JSONException e1) {
-            Log.v("SUBHA", "JSONException" +e1);
+            Log.v("MUVISDK", "JSONException" +e1);
 
             responseStr = "0";
             status = 0;
@@ -190,7 +190,7 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
 
         catch (Exception e)
         {
-            Log.v("SUBHA", "Exception" +e);
+            Log.v("MUVISDK", "Exception" +e);
 
             responseStr = "0";
             status = 0;

@@ -50,7 +50,7 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
 
         this.search_data_input = search_data_input;
         PACKAGE_NAME = context.getPackageName();
-        Log.v("MUVI", "pkgnm :" + PACKAGE_NAME);
+        Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
     }
    /* public SearchDataAsynTask(Search_Data_input search_data_input,SearchData listener) {
         this.listener = listener;
@@ -80,7 +80,7 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("MUVI", "RES" + responseStr);
+                Log.v("MUVISDK", "RES" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 status = 0;

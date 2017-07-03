@@ -54,8 +54,8 @@ public class HomePageAsynTask extends AsyncTask<HomePageInputModel, Void, Void> 
 
         this.homePageInputModel = homePageInputModel;
         PACKAGE_NAME = context.getPackageName();
-        Log.v("SUBHA","getPlanListAsynctask");
-        Log.v("SUBHA","authToken = "+ this.homePageInputModel.getAuthToken());
+        Log.v("MUVISDK","getPlanListAsynctask");
+        Log.v("MUVISDK","authToken = "+ this.homePageInputModel.getAuthToken());
 
 
     }
@@ -69,7 +69,7 @@ public class HomePageAsynTask extends AsyncTask<HomePageInputModel, Void, Void> 
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader("authToken", this.homePageInputModel.getAuthToken());
 
-            Log.v("SUBHA","authToken = "+ this.homePageInputModel.getAuthToken());
+            Log.v("MUVISDK","authToken = "+ this.homePageInputModel.getAuthToken());
 
             // Execute HTTP Post Request
             try {
@@ -88,7 +88,7 @@ public class HomePageAsynTask extends AsyncTask<HomePageInputModel, Void, Void> 
                 message = "Error";
             }
 
-            Log.v("SUBHA","response = "+ responseStr);
+            Log.v("MUVISDK","response = "+ responseStr);
             JSONObject myJson = null;
             if (responseStr != null) {
                 JSONObject bannerJson;
@@ -166,7 +166,7 @@ public class HomePageAsynTask extends AsyncTask<HomePageInputModel, Void, Void> 
 
                                 }
 
-                                Log.v("SUBHA","section_id = "+ sectionModel.getSection_id());
+                                Log.v("MUVISDK","section_id = "+ sectionModel.getSection_id());
 
                                 homePageSectionModelArrayList.add(sectionModel);
                             }
@@ -177,7 +177,7 @@ public class HomePageAsynTask extends AsyncTask<HomePageInputModel, Void, Void> 
                             }
                         }
 
-                          Log.v("SUBHA","response123 = "+ responseStr);
+                          Log.v("MUVISDK","response123 = "+ responseStr);
 
                     }
 

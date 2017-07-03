@@ -46,9 +46,9 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
         this.context = context;
 
         this.socialAuthInputModel = socialAuthInputModel;
-        Log.v("SUBHA", "LoginAsynTask");
+        Log.v("MUVISDK", "LoginAsynTask");
         PACKAGE_NAME = context.getPackageName();
-        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
+        Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
 
     }
 
@@ -78,13 +78,13 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
 
                 status = 0;
                 message = "Error";
-                Log.v("SUBHA", "ConnectTimeoutException" + e.toString());
+                Log.v("MUVISDK", "ConnectTimeoutException" + e.toString());
 
 
             } catch (IOException e) {
                 status = 0;
                 message = "Error";
-                Log.v("SUBHA", "IOException" + e.toString());
+                Log.v("MUVISDK", "IOException" + e.toString());
 
             }
 
@@ -165,7 +165,7 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
             }
         } catch (final JSONException e1) {
 
-            Log.v("SUBHA", "IOException" + e1.toString());
+            Log.v("MUVISDK", "IOException" + e1.toString());
 
             responseStr = "0";
             status = 0;

@@ -49,9 +49,9 @@ public class GetVideoLogsAsynTask extends AsyncTask<VideoLogsInputModel, Void, V
         this.context = context;
 
         this.videoLogsInputModel = videoLogsInputModel;
-        Log.v("SUBHA", "LoginAsynTask");
+        Log.v("MUVISDK", "LoginAsynTask");
         PACKAGE_NAME = context.getPackageName();
-        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
+        Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
 
     }
 
@@ -100,7 +100,7 @@ public class GetVideoLogsAsynTask extends AsyncTask<VideoLogsInputModel, Void, V
                 while ((inputLine = in.readLine()) != null) {
                     System.out.println(inputLine);
                     responseStr = inputLine;
-                    Log.v("SUBHA", "responseStr" + responseStr);
+                    Log.v("MUVISDK", "responseStr" + responseStr);
 
                 }
                 in.close();

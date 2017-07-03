@@ -48,9 +48,9 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
         this.listener = listener;
         this.context=context;
 
-        Log.v("SUBHA", "ForgotpassAsynTask");
+        Log.v("MUVISDK", "ForgotpassAsynTask");
         PACKAGE_NAME=context.getPackageName();
-        Log.v("SUBHA", "pkgnm :"+PACKAGE_NAME);
+        Log.v("MUVISDK", "pkgnm :"+PACKAGE_NAME);
     }
 
     @Override
@@ -65,9 +65,9 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
             httppost.addHeader("email", this.forgotpassword_input.getEmail());
             httppost.addHeader("lang_code",this.forgotpassword_input.getLang_code());
 
-            Log.v("SUBHA", "responseStr"+this.forgotpassword_input.getAuthToken());
-            Log.v("SUBHA", "responseStr"+this.forgotpassword_input.getEmail());
-            Log.v("SUBHA", "responseStr"+this.forgotpassword_input.getLang_code());
+            Log.v("MUVISDK", "responseStr"+this.forgotpassword_input.getAuthToken());
+            Log.v("MUVISDK", "responseStr"+this.forgotpassword_input.getEmail());
+            Log.v("MUVISDK", "responseStr"+this.forgotpassword_input.getLang_code());
 
 
 
@@ -75,7 +75,7 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("SUBHA", "responseStr"+responseStr);
+                Log.v("MUVISDK", "responseStr"+responseStr);
 
 
             } catch (org.apache.http.conn.ConnectTimeoutException e){

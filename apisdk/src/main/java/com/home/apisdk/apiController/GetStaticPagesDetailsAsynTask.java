@@ -46,8 +46,8 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
 
         this.getStaticPagesDeatilsModelInput = getStaticPagesDeatilsModelInput;
         PACKAGE_NAME = context.getPackageName();
-        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
-        Log.v("SUBHA", "GetUserProfileAsynctask");
+        Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
+        Log.v("MUVISDK", "GetUserProfileAsynctask");
 
     }
 
@@ -67,7 +67,7 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("SUBHA", "RES" + responseStr);
+                Log.v("MUVISDK", "RES" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 code = 0;
@@ -89,11 +89,11 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
 
             if (code == 200) {
 
-                Log.v("SUBHA", "code = " + status);
+                Log.v("MUVISDK", "code = " + status);
                 JSONObject mainJson = myJson.getJSONObject("page_details");
                 getStaticPageDetailsModelOutput = new GetStaticPageDetailsModelOutput();
                 if ((mainJson.has("content")) && mainJson.optString("content").trim() != null && !mainJson.optString("content").trim().isEmpty() && !mainJson.optString("content").trim().equals("null") && !mainJson.optString("content").trim().matches("")) {
-                    Log.v("SUBHA", "mainJson.has(\"content\") = " + mainJson.optString("content"));
+                    Log.v("MUVISDK", "mainJson.has(\"content\") = " + mainJson.optString("content"));
 
                     getStaticPageDetailsModelOutput.setContent(mainJson.optString("content"));
 
@@ -111,7 +111,7 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
 
             }
 
-            Log.v("SUBHA", "content = " + getStaticPageDetailsModelOutput.getContent());
+            Log.v("MUVISDK", "content = " + getStaticPageDetailsModelOutput.getContent());
         } catch (Exception e) {
             code = 0;
             message = "";

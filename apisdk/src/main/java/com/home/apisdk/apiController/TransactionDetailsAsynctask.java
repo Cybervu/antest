@@ -47,8 +47,8 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
 
         this.transactionInputModel = transactionInputModel;
         PACKAGE_NAME = context.getPackageName();
-        Log.v("SUBHA", "pkgnm :" + PACKAGE_NAME);
-        Log.v("SUBHA", "transaction");
+        Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
+        Log.v("MUVISDK", "transaction");
 
 
     }
