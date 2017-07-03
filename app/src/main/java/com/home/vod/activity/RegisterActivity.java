@@ -726,7 +726,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                     preferenceManager.setDispNameToPref(registration_output.getDisplay_name());
                     preferenceManager.setLoginProfImgoPref(registration_output.getProfile_image());
                     preferenceManager.setIsSubscribedToPref(isSubscribedStr);
-                    preferenceManager.setLoginHistIdPref(loginHistoryIdStr);
+                    preferenceManager.setLoginHistIdPref(preferenceManager.getLoginHistIdFromPref());
 
                     Date todayDate = new Date();
                     String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
@@ -3724,15 +3724,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
         }
         if (code > 0) {
             if (code == 200) {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.clear();
-                editor.commit();
-                SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-                if (loginPref != null) {
-                    SharedPreferences.Editor countryEditor = loginPref.edit();
-                    countryEditor.clear();
-                    countryEditor.commit();
-                }
+               preferenceManager.clearLoginPref();
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(UniversalErrorMessage);
