@@ -20,6 +20,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
+import com.home.apisdk.apiController.AboutUsAsync;
+import com.home.apisdk.apiModel.AboutUsInput;
 import com.home.vod.R;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -38,14 +40,14 @@ import java.io.IOException;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AboutUs extends Fragment {
+public class AboutUs extends Fragment implements AboutUsAsync.AboutUs {
     String about;
     // TextView textView;
     Context context;
     ProgressBar progresBar;
     WebView webView;
 
-    AsyncAboutUS asyncAboutUS;
+    AboutUsAsync asyncAboutUS;
 
 
     public AboutUs() {
@@ -64,7 +66,12 @@ public class AboutUs extends Fragment {
         context = getActivity();
         progresBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         webView = (WebView) view.findViewById(R.id.aboutUsWebView);
-        asyncAboutUS = new AsyncAboutUS();
+        AboutUsInput aboutUsInput=new AboutUsInput();
+        aboutUsInput.setAuthToken(Util.authTokenStr);
+        aboutUsInput.setLang_code(Util.getTextofLanguage(getActivity(),Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        String strtext = getArguments().getString("item");
+        aboutUsInput.setPermalink(strtext);
+        asyncAboutUS = new AboutUsAsync(aboutUsInput,this,context);
         asyncAboutUS.execute();
         TextView categoryTitle = (TextView) view.findViewById(R.id.categoryTitle);
         Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
@@ -111,84 +118,108 @@ public class AboutUs extends Fragment {
         menu.clear();
     }
 
-    public class AsyncAboutUS extends AsyncTask<Void, Void, Void> {
-        String responseStr;
+    @Override
+    public void onAboutUsPreExecuteStarted() {
 
-        private ProgressBarHandler progressBarHandler = null;
+    }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            progresBar.setVisibility(View.GONE);
-            String bodyData = about;
+    @Override
+    public void onAboutUsPostExecuteCompleted(String about) {
+        progresBar.setVisibility(View.GONE);
+        String bodyData = about;
 
           /*  textView.setMovementMethod(LinkMovementMethod.getInstance());
             textView.setText(getStyledTextFromHtml(bodyData));*/
 
-            String text = "<html><head>"
-                    + "<style type=\"text/css\" >body{color:#333; background-color: #fff;}"
-                    + "</style></head>"
-                    + "<body style >"
-                    + about
-                    + "</body></html>";
+        String text = "<html><head>"
+                + "<style type=\"text/css\" >body{color:#333; background-color: #fff;}"
+                + "</style></head>"
+                + "<body style >"
+                + about
+                + "</body></html>";
 
-            webView.loadData(text, "text/html", "utf-8");
-            webView.getSettings().setJavaScriptEnabled(true);
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-//            String urlRouteList = "https://sonydadc.muvi.com/rest" + "/getStaticPagedetails";
-            String urlRouteList = Util.rootUrl().trim() + Util.AboutUs.trim();
-
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    progresBar.setVisibility(View.VISIBLE);
-                }
-
-            });
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr);
-                String strtext = getArguments().getString("item");
-                httppost.addHeader("permalink",strtext.trim());
-                httppost.addHeader("lang_code",Util.getTextofLanguage(getActivity(),Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-
-                }
-
-            } catch (IOException e) {
-
-                e.printStackTrace();
-            }
-
-            JSONObject myJson = null;
-            if (responseStr != null) {
-                try {
-                    myJson = new JSONObject(responseStr);
-                } catch (JSONException e) {
-
-                    e.printStackTrace();
-                }
-            }
-            try {
-                JSONObject jsonMainNode = myJson.getJSONObject("page_details");
-                about = jsonMainNode.optString("content").trim();
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
+        webView.loadData(text, "text/html", "utf-8");
+        webView.getSettings().setJavaScriptEnabled(true);
     }
+
+//    public class AsyncAboutUS extends AsyncTask<Void, Void, Void> {
+//        String responseStr;
+//
+//        private ProgressBarHandler progressBarHandler = null;
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            progresBar.setVisibility(View.GONE);
+//            String bodyData = about;
+//
+//          /*  textView.setMovementMethod(LinkMovementMethod.getInstance());
+//            textView.setText(getStyledTextFromHtml(bodyData));*/
+//
+//            String text = "<html><head>"
+//                    + "<style type=\"text/css\" >body{color:#333; background-color: #fff;}"
+//                    + "</style></head>"
+//                    + "<body style >"
+//                    + about
+//                    + "</body></html>";
+//
+//            webView.loadData(text, "text/html", "utf-8");
+//            webView.getSettings().setJavaScriptEnabled(true);
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+////            String urlRouteList = "https://sonydadc.muvi.com/rest" + "/getStaticPagedetails";
+//            String urlRouteList = Util.rootUrl().trim() + Util.AboutUs.trim();
+//
+//            getActivity().runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    progresBar.setVisibility(View.VISIBLE);
+//                }
+//
+//            });
+//
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr);
+//                String strtext = getArguments().getString("item");
+//                httppost.addHeader("permalink",strtext.trim());
+//                httppost.addHeader("lang_code",Util.getTextofLanguage(getActivity(),Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//
+//                }
+//
+//            } catch (IOException e) {
+//
+//                e.printStackTrace();
+//            }
+//
+//            JSONObject myJson = null;
+//            if (responseStr != null) {
+//                try {
+//                    myJson = new JSONObject(responseStr);
+//                } catch (JSONException e) {
+//
+//                    e.printStackTrace();
+//                }
+//            }
+//            try {
+//                JSONObject jsonMainNode = myJson.getJSONObject("page_details");
+//                about = jsonMainNode.optString("content").trim();
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//    }
    /* public static CharSequence getStyledTextFromHtml(String source) {
         return android.text.Html.fromHtml(replaceNewlinesWithBreaks(source));
     }

@@ -48,8 +48,29 @@ public class APIUrlConstant {
     public static  String AUTH_USER_PAYMENT_INFO_URL = "authUserPaymentInfo";
     public static  String GET_CARD_LIST_FOR_PPV_URL = "getCardsListForPPV";
     public static  String LanguageTranslation= "textTranslation";
+    public static final String CheckDevice = "CheckDevice";
+    public static final String LogoutAll = "LogoutAll";
+    public static final String fbUserExistsUrl = "getFbUserStatus";
+    public static final String AboutUs = "getStaticPagedetails";
+
+    public static String getAboutUs() {
+        return BASE_URl+AboutUs;
+    }
 
 
+    public static String getFbUserExistsUrl() {
+        return BASE_URl+fbUserExistsUrl;
+    }
+
+
+
+    public static String getLogoutAll() {
+        return BASE_URl+LogoutAll;
+    }
+
+    public static String getCheckDevice() {
+        return BASE_URl+CheckDevice;
+    }
 
     public static String getLanguageTranslation() {
         return BASE_URl+LanguageTranslation;

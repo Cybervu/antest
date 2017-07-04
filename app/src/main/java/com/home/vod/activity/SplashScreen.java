@@ -23,6 +23,7 @@ import com.home.apisdk.apiController.GetGenreListAsynctask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetPlanListAsynctask;
+import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.GetUserProfileAsynctask;
 import com.home.apisdk.apiController.IsRegistrationEnabledAsynTask;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
@@ -73,7 +74,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         GetPlanListAsynctask.GetStudioPlanLists,
         IsRegistrationEnabledAsynTask.IsRegistrationenabled,
         GetLanguageListAsynTask.GetLanguageList,
-        GetGenreListAsynctask.GenreList,GetUserProfileAsynctask.Get_UserProfile{
+        GetGenreListAsynctask.GenreList, GetUserProfileAsynctask.Get_UserProfile, GetTranslateLanguageAsync.GetTranslateLanguageInfoListner {
 
     String[] genreArrToSend;
     String[] genreValueArrayToSend;
@@ -152,26 +153,25 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         preferenceManager = PreferenceManager.getPreferenceManager(this);
 
 
-
         if (preferenceManager != null) {
             String countryCodeStr = preferenceManager.getCountryCodeFromPref();
 
             if (countryCodeStr == null) {
                 if (isNetwork == true) {
-                    GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this,this);
+                    GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
                     asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
                 } else {
                     noInternetLayout.setVisibility(View.VISIBLE);
                     geoBlockedLayout.setVisibility(View.GONE);
                 }
             } else {
-                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this,this);
+                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
                 asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
             }
         } else {
             if (isNetwork == true) {
 
-                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this,this);
+                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
                 asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
             } else {
@@ -212,12 +212,12 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         if (ipAddressStr.equals("")) {
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
-        } else{
+        } else {
             this.ipAddressStr = ipAddressStr;
-            CheckGeoBlockInputModel checkGeoBlockInputModel=new CheckGeoBlockInputModel();
+            CheckGeoBlockInputModel checkGeoBlockInputModel = new CheckGeoBlockInputModel();
             checkGeoBlockInputModel.setAuthToken(Util.authTokenStr);
             checkGeoBlockInputModel.setIp(ipAddressStr);
-            CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel,this,this);
+            CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel, this, this);
             asynGetCountry.executeOnExecutor(threadPoolExecutor);
         }
     }
@@ -236,10 +236,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         } else {
             if (status > 0 && status == 200) {
                 preferenceManager.setCountryCodeToPref(checkGeoBlockOutputModel.getCountrycode().trim());
-                SubscriptionPlanInputModel planListInput=new SubscriptionPlanInputModel();
+                SubscriptionPlanInputModel planListInput = new SubscriptionPlanInputModel();
                 planListInput.setAuthToken(Util.authTokenStr);
                 planListInput.setLang(Util.getTextofLanguage(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                GetPlanListAsynctask asynGetPlanid= new GetPlanListAsynctask(planListInput,SplashScreen.this,SplashScreen.this);
+                GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, SplashScreen.this, SplashScreen.this);
                 asynGetPlanid.executeOnExecutor(threadPoolExecutor);
 
             } else {
@@ -267,9 +267,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             }
         }
 
-        IsRegistrationEnabledInputModel isRegistrationEnabledInputModel=new IsRegistrationEnabledInputModel();
+        IsRegistrationEnabledInputModel isRegistrationEnabledInputModel = new IsRegistrationEnabledInputModel();
         isRegistrationEnabledInputModel.setAuthToken(Util.authTokenStr);
-        IsRegistrationEnabledAsynTask asynIsRegistrationEnabled=new IsRegistrationEnabledAsynTask(isRegistrationEnabledInputModel,this,this);
+        IsRegistrationEnabledAsynTask asynIsRegistrationEnabled = new IsRegistrationEnabledAsynTask(isRegistrationEnabledInputModel, this, this);
         asynIsRegistrationEnabled.executeOnExecutor(threadPoolExecutor);
     }
 
@@ -282,17 +282,16 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     public void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message) {
 
         Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_RESTRICT_DEVICE, isRegistrationEnabledOutputModel.getIsRestrictDevice());
-        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_ONE_STEP_REGISTRATION,""+isRegistrationEnabledOutputModel.getSignup_step());
-        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_MYLIBRARY, ""+isRegistrationEnabledOutputModel.getIsMylibrary());
+        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_ONE_STEP_REGISTRATION, "" + isRegistrationEnabledOutputModel.getSignup_step());
+        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_MYLIBRARY, "" + isRegistrationEnabledOutputModel.getIsMylibrary());
 
 
         preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
 
 
-
-        LanguageListInputModel languageListInputModel=new LanguageListInputModel();
+        LanguageListInputModel languageListInputModel = new LanguageListInputModel();
         languageListInputModel.setAuthToken(Util.authTokenStr);
-        GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel,this,this);
+        GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
         asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
 
     }
@@ -305,8 +304,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
 
-        this.default_Language=defaultLanguage;
-        for (int i = 0; i <languageListOutputArray.size(); i++) {
+        this.default_Language = defaultLanguage;
+        for (int i = 0; i < languageListOutputArray.size(); i++) {
 
             LanguageModel languageModel = new LanguageModel();
             languageModel.setLanguageId(languageListOutputArray.get(i).getLanguageCode());
@@ -321,8 +320,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             languageModels.add(languageModel);
         }
 
-        Util.languageModel=languageModels;
-
+        Util.languageModel = languageModels;
 
 
         if (languageModels.size() == 1) {
@@ -333,7 +331,11 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }
 
         //                  Call For Language Translation.
-        AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
+
+        LanguageListInputModel languageListInputModel = new LanguageListInputModel();
+        languageListInputModel.setAuthToken(Util.authTokenStr);
+        languageListInputModel.setLangCode(defaultLanguage);
+        GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel, this, this);
         asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
 
 
@@ -438,12 +440,12 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 Email_Id = preferenceManager.getEmailIdFromPref();
 
                 if (User_Id != null && Email_Id != null) {
-                    Get_UserProfile_Input get_userProfile_input=new Get_UserProfile_Input();
+                    Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
                     get_userProfile_input.setAuthToken(Util.authTokenStr);
                     get_userProfile_input.setEmail(get_userProfile_input.getEmail());
                     get_userProfile_input.setUser_id(get_userProfile_input.getEmail());
                     get_userProfile_input.setLang_code(get_userProfile_input.getLang_code());
-                    GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input,this,this);
+                    GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
                     asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
 
                 } else {
@@ -470,6 +472,214 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         Call_One_Step_Procedure();
     }
+
+    @Override
+    public void onGetTranslateLanguagePreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onGetTranslateLanguagePostExecuteCompleted(String jsonResponse, int status) {
+        if (status > 0 && status == 200) {
+
+            try {
+                JSONObject json = new JSONObject(jsonResponse);
+
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ALREADY_MEMBER, json.optString("already_member").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ACTIAVTE_PLAN_TITLE, json.optString("activate_plan_title").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_STATUS_ACTIVE, json.optString("transaction_status_active").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ADD_TO_FAV, json.optString("add_to_fav").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ADDED_TO_FAV, json.optString("added_to_fav").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ENTER_EMPTY_FIELD, json.optString("enter_register_fields_data").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ADVANCE_PURCHASE, json.optString("advance_purchase").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ALERT, json.optString("alert").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.EPISODE_TITLE, json.optString("episodes_title").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_ALPHA_A_Z, json.optString("sort_alpha_a_z").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_ALPHA_Z_A, json.optString("sort_alpha_z_a").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.AMOUNT, json.optString("amount").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.COUPON_CANCELLED, json.optString("coupon_cancelled").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BUTTON_APPLY, json.optString("btn_apply").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIGN_OUT_WARNING, json.optString("sign_out_warning").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DISCOUNT_ON_COUPON, json.optString("discount_on_coupon").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.MY_LIBRARY, json.optString("my_library").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CREDIT_CARD_CVV_HINT, json.optString("credit_card_cvv_hint").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CAST, json.optString("cast").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CAST_CREW_BUTTON_TITLE, json.optString("cast_crew_button_title").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CENSOR_RATING, json.optString("censor_rating").trim());
+                if (json.optString("change_password").trim() == null || json.optString("change_password").trim().equals("")) {
+                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CHANGE_PASSWORD, Util.DEFAULT_CHANGE_PASSWORD);
+                } else {
+                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CHANGE_PASSWORD, json.optString("change_password").trim());
+                }
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CANCEL_BUTTON, json.optString("btn_cancel").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.RESUME_MESSAGE, json.optString("resume_watching").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CONTINUE_BUTTON, json.optString("continue").trim());
+
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CONFIRM_PASSWORD, json.optString("confirm_password").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CREDIT_CARD_DETAILS, json.optString("credit_card_detail").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DIRECTOR, json.optString("director").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DOWNLOAD_BUTTON_TITLE, json.optString("download_button_title").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DESCRIPTION, json.optString("description").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.HOME, json.optString("home").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.EMAIL_EXISTS, json.optString("email_exists").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.EMAIL_DOESNOT_EXISTS, json.optString("email_does_not_exist").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.EMAIL_PASSWORD_INVALID, json.optString("email_password_invalid").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.COUPON_CODE_HINT, json.optString("coupon_code_hint").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SEARCH_ALERT, json.optString("search_alert").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CREDIT_CARD_NUMBER_HINT, json.optString("credit_card_number_hint").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TEXT_EMIAL, json.optString("text_email").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NAME_HINT, json.optString("name_hint").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CREDIT_CARD_NAME_HINT, json.optString("credit_card_name_hint").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TEXT_PASSWORD, json.optString("text_password").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ERROR_IN_PAYMENT_VALIDATION, json.optString("error_in_payment_validation").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ERROR_IN_REGISTRATION, json.optString("error_in_registration").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_STATUS_EXPIRED, json.optString("transaction_status_expired").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DETAILS_NOT_FOUND_ALERT, json.optString("details_not_found_alert").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FAILURE, json.optString("failure").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FILTER_BY, json.optString("filter_by").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FORGOT_PASSWORD, json.optString("forgot_password").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.GENRE, json.optString("genre").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.AGREE_TERMS, json.optString("agree_terms").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.INVALID_COUPON, json.optString("invalid_coupon").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.INVOICE, json.optString("invoice").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LANGUAGE_POPUP_LANGUAGE, json.optString("language_popup_language").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_LAST_UPLOADED, json.optString("sort_last_uploaded").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LANGUAGE_POPUP_LOGIN, json.optString("language_popup_login").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LOGIN, json.optString("login").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LOGOUT, json.optString("logout").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LOGOUT_SUCCESS, json.optString("logout_success").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.MY_FAVOURITE, json.optString("my_favourite").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NEW_PASSWORD, json.optString("new_password").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NEW_HERE_TITLE, json.optString("new_here_title").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO, json.optString("no").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_DATA, json.optString("no_data").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_INTERNET_CONNECTION, json.optString("no_internet_connection").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ENTER_REGISTER_FIELDS_DATA, json.optString("enter_register_fields_data").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_INTERNET_NO_DATA, json.optString("no_internet_no_data").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_DETAILS_AVAILABLE, json.optString("no_details_available").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BUTTON_OK, json.optString("btn_ok").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.OLD_PASSWORD, json.optString("old_password").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.OOPS_INVALID_EMAIL, json.optString("oops_invalid_email").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ORDER, json.optString("order").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_DETAILS_ORDER_ID, json.optString("transaction_detail_order_id").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PASSWORD_RESET_LINK, json.optString("password_reset_link").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PASSWORDS_DO_NOT_MATCH, json.optString("password_donot_match").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PAY_BY_PAYPAL, json.optString("pay_by_paypal").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BTN_PAYNOW, json.optString("btn_paynow").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PAY_WITH_CREDIT_CARD, json.optString("pay_with_credit_card").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PAYMENT_OPTIONS_TITLE, json.optString("payment_options_title").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PLAN_NAME, json.optString("plan_name").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, json.optString("activate_subscription_watch_video").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.COUPON_ALERT, json.optString("coupon_alert").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.VALID_CONFIRM_PASSWORD, json.optString("valid_confirm_password").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PROFILE, json.optString("profile").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PROFILE_UPDATED, json.optString("profile_updated").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PURCHASE, json.optString("purchase").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_DETAIL_PURCHASE_DATE, json.optString("transaction_detail_purchase_date").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PURCHASE_HISTORY, json.optString("purchase_history").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BTN_REGISTER, json.optString("btn_register").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_RELEASE_DATE, json.optString("sort_release_date").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SAVE_THIS_CARD, json.optString("save_this_card").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TEXT_SEARCH_PLACEHOLDER, json.optString("text_search_placeholder").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SEASON, json.optString("season").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECT_OPTION_TITLE, json.optString("select_option_title").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECT_PLAN, json.optString("select_plan").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIGN_UP_TITLE, json.optString("signup_title").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SLOW_INTERNET_CONNECTION, json.optString("slow_internet_connection").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SLOW_ISSUE_INTERNET_CONNECTION, json.optString("slow_issue_internet_connection").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORRY, json.optString("sorry").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.GEO_BLOCKED_ALERT, json.optString("geo_blocked_alert").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIGN_OUT_ERROR, json.optString("sign_out_error").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ALREADY_PURCHASE_THIS_CONTENT, json.optString("already_purchase_this_content").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CROSSED_MAXIMUM_LIMIT, json.optString("crossed_max_limit_of_watching").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_BY, json.optString("sort_by").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.STORY_TITLE, json.optString("story_title").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BTN_SUBMIT, json.optString("btn_submit").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_STATUS, json.optString("transaction_success").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.VIDEO_ISSUE, json.optString("video_issue").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_CONTENT, json.optString("no_content").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_VIDEO_AVAILABLE, json.optString("no_video_available").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, json.optString("content_not_available_in_your_country").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_DATE, json.optString("transaction_date").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANASCTION_DETAIL, json.optString("transaction_detail").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_STATUS, json.optString("transaction_status").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION, json.optString("transaction").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRY_AGAIN, json.optString("try_again").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.UNPAID, json.optString("unpaid").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.USE_NEW_CARD, json.optString("use_new_card").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.VIEW_MORE, json.optString("view_more").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.VIEW_TRAILER, json.optString("view_trailer").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.WATCH, json.optString("watch").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.WATCH_NOW, json.optString("watch_now").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIGN_OUT_ALERT, json.optString("sign_out_alert").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.UPDATE_PROFILE_ALERT, json.optString("update_profile_alert").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.YES, json.optString("yes").trim());
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PURCHASE_SUCCESS_ALERT, json.optString("purchase_success_alert").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CARD_WILL_CHARGE, json.optString("card_will_charge").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SEARCH_HINT, json.optString("search_hint").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TERMS, json.optString("terms").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.UPDATE_PROFILE, json.optString("btn_update_profile").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.APP_ON, json.optString("app_on").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.APP_SELECT_LANGUAGE, json.optString("app_select_language").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FILL_FORM_BELOW, json.optString("Fill_form_below").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.MESSAGE, json.optString("text_message").trim());
+
+
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, json.optString("simultaneous_logout_message").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LOGIN_STATUS_MESSAGE, json.optString("login_status_message").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FILL_FORM_BELOW, json.optString("fill_form_below").trim());
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.MESSAGE, json.optString("text_message").trim());
+
+
+                Util.getTextofLanguage(SplashScreen.this, Util.PURCHASE, Util.DEFAULT_PURCHASE);
+                Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, default_Language);
+
+                //Call For Language PopUp Dialog
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                noInternetLayout.setVisibility(View.GONE);
+            }
+            // Call For Other Methods.
+
+
+        } else {
+            noInternetLayout.setVisibility(View.GONE);
+        }
+
+        GenreListInput genreListInput = new GenreListInput();
+        genreListInput.setAuthToken(Util.authTokenStr);
+
+        GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput, SplashScreen.this, SplashScreen.this);
+        asynGetGenreList.executeOnExecutor(threadPoolExecutor);
+    }
+
+
     /*//Verify the IP
     private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
         String responseStr;
@@ -574,7 +784,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }
     }
 */
-    //Verify the IP
+//Verify the IP
 //    private class AsynGetCountry extends AsyncTask<Void, Void, Void> {
 //        String responseStr;
 //        String countryCode;
@@ -779,7 +989,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //        }
 //    }
 
-    //MUVIshree genre
+//MUVIshree genre
 
 //    private class AsynGetGenreList extends AsyncTask<Void, Void, Void> {
 //        String responseStr;
@@ -1305,262 +1515,263 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //    }
 
 
-    private class  AsynGetTransalatedLanguage extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int status;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = Util.rootUrl().trim() + Util.LanguageTranslation.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr);
-                httppost.addHeader("lang_code", default_Language);
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = (EntityUtils.toString(response.getEntity())).trim();
-                } catch (Exception e) {
-                }
-                if (responseStr != null) {
-                    JSONObject json = new JSONObject(responseStr);
-                    try {
-                        status = Integer.parseInt(json.optString("code"));
-                    } catch (Exception e) {
-                        status = 0;
-                    }
-                }
-
-            } catch (Exception e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        noInternetLayout.setVisibility(View.GONE);
-
-                    }
-                });
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-
-            if (responseStr == null) {
-                noInternetLayout.setVisibility(View.GONE);
-            } else {
-                if (status > 0 && status == 200) {
-
-                    try {
-                        JSONObject parent_json = new JSONObject(responseStr);
-                        JSONObject json = parent_json.getJSONObject("translation");
-
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ALREADY_MEMBER, json.optString("already_member").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ACTIAVTE_PLAN_TITLE, json.optString("activate_plan_title").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_STATUS_ACTIVE, json.optString("transaction_status_active").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ADD_TO_FAV, json.optString("add_to_fav").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ADDED_TO_FAV, json.optString("added_to_fav").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ENTER_EMPTY_FIELD, json.optString("enter_register_fields_data").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ADVANCE_PURCHASE, json.optString("advance_purchase").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ALERT, json.optString("alert").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.EPISODE_TITLE, json.optString("episodes_title").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_ALPHA_A_Z, json.optString("sort_alpha_a_z").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_ALPHA_Z_A, json.optString("sort_alpha_z_a").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.AMOUNT, json.optString("amount").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.COUPON_CANCELLED, json.optString("coupon_cancelled").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BUTTON_APPLY, json.optString("btn_apply").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIGN_OUT_WARNING, json.optString("sign_out_warning").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DISCOUNT_ON_COUPON, json.optString("discount_on_coupon").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.MY_LIBRARY, json.optString("my_library").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CREDIT_CARD_CVV_HINT, json.optString("credit_card_cvv_hint").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CAST, json.optString("cast").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CAST_CREW_BUTTON_TITLE, json.optString("cast_crew_button_title").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CENSOR_RATING, json.optString("censor_rating").trim());
-                        if (json.optString("change_password").trim() == null || json.optString("change_password").trim().equals("")) {
-                            Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CHANGE_PASSWORD, Util.DEFAULT_CHANGE_PASSWORD);
-                        } else {
-                            Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CHANGE_PASSWORD, json.optString("change_password").trim());
-                        }
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CANCEL_BUTTON, json.optString("btn_cancel").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.RESUME_MESSAGE, json.optString("resume_watching").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CONTINUE_BUTTON, json.optString("continue").trim());
-
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CONFIRM_PASSWORD, json.optString("confirm_password").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CREDIT_CARD_DETAILS, json.optString("credit_card_detail").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DIRECTOR, json.optString("director").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DOWNLOAD_BUTTON_TITLE, json.optString("download_button_title").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DESCRIPTION, json.optString("description").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.HOME, json.optString("home").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.EMAIL_EXISTS, json.optString("email_exists").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.EMAIL_DOESNOT_EXISTS, json.optString("email_does_not_exist").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.EMAIL_PASSWORD_INVALID, json.optString("email_password_invalid").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.COUPON_CODE_HINT, json.optString("coupon_code_hint").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SEARCH_ALERT, json.optString("search_alert").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CREDIT_CARD_NUMBER_HINT, json.optString("credit_card_number_hint").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TEXT_EMIAL, json.optString("text_email").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NAME_HINT, json.optString("name_hint").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CREDIT_CARD_NAME_HINT, json.optString("credit_card_name_hint").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TEXT_PASSWORD, json.optString("text_password").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ERROR_IN_PAYMENT_VALIDATION, json.optString("error_in_payment_validation").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ERROR_IN_REGISTRATION, json.optString("error_in_registration").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_STATUS_EXPIRED, json.optString("transaction_status_expired").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DETAILS_NOT_FOUND_ALERT, json.optString("details_not_found_alert").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FAILURE, json.optString("failure").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FILTER_BY, json.optString("filter_by").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FORGOT_PASSWORD, json.optString("forgot_password").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.GENRE, json.optString("genre").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.AGREE_TERMS, json.optString("agree_terms").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.INVALID_COUPON, json.optString("invalid_coupon").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.INVOICE, json.optString("invoice").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LANGUAGE_POPUP_LANGUAGE, json.optString("language_popup_language").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_LAST_UPLOADED, json.optString("sort_last_uploaded").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LANGUAGE_POPUP_LOGIN, json.optString("language_popup_login").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LOGIN, json.optString("login").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LOGOUT, json.optString("logout").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LOGOUT_SUCCESS, json.optString("logout_success").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.MY_FAVOURITE, json.optString("my_favourite").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NEW_PASSWORD, json.optString("new_password").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NEW_HERE_TITLE, json.optString("new_here_title").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO, json.optString("no").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_DATA, json.optString("no_data").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_INTERNET_CONNECTION, json.optString("no_internet_connection").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ENTER_REGISTER_FIELDS_DATA, json.optString("enter_register_fields_data").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_INTERNET_NO_DATA, json.optString("no_internet_no_data").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_DETAILS_AVAILABLE, json.optString("no_details_available").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BUTTON_OK, json.optString("btn_ok").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.OLD_PASSWORD, json.optString("old_password").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.OOPS_INVALID_EMAIL, json.optString("oops_invalid_email").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ORDER, json.optString("order").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_DETAILS_ORDER_ID, json.optString("transaction_detail_order_id").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PASSWORD_RESET_LINK, json.optString("password_reset_link").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PASSWORDS_DO_NOT_MATCH, json.optString("password_donot_match").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PAY_BY_PAYPAL, json.optString("pay_by_paypal").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BTN_PAYNOW, json.optString("btn_paynow").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PAY_WITH_CREDIT_CARD, json.optString("pay_with_credit_card").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PAYMENT_OPTIONS_TITLE, json.optString("payment_options_title").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PLAN_NAME, json.optString("plan_name").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, json.optString("activate_subscription_watch_video").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.COUPON_ALERT, json.optString("coupon_alert").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.VALID_CONFIRM_PASSWORD, json.optString("valid_confirm_password").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PROFILE, json.optString("profile").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PROFILE_UPDATED, json.optString("profile_updated").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PURCHASE, json.optString("purchase").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_DETAIL_PURCHASE_DATE, json.optString("transaction_detail_purchase_date").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PURCHASE_HISTORY, json.optString("purchase_history").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BTN_REGISTER, json.optString("btn_register").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_RELEASE_DATE, json.optString("sort_release_date").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SAVE_THIS_CARD, json.optString("save_this_card").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TEXT_SEARCH_PLACEHOLDER, json.optString("text_search_placeholder").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SEASON, json.optString("season").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECT_OPTION_TITLE, json.optString("select_option_title").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECT_PLAN, json.optString("select_plan").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIGN_UP_TITLE, json.optString("signup_title").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SLOW_INTERNET_CONNECTION, json.optString("slow_internet_connection").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SLOW_ISSUE_INTERNET_CONNECTION, json.optString("slow_issue_internet_connection").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORRY, json.optString("sorry").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.GEO_BLOCKED_ALERT, json.optString("geo_blocked_alert").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIGN_OUT_ERROR, json.optString("sign_out_error").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ALREADY_PURCHASE_THIS_CONTENT, json.optString("already_purchase_this_content").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CROSSED_MAXIMUM_LIMIT, json.optString("crossed_max_limit_of_watching").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_BY, json.optString("sort_by").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.STORY_TITLE, json.optString("story_title").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BTN_SUBMIT, json.optString("btn_submit").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_STATUS, json.optString("transaction_success").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.VIDEO_ISSUE, json.optString("video_issue").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_CONTENT, json.optString("no_content").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_VIDEO_AVAILABLE, json.optString("no_video_available").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, json.optString("content_not_available_in_your_country").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_DATE, json.optString("transaction_date").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANASCTION_DETAIL, json.optString("transaction_detail").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_STATUS, json.optString("transaction_status").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION, json.optString("transaction").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRY_AGAIN, json.optString("try_again").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.UNPAID, json.optString("unpaid").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.USE_NEW_CARD, json.optString("use_new_card").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.VIEW_MORE, json.optString("view_more").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.VIEW_TRAILER, json.optString("view_trailer").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.WATCH, json.optString("watch").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.WATCH_NOW, json.optString("watch_now").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIGN_OUT_ALERT, json.optString("sign_out_alert").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.UPDATE_PROFILE_ALERT, json.optString("update_profile_alert").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.YES, json.optString("yes").trim());
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PURCHASE_SUCCESS_ALERT, json.optString("purchase_success_alert").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CARD_WILL_CHARGE, json.optString("card_will_charge").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SEARCH_HINT, json.optString("search_hint").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TERMS, json.optString("terms").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.UPDATE_PROFILE, json.optString("btn_update_profile").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.APP_ON, json.optString("app_on").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.APP_SELECT_LANGUAGE, json.optString("app_select_language").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FILL_FORM_BELOW, json.optString("Fill_form_below").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.MESSAGE, json.optString("text_message").trim());
-
-
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, json.optString("simultaneous_logout_message").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LOGIN_STATUS_MESSAGE, json.optString("login_status_message").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FILL_FORM_BELOW, json.optString("fill_form_below").trim());
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.MESSAGE, json.optString("text_message").trim());
-
-
-                        Util.getTextofLanguage(SplashScreen.this, Util.PURCHASE, Util.DEFAULT_PURCHASE);
-                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, default_Language);
-
-                        //Call For Language PopUp Dialog
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        noInternetLayout.setVisibility(View.GONE);
-                    }
-                    // Call For Other Methods.
-
-
-                } else {
-                    noInternetLayout.setVisibility(View.GONE);
-                }
-            }
-            GenreListInput genreListInput=new GenreListInput();
-            genreListInput.setAuthToken(Util.authTokenStr);
-
-            GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput,SplashScreen.this,SplashScreen.this);
-            asynGetGenreList.executeOnExecutor(threadPoolExecutor);
-
-
-        }
-
-        protected void onPreExecute() {
-
-        }
-    }
+//private class AsynGetTransalatedLanguage extends AsyncTask<Void, Void, Void> {
+//    String responseStr;
+//    int status;
+//
+//    @Override
+//    protected Void doInBackground(Void... params) {
+//
+//        String urlRouteList = Util.rootUrl().trim() + Util.LanguageTranslation.trim();
+//        try {
+//            HttpClient httpclient = new DefaultHttpClient();
+//            HttpPost httppost = new HttpPost(urlRouteList);
+//            httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//            httppost.addHeader("authToken", Util.authTokenStr);
+//            httppost.addHeader("lang_code", default_Language);
+//
+//
+//            // Execute HTTP Post Request
+//            try {
+//                HttpResponse response = httpclient.execute(httppost);
+//                responseStr = (EntityUtils.toString(response.getEntity())).trim();
+//            } catch (Exception e) {
+//            }
+//            if (responseStr != null) {
+//                JSONObject json = new JSONObject(responseStr);
+//                try {
+//                    status = Integer.parseInt(json.optString("code"));
+//                } catch (Exception e) {
+//                    status = 0;
+//                }
+//            }
+//
+//        } catch (Exception e) {
+//            runOnUiThread(new Runnable() {
+//                public void run() {
+//                    noInternetLayout.setVisibility(View.GONE);
+//
+//                }
+//            });
+//        }
+//
+//        return null;
+//    }
+//
+//
+//    protected void onPostExecute(Void result) {
+//
+//
+//        if (responseStr == null) {
+//            noInternetLayout.setVisibility(View.GONE);
+//        } else {
+//            if (status > 0 && status == 200) {
+//
+//                try {
+//                    JSONObject parent_json = new JSONObject(responseStr);
+//                    JSONObject json = parent_json.getJSONObject("translation");
+//
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ALREADY_MEMBER, json.optString("already_member").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ACTIAVTE_PLAN_TITLE, json.optString("activate_plan_title").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_STATUS_ACTIVE, json.optString("transaction_status_active").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ADD_TO_FAV, json.optString("add_to_fav").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ADDED_TO_FAV, json.optString("added_to_fav").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ENTER_EMPTY_FIELD, json.optString("enter_register_fields_data").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ADVANCE_PURCHASE, json.optString("advance_purchase").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ALERT, json.optString("alert").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.EPISODE_TITLE, json.optString("episodes_title").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_ALPHA_A_Z, json.optString("sort_alpha_a_z").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_ALPHA_Z_A, json.optString("sort_alpha_z_a").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.AMOUNT, json.optString("amount").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.COUPON_CANCELLED, json.optString("coupon_cancelled").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BUTTON_APPLY, json.optString("btn_apply").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIGN_OUT_WARNING, json.optString("sign_out_warning").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DISCOUNT_ON_COUPON, json.optString("discount_on_coupon").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.MY_LIBRARY, json.optString("my_library").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CREDIT_CARD_CVV_HINT, json.optString("credit_card_cvv_hint").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CAST, json.optString("cast").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CAST_CREW_BUTTON_TITLE, json.optString("cast_crew_button_title").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CENSOR_RATING, json.optString("censor_rating").trim());
+//                    if (json.optString("change_password").trim() == null || json.optString("change_password").trim().equals("")) {
+//                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CHANGE_PASSWORD, Util.DEFAULT_CHANGE_PASSWORD);
+//                    } else {
+//                        Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CHANGE_PASSWORD, json.optString("change_password").trim());
+//                    }
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CANCEL_BUTTON, json.optString("btn_cancel").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.RESUME_MESSAGE, json.optString("resume_watching").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CONTINUE_BUTTON, json.optString("continue").trim());
+//
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CONFIRM_PASSWORD, json.optString("confirm_password").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CREDIT_CARD_DETAILS, json.optString("credit_card_detail").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DIRECTOR, json.optString("director").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DOWNLOAD_BUTTON_TITLE, json.optString("download_button_title").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DESCRIPTION, json.optString("description").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.HOME, json.optString("home").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.EMAIL_EXISTS, json.optString("email_exists").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.EMAIL_DOESNOT_EXISTS, json.optString("email_does_not_exist").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.EMAIL_PASSWORD_INVALID, json.optString("email_password_invalid").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.COUPON_CODE_HINT, json.optString("coupon_code_hint").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SEARCH_ALERT, json.optString("search_alert").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CREDIT_CARD_NUMBER_HINT, json.optString("credit_card_number_hint").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TEXT_EMIAL, json.optString("text_email").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NAME_HINT, json.optString("name_hint").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CREDIT_CARD_NAME_HINT, json.optString("credit_card_name_hint").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TEXT_PASSWORD, json.optString("text_password").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ERROR_IN_PAYMENT_VALIDATION, json.optString("error_in_payment_validation").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ERROR_IN_REGISTRATION, json.optString("error_in_registration").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_STATUS_EXPIRED, json.optString("transaction_status_expired").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.DETAILS_NOT_FOUND_ALERT, json.optString("details_not_found_alert").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FAILURE, json.optString("failure").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FILTER_BY, json.optString("filter_by").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FORGOT_PASSWORD, json.optString("forgot_password").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.GENRE, json.optString("genre").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.AGREE_TERMS, json.optString("agree_terms").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.INVALID_COUPON, json.optString("invalid_coupon").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.INVOICE, json.optString("invoice").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LANGUAGE_POPUP_LANGUAGE, json.optString("language_popup_language").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_LAST_UPLOADED, json.optString("sort_last_uploaded").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LANGUAGE_POPUP_LOGIN, json.optString("language_popup_login").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LOGIN, json.optString("login").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LOGOUT, json.optString("logout").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LOGOUT_SUCCESS, json.optString("logout_success").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.MY_FAVOURITE, json.optString("my_favourite").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NEW_PASSWORD, json.optString("new_password").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NEW_HERE_TITLE, json.optString("new_here_title").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO, json.optString("no").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_DATA, json.optString("no_data").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_INTERNET_CONNECTION, json.optString("no_internet_connection").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ENTER_REGISTER_FIELDS_DATA, json.optString("enter_register_fields_data").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_INTERNET_NO_DATA, json.optString("no_internet_no_data").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_DETAILS_AVAILABLE, json.optString("no_details_available").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BUTTON_OK, json.optString("btn_ok").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.OLD_PASSWORD, json.optString("old_password").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.OOPS_INVALID_EMAIL, json.optString("oops_invalid_email").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ORDER, json.optString("order").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_DETAILS_ORDER_ID, json.optString("transaction_detail_order_id").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PASSWORD_RESET_LINK, json.optString("password_reset_link").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PASSWORDS_DO_NOT_MATCH, json.optString("password_donot_match").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PAY_BY_PAYPAL, json.optString("pay_by_paypal").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BTN_PAYNOW, json.optString("btn_paynow").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PAY_WITH_CREDIT_CARD, json.optString("pay_with_credit_card").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PAYMENT_OPTIONS_TITLE, json.optString("payment_options_title").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PLAN_NAME, json.optString("plan_name").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, json.optString("activate_subscription_watch_video").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.COUPON_ALERT, json.optString("coupon_alert").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.VALID_CONFIRM_PASSWORD, json.optString("valid_confirm_password").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PROFILE, json.optString("profile").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PROFILE_UPDATED, json.optString("profile_updated").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PURCHASE, json.optString("purchase").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_DETAIL_PURCHASE_DATE, json.optString("transaction_detail_purchase_date").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PURCHASE_HISTORY, json.optString("purchase_history").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BTN_REGISTER, json.optString("btn_register").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_RELEASE_DATE, json.optString("sort_release_date").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SAVE_THIS_CARD, json.optString("save_this_card").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TEXT_SEARCH_PLACEHOLDER, json.optString("text_search_placeholder").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SEASON, json.optString("season").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECT_OPTION_TITLE, json.optString("select_option_title").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECT_PLAN, json.optString("select_plan").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIGN_UP_TITLE, json.optString("signup_title").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SLOW_INTERNET_CONNECTION, json.optString("slow_internet_connection").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SLOW_ISSUE_INTERNET_CONNECTION, json.optString("slow_issue_internet_connection").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORRY, json.optString("sorry").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.GEO_BLOCKED_ALERT, json.optString("geo_blocked_alert").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIGN_OUT_ERROR, json.optString("sign_out_error").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.ALREADY_PURCHASE_THIS_CONTENT, json.optString("already_purchase_this_content").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CROSSED_MAXIMUM_LIMIT, json.optString("crossed_max_limit_of_watching").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SORT_BY, json.optString("sort_by").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.STORY_TITLE, json.optString("story_title").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.BTN_SUBMIT, json.optString("btn_submit").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_STATUS, json.optString("transaction_success").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.VIDEO_ISSUE, json.optString("video_issue").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_CONTENT, json.optString("no_content").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.NO_VIDEO_AVAILABLE, json.optString("no_video_available").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, json.optString("content_not_available_in_your_country").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_DATE, json.optString("transaction_date").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANASCTION_DETAIL, json.optString("transaction_detail").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION_STATUS, json.optString("transaction_status").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRANSACTION, json.optString("transaction").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TRY_AGAIN, json.optString("try_again").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.UNPAID, json.optString("unpaid").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.USE_NEW_CARD, json.optString("use_new_card").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.VIEW_MORE, json.optString("view_more").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.VIEW_TRAILER, json.optString("view_trailer").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.WATCH, json.optString("watch").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.WATCH_NOW, json.optString("watch_now").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIGN_OUT_ALERT, json.optString("sign_out_alert").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.UPDATE_PROFILE_ALERT, json.optString("update_profile_alert").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.YES, json.optString("yes").trim());
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.PURCHASE_SUCCESS_ALERT, json.optString("purchase_success_alert").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.CARD_WILL_CHARGE, json.optString("card_will_charge").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SEARCH_HINT, json.optString("search_hint").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.TERMS, json.optString("terms").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.UPDATE_PROFILE, json.optString("btn_update_profile").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.APP_ON, json.optString("app_on").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.APP_SELECT_LANGUAGE, json.optString("app_select_language").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FILL_FORM_BELOW, json.optString("Fill_form_below").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.MESSAGE, json.optString("text_message").trim());
+//
+//
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, json.optString("simultaneous_logout_message").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.LOGIN_STATUS_MESSAGE, json.optString("login_status_message").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.FILL_FORM_BELOW, json.optString("fill_form_below").trim());
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.MESSAGE, json.optString("text_message").trim());
+//
+//
+//                    Util.getTextofLanguage(SplashScreen.this, Util.PURCHASE, Util.DEFAULT_PURCHASE);
+//                    Util.setLanguageSharedPrefernce(SplashScreen.this, Util.SELECTED_LANGUAGE_CODE, default_Language);
+//
+//                    //Call For Language PopUp Dialog
+//
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    noInternetLayout.setVisibility(View.GONE);
+//                }
+//                // Call For Other Methods.
+//
+//
+//            } else {
+//                noInternetLayout.setVisibility(View.GONE);
+//            }
+//        }
+//        GenreListInput genreListInput = new GenreListInput();
+//        genreListInput.setAuthToken(Util.authTokenStr);
+//
+//        GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput, SplashScreen.this, SplashScreen.this);
+//        asynGetGenreList.executeOnExecutor(threadPoolExecutor);
+//
+//
+//    }
+//
+//    protected void onPreExecute() {
+//
+//    }
+//
+//}
 
     public void Call_One_Step_Procedure() {
 
@@ -1607,9 +1818,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         //============================End Added For FCM===========================//
 
 
-
-
-
         //============================Added For FCM===========================//
 
         if (!Util.getTextofLanguage(SplashScreen.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN).equals("0")) {
@@ -1634,7 +1842,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                         overridePendingTransition(0, 0);
                     }
                 } else {
-
 
 
                     final Intent i = new Intent(SplashScreen.this, RegisterActivity.class);
@@ -1674,7 +1881,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(i);
                         finish();
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
 
                         String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
@@ -1699,7 +1906,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                                 runOnUiThread(new Runnable() {
                                     public void run() {
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                        overridePendingTransition(0,0);
+                                        overridePendingTransition(0, 0);
                                         startActivity(intent);
                                         finish();
 
