@@ -47,6 +47,14 @@ public class APIUrlConstant {
     public static  String REGISTER_USER_PAYMENT_URL = "registerUserPayment";
     public static  String AUTH_USER_PAYMENT_INFO_URL = "authUserPaymentInfo";
     public static  String GET_CARD_LIST_FOR_PPV_URL = "getCardsListForPPV";
+    public static  String LanguageTranslation= "textTranslation";
+
+
+
+    public static String getLanguageTranslation() {
+        return BASE_URl+LanguageTranslation;
+    }
+
 
     public static String getInitializationUrl() {
         return BASE_URl+INITIALIZATION_URL;
