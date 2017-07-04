@@ -989,7 +989,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                     onBackPressed();
                 } else {
 
-//                      Modified By Bibhu
+//                      Modified By MUVI
                     final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
 
                     runOnUiThread(new Runnable() {
@@ -1369,7 +1369,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 //                        onBackPressed();
 //                    } else {
 //
-////                      Modified By Bibhu
+////                      Modified By MUVI
 //                        final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
 //
 //                        runOnUiThread(new Runnable() {

@@ -131,7 +131,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     String Previous_Selected_Language = "";
 
 
-    //Add By Bibhu Later.
+    //Add By MUVI Later.
     ExpandableTextView videoStoryTextView;
     TextView videoTitle, videoGenreTextView, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView, videoCastCrewTitleTextView;
     String movieNameStr;

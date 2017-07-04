@@ -152,7 +152,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                     if (Util.getTextofLanguage(LoginActivity.this, Util.IS_RESTRICT_DEVICE, Util.DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
 
-                        LogUtil.showLog("BIBHU", "isRestrictDevice called");
+                        LogUtil.showLog("MUVI", "isRestrictDevice called");
                         // Call For Check Api.
                         AsynCheckDevice asynCheckDevice = new AsynCheckDevice();
                         asynCheckDevice.executeOnExecutor(threadPoolExecutor);
@@ -876,7 +876,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         deviceName = myDevice.getName();
 
 
-        LogUtil.showLog("BIBHU", "Device_Name=" + deviceName);
+        LogUtil.showLog("MUVI", "Device_Name=" + deviceName);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
@@ -885,9 +885,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 .trim()).equals("1")) {
             mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-            LogUtil.showLog("BIBHU", "Called");
+            LogUtil.showLog("MUVI", "Called");
         } else {
-            LogUtil.showLog("BIBHU", "Called============" + (Util.getTextofLanguage(LoginActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)));
+            LogUtil.showLog("MUVI", "Called============" + (Util.getTextofLanguage(LoginActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)));
             mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }
 
@@ -1428,8 +1428,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                    HttpResponse response = httpclient.execute(httppost);
 //                    responseStr = EntityUtils.toString(response.getEntity());
 //
-//                    Log.v("BIBHU2","google_id="+Util.getTextofLanguage(LoginActivity.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
-//                    Log.v("BIBHU2","responseStr="+responseStr);
+//                    Log.v("MUVI2","google_id="+Util.getTextofLanguage(LoginActivity.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
+//                    Log.v("MUVI2","responseStr="+responseStr);
 //
 //
 //                } catch (org.apache.http.conn.ConnectTimeoutException e){
@@ -1525,7 +1525,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                    editor.commit();
 //
 //
-//                Log.v("BIBHU","PlanId="+PlanId+" ,isSubscribedStr="+isSubscribedStr);
+//                Log.v("MUVI","PlanId="+PlanId+" ,isSubscribedStr="+isSubscribedStr);
 //
 //                    if (Util.checkNetwork(LoginActivity.this) == true) {
 //                        if (pDialog != null && pDialog.isShowing()) {
@@ -1537,7 +1537,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                        if(Util.getTextofLanguage(LoginActivity.this,Util.IS_RESTRICT_DEVICE,Util.DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1"))
 //                        {
 //
-//                            Log.v("BIBHU","isRestrictDevice called");
+//                            Log.v("MUVI","isRestrictDevice called");
 //                            // Call For Check Api.
 //                            AsynCheckDevice asynCheckDevice = new AsynCheckDevice();
 //                            asynCheckDevice.executeOnExecutor(threadPoolExecutor);
@@ -3760,7 +3760,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                    LogUtil.showLog("BIBHU", "Response Of the Simultaneous Logout =" + responseStr);
+                    LogUtil.showLog("MUVI", "Response Of the Simultaneous Logout =" + responseStr);
 
 
                 } catch (Exception e) {
@@ -4205,7 +4205,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                    LogUtil.showLog("BIBHU3", "responseStr of check device=" + responseStr);
+                    LogUtil.showLog("MUVI3", "responseStr of check device=" + responseStr);
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     runOnUiThread(new Runnable() {
@@ -4318,7 +4318,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     }
 
     public void LogOut() {
-        LogUtil.showLog("BIBHU3", "logout Called");
+        LogUtil.showLog("MUVI3", "logout Called");
         LogoutInput logoutInput = new LogoutInput();
         logoutInput.setAuthToken(Util.authTokenStr);
         logoutInput.setLogin_history_id(logoutInput.getLogin_history_id());
@@ -4351,7 +4351,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                    HttpResponse response = httpclient.execute(httppost);
 //                    responseStr = EntityUtils.toString(response.getEntity());
 //
-//                    LogUtil.showLog("BIBHU3","responseStr of logout="+responseStr);
+//                    LogUtil.showLog("MUVI3","responseStr of logout="+responseStr);
 //
 //                } catch (org.apache.http.conn.ConnectTimeoutException e){
 //                    runOnUiThread(new Runnable() {

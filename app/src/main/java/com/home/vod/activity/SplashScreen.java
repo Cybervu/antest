@@ -1057,12 +1057,12 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //                            IsOneStepReg = myJson.optString("signup_step");
 //                            isRestrictDevice = myJson.optString("isRestrictDevice");
 //
-//                            Log.v("BIBHU","isRestrictDevice="+isRestrictDevice);
+//                            Log.v("MUVI","isRestrictDevice="+isRestrictDevice);
 //
 ////                            IsOneStepReg = "1";
 //
 //
-//                            //Adder Later By Bibhu
+//                            //Adder Later By MUVI
 //                            //This code is used for the 'My Library Feature'
 //
 //                            if (isLogin == 1)
@@ -1572,7 +1572,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 /*
         if(!Util.getTextofLanguage(SplashScreen.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN).equals("0"))
         {
-            Log.v("BIBHU2","google_id already created ="+Util.getTextofLanguage(SplashScreen.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
+            Log.v("MUVI","google_id already created ="+Util.getTextofLanguage(SplashScreen.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
 
 
             Intent i = new Intent(SplashScreen.this, MainActivity.class);
@@ -1592,7 +1592,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                         GoogleIdGeneraterTimer.cancel();
                         GoogleIdGeneraterTimer.purge();
 
-                        Log.v("BIBHU2","google_id="+Util.getTextofLanguage(SplashScreen.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN) );
+                        Log.v("MUVI","google_id="+Util.getTextofLanguage(SplashScreen.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN) );
 
                         Intent i = new Intent(SplashScreen.this, MainActivity.class);
                         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1613,7 +1613,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         //============================Added For FCM===========================//
 
         if (!Util.getTextofLanguage(SplashScreen.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN).equals("0")) {
-            Log.v("BIBHU2", "google_id already created =" + Util.getTextofLanguage(SplashScreen.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+            Log.v("MUVI", "google_id already created =" + Util.getTextofLanguage(SplashScreen.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
             String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
 
@@ -1668,7 +1668,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                         GoogleIdGeneraterTimer.cancel();
                         GoogleIdGeneraterTimer.purge();
 
-                        Log.v("BIBHU2", "google_id=" + Util.getTextofLanguage(SplashScreen.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+                        Log.v("MUVI", "google_id=" + Util.getTextofLanguage(SplashScreen.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
 
                         Intent i = new Intent(SplashScreen.this, MainActivity.class);
                         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1752,7 +1752,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //                    isSubscribed = "0";
 //                }
 //
-//                Log.v("BIBHU", "responseStr of get profile update =" + responseStr);
+//                Log.v("MUVI", "responseStr of get profile update =" + responseStr);
 //
 //                JSONObject myJson = null;
 //                if (responseStr != null) {
