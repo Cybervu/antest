@@ -25,6 +25,16 @@ public class RegisterUserPaymentInputModel {
     String plan_id;
     String name;
 
+    public String getCouponCode() {
+        return CouponCode;
+    }
+
+    public void setCouponCode(String couponCode) {
+        CouponCode = couponCode;
+    }
+
+    String CouponCode;
+
     public String getName() {
         return name;
     }

@@ -78,6 +78,7 @@ public class RegisterUserPaymentAsyntask extends AsyncTask<RegisterUserPaymentIn
             httppost.addHeader("season_id", this.registerUserPaymentInputModel.getSeason_id());
             httppost.addHeader("profile_id", this.registerUserPaymentInputModel.getProfile_id());
             httppost.addHeader("token", this.registerUserPaymentInputModel.getToken());
+            httppost.addHeader("coupon_code",this.registerUserPaymentInputModel.getCouponCode());
 
 
             try {
@@ -102,12 +103,12 @@ public class RegisterUserPaymentAsyntask extends AsyncTask<RegisterUserPaymentIn
 
             }
 
-            if (code == 200) {
-                if ((myJson.has("msg")) && myJson.optString("msg").trim() != null && !myJson.optString("msg").trim().isEmpty() && !myJson.optString("msg").trim().equals("null") && !myJson.optString("msg").trim().matches("")) {
-                    registerUserPaymentOutputModel.setMsg(myJson.optString("msg"));
-                }
-
-            }
+//            if (code == 200) {
+//                if ((myJson.has("msg")) && myJson.optString("msg").trim() != null && !myJson.optString("msg").trim().isEmpty() && !myJson.optString("msg").trim().equals("null") && !myJson.optString("msg").trim().matches("")) {
+//                    registerUserPaymentOutputModel.setMsg(myJson.optString("msg"));
+//                }
+//
+//            }
 
         } catch (Exception e) {
             code = 0;

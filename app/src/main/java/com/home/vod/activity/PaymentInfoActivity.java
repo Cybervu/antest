@@ -30,9 +30,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.home.apisdk.apiController.AuthUserPaymentInfoAsyntask;
+import com.home.apisdk.apiController.RegisterUserPaymentAsyntask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
+import com.home.apisdk.apiModel.AuthUserPaymentInfoInputModel;
+import com.home.apisdk.apiModel.AuthUserPaymentInfoOutputModel;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.Get_Video_Details_Output;
+import com.home.apisdk.apiModel.RegisterUserPaymentInputModel;
+import com.home.apisdk.apiModel.RegisterUserPaymentOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.model.CardModel;
@@ -61,7 +67,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 
-public class PaymentInfoActivity extends ActionBarActivity implements VideoDetailsAsynctask.VideoDetails {
+public class PaymentInfoActivity extends ActionBarActivity implements VideoDetailsAsynctask.VideoDetails, AuthUserPaymentInfoAsyntask.AuthUserPaymentInfo, RegisterUserPaymentAsyntask.RegisterUserPayment {
     CardModel[] cardSavedArray;
 
     ProgressDialog pDialog;
@@ -71,7 +77,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
     String videoResolution = "BEST";
 
     PreferenceManager preferenceManager;
-
+    ProgressBarHandler progressBarHandler;
     Toolbar mActionBarToolbar;
     boolean isCouponCodeAdded = false;
     String validCouponCode;
@@ -179,14 +185,11 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
         setSupportActionBar(mActionBarToolbar);
 
 
-
         if ((Util.getTextofLanguage(PaymentInfoActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
             mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-        }
-        else
-        {
+        } else {
             mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }
 
@@ -232,7 +235,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
         securityCodeEditText = (EditText) findViewById(R.id.securityCodeEditText);
         couponCodeEditText = (EditText) findViewById(R.id.couponCodeEditText);
 
-        Typeface typeface6 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface typeface6 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         nameOnCardEditText.setTypeface(typeface6);
         cardNumberEditText.setTypeface(typeface6);
         securityCodeEditText.setTypeface(typeface6);
@@ -291,8 +294,6 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
             }
         });*/
-
-
 
 
         selectShowRadioButton = (TextView) findViewById(R.id.showNameWithPrice);
@@ -459,7 +460,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
             }
         });
 
-        chargedPriceTextView.setText(Util.getTextofLanguage(PaymentInfoActivity.this,Util.CARD_WILL_CHARGE,Util.DEFAULT_CARD_WILL_CHARGE)+" : "+currencySymbolStr+ getIntent().getStringExtra("price"));
+        chargedPriceTextView.setText(Util.getTextofLanguage(PaymentInfoActivity.this, Util.CARD_WILL_CHARGE, Util.DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + getIntent().getStringExtra("price"));
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -483,13 +484,13 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 String securityCodeStr = securityCodeEditText.getText().toString().trim();
 
                 if (nameOnCardStr.matches("")) {
-                    Toast.makeText(PaymentInfoActivity.this,Util.getTextofLanguage(PaymentInfoActivity.this,Util.CREDIT_CARD_NAME_HINT,Util.DEFAULT_CREDIT_CARD_NAME_HINT), Toast.LENGTH_LONG).show();
+                    Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.CREDIT_CARD_NAME_HINT, Util.DEFAULT_CREDIT_CARD_NAME_HINT), Toast.LENGTH_LONG).show();
 
                 } else if (cardNumberStr.matches("")) {
-                    Toast.makeText(PaymentInfoActivity.this,Util.getTextofLanguage(PaymentInfoActivity.this,Util.CREDIT_CARD_NUMBER_HINT,Util.DEFAULT_CREDIT_CARD_NUMBER_HINT), Toast.LENGTH_LONG).show();
+                    Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.CREDIT_CARD_NUMBER_HINT, Util.DEFAULT_CREDIT_CARD_NUMBER_HINT), Toast.LENGTH_LONG).show();
 
                 } else if (securityCodeStr.matches("")) {
-                    Toast.makeText(PaymentInfoActivity.this,Util.getTextofLanguage(PaymentInfoActivity.this,Util.CVV_ALERT,Util.DEFAULT_CVV_ALERT), Toast.LENGTH_LONG).show();
+                    Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.CVV_ALERT, Util.DEFAULT_CVV_ALERT), Toast.LENGTH_LONG).show();
 
 
                 } else if (expiryMonthStr <= 0) {
@@ -515,8 +516,20 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                         dlgAlert.create().show();
 
                     } else {
+                        String emailIdStr = preferenceManager.getEmailIdFromPref();
 
-                        AsynPaymentInfoDetails asyncReg = new AsynPaymentInfoDetails();
+                        nameOnCardStr = nameOnCardEditText.getText().toString().trim();
+                        cardNumberStr = cardNumberEditText.getText().toString().trim();
+                        securityCodeStr = securityCodeEditText.getText().toString().trim();
+                        AuthUserPaymentInfoInputModel authUserPaymentInfoInputModel = new AuthUserPaymentInfoInputModel();
+                        authUserPaymentInfoInputModel.setAuthToken(Util.authTokenStr);
+                        authUserPaymentInfoInputModel.setName_on_card(nameOnCardStr);
+                        authUserPaymentInfoInputModel.setExpiryMonth(String.valueOf(expiryMonthStr).trim());
+                        authUserPaymentInfoInputModel.setExpiryYear(String.valueOf(expiryYearStr).trim());
+                        authUserPaymentInfoInputModel.setCardNumber(cardNumberStr);
+                        authUserPaymentInfoInputModel.setCvv(securityCodeStr);
+                        authUserPaymentInfoInputModel.setEmail(emailIdStr);
+                        AuthUserPaymentInfoAsyntask asyncReg = new AuthUserPaymentInfoAsyntask(authUserPaymentInfoInputModel, PaymentInfoActivity.this, PaymentInfoActivity.this);
                         asyncReg.executeOnExecutor(threadPoolExecutor);
 
 
@@ -568,7 +581,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
     @Override
     public void onVideoDetailsPreExecuteStarted() {
-        pDialog=new ProgressDialog(PaymentInfoActivity.this);
+        pDialog = new ProgressDialog(PaymentInfoActivity.this);
         pDialog.show();
     }
 
@@ -606,9 +619,9 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
                 dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
                 dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -630,9 +643,9 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
                     dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
                     dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -652,9 +665,9 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
                     dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
                     dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -681,9 +694,9 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
                             }
                         });
-                    }else{
-                        if (Util.dataModel.getVideoUrl().contains("://www.youtube") || Util.dataModel.getVideoUrl().contains("://www.youtu.be")){
-                            if(Util.dataModel.getVideoUrl().contains("live_stream?channel")) {
+                    } else {
+                        if (Util.dataModel.getVideoUrl().contains("://www.youtube") || Util.dataModel.getVideoUrl().contains("://www.youtu.be")) {
+                            if (Util.dataModel.getVideoUrl().contains("live_stream?channel")) {
                                 final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ThirdPartyPlayer.class);
                                 runOnUiThread(new Runnable() {
                                     public void run() {
@@ -693,7 +706,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
                                     }
                                 });
-                            }else{
+                            } else {
 
                                 final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, YouTubeAPIActivity.class);
                                 runOnUiThread(new Runnable() {
@@ -707,7 +720,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                                 });
 
                             }
-                        }else{
+                        } else {
                             final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ThirdPartyPlayer.class);
                             runOnUiThread(new Runnable() {
                                 public void run() {
@@ -726,333 +739,38 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
         }
     }
 
-
-    private class AsynPaymentInfoDetails extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler progressBarHandler;
-        int status;
-        String responseStr;
-        String responseMessageStr;
-        String emailIdStr = preferenceManager.getEmailIdFromPref();
-
-        String nameOnCardStr = nameOnCardEditText.getText().toString().trim();
-        String cardNumberStr = cardNumberEditText.getText().toString().trim();
-        String securityCodeStr = securityCodeEditText.getText().toString().trim();
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            String urlRouteList = Util.rootUrl().trim() + Util.authenticatedCardValidationUrl.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("nameOnCard", nameOnCardStr);
-                httppost.addHeader("expiryMonth", String.valueOf(expiryMonthStr).trim());
-                httppost.addHeader("expiryYear", String.valueOf(expiryYearStr).trim());
-                httppost.addHeader("cardNumber", cardNumberStr);
-                httppost.addHeader("cvv", securityCodeStr);
-                httppost.addHeader("email", emailIdStr);
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-
-            /*    Log.v("MUVI", "nameOnCardStr = " + nameOnCardStr);
-                Log.v("MUVI", "expiryMonth = " + String.valueOf(expiryMonthStr).trim());
-                Log.v("MUVI", "expiryYear = " + String.valueOf(expiryYearStr).trim());
-                Log.v("MUVI", "cardNumber = " + cardNumberStr);
-                Log.v("MUVI", "cvv = " + securityCodeStr);
-                Log.v("MUVI", "email = " + emailIdStr);
-                Log.v("MUVI", "authToken = " + Util.authTokenStr.trim());
-*/
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                    LogUtil.showLog("MUVI", "response of card validation = " + responseStr);
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (progressBarHandler.isShowing())
-                                progressBarHandler.hide();
-                            status = 0;
-                            Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    if (progressBarHandler.isShowing())
-                        progressBarHandler.hide();
-                    status = 0;
-                    e.printStackTrace();
-
-
-                }
-                JSONObject myJson = null;
-
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("isSuccess"));
-                }
-                if (status == 1) {
-                    JSONObject mainJson = null;
-
-                    if (myJson.has("card")) {
-                        mainJson = myJson.getJSONObject("card");
-                        if (mainJson.has("status") && mainJson.getString("status").trim() != null && !mainJson.getString("status").trim().isEmpty() && !mainJson.getString("status").trim().equals("null") && !mainJson.getString("status").trim().matches("")) {
-                            statusStr = mainJson.getString("status");
-                        } else {
-                            statusStr = "";
-
-                        }
-
-                        if (mainJson.has("token") && mainJson.getString("token").trim() != null && !mainJson.getString("token").trim().isEmpty() && !mainJson.getString("token").trim().equals("null") && !mainJson.getString("token").trim().matches("")) {
-                            tokenStr = mainJson.getString("token");
-                        } else {
-                            tokenStr = "";
-
-                        }
-
-                        if (mainJson.has("response_text") && mainJson.getString("response_text").trim() != null && !mainJson.getString("response_text").trim().isEmpty() && !mainJson.getString("response_text").trim().equals("null") && !mainJson.getString("response_text").trim().matches("")) {
-                            responseText = mainJson.getString("response_text");
-                        } else {
-                            responseText = "";
-
-                        }
-
-                        if (mainJson.has("profile_id") && mainJson.getString("profile_id").trim() != null && !mainJson.getString("profile_id").trim().isEmpty() && !mainJson.getString("profile_id").trim().equals("null") && !mainJson.getString("profile_id").trim().matches("")) {
-                            profileIdStr = mainJson.getString("profile_id");
-                        } else {
-                            profileIdStr = "";
-
-                        }
-
-                        if (mainJson.has("card_last_fourdigit") && mainJson.getString("card_last_fourdigit").trim() != null && !mainJson.getString("card_last_fourdigit").trim().isEmpty() && !mainJson.getString("card_last_fourdigit").trim().equals("null") && !mainJson.getString("card_last_fourdigit").trim().matches("")) {
-                            cardLastFourDigitStr = mainJson.getString("card_last_fourdigit");
-                        } else {
-                            cardLastFourDigitStr = "";
-
-                        }
-
-                        if (mainJson.has("card_type") && mainJson.getString("card_type").trim() != null && !mainJson.getString("card_type").trim().isEmpty() && !mainJson.getString("card_type").trim().equals("null") && !mainJson.getString("card_type").trim().matches("")) {
-                            cardTypeStr = mainJson.getString("card_type");
-                        } else {
-                            cardTypeStr = "";
-
-                        }
-                    }
-
-
-                }
-                if (status == 0) {
-                    if (myJson.has("Message")) {
-                        responseMessageStr = myJson.optString("Message");
-                    }
-                    if (((responseMessageStr.equalsIgnoreCase("null")) || (responseMessageStr.length() <= 0))) {
-                        responseMessageStr = "No Details found";
-
-                    }
-                }
-
-            } catch (Exception e) {
-                if (progressBarHandler.isShowing())
-                    progressBarHandler.hide();
-                status = 0;
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-           /* try {
-                if (pDialog.isShowing())
-                    pDialog.dismiss();
-            } catch (IllegalArgumentException ex) {
-                status = 0;
-            }*/
-
-            if (status == 0) {
-                try {
-                    if (progressBarHandler.isShowing())
-                        progressBarHandler.hide();
-                } catch (IllegalArgumentException ex) {
-                    status = 0;
-                }
-                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
-                dlgAlert.setMessage(responseMessageStr);
-                dlgAlert.setTitle("Failure");
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                dlgAlert.create().show();
-            } else if (status == 1) {
-                boolean isNetwork = Util.checkNetwork(PaymentInfoActivity.this);
-                if (isNetwork == false) {
-                    try {
-                        if (progressBarHandler.isShowing())
-                            progressBarHandler.hide();
-                    } catch (IllegalArgumentException ex) {
-                        status = 0;
-                    }
-                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
-                    dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
-                    dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    dlgAlert.create().show();
-
-                } else {
-                    AsynSubscriptionRegDetails asyncSubsrInfo = new AsynSubscriptionRegDetails();
-                    asyncSubsrInfo.executeOnExecutor(threadPoolExecutor);
-                }
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressBarHandler = new ProgressBarHandler(PaymentInfoActivity.this);
-            progressBarHandler.show();
-        }
-
-
+    @Override
+    public void onAuthUserPaymentInfoPreExecuteStarted() {
+        progressBarHandler = new ProgressBarHandler(PaymentInfoActivity.this);
+        progressBarHandler.show();
     }
 
-    private class AsynSubscriptionRegDetails extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler progressBarHandler;
-        int status;
-        String responseStr;
-        String nameOnCardStr = nameOnCardEditText.getText().toString().trim();
-        String cardNumberStr = cardNumberEditText.getText().toString().trim();
-        String securityCardStr = securityCodeEditText.getText().toString().trim();
+    @Override
+    public void onAuthUserPaymentInfoPostExecuteCompleted(AuthUserPaymentInfoOutputModel authUserPaymentInfoOutputModel, int status, String responseMessageStr) {
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            Log.v("MUVI", "payment at doInBackground called ");
-            String userIdStr = preferenceManager.getUseridFromPref();
-            String emailIdSubStr = preferenceManager.getEmailIdFromPref();
 
-            String urlRouteList = Util.rootUrl().trim() + Util.subscriptionUrl.trim();
-            LogUtil.showLog("MUVI", "payment at urlRouteList = "+urlRouteList);
+        if (status == 0) {
             try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                LogUtil.showLog("MUVI", "=========== 1");
-                httppost.addHeader("card_name", nameOnCardStr);
-                LogUtil.showLog("MUVI", "=========== 11");
-                httppost.addHeader("exp_month", String.valueOf(expiryMonthStr).trim());
-                LogUtil.showLog("MUVI", "=========== 111");
-                httppost.addHeader("card_number", cardNumberStr);
-                LogUtil.showLog("MUVI", "=========== 1111");
-                httppost.addHeader("exp_year", String.valueOf(expiryYearStr).trim());
-                LogUtil.showLog("MUVI", "=========== 2");
-                httppost.addHeader("email", emailIdSubStr.trim()); //Null pointer
-              //  httppost.addHeader("movie_id", muviUniqueIdStr.trim());
-                httppost.addHeader("user_id", userIdStr.trim());
-                LogUtil.showLog("MUVI", "=========== 22="+ emailIdSubStr.trim());
-                if (isCouponCodeAdded == true) {
-                    httppost.addHeader("coupon_code", validCouponCode);
-                    LogUtil.showLog("MUVI", "=========== 222");
-                } else {
-                    LogUtil.showLog("MUVI", "=========== 2222");
-                    httppost.addHeader("coupon_code", "");
-                }
-                LogUtil.showLog("MUVI", "=========== 22222");
-                httppost.addHeader("card_type", cardTypeStr.trim());
-                LogUtil.showLog("MUVI", "=========== 3");
-                httppost.addHeader("card_last_fourdigit", cardLastFourDigitStr.trim());
-                LogUtil.showLog("MUVI", "=========== 33");
-                httppost.addHeader("profile_id", profileIdStr.trim());
-                LogUtil.showLog("MUVI", "=========== 333");
-                httppost.addHeader("token", tokenStr.trim());
-                LogUtil.showLog("MUVI", "=========== 3333="+tokenStr.trim());
-                httppost.addHeader("cvv", securityCardStr);
-                // httppost.addHeader("country",currencyCountryCodeStr.trim());
-                Log.v("MUVI", "=========== 33333");
-                httppost.addHeader("country", preferenceManager.getCountryCodeFromPref());
-                Log.v("MUVI", "=========== 4");
-                httppost.addHeader("season_id", "0");
-                LogUtil.showLog("MUVI", "=========== 44");
-                httppost.addHeader("episode_id", "0");
-                LogUtil.showLog("MUVI", "=========== 444");
-                httppost.addHeader("currency_id", currencyIdStr.trim());
-                LogUtil.showLog("MUVI", "=========== 4444");
-
-                httppost.addHeader("plan_id", getIntent().getStringExtra("selected_plan_id").toString().trim());
-                httppost.addHeader("name", preferenceManager.getDispNameFromPref());
-
-//                httppost.addHeader("is_save_this_card", isCheckedToSavetheCard.trim());
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                    LogUtil.showLog("MUVI", "response of payment = " + responseStr);
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    LogUtil.showLog("MUVI","error2="+e.toString());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            status = 0;
-                            if (progressBarHandler.isShowing())
-                                progressBarHandler.hide();
-                            Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-
-                    status = 0;
-                    if (progressBarHandler.isShowing())
-                        progressBarHandler.hide();
-                    e.printStackTrace();
-                    LogUtil.showLog("MUVI","error1="+e.toString());
-                }
-
-                LogUtil.showLog("MUVI", "response of payment = " + responseStr);
-
-                if (responseStr != null) {
-                    JSONObject myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                }
-
-            } catch (Exception e) {
-
                 if (progressBarHandler.isShowing())
                     progressBarHandler.hide();
+            } catch (IllegalArgumentException ex) {
                 status = 0;
-                LogUtil.showLog("MUVI","error="+e.toString());
             }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if (status == 0) {
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
+            dlgAlert.setMessage(responseMessageStr);
+            dlgAlert.setTitle("Failure");
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
+        } else if (status == 1) {
+            boolean isNetwork = Util.checkNetwork(PaymentInfoActivity.this);
+            if (isNetwork == false) {
                 try {
                     if (progressBarHandler.isShowing())
                         progressBarHandler.hide();
@@ -1060,8 +778,8 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     status = 0;
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
-                dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this,Util.ERROR_IN_SUBSCRIPTION, Util.DEFAULT_ERROR_IN_SUBSCRIPTION));
-                dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this,Util.FAILURE, Util.DEFAULT_FAILURE));
+                dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
+                dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
                 dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
                 dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
@@ -1071,76 +789,539 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                             }
                         });
                 dlgAlert.create().show();
-            } else if (status > 0) {
 
-                if (status == 200) {
-                    if (progressBarHandler.isShowing())
-                        progressBarHandler.hide();
-                    Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this,Util.SUBSCRIPTION_COMPLETED,Util.DEFAULT_SUBSCRIPTION_COMPLETED), Toast.LENGTH_LONG).show();
-                    if(Util.check_for_subscription == 0)
-                    {
-                        Intent intent = new Intent(PaymentInfoActivity.this,MainActivity.class);
+            } else {
+                RegisterUserPaymentInputModel registerUserPaymentInputModel = new RegisterUserPaymentInputModel();
+                registerUserPaymentInputModel.setAuthToken(Util.authTokenStr);
+                registerUserPaymentInputModel.setCard_name(cardNumberEditText.getText().toString().trim());
+                registerUserPaymentInputModel.setExp_month(String.valueOf(expiryMonthStr).trim());
+                registerUserPaymentInputModel.setCard_number(cardNumberEditText.getText().toString().trim());
+                registerUserPaymentInputModel.setExp_year(String.valueOf(expiryYearStr).trim());
+                String userIdStr = preferenceManager.getUseridFromPref();
+                String emailIdSubStr = preferenceManager.getEmailIdFromPref();
+                registerUserPaymentInputModel.setEmail(emailIdSubStr.trim());
+                registerUserPaymentInputModel.setUser_id(userIdStr.trim());
+                if (isCouponCodeAdded == true) {
+                    registerUserPaymentInputModel.setCouponCode(validCouponCode);
+                } else {
+                    registerUserPaymentInputModel.setCouponCode("");
+                }
+                registerUserPaymentInputModel.setCard_type(cardTypeStr.trim());
+                registerUserPaymentInputModel.setCard_last_fourdigit(cardLastFourDigitStr.trim());
+                registerUserPaymentInputModel.setProfile_id(profileIdStr.trim());
+                registerUserPaymentInputModel.setToken(tokenStr.trim());
+                registerUserPaymentInputModel.setCvv(securityCodeEditText.getText().toString().trim());
+                registerUserPaymentInputModel.setCountry(preferenceManager.getCountryCodeFromPref());
+                registerUserPaymentInputModel.setEpisode_id("0");
+                registerUserPaymentInputModel.setSeason_id("0");
+                registerUserPaymentInputModel.setCurrency_id(currencyIdStr.trim());
+                registerUserPaymentInputModel.setPlan_id(getIntent().getStringExtra("selected_plan_id").toString().trim());
+                registerUserPaymentInputModel.setName(preferenceManager.getDispNameFromPref());
+
+
+                RegisterUserPaymentAsyntask asyncSubsrInfo = new RegisterUserPaymentAsyntask(registerUserPaymentInputModel,this,this);
+                asyncSubsrInfo.executeOnExecutor(threadPoolExecutor);
+            }
+        }
+    }
+
+
+    //    private class AsynPaymentInfoDetails extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler progressBarHandler;
+//        int status;
+//        String responseStr;
+//        String responseMessageStr;
+//        String emailIdStr = preferenceManager.getEmailIdFromPref();
+//
+//        String nameOnCardStr = nameOnCardEditText.getText().toString().trim();
+//        String cardNumberStr = cardNumberEditText.getText().toString().trim();
+//        String securityCodeStr = securityCodeEditText.getText().toString().trim();
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            String urlRouteList = Util.rootUrl().trim() + Util.authenticatedCardValidationUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("nameOnCard", nameOnCardStr);
+//                httppost.addHeader("expiryMonth", String.valueOf(expiryMonthStr).trim());
+//                httppost.addHeader("expiryYear", String.valueOf(expiryYearStr).trim());
+//                httppost.addHeader("cardNumber", cardNumberStr);
+//                httppost.addHeader("cvv", securityCodeStr);
+//                httppost.addHeader("email", emailIdStr);
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//
+//            /*    Log.v("MUVI", "nameOnCardStr = " + nameOnCardStr);
+//                Log.v("MUVI", "expiryMonth = " + String.valueOf(expiryMonthStr).trim());
+//                Log.v("MUVI", "expiryYear = " + String.valueOf(expiryYearStr).trim());
+//                Log.v("MUVI", "cardNumber = " + cardNumberStr);
+//                Log.v("MUVI", "cvv = " + securityCodeStr);
+//                Log.v("MUVI", "email = " + emailIdStr);
+//                Log.v("MUVI", "authToken = " + Util.authTokenStr.trim());
+//*/
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//                    LogUtil.showLog("MUVI", "response of card validation = " + responseStr);
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (progressBarHandler.isShowing())
+//                                progressBarHandler.hide();
+//                            status = 0;
+//                            Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    if (progressBarHandler.isShowing())
+//                        progressBarHandler.hide();
+//                    status = 0;
+//                    e.printStackTrace();
+//
+//
+//                }
+//                JSONObject myJson = null;
+//
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    status = Integer.parseInt(myJson.optString("isSuccess"));
+//                }
+//                if (status == 1) {
+//                    JSONObject mainJson = null;
+//
+//                    if (myJson.has("card")) {
+//                        mainJson = myJson.getJSONObject("card");
+//                        if (mainJson.has("status") && mainJson.getString("status").trim() != null && !mainJson.getString("status").trim().isEmpty() && !mainJson.getString("status").trim().equals("null") && !mainJson.getString("status").trim().matches("")) {
+//                            statusStr = mainJson.getString("status");
+//                        } else {
+//                            statusStr = "";
+//
+//                        }
+//
+//                        if (mainJson.has("token") && mainJson.getString("token").trim() != null && !mainJson.getString("token").trim().isEmpty() && !mainJson.getString("token").trim().equals("null") && !mainJson.getString("token").trim().matches("")) {
+//                            tokenStr = mainJson.getString("token");
+//                        } else {
+//                            tokenStr = "";
+//
+//                        }
+//
+//                        if (mainJson.has("response_text") && mainJson.getString("response_text").trim() != null && !mainJson.getString("response_text").trim().isEmpty() && !mainJson.getString("response_text").trim().equals("null") && !mainJson.getString("response_text").trim().matches("")) {
+//                            responseText = mainJson.getString("response_text");
+//                        } else {
+//                            responseText = "";
+//
+//                        }
+//
+//                        if (mainJson.has("profile_id") && mainJson.getString("profile_id").trim() != null && !mainJson.getString("profile_id").trim().isEmpty() && !mainJson.getString("profile_id").trim().equals("null") && !mainJson.getString("profile_id").trim().matches("")) {
+//                            profileIdStr = mainJson.getString("profile_id");
+//                        } else {
+//                            profileIdStr = "";
+//
+//                        }
+//
+//                        if (mainJson.has("card_last_fourdigit") && mainJson.getString("card_last_fourdigit").trim() != null && !mainJson.getString("card_last_fourdigit").trim().isEmpty() && !mainJson.getString("card_last_fourdigit").trim().equals("null") && !mainJson.getString("card_last_fourdigit").trim().matches("")) {
+//                            cardLastFourDigitStr = mainJson.getString("card_last_fourdigit");
+//                        } else {
+//                            cardLastFourDigitStr = "";
+//
+//                        }
+//
+//                        if (mainJson.has("card_type") && mainJson.getString("card_type").trim() != null && !mainJson.getString("card_type").trim().isEmpty() && !mainJson.getString("card_type").trim().equals("null") && !mainJson.getString("card_type").trim().matches("")) {
+//                            cardTypeStr = mainJson.getString("card_type");
+//                        } else {
+//                            cardTypeStr = "";
+//
+//                        }
+//                    }
+//
+//
+//                }
+//                if (status == 0) {
+//                    if (myJson.has("Message")) {
+//                        responseMessageStr = myJson.optString("Message");
+//                    }
+//                    if (((responseMessageStr.equalsIgnoreCase("null")) || (responseMessageStr.length() <= 0))) {
+//                        responseMessageStr = "No Details found";
+//
+//                    }
+//                }
+//
+//            } catch (Exception e) {
+//                if (progressBarHandler.isShowing())
+//                    progressBarHandler.hide();
+//                status = 0;
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//           /* try {
+//                if (pDialog.isShowing())
+//                    pDialog.dismiss();
+//            } catch (IllegalArgumentException ex) {
+//                status = 0;
+//            }*/
+//
+//            if (status == 0) {
+//                try {
+//                    if (progressBarHandler.isShowing())
+//                        progressBarHandler.hide();
+//                } catch (IllegalArgumentException ex) {
+//                    status = 0;
+//                }
+//                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
+//                dlgAlert.setMessage(responseMessageStr);
+//                dlgAlert.setTitle("Failure");
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            } else if (status == 1) {
+//                boolean isNetwork = Util.checkNetwork(PaymentInfoActivity.this);
+//                if (isNetwork == false) {
+//                    try {
+//                        if (progressBarHandler.isShowing())
+//                            progressBarHandler.hide();
+//                    } catch (IllegalArgumentException ex) {
+//                        status = 0;
+//                    }
+//                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
+//                    dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
+//                    dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setCancelable(false);
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                }
+//                            });
+//                    dlgAlert.create().show();
+//
+//                } else {
+//                    AsynSubscriptionRegDetails asyncSubsrInfo = new AsynSubscriptionRegDetails();
+//                    asyncSubsrInfo.executeOnExecutor(threadPoolExecutor);
+//                }
+//            }
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            progressBarHandler = new ProgressBarHandler(PaymentInfoActivity.this);
+//            progressBarHandler.show();
+//        }
+//
+//
+//    }
+    @Override
+    public void onRegisterUserPaymentPreExecuteStarted() {
+        progressBarHandler = new ProgressBarHandler(PaymentInfoActivity.this);
+        progressBarHandler.show();
+    }
+
+    @Override
+    public void onRegisterUserPaymentPostExecuteCompleted(RegisterUserPaymentOutputModel registerUserPaymentOutputModel, int status) {
+
+        if (status == 0) {
+            try {
+                if (progressBarHandler.isShowing())
+                    progressBarHandler.hide();
+            } catch (IllegalArgumentException ex) {
+                status = 0;
+            }
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
+            dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.ERROR_IN_SUBSCRIPTION, Util.DEFAULT_ERROR_IN_SUBSCRIPTION));
+            dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE));
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
+        } else if (status > 0) {
+
+            if (status == 200) {
+                if (progressBarHandler.isShowing())
+                    progressBarHandler.hide();
+                Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.SUBSCRIPTION_COMPLETED, Util.DEFAULT_SUBSCRIPTION_COMPLETED), Toast.LENGTH_LONG).show();
+                if (Util.check_for_subscription == 0) {
+                    Intent intent = new Intent(PaymentInfoActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    if (Util.checkNetwork(PaymentInfoActivity.this) == true) {
+
+                        GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                        getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                        getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                        getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                        getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+
+                        VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, PaymentInfoActivity.this, PaymentInfoActivity.this);
+                        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+
+                    } else {
+                        Intent intent = new Intent(PaymentInfoActivity.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
                         finish();
+                        Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
-                    else
-                    {
-                        if (Util.checkNetwork(PaymentInfoActivity.this) == true) {
-
-                            GetVideoDetailsInput getVideoDetailsInput=new GetVideoDetailsInput();
-                            getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-
-                                VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,PaymentInfoActivity.this,PaymentInfoActivity.this);
-                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-
-                        } else {
-                            Intent intent = new Intent(PaymentInfoActivity.this,MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(intent);
-                            finish();
-                            Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                } else {
-                    try {
-                        if (progressBarHandler.isShowing())
-                            progressBarHandler.hide();
-                    } catch (IllegalArgumentException ex) {
-                        status = 0;
-                    }
-                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
-                    dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this,Util.ERROR_IN_SUBSCRIPTION, Util.DEFAULT_ERROR_IN_SUBSCRIPTION));
-                    dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    dlgAlert.create().show();
                 }
+
+            } else {
+                try {
+                    if (progressBarHandler.isShowing())
+                        progressBarHandler.hide();
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
+                dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.ERROR_IN_SUBSCRIPTION, Util.DEFAULT_ERROR_IN_SUBSCRIPTION));
+                dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                dlgAlert.create().show();
             }
-
         }
-
-        @Override
-        protected void onPreExecute() {
-          progressBarHandler = new ProgressBarHandler(PaymentInfoActivity.this);
-            progressBarHandler.show();
-            
-        }
-
 
     }
+
+//    private class AsynSubscriptionRegDetails extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler progressBarHandler;
+//        int status;
+//        String responseStr;
+//        String nameOnCardStr = nameOnCardEditText.getText().toString().trim();
+//        String cardNumberStr = cardNumberEditText.getText().toString().trim();
+//        String securityCardStr = securityCodeEditText.getText().toString().trim();
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            Log.v("MUVI", "payment at doInBackground called ");
+//            String userIdStr = preferenceManager.getUseridFromPref();
+//            String emailIdSubStr = preferenceManager.getEmailIdFromPref();
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.subscriptionUrl.trim();
+//            LogUtil.showLog("MUVI", "payment at urlRouteList = " + urlRouteList);
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                LogUtil.showLog("MUVI", "=========== 1");
+//                httppost.addHeader("card_name", nameOnCardStr);
+//                LogUtil.showLog("MUVI", "=========== 11");
+//                httppost.addHeader("exp_month", String.valueOf(expiryMonthStr).trim());
+//                LogUtil.showLog("MUVI", "=========== 111");
+//                httppost.addHeader("card_number", cardNumberStr);
+//                LogUtil.showLog("MUVI", "=========== 1111");
+//                httppost.addHeader("exp_year", String.valueOf(expiryYearStr).trim());
+//                LogUtil.showLog("MUVI", "=========== 2");
+//                httppost.addHeader("email", emailIdSubStr.trim()); //Null pointer
+//                //  httppost.addHeader("movie_id", muviUniqueIdStr.trim());
+//                httppost.addHeader("user_id", userIdStr.trim());
+//                LogUtil.showLog("MUVI", "=========== 22=" + emailIdSubStr.trim());
+//                if (isCouponCodeAdded == true) {
+//                    httppost.addHeader("coupon_code", validCouponCode);
+//                    LogUtil.showLog("MUVI", "=========== 222");
+//                } else {
+//                    LogUtil.showLog("MUVI", "=========== 2222");
+//                    httppost.addHeader("coupon_code", "");
+//                }
+//                LogUtil.showLog("MUVI", "=========== 22222");
+//                httppost.addHeader("card_type", cardTypeStr.trim());
+//                LogUtil.showLog("MUVI", "=========== 3");
+//                httppost.addHeader("card_last_fourdigit", cardLastFourDigitStr.trim());
+//                LogUtil.showLog("MUVI", "=========== 33");
+//                httppost.addHeader("profile_id", profileIdStr.trim());
+//                LogUtil.showLog("MUVI", "=========== 333");
+//                httppost.addHeader("token", tokenStr.trim());
+//                LogUtil.showLog("MUVI", "=========== 3333=" + tokenStr.trim());
+//                httppost.addHeader("cvv", securityCardStr);
+//                // httppost.addHeader("country",currencyCountryCodeStr.trim());
+//                Log.v("MUVI", "=========== 33333");
+//                httppost.addHeader("country", preferenceManager.getCountryCodeFromPref());
+//                Log.v("MUVI", "=========== 4");
+//                httppost.addHeader("season_id", "0");
+//                LogUtil.showLog("MUVI", "=========== 44");
+//                httppost.addHeader("episode_id", "0");
+//                LogUtil.showLog("MUVI", "=========== 444");
+//                httppost.addHeader("currency_id", currencyIdStr.trim());
+//                LogUtil.showLog("MUVI", "=========== 4444");
+//
+//                httppost.addHeader("plan_id", getIntent().getStringExtra("selected_plan_id").toString().trim());
+//                httppost.addHeader("name", preferenceManager.getDispNameFromPref());
+//
+////                httppost.addHeader("is_save_this_card", isCheckedToSavetheCard.trim());
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//                    LogUtil.showLog("MUVI", "response of payment = " + responseStr);
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    LogUtil.showLog("MUVI", "error2=" + e.toString());
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                            status = 0;
+//                            if (progressBarHandler.isShowing())
+//                                progressBarHandler.hide();
+//                            Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//
+//                    status = 0;
+//                    if (progressBarHandler.isShowing())
+//                        progressBarHandler.hide();
+//                    e.printStackTrace();
+//                    LogUtil.showLog("MUVI", "error1=" + e.toString());
+//                }
+//
+//                LogUtil.showLog("MUVI", "response of payment = " + responseStr);
+//
+//                if (responseStr != null) {
+//                    JSONObject myJson = new JSONObject(responseStr);
+//                    status = Integer.parseInt(myJson.optString("code"));
+//                }
+//
+//            } catch (Exception e) {
+//
+//                if (progressBarHandler.isShowing())
+//                    progressBarHandler.hide();
+//                status = 0;
+//                LogUtil.showLog("MUVI", "error=" + e.toString());
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            if (status == 0) {
+//                try {
+//                    if (progressBarHandler.isShowing())
+//                        progressBarHandler.hide();
+//                } catch (IllegalArgumentException ex) {
+//                    status = 0;
+//                }
+//                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
+//                dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.ERROR_IN_SUBSCRIPTION, Util.DEFAULT_ERROR_IN_SUBSCRIPTION));
+//                dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE));
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            } else if (status > 0) {
+//
+//                if (status == 200) {
+//                    if (progressBarHandler.isShowing())
+//                        progressBarHandler.hide();
+//                    Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.SUBSCRIPTION_COMPLETED, Util.DEFAULT_SUBSCRIPTION_COMPLETED), Toast.LENGTH_LONG).show();
+//                    if (Util.check_for_subscription == 0) {
+//                        Intent intent = new Intent(PaymentInfoActivity.this, MainActivity.class);
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                        startActivity(intent);
+//                        finish();
+//                    } else {
+//                        if (Util.checkNetwork(PaymentInfoActivity.this) == true) {
+//
+//                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+//                            getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+//                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+//                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+//                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+//
+//                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, PaymentInfoActivity.this, PaymentInfoActivity.this);
+//                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+//
+//                        } else {
+//                            Intent intent = new Intent(PaymentInfoActivity.this, MainActivity.class);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                            startActivity(intent);
+//                            finish();
+//                            Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//
+//                } else {
+//                    try {
+//                        if (progressBarHandler.isShowing())
+//                            progressBarHandler.hide();
+//                    } catch (IllegalArgumentException ex) {
+//                        status = 0;
+//                    }
+//                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
+//                    dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.ERROR_IN_SUBSCRIPTION, Util.DEFAULT_ERROR_IN_SUBSCRIPTION));
+//                    dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setCancelable(false);
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                }
+//                            });
+//                    dlgAlert.create().show();
+//                }
+//            }
+//
+//        }
+
+//        @Override
+//        protected void onPreExecute() {
+//            progressBarHandler = new ProgressBarHandler(PaymentInfoActivity.this);
+//            progressBarHandler.show();
+//
+//        }
+//
+//
+//    }
 
     @Override
     protected void onResume() {

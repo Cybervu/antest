@@ -48,10 +48,19 @@ public class APIUrlConstant {
     public static  String AUTH_USER_PAYMENT_INFO_URL = "authUserPaymentInfo";
     public static  String GET_CARD_LIST_FOR_PPV_URL = "getCardsListForPPV";
     public static  String LanguageTranslation= "textTranslation";
-    public static final String CheckDevice = "CheckDevice";
-    public static final String LogoutAll = "LogoutAll";
-    public static final String fbUserExistsUrl = "getFbUserStatus";
-    public static final String AboutUs = "getStaticPagedetails";
+    public static  String CheckDevice = "CheckDevice";
+    public static  String LogoutAll = "LogoutAll";
+    public static  String fbUserExistsUrl = "getFbUserStatus";
+    public static  String AboutUs = "getStaticPagedetails";
+
+    public static String getManageDevices() {
+        return BASE_URl+ManageDevices;
+    }
+
+    public static final String ManageDevices = "ManageDevices";
+
+
+
 
     public static String getAboutUs() {
         return BASE_URl+AboutUs;
@@ -251,6 +260,12 @@ public class APIUrlConstant {
     public static  String IP_ADDRESS_URL = "https://api.ipify.org/?format=json";
     public static  String GET_LANGUAGE_LIST_URL = "getLanguageList";
     public static  String VIDEO_LOGS_URL = "videoLogs";
+
+    public static String getUpdateBufferLogUrl() {
+        return BASE_URl+updateBufferLogUrl;
+    }
+
+    public static final String updateBufferLogUrl = "updateBufferLogs";
     public static  String VIDEO_BUFFER_LOGS_URL = "bufferLogs";
     public static  String VALIDATE_USER_FOR_CONTENT_URL = "isContentAuthorized";
 

@@ -14,6 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.home.apisdk.apiController.LoadRegisteredDevicesAsync;
+import com.home.apisdk.apiModel.LoadRegisteredDevicesInput;
+import com.home.apisdk.apiModel.LoadRegisteredDevicesOutput;
 import com.home.vod.R;
 import com.home.vod.adapter.DeviceListAdapter;
 import com.home.vod.preferences.PreferenceManager;
@@ -39,11 +42,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class ManageDevices extends AppCompatActivity {
+public class ManageDevices extends AppCompatActivity implements LoadRegisteredDevicesAsync.LoadRegisteredDevices {
     String userId = "";
     String emailId = "";
     TextView name_of_user;
-
+    ProgressBarHandler pDialog;
 
     ArrayList<String> DeviceName = new ArrayList<>();
     ArrayList<String> DeviceFalg = new ArrayList<>();
@@ -58,7 +61,7 @@ public class ManageDevices extends AppCompatActivity {
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-   private PreferenceManager preferenceManager;
+    private PreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +71,14 @@ public class ManageDevices extends AppCompatActivity {
         device_list = (ListView) findViewById(R.id.device_list);
         manage_device_text = (TextView) findViewById(R.id.manage_device_text);
 
-        manage_device_text.setText("  "+Util.getTextofLanguage(ManageDevices.this,Util.YOUR_DEVICE,Util.DEFAULT_YOUR_DEVICE));
+        manage_device_text.setText("  " + Util.getTextofLanguage(ManageDevices.this, Util.YOUR_DEVICE, Util.DEFAULT_YOUR_DEVICE));
         Typeface typeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         manage_device_text.setTypeface(typeface);
 
 
-        Toolbar mActionBarToolbar= (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-        mActionBarToolbar.setTitle(Util.getTextofLanguage(ManageDevices.this,Util.MANAGE_DEVICE, Util.DEFAULT_MANAGE_DEVICE));
+        mActionBarToolbar.setTitle(Util.getTextofLanguage(ManageDevices.this, Util.MANAGE_DEVICE, Util.DEFAULT_MANAGE_DEVICE));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,127 +86,157 @@ public class ManageDevices extends AppCompatActivity {
             }
         });
 
-            userId = preferenceManager.getUseridFromPref();
-            emailId = preferenceManager.getEmailIdFromPref();
-
-        AsynLoadRegisteredDevices asynLoadRegisteredDevices = new AsynLoadRegisteredDevices();
+        userId = preferenceManager.getUseridFromPref();
+        emailId = preferenceManager.getEmailIdFromPref();
+        LoadRegisteredDevicesInput loadRegisteredDevicesInput = new LoadRegisteredDevicesInput();
+        loadRegisteredDevicesInput.setAuthToken(Util.authTokenStr);
+        loadRegisteredDevicesInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        loadRegisteredDevicesInput.setUser_id(userId);
+        loadRegisteredDevicesInput.setLang_code(Util.getTextofLanguage(ManageDevices.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        LoadRegisteredDevicesAsync asynLoadRegisteredDevices = new LoadRegisteredDevicesAsync(loadRegisteredDevicesInput, this, this);
         asynLoadRegisteredDevices.executeOnExecutor(threadPoolExecutor);
     }
 
-    private class AsynLoadRegisteredDevices extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-        String responseStr="0";
-        int statusCode;
-        String message;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.ManageDevices.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", userId);
-                httppost.addHeader("device", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                httppost.addHeader("lang_code",Util.getTextofLanguage(ManageDevices.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-                // Execute HTTP Post Request
-                try {
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                    LogUtil.showLog("BIBHU","responseStr of device list ="+responseStr);
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    ManageDevices.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(ManageDevices.this, Util.getTextofLanguage(ManageDevices.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                    message = myJson.optString("msg");
-                }
-
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-            }
-            if (responseStr != null) {
-                if (statusCode==200) {
-                    // Start parsing Here
-
-                    try {
-                        JSONObject myJson = new JSONObject(responseStr);
-                        JSONArray jsonArray = myJson.optJSONArray("device_list");
-
-                        for(int i=0 ;i<jsonArray.length();i++)
-                        {
-                            DeviceName.add(jsonArray.optJSONObject(i).optString("device").trim());
-                            DeviceInfo.add(jsonArray.optJSONObject(i).optString("device_info").trim());
-                            DeviceFalg.add(jsonArray.optJSONObject(i).optString("flag").trim());
-                        }
-
-                        DeviceListAdapter adapter = new DeviceListAdapter(ManageDevices.this,DeviceName,DeviceInfo,DeviceFalg);
-                        device_list.setAdapter(adapter);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else
-                {
-                    // Show The Error Message Here
-                    Toast.makeText(getApplicationContext(),message, Toast.LENGTH_LONG).show();
-                    finish();
-                }
-            }
-            else{
-                // Show Try Again Msg and finish here.
-                Toast.makeText(getApplicationContext(),  Util.getTextofLanguage(ManageDevices.this,Util.TRY_AGAIN,Util.DEFAULT_TRY_AGAIN), Toast.LENGTH_LONG).show();
-                finish();
-            }
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressBarHandler(ManageDevices.this);
-            pDialog.show();
-        }
+    @Override
+    public void onLoadRegisteredDevicesPreExecuteStarted() {
+        pDialog = new ProgressBarHandler(ManageDevices.this);
+        pDialog.show();
     }
+
+    @Override
+    public void onLoadRegisteredDevicesPostExecuteCompleted(ArrayList<LoadRegisteredDevicesOutput> loadRegisteredDevicesOutputs, int status, String message) {
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
+        }
+        if (message != null) {
+
+            DeviceListAdapter adapter = new DeviceListAdapter(ManageDevices.this, DeviceName, DeviceInfo, DeviceFalg);
+            device_list.setAdapter(adapter);
+        } else {
+            // Show The Error Message Here
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            finish();
+        }
+
+
+    }
+//    private class AsynLoadRegisteredDevices extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler pDialog;
+//        String responseStr="0";
+//        int statusCode;
+//        String message;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.ManageDevices.trim());
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("user_id", userId);
+//                httppost.addHeader("device", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+//                httppost.addHeader("lang_code",Util.getTextofLanguage(ManageDevices.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//                // Execute HTTP Post Request
+//                try {
+//
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//                    LogUtil.showLog("BIBHU","responseStr of device list ="+responseStr);
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    ManageDevices.this.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Toast.makeText(ManageDevices.this, Util.getTextofLanguage(ManageDevices.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                JSONObject myJson = null;
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//                    message = myJson.optString("msg");
+//                }
+//
+//            } catch (JSONException e1) {
+//                e1.printStackTrace();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//
+//        }
+//
+//        protected void onPostExecute(Void result) {
+//
+//            try {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//            } catch (IllegalArgumentException ex) {
+//            }
+//            if (responseStr != null) {
+//                if (statusCode==200) {
+//                    // Start parsing Here
+//
+//                    try {
+//                        JSONObject myJson = new JSONObject(responseStr);
+//                        JSONArray jsonArray = myJson.optJSONArray("device_list");
+//
+//                        for(int i=0 ;i<jsonArray.length();i++)
+//                        {
+//                            DeviceName.add(jsonArray.optJSONObject(i).optString("device").trim());
+//                            DeviceInfo.add(jsonArray.optJSONObject(i).optString("device_info").trim());
+//                            DeviceFalg.add(jsonArray.optJSONObject(i).optString("flag").trim());
+//                        }
+//
+//                        DeviceListAdapter adapter = new DeviceListAdapter(ManageDevices.this,DeviceName,DeviceInfo,DeviceFalg);
+//                        device_list.setAdapter(adapter);
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                else
+//                {
+//                    // Show The Error Message Here
+//                    Toast.makeText(getApplicationContext(),message, Toast.LENGTH_LONG).show();
+//                    finish();
+//                }
+//            }
+//            else{
+//                // Show Try Again Msg and finish here.
+//                Toast.makeText(getApplicationContext(),  Util.getTextofLanguage(ManageDevices.this,Util.TRY_AGAIN,Util.DEFAULT_TRY_AGAIN), Toast.LENGTH_LONG).show();
+//                finish();
+//            }
+//
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            pDialog = new ProgressBarHandler(ManageDevices.this);
+//            pDialog.show();
+//        }
+//    }
 
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         finish();
         overridePendingTransition(0, 0);
         super.onBackPressed();

@@ -23,29 +23,30 @@ import java.io.IOException;
  * Created by MUVI on 1/20/2017.
  */
 
-public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoInputModel,Void ,Void > {
+public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoInputModel, Void, Void> {
 
     public AuthUserPaymentInfoInputModel authUserPaymentInfoInputModel;
-    String PACKAGE_NAME,message,responseStr;
+    String PACKAGE_NAME, message, responseStr,responseMessageStr;
     int code;
 
-    public interface AuthUserPaymentInfo{
+    public interface AuthUserPaymentInfo {
         void onAuthUserPaymentInfoPreExecuteStarted();
-        void onAuthUserPaymentInfoPostExecuteCompleted(AuthUserPaymentInfoOutputModel authUserPaymentInfoOutputModel, int status);
+
+        void onAuthUserPaymentInfoPostExecuteCompleted(AuthUserPaymentInfoOutputModel authUserPaymentInfoOutputModel, int status,String message);
     }
 
     private AuthUserPaymentInfo listener;
     private Context context;
     AuthUserPaymentInfoOutputModel authUserPaymentInfoOutputModel = new AuthUserPaymentInfoOutputModel();
 
-    public AuthUserPaymentInfoAsyntask(AuthUserPaymentInfoInputModel authUserPaymentInfoInputModel,AuthUserPaymentInfo listener, Context context) {
+    public AuthUserPaymentInfoAsyntask(AuthUserPaymentInfoInputModel authUserPaymentInfoInputModel, AuthUserPaymentInfo listener, Context context) {
         this.listener = listener;
         this.context = context;
 
         this.authUserPaymentInfoInputModel = authUserPaymentInfoInputModel;
-        PACKAGE_NAME=context.getPackageName();
-        Log.v("MUVISDK", "pkgnm :"+PACKAGE_NAME);
-        Log.v("MUVISDK","register user payment");
+        PACKAGE_NAME = context.getPackageName();
+        Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
+        Log.v("MUVISDK", "register user payment");
     }
 
     @Override
@@ -64,7 +65,6 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
             httppost.addHeader("cardNumber", this.authUserPaymentInfoInputModel.getCardNumber());
             httppost.addHeader("cvv", this.authUserPaymentInfoInputModel.getCvv());
             httppost.addHeader("email", this.authUserPaymentInfoInputModel.getEmail());
-
 
 
             try {
@@ -89,7 +89,7 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
 
             }
 
-            if(code == 1){
+            if (code == 1) {
 
                 JSONObject mainJson = null;
 
@@ -104,14 +104,14 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
                     }
 
                     if (mainJson.has("response_text") && mainJson.optString("response_text").trim() != null && !mainJson.optString("response_text").trim().isEmpty() && !mainJson.optString("response_text").trim().equals("null") && !mainJson.optString("response_text").trim().matches("")) {
-                        authUserPaymentInfoOutputModel.setResponse_text( mainJson.optString("response_text"));
+                        authUserPaymentInfoOutputModel.setResponse_text(mainJson.optString("response_text"));
                     }
 
                     if (mainJson.has("profile_id") && mainJson.optString("profile_id").trim() != null && !mainJson.optString("profile_id").trim().isEmpty() && !mainJson.optString("profile_id").trim().equals("null") && !mainJson.optString("profile_id").trim().matches("")) {
                         authUserPaymentInfoOutputModel.setProfile_id(mainJson.optString("profile_id"));
                     }
                     if (mainJson.has("card_last_fourdigit") && mainJson.optString("card_last_fourdigit").trim() != null && !mainJson.optString("card_last_fourdigit").trim().isEmpty() && !mainJson.optString("card_last_fourdigit").trim().equals("null") && !mainJson.optString("card_last_fourdigit").trim().matches("")) {
-                        authUserPaymentInfoOutputModel.setCard_last_fourdigit( mainJson.optString("card_last_fourdigit"));
+                        authUserPaymentInfoOutputModel.setCard_last_fourdigit(mainJson.optString("card_last_fourdigit"));
                     }
 
                     if (mainJson.has("card_type") && mainJson.optString("card_type").trim() != null && !mainJson.optString("card_type").trim().isEmpty() && !mainJson.optString("card_type").trim().equals("null") && !mainJson.optString("card_type").trim().matches("")) {
@@ -120,31 +120,34 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
                 }
 
             }
-            /*if (code == 0) {
+            if (code == 0) {
                 if (myJson.has("Message")) {
-                     String responseMessageStr = myJson.optString("Message");
+                    responseMessageStr = myJson.optString("Message");
                 }
                 if (((responseMessageStr.equalsIgnoreCase("null")) || (responseMessageStr.length() <= 0))) {
-                    responseMessageStr = Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.NO_DETAILS_AVAILABLE,Util.DEFAULT_NO_DETAILS_AVAILABLE);
+                    responseMessageStr="No Details found";
 
-                }
-            }*/
-
-
-        } catch (Exception e) {
-            code = 0;
-            message = "";
-
+            }
         }
-        return null;
+
+
+    } catch(
+    Exception e)
+
+    {
+        code = 0;
+        message = "";
+
     }
+        return null;
+}
 
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onAuthUserPaymentInfoPreExecuteStarted();
-        code= 0;
+        code = 0;
      /*   if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
@@ -161,6 +164,6 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onAuthUserPaymentInfoPostExecuteCompleted(authUserPaymentInfoOutputModel,code);
+        listener.onAuthUserPaymentInfoPostExecuteCompleted(authUserPaymentInfoOutputModel, code,responseMessageStr);
     }
 }
