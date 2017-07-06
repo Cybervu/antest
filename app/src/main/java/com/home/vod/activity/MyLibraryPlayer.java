@@ -169,7 +169,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     int content_types_id = 0;
 
 
-    // Adder Later // By Bibhu
+    // Adder Later // By MUVI
 
     private SubtitleProcessingTask subsFetchTask;
     public TimedTextObject srt;
@@ -280,7 +280,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             }
         },1000,1000);
 
-        //Call For Subtitle Loading // Added By Bibhu
+        //Call For Subtitle Loading // Added By MUVI
 
 
         if (getIntent().getStringArrayListExtra("SubTitleName") != null) {
@@ -388,7 +388,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             Collections.reverse(ResolutionFormat);
             for(int m=0;m<ResolutionFormat.size();m++)
             {
-                LogUtil.showLog("BIBHU","RESOLUTION FORMAT======"+ResolutionFormat.get(m));
+                LogUtil.showLog("MUVI","RESOLUTION FORMAT======"+ResolutionFormat.get(m));
             }
         }
         if(ResolutionUrl.size()>0)
@@ -396,7 +396,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             Collections.reverse(ResolutionUrl);
             for(int n=0;n<ResolutionUrl.size();n++)
             {
-                LogUtil.showLog("BIBHU","RESOLUTION URL======"+ResolutionUrl.get(n));
+                LogUtil.showLog("MUVI","RESOLUTION URL======"+ResolutionUrl.get(n));
             }
         }
 
@@ -1876,7 +1876,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             MovableTimer.cancel();
     }
 
-    // Added Later By Bibhu For Subtitle Feature.
+    // Added Later By MUVI For Subtitle Feature.
 
     public class SubtitleProcessingTask extends AsyncTask<Void, Void, Void> {
 
@@ -1936,13 +1936,13 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 if(callWithoutCaption)
                 {
-                    LogUtil.showLog("BIBHU","Without Caption Called");
+                    LogUtil.showLog("MUVI","Without Caption Called");
                     FormatSRT_WithoutCaption formatSRT = new FormatSRT_WithoutCaption();
                     srt = formatSRT.parseFile("sample", fIn);
                 }
                 else
                 {
-                    LogUtil.showLog("BIBHU","With Caption Called");
+                    LogUtil.showLog("MUVI","With Caption Called");
                     FormatSRT formatSRT = new FormatSRT();
                     srt = formatSRT.parseFile("sample", fIn);
                 }
@@ -2043,8 +2043,8 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
 //        String Subtitle_Path = Environment.getExternalStorageDirectory().toString()+"/"+"sub.vtt";
 
-        LogUtil.showLog("BIBHU","Subtitle_Path at CheckSubTitleParsingType = "+Subtitle_Path);
-        LogUtil.showLog("BIBHU","Subtitle_Path at CheckSubTitleParsingType size = "+SubTitlePath.size());
+        LogUtil.showLog("MUVI","Subtitle_Path at CheckSubTitleParsingType = "+Subtitle_Path);
+        LogUtil.showLog("MUVI","Subtitle_Path at CheckSubTitleParsingType size = "+SubTitlePath.size());
 
         callWithoutCaption = true;
 
@@ -2075,7 +2075,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         {
             try
             {
-                LogUtil.showLog("BIBHU","Testing Liane at Mainactivity = "+TestingLine.toString());
+                LogUtil.showLog("MUVI","Testing Liane at Mainactivity = "+TestingLine.toString());
 
                 if(Integer.parseInt(TestingLine.toString().trim())==captionNumber)
                 {
@@ -2090,7 +2090,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     e1.printStackTrace();
                 }
                 testinglinecounter++;
-                LogUtil.showLog("BIBHU","Total no of line at Mainactivity = "+testinglinecounter);
+                LogUtil.showLog("MUVI","Total no of line at Mainactivity = "+testinglinecounter);
             }
         }
     }
@@ -2126,20 +2126,20 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             final int yUp =  new Random().nextInt((max - min) + 1) + min;
 
 
-            LogUtil.showLog("BIBHU" ,"=========================================="+"\n");
+            LogUtil.showLog("MUVI" ,"=========================================="+"\n");
 
-            LogUtil.showLog("BIBHU" ,"mainLayout_width  ==="+mainLayout_width);
-            LogUtil.showLog("BIBHU" ,"mainLayout_height  ==="+mainLayout_height);
+            LogUtil.showLog("MUVI" ,"mainLayout_width  ==="+mainLayout_width);
+            LogUtil.showLog("MUVI" ,"mainLayout_height  ==="+mainLayout_height);
 
-            LogUtil.showLog("BIBHU" ,"childLayout_width  ==="+childLayout_width);
-            LogUtil.showLog("BIBHU" ,"childLayout_height  ==="+childLayout_height);
+            LogUtil.showLog("MUVI" ,"childLayout_width  ==="+childLayout_width);
+            LogUtil.showLog("MUVI" ,"childLayout_height  ==="+childLayout_height);
 
 
-            LogUtil.showLog("BIBHU" ,"xLeft  ==="+xLeft);
-            LogUtil.showLog("BIBHU" ,"yUp  ==="+yUp);
+            LogUtil.showLog("MUVI" ,"xLeft  ==="+xLeft);
+            LogUtil.showLog("MUVI" ,"yUp  ==="+yUp);
 
-            LogUtil.showLog("BIBHU" ,"width addition  ==="+(childLayout_width+xLeft));
-            LogUtil.showLog("BIBHU" ,"height addition   ==="+(childLayout_height+yUp));
+            LogUtil.showLog("MUVI" ,"width addition  ==="+(childLayout_width+xLeft));
+            LogUtil.showLog("MUVI" ,"height addition   ==="+(childLayout_height+yUp));
 
             if((mainLayout_width>(childLayout_width+xLeft)) && (mainLayout_height>(childLayout_height+yUp)))
             {
@@ -2198,7 +2198,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("BIBHU", "Response Of the Login Status =" + responseStr);
+                    Log.v("MUVI", "Response Of the Login Status =" + responseStr);
 
                 } catch (Exception e) {
                     responseStr = "0";

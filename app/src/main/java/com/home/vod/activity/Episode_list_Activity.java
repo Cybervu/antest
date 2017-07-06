@@ -56,6 +56,7 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.apiController.GetEpisodeDeatailsAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
+import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
 import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
@@ -123,8 +124,9 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 /**
  * Created by Muvi on 2/6/2017.
  */
-public class Episode_list_Activity extends AppCompatActivity implements VideoDetailsAsynctask.VideoDetails,GetValidateUserAsynTask.GetValidateUser,
-        GetEpisodeDeatailsAsynTask.GetEpisodeDetails,GetLanguageListAsynTask.GetLanguageList,LogoutAsynctask.Logout{
+public class Episode_list_Activity extends AppCompatActivity implements VideoDetailsAsynctask.VideoDetails, GetValidateUserAsynTask.GetValidateUser,
+        GetEpisodeDeatailsAsynTask.GetEpisodeDetails, GetLanguageListAsynTask.GetLanguageList, LogoutAsynctask.Logout,
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListner {
 
     String filename = "";
     static File mediaStorageDir;
@@ -522,13 +524,13 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                     if ((validateUserOutput.getValiduser_str().trim().equalsIgnoreCase("OK")) || (validateUserOutput.getValiduser_str().trim().matches("OK")) || (validateUserOutput.getValiduser_str().trim().equals("OK"))) {
                         if (Util.checkNetwork(Episode_list_Activity.this) == true) {
-                            GetVideoDetailsInput getVideoDetailsInput=new GetVideoDetailsInput();
+                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                             getVideoDetailsInput.setAuthToken(Util.authTokenStr);
                             getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                             getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                             getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                             getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,Episode_list_Activity.this,this);
+                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, Episode_list_Activity.this, this);
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
                             Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -573,13 +575,13 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 dlgAlert.create().show();
             } else {
                 if (Util.checkNetwork(Episode_list_Activity.this) == true) {
-                    GetVideoDetailsInput getVideoDetailsInput=new GetVideoDetailsInput();
+                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(Util.authTokenStr);
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,Episode_list_Activity.this,this);
+                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, Episode_list_Activity.this, this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                 } else {
                     Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -633,7 +635,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         }
         if (code > 0) {
             if (code == 200) {
-               preferenceManager.clearLoginPref();
+                preferenceManager.clearLoginPref();
                  /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
                     if (countryPref!=null) {
                         SharedPreferences.Editor countryEditor = countryPref.edit();
@@ -673,6 +675,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             }
         }
     }
+
 
     public enum PlaybackLocation {
         LOCAL,
@@ -1008,7 +1011,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     }
 
 
-
     public void clickItem(EpisodesListModel item) {
 
 
@@ -1059,7 +1061,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         ResolutionUrl.clear();
         ResolutionFormat.clear();
 
-        if(isLogin == 1) {
+        if (isLogin == 1) {
             if (preferenceManager != null) {
                 String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
@@ -1072,27 +1074,27 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     if (Util.checkNetwork(Episode_list_Activity.this) == true) {
 
 
-                                if (isFreeContent == 1) {
-                                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this,this);
-                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                } else {
-                                    ValidateUserInput validateUserInput=new ValidateUserInput();
-                                    validateUserInput.setAuthToken(Util.authTokenStr);
-                                    validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                                    validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                                    validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                                    validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                    validateUserInput.setLanguageCode(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                                    GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput,this,this);
-                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                                }
-                            } else {
+                        if (isFreeContent == 1) {
+                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                            getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this, this);
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                        } else {
+                            ValidateUserInput validateUserInput = new ValidateUserInput();
+                            validateUserInput.setAuthToken(Util.authTokenStr);
+                            validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
+                            validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
+                            validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
+                            validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
+                            validateUserInput.setLanguageCode(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                            GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, this, this);
+                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                        }
+                    } else {
                         Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
                 }
@@ -1107,20 +1109,20 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             if (Util.checkNetwork(Episode_list_Activity.this) == true) {
                 // MUVIlaxmi
 
-                GetVideoDetailsInput getVideoDetailsInput=new GetVideoDetailsInput();
+                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                 getVideoDetailsInput.setAuthToken(Util.authTokenStr);
                 getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,this,this);
+                VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this, this);
                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
             } else {
                 Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
             }
         }
-        }
+    }
 
 
 //    private class AsynLoadVideoUrls extends AsyncTask<Void, Void, Void> {
@@ -2323,13 +2325,13 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     httppost.addHeader("country", "IN");
 
                 }
-                httppost.addHeader("lang_code",Util.getTextofLanguage(Episode_list_Activity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("lang_code", Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
-                if(!getIntent().getStringExtra(Util.SEASON_INTENT_KEY).equals("")){
+                if (!getIntent().getStringExtra(Util.SEASON_INTENT_KEY).equals("")) {
 
-                    httppost.addHeader("series_number",getIntent().getStringExtra(Util.SEASON_INTENT_KEY));
+                    httppost.addHeader("series_number", getIntent().getStringExtra(Util.SEASON_INTENT_KEY));
 
-                }else {
+                } else {
 
                 }
 
@@ -2339,7 +2341,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -2347,13 +2349,13 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                                 pDialog.hide();
                                 pDialog = null;
                             }
-                            if (itemData!=null){
+                            if (itemData != null) {
                                 noInternetConnectionLayout.setVisibility(View.GONE);
                                 episodelist.setVisibility(View.VISIBLE);
                                 noDataLayout.setVisibility(View.GONE);
 
 
-                            }else {
+                            } else {
                                 noInternetConnectionLayout.setVisibility(View.VISIBLE);
                                 episodelist.setVisibility(View.GONE);
                                 noDataLayout.setVisibility(View.GONE);
@@ -3270,9 +3272,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
         id = preferenceManager.getUseridFromPref();
-        email=preferenceManager.getEmailIdFromPref();
+        email = preferenceManager.getEmailIdFromPref();
 
-        if(preferenceManager.getLanguageListFromPref().equals("1"))
+        if (preferenceManager.getLanguageListFromPref().equals("1"))
             (menu.findItem(R.id.menu_item_language)).setVisible(false);
 
 
@@ -3372,9 +3374,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     ShowLanguagePopup();
 
                 } else {
-                    LanguageListInputModel languageListInputMode=new LanguageListInputModel();
+                    LanguageListInputModel languageListInputMode = new LanguageListInputModel();
                     languageListInputMode.setAuthToken(Util.authTokenStr);
-                    GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputMode,this,this);
+                    GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputMode, this, this);
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
                 return false;
@@ -3404,11 +3406,11 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         // Do nothing but close the dialog
 
                         // dialog.cancel();
-                        LogoutInput logoutInput=new LogoutInput();
+                        LogoutInput logoutInput = new LogoutInput();
                         logoutInput.setAuthToken(Util.authTokenStr);
                         logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
                         logoutInput.setLang_code(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                        LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput,Episode_list_Activity.this,Episode_list_Activity.this);
+                        LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, Episode_list_Activity.this, Episode_list_Activity.this);
                         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
 
 
@@ -3529,8 +3531,10 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 if (!Previous_Selected_Language.equals(Default_Language)) {
 
-
-                    AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
+                    LanguageListInputModel languageListInputModel=new LanguageListInputModel();
+                    languageListInputModel.setAuthToken(Util.authTokenStr);
+                    languageListInputModel.setLangCode(Default_Language);
+                    GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel,Episode_list_Activity.this,Episode_list_Activity.this);
                     asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
                 }
 
@@ -3551,7 +3555,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     }
 
 
-//    private class AsynGetLanguageList extends AsyncTask<Void, Void, Void> {
+    //    private class AsynGetLanguageList extends AsyncTask<Void, Void, Void> {
 //        String responseStr;
 //        int status;
 //
@@ -3667,275 +3671,494 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 //
 //        }
 //    }
-
-    private class AsynGetTransalatedLanguage extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int status;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = Util.rootUrl().trim() + Util.LanguageTranslation.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr);
-                httppost.addHeader("lang_code", Default_Language);
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = (EntityUtils.toString(response.getEntity())).trim();
-                } catch (Exception e) {
-                }
-                if (responseStr != null) {
-                    JSONObject json = new JSONObject(responseStr);
-                    try {
-                        status = Integer.parseInt(json.optString("code"));
-                    } catch (Exception e) {
-                        status = 0;
-                    }
-                }
-
-            } catch (Exception e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-
-                    }
-                });
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if (progressBarHandler != null && progressBarHandler.isShowing()) {
-                progressBarHandler.hide();
-                progressBarHandler = null;
-
-            }
-
-            if (responseStr == null) {
-            } else {
-                if (status > 0 && status == 200) {
-
-                    try {
-                        JSONObject parent_json = new JSONObject(responseStr);
-                        JSONObject json = parent_json.getJSONObject("translation");
-
-
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.ALREADY_MEMBER,json.optString("already_member").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.ACTIAVTE_PLAN_TITLE,json.optString("activate_plan_title").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.TRANSACTION_STATUS_ACTIVE,json.optString("transaction_status_active").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.ADD_TO_FAV,json.optString("add_to_fav").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.ADDED_TO_FAV,json.optString("added_to_fav").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.ADVANCE_PURCHASE,json.optString("advance_purchase").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.ALERT,json.optString("alert").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.EPISODE_TITLE,json.optString("episodes_title").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SORT_ALPHA_A_Z,json.optString("sort_alpha_a_z").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SORT_ALPHA_Z_A,json.optString("sort_alpha_z_a").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.AMOUNT,json.optString("amount").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.COUPON_CANCELLED,json.optString("coupon_cancelled").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.BUTTON_APPLY,json.optString("btn_apply").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SIGN_OUT_WARNING,json.optString("sign_out_warning").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.DISCOUNT_ON_COUPON,json.optString("discount_on_coupon").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.CREDIT_CARD_CVV_HINT,json.optString("credit_card_cvv_hint").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.CAST,json.optString("cast").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.CAST_CREW_BUTTON_TITLE,json.optString("cast_crew_button_title").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.CENSOR_RATING,json.optString("censor_rating").trim());
-
-
-                        if(json.optString("change_password").trim()==null || json.optString("change_password").trim().equals("")) {
-                            Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CHANGE_PASSWORD, Util.DEFAULT_CHANGE_PASSWORD);
-                        }
-                        else {
-                            Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CHANGE_PASSWORD, json.optString("change_password").trim());
-                        }
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.CONFIRM_PASSWORD,json.optString("confirm_password").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.CREDIT_CARD_DETAILS,json.optString("credit_card_detail").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.DIRECTOR,json.optString("director").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.DOWNLOAD_BUTTON_TITLE,json.optString("download_button_title").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.DESCRIPTION,json.optString("description").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.EMAIL_EXISTS,json.optString("email_exists").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.EMAIL_DOESNOT_EXISTS,json.optString("email_does_not_exist").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.EMAIL_PASSWORD_INVALID,json.optString("email_password_invalid").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.COUPON_CODE_HINT,json.optString("coupon_code_hint").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SEARCH_ALERT,json.optString("search_alert").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.CREDIT_CARD_NUMBER_HINT,json.optString("credit_card_number_hint").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.TEXT_EMIAL,json.optString("text_email").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.NAME_HINT,json.optString("name_hint").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.CREDIT_CARD_NAME_HINT,json.optString("credit_card_name_hint").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.TEXT_PASSWORD,json.optString("text_password").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.ERROR_IN_SUBSCRIPTION,json.optString("error_in_subscription").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.ERROR_IN_PAYMENT_VALIDATION,json.optString("error_in_payment_validation").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.ERROR_IN_REGISTRATION,json.optString("error_in_registration").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.TRANSACTION_STATUS_EXPIRED,json.optString("transaction_status_expired").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.DETAILS_NOT_FOUND_ALERT,json.optString("details_not_found_alert").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.FAILURE,json.optString("failure").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.ENTER_REGISTER_FIELDS_DATA,json.optString("enter_register_fields_data").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.FILTER_BY,json.optString("filter_by").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.FORGOT_PASSWORD,json.optString("forgot_password").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.GENRE,json.optString("genre").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.AGREE_TERMS,json.optString("agree_terms").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.INVALID_COUPON,json.optString("invalid_coupon").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.INVOICE,json.optString("invoice").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.LANGUAGE_POPUP_LANGUAGE,json.optString("language_popup_language").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SORT_LAST_UPLOADED,json.optString("sort_last_uploaded").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.LANGUAGE_POPUP_LOGIN,json.optString("language_popup_login").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.LOGIN,json.optString("login").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.LOGOUT,json.optString("logout").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.LOGOUT_SUCCESS,json.optString("logout_success").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.MY_FAVOURITE,json.optString("my_favourite").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.NEW_PASSWORD,json.optString("new_password").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.NEW_HERE_TITLE,json.optString("new_here_title").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.NO,json.optString("no").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.NO_DATA,json.optString("no_data").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.NO_INTERNET_CONNECTION,json.optString("no_internet_connection").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.NO_INTERNET_NO_DATA,json.optString("no_internet_no_data").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.NO_DETAILS_AVAILABLE,json.optString("no_details_available").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.BUTTON_OK,json.optString("btn_ok").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.OLD_PASSWORD,json.optString("old_password").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.OOPS_INVALID_EMAIL,json.optString("oops_invalid_email").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.ORDER,json.optString("order").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.TRANSACTION_DETAILS_ORDER_ID,json.optString("transaction_detail_order_id").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.PASSWORD_RESET_LINK,json.optString("password_reset_link").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.PASSWORDS_DO_NOT_MATCH,json.optString("password_donot_match").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.PAY_BY_PAYPAL,json.optString("pay_by_paypal").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.BTN_PAYNOW,json.optString("btn_paynow").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.PAY_WITH_CREDIT_CARD,json.optString("pay_with_credit_card").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.PAYMENT_OPTIONS_TITLE,json.optString("payment_options_title").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.PLAN_NAME,json.optString("plan_name").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,json.optString("activate_subscription_watch_video").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.COUPON_ALERT,json.optString("coupon_alert").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.VALID_CONFIRM_PASSWORD,json.optString("valid_confirm_password").trim());
-                       // Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.EMAIL_REQUIRED,json.optString("email_required").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.PROFILE,json.optString("profile").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.PROFILE_UPDATED,json.optString("profile_updated").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.PURCHASE,json.optString("purchase").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.TRANSACTION_DETAIL_PURCHASE_DATE,json.optString("transaction_detail_purchase_date").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.PURCHASE_HISTORY,json.optString("purchase_history").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.BTN_REGISTER,json.optString("btn_register").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SORT_RELEASE_DATE,json.optString("sort_release_date").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SAVE_THIS_CARD,json.optString("save_this_card").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.TEXT_SEARCH_PLACEHOLDER,json.optString("text_search_placeholder").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SEASON,json.optString("season").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SELECT_OPTION_TITLE,json.optString("select_option_title").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SELECT_PLAN,json.optString("select_plan").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SIGN_UP_TITLE,json.optString("signup_title").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SLOW_INTERNET_CONNECTION,json.optString("slow_internet_connection").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SLOW_ISSUE_INTERNET_CONNECTION,json.optString("slow_issue_internet_connection").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SORRY,json.optString("sorry").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.GEO_BLOCKED_ALERT,json.optString("geo_blocked_alert").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SIGN_OUT_ERROR,json.optString("sign_out_error").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.ALREADY_PURCHASE_THIS_CONTENT,json.optString("already_purchase_this_content").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.CROSSED_MAXIMUM_LIMIT,json.optString("crossed_max_limit_of_watching").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SORT_BY,json.optString("sort_by").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.STORY_TITLE,json.optString("story_title").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.BTN_SUBMIT,json.optString("btn_submit").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.TRANSACTION_STATUS,json.optString("transaction_success").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.VIDEO_ISSUE,json.optString("video_issue").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.NO_CONTENT,json.optString("no_content").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.NO_VIDEO_AVAILABLE,json.optString("no_video_available").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY,json.optString("content_not_available_in_your_country").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.TRANSACTION_DATE,json.optString("transaction_date").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.TRANASCTION_DETAIL,json.optString("transaction_detail").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.TRANSACTION_STATUS,json.optString("transaction_status").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.TRANSACTION,json.optString("transaction").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.TRY_AGAIN,json.optString("try_again").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.UNPAID,json.optString("unpaid").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.USE_NEW_CARD,json.optString("use_new_card").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.VIEW_MORE,json.optString("view_more").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.VIEW_TRAILER,json.optString("view_trailer").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.WATCH,json.optString("watch").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.WATCH_NOW,json.optString("watch_now").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SIGN_OUT_ALERT,json.optString("sign_out_alert").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.UPDATE_PROFILE_ALERT,json.optString("update_profile_alert").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.YES,json.optString("yes").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.PURCHASE_SUCCESS_ALERT,json.optString("purchase_success_alert").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.CARD_WILL_CHARGE,json.optString("card_will_charge").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SEARCH_HINT,json.optString("search_hint").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TERMS, json.optString("terms").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.UPDATE_PROFILE, json.optString("btn_update_profile").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.APP_ON, json.optString("app_on").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.APP_SELECT_LANGUAGE, json.optString("app_select_language").trim());
-
-
-
-                        // Added Later
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.NO_PDF,json.optString("no_pdf").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.DOWNLOAD_INTERRUPTED,json.optString("download_interrupted").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.DOWNLOAD_COMPLETED,json.optString("download_completed").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.TRANSACTION_TITLE,json.optString("transaction_title").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.FREE,json.optString("free").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.SUBSCRIPTION_COMPLETED,json.optString("subscription completed").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.CANCEL_BUTTON,json.optString("btn_cancel").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.RESUME_MESSAGE,json.optString("resume_watching").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.CONTINUE_BUTTON,json.optString("continue").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.CVV_ALERT,json.optString("cvv_alert").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, json.optString("simultaneous_logout_message").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.LOGIN_STATUS_MESSAGE, json.optString("login_status_message").trim());
-
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.FILL_FORM_BELOW, json.optString("fill_form_below").trim());
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.MESSAGE, json.optString("text_message").trim());
-                        Util.getTextofLanguage(Episode_list_Activity.this, Util.PURCHASE, Util.DEFAULT_PURCHASE);
-                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Default_Language);
-
-                        //Call For Language PopUp Dialog
-
-                        languageCustomAdapter.notifyDataSetChanged();
-
-                        Intent intent = new Intent(Episode_list_Activity.this,MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    // Call For Other Methods.
-
-
-                } else {
-                }
-            }
-
-
-        }
-
-        protected void onPreExecute() {
-            progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
-            progressBarHandler.show();
-        }
+    @Override
+    public void onGetTranslateLanguagePreExecuteStarted() {
+        progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
+        progressBarHandler.show();
     }
+
+    @Override
+    public void onGetTranslateLanguagePostExecuteCompleted(String jsonResponse, int status) {
+
+
+        if (progressBarHandler != null && progressBarHandler.isShowing()) {
+            progressBarHandler.hide();
+            progressBarHandler = null;
+
+        }
+
+        if (jsonResponse == null) {
+        } else {
+            if (status > 0 && status == 200) {
+
+                try {
+                    JSONObject json = new JSONObject(jsonResponse);
+
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ALREADY_MEMBER, json.optString("already_member").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ACTIAVTE_PLAN_TITLE, json.optString("activate_plan_title").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_STATUS_ACTIVE, json.optString("transaction_status_active").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ADD_TO_FAV, json.optString("add_to_fav").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ADDED_TO_FAV, json.optString("added_to_fav").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ADVANCE_PURCHASE, json.optString("advance_purchase").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ALERT, json.optString("alert").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.EPISODE_TITLE, json.optString("episodes_title").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SORT_ALPHA_A_Z, json.optString("sort_alpha_a_z").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SORT_ALPHA_Z_A, json.optString("sort_alpha_z_a").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.AMOUNT, json.optString("amount").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.COUPON_CANCELLED, json.optString("coupon_cancelled").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.BUTTON_APPLY, json.optString("btn_apply").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SIGN_OUT_WARNING, json.optString("sign_out_warning").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.DISCOUNT_ON_COUPON, json.optString("discount_on_coupon").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CREDIT_CARD_CVV_HINT, json.optString("credit_card_cvv_hint").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CAST, json.optString("cast").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CAST_CREW_BUTTON_TITLE, json.optString("cast_crew_button_title").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CENSOR_RATING, json.optString("censor_rating").trim());
+
+
+                    if (json.optString("change_password").trim() == null || json.optString("change_password").trim().equals("")) {
+                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CHANGE_PASSWORD, Util.DEFAULT_CHANGE_PASSWORD);
+                    } else {
+                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CHANGE_PASSWORD, json.optString("change_password").trim());
+                    }
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CONFIRM_PASSWORD, json.optString("confirm_password").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CREDIT_CARD_DETAILS, json.optString("credit_card_detail").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.DIRECTOR, json.optString("director").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.DOWNLOAD_BUTTON_TITLE, json.optString("download_button_title").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.DESCRIPTION, json.optString("description").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.EMAIL_EXISTS, json.optString("email_exists").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.EMAIL_DOESNOT_EXISTS, json.optString("email_does_not_exist").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.EMAIL_PASSWORD_INVALID, json.optString("email_password_invalid").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.COUPON_CODE_HINT, json.optString("coupon_code_hint").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SEARCH_ALERT, json.optString("search_alert").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CREDIT_CARD_NUMBER_HINT, json.optString("credit_card_number_hint").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TEXT_EMIAL, json.optString("text_email").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NAME_HINT, json.optString("name_hint").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CREDIT_CARD_NAME_HINT, json.optString("credit_card_name_hint").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TEXT_PASSWORD, json.optString("text_password").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ERROR_IN_SUBSCRIPTION, json.optString("error_in_subscription").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ERROR_IN_PAYMENT_VALIDATION, json.optString("error_in_payment_validation").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ERROR_IN_REGISTRATION, json.optString("error_in_registration").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_STATUS_EXPIRED, json.optString("transaction_status_expired").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.DETAILS_NOT_FOUND_ALERT, json.optString("details_not_found_alert").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.FAILURE, json.optString("failure").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ENTER_REGISTER_FIELDS_DATA, json.optString("enter_register_fields_data").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.FILTER_BY, json.optString("filter_by").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.FORGOT_PASSWORD, json.optString("forgot_password").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.GENRE, json.optString("genre").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.AGREE_TERMS, json.optString("agree_terms").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.INVALID_COUPON, json.optString("invalid_coupon").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.INVOICE, json.optString("invoice").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.LANGUAGE_POPUP_LANGUAGE, json.optString("language_popup_language").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SORT_LAST_UPLOADED, json.optString("sort_last_uploaded").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.LANGUAGE_POPUP_LOGIN, json.optString("language_popup_login").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.LOGIN, json.optString("login").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.LOGOUT, json.optString("logout").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.LOGOUT_SUCCESS, json.optString("logout_success").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.MY_FAVOURITE, json.optString("my_favourite").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NEW_PASSWORD, json.optString("new_password").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NEW_HERE_TITLE, json.optString("new_here_title").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO, json.optString("no").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO_DATA, json.optString("no_data").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, json.optString("no_internet_connection").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO_INTERNET_NO_DATA, json.optString("no_internet_no_data").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO_DETAILS_AVAILABLE, json.optString("no_details_available").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.BUTTON_OK, json.optString("btn_ok").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.OLD_PASSWORD, json.optString("old_password").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.OOPS_INVALID_EMAIL, json.optString("oops_invalid_email").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ORDER, json.optString("order").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_DETAILS_ORDER_ID, json.optString("transaction_detail_order_id").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PASSWORD_RESET_LINK, json.optString("password_reset_link").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PASSWORDS_DO_NOT_MATCH, json.optString("password_donot_match").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PAY_BY_PAYPAL, json.optString("pay_by_paypal").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.BTN_PAYNOW, json.optString("btn_paynow").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PAY_WITH_CREDIT_CARD, json.optString("pay_with_credit_card").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PAYMENT_OPTIONS_TITLE, json.optString("payment_options_title").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PLAN_NAME, json.optString("plan_name").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, json.optString("activate_subscription_watch_video").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.COUPON_ALERT, json.optString("coupon_alert").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.VALID_CONFIRM_PASSWORD, json.optString("valid_confirm_password").trim());
+                    // Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.EMAIL_REQUIRED,json.optString("email_required").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PROFILE, json.optString("profile").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PROFILE_UPDATED, json.optString("profile_updated").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PURCHASE, json.optString("purchase").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_DETAIL_PURCHASE_DATE, json.optString("transaction_detail_purchase_date").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PURCHASE_HISTORY, json.optString("purchase_history").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.BTN_REGISTER, json.optString("btn_register").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SORT_RELEASE_DATE, json.optString("sort_release_date").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SAVE_THIS_CARD, json.optString("save_this_card").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TEXT_SEARCH_PLACEHOLDER, json.optString("text_search_placeholder").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SEASON, json.optString("season").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SELECT_OPTION_TITLE, json.optString("select_option_title").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SELECT_PLAN, json.optString("select_plan").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SIGN_UP_TITLE, json.optString("signup_title").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SLOW_INTERNET_CONNECTION, json.optString("slow_internet_connection").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SLOW_ISSUE_INTERNET_CONNECTION, json.optString("slow_issue_internet_connection").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SORRY, json.optString("sorry").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.GEO_BLOCKED_ALERT, json.optString("geo_blocked_alert").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SIGN_OUT_ERROR, json.optString("sign_out_error").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ALREADY_PURCHASE_THIS_CONTENT, json.optString("already_purchase_this_content").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CROSSED_MAXIMUM_LIMIT, json.optString("crossed_max_limit_of_watching").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SORT_BY, json.optString("sort_by").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.STORY_TITLE, json.optString("story_title").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.BTN_SUBMIT, json.optString("btn_submit").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_STATUS, json.optString("transaction_success").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.VIDEO_ISSUE, json.optString("video_issue").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO_CONTENT, json.optString("no_content").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO_VIDEO_AVAILABLE, json.optString("no_video_available").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, json.optString("content_not_available_in_your_country").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_DATE, json.optString("transaction_date").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANASCTION_DETAIL, json.optString("transaction_detail").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_STATUS, json.optString("transaction_status").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION, json.optString("transaction").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRY_AGAIN, json.optString("try_again").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.UNPAID, json.optString("unpaid").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.USE_NEW_CARD, json.optString("use_new_card").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.VIEW_MORE, json.optString("view_more").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.VIEW_TRAILER, json.optString("view_trailer").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.WATCH, json.optString("watch").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.WATCH_NOW, json.optString("watch_now").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SIGN_OUT_ALERT, json.optString("sign_out_alert").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.UPDATE_PROFILE_ALERT, json.optString("update_profile_alert").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.YES, json.optString("yes").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PURCHASE_SUCCESS_ALERT, json.optString("purchase_success_alert").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CARD_WILL_CHARGE, json.optString("card_will_charge").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SEARCH_HINT, json.optString("search_hint").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TERMS, json.optString("terms").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.UPDATE_PROFILE, json.optString("btn_update_profile").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.APP_ON, json.optString("app_on").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.APP_SELECT_LANGUAGE, json.optString("app_select_language").trim());
+
+
+                    // Added Later
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO_PDF, json.optString("no_pdf").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.DOWNLOAD_INTERRUPTED, json.optString("download_interrupted").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.DOWNLOAD_COMPLETED, json.optString("download_completed").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_TITLE, json.optString("transaction_title").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.FREE, json.optString("free").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SUBSCRIPTION_COMPLETED, json.optString("subscription completed").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CANCEL_BUTTON, json.optString("btn_cancel").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.RESUME_MESSAGE, json.optString("resume_watching").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CONTINUE_BUTTON, json.optString("continue").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CVV_ALERT, json.optString("cvv_alert").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, json.optString("simultaneous_logout_message").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.LOGIN_STATUS_MESSAGE, json.optString("login_status_message").trim());
+
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.FILL_FORM_BELOW, json.optString("fill_form_below").trim());
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.MESSAGE, json.optString("text_message").trim());
+                    Util.getTextofLanguage(Episode_list_Activity.this, Util.PURCHASE, Util.DEFAULT_PURCHASE);
+                    Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Default_Language);
+
+                    //Call For Language PopUp Dialog
+
+                    languageCustomAdapter.notifyDataSetChanged();
+
+                    Intent intent = new Intent(Episode_list_Activity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                // Call For Other Methods.
+
+
+            } else {
+            }
+        }
+
+    }
+
+//    private class AsynGetTransalatedLanguage extends AsyncTask<Void, Void, Void> {
+//        String responseStr;
+//        int status;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.LanguageTranslation.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr);
+//                httppost.addHeader("lang_code", Default_Language);
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = (EntityUtils.toString(response.getEntity())).trim();
+//                } catch (Exception e) {
+//                }
+//                if (responseStr != null) {
+//                    JSONObject json = new JSONObject(responseStr);
+//                    try {
+//                        status = Integer.parseInt(json.optString("code"));
+//                    } catch (Exception e) {
+//                        status = 0;
+//                    }
+//                }
+//
+//            } catch (Exception e) {
+//                runOnUiThread(new Runnable() {
+//                    public void run() {
+//
+//                    }
+//                });
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            if (progressBarHandler != null && progressBarHandler.isShowing()) {
+//                progressBarHandler.hide();
+//                progressBarHandler = null;
+//
+//            }
+//
+//            if (responseStr == null) {
+//            } else {
+//                if (status > 0 && status == 200) {
+//
+//                    try {
+//                        JSONObject parent_json = new JSONObject(responseStr);
+//                        JSONObject json = parent_json.getJSONObject("translation");
+//
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ALREADY_MEMBER, json.optString("already_member").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ACTIAVTE_PLAN_TITLE, json.optString("activate_plan_title").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_STATUS_ACTIVE, json.optString("transaction_status_active").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ADD_TO_FAV, json.optString("add_to_fav").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ADDED_TO_FAV, json.optString("added_to_fav").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ADVANCE_PURCHASE, json.optString("advance_purchase").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ALERT, json.optString("alert").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.EPISODE_TITLE, json.optString("episodes_title").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SORT_ALPHA_A_Z, json.optString("sort_alpha_a_z").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SORT_ALPHA_Z_A, json.optString("sort_alpha_z_a").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.AMOUNT, json.optString("amount").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.COUPON_CANCELLED, json.optString("coupon_cancelled").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.BUTTON_APPLY, json.optString("btn_apply").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SIGN_OUT_WARNING, json.optString("sign_out_warning").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.DISCOUNT_ON_COUPON, json.optString("discount_on_coupon").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CREDIT_CARD_CVV_HINT, json.optString("credit_card_cvv_hint").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CAST, json.optString("cast").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CAST_CREW_BUTTON_TITLE, json.optString("cast_crew_button_title").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CENSOR_RATING, json.optString("censor_rating").trim());
+//
+//
+//                        if (json.optString("change_password").trim() == null || json.optString("change_password").trim().equals("")) {
+//                            Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CHANGE_PASSWORD, Util.DEFAULT_CHANGE_PASSWORD);
+//                        } else {
+//                            Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CHANGE_PASSWORD, json.optString("change_password").trim());
+//                        }
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CONFIRM_PASSWORD, json.optString("confirm_password").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CREDIT_CARD_DETAILS, json.optString("credit_card_detail").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.DIRECTOR, json.optString("director").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.DOWNLOAD_BUTTON_TITLE, json.optString("download_button_title").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.DESCRIPTION, json.optString("description").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.EMAIL_EXISTS, json.optString("email_exists").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.EMAIL_DOESNOT_EXISTS, json.optString("email_does_not_exist").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.EMAIL_PASSWORD_INVALID, json.optString("email_password_invalid").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.COUPON_CODE_HINT, json.optString("coupon_code_hint").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SEARCH_ALERT, json.optString("search_alert").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CREDIT_CARD_NUMBER_HINT, json.optString("credit_card_number_hint").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TEXT_EMIAL, json.optString("text_email").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NAME_HINT, json.optString("name_hint").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CREDIT_CARD_NAME_HINT, json.optString("credit_card_name_hint").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TEXT_PASSWORD, json.optString("text_password").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ERROR_IN_SUBSCRIPTION, json.optString("error_in_subscription").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ERROR_IN_PAYMENT_VALIDATION, json.optString("error_in_payment_validation").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ERROR_IN_REGISTRATION, json.optString("error_in_registration").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_STATUS_EXPIRED, json.optString("transaction_status_expired").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.DETAILS_NOT_FOUND_ALERT, json.optString("details_not_found_alert").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.FAILURE, json.optString("failure").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ENTER_REGISTER_FIELDS_DATA, json.optString("enter_register_fields_data").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.FILTER_BY, json.optString("filter_by").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.FORGOT_PASSWORD, json.optString("forgot_password").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.GENRE, json.optString("genre").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.AGREE_TERMS, json.optString("agree_terms").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.INVALID_COUPON, json.optString("invalid_coupon").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.INVOICE, json.optString("invoice").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.LANGUAGE_POPUP_LANGUAGE, json.optString("language_popup_language").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SORT_LAST_UPLOADED, json.optString("sort_last_uploaded").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.LANGUAGE_POPUP_LOGIN, json.optString("language_popup_login").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.LOGIN, json.optString("login").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.LOGOUT, json.optString("logout").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.LOGOUT_SUCCESS, json.optString("logout_success").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.MY_FAVOURITE, json.optString("my_favourite").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NEW_PASSWORD, json.optString("new_password").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NEW_HERE_TITLE, json.optString("new_here_title").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO, json.optString("no").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO_DATA, json.optString("no_data").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, json.optString("no_internet_connection").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO_INTERNET_NO_DATA, json.optString("no_internet_no_data").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO_DETAILS_AVAILABLE, json.optString("no_details_available").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.BUTTON_OK, json.optString("btn_ok").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.OLD_PASSWORD, json.optString("old_password").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.OOPS_INVALID_EMAIL, json.optString("oops_invalid_email").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ORDER, json.optString("order").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_DETAILS_ORDER_ID, json.optString("transaction_detail_order_id").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PASSWORD_RESET_LINK, json.optString("password_reset_link").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PASSWORDS_DO_NOT_MATCH, json.optString("password_donot_match").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PAY_BY_PAYPAL, json.optString("pay_by_paypal").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.BTN_PAYNOW, json.optString("btn_paynow").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PAY_WITH_CREDIT_CARD, json.optString("pay_with_credit_card").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PAYMENT_OPTIONS_TITLE, json.optString("payment_options_title").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PLAN_NAME, json.optString("plan_name").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, json.optString("activate_subscription_watch_video").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.COUPON_ALERT, json.optString("coupon_alert").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.VALID_CONFIRM_PASSWORD, json.optString("valid_confirm_password").trim());
+//                        // Util.setLanguageSharedPrefernce(Episode_list_Activity.this,Util.EMAIL_REQUIRED,json.optString("email_required").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PROFILE, json.optString("profile").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PROFILE_UPDATED, json.optString("profile_updated").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PURCHASE, json.optString("purchase").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_DETAIL_PURCHASE_DATE, json.optString("transaction_detail_purchase_date").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PURCHASE_HISTORY, json.optString("purchase_history").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.BTN_REGISTER, json.optString("btn_register").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SORT_RELEASE_DATE, json.optString("sort_release_date").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SAVE_THIS_CARD, json.optString("save_this_card").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TEXT_SEARCH_PLACEHOLDER, json.optString("text_search_placeholder").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SEASON, json.optString("season").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SELECT_OPTION_TITLE, json.optString("select_option_title").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SELECT_PLAN, json.optString("select_plan").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SIGN_UP_TITLE, json.optString("signup_title").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SLOW_INTERNET_CONNECTION, json.optString("slow_internet_connection").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SLOW_ISSUE_INTERNET_CONNECTION, json.optString("slow_issue_internet_connection").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SORRY, json.optString("sorry").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.GEO_BLOCKED_ALERT, json.optString("geo_blocked_alert").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SIGN_OUT_ERROR, json.optString("sign_out_error").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.ALREADY_PURCHASE_THIS_CONTENT, json.optString("already_purchase_this_content").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CROSSED_MAXIMUM_LIMIT, json.optString("crossed_max_limit_of_watching").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SORT_BY, json.optString("sort_by").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.STORY_TITLE, json.optString("story_title").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.BTN_SUBMIT, json.optString("btn_submit").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_STATUS, json.optString("transaction_success").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.VIDEO_ISSUE, json.optString("video_issue").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO_CONTENT, json.optString("no_content").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO_VIDEO_AVAILABLE, json.optString("no_video_available").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, json.optString("content_not_available_in_your_country").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_DATE, json.optString("transaction_date").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANASCTION_DETAIL, json.optString("transaction_detail").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_STATUS, json.optString("transaction_status").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION, json.optString("transaction").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRY_AGAIN, json.optString("try_again").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.UNPAID, json.optString("unpaid").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.USE_NEW_CARD, json.optString("use_new_card").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.VIEW_MORE, json.optString("view_more").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.VIEW_TRAILER, json.optString("view_trailer").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.WATCH, json.optString("watch").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.WATCH_NOW, json.optString("watch_now").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SIGN_OUT_ALERT, json.optString("sign_out_alert").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.UPDATE_PROFILE_ALERT, json.optString("update_profile_alert").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.YES, json.optString("yes").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.PURCHASE_SUCCESS_ALERT, json.optString("purchase_success_alert").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CARD_WILL_CHARGE, json.optString("card_will_charge").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SEARCH_HINT, json.optString("search_hint").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TERMS, json.optString("terms").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.UPDATE_PROFILE, json.optString("btn_update_profile").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.APP_ON, json.optString("app_on").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.APP_SELECT_LANGUAGE, json.optString("app_select_language").trim());
+//
+//
+//                        // Added Later
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.NO_PDF, json.optString("no_pdf").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.DOWNLOAD_INTERRUPTED, json.optString("download_interrupted").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.DOWNLOAD_COMPLETED, json.optString("download_completed").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.TRANSACTION_TITLE, json.optString("transaction_title").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.FREE, json.optString("free").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SUBSCRIPTION_COMPLETED, json.optString("subscription completed").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CANCEL_BUTTON, json.optString("btn_cancel").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.RESUME_MESSAGE, json.optString("resume_watching").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CONTINUE_BUTTON, json.optString("continue").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.CVV_ALERT, json.optString("cvv_alert").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, json.optString("simultaneous_logout_message").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.LOGIN_STATUS_MESSAGE, json.optString("login_status_message").trim());
+//
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.FILL_FORM_BELOW, json.optString("fill_form_below").trim());
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.MESSAGE, json.optString("text_message").trim());
+//                        Util.getTextofLanguage(Episode_list_Activity.this, Util.PURCHASE, Util.DEFAULT_PURCHASE);
+//                        Util.setLanguageSharedPrefernce(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Default_Language);
+//
+//                        //Call For Language PopUp Dialog
+//
+//                        languageCustomAdapter.notifyDataSetChanged();
+//
+//                        Intent intent = new Intent(Episode_list_Activity.this, MainActivity.class);
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                        startActivity(intent);
+//
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    // Call For Other Methods.
+//
+//
+//                } else {
+//                }
+//            }
+//
+//
+//        }
+//
+//        protected void onPreExecute() {
+//            progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
+//            progressBarHandler.show();
+//        }
+//    }
 
 
 //    private class AsynLogoutDetails extends AsyncTask<Void, Void, Void> {

@@ -1,47 +1,15 @@
 package com.home.apisdk.apiModel;
 
 /**
- * Created by MUVI on 1/20/2017.
+ * Created by MUVI on 7/6/2017.
  */
 
-public class RegisterUserPaymentInputModel {
+public class WithouPaymentSubscriptionRegDetailsInput {
 
     String authToken;
+    String is_advance;
     String card_name;
     String exp_month;
-    String card_number;
-    String exp_year;
-    String email;
-    String user_id;
-    String card_type;
-    String card_last_fourdigit;
-    String profile_id;
-    String token;
-    String cvv;
-    String country;
-    String season_id;
-    String episode_id;
-    String currency_id;
-    String plan_id;
-    String name;
-
-    public String getCouponCode() {
-        return CouponCode;
-    }
-
-    public void setCouponCode(String couponCode) {
-        CouponCode = couponCode;
-    }
-
-    String CouponCode;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getAuthToken() {
         return authToken;
@@ -49,6 +17,14 @@ public class RegisterUserPaymentInputModel {
 
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
+    }
+
+    public String getIs_advance() {
+        return is_advance;
+    }
+
+    public void setIs_advance(String is_advance) {
+        this.is_advance = is_advance;
     }
 
     public String getCard_name() {
@@ -91,12 +67,28 @@ public class RegisterUserPaymentInputModel {
         this.email = email;
     }
 
+    public String getMovie_id() {
+        return movie_id;
+    }
+
+    public void setMovie_id(String movie_id) {
+        this.movie_id = movie_id;
+    }
+
     public String getUser_id() {
         return user_id;
     }
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+    public String getCoupon_code() {
+        return coupon_code;
+    }
+
+    public void setCoupon_code(String coupon_code) {
+        this.coupon_code = coupon_code;
     }
 
     public String getCard_type() {
@@ -171,17 +163,28 @@ public class RegisterUserPaymentInputModel {
         this.currency_id = currency_id;
     }
 
-    public String getPlan_id() {
-        return plan_id;
+    public String getIs_save_this_card() {
+        return is_save_this_card;
     }
 
-    public void setPlan_id(String plan_id) {
-        this.plan_id = plan_id;
+    public void setIs_save_this_card(String is_save_this_card) {
+        this.is_save_this_card = is_save_this_card;
     }
 
+    public String getExisting_card_id() {
+        return existing_card_id;
+    }
 
+    public void setExisting_card_id(String existing_card_id) {
+        this.existing_card_id = existing_card_id;
+    }
 
-
-
-
+    String card_number;
+    String exp_year;
+    String email;
+    String movie_id;
+    String user_id;
+    String coupon_code;
+    String card_type;
+    String card_last_fourdigit,profile_id,token,cvv,country,season_id,episode_id,currency_id,is_save_this_card,existing_card_id;
 }

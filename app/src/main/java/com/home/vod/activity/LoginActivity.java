@@ -50,15 +50,25 @@ import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.images.WebImage;
+import com.home.apisdk.apiController.CheckDeviceAsyncTask;
+import com.home.apisdk.apiController.CheckFbUserDetailsAsyn;
+import com.home.apisdk.apiController.GetSimultaneousLogoutAsync;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
 import com.home.apisdk.apiController.LoginAsynTask;
 import com.home.apisdk.apiController.LogoutAsynctask;
+import com.home.apisdk.apiController.SocialAuthAsynTask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
+import com.home.apisdk.apiModel.CheckDeviceInput;
+import com.home.apisdk.apiModel.CheckDeviceOutput;
+import com.home.apisdk.apiModel.CheckFbUserDetailsInput;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.Get_Video_Details_Output;
 import com.home.apisdk.apiModel.Login_input;
 import com.home.apisdk.apiModel.Login_output;
 import com.home.apisdk.apiModel.LogoutInput;
+import com.home.apisdk.apiModel.SimultaneousLogoutInput;
+import com.home.apisdk.apiModel.SocialAuthInputModel;
+import com.home.apisdk.apiModel.SocialAuthOutputModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.R;
@@ -98,7 +108,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class LoginActivity extends AppCompatActivity implements LoginAsynTask.LoinDetails, GetValidateUserAsynTask.GetValidateUser,
-        VideoDetailsAsynctask.VideoDetails, LogoutAsynctask.Logout {
+        VideoDetailsAsynctask.VideoDetails, LogoutAsynctask.Logout, CheckDeviceAsyncTask.CheckDevice, GetSimultaneousLogoutAsync.SimultaneousLogoutAsync,
+        CheckFbUserDetailsAsyn.CheckFbUserDetails, SocialAuthAsynTask.SocialAuth {
 
 
     /*subtitle-------------------------------------*/
@@ -113,6 +124,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     ArrayList<String> FakeSubTitlePath = new ArrayList<>();
     ArrayList<String> ResolutionFormat = new ArrayList<>();
     ArrayList<String> ResolutionUrl = new ArrayList<>();
+    ProgressDialog progressDialog1;
     public static ProgressBarHandler progressBarHandler;
     ProgressBarHandler pDialog;
 
@@ -128,7 +140,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         if (status > 0) {
 
-           // SharedPreferences.Editor editor = pref.edit();
+            // SharedPreferences.Editor editor = pref.edit();
 
             if (status == 200) {
 
@@ -152,9 +164,20 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                     if (Util.getTextofLanguage(LoginActivity.this, Util.IS_RESTRICT_DEVICE, Util.DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
 
-                        LogUtil.showLog("BIBHU", "isRestrictDevice called");
+                        LogUtil.showLog("MUVI", "isRestrictDevice called");
                         // Call For Check Api.
-                        AsynCheckDevice asynCheckDevice = new AsynCheckDevice();
+                        CheckDeviceInput checkDeviceInput = new CheckDeviceInput();
+                        if (preferenceManager != null) {
+                            String userIdStr = preferenceManager.getUseridFromPref();
+                            checkDeviceInput.setUser_id(userIdStr.trim());
+                        }
+                        checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                        checkDeviceInput.setGoogle_id(Util.getTextofLanguage(LoginActivity.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+                        checkDeviceInput.setAuthToken(Util.authTokenStr);
+                        checkDeviceInput.setDevice_type("1");
+                        checkDeviceInput.setLang_code(Util.getTextofLanguage(LoginActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                        checkDeviceInput.setDevice_info(deviceName + "," + Util.getTextofLanguage(LoginActivity.this, Util.ANDROID_VERSION, Util.DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
+                        CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
                         asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                     } else {
 
@@ -617,9 +640,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 if (FakeSubTitlePath.size() > 0) {
                                     // This Portion Will Be changed Later.
 
-                                    File dir = new File(Environment.getExternalStorageDirectory()+"/Android/data/" + getApplicationContext().getPackageName().trim() + "/SubTitleList/");
-                                    if (dir.isDirectory())
-                                    {
+                                    File dir = new File(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/SubTitleList/");
+                                    if (dir.isDirectory()) {
                                         String[] children = dir.list();
                                         for (int i = 0; i < children.length; i++) {
                                             new File(dir, children[i]).delete();
@@ -723,7 +745,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         }
         if (code > 0) {
             if (code == 200) {
-               preferenceManager.clearLoginPref();
+                preferenceManager.clearLoginPref();
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(UniversalErrorMessage);
@@ -832,8 +854,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     private LinearLayout btnLogin;
     private ProgressBarHandler progressDialog;
     private CallbackManager callbackManager;
-    AsynCheckFbUserDetails asynCheckFbUserDetails;
-    AsynFbRegDetails asynFbRegDetails;
+    CheckFbUserDetailsAsyn asynCheckFbUserDetails;
+    SocialAuthAsynTask asynFbRegDetails;
 
     /*********fb****/
     //AsynLogInDetails asyncReg;
@@ -846,7 +868,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     int maximumPoolSize = 80;
     int keepAliveTime = 10;
     //SharedPreferences pref;
-    String regEmailStr,regPasswordStr;
+    String regEmailStr, regPasswordStr;
     Toolbar mActionBarToolbar;
 
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
@@ -876,7 +898,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         deviceName = myDevice.getName();
 
 
-        LogUtil.showLog("BIBHU", "Device_Name=" + deviceName);
+        LogUtil.showLog("MUVI", "Device_Name=" + deviceName);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
@@ -885,9 +907,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 .trim()).equals("1")) {
             mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-            LogUtil.showLog("BIBHU", "Called");
+            LogUtil.showLog("MUVI", "Called");
         } else {
-            LogUtil.showLog("BIBHU", "Called============" + (Util.getTextofLanguage(LoginActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)));
+            LogUtil.showLog("MUVI", "Called============" + (Util.getTextofLanguage(LoginActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)));
             mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }
 
@@ -982,7 +1004,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 onBackPressed();
             }
         });*/
-
 
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -1428,8 +1449,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                    HttpResponse response = httpclient.execute(httppost);
 //                    responseStr = EntityUtils.toString(response.getEntity());
 //
-//                    Log.v("BIBHU2","google_id="+Util.getTextofLanguage(LoginActivity.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
-//                    Log.v("BIBHU2","responseStr="+responseStr);
+//                    Log.v("MUVI2","google_id="+Util.getTextofLanguage(LoginActivity.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
+//                    Log.v("MUVI2","responseStr="+responseStr);
 //
 //
 //                } catch (org.apache.http.conn.ConnectTimeoutException e){
@@ -1525,7 +1546,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                    editor.commit();
 //
 //
-//                Log.v("BIBHU","PlanId="+PlanId+" ,isSubscribedStr="+isSubscribedStr);
+//                Log.v("MUVI","PlanId="+PlanId+" ,isSubscribedStr="+isSubscribedStr);
 //
 //                    if (Util.checkNetwork(LoginActivity.this) == true) {
 //                        if (pDialog != null && pDialog.isShowing()) {
@@ -1537,7 +1558,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                        if(Util.getTextofLanguage(LoginActivity.this,Util.IS_RESTRICT_DEVICE,Util.DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1"))
 //                        {
 //
-//                            Log.v("BIBHU","isRestrictDevice called");
+//                            Log.v("MUVI","isRestrictDevice called");
 //                            // Call For Check Api.
 //                            AsynCheckDevice asynCheckDevice = new AsynCheckDevice();
 //                            asynCheckDevice.executeOnExecutor(threadPoolExecutor);
@@ -3288,7 +3309,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     loginButton.setVisibility(View.GONE);
                                     loginWithFacebookButton.setVisibility(View.GONE);
                                     btnLogin.setVisibility(View.GONE);
-                                    AsynCheckFbUserDetails asynCheckFbUserDetails = new AsynCheckFbUserDetails();
+
+                                    CheckFbUserDetailsInput checkFbUserDetailsInput = new CheckFbUserDetailsInput();
+                                    checkFbUserDetailsInput.setAuthToken(Util.authTokenStr);
+                                    checkFbUserDetailsInput.setFb_userid(fbUserId.trim());
+                                    CheckFbUserDetailsAsyn asynCheckFbUserDetails = new CheckFbUserDetailsAsyn(checkFbUserDetailsInput, LoginActivity.this, LoginActivity.this);
                                     asynCheckFbUserDetails.executeOnExecutor(threadPoolExecutor);
 
 //
@@ -3330,314 +3355,301 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         }
     };
 
+    @Override
+    public void onCheckFbUserDetailsAsynPreExecuteStarted() {
 
-    private class AsynCheckFbUserDetails extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        if (accessToken != null) {
+            LoginManager.getInstance().logOut();
+        }
+        pDialog = new ProgressBarHandler(LoginActivity.this);
+        pDialog.show();
+    }
 
-        int status;
-        String responseStr;
-        int isNewUserStr = 1;
-        JSONObject myJson = null;
+    @Override
+    public void onCheckFbUserDetailsAsynPostExecuteCompleted(int code) {
 
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = Util.rootUrl().trim() + Util.fbUserExistsUrl.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("fb_userid", fbUserId.trim());
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-
-                    status = 0;
-
-                } catch (IOException e) {
-                    status = 0;
-                    e.printStackTrace();
-                }
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                    isNewUserStr = Integer.parseInt(myJson.optString("is_newuser"));
-                }
-
-            } catch (Exception e) {
-                status = 0;
-
+        if (code == 0) {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
             }
-
-            return null;
+            android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
+            dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+            dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
         }
 
-
-        protected void onPostExecute(Void result) {
-
-
-            if (responseStr == null) {
-                status = 0;
-
+        if (code == 200) {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
             }
-            if (status == 0) {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-                android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
-                dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
-                dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                dlgAlert.create().show();
+            SocialAuthInputModel socialAuthInputModel=new SocialAuthInputModel();
+            socialAuthInputModel.setAuthToken(Util.authTokenStr);
+            socialAuthInputModel.setName(fbName.trim());
+            socialAuthInputModel.setEmail(fbEmail.trim());
+            socialAuthInputModel.setPassword("");
+            socialAuthInputModel.setFb_userid(fbUserId.trim());
+            socialAuthInputModel.setLanguage(Util.getTextofLanguage(LoginActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+            asynFbRegDetails = new SocialAuthAsynTask(socialAuthInputModel,this,this);
+            asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
+
+
+        } else {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
             }
-
-            if (status == 200) {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-
-                asynFbRegDetails = new AsynFbRegDetails();
-                asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
-
-
-            } else {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-                android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
-                dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
-                dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                dlgAlert.create().show();
-            }
-
-
+            android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
+            dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+            dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
         }
 
-        @Override
-        protected void onPreExecute() {
-            AccessToken accessToken = AccessToken.getCurrentAccessToken();
-            if (accessToken != null) {
-                LoginManager.getInstance().logOut();
-            }
-            pDialog = new ProgressBarHandler(LoginActivity.this);
-            pDialog.show();
-
-        }
     }
 
 
-    private class AsynFbRegDetails extends AsyncTask<Void, Void, Void> {
-        // ProgressDialog pDialog;
-        ProgressBarHandler pDialog;
-        int statusCode;
-        String loggedInIdStr;
-        String responseStr;
-        String isSubscribedStr;
-        String loginHistoryIdStr;
+//    private class AsynCheckFbUserDetails extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler pDialog;
+//
+//        int status;
+//        String responseStr;
+//        int isNewUserStr = 1;
+//        JSONObject myJson = null;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.fbUserExistsUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("fb_userid", fbUserId.trim());
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//
+//                    status = 0;
+//
+//                } catch (IOException e) {
+//                    status = 0;
+//                    e.printStackTrace();
+//                }
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    status = Integer.parseInt(myJson.optString("code"));
+//                    isNewUserStr = Integer.parseInt(myJson.optString("is_newuser"));
+//                }
+//
+//            } catch (Exception e) {
+//                status = 0;
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//
+//            if (responseStr == null) {
+//                status = 0;
+//
+//            }
+//            if (status == 0) {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//                android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+//                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
+//                dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            }
+//
+//            if (status == 200) {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//
+//                asynFbRegDetails = new AsynFbRegDetails();
+//                asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
+//
+//
+//            } else {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//                android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+//                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
+//                dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            }
+//
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            AccessToken accessToken = AccessToken.getCurrentAccessToken();
+//            if (accessToken != null) {
+//                LoginManager.getInstance().logOut();
+//            }
+//            pDialog = new ProgressBarHandler(LoginActivity.this);
+//            pDialog.show();
+//
+//        }
+//    }
 
-        JSONObject myJson = null;
+    @Override
+    public void onSocialAuthPreExecuteStarted() {
 
-        @Override
-        protected Void doInBackground(Void... params) {
+        pDialog = new ProgressBarHandler(LoginActivity.this);
+        pDialog.show();
+    }
 
-            String urlRouteList = Util.rootUrl().trim() + Util.fbRegUrl.trim();
+    @Override
+    public void onSocialAuthPostExecuteCompleted(SocialAuthOutputModel socialAuthOutputModel, int status, String message) {
+
+        if (socialAuthOutputModel == null) {
             try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("name", fbName.trim());
-                httppost.addHeader("email", fbEmail.trim());
-                httppost.addHeader("password", "");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("fb_userid", fbUserId.trim());
-                httppost.addHeader("lang_code", Util.getTextofLanguage(LoginActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            statusCode = 0;
-                            Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    statusCode = 0;
-
-                    e.printStackTrace();
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
                 }
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                    loggedInIdStr = myJson.optString("id");
-                    isSubscribedStr = myJson.optString("isSubscribed");
-                    UniversalIsSubscribed = isSubscribedStr;
-                    if (myJson.has("login_history_id")) {
-                        loginHistoryIdStr = myJson.optString("login_history_id");
-                    }
-
-
-                }
-
-            } catch (Exception e) {
-                statusCode = 0;
+            } catch (IllegalArgumentException ex) {
+                status = 0;
 
             }
-
-            return null;
+            android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
+            dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+            dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
         }
 
+        if (status > 0) {
 
-        protected void onPostExecute(Void result) {
+            //    SharedPreferences.Editor editor = pref.edit();
 
-            if (responseStr == null) {
-                try {
+            if (status == 200) {
+                String displayNameStr = socialAuthOutputModel.getDisplay_name();
+                String emailFromApiStr = socialAuthOutputModel.getEmail();
+                String profileImageStr = socialAuthOutputModel.getProfile_image();
+                String isSubscribedStr = socialAuthOutputModel.getIsSubscribed();
+                String loginHistoryIdStr = socialAuthOutputModel.getLogin_history_id();
+
+                preferenceManager.setLogInStatusToPref("1");
+                preferenceManager.setUserIdToPref(loggedInIdStr);
+                preferenceManager.setPwdToPref("");
+                preferenceManager.setEmailIdToPref(emailFromApiStr);
+                preferenceManager.setDispNameToPref(displayNameStr);
+                preferenceManager.setLoginProfImgoPref(profileImageStr);
+                preferenceManager.setIsSubscribedToPref(isSubscribedStr);
+                preferenceManager.setLoginHistIdPref(loginHistoryIdStr);
+
+
+                if (Util.checkNetwork(LoginActivity.this) == true) {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
                         pDialog = null;
                     }
-                } catch (IllegalArgumentException ex) {
-                    statusCode = 0;
-
-                }
-                android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
-                dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
-                dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                dlgAlert.create().show();
-            }
-
-            if (statusCode > 0) {
-
-            //    SharedPreferences.Editor editor = pref.edit();
-
-                if (statusCode == 200) {
-                    String displayNameStr = myJson.optString("display_name");
-                    String emailFromApiStr = myJson.optString("email");
-                    String profileImageStr = myJson.optString("profile_image");
-
-                    preferenceManager.setLogInStatusToPref("1");
-                    preferenceManager.setUserIdToPref(loggedInIdStr);
-                    preferenceManager.setPwdToPref("");
-                    preferenceManager.setEmailIdToPref(emailFromApiStr);
-                    preferenceManager.setDispNameToPref(displayNameStr);
-                    preferenceManager.setLoginProfImgoPref(profileImageStr);
-                    preferenceManager.setIsSubscribedToPref(isSubscribedStr);
-                    preferenceManager.setLoginHistIdPref(loginHistoryIdStr);
+                    //load video urls according to resolution
 
 
-                    if (Util.checkNetwork(LoginActivity.this) == true) {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                        //load video urls according to resolution
-
-
-                        if (Util.check_for_subscription == 1) {
-                            //go to subscription page
-                            if (Util.checkNetwork(LoginActivity.this) == true) {
-                                if (Util.dataModel.getIsFreeContent() == 1) {
-                                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                                    getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
-                                    getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
-                                    getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
-                                    getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
-                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
-                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                } else {
-                                    ValidateUserInput validateUserInput = new ValidateUserInput();
-                                    validateUserInput.setAuthToken(Util.authTokenStr);
-                                    validateUserInput.setUserId(validateUserInput.getUserId());
-                                    validateUserInput.setMuviUniqueId(validateUserInput.getMuviUniqueId());
-                                    validateUserInput.setEpisodeStreamUniqueId(validateUserInput.getEpisodeStreamUniqueId());
-                                    validateUserInput.setSeasonId(validateUserInput.getSeasonId());
-                                    validateUserInput.setLanguageCode(validateUserInput.getLanguageCode());
-                                    validateUserInput.setPurchaseType(validateUserInput.getPurchaseType());
-                                    GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
-                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                                }
+                    if (Util.check_for_subscription == 1) {
+                        //go to subscription page
+                        if (Util.checkNetwork(LoginActivity.this) == true) {
+                            if (Util.dataModel.getIsFreeContent() == 1) {
+                                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                                getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
+                                getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
+                                getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
+                                getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
+                                VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
+                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                             } else {
-                                Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                                ValidateUserInput validateUserInput = new ValidateUserInput();
+                                validateUserInput.setAuthToken(Util.authTokenStr);
+                                validateUserInput.setUserId(validateUserInput.getUserId());
+                                validateUserInput.setMuviUniqueId(validateUserInput.getMuviUniqueId());
+                                validateUserInput.setEpisodeStreamUniqueId(validateUserInput.getEpisodeStreamUniqueId());
+                                validateUserInput.setSeasonId(validateUserInput.getSeasonId());
+                                validateUserInput.setLanguageCode(validateUserInput.getLanguageCode());
+                                validateUserInput.setPurchaseType(validateUserInput.getPurchaseType());
+                                GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
+                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                             }
-
                         } else {
-
-                            Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(in);
-
-                            onBackPressed();
+                            Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
-
 
                     } else {
-                        Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+
+                        Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(in);
+
+                        onBackPressed();
                     }
 
 
                 } else {
-                    try {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        statusCode = 0;
-
-                    }
-                    android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.EMAIL_PASSWORD_INVALID, Util.DEFAULT_EMAIL_PASSWORD_INVALID));
-                    dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    dlgAlert.create().show();
+                    Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 }
+
+
             } else {
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
@@ -3645,10 +3657,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
+                    status = 0;
 
                 }
                 android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
+                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.EMAIL_PASSWORD_INVALID, Util.DEFAULT_EMAIL_PASSWORD_INVALID));
                 dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
                 dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
@@ -3660,16 +3673,252 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         });
                 dlgAlert.create().show();
             }
+        } else {
+            try {
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
+                }
+            } catch (IllegalArgumentException ex) {
 
+            }
+            android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
+            dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
         }
 
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressBarHandler(LoginActivity.this);
-            pDialog.show();
-
-        }
     }
+
+//    private class AsynFbRegDetails extends AsyncTask<Void, Void, Void> {
+//        // ProgressDialog pDialog;
+//        ProgressBarHandler pDialog;
+//        int statusCode;
+//        String loggedInIdStr;
+//        String responseStr;
+//        String isSubscribedStr;
+//        String loginHistoryIdStr;
+//
+//        JSONObject myJson = null;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.fbRegUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("name", fbName.trim());
+//                httppost.addHeader("email", fbEmail.trim());
+//                httppost.addHeader("password", "");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("fb_userid", fbUserId.trim());
+//                httppost.addHeader("lang_code", Util.getTextofLanguage(LoginActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            statusCode = 0;
+//                            Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    statusCode = 0;
+//
+//                    e.printStackTrace();
+//                }
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//                    loggedInIdStr = myJson.optString("id");
+//                    isSubscribedStr = myJson.optString("isSubscribed");
+//                    UniversalIsSubscribed = isSubscribedStr;
+//                    if (myJson.has("login_history_id")) {
+//                        loginHistoryIdStr = myJson.optString("login_history_id");
+//                    }
+//
+//
+//                }
+//
+//            } catch (Exception e) {
+//                statusCode = 0;
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            if (responseStr == null) {
+//                try {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                } catch (IllegalArgumentException ex) {
+//                    statusCode = 0;
+//
+//                }
+//                android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+//                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
+//                dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            }
+//
+//            if (statusCode > 0) {
+//
+//                //    SharedPreferences.Editor editor = pref.edit();
+//
+//                if (statusCode == 200) {
+//                    String displayNameStr = myJson.optString("display_name");
+//                    String emailFromApiStr = myJson.optString("email");
+//                    String profileImageStr = myJson.optString("profile_image");
+//
+//                    preferenceManager.setLogInStatusToPref("1");
+//                    preferenceManager.setUserIdToPref(loggedInIdStr);
+//                    preferenceManager.setPwdToPref("");
+//                    preferenceManager.setEmailIdToPref(emailFromApiStr);
+//                    preferenceManager.setDispNameToPref(displayNameStr);
+//                    preferenceManager.setLoginProfImgoPref(profileImageStr);
+//                    preferenceManager.setIsSubscribedToPref(isSubscribedStr);
+//                    preferenceManager.setLoginHistIdPref(loginHistoryIdStr);
+//
+//
+//                    if (Util.checkNetwork(LoginActivity.this) == true) {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                        //load video urls according to resolution
+//
+//
+//                        if (Util.check_for_subscription == 1) {
+//                            //go to subscription page
+//                            if (Util.checkNetwork(LoginActivity.this) == true) {
+//                                if (Util.dataModel.getIsFreeContent() == 1) {
+//                                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+//                                    getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+//                                    getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
+//                                    getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
+//                                    getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
+//                                    getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
+//                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
+//                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+//                                } else {
+//                                    ValidateUserInput validateUserInput = new ValidateUserInput();
+//                                    validateUserInput.setAuthToken(Util.authTokenStr);
+//                                    validateUserInput.setUserId(validateUserInput.getUserId());
+//                                    validateUserInput.setMuviUniqueId(validateUserInput.getMuviUniqueId());
+//                                    validateUserInput.setEpisodeStreamUniqueId(validateUserInput.getEpisodeStreamUniqueId());
+//                                    validateUserInput.setSeasonId(validateUserInput.getSeasonId());
+//                                    validateUserInput.setLanguageCode(validateUserInput.getLanguageCode());
+//                                    validateUserInput.setPurchaseType(validateUserInput.getPurchaseType());
+//                                    GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
+//                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+//                                }
+//                            } else {
+//                                Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            }
+//
+//                        } else {
+//
+//                            Intent in = new Intent(LoginActivity.this, MainActivity.class);
+//                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                            startActivity(in);
+//
+//                            onBackPressed();
+//                        }
+//
+//
+//                    } else {
+//                        Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                    }
+//
+//
+//                } else {
+//                    try {
+//                        if (pDialog != null && pDialog.isShowing()) {
+//                            pDialog.hide();
+//                            pDialog = null;
+//                        }
+//                    } catch (IllegalArgumentException ex) {
+//                        statusCode = 0;
+//
+//                    }
+//                    android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+//                    dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.EMAIL_PASSWORD_INVALID, Util.DEFAULT_EMAIL_PASSWORD_INVALID));
+//                    dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setCancelable(false);
+//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                }
+//                            });
+//                    dlgAlert.create().show();
+//                }
+//            } else {
+//                try {
+//                    if (pDialog != null && pDialog.isShowing()) {
+//                        pDialog.hide();
+//                        pDialog = null;
+//                    }
+//                } catch (IllegalArgumentException ex) {
+//
+//                }
+//                android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
+//                dlgAlert.setMessage(Util.getTextofLanguage(LoginActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
+//                dlgAlert.setTitle(Util.getTextofLanguage(LoginActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setCancelable(false);
+//                dlgAlert.setPositiveButton(Util.getTextofLanguage(LoginActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                dlgAlert.create().show();
+//            }
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            pDialog = new ProgressBarHandler(LoginActivity.this);
+//            pDialog.show();
+//
+//        }
+//    }
 
 
     // Added For  FCM
@@ -3713,8 +3962,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     if (Util.checkNetwork(LoginActivity.this) == true) {
 
                         // Call Api For Simultaneous Logout
-
-                        AsynSimultaneousLogout asynSimultaneousLogout = new AsynSimultaneousLogout();
+                        SimultaneousLogoutInput simultaneousLogoutInput = new SimultaneousLogoutInput();
+                        simultaneousLogoutInput.setAuthToken(Util.authTokenStr);
+                        simultaneousLogoutInput.setDevice_type("1");
+                        simultaneousLogoutInput.setEmail_id(regEmailStr);
+                        GetSimultaneousLogoutAsync asynSimultaneousLogout = new GetSimultaneousLogoutAsync(simultaneousLogoutInput, LoginActivity.this, LoginActivity.this);
                         asynSimultaneousLogout.executeOnExecutor(threadPoolExecutor);
                     } else {
                         Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -3736,81 +3988,109 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         }
     }
 
+    @Override
+    public void onSimultaneousLogoutPreExecuteStarted() {
+        progressDialog1 = new ProgressDialog(LoginActivity.this, R.style.MyTheme);
+        progressDialog1.setCancelable(false);
+        progressDialog1.setProgressStyle(android.R.style.Widget_ProgressBar_Large_Inverse);
+        progressDialog1.setIndeterminate(false);
+        progressDialog1.setIndeterminateDrawable(getResources().getDrawable(R.drawable.dialog_progress_rawable));
+        progressDialog1.show();
+    }
+
+    @Override
+    public void onSimultaneousLogoutPostExecuteCompleted(int code) {
+        if (progressDialog1 != null && progressDialog1.isShowing()) {
+            progressDialog1.hide();
+            progressDialog1 = null;
+        }
+        if (code == 200) {
+            // Allow the user to login
+            if (logout_alert.isShowing()) {
+                logout_alert.dismiss();
+            }
+
+            Toast.makeText(getApplicationContext(), Util.getTextofLanguage(LoginActivity.this, Util.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, Util.DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE), Toast.LENGTH_LONG).show();
+
+        } else {
+            Toast.makeText(getApplicationContext(), Util.getTextofLanguage(LoginActivity.this, Util.TRY_AGAIN, Util.DEFAULT_TRY_AGAIN), Toast.LENGTH_LONG).show();
+        }
+    }
 
     // This API is called for simultaneous logout
-    private class AsynSimultaneousLogout extends AsyncTask<Void, Void, Void> {
-        ProgressDialog progressDialog1;
-        String responseStr;
-        int statusCode = 0;
-
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.LogoutAll.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("device_type", "1");
-                httppost.addHeader("email_id", regEmailStr);
-
-                // Execute HTTP Post Request
-                try {
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                    LogUtil.showLog("BIBHU", "Response Of the Simultaneous Logout =" + responseStr);
-
-
-                } catch (Exception e) {
-                    responseStr = "0";
-                }
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                }
-
-            } catch (Exception e) {
-                responseStr = "0";
-                e.printStackTrace();
-
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-
-            if (progressDialog1 != null && progressDialog1.isShowing()) {
-                progressDialog1.hide();
-                progressDialog1 = null;
-            }
-            if (statusCode == 200) {
-                // Allow the user to login
-                if (logout_alert.isShowing()) {
-                    logout_alert.dismiss();
-                }
-
-                Toast.makeText(getApplicationContext(), Util.getTextofLanguage(LoginActivity.this, Util.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, Util.DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE), Toast.LENGTH_LONG).show();
-
-            } else {
-                Toast.makeText(getApplicationContext(), Util.getTextofLanguage(LoginActivity.this, Util.TRY_AGAIN, Util.DEFAULT_TRY_AGAIN), Toast.LENGTH_LONG).show();
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog1 = new ProgressDialog(LoginActivity.this, R.style.MyTheme);
-            progressDialog1.setCancelable(false);
-            progressDialog1.setProgressStyle(android.R.style.Widget_ProgressBar_Large_Inverse);
-            progressDialog1.setIndeterminate(false);
-            progressDialog1.setIndeterminateDrawable(getResources().getDrawable(R.drawable.dialog_progress_rawable));
-            progressDialog1.show();
-        }
-
-    }
+//    private class AsynSimultaneousLogout extends AsyncTask<Void, Void, Void> {
+//        ProgressDialog progressDialog1;
+//        String responseStr;
+//        int statusCode = 0;
+//
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.LogoutAll.trim());
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("device_type", "1");
+//                httppost.addHeader("email_id", regEmailStr);
+//
+//                // Execute HTTP Post Request
+//                try {
+//
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//                    LogUtil.showLog("MUVI", "Response Of the Simultaneous Logout =" + responseStr);
+//
+//
+//                } catch (Exception e) {
+//                    responseStr = "0";
+//                }
+//
+//                JSONObject myJson = null;
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//                }
+//
+//            } catch (Exception e) {
+//                responseStr = "0";
+//                e.printStackTrace();
+//
+//            }
+//            return null;
+//        }
+//
+//        protected void onPostExecute(Void result) {
+//
+//            if (progressDialog1 != null && progressDialog1.isShowing()) {
+//                progressDialog1.hide();
+//                progressDialog1 = null;
+//            }
+//            if (statusCode == 200) {
+//                // Allow the user to login
+//                if (logout_alert.isShowing()) {
+//                    logout_alert.dismiss();
+//                }
+//
+//                Toast.makeText(getApplicationContext(), Util.getTextofLanguage(LoginActivity.this, Util.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, Util.DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE), Toast.LENGTH_LONG).show();
+//
+//            } else {
+//                Toast.makeText(getApplicationContext(), Util.getTextofLanguage(LoginActivity.this, Util.TRY_AGAIN, Util.DEFAULT_TRY_AGAIN), Toast.LENGTH_LONG).show();
+//            }
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            progressDialog1 = new ProgressDialog(LoginActivity.this, R.style.MyTheme);
+//            progressDialog1.setCancelable(false);
+//            progressDialog1.setProgressStyle(android.R.style.Widget_ProgressBar_Large_Inverse);
+//            progressDialog1.setIndeterminate(false);
+//            progressDialog1.setIndeterminateDrawable(getResources().getDrawable(R.drawable.dialog_progress_rawable));
+//            progressDialog1.show();
+//        }
+//
+//    }
 
 
     public void ShowPpvPopUp() {
@@ -3896,7 +4176,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         String subscriptionStr = preferenceManager.getIsSubscribedFromPref();
 
-        if(subscriptionStr.trim().equals("1")){
+        if (subscriptionStr.trim().equals("1")) {
             if (Util.dataModel.getIsAPV() == 1) {
 
                 episodePriceTextView.setText(Util.currencyModel.getCurrencySymbol() + " " + Util.apvModel.getApvEpisodeSubscribedStr());
@@ -4172,153 +4452,220 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     // Following Code Has Been Added For The Device Management
 
+    @Override
+    public void onCheckDevicePreExecuteStarted() {
+        pDialog = new ProgressBarHandler(LoginActivity.this);
+        pDialog.show();
+    }
 
-    private class AsynCheckDevice extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
+    @Override
+    public void onCheckDevicePostExecuteCompleted(CheckDeviceOutput checkDeviceOutput, int code, String message) {
 
-        int statusCode;
-        String responseStr;
-        JSONObject myJson = null;
-        String userIdStr;
+        if (code > 0) {
+            if (code == 200) {
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            if (preferenceManager != null) {
-              userIdStr = preferenceManager.getUseridFromPref();
-            }
-
-            String urlRouteList = Util.rootUrl().trim() + Util.CheckDevice.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("user_id", userIdStr.trim());
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("device", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                httppost.addHeader("google_id", Util.getTextofLanguage(LoginActivity.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
-                httppost.addHeader("device_type", "1");
-                httppost.addHeader("lang_code", Util.getTextofLanguage(LoginActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                httppost.addHeader("device_info", deviceName + "," + Util.getTextofLanguage(LoginActivity.this, Util.ANDROID_VERSION, Util.DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                    LogUtil.showLog("BIBHU3", "responseStr of check device=" + responseStr);
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            statusCode = 0;
-                            Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    statusCode = 0;
-
-                    e.printStackTrace();
-                }
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                    UniversalErrorMessage = myJson.optString("msg");
-                }
-            } catch (Exception e) {
-                statusCode = 0;
-            }
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                statusCode = 0;
-            }
-
-            if (responseStr == null) {
-                // Call For Logout
-                LogOut();
-            }
-
-            if (statusCode > 0) {
-                if (statusCode == 200) {
-
-                    // Allow The User To Login
-                    if (Util.check_for_subscription == 1) {
-                        //go to subscription page
-                        if (Util.checkNetwork(LoginActivity.this) == true) {
-                            if (Util.dataModel.getIsFreeContent() == 1) {
-                                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
-                                getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
-                                getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
-                                getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
-                                getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
-                                VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
-                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                            } else {
-                                ValidateUserInput validateUserInput = new ValidateUserInput();
-                                validateUserInput.setAuthToken(Util.authTokenStr);
-                                validateUserInput.setUserId(validateUserInput.getUserId());
-                                validateUserInput.setMuviUniqueId(validateUserInput.getMuviUniqueId());
-                                validateUserInput.setEpisodeStreamUniqueId(validateUserInput.getEpisodeStreamUniqueId());
-                                validateUserInput.setSeasonId(validateUserInput.getSeasonId());
-                                validateUserInput.setLanguageCode(validateUserInput.getLanguageCode());
-                                validateUserInput.setPurchaseType(validateUserInput.getPurchaseType());
-                                GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
-                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-
-                            }
+                // Allow The User To Login
+                if (Util.check_for_subscription == 1) {
+                    //go to subscription page
+                    if (Util.checkNetwork(LoginActivity.this) == true) {
+                        if (Util.dataModel.getIsFreeContent() == 1) {
+                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                            getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                            getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
+                            getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
+                            getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
+                            getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
+                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
-                            Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            ValidateUserInput validateUserInput = new ValidateUserInput();
+                            validateUserInput.setAuthToken(Util.authTokenStr);
+                            validateUserInput.setUserId(validateUserInput.getUserId());
+                            validateUserInput.setMuviUniqueId(validateUserInput.getMuviUniqueId());
+                            validateUserInput.setEpisodeStreamUniqueId(validateUserInput.getEpisodeStreamUniqueId());
+                            validateUserInput.setSeasonId(validateUserInput.getSeasonId());
+                            validateUserInput.setLanguageCode(validateUserInput.getLanguageCode());
+                            validateUserInput.setPurchaseType(validateUserInput.getPurchaseType());
+                            GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
+                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+
                         }
                     } else {
-                        if (PlanId.equals("1") && UniversalIsSubscribed.equals("0")) {
-                            Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(intent);
-                            finish();
-                            overridePendingTransition(0, 0);
-                        } else {
-                            Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(in);
-                            finish();
-                        }
+                        Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    // Call For Logout
-                    LogOut();
+                    if (PlanId.equals("1") && UniversalIsSubscribed.equals("0")) {
+                        Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(intent);
+                        finish();
+                        overridePendingTransition(0, 0);
+                    } else {
+                        Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                        in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(in);
+                        finish();
+                    }
                 }
             } else {
                 // Call For Logout
                 LogOut();
             }
-
+        } else {
+            // Call For Logout
+            LogOut();
         }
 
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressBarHandler(LoginActivity.this);
-            pDialog.show();
-        }
     }
 
+
+//    private class AsynCheckDevice extends AsyncTask<Void, Void, Void> {
+//        ProgressBarHandler pDialog;
+//
+//        int statusCode;
+//        String responseStr;
+//        JSONObject myJson = null;
+//        String userIdStr;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            if (preferenceManager != null) {
+//                userIdStr = preferenceManager.getUseridFromPref();
+//            }
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.CheckDevice.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("user_id", userIdStr.trim());
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("device", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+//                httppost.addHeader("google_id", Util.getTextofLanguage(LoginActivity.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+//                httppost.addHeader("device_type", "1");
+//                httppost.addHeader("lang_code", Util.getTextofLanguage(LoginActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("device_info", deviceName + "," + Util.getTextofLanguage(LoginActivity.this, Util.ANDROID_VERSION, Util.DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//                    LogUtil.showLog("MUVI3", "responseStr of check device=" + responseStr);
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            statusCode = 0;
+//                            Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    statusCode = 0;
+//
+//                    e.printStackTrace();
+//                }
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//                    UniversalErrorMessage = myJson.optString("msg");
+//                }
+//            } catch (Exception e) {
+//                statusCode = 0;
+//            }
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            try {
+//                if (pDialog != null && pDialog.isShowing()) {
+//                    pDialog.hide();
+//                    pDialog = null;
+//                }
+//            } catch (IllegalArgumentException ex) {
+//                statusCode = 0;
+//            }
+//
+//            if (responseStr == null) {
+//                // Call For Logout
+//                LogOut();
+//            }
+//
+//            if (statusCode > 0) {
+//                if (statusCode == 200) {
+//
+//                    // Allow The User To Login
+//                    if (Util.check_for_subscription == 1) {
+//                        //go to subscription page
+//                        if (Util.checkNetwork(LoginActivity.this) == true) {
+//                            if (Util.dataModel.getIsFreeContent() == 1) {
+//                                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+//                                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+//                                getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
+//                                getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
+//                                getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
+//                                getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
+//                                VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
+//                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+//                            } else {
+//                                ValidateUserInput validateUserInput = new ValidateUserInput();
+//                                validateUserInput.setAuthToken(Util.authTokenStr);
+//                                validateUserInput.setUserId(validateUserInput.getUserId());
+//                                validateUserInput.setMuviUniqueId(validateUserInput.getMuviUniqueId());
+//                                validateUserInput.setEpisodeStreamUniqueId(validateUserInput.getEpisodeStreamUniqueId());
+//                                validateUserInput.setSeasonId(validateUserInput.getSeasonId());
+//                                validateUserInput.setLanguageCode(validateUserInput.getLanguageCode());
+//                                validateUserInput.setPurchaseType(validateUserInput.getPurchaseType());
+//                                GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
+//                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+//
+//                            }
+//                        } else {
+//                            Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                        }
+//                    } else {
+//                        if (PlanId.equals("1") && UniversalIsSubscribed.equals("0")) {
+//                            Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                            startActivity(intent);
+//                            finish();
+//                            overridePendingTransition(0, 0);
+//                        } else {
+//                            Intent in = new Intent(LoginActivity.this, MainActivity.class);
+//                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            startActivity(in);
+//                            finish();
+//                        }
+//                    }
+//                } else {
+//                    // Call For Logout
+//                    LogOut();
+//                }
+//            } else {
+//                // Call For Logout
+//                LogOut();
+//            }
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            pDialog = new ProgressBarHandler(LoginActivity.this);
+//            pDialog.show();
+//        }
+//    }
+
     public void LogOut() {
-        LogUtil.showLog("BIBHU3", "logout Called");
+        LogUtil.showLog("MUVI3", "logout Called");
         LogoutInput logoutInput = new LogoutInput();
         logoutInput.setAuthToken(Util.authTokenStr);
         logoutInput.setLogin_history_id(logoutInput.getLogin_history_id());
@@ -4351,7 +4698,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                    HttpResponse response = httpclient.execute(httppost);
 //                    responseStr = EntityUtils.toString(response.getEntity());
 //
-//                    LogUtil.showLog("BIBHU3","responseStr of logout="+responseStr);
+//                    LogUtil.showLog("MUVI3","responseStr of logout="+responseStr);
 //
 //                } catch (org.apache.http.conn.ConnectTimeoutException e){
 //                    runOnUiThread(new Runnable() {

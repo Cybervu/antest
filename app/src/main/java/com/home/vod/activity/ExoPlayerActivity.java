@@ -32,9 +32,13 @@ import android.widget.Toast;
 
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.home.apisdk.apiController.GetFFVideoBufferLogDetailsAsync;
+import com.home.apisdk.apiController.GetFFVideoLogDetailsAsync;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetVideoBufferLogsAsynTask;
 import com.home.apisdk.apiController.GetVideoLogsAsynTask;
+import com.home.apisdk.apiController.UpdateVideoBufferLogDetailsAsync;
+import com.home.apisdk.apiModel.FFVideoLogDetailsInput;
 import com.home.apisdk.apiModel.VideoBufferLogsInputModel;
 import com.home.apisdk.apiModel.VideoBufferLogsOutputModel;
 import com.home.apisdk.apiModel.VideoLogsInputModel;
@@ -87,8 +91,9 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 
-public class ExoPlayerActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener,GetVideoLogsAsynTask.GetVideoLogs,
-        GetVideoBufferLogsAsynTask.GetVideoBufferLogs,GetIpAddressAsynTask.IpAddress{
+public class ExoPlayerActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener, GetVideoLogsAsynTask.GetVideoLogs,
+        GetVideoBufferLogsAsynTask.GetVideoBufferLogs, GetIpAddressAsynTask.IpAddress, GetFFVideoLogDetailsAsync.GetFFVideoLogs,
+        GetFFVideoBufferLogDetailsAsync.GetFFVideoBufferLogs, UpdateVideoBufferLogDetailsAsync.UpdateVideoBufferLog {
     int played_length = 0;
     int playerStartPosition = 0;
 
@@ -110,7 +115,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     String Location = "0";
 
     GetVideoLogsAsynTask asyncVideoLogDetails;
-    AsyncFFVideoLogDetails asyncFFVideoLogDetails;
+    GetFFVideoLogDetailsAsync asyncFFVideoLogDetails;
     GetIpAddressAsynTask asynGetIpAddress;
     ImageButton back, center_play_pause;
     ImageView compress_expand;
@@ -190,9 +195,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         SensorOrientationChangeNotifier.getInstance(ExoPlayerActivity.this).addListener(this);
         // Added For FCM
         // Call Api to Check User's Login Status;
-
-        AsynCheckForLoginStatus asynCheckForLoginStatus = new AsynCheckForLoginStatus();
-        asynCheckForLoginStatus.executeOnExecutor(threadPoolExecutor);
     }
 
     @Override
@@ -236,7 +238,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoDurationTextView.setTypeface(videoDurationTextViewface);
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
-        Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoCensorRatingTextView.setTypeface(videoCensorRatingTextViewface);
         videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
         Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
@@ -327,13 +329,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (ResolutionFormat.size() > 0) {
             Collections.reverse(ResolutionFormat);
             for (int m = 0; m < ResolutionFormat.size(); m++) {
-                LogUtil.showLog("BIBHU", "RESOLUTION FORMAT======" + ResolutionFormat.get(m));
+                LogUtil.showLog("MUVI", "RESOLUTION FORMAT======" + ResolutionFormat.get(m));
             }
         }
         if (ResolutionUrl.size() > 0) {
             Collections.reverse(ResolutionUrl);
             for (int n = 0; n < ResolutionUrl.size(); n++) {
-                LogUtil.showLog("BIBHU", "RESOLUTION URL======" + ResolutionUrl.get(n));
+                LogUtil.showLog("MUVI", "RESOLUTION URL======" + ResolutionUrl.get(n));
             }
         }
 
@@ -470,7 +472,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         emailAddressTextView = (TextView) findViewById(R.id.ipAddressTextView);
         dateTextView = (TextView) findViewById(R.id.dateTextView);
 
-        Typeface Tf = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        Typeface Tf = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         ipAddressTextView.setTypeface(Tf);
         emailAddressTextView.setTypeface(Tf);
         dateTextView.setTypeface(Tf);
@@ -523,7 +525,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-
 
 
             }
@@ -733,7 +734,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 subsFetchTask = new SubtitleProcessingTask("1");
                                 subsFetchTask.execute();
                             } else {
-                                VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                                VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                                 videoLogsInputModel.setAuthToken(Util.authTokenStr);
                                 videoLogsInputModel.setUserId(userIdStr.trim());
                                 videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -744,7 +745,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 videoLogsInputModel.setDeviceType("2");
                                 videoLogsInputModel.setVideoLogId(videoLogId);
 
-                                GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this,ExoPlayerActivity.this);
+                                GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, ExoPlayerActivity.this, ExoPlayerActivity.this);
                                 asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                             }
 
@@ -771,7 +772,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                     subsFetchTask = new SubtitleProcessingTask("1");
                                     subsFetchTask.execute();
                                 } else {
-                                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                                     videoLogsInputModel.setAuthToken(Util.authTokenStr);
                                     videoLogsInputModel.setUserId(userIdStr.trim());
                                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -782,7 +783,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                     videoLogsInputModel.setDeviceType("2");
                                     videoLogsInputModel.setVideoLogId(videoLogId);
 
-                                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this,ExoPlayerActivity.this);
+                                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, ExoPlayerActivity.this, ExoPlayerActivity.this);
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
 
@@ -807,7 +808,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 //        emVideoView.setVideoURI(Uri.parse("https://redirector.googlevideo.com/videoplayback?mime=video%2Fmp4&gir=yes&key=yt6&requiressl=yes&initcwndbps=5801250&gcr=us&ratebypass=yes&dur=14097.298&lmt=1492322340213750&source=youtube&clen=695864911&id=o-AKWpvS-A4M1BMyXQj_FgFCgNeVAkhhIz6HNbSx6IzIp-&mm=31&mn=sn-p5qs7nee&ei=klkZWYjnN4jC1wK24b6wAQ&ms=au&ipbits=0&pl=24&mv=m&expire=1494855155&ip=159.253.144.86&sparams=clen%2Cdur%2Cei%2Cgcr%2Cgir%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cupn%2Cexpire&signature=410B1D5E19A19F646D628A43F6198997F430002C.AE2553E2A5C08FE91736B24A5C57DD8CA8C20A01&itag=18&upn=iPbZvZf33FA&mt=1494833478&title=Baahubali+2+-+The+Conclusion+Pre+Release+Event+LIVE+360%C2%B0.mp4"));
 
 
-        asynGetIpAddress = new GetIpAddressAsynTask(this,this);
+        asynGetIpAddress = new GetIpAddressAsynTask(this, this);
         asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
     }
 
@@ -820,7 +821,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     @Override
     public void onGetVideoLogsPostExecuteCompleted(int status, String message, String videoLogId) {
-        VideoBufferLogsInputModel videoBufferLogsInputModel=new VideoBufferLogsInputModel();
+        VideoBufferLogsInputModel videoBufferLogsInputModel = new VideoBufferLogsInputModel();
         videoBufferLogsInputModel.setAuthToken(Util.authTokenStr);
         videoBufferLogsInputModel.setUserId(userIdStr);
         videoBufferLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -833,7 +834,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         videoBufferLogsInputModel.setBufferEndTime(String.valueOf(playerPosition));
         videoBufferLogsInputModel.setBufferLogUniqueId(videoBufferLogUniqueId);
         videoBufferLogsInputModel.setLocation(Location);
-        GetVideoBufferLogsAsynTask asyncVideoBufferLogDetails = new GetVideoBufferLogsAsynTask(videoBufferLogsInputModel,this,this);
+        GetVideoBufferLogsAsynTask asyncVideoBufferLogDetails = new GetVideoBufferLogsAsynTask(videoBufferLogsInputModel, this, this);
         asyncVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
 
         return;
@@ -847,9 +848,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     @Override
     public void onGetVideoBufferLogsPostExecuteCompleted(VideoBufferLogsOutputModel videoBufferLogsOutputModel, int status, String message) {
 
-            videoBufferLogId = "0";
-            videoBufferLogUniqueId = "0";
-            Location = "0";
+        videoBufferLogId = "0";
+        videoBufferLogUniqueId = "0";
+        Location = "0";
 
         startTimer();
 
@@ -1066,7 +1067,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         if (emVideoView != null) {
                             int currentPositionStr = millisecondsToString(emVideoView.getCurrentPosition());
                             playerPosition = currentPositionStr;
-                            LogUtil.showLog("BIBHU1" +
+                            LogUtil.showLog("MUVI1" +
                                     "", "TimerTask called=" + currentPositionStr + "  =====  " + playerPreviousPosition + "======" + isFastForward);
 
                             if (isFastForward == true) {
@@ -1076,17 +1077,36 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
 
-                                    LogUtil.showLog("BIBHU1" +
+                                    LogUtil.showLog("MUVI1" +
                                             "", "Complete FF Log Called");
-
-                                    asyncFFVideoLogDetails = new AsyncFFVideoLogDetails();
+                                    FFVideoLogDetailsInput ffVideoLogDetailsInput = new FFVideoLogDetailsInput();
+                                    ffVideoLogDetailsInput.setAuthToken(Util.authTokenStr);
+                                    ffVideoLogDetailsInput.setUser_id(userIdStr);
+                                    ffVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
+                                    ffVideoLogDetailsInput.setMovie_id(movieId.trim());
+                                    ffVideoLogDetailsInput.setEpisode_id(episodeId.trim());
+                                    ffVideoLogDetailsInput.setPlayed_length(String.valueOf(playerPosition));
+                                    ffVideoLogDetailsInput.setWatch_status(watchStatus);
+                                    ffVideoLogDetailsInput.setDevice_type("2");
+                                    ffVideoLogDetailsInput.setLog_id(videoLogId);
+                                    asyncFFVideoLogDetails = new GetFFVideoLogDetailsAsync(ffVideoLogDetailsInput, ExoPlayerActivity.this, ExoPlayerActivity.this);
                                     watchStatus = "complete";
                                     asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else {
 
-                                    LogUtil.showLog("BIBHU1", "halfplay FF Log Called");
+                                    LogUtil.showLog("MUVI1", "halfplay FF Log Called");
 
-                                    asyncFFVideoLogDetails = new AsyncFFVideoLogDetails();
+                                    FFVideoLogDetailsInput ffVideoLogDetailsInput = new FFVideoLogDetailsInput();
+                                    ffVideoLogDetailsInput.setAuthToken(Util.authTokenStr);
+                                    ffVideoLogDetailsInput.setUser_id(userIdStr);
+                                    ffVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
+                                    ffVideoLogDetailsInput.setMovie_id(movieId.trim());
+                                    ffVideoLogDetailsInput.setEpisode_id(episodeId.trim());
+                                    ffVideoLogDetailsInput.setPlayed_length(String.valueOf(playerPosition));
+                                    ffVideoLogDetailsInput.setWatch_status(watchStatus);
+                                    ffVideoLogDetailsInput.setDevice_type("2");
+                                    ffVideoLogDetailsInput.setLog_id(videoLogId);
+                                    asyncFFVideoLogDetails = new GetFFVideoLogDetailsAsync(ffVideoLogDetailsInput, ExoPlayerActivity.this, ExoPlayerActivity.this);
                                     watchStatus = "halfplay";
                                     asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
@@ -1098,9 +1118,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
 
-                                    LogUtil.showLog("BIBHU1", "Complete Video Log Called");
+                                    LogUtil.showLog("MUVI1", "Complete Video Log Called");
 
-                                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                                     videoLogsInputModel.setAuthToken(Util.authTokenStr);
                                     videoLogsInputModel.setUserId(userIdStr.trim());
                                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -1111,14 +1131,14 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                     videoLogsInputModel.setDeviceType("2");
                                     videoLogsInputModel.setVideoLogId(videoLogId);
 
-                                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this,ExoPlayerActivity.this);
+                                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, ExoPlayerActivity.this, ExoPlayerActivity.this);
                                     watchStatus = "complete";
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else if (currentPositionStr > 0 && currentPositionStr % 60 == 0) {
 
-                                    LogUtil.showLog("BIBHU1", "Halfplay video Log Called");
+                                    LogUtil.showLog("MUVI1", "Halfplay video Log Called");
 
-                                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                                     videoLogsInputModel.setAuthToken(Util.authTokenStr);
                                     videoLogsInputModel.setUserId(userIdStr.trim());
                                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -1129,7 +1149,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                     videoLogsInputModel.setDeviceType("2");
                                     videoLogsInputModel.setVideoLogId(videoLogId);
 
-                                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this,ExoPlayerActivity.this);
+                                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, ExoPlayerActivity.this, ExoPlayerActivity.this);
                                     watchStatus = "halfplay";
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -1153,279 +1173,356 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         ipAddressTextView.setText(ipAddressStr);
     }
 
-    private class AsyncFFVideoLogDetails extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int statusCode = 0;
+    @Override
+    public void onGetFFVideoLogsPreExecuteStarted() {
+        stoptimertask();
+    }
 
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", userIdStr);
-                httppost.addHeader("ip_address", ipAddressStr.trim());
-                httppost.addHeader("movie_id", movieId.trim());
-                httppost.addHeader("episode_id", episodeId.trim());
-
-                httppost.addHeader("played_length", String.valueOf(playerPosition));
-                httppost.addHeader("watch_status", watchStatus);
-
-                httppost.addHeader("device_type", "2");
-                httppost.addHeader("log_id", videoLogId);
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            videoLogId = "0";
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    videoLogId = "0";
-
-                    e.printStackTrace();
-                }
-                if (responseStr != null) {
-                    JSONObject myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                    if (statusCode == 200) {
-                        videoLogId = myJson.optString("log_id");
-                    } else {
-                        videoLogId = "0";
-                    }
-                }
-
-            } catch (Exception e) {
-                videoLogId = "0";
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-            if (responseStr == null) {
-                videoLogId = "0";
-
-            }
-            if (statusCode == 200) {
-                AsyncFFVideoBufferLogDetails asyncFFVideoBufferLogDetails = new AsyncFFVideoBufferLogDetails();
-                asyncFFVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
-
-            }
-            return;
+    @Override
+    public void onGetFFVideoLogsPostExecuteCompleted(int code, String status, String videoLogId) {
+        if (status == null) {
+            videoLogId = "0";
 
         }
+        if (code == 200) {
+            VideoBufferLogsInputModel videoBufferLogsInputModel = new VideoBufferLogsInputModel();
+            videoBufferLogsInputModel.setAuthToken(Util.authTokenStr);
+            videoBufferLogsInputModel.setUserId(userIdStr.trim());
+            videoBufferLogsInputModel.setIpAddress(ipAddressStr.trim());
+            videoBufferLogsInputModel.setMuviUniqueId(movieId.trim());
+            videoBufferLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
+            videoBufferLogsInputModel.setBufferLogUniqueId(videoBufferLogId);
+            videoBufferLogsInputModel.setDeviceType("2");
+            videoBufferLogsInputModel.setVideoResolution(resolution.trim());
+            videoBufferLogsInputModel.setBufferStartTime("0");
+            videoBufferLogsInputModel.setBufferEndTime(String.valueOf(millisecondsToString(playerPreviousPosition)));
+            videoBufferLogsInputModel.setBufferLogUniqueId(videoBufferLogUniqueId);
+            videoBufferLogsInputModel.setLocation(Location);
+            GetFFVideoBufferLogDetailsAsync asyncFFVideoBufferLogDetails = new GetFFVideoBufferLogDetailsAsync(videoBufferLogsInputModel, this, this);
+            asyncFFVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
 
-        @Override
-        protected void onPreExecute() {
-            // updateSeekBarThread.stop();
-            stoptimertask();
         }
+        return;
     }
 
 
-    private class AsyncFFVideoBufferLogDetails extends AsyncTask<Void, Void, Void> {
-        //  ProgressDialog pDialog;
-        String responseStr;
-        int statusCode = 0;
+//    private class AsyncFFVideoLogDetails extends AsyncTask<Void, Void, Void> {
+//        String responseStr;
+//        int statusCode = 0;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("user_id", userIdStr);
+//                httppost.addHeader("ip_address", ipAddressStr.trim());
+//                httppost.addHeader("movie_id", movieId.trim());
+//                httppost.addHeader("episode_id", episodeId.trim());
+//
+//                httppost.addHeader("played_length", String.valueOf(playerPosition));
+//                httppost.addHeader("watch_status", watchStatus);
+//
+//                httppost.addHeader("device_type", "2");
+//                httppost.addHeader("log_id", videoLogId);
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            videoLogId = "0";
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    videoLogId = "0";
+//
+//                    e.printStackTrace();
+//                }
+//                if (responseStr != null) {
+//                    JSONObject myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//                    if (statusCode == 200) {
+//                        videoLogId = myJson.optString("log_id");
+//                    } else {
+//                        videoLogId = "0";
+//                    }
+//                }
+//
+//            } catch (Exception e) {
+//                videoLogId = "0";
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//            if (responseStr == null) {
+//                videoLogId = "0";
+//
+//            }
+//            if (statusCode == 200) {
+//                AsyncFFVideoBufferLogDetails asyncFFVideoBufferLogDetails = new AsyncFFVideoBufferLogDetails();
+//                asyncFFVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
+//
+//            }
+//            return;
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            // updateSeekBarThread.stop();
+//            stoptimertask();
+//        }
+//    }
 
-        @Override
-        protected Void doInBackground(Void... params) {
+    @Override
+    public void onGetFFVideoBufferLogsPreExecuteStarted() {
 
-            String urlRouteList = Util.rootUrl().trim() + Util.bufferLogUrl.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", userIdStr.trim());
-                httppost.addHeader("ip_address", ipAddressStr.trim());
-                httppost.addHeader("movie_id", movieId.trim());
-                httppost.addHeader("episode_id", episodeId.trim());
-                httppost.addHeader("device_type", "2");
-                httppost.addHeader("log_id", videoBufferLogId);
-                httppost.addHeader("resolution", resolution.trim());
-                httppost.addHeader("start_time", "0");
-                httppost.addHeader("end_time", String.valueOf(millisecondsToString(playerPreviousPosition)));
-                httppost.addHeader("log_unique_id", videoBufferLogUniqueId);
-                httppost.addHeader("location", Location);
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            videoBufferLogId = "0";
-                            videoBufferLogUniqueId = "0";
-                            Location = "0";
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    videoBufferLogId = "0";
-                    videoBufferLogUniqueId = "0";
-                    Location = "0";
-                    e.printStackTrace();
-                }
-                if (responseStr != null) {
-                    JSONObject myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                    if (statusCode == 200) {
-                        videoBufferLogId = myJson.optString("log_id");
-                        videoBufferLogUniqueId = myJson.optString("log_unique_id");
-                        Location = myJson.optString("location");
-                        ;
-                    } else {
-                        videoBufferLogId = "0";
-                        videoBufferLogUniqueId = "0";
-                        Location = "0";
-                    }
-
-                }
-
-            } catch (Exception e) {
-                videoBufferLogId = "0";
-                videoBufferLogUniqueId = "0";
-                Location = "0";
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if (responseStr == null) {
-
-                videoBufferLogId = "0";
-                videoBufferLogUniqueId = "0";
-                Location = "0";
-            }
-            if (statusCode == 200) {
-
-                AsyncUpdateVideoBufferLogDetails asyncUpdateVideoBufferLogDetails = new AsyncUpdateVideoBufferLogDetails();
-                asyncUpdateVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
-
-            } else {
-                return;
-            }
-            return;
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-        }
     }
 
-    private class AsyncUpdateVideoBufferLogDetails extends AsyncTask<Void, Void, Void> {
-        //ProgressDialog pDialog;
-        String responseStr;
-        int statusCode = 0;
+    @Override
+    public void onGetFFVideoBufferLogsPostExecuteCompleted(VideoBufferLogsOutputModel videoBufferLogsOutputModel, int status, String message) {
 
-        @Override
-        protected Void doInBackground(Void... params) {
+        if (status == 200) {
+            VideoBufferLogsInputModel videoBufferLogsInputModel = new VideoBufferLogsInputModel();
+            videoBufferLogsInputModel.setAuthToken(Util.authTokenStr);
+            videoBufferLogsInputModel.setUserId(userIdStr);
+            videoBufferLogsInputModel.setIpAddress(ipAddressStr);
+            videoBufferLogsInputModel.setMuviUniqueId(movieId.trim());
+            videoBufferLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
+            videoBufferLogsInputModel.setBufferLogUniqueId(videoBufferLogUniqueId);
+            videoBufferLogsInputModel.setDeviceType("2");
+            videoBufferLogsInputModel.setVideoResolution(resolution.trim());
+            videoBufferLogsInputModel.setBufferStartTime(String.valueOf(playerPosition));
+            videoBufferLogsInputModel.setBufferEndTime(String.valueOf(playerPosition));
+            videoBufferLogsInputModel.setBufferLogId(videoBufferLogId);
+            videoBufferLogsInputModel.setLocation(Location);
 
-            String urlRouteList = Util.rootUrl().trim() + Util.updateBufferLogUrl.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", userIdStr);
-                httppost.addHeader("ip_address", ipAddressStr);
-                httppost.addHeader("movie_id", movieId.trim());
-                httppost.addHeader("episode_id", episodeId.trim());
-                httppost.addHeader("device_type", "2");
-                httppost.addHeader("log_id", videoBufferLogId);
-                httppost.addHeader("resolution", resolution.trim());
+            UpdateVideoBufferLogDetailsAsync asyncUpdateVideoBufferLogDetails = new UpdateVideoBufferLogDetailsAsync(videoBufferLogsInputModel, this, this);
+            asyncUpdateVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
 
-                httppost.addHeader("start_time", String.valueOf(playerPosition));
-                httppost.addHeader("end_time", String.valueOf(playerPosition));
-                httppost.addHeader("log_unique_id", videoBufferLogUniqueId);
-                httppost.addHeader("location", Location);
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            videoBufferLogId = "0";
-                            videoBufferLogUniqueId = "0";
-                            Location = "0";
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    videoBufferLogId = "0";
-                    videoBufferLogUniqueId = "0";
-                    Location = "0";
-                    e.printStackTrace();
-                }
-                if (responseStr != null) {
-                    JSONObject myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                    if (statusCode == 200) {
-                        videoBufferLogId = myJson.optString("log_id");
-                        videoBufferLogUniqueId = myJson.optString("log_unique_id");
-                        Location = myJson.optString("location");
-
-                    } else {
-                        videoBufferLogId = "0";
-                        videoBufferLogUniqueId = "0";
-                        Location = "0";
-                    }
-
-                }
-
-            } catch (Exception e) {
-                videoBufferLogId = "0";
-                videoBufferLogUniqueId = "0";
-                Location = "0";
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if (responseStr == null) {
-                videoBufferLogId = "0";
-                videoBufferLogUniqueId = "0";
-                Location = "0";
-            }
-
-            startTimer();
+        } else {
             return;
         }
-
-        @Override
-        protected void onPreExecute() {
-        }
+        return;
     }
+
+
+//    private class AsyncFFVideoBufferLogDetails extends AsyncTask<Void, Void, Void> {
+//        //  ProgressDialog pDialog;
+//        String responseStr;
+//        int statusCode = 0;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.bufferLogUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("user_id", userIdStr.trim());
+//                httppost.addHeader("ip_address", ipAddressStr.trim());
+//                httppost.addHeader("movie_id", movieId.trim());
+//                httppost.addHeader("episode_id", episodeId.trim());
+//                httppost.addHeader("device_type", "2");
+//                httppost.addHeader("log_id", videoBufferLogId);
+//                httppost.addHeader("resolution", resolution.trim());
+//                httppost.addHeader("start_time", "0");
+//                httppost.addHeader("end_time", String.valueOf(millisecondsToString(playerPreviousPosition)));
+//                httppost.addHeader("log_unique_id", videoBufferLogUniqueId);
+//                httppost.addHeader("location", Location);
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            videoBufferLogId = "0";
+//                            videoBufferLogUniqueId = "0";
+//                            Location = "0";
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    videoBufferLogId = "0";
+//                    videoBufferLogUniqueId = "0";
+//                    Location = "0";
+//                    e.printStackTrace();
+//                }
+//                if (responseStr != null) {
+//                    JSONObject myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//                    if (statusCode == 200) {
+//                        videoBufferLogId = myJson.optString("log_id");
+//                        videoBufferLogUniqueId = myJson.optString("log_unique_id");
+//                        Location = myJson.optString("location");
+//                        ;
+//                    } else {
+//                        videoBufferLogId = "0";
+//                        videoBufferLogUniqueId = "0";
+//                        Location = "0";
+//                    }
+//
+//                }
+//
+//            } catch (Exception e) {
+//                videoBufferLogId = "0";
+//                videoBufferLogUniqueId = "0";
+//                Location = "0";
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            if (responseStr == null) {
+//
+//                videoBufferLogId = "0";
+//                videoBufferLogUniqueId = "0";
+//                Location = "0";
+//            }
+//            if (statusCode == 200) {
+//
+//                AsyncUpdateVideoBufferLogDetails asyncUpdateVideoBufferLogDetails = new AsyncUpdateVideoBufferLogDetails();
+//                asyncUpdateVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
+//
+//            } else {
+//                return;
+//            }
+//            return;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//
+//        }
+//    }
+
+    @Override
+    public void onUpdateVideoBufferLogPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onUpdateVideoBufferLogPostExecuteCompleted(VideoBufferLogsOutputModel videoBufferLogsOutputModel, int status, String message) {
+
+        startTimer();
+        return;
+    }
+
+//    private class AsyncUpdateVideoBufferLogDetails extends AsyncTask<Void, Void, Void> {
+//        //ProgressDialog pDialog;
+//        String responseStr;
+//        int statusCode = 0;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.updateBufferLogUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("user_id", userIdStr);
+//                httppost.addHeader("ip_address", ipAddressStr);
+//                httppost.addHeader("movie_id", movieId.trim());
+//                httppost.addHeader("episode_id", episodeId.trim());
+//                httppost.addHeader("device_type", "2");
+//                httppost.addHeader("log_id", videoBufferLogId);
+//                httppost.addHeader("resolution", resolution.trim());
+//
+//                httppost.addHeader("start_time", String.valueOf(playerPosition));
+//                httppost.addHeader("end_time", String.valueOf(playerPosition));
+//                httppost.addHeader("log_unique_id", videoBufferLogUniqueId);
+//                httppost.addHeader("location", Location);
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            videoBufferLogId = "0";
+//                            videoBufferLogUniqueId = "0";
+//                            Location = "0";
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    videoBufferLogId = "0";
+//                    videoBufferLogUniqueId = "0";
+//                    Location = "0";
+//                    e.printStackTrace();
+//                }
+//                if (responseStr != null) {
+//                    JSONObject myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//                    if (statusCode == 200) {
+//                        videoBufferLogId = myJson.optString("log_id");
+//                        videoBufferLogUniqueId = myJson.optString("log_unique_id");
+//                        Location = myJson.optString("location");
+//
+//                    } else {
+//                        videoBufferLogId = "0";
+//                        videoBufferLogUniqueId = "0";
+//                        Location = "0";
+//                    }
+//
+//                }
+//
+//            } catch (Exception e) {
+//                videoBufferLogId = "0";
+//                videoBufferLogUniqueId = "0";
+//                Location = "0";
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//
+//            if (responseStr == null) {
+//                videoBufferLogId = "0";
+//                videoBufferLogUniqueId = "0";
+//                Location = "0";
+//            }
+//
+//            startTimer();
+//            return;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//        }
+//    }
 
     private int millisecondsToString(int milliseconds) {
         // int seconds = (int) (milliseconds / 1000) % 60 ;
@@ -1930,7 +2027,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     public void run() {
                         if (content_types_id != 4) {
 
-                            try{
+                            try {
 
                                 current_time.setText(Current_Time);
                                 double pourcent = seekBar.getProgress() / (double) seekBar.getMax();
@@ -1940,10 +2037,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 int labelWidth = current_time.getWidth();
                                 current_time.setX(offset + seekBar.getX() + val
                                         - Math.round(pourcent * offset)
-                                        - Math.round(pourcent * labelWidth/2));
+                                        - Math.round(pourcent * labelWidth / 2));
 
 
-                            }catch (Exception e){
+                            } catch (Exception e) {
                             }
 
                             timer.cancel();
@@ -2124,7 +2221,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     subsFetchTask = new SubtitleProcessingTask("1");
                     subsFetchTask.execute();
                 } else {
-                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                     videoLogsInputModel.setAuthToken(Util.authTokenStr);
                     videoLogsInputModel.setUserId(userIdStr.trim());
                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -2135,7 +2232,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     videoLogsInputModel.setDeviceType("2");
                     videoLogsInputModel.setVideoLogId(videoLogId);
 
-                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this,ExoPlayerActivity.this);
+                    GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, ExoPlayerActivity.this, ExoPlayerActivity.this);
                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                 }
 
@@ -2199,7 +2296,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             MovableTimer.cancel();
     }
 
-    // Added Later By Bibhu For Subtitle Feature.
+    // Added Later By MUVI For Subtitle Feature.
 
     public class SubtitleProcessingTask extends AsyncTask<Void, Void, Void> {
 
@@ -2258,11 +2355,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         R.raw.subtitle);*/
 
                 if (callWithoutCaption) {
-                    Log.v("BIBHU", "Without Caption Called");
+                    Log.v("MUVI", "Without Caption Called");
                     FormatSRT_WithoutCaption formatSRT = new FormatSRT_WithoutCaption();
                     srt = formatSRT.parseFile("sample", fIn);
                 } else {
-                    Log.v("BIBHU", "With Caption Called");
+                    Log.v("MUVI", "With Caption Called");
                     FormatSRT formatSRT = new FormatSRT();
                     srt = formatSRT.parseFile("sample", fIn);
                 }
@@ -2283,7 +2380,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 //                Toast.makeText(getApplicationContext(), "subtitles loaded!!",Toast.LENGTH_SHORT).show();
             }
 
-            VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+            VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
             videoLogsInputModel.setAuthToken(Util.authTokenStr);
             videoLogsInputModel.setUserId(userIdStr.trim());
             videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -2294,7 +2391,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             videoLogsInputModel.setDeviceType("2");
             videoLogsInputModel.setVideoLogId(videoLogId);
 
-            GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,ExoPlayerActivity.this,ExoPlayerActivity.this);
+            GetVideoLogsAsynTask asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, ExoPlayerActivity.this, ExoPlayerActivity.this);
             asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
             super.onPostExecute(result);
@@ -2362,8 +2459,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 //        String Subtitle_Path = Environment.getExternalStorageDirectory().toString()+"/"+"sub.vtt";
 
-        LogUtil.showLog("BIBHU", "Subtitle_Path at CheckSubTitleParsingType = " + Subtitle_Path);
-        LogUtil.showLog("BIBHU", "Subtitle_Path at CheckSubTitleParsingType size = " + SubTitlePath.size());
+        LogUtil.showLog("MUVI", "Subtitle_Path at CheckSubTitleParsingType = " + Subtitle_Path);
+        LogUtil.showLog("MUVI", "Subtitle_Path at CheckSubTitleParsingType size = " + SubTitlePath.size());
 
         callWithoutCaption = true;
 
@@ -2392,7 +2489,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         }
         while (testinglinecounter < 6) {
             try {
-                LogUtil.showLog("BIBHU", "Testing Liane at Mainactivity = " + TestingLine.toString());
+                LogUtil.showLog("MUVI", "Testing Liane at Mainactivity = " + TestingLine.toString());
 
                 if (Integer.parseInt(TestingLine.toString().trim()) == captionNumber) {
                     callWithoutCaption = false;
@@ -2405,7 +2502,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     e1.printStackTrace();
                 }
                 testinglinecounter++;
-                LogUtil.showLog("BIBHU", "Total no of line at Mainactivity = " + testinglinecounter);
+                LogUtil.showLog("MUVI", "Total no of line at Mainactivity = " + testinglinecounter);
             }
         }
     }
@@ -2439,20 +2536,20 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             final int yUp = new Random().nextInt((max - min) + 1) + min;
 
 
-            LogUtil.showLog("BIBHU", "==========================================" + "\n");
+            LogUtil.showLog("MUVI", "==========================================" + "\n");
 
-            LogUtil.showLog("BIBHU", "mainLayout_width  ===" + mainLayout_width);
-            LogUtil.showLog("BIBHU", "mainLayout_height  ===" + mainLayout_height);
+            LogUtil.showLog("MUVI", "mainLayout_width  ===" + mainLayout_width);
+            LogUtil.showLog("MUVI", "mainLayout_height  ===" + mainLayout_height);
 
-            LogUtil.showLog("BIBHU", "childLayout_width  ===" + childLayout_width);
-            LogUtil.showLog("BIBHU", "childLayout_height  ===" + childLayout_height);
+            LogUtil.showLog("MUVI", "childLayout_width  ===" + childLayout_width);
+            LogUtil.showLog("MUVI", "childLayout_height  ===" + childLayout_height);
 
 
-            LogUtil.showLog("BIBHU", "xLeft  ===" + xLeft);
-            LogUtil.showLog("BIBHU", "yUp  ===" + yUp);
+            LogUtil.showLog("MUVI", "xLeft  ===" + xLeft);
+            LogUtil.showLog("MUVI", "yUp  ===" + yUp);
 
-            LogUtil.showLog("BIBHU", "width addition  ===" + (childLayout_width + xLeft));
-            LogUtil.showLog("BIBHU", "height addition   ===" + (childLayout_height + yUp));
+            LogUtil.showLog("MUVI", "width addition  ===" + (childLayout_width + xLeft));
+            LogUtil.showLog("MUVI", "height addition   ===" + (childLayout_height + yUp));
 
             if ((mainLayout_width > (childLayout_width + xLeft)) && (mainLayout_height > (childLayout_height + yUp))) {
                 show = false;
@@ -2499,85 +2596,5 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         );
     }
 
-    // This API is called for cecking the Login status
-    private class AsynCheckForLoginStatus extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-        String responseStr;
-        int statusCode = 0;
-        String isLogin = "";
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.CheckIfUserLoggedIn.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", userIdStr);
-                httppost.addHeader("device_id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                httppost.addHeader("device_type", "1");
-
-                // Execute HTTP Post Request
-                try {
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                    LogUtil.showLog("BIBHU", "Response Of the Login Status =" + responseStr);
-
-                } catch (Exception e) {
-                    responseStr = "0";
-                }
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                }
-
-
-                if (statusCode > 0) {
-                    if (statusCode == 200) {
-                        isLogin = myJson.optString("is_login").trim();
-                    } else {
-                        responseStr = "0";
-                    }
-                } else {
-                    responseStr = "0";
-                }
-
-            } catch (Exception e) {
-                responseStr = "0";
-                e.printStackTrace();
-
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-
-
-            if (isLogin.equals("1")) {
-                // Call the next Api and Allow the app as usual
-                // Do nothing
-            } else if (isLogin.equals("0")) {
-                //Logout the user
-               preferenceManager.clearLoginPref();
-
-                Toast.makeText(getApplicationContext(),Util.getTextofLanguage(ExoPlayerActivity.this,Util.LOGIN_STATUS_MESSAGE,Util.DEFAULT_LOGIN_STATUS_MESSAGE), Toast.LENGTH_LONG).show();
-
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                startActivity(intent);
-
-
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-        }
-    }
 
 }

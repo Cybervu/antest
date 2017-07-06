@@ -28,6 +28,9 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.home.apisdk.apiController.GetLoadVideosAsync;
+import com.home.apisdk.apiModel.LoadVideoInput;
+import com.home.apisdk.apiModel.LoadVideoOutput;
 import com.home.vod.R;
 import com.home.vod.adapter.RecyclerViewDataAdapter;
 import com.home.vod.model.GetMenuItem;
@@ -65,111 +68,102 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 /**
  * Created by Muvi on 11/24/2016.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment{
 
     /***************chromecast*********************
-    public enum PlaybackLocation {
-        LOCAL,
-        REMOTE
+     public enum PlaybackLocation {
+     LOCAL,
+     REMOTE
+     }
+
+     public enum PlaybackState {
+     PLAYING, PAUSED, BUFFERING, IDLE
+     }
+
+
+
+     private VideoView mVideoView;
+     private TextView mTitleView;
+     private TextView mDescriptionView;
+     private TextView mStartText;
+     private TextView mEndText;
+     private SeekBar mSeekbar;
+     private ImageView mPlayPause;
+     private ProgressBar mLoading;
+     private View mControllers;
+     private View mContainer;
+     private ImageView mCoverArt;
+     private Timer mSeekbarTimer;
+     private Timer mControllersTimer;
+     private PlaybackLocation mLocation;
+     private PlaybackState mPlaybackState;
+     private final Handler mHandler = new Handler();
+     private final float mAspectRatio = 72f / 128;
+     private AQuery mAquery;
+     private MediaInfo mSelectedMedia;
+     private boolean mControllersVisible;
+     private int mDuration;
+     private TextView mAuthorView;
+     private ImageButton mPlayCircle;
+
+
+     private CastContext mCastContext;
+     private SessionManagerListener<CastSession> mSessionManagerListener =
+     new MySessionManagerListener();
+     private CastSession mCastSession;
+     private MenuItem mediaRouteMenuItem;
+     private IntroductoryOverlay mIntroductoryOverlay;
+     private CastStateListener mCastStateListener;
+
+     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
+
+    @Override public void onSessionEnded(CastSession session, int error) {
+    if (session == mCastSession) {
+    mCastSession = null;
+    }
+    //invalidateOptionsMenu();
     }
 
-    public enum PlaybackState {
-        PLAYING, PAUSED, BUFFERING, IDLE
+    @Override public void onSessionResumed(CastSession session, boolean wasSuspended) {
+    mCastSession = session;
+    //invalidateOptionsMenu();
     }
 
+    @Override public void onSessionStarted(CastSession session, String sessionId) {
+    mCastSession = session;
+    //invalidateOptionsMenu();
+    }
 
+    @Override public void onSessionStarting(CastSession session) {
+    }
 
-    private VideoView mVideoView;
-    private TextView mTitleView;
-    private TextView mDescriptionView;
-    private TextView mStartText;
-    private TextView mEndText;
-    private SeekBar mSeekbar;
-    private ImageView mPlayPause;
-    private ProgressBar mLoading;
-    private View mControllers;
-    private View mContainer;
-    private ImageView mCoverArt;
-    private Timer mSeekbarTimer;
-    private Timer mControllersTimer;
-    private PlaybackLocation mLocation;
-    private PlaybackState mPlaybackState;
-    private final Handler mHandler = new Handler();
-    private final float mAspectRatio = 72f / 128;
-    private AQuery mAquery;
-    private MediaInfo mSelectedMedia;
-    private boolean mControllersVisible;
-    private int mDuration;
-    private TextView mAuthorView;
-    private ImageButton mPlayCircle;
+    @Override public void onSessionStartFailed(CastSession session, int error) {
+    }
 
+    @Override public void onSessionEnding(CastSession session) {
+    }
 
-    private CastContext mCastContext;
-    private SessionManagerListener<CastSession> mSessionManagerListener =
-            new MySessionManagerListener();
-    private CastSession mCastSession;
-    private MenuItem mediaRouteMenuItem;
-    private IntroductoryOverlay mIntroductoryOverlay;
-    private CastStateListener mCastStateListener;
+    @Override public void onSessionResuming(CastSession session, String sessionId) {
+    }
 
-    private class MySessionManagerListener implements SessionManagerListener<CastSession> {
+    @Override public void onSessionResumeFailed(CastSession session, int error) {
+    }
 
-        @Override
-        public void onSessionEnded(CastSession session, int error) {
-            if (session == mCastSession) {
-                mCastSession = null;
-            }
-            //invalidateOptionsMenu();
-        }
-
-        @Override
-        public void onSessionResumed(CastSession session, boolean wasSuspended) {
-            mCastSession = session;
-            //invalidateOptionsMenu();
-        }
-
-        @Override
-        public void onSessionStarted(CastSession session, String sessionId) {
-            mCastSession = session;
-            //invalidateOptionsMenu();
-        }
-
-        @Override
-        public void onSessionStarting(CastSession session) {
-        }
-
-        @Override
-        public void onSessionStartFailed(CastSession session, int error) {
-        }
-
-        @Override
-        public void onSessionEnding(CastSession session) {
-        }
-
-        @Override
-        public void onSessionResuming(CastSession session, String sessionId) {
-        }
-
-        @Override
-        public void onSessionResumeFailed(CastSession session, int error) {
-        }
-
-        @Override
-        public void onSessionSuspended(CastSession session, int reason) {
-        }
+    @Override public void onSessionSuspended(CastSession session, int reason) {
+    }
     }
 
 
 
 
 
-    MediaInfo mediaInfo;
-    **************chromecast*********************
+     MediaInfo mediaInfo;
+     **************chromecast*********************
 
-*/
+     */
 
-    int  videoHeight = 185;
-    int  videoWidth = 256;
+    int videoHeight = 185;
+    int videoWidth = 256;
 
     AsynLoadVideos asynLoadVideos;
     AsynLOADUI loadui;
@@ -201,8 +195,8 @@ public class HomeFragment extends Fragment {
 
     //AsynLoadImageUrls as = null;
     AsynLoadMenuItems asynLoadMenuItems = null;
-   /* int banner[] = {R.drawable.banner1,R.drawable.banner2,R.drawable.banner3};
-    int bannerL[] = {R.drawable.banner1_l,R.drawable.banner2_l,R.drawable.banner3_l};*/
+    /* int banner[] = {R.drawable.banner1,R.drawable.banner2,R.drawable.banner3};
+     int bannerL[] = {R.drawable.banner1_l,R.drawable.banner2_l,R.drawable.banner3_l};*/
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     int keepAliveTime = 10;
@@ -229,8 +223,8 @@ public class HomeFragment extends Fragment {
         setHasOptionsMenu(true);
         Util.image_orentiation.clear();
 
-        LogUtil.showLog("BIBHU2","device_id already created ="+ Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
-        LogUtil.showLog("BIBHU2","google_id already created ="+Util.getTextofLanguage(getActivity(),Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
+        LogUtil.showLog("BIBHU2", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
+        LogUtil.showLog("BIBHU2", "google_id already created =" + Util.getTextofLanguage(getActivity(), Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
 
 
 
@@ -266,10 +260,10 @@ public class HomeFragment extends Fragment {
         mDemoSlider = (SliderLayout) v.findViewById(R.id.sliderLayout);
 
         sliderRelativeLayout.setVisibility(View.GONE);
-        noInternetLayout = (RelativeLayout)rootView.findViewById(R.id.noInternet);
-        noDataLayout = (RelativeLayout)rootView.findViewById(R.id.noData);
-        noInternetTextView =(TextView)rootView.findViewById(R.id.noInternetTextView);
-        noDataTextView =(TextView)rootView.findViewById(R.id.noDataTextView);
+        noInternetLayout = (RelativeLayout) rootView.findViewById(R.id.noInternet);
+        noDataLayout = (RelativeLayout) rootView.findViewById(R.id.noData);
+        noInternetTextView = (TextView) rootView.findViewById(R.id.noInternetTextView);
+        noDataTextView = (TextView) rootView.findViewById(R.id.noDataTextView);
         noInternetTextView.setText(Util.getTextofLanguage(context, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
         noDataTextView.setText(Util.getTextofLanguage(context, Util.NO_CONTENT, Util.DEFAULT_NO_CONTENT));
 
@@ -300,7 +294,7 @@ public class HomeFragment extends Fragment {
         // Do something that differs the Activity's menu here
 
         MenuItem item;
-        item= menu.findItem(R.id.action_filter);
+        item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
       /*  *//***************chromecast**********************//*
 
@@ -316,13 +310,82 @@ public class HomeFragment extends Fragment {
 
 
     private void StartAsyncTaskInParallel(AsynLoadMenuItems task) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         else
             task.execute();
     }
 
-    private class AsynLoadVideos extends AsyncTask<String, Void, Void> {
+//    @Override
+//    public void onLoadVideosAsyncPreExecuteStarted() {
+//        if (firstTime == false) {
+//
+//
+//            if (getActivity() != null) {
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mProgressBarHandler = new ProgressBarHandler(context);
+//                        mProgressBarHandler.show();
+//                    }
+//                });
+//
+//            }
+//
+//        } else {
+//               /* if (counter >= 0 && counter >= menuList.size()-1) {
+//                    Log.v("MUVI","COUNTER");
+//                    loading_completed = true;
+//                }*/
+//        }
+//    }
+//
+//    @Override
+//    public void onLoadVideosAsyncPostExecuteCompleted(ArrayList<LoadVideoOutput> loadVideoOutputs, int code, String status) {
+//
+//        for (int i = 0; i < loadVideoOutputs.size(); i++) {
+//
+//            String movieImageStr = loadVideoOutputs.get(i).getPoster_url();
+//            String movieName = loadVideoOutputs.get(i).getName();
+//            String videoTypeIdStr = loadVideoOutputs.get(i).getContent_types_id();
+//            String movieGenreStr = loadVideoOutputs.get(i).getGenre();
+//            String moviePermalinkStr = loadVideoOutputs.get(i).getPermalink();
+//            String isEpisodeStr = loadVideoOutputs.get(i).getIs_episode();
+//            int isConverted = loadVideoOutputs.get(i).getIs_converted();
+//            int isPPV = loadVideoOutputs.get(i).getIs_ppv();
+//            int isAPV = loadVideoOutputs.get(i).getIs_advance();
+//            singleItem.add(new SingleItemModel(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+//
+//            if (mProgressBarHandler != null) {
+//                mProgressBarHandler.hide();
+//                mProgressBarHandler = null;
+//            }
+//
+//            if (status == null) {
+//                status = "0";
+//            }
+//
+//            allSampleData.add(new SectionDataModel(menuList.get(counter).getName(), menuList.get(counter).getSectionId(), singleItem));
+//
+//            boolean isNetwork = Util.checkNetwork(context);
+//            if (isNetwork == true) {
+//
+//                if (getActivity() != null) {
+//                    new RetrieveFeedTask().execute(movieImageStr);
+//
+//                }
+//
+//
+//            } else {
+//                noInternetLayout.setVisibility(View.VISIBLE);
+//            }
+//
+//            return;
+//
+//        }
+//    }
+
+        private class AsynLoadVideos extends AsyncTask<String, Void, Void> {
 
         String responseStr;
         int status;
@@ -623,6 +686,7 @@ public class HomeFragment extends Fragment {
         protected void onPostExecute(Void result) {
 
         }
+
         @Override
         protected void onPreExecute() {
 
@@ -642,13 +706,13 @@ public class HomeFragment extends Fragment {
 
                 Util.image_orentiation.add(0);
 
-            }else{
+            } else {
                 Util.image_orentiation.add(1);
 
             }
 
-            LogUtil.showLog("MUVI", "HHH"+videoWidth+videoHeight);
-            LogUtil.showLog("MUVI", "vertical"+ MainActivity.vertical);
+            LogUtil.showLog("MUVI", "HHH" + videoWidth + videoHeight);
+            LogUtil.showLog("MUVI", "vertical" + MainActivity.vertical);
 
             if (getView() != null) {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -663,24 +727,23 @@ public class HomeFragment extends Fragment {
                 }
                 firstTime = true;
 
-                if (adapter != null){
+                if (adapter != null) {
 
                     adapter.notifyDataSetChanged();
-                }
-                else { // it works first time
-                    adapter = new RecyclerViewDataAdapter(context, allSampleData, url_maps,firstTime, MainActivity.vertical);
+                } else { // it works first time
+                    adapter = new RecyclerViewDataAdapter(context, allSampleData, url_maps, firstTime, MainActivity.vertical);
                     //   adapter = new AdapterClass(context,list);
                     my_recycler_view.setAdapter(adapter);
                 }
 
-            }else{
+            } else {
                 if (mProgressBarHandler != null) {
                     mProgressBarHandler.hide();
                     mProgressBarHandler = null;
                 }
 
 
-                if (counter >= 0 && counter >= menuList.size()-1) {
+                if (counter >= 0 && counter >= menuList.size() - 1) {
                     footerView.setVisibility(View.GONE);
                 }
 
@@ -713,11 +776,11 @@ public class HomeFragment extends Fragment {
 
                 }
             });*/
-            if (counter >= 0 && counter < menuList.size() -1 ){
-                counter = counter+1;
+            if (counter >= 0 && counter < menuList.size() - 1) {
+                counter = counter + 1;
                 boolean isNetwork = Util.checkNetwork(context);
                 if (isNetwork == true) {
-                    if (getActivity()!=null) {
+                    if (getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -736,14 +799,14 @@ public class HomeFragment extends Fragment {
                     asynLoadVideos = new AsynLoadVideos();
                     asynLoadVideos.executeOnExecutor(threadPoolExecutor, menuList.get(counter).getSectionId());
 
-                }else{
+                } else {
                     noInternetLayout.setVisibility(View.VISIBLE);
                 }
             }
 
 
-
         }
+
         @Override
         protected void onPreExecute() {
 
@@ -755,8 +818,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // save RecyclerView state
-        if (my_recycler_view != null)
-        {
+        if (my_recycler_view != null) {
             mBundleRecyclerViewState = new Bundle();
             Parcelable listState = mLayoutManager.onSaveInstanceState();
             mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
@@ -771,7 +833,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private class AsynLoadMenuItems extends AsyncTask<Void, Void, Void> implements  BaseSliderView.OnSliderClickListener,ViewPagerEx.OnPageChangeListener{
+    private class AsynLoadMenuItems extends AsyncTask<Void, Void, Void> implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
 
 
         String responseStr;
@@ -810,8 +872,6 @@ public class HomeFragment extends Fragment {
                     if (allSampleData != null && allSampleData.size() > 0) {
                         allSampleData.clear();
                     }
-
-
 
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
@@ -907,14 +967,14 @@ public class HomeFragment extends Fragment {
                                     e.printStackTrace();
                                 }
                             }
-                        }else{
+                        } else {
                             responseStr = "0";
 
 
                         }
                     }
                 }
-            }catch (Exception e) {
+            } catch (Exception e) {
                 if (progressBarHandler != null) {
                     progressBarHandler.hide();
                     progressBarHandler = null;
@@ -943,15 +1003,14 @@ public class HomeFragment extends Fragment {
                     progressBarHandler = null;
                 }
                 responseStr = "0";
-            }
-            else if((responseStr.trim().equals("0"))){
+            } else if ((responseStr.trim().equals("0"))) {
 
 
-                if(url_maps.size()>=0 && firstTime == false){
+                if (url_maps.size() >= 0 && firstTime == false) {
                     firstTime = true;
 
                     if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                        for (int j = 0; j < url_maps.size() ;j ++) {
+                        for (int j = 0; j < url_maps.size(); j++) {
                             DefaultSliderView textSliderView = new DefaultSliderView(context);
                             textSliderView
                                     .description("")
@@ -964,8 +1023,8 @@ public class HomeFragment extends Fragment {
 
                             mDemoSlider.addSlider(textSliderView);
                         }
-                    }else{
-                        for (int j = 0; j < url_maps.size();j ++) {
+                    } else {
+                        for (int j = 0; j < url_maps.size(); j++) {
                             DefaultSliderView textSliderView = new DefaultSliderView(context);
                             textSliderView
                                     .description("")
@@ -1011,9 +1070,8 @@ public class HomeFragment extends Fragment {
                                 .putString("extra", "");
 
                         mDemoSlider.addSlider(textSliderView);*/
-                    }
-                else{
-                   // DefaultSliderView textSliderView = new DefaultSliderView(context);
+                } else {
+                    // DefaultSliderView textSliderView = new DefaultSliderView(context);
                   /*  textSliderView
                             .description("")
                             .image(R.drawable.slider1)
@@ -1026,45 +1084,43 @@ public class HomeFragment extends Fragment {
 
                     mDemoSlider.addSlider(textSliderView);*/
 
-                if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                    for (int j = 0; j < url_maps.size() ;j ++) {
-                        DefaultSliderView textSliderView = new DefaultSliderView(context);
-                        textSliderView
-                                .description("")
-                                .image(url_maps.get(j))
-                                .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                                .setOnSliderClickListener(this);
-                        textSliderView.bundle(new Bundle());
-                        textSliderView.getBundle()
-                                .putString("extra", "");
+                    if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+                        for (int j = 0; j < url_maps.size(); j++) {
+                            DefaultSliderView textSliderView = new DefaultSliderView(context);
+                            textSliderView
+                                    .description("")
+                                    .image(url_maps.get(j))
+                                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                                    .setOnSliderClickListener(this);
+                            textSliderView.bundle(new Bundle());
+                            textSliderView.getBundle()
+                                    .putString("extra", "");
 
-                        mDemoSlider.addSlider(textSliderView);
-                    }
-                }else{
-                    for (int j = 0; j < url_maps.size();j ++) {
-                        DefaultSliderView textSliderView = new DefaultSliderView(context);
-                        textSliderView
-                                .description("")
-                                .image(url_maps.get(j))
-                                .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                                .setOnSliderClickListener(this);
-                        textSliderView.bundle(new Bundle());
-                        textSliderView.getBundle()
-                                .putString("extra", "");
+                            mDemoSlider.addSlider(textSliderView);
+                        }
+                    } else {
+                        for (int j = 0; j < url_maps.size(); j++) {
+                            DefaultSliderView textSliderView = new DefaultSliderView(context);
+                            textSliderView
+                                    .description("")
+                                    .image(url_maps.get(j))
+                                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                                    .setOnSliderClickListener(this);
+                            textSliderView.bundle(new Bundle());
+                            textSliderView.getBundle()
+                                    .putString("extra", "");
 
-                        mDemoSlider.addSlider(textSliderView);
+                            mDemoSlider.addSlider(textSliderView);
+                        }
                     }
+
                 }
-
-            }
                 mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
                 mDemoSlider.setCustomAnimation(new DescriptionAnimation());
                 mDemoSlider.setDuration(10000);
                 mDemoSlider.addOnPageChangeListener(this);
                 sliderRelativeLayout.setVisibility(View.VISIBLE);
-            }
-
-                else {
+            } else {
                 if (mProgressBarHandler != null) {
                     mProgressBarHandler.hide();
                     mProgressBarHandler = null;
@@ -1079,9 +1135,9 @@ public class HomeFragment extends Fragment {
                     my_recycler_view.setAdapter(adapter);
                     my_recycler_view.setVisibility(View.VISIBLE);
 
-
                     asynLoadVideos = new AsynLoadVideos();
                     asynLoadVideos.executeOnExecutor(threadPoolExecutor, menuList.get(counter).getSectionId());
+
                     // default data
                     /*asynLoadVideos = new AsynLoadVideos();
                     asynLoadVideos.executeOnExecutor(threadPoolExecutor,menuList.get(counter).getSectionId());*/
@@ -1121,6 +1177,7 @@ public class HomeFragment extends Fragment {
 
         }
     }
+
     /*private class AsynLoadImageUrls extends AsyncTask<Void, Void, Void> {
         String responseStr;
         int statusCode;
@@ -1288,13 +1345,13 @@ public class HomeFragment extends Fragment {
 
 
     }*/
-    public void myOnKeyDown(){
+    public void myOnKeyDown() {
         //do whatever you want here
-        if (asynLoadMenuItems != null){
+        if (asynLoadMenuItems != null) {
             asynLoadMenuItems.cancel(true);
         }
 
-        if (asynLoadVideos != null){
+        if (asynLoadVideos != null) {
             asynLoadVideos.cancel(true);
         }
        /* ActivityCompat.finishAffinity(getActivity());
@@ -1548,7 +1605,9 @@ public class HomeFragment extends Fragment {
 
 
 
-    *//***************chromecast**********************/
+    */
+
+    /***************chromecast**********************/
 
     @Override
     public void onResume() {
@@ -1571,18 +1630,20 @@ public class HomeFragment extends Fragment {
         getActivity().invalidateOptionsMenu();
 
     }
-@Override
-public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-        case R.id.media_route_menu_item:
-            // Not implemented here
-            return false;
-        default:
-            break;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.media_route_menu_item:
+                // Not implemented here
+                return false;
+            default:
+                break;
+        }
+
+        return false;
     }
 
-    return false;
-}
     class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
 
         private Exception exception;
@@ -1598,8 +1659,8 @@ public boolean onOptionsItemSelected(MenuItem item) {
                 videoWidth = bmp.getWidth();
 
 
-                LogUtil.showLog("MUVI", "videoHeight=============="+videoHeight);
-                LogUtil.showLog("MUVI", "videoWidth=============="+videoWidth);
+                LogUtil.showLog("MUVI", "videoHeight==============" + videoHeight);
+                LogUtil.showLog("MUVI", "videoWidth==============" + videoWidth);
 
                 return null;
             } catch (Exception e) {
@@ -1612,8 +1673,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
             // TODO: check this.exception
             // TODO: do something with the feed
 
-            if(phandler!=null && phandler.isShowing())
-            {
+            if (phandler != null && phandler.isShowing()) {
                 phandler.hide();
             }
 
