@@ -53,6 +53,13 @@ public class APIUrlConstant {
     public static  String fbUserExistsUrl = "getFbUserStatus";
     public static  String AboutUs = "getStaticPagedetails";
 
+    public static String getAddSubscriptionUrl() {
+        return BASE_URl+addSubscriptionUrl;
+    }
+
+    public static  String addSubscriptionUrl = "ppvpayment";
+
+
     public static String getManageDevices() {
         return BASE_URl+ManageDevices;
     }
