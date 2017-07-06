@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -56,7 +55,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -2197,7 +2195,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                 dlgAlert.create().show();
 
             } else {
-                AsynSubscriptionRegDetails asyncSubsrInfo = new AsynSubscriptionRegDetails();
+                AsyncPPVPayment asyncSubsrInfo = new AsyncPPVPayment();
                 asyncSubsrInfo.executeOnExecutor(threadPoolExecutor);
             }
         }
@@ -2403,7 +2401,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 //                    dlgAlert.create().show();
 //
 //                } else {
-//                    AsynSubscriptionRegDetails asyncSubsrInfo = new AsynSubscriptionRegDetails();
+//                    AsyncPPVPayment asyncSubsrInfo = new AsyncPPVPayment();
 //                    asyncSubsrInfo.executeOnExecutor(threadPoolExecutor);
 //                }
 //            }
@@ -2831,7 +2829,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 //
 //    }
 
-    private class AsynSubscriptionRegDetails extends AsyncTask<Void, Void, Void> {
+    private class AsyncPPVPayment extends AsyncTask<Void, Void, Void> {
         // ProgressDialog pDialog;
         int status;
         String responseStr;
