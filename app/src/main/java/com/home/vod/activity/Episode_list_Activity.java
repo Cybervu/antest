@@ -593,16 +593,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     }
 
     @Override
-    public void onGetEpisodeDetailsPreExecuteStarted() {
-
-    }
-
-    @Override
-    public void onGetEpisodeDetailsPostExecuteCompleted(ArrayList<Episode_Details_output> episode_details_output, int i, int status, String message) {
-
-    }
-
-    @Override
     public void onGetLanguageListPreExecuteStarted() {
         progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
         progressBarHandler.show();
@@ -2296,6 +2286,15 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     }*/
 
 
+    @Override
+    public void onGetEpisodeDetailsPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onGetEpisodeDetailsPostExecuteCompleted(ArrayList<Episode_Details_output> episode_details_output, int i, int status, String message) {
+
+    }
     private class AsynEpisodeDetails extends AsyncTask<Void, Void, Void> {
         // ProgressDialog pDialog;
         String responseStr;

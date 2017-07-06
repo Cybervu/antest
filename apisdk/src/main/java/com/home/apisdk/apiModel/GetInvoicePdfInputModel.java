@@ -9,6 +9,16 @@ public class GetInvoicePdfInputModel {
     String user_id;
     String device_type;
 
+    public String getLang_code() {
+        return lang_code;
+    }
+
+    public void setLang_code(String lang_code) {
+        this.lang_code = lang_code;
+    }
+
+    String lang_code;
+
 
     public String getDevice_type() {
         return device_type;

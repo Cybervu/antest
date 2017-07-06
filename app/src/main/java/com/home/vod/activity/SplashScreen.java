@@ -480,6 +480,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onGetTranslateLanguagePostExecuteCompleted(String jsonResponse, int status) {
+
         if (status > 0 && status == 200) {
 
             try {

@@ -60,7 +60,7 @@ public class GetLoadVideosAsync extends AsyncTask<LoadVideoInput, Void, Void> {
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader("authToken", this.loadVideoInput.getAuthToken());
-            httppost.addHeader("section_id", String.valueOf(params[0]));
+            httppost.addHeader("section_id", this.loadVideoInput.getSection_id());
             httppost.addHeader("lang_code", this.loadVideoInput.getLang_code());
 
             try {

@@ -62,7 +62,7 @@ public class GetInvoicePdfAsynTask extends AsyncTask<GetInvoicePdfInputModel, Vo
             httppost.addHeader("id", this.getInvoicePdfInputModel.getId());
             httppost.addHeader("user_id", this.getInvoicePdfInputModel.getUser_id());
             httppost.addHeader("device_type", this.getInvoicePdfInputModel.getDevice_type());
-
+            httppost.addHeader("lang_code", this.getInvoicePdfInputModel.getLang_code());
             // Execute HTTP Post Request
             try {
                 HttpResponse response = httpclient.execute(httppost);

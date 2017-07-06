@@ -25,6 +25,36 @@ public class RegisterUserPaymentInputModel {
     String plan_id;
     String name;
 
+    public String getMovie_id() {
+        return movie_id;
+    }
+
+    public void setMovie_id(String movie_id) {
+        this.movie_id = movie_id;
+    }
+
+    String movie_id;
+
+    public String getIs_advance() {
+        return is_advance;
+    }
+
+    public void setIs_advance(String is_advance) {
+        this.is_advance = is_advance;
+    }
+
+    String is_advance;
+
+    public String getIs_save_this_card() {
+        return is_save_this_card;
+    }
+
+    public void setIs_save_this_card(String is_save_this_card) {
+        this.is_save_this_card = is_save_this_card;
+    }
+
+    String is_save_this_card;
+
     public String getCouponCode() {
         return CouponCode;
     }
@@ -178,10 +208,6 @@ public class RegisterUserPaymentInputModel {
     public void setPlan_id(String plan_id) {
         this.plan_id = plan_id;
     }
-
-
-
-
 
 
 }

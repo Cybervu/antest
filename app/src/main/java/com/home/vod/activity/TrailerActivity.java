@@ -29,7 +29,9 @@ import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import com.home.apisdk.apiController.GetFFVideoLogDetailsAsync;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetVideoLogsAsynTask;
+import com.home.apisdk.apiController.ResumeVideoLogDetailsAsync;
 import com.home.apisdk.apiModel.FFVideoLogDetailsInput;
+import com.home.apisdk.apiModel.ResumeVideoLogDetailsInput;
 import com.home.apisdk.apiModel.VideoLogsInputModel;
 import com.home.vod.R;
 import com.home.vod.preferences.PreferenceManager;
@@ -83,7 +85,7 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 }*/
 
 public class TrailerActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener,GetVideoLogsAsynTask.GetVideoLogs,GetIpAddressAsynTask.IpAddress,
-        GetFFVideoLogDetailsAsync.GetFFVideoLogs{
+        GetFFVideoLogDetailsAsync.GetFFVideoLogs,ResumeVideoLogDetailsAsync.ResumeVideoLogDetails{
    // int played_length = 0;
     int playerStartPosition = 0;
     ImageView subtitle_change_btn;
@@ -93,6 +95,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     String videoLogId = "0";
     String watchStatus = "start";
     int playerPosition = 0;
+    String watchSt = "halfplay";
     public boolean isFastForward = false;
     public int playerPreviousPosition = 0;
     TimerTask timerTask;
@@ -1358,7 +1361,25 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
         if (video_completed == false) {
 
-            AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+            ResumeVideoLogDetailsInput resumeVideoLogDetailsInput=new ResumeVideoLogDetailsInput();
+            resumeVideoLogDetailsInput.setAuthToken(Util.authTokenStr);
+            resumeVideoLogDetailsInput.setUser_id(userIdStr.trim());
+            resumeVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
+            resumeVideoLogDetailsInput.setMovie_id(movieId.trim());
+            resumeVideoLogDetailsInput.setEpisode_id(episodeId.trim());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (current_matching_time >= emVideoView.getDuration()) {
+                        watchSt = "complete";
+                    }
+
+                }
+
+            });
+            resumeVideoLogDetailsInput.setPlayed_length(String.valueOf(playerPosition));
+            resumeVideoLogDetailsInput.setWatch_status(watchSt);
+            ResumeVideoLogDetailsAsync asyncResumeVideoLogDetails = new ResumeVideoLogDetailsAsync(resumeVideoLogDetailsInput,this,this);
             asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
             return;
         }
@@ -1388,7 +1409,25 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
             stoptimertask();
             timer = null;
         }
-        AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+        ResumeVideoLogDetailsInput resumeVideoLogDetailsInput=new ResumeVideoLogDetailsInput();
+        resumeVideoLogDetailsInput.setAuthToken(Util.authTokenStr);
+        resumeVideoLogDetailsInput.setUser_id(userIdStr.trim());
+        resumeVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
+        resumeVideoLogDetailsInput.setMovie_id(movieId.trim());
+        resumeVideoLogDetailsInput.setEpisode_id(episodeId.trim());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (current_matching_time >= emVideoView.getDuration()) {
+                    watchSt = "complete";
+                }
+
+            }
+
+        });
+        resumeVideoLogDetailsInput.setPlayed_length(String.valueOf(playerPosition));
+        resumeVideoLogDetailsInput.setWatch_status(watchSt);
+        ResumeVideoLogDetailsAsync asyncResumeVideoLogDetails = new ResumeVideoLogDetailsAsync(resumeVideoLogDetailsInput,this,this);
         asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
         return;
       /*  if (video_completed == false){
@@ -1601,130 +1640,151 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
         return super.onKeyUp(keyCode, objEvent);
     }
 */
+   @Override
+   public void onGetResumeVideoLogDetailsPreExecuteStarted() {
 
+       stoptimertask();
+   }
 
-    private class AsyncResumeVideoLogDetails extends AsyncTask<Void, Void, Void> {
-        //  ProgressDialog pDialog;
-        String responseStr;
-        int statusCode = 0;
-        String watchSt = "halfplay";
+    @Override
+    public void onGetResumeVideoLogDetailsPostExecuteCompleted(int status, String message, String videoLogId) {
 
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", userIdStr.trim());
-                httppost.addHeader("ip_address", ipAddressStr.trim());
-                httppost.addHeader("movie_id", movieId.trim());
-                httppost.addHeader("episode_id", episodeId.trim());
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (current_matching_time >= emVideoView.getDuration()) {
-                            watchSt = "complete";
-                        }
-
-                    }
-
-                });
-                httppost.addHeader("played_length", String.valueOf(playerPosition));
-                httppost.addHeader("watch_status", watchSt);
-              /*  runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (current_matching_time >= emVideoView.getDuration()) {
-
-                            httppost.addHeader("watch_status", "complete");
-                        }else{
-                            httppost.addHeader("watch_status", "halfplay");
-
-                        }
-
-                    }
-
-                });*/
-
-                httppost.addHeader("device_type", "2");
-                httppost.addHeader("log_id", videoLogId);
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            videoLogId = "0";
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    videoLogId = "0";
-
-                    e.printStackTrace();
-                }
-                if (responseStr != null) {
-                    JSONObject myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                    if (statusCode == 200) {
-                        videoLogId = myJson.optString("log_id");
-                    } else {
-                        videoLogId = "0";
-                    }
-
-                }
-
-            } catch (Exception e) {
-                videoLogId = "0";
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-         /*   try {
-                if (pDialog.isShowing())
-                    pDialog.dismiss();
-            } catch (IllegalArgumentException ex) {
-                videoLogId = "0";
-            }*/
-            if (responseStr == null) {
-                videoLogId = "0";
-
-            }
-            mHandler.removeCallbacks(updateTimeTask);
-            if (emVideoView != null) {
-                emVideoView.release();
-            }
-            finish();
-            overridePendingTransition(0, 0);
-            //startTimer();
-            return;
-
+        if (message == null) {
+            videoLogId = "0";
 
         }
-
-        @Override
-        protected void onPreExecute() {
-            stoptimertask();
-
+        mHandler.removeCallbacks(updateTimeTask);
+        if (emVideoView != null) {
+            emVideoView.release();
         }
-
-
+        finish();
+        overridePendingTransition(0, 0);
+        //startTimer();
+        return;
     }
+
+//    private class AsyncResumeVideoLogDetails extends AsyncTask<Void, Void, Void> {
+//        //  ProgressDialog pDialog;
+//        String responseStr;
+//        int statusCode = 0;
+//        String watchSt = "halfplay";
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("user_id", userIdStr.trim());
+//                httppost.addHeader("ip_address", ipAddressStr.trim());
+//                httppost.addHeader("movie_id", movieId.trim());
+//                httppost.addHeader("episode_id", episodeId.trim());
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (current_matching_time >= emVideoView.getDuration()) {
+//                            watchSt = "complete";
+//                        }
+//
+//                    }
+//
+//                });
+//                httppost.addHeader("played_length", String.valueOf(playerPosition));
+//                httppost.addHeader("watch_status", watchSt);
+//              /*  runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (current_matching_time >= emVideoView.getDuration()) {
+//
+//                            httppost.addHeader("watch_status", "complete");
+//                        }else{
+//                            httppost.addHeader("watch_status", "halfplay");
+//
+//                        }
+//
+//                    }
+//
+//                });*/
+//
+//                httppost.addHeader("device_type", "2");
+//                httppost.addHeader("log_id", videoLogId);
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//
+//
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            videoLogId = "0";
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    videoLogId = "0";
+//
+//                    e.printStackTrace();
+//                }
+//                if (responseStr != null) {
+//                    JSONObject myJson = new JSONObject(responseStr);
+//                    statusCode = Integer.parseInt(myJson.optString("code"));
+//                    if (statusCode == 200) {
+//                        videoLogId = myJson.optString("log_id");
+//                    } else {
+//                        videoLogId = "0";
+//                    }
+//
+//                }
+//
+//            } catch (Exception e) {
+//                videoLogId = "0";
+//
+//            }
+//
+//            return null;
+//        }
+//
+//
+//        protected void onPostExecute(Void result) {
+//         /*   try {
+//                if (pDialog.isShowing())
+//                    pDialog.dismiss();
+//            } catch (IllegalArgumentException ex) {
+//                videoLogId = "0";
+//            }*/
+//            if (responseStr == null) {
+//                videoLogId = "0";
+//
+//            }
+//            mHandler.removeCallbacks(updateTimeTask);
+//            if (emVideoView != null) {
+//                emVideoView.release();
+//            }
+//            finish();
+//            overridePendingTransition(0, 0);
+//            //startTimer();
+//            return;
+//
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            stoptimertask();
+//
+//        }
+
+
+  //  }
 
 
 

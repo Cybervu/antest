@@ -31,9 +31,12 @@ import android.widget.Toast;
 
 
 import com.home.apisdk.apiController.DeleteInvoicePdfAsynTask;
+import com.home.apisdk.apiController.GetInvoicePdfAsynTask;
 import com.home.apisdk.apiController.PurchaseHistoryAsyntask;
 import com.home.apisdk.apiModel.DeleteInvoicePdfInputModel;
 import com.home.apisdk.apiModel.DeleteInvoicePdfOutputModel;
+import com.home.apisdk.apiModel.GetInvoicePdfInputModel;
+import com.home.apisdk.apiModel.GetInvoicePdfOutputModel;
 import com.home.apisdk.apiModel.PurchaseHistoryInputModel;
 import com.home.apisdk.apiModel.PurchaseHistoryOutputModel;
 import com.home.vod.R;
@@ -66,7 +69,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 
-public class TransactionDetailsActivity extends AppCompatActivity implements DeleteInvoicePdfAsynTask.DeleteInvoicePdf, PurchaseHistoryAsyntask.PurchaseHistory {
+public class TransactionDetailsActivity extends AppCompatActivity implements DeleteInvoicePdfAsynTask.DeleteInvoicePdf, PurchaseHistoryAsyntask.PurchaseHistory,
+        GetInvoicePdfAsynTask.GetInvoicePdf{
     Toolbar mActionBarToolbar;
     TextView transactionTitleTextView;
     LinearLayout transactionDateLayout, transactionOrderLayout, transactionAmountLayout, transactionInvoiceLayout,
@@ -321,7 +325,14 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
         transactionStatustextView.setText(TransactionStatus);
         transactionPlanNameTextView.setText(PlanName);
 
-        DownloadDocumentDetails downloadDocumentDetails = new DownloadDocumentDetails();
+
+        GetInvoicePdfInputModel getInvoicePdfInputModel=new GetInvoicePdfInputModel();
+        getInvoicePdfInputModel.setAuthToken(Util.authTokenStr);
+        getInvoicePdfInputModel.setUser_id(user_id);
+        getInvoicePdfInputModel.setId(id);
+        getInvoicePdfInputModel.setDevice_type("app");
+        getInvoicePdfInputModel.setLang_code(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        GetInvoicePdfAsynTask downloadDocumentDetails = new GetInvoicePdfAsynTask(getInvoicePdfInputModel,this,this);
         downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);
     }
 
@@ -716,105 +727,137 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
 
 
     //Asyntask to get Transaction Details.
+    @Override
+    public void onGetInvoicePdfPreExecuteStarted() {
 
-    private class DownloadDocumentDetails extends AsyncTask<Void, Void, Void> {
+    }
 
-        String responseStr = "";
-        int status;
+    @Override
+    public void onGetInvoicePdfPostExecuteCompleted(GetInvoicePdfOutputModel getInvoicePdfOutputModel, int code, String message, String status) {
 
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.GetInvoicePDF.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr);
-                httppost.addHeader("user_id", user_id);
-                httppost.addHeader("id", id);
-                httppost.addHeader("device_type", "app");
-                httppost.addHeader("lang_code", Util.getTextofLanguage(TransactionDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("MUVI", "responseStr getpdf Details=" + responseStr);
-                } catch (Exception e) {
+        try {
+            if (Ph.isShowing())
+                Ph.hide();
+        } catch (IllegalArgumentException ex) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    primary_layout.setVisibility(View.GONE);
+                    noInternet.setVisibility(View.VISIBLE);
 
                 }
 
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                }
-                if (status > 0) {
-                    if (status == 200) {
-
-
-                        Download_Url = myJson.optString("section");
-                        if (Download_Url.equals("") || Download_Url == null || Download_Url.equals("null")) {
-
-                            Download_Url = "";
-                        }
-                    } else {
-                        responseStr = "0";
-                    }
-                } else {
-                    responseStr = "0";
-
-                }
-            } catch (final JSONException e1) {
-                responseStr = "0";
-            } catch (Exception e) {
-                responseStr = "0";
-            }
-            return null;
-
+            });
+            status = "0";
         }
+        if (status == null)
+            status = "0";
 
-        protected void onPostExecute(Void result) {
+        if ((status.trim().equals("0"))) {
+            primary_layout.setVisibility(View.GONE);
+            noInternet.setVisibility(View.VISIBLE);
+        } else {
 
-            try {
-                if (Ph.isShowing())
-                    Ph.hide();
-            } catch (IllegalArgumentException ex) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        primary_layout.setVisibility(View.GONE);
-                        noInternet.setVisibility(View.VISIBLE);
-
-                    }
-
-                });
-                responseStr = "0";
-            }
-            if (responseStr == null)
-                responseStr = "0";
-
-            if ((responseStr.trim().equals("0"))) {
-                primary_layout.setVisibility(View.GONE);
-                noInternet.setVisibility(View.VISIBLE);
-            } else {
-
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            /*progressDialog = new ProgressDialog(TransactionDetailsActivity.this,R.style.MyTheme);
-            progressDialog.setCancelable(false);
-            progressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Large_Inverse);
-            progressDialog.setIndeterminate(false);
-            progressDialog.setIndeterminateDrawable(getResources().getDrawable(R.drawable.progress_rawable));
-            progressDialog.show()*/
-            ;
         }
     }
+//    private class DownloadDocumentDetails extends AsyncTask<Void, Void, Void> {
+//
+//        String responseStr = "";
+//        int status;
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.GetInvoicePDF.trim());
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr);
+//                httppost.addHeader("user_id", user_id);
+//                httppost.addHeader("id", id);
+//                httppost.addHeader("device_type", "app");
+//                httppost.addHeader("lang_code", Util.getTextofLanguage(TransactionDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//                    Log.v("MUVI", "responseStr getpdf Details=" + responseStr);
+//                } catch (Exception e) {
+//
+//                }
+//
+//                JSONObject myJson = null;
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    status = Integer.parseInt(myJson.optString("code"));
+//                }
+//                if (status > 0) {
+//                    if (status == 200) {
+//
+//
+//                        Download_Url = myJson.optString("section");
+//                        if (Download_Url.equals("") || Download_Url == null || Download_Url.equals("null")) {
+//
+//                            Download_Url = "";
+//                        }
+//                    } else {
+//                        responseStr = "0";
+//                    }
+//                } else {
+//                    responseStr = "0";
+//
+//                }
+//            } catch (final JSONException e1) {
+//                responseStr = "0";
+//            } catch (Exception e) {
+//                responseStr = "0";
+//            }
+//            return null;
+//
+//        }
+//
+//        protected void onPostExecute(Void result) {
+//
+//            try {
+//                if (Ph.isShowing())
+//                    Ph.hide();
+//            } catch (IllegalArgumentException ex) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        primary_layout.setVisibility(View.GONE);
+//                        noInternet.setVisibility(View.VISIBLE);
+//
+//                    }
+//
+//                });
+//                responseStr = "0";
+//            }
+//            if (responseStr == null)
+//                responseStr = "0";
+//
+//            if ((responseStr.trim().equals("0"))) {
+//                primary_layout.setVisibility(View.GONE);
+//                noInternet.setVisibility(View.VISIBLE);
+//            } else {
+//
+//            }
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//
+//            /*progressDialog = new ProgressDialog(TransactionDetailsActivity.this,R.style.MyTheme);
+//            progressDialog.setCancelable(false);
+//            progressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Large_Inverse);
+//            progressDialog.setIndeterminate(false);
+//            progressDialog.setIndeterminateDrawable(getResources().getDrawable(R.drawable.progress_rawable));
+//            progressDialog.show()*/
+//            ;
+//        }
+//    }
 
     public void showDialog(String msg, final int deletevalue) {
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(TransactionDetailsActivity.this);

@@ -276,6 +276,7 @@ public class ContactUs extends Fragment implements ContactUsAsynTask.ContactUs {
 
     @Override
     public void onContactUsPostExecuteCompleted(ContactUsOutputModel contactUsOutputModel, int code, String message, String status) {
+
         Toast.makeText(getActivity(), sucessMsg, Toast.LENGTH_SHORT).show();
 
 //        try {
