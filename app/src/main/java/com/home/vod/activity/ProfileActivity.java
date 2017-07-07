@@ -26,7 +26,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.home.apisdk.apiController.GetUserProfileAsynctask;
 import com.home.apisdk.apiController.UpadteUserProfileAsynctask;
+import com.home.apisdk.apiModel.Get_UserProfile_Output;
 import com.home.apisdk.apiModel.Update_UserProfile_Input;
 import com.home.apisdk.apiModel.Update_UserProfile_Output;
 import com.home.vod.R;
@@ -56,7 +58,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class ProfileActivity extends AppCompatActivity implements UpadteUserProfileAsynctask.Update_UserProfile {
+public class ProfileActivity extends AppCompatActivity implements UpadteUserProfileAsynctask.Update_UserProfile,GetUserProfileAsynctask.Get_UserProfile {
     SharedPreferences loginPref;
 
     ImageView bannerImageView;
@@ -501,6 +503,7 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
                 dlgAlert.create().show();
             }
         }
+
 //
 //    private class AsynUpdateProfile extends AsyncTask<Void, Void, Void> {
 //        ProgressBarHandler pDialog;
@@ -717,6 +720,16 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
 //
 //    }
     //Getting Profile Details from The Api
+
+    @Override
+    public void onGet_UserProfilePreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onGet_UserProfilePostExecuteCompleted(Get_UserProfile_Output get_userProfile_output, int code, String message, String status) {
+
+    }
 
     private class AsynLoadProfileDetails extends AsyncTask<Void, Void, Void> {
         ProgressBarHandler pDialog;

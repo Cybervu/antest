@@ -64,6 +64,7 @@ public class GetFeatureContentAsynTask extends AsyncTask<FeatureContentInputMode
 
             httppost.addHeader("authToken", this.featureContentInputModel.getAuthToken());
             httppost.addHeader("section_id", this.featureContentInputModel.getSection_id());
+            httppost.addHeader("lang_code",this.featureContentInputModel.getLang_code());
 
 
             // Execute HTTP Post Request

@@ -6,6 +6,34 @@ package com.home.apisdk.apiModel;
 public class Episode_Details_input {
     String permalink,authtoken,limit="10",offset="0";
 
+    public String getSeries_number() {
+        return series_number;
+    }
+
+    public void setSeries_number(String series_number) {
+        this.series_number = series_number;
+    }
+
+    public String getLang_code() {
+        return lang_code;
+    }
+
+    public void setLang_code(String lang_code) {
+        this.lang_code = lang_code;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    String series_number;
+    String lang_code;
+    String country;
+
    /* public Episode_Details_input(String permalink, String authtoken, String limit, String offset) {
         this.permalink = permalink;
         this.authtoken = authtoken;

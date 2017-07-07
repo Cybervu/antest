@@ -16,6 +16,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -101,6 +102,8 @@ public class GetUserProfileAsynctask extends AsyncTask<Get_UserProfile_Input, Vo
                     get_userProfile_output.setStudio_id(myJson.optString("studio_id"));
                     get_userProfile_output.setProfile_image(myJson.optString("profile_image"));
                     get_userProfile_output.setIsSubscribed(myJson.optString("isSubscribed"));
+
+                    JSONArray languageJson = null;
 
                 } catch (Exception e) {
                     code = 0;

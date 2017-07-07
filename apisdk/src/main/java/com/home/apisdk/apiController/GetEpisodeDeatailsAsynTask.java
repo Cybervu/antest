@@ -27,7 +27,7 @@ import java.util.ArrayList;
  */
 public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input, Void, Void> {
     Episode_Details_input episode_details_input;
-    String responseStr;
+    String responseStr,movieUniqueId;
     int status,is_ppv,item_count;
     String message,permalink,PACKAGE_NAME;
 
@@ -64,6 +64,9 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
             httppost.addHeader("permalink", this.episode_details_input.getPermalink());
             httppost.addHeader("limit",this.episode_details_input.getLimit());
             httppost.addHeader("offset",this.episode_details_input.getOffset());
+            httppost.addHeader("country",this.episode_details_input.getCountry());
+            httppost.addHeader("series_number",this.episode_details_input.getSeries_number());
+            httppost.addHeader("lang_code",this.episode_details_input.getLang_code());
 
             // Execute HTTP Post Request
             try {
@@ -89,6 +92,7 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
                 is_ppv= Integer.parseInt(myJson.optString("is_ppv"));
                 permalink=myJson.optString("permalink");
                 item_count= Integer.parseInt(myJson.optString("item_count"));
+                movieUniqueId=myJson.optString("muvi_uniq_id");
 
             }
 

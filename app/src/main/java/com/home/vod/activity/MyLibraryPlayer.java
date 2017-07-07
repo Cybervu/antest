@@ -211,9 +211,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         // Added For FCM
         // Call Api to Check User's Login Status;
-
-        AsynCheckForLoginStatus asynCheckForLoginStatus = new AsynCheckForLoginStatus();
-        asynCheckForLoginStatus.executeOnExecutor(threadPoolExecutor);
     }
 
     @Override
@@ -2272,79 +2269,4 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
 
     // This API is called for cecking the Login status
-    private class AsynCheckForLoginStatus extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-        String responseStr;
-        int statusCode = 0;
-        String isLogin = "";
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.CheckIfUserLoggedIn.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", userIdStr);
-                httppost.addHeader("device_id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                httppost.addHeader("device_type", "1");
-
-                // Execute HTTP Post Request
-                try {
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("MUVI", "Response Of the Login Status =" + responseStr);
-
-                } catch (Exception e) {
-                    responseStr = "0";
-                }
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                }
-
-
-                if (statusCode > 0) {
-                    if (statusCode == 200) {
-                        isLogin = myJson.optString("is_login").trim();
-                    } else {
-                        responseStr = "0";
-                    }
-                } else {
-                    responseStr = "0";
-                }
-
-            } catch (Exception e) {
-                responseStr = "0";
-                e.printStackTrace();
-
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-            if (isLogin.equals("1")) {
-                // Call the next Api and Allow the app as usual
-                // Do nothing
-            } else if (isLogin.equals("0")) {
-                //Logout the user
-               preferenceManager.clearLoginPref();
-                Toast.makeText(getApplicationContext(),Util.getTextofLanguage(MyLibraryPlayer.this,Util.LOGIN_STATUS_MESSAGE,Util.DEFAULT_LOGIN_STATUS_MESSAGE), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                startActivity(intent);
-
-
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-        }
-    }
 }

@@ -68,6 +68,7 @@ public class HomePageAsynTask extends AsyncTask<HomePageInputModel, Void, Void> 
             HttpPost httppost = new HttpPost(APIUrlConstant.getHomepageUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader("authToken", this.homePageInputModel.getAuthToken());
+            httppost.addHeader("lang_code",this.homePageInputModel.getLang_code());
 
             Log.v("MUVISDK","authToken = "+ this.homePageInputModel.getAuthToken());
 
@@ -110,6 +111,7 @@ public class HomePageAsynTask extends AsyncTask<HomePageInputModel, Void, Void> 
                         try {
                             jsonBannerImageNode = bannerJson.getJSONArray("banners");
 
+
                             int lengthBannerImagesArray = jsonBannerImageNode.length();
                             if (lengthBannerImagesArray > 0) {
                                 for (int i = 0; i < lengthBannerImagesArray; i++) {
@@ -119,9 +121,6 @@ public class HomePageAsynTask extends AsyncTask<HomePageInputModel, Void, Void> 
                                     homePageBannerModelArrayList.add(homePageBannerModel);
 
                                 }
-
-
-
                             }
 
 

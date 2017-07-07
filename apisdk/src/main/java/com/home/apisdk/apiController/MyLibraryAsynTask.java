@@ -29,13 +29,13 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
     MyLibraryInputModel myLibraryInputModel;
     String responseStr;
     int status;
-    int totalItems;
+    String totalItems;
     String message, PACKAGE_NAME;
 
     public interface MyLibrary {
         void onMyLibraryPreExecuteStarted();
 
-        void onMyLibraryPostExecuteCompleted(ArrayList<MyLibraryOutputModel> myLibraryOutputModelArray, int status, int totalItems, String message);
+        void onMyLibraryPostExecuteCompleted(ArrayList<MyLibraryOutputModel> myLibraryOutputModelArray, int status, String totalItems, String message);
     }
 
 
@@ -65,6 +65,10 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
 
             httppost.addHeader("authToken", this.myLibraryInputModel.getAuthToken());
             httppost.addHeader("user_id", this.myLibraryInputModel.getUser_id());
+            httppost.addHeader("limit",this.myLibraryInputModel.getLimit());
+            httppost.addHeader("offset",this.myLibraryInputModel.getOffset());
+            httppost.addHeader("country",this.myLibraryInputModel.getCountry());
+            httppost.addHeader("lang_code",this.myLibraryInputModel.getLang_code());
 
 
             // Execute HTTP Post Request
@@ -75,13 +79,11 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 status = 0;
-                totalItems = 0;
                 message = "";
                 Log.v("MUVISDK", "ConnectTimeoutException" + e.toString());
 
             } catch (IOException e) {
                 status = 0;
-                totalItems = 0;
                 message = "";
                 Log.v("MUVISDK", "IOException" + e.toString());
             }
@@ -91,6 +93,7 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
                 myJson = new JSONObject(responseStr);
                 status = Integer.parseInt(myJson.optString("code"));
                 message = myJson.optString("status");
+                totalItems=myJson.optString("item_count");
             }
 
 
@@ -152,7 +155,6 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
                         myLibraryOutputModel.add(content);
                     } catch (Exception e) {
                         status = 0;
-                        totalItems = 0;
                         message = "";
                     }
                 }
@@ -160,7 +162,6 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
 
         } catch (Exception e) {
             status = 0;
-            totalItems = 0;
             message = "";
             Log.v("MUVISDK", "Exception" + e.toString());
         }
@@ -193,7 +194,7 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onMyLibraryPostExecuteCompleted(myLibraryOutputModel, status, totalItems, message);
+        listener.onMyLibraryPostExecuteCompleted(myLibraryOutputModel, status, totalItems, responseStr);
 
     }
 

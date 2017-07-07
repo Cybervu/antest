@@ -85,7 +85,7 @@ import com.twotoasters.jazzylistview.JazzyHelper;
 /**
  * Created by user on 28-06-2015.
  */
-public class VideosListFragment extends Fragment implements GetContentListAsynTask.GetContentList {
+public class VideosListFragment extends Fragment implements GetContentListAsynTask.GetContentList  {
 
    /* *//***************chromecast**********************//*
     public enum PlaybackLocation {
@@ -1315,7 +1315,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 //
 //    @Override
 //    protected Void doInBackground(Void... params) {
-//
+
 //        String urlRouteList = Util.rootUrl().trim() + Util.listUrl.trim();
 //        try {
 //            HttpClient httpclient = new DefaultHttpClient();

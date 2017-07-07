@@ -105,7 +105,6 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                     if ((mainJson.has("genre")) && mainJson.optString("genre").trim() != null && !mainJson.optString("genre").trim().isEmpty() && !mainJson.optString("genre").trim().equals("null") && !mainJson.optString("genre").trim().matches("")) {
                         contentDetailsOutput.setGenre(mainJson.optString("genre"));
 
-
                     } else {
                         contentDetailsOutput.setGenre("");
 

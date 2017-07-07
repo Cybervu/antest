@@ -31,12 +31,15 @@ import android.widget.Toast;
 
 
 import com.home.apisdk.apiController.AuthUserPaymentInfoAsyntask;
+import com.home.apisdk.apiController.GetCardListForPPVAsynTask;
 import com.home.apisdk.apiController.GetPPVPaymentAsync;
 import com.home.apisdk.apiController.ValidateCouponCodeAsynTask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
 import com.home.apisdk.apiController.WithouPaymentSubscriptionRegDetailsAsync;
 import com.home.apisdk.apiModel.AuthUserPaymentInfoInputModel;
 import com.home.apisdk.apiModel.AuthUserPaymentInfoOutputModel;
+import com.home.apisdk.apiModel.GetCardListForPPVInputModel;
+import com.home.apisdk.apiModel.GetCardListForPPVOutputModel;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.Get_Video_Details_Output;
 import com.home.apisdk.apiModel.RegisterUserPaymentInputModel;
@@ -75,7 +78,7 @@ import io.card.payment.CreditCard;
 
 public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDetailsAsynctask.VideoDetails, ValidateCouponCodeAsynTask.ValidateCouponCode,
         AuthUserPaymentInfoAsyntask.AuthUserPaymentInfo, WithouPaymentSubscriptionRegDetailsAsync.WithouPaymentSubscriptionRegDetails,
-        GetPPVPaymentAsync.GetPPVPayment {
+        GetPPVPaymentAsync.GetPPVPayment,GetCardListForPPVAsynTask.GetCardListForPPV {
     CardModel[] cardSavedArray;
     ProgressDialog pDialog;
     String existing_card_id = "";
@@ -755,7 +758,11 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
             Toast.makeText(PPvPaymentInfoActivity.this, Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 
         } else {
-            AsynLoadCardList asynLoadCardList = new AsynLoadCardList();
+            GetCardListForPPVInputModel getCardListForPPVInputModel=new GetCardListForPPVInputModel();
+            String userIdStr = preferenceManager.getUseridFromPref();
+            getCardListForPPVInputModel.setUser_id(userIdStr.trim());
+            getCardListForPPVInputModel.setAuthToken(Util.authTokenStr);
+            GetCardListForPPVAsynTask asynLoadCardList = new GetCardListForPPVAsynTask(getCardListForPPVInputModel,this,this);
             asynLoadCardList.executeOnExecutor(threadPoolExecutor);
         }
         saveCardCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -1093,135 +1100,35 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
         }
     }
 
-    //Load Films Videos
-    private class AsynLoadCardList extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int status;
+    @Override
+    public void onGetCardListForPPVPreExecuteStarted() {
+
+        videoPDialog = new ProgressBarHandler(PPvPaymentInfoActivity.this);
+        videoPDialog.show();
+    }
+
+    @Override
+    public void onGetCardListForPPVPostExecuteCompleted(ArrayList<GetCardListForPPVOutputModel> getCardListForPPVOutputModelArray, int status, int totalItems, String message) {
 
         ArrayList<CardModel> savedCards = new ArrayList<CardModel>();
 
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = Util.rootUrl().trim() + Util.getCardDetailsUrl.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                String userIdStr = preferenceManager.getUseridFromPref();
-                httppost.addHeader("user_id", userIdStr.trim());
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            if (cardSavedArray == null || cardSavedArray.length <= 0) {
-                                creditCardSaveSpinner.setVisibility(View.GONE);
-                            }
-                            Toast.makeText(PPvPaymentInfoActivity.this, Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                        }
-
-                    });
-
-                } catch (IOException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (cardSavedArray == null || cardSavedArray.length <= 0) {
-                                creditCardSaveSpinner.setVisibility(View.GONE);
-                            }
-                        }
-                    });
-                    e.printStackTrace();
-                }
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                }
-
-                if (status > 0) {
-                    if (status == 200) {
-
-                        JSONArray jsonMainNode = myJson.getJSONArray("cards");
-
-                        int lengthJsonArr = jsonMainNode.length();
-                        for (int i = 0; i < lengthJsonArr; i++) {
-                            JSONObject jsonChildNode;
-                            String cardIdStr = "";
-                            String cardNumberStr = "";
-
-                            try {
-                                jsonChildNode = jsonMainNode.getJSONObject(i);
-
-                                if ((jsonChildNode.has("card_id")) && jsonChildNode.getString("card_id").trim() != null && !jsonChildNode.getString("card_id").trim().isEmpty() && !jsonChildNode.getString("card_id").trim().equals("null") && !jsonChildNode.getString("card_id").trim().matches("") && !jsonChildNode.getString("card_id").trim().equalsIgnoreCase("")) {
-                                    cardIdStr = jsonChildNode.getString("card_id");
 
 
-                                }
-                                if ((jsonChildNode.has("card_last_fourdigit")) && jsonChildNode.getString("card_last_fourdigit").trim() != null && !jsonChildNode.getString("card_last_fourdigit").trim().isEmpty() && !jsonChildNode.getString("card_last_fourdigit").trim().equals("null") && !jsonChildNode.getString("card_last_fourdigit").trim().matches("") && !jsonChildNode.getString("card_id").trim().equalsIgnoreCase("")) {
-                                    cardNumberStr = jsonChildNode.getString("card_last_fourdigit");
-
-                                }
-                                if (cardIdStr != null && !cardIdStr.matches("") && !cardIdStr.equalsIgnoreCase("")) {
-                                    savedCards.add(new CardModel(cardIdStr, cardNumberStr));
-                                }
-                            } catch (Exception e) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        creditCardSaveSpinner.setVisibility(View.GONE);
-
-                                    }
-                                });
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-                        }
-                    } else {
-                        responseStr = "0";
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                creditCardSaveSpinner.setVisibility(View.GONE);
-
-                            }
-                        });
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        creditCardSaveSpinner.setVisibility(View.GONE);
-
-                    }
-                });
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
+        if (message == null)
+            message = "0";
+        if ((message.trim().equals("0"))) {
             try {
                 if (videoPDialog.isShowing())
                     videoPDialog.hide();
             } catch (IllegalArgumentException ex) {
 
                 creditCardSaveSpinner.setVisibility(View.GONE);
+
             }
-            if (responseStr == null)
-                responseStr = "0";
-            if ((responseStr.trim().equals("0"))) {
+            creditCardSaveSpinner.setVisibility(View.GONE);
+
+        } else {
+            if (savedCards.size() <= 0) {
                 try {
                     if (videoPDialog.isShowing())
                         videoPDialog.hide();
@@ -1233,46 +1140,197 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                 creditCardSaveSpinner.setVisibility(View.GONE);
 
             } else {
-                if (savedCards.size() <= 0) {
-                    try {
-                        if (videoPDialog.isShowing())
-                            videoPDialog.hide();
-                    } catch (IllegalArgumentException ex) {
+                savedCards.add(0, new CardModel("0", Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.USE_NEW_CARD, Util.DEFAULT_USE_NEW_CARD)));
+                cardSavedArray = savedCards.toArray(new CardModel[savedCards.size()]);
+                creditCardSaveSpinnerAdapter = new CardSpinnerAdapter(PPvPaymentInfoActivity.this, cardSavedArray);
+                //cardExpiryYearSpinnerAdapter = new CardSpinnerAdapter<Integer>(this, R.layout.spinner_new, yearArray);
 
-                        creditCardSaveSpinner.setVisibility(View.GONE);
-
-                    }
-                    creditCardSaveSpinner.setVisibility(View.GONE);
-
-                } else {
-                    savedCards.add(0, new CardModel("0", Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.USE_NEW_CARD, Util.DEFAULT_USE_NEW_CARD)));
-                    cardSavedArray = savedCards.toArray(new CardModel[savedCards.size()]);
-                    creditCardSaveSpinnerAdapter = new CardSpinnerAdapter(PPvPaymentInfoActivity.this, cardSavedArray);
-                    //cardExpiryYearSpinnerAdapter = new CardSpinnerAdapter<Integer>(this, R.layout.spinner_new, yearArray);
-
-                    creditCardSaveSpinner.setAdapter(creditCardSaveSpinnerAdapter);
-                    creditCardSaveSpinner.setSelection(0);
-                }
+                creditCardSaveSpinner.setAdapter(creditCardSaveSpinnerAdapter);
+                creditCardSaveSpinner.setSelection(0);
             }
         }
-
-        @Override
-        protected void onPreExecute() {
-           /* videoPDialog = new ProgressDialog(PPvPaymentInfoActivity.this, R.style.CustomDialogTheme);
-            videoPDialog.setCancelable(false);
-            videoPDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Large_Inverse);
-            videoPDialog.setIndeterminate(false);
-            videoPDialog.setIndeterminateDrawable(getResources().getDrawable(R.drawable.progress_rawable));
-            videoPDialog.show();*/
-
-            videoPDialog = new ProgressBarHandler(PPvPaymentInfoActivity.this);
-            videoPDialog.show();
-
-
-        }
-
-
     }
+
+    //Load Films Videos
+//    private class AsynLoadCardList extends AsyncTask<Void, Void, Void> {
+//        String responseStr;
+//        int status;
+//
+//        ArrayList<CardModel> savedCards = new ArrayList<CardModel>();
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//
+//            String urlRouteList = Util.rootUrl().trim() + Util.getCardDetailsUrl.trim();
+//            try {
+//                HttpClient httpclient = new DefaultHttpClient();
+//                HttpPost httppost = new HttpPost(urlRouteList);
+//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                String userIdStr = preferenceManager.getUseridFromPref();
+//                httppost.addHeader("user_id", userIdStr.trim());
+//
+//                // Execute HTTP Post Request
+//                try {
+//                    HttpResponse response = httpclient.execute(httppost);
+//                    responseStr = EntityUtils.toString(response.getEntity());
+//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                            if (cardSavedArray == null || cardSavedArray.length <= 0) {
+//                                creditCardSaveSpinner.setVisibility(View.GONE);
+//                            }
+//                            Toast.makeText(PPvPaymentInfoActivity.this, Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//
+//                        }
+//
+//                    });
+//
+//                } catch (IOException e) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (cardSavedArray == null || cardSavedArray.length <= 0) {
+//                                creditCardSaveSpinner.setVisibility(View.GONE);
+//                            }
+//                        }
+//                    });
+//                    e.printStackTrace();
+//                }
+//
+//                JSONObject myJson = null;
+//                if (responseStr != null) {
+//                    myJson = new JSONObject(responseStr);
+//                    status = Integer.parseInt(myJson.optString("code"));
+//                }
+//
+//                if (status > 0) {
+//                    if (status == 200) {
+//
+//                        JSONArray jsonMainNode = myJson.getJSONArray("cards");
+//
+//                        int lengthJsonArr = jsonMainNode.length();
+//                        for (int i = 0; i < lengthJsonArr; i++) {
+//                            JSONObject jsonChildNode;
+//                            String cardIdStr = "";
+//                            String cardNumberStr = "";
+//
+//                            try {
+//                                jsonChildNode = jsonMainNode.getJSONObject(i);
+//
+//                                if ((jsonChildNode.has("card_id")) && jsonChildNode.getString("card_id").trim() != null && !jsonChildNode.getString("card_id").trim().isEmpty() && !jsonChildNode.getString("card_id").trim().equals("null") && !jsonChildNode.getString("card_id").trim().matches("") && !jsonChildNode.getString("card_id").trim().equalsIgnoreCase("")) {
+//                                    cardIdStr = jsonChildNode.getString("card_id");
+//
+//
+//                                }
+//                                if ((jsonChildNode.has("card_last_fourdigit")) && jsonChildNode.getString("card_last_fourdigit").trim() != null && !jsonChildNode.getString("card_last_fourdigit").trim().isEmpty() && !jsonChildNode.getString("card_last_fourdigit").trim().equals("null") && !jsonChildNode.getString("card_last_fourdigit").trim().matches("") && !jsonChildNode.getString("card_id").trim().equalsIgnoreCase("")) {
+//                                    cardNumberStr = jsonChildNode.getString("card_last_fourdigit");
+//
+//                                }
+//                                if (cardIdStr != null && !cardIdStr.matches("") && !cardIdStr.equalsIgnoreCase("")) {
+//                                    savedCards.add(new CardModel(cardIdStr, cardNumberStr));
+//                                }
+//                            } catch (Exception e) {
+//                                runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        creditCardSaveSpinner.setVisibility(View.GONE);
+//
+//                                    }
+//                                });
+//                                // TODO Auto-generated catch block
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    } else {
+//                        responseStr = "0";
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                creditCardSaveSpinner.setVisibility(View.GONE);
+//
+//                            }
+//                        });
+//                    }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        creditCardSaveSpinner.setVisibility(View.GONE);
+//
+//                    }
+//                });
+//            }
+//            return null;
+//
+//        }
+//
+//        protected void onPostExecute(Void result) {
+//            try {
+//                if (videoPDialog.isShowing())
+//                    videoPDialog.hide();
+//            } catch (IllegalArgumentException ex) {
+//
+//                creditCardSaveSpinner.setVisibility(View.GONE);
+//            }
+//            if (responseStr == null)
+//                responseStr = "0";
+//            if ((responseStr.trim().equals("0"))) {
+//                try {
+//                    if (videoPDialog.isShowing())
+//                        videoPDialog.hide();
+//                } catch (IllegalArgumentException ex) {
+//
+//                    creditCardSaveSpinner.setVisibility(View.GONE);
+//
+//                }
+//                creditCardSaveSpinner.setVisibility(View.GONE);
+//
+//            } else {
+//                if (savedCards.size() <= 0) {
+//                    try {
+//                        if (videoPDialog.isShowing())
+//                            videoPDialog.hide();
+//                    } catch (IllegalArgumentException ex) {
+//
+//                        creditCardSaveSpinner.setVisibility(View.GONE);
+//
+//                    }
+//                    creditCardSaveSpinner.setVisibility(View.GONE);
+//
+//                } else {
+//                    savedCards.add(0, new CardModel("0", Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.USE_NEW_CARD, Util.DEFAULT_USE_NEW_CARD)));
+//                    cardSavedArray = savedCards.toArray(new CardModel[savedCards.size()]);
+//                    creditCardSaveSpinnerAdapter = new CardSpinnerAdapter(PPvPaymentInfoActivity.this, cardSavedArray);
+//                    //cardExpiryYearSpinnerAdapter = new CardSpinnerAdapter<Integer>(this, R.layout.spinner_new, yearArray);
+//
+//                    creditCardSaveSpinner.setAdapter(creditCardSaveSpinnerAdapter);
+//                    creditCardSaveSpinner.setSelection(0);
+//                }
+//            }
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//           /* videoPDialog = new ProgressDialog(PPvPaymentInfoActivity.this, R.style.CustomDialogTheme);
+//            videoPDialog.setCancelable(false);
+//            videoPDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Large_Inverse);
+//            videoPDialog.setIndeterminate(false);
+//            videoPDialog.setIndeterminateDrawable(getResources().getDrawable(R.drawable.progress_rawable));
+//            videoPDialog.show();*/
+//
+//            videoPDialog = new ProgressBarHandler(PPvPaymentInfoActivity.this);
+//            videoPDialog.show();
+//
+//
+//        }
+//
+//
+//    }
 
     //load video urls as per resolution
 //    private class AsynLoadVideoUrls extends AsyncTask<Void, Void, Void> {
