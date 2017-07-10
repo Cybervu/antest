@@ -6,7 +6,31 @@ package com.home.apisdk.apiModel;
 
 public class Get_UserProfile_Output {
 
-    String id,display_name,email,studio_id,profile_image,isSubscribed;
+    String id;
+    String display_name;
+    String email;
+    String studio_id;
+    String profile_image;
+    String isSubscribed;
+    String custom_languages;
+
+    public String getCustom_languages() {
+        return custom_languages;
+    }
+
+    public void setCustom_languages(String custom_languages) {
+        this.custom_languages = custom_languages;
+    }
+
+    public String getCustom_country() {
+        return custom_country;
+    }
+
+    public void setCustom_country(String custom_country) {
+        this.custom_country = custom_country;
+    }
+
+    String custom_country;
     public void setId(String id){
         this.id = id;
     }

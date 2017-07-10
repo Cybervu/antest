@@ -223,8 +223,8 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
         setHasOptionsMenu(true);
         Util.image_orentiation.clear();
 
-        LogUtil.showLog("BIBHU2", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
-        LogUtil.showLog("BIBHU2", "google_id already created =" + Util.getTextofLanguage(getActivity(), Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+        LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
+        LogUtil.showLog("MUVI", "google_id already created =" + Util.getTextofLanguage(getActivity(), Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
 
 
 
@@ -414,6 +414,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
     public void onLoadVideosAsyncPostExecuteCompleted(ArrayList<LoadVideoOutput> loadVideoOutputs, int code, String status) {
 
         String movieImageStr = "";
+
         for (int i = 0; i < loadVideoOutputs.size() ; i++) {
             movieImageStr = loadVideoOutputs.get(i).getPoster_url();
             String movieName = loadVideoOutputs.get(i).getName();
@@ -424,14 +425,14 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
             int isConverted = loadVideoOutputs.get(i).getIs_converted();
             int isPPV = loadVideoOutputs.get(i).getIs_ppv();
             int isAPV = loadVideoOutputs.get(i).getIs_advance();
+
+
            singleItem.add(new SingleItemModel(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
         }
             if (mProgressBarHandler != null) {
                 mProgressBarHandler.hide();
                 mProgressBarHandler = null;
             }
-
-
             allSampleData.add(new SectionDataModel(menuList.get(counter).getName(), menuList.get(counter).getSectionId(), singleItem));
 
 

@@ -103,7 +103,13 @@ public class GetUserProfileAsynctask extends AsyncTask<Get_UserProfile_Input, Vo
                     get_userProfile_output.setProfile_image(myJson.optString("profile_image"));
                     get_userProfile_output.setIsSubscribed(myJson.optString("isSubscribed"));
 
-                    JSONArray languageJson = null;
+
+                    if (myJson.has("custom_languages")){
+                        get_userProfile_output.setCustom_languages("custom_languages");
+                    }
+                    if (myJson.has("custom_country")){
+                        get_userProfile_output.setCustom_country("custom_country");
+                    }
 
                 } catch (Exception e) {
                     code = 0;
@@ -125,17 +131,17 @@ public class GetUserProfileAsynctask extends AsyncTask<Get_UserProfile_Input, Vo
         super.onPreExecute();
         listener.onGet_UserProfilePreExecuteStarted();
         code = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
-            this.cancel(true);
-            message = "Packge Name Not Matched";
-            listener.onGet_UserProfilePostExecuteCompleted(get_userProfile_output, code, message, status);
-            return;
-        }
-        if (CommonConstants.hashKey.equals("")) {
-            this.cancel(true);
-            message = "Hash Key Is Not Available. Please Initialize The SDK";
-            listener.onGet_UserProfilePostExecuteCompleted(get_userProfile_output, code, message, status);
-        }
+//        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+//            this.cancel(true);
+//            message = "Packge Name Not Matched";
+//            listener.onGet_UserProfilePostExecuteCompleted(get_userProfile_output, code, message, status);
+//            return;
+//        }
+//        if (CommonConstants.hashKey.equals("")) {
+//            this.cancel(true);
+//            message = "Hash Key Is Not Available. Please Initialize The SDK";
+//            listener.onGet_UserProfilePostExecuteCompleted(get_userProfile_output, code, message, status);
+//        }
     }
 
     @Override

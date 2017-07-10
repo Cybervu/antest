@@ -66,6 +66,13 @@ public class GetFeatureContentAsynTask extends AsyncTask<FeatureContentInputMode
             httppost.addHeader("section_id", this.featureContentInputModel.getSection_id());
             httppost.addHeader("lang_code",this.featureContentInputModel.getLang_code());
 
+            Log.v("MuviSDK","authToken = "+ this.featureContentInputModel.getAuthToken());
+            Log.v("MuviSDK","section_id = "+ this.featureContentInputModel.getSection_id());
+            Log.v("MuviSDK  ","lang_code = "+ this.featureContentInputModel.getLang_code());
+//            httppost.addHeader("limit",this.featureContentInputModel.getLimit());
+//            httppost.addHeader("offset",this.featureContentInputModel.getOffset());
+//            httppost.addHeader("orderby",this.featureContentInputModel.getOrderby());
+
 
             // Execute HTTP Post Request
             try {

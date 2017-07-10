@@ -1223,17 +1223,22 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     @Override
     public void onGetContentListPostExecuteCompleted(ArrayList<ContentListOutput> contentListOutputArray, int status, int totalItems, String message) {
 
+
+        String movieImageStr="";
         for (int i = 0; i < contentListOutputArray.size(); i++) {
 
-            String name = contentListOutputArray.get(i).getName();
+            String movieName = contentListOutputArray.get(i).getName();
             String contentTypesId = contentListOutputArray.get(i).getContentTypesId();
-            String genre = contentListOutputArray.get(i).getGenre();
-            String movieImageStr=contentListOutputArray.get(i).getPosterUrl();
+            String movieGenreStr = contentListOutputArray.get(i).getGenre();
+            movieImageStr = contentListOutputArray.get(i).getPosterUrl();
             String moviePermalinkStr = contentListOutputArray.get(i).getPermalink();
             String isEpisodeStr = contentListOutputArray.get(i).getIsEpisodeStr();
             int isConverted = contentListOutputArray.get(i).getIsConverted();
             int isPPV = contentListOutputArray.get(i).getIsPPV();
             int isAPV = contentListOutputArray.get(i).getIsAPV();
+
+            itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+        }
             if (itemData.size() <= 0) {
 
                 try {
@@ -1293,9 +1298,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                     loadUI.executeOnExecutor(threadPoolExecutor);
                 }
             }
-
-            itemData.add(new GridItem(movieImageStr, name, "", contentTypesId, genre, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
-        }
     }
 
 //Load Films Videos

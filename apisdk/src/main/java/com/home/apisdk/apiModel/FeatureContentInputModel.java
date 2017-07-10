@@ -6,6 +6,34 @@ package com.home.apisdk.apiModel;
 public class FeatureContentInputModel {
     String authToken;
     String section_id;
+    String Limit;
+
+    public String getLimit() {
+        return Limit;
+    }
+
+    public void setLimit(String limit) {
+        Limit = limit;
+    }
+
+    public String getOffset() {
+        return offset;
+    }
+
+    public void setOffset(String offset) {
+        this.offset = offset;
+    }
+
+    public String getOrderby() {
+        return orderby;
+    }
+
+    public void setOrderby(String orderby) {
+        this.orderby = orderby;
+    }
+
+    String offset;
+    String orderby;
 
     public String getLang_code() {
         return lang_code;

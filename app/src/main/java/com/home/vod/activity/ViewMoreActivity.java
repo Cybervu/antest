@@ -716,6 +716,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
             int isConverted = featureContentOutputModelArray.get(i).getIs_converted();
             int isPPV = featureContentOutputModelArray.get(i).getIs_ppv();
             int isAPV = featureContentOutputModelArray.get(i).getIs_advance();
+
             itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
 
         }
@@ -819,7 +820,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 //        @Override
 //        protected Void doInBackground(Void... params) {
 //
-            String urlRouteList = Util.rootUrl().trim() + Util.getContent.trim();
+           // String urlRouteList = Util.rootUrl().trim() + Util.getContent.trim();
 //            try {
 //                HttpClient httpclient = new DefaultHttpClient();
 //                HttpPost httppost = new HttpPost(urlRouteList);

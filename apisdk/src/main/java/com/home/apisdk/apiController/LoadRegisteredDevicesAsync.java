@@ -123,7 +123,7 @@ public class LoadRegisteredDevicesAsync extends AsyncTask<LoadRegisteredDevicesI
             }
 
             if (status == 200) {
-
+                  myJson = new JSONObject(responseStr);
                 JSONArray jsonMainNode = myJson.getJSONArray("device_list");
 
                 int lengthJsonArr = jsonMainNode.length();
