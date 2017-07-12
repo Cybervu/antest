@@ -76,11 +76,6 @@ public class LoadRegisteredDevicesAsync extends AsyncTask<LoadRegisteredDevicesI
                         .appendQueryParameter("lang_code", this.loadRegisteredDevicesInput.getLang_code());
                 String query = builder.build().getEncodedQuery();
 
-                Log.v("AbhishekMishraAuth",this.loadRegisteredDevicesInput.getAuthToken());
-                Log.v("AbhishekMishraUserid",this.loadRegisteredDevicesInput.getUser_id());
-                Log.v("AbhishekMishraDevice",this.loadRegisteredDevicesInput.getDevice());
-                Log.v("AbhishekMishraLang",this.loadRegisteredDevicesInput.getLang_code());
-
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
