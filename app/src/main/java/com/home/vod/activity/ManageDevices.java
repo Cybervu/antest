@@ -112,17 +112,27 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
             }
         } catch (IllegalArgumentException ex) {
         }
-        if (message != null) {
+        if (status == 200) {
+            // Start parsing Here
+            for (int i=0;i<loadRegisteredDevicesOutputs.size();i++){
+
+                String devicename=loadRegisteredDevicesOutputs.get(i).getDevice();
+                String deviceinfo=loadRegisteredDevicesOutputs.get(i).getDevice_info();
+                String flag=loadRegisteredDevicesOutputs.get(i).getFlag();
+
+                DeviceName.add(devicename);
+                DeviceInfo.add(deviceinfo);
+                DeviceFalg.add(flag);
+            }
 
             DeviceListAdapter adapter = new DeviceListAdapter(ManageDevices.this, DeviceName, DeviceInfo, DeviceFalg);
             device_list.setAdapter(adapter);
+
         } else {
             // Show The Error Message Here
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             finish();
         }
-
-
     }
 //    private class AsynLoadRegisteredDevices extends AsyncTask<Void, Void, Void> {
 //        ProgressBarHandler pDialog;

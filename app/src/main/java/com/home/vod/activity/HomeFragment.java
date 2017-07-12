@@ -191,7 +191,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
 
     ArrayList<SectionDataModel> allSampleData;
-    ArrayList<SingleItemModel> singleItem = new ArrayList<>();
+    ArrayList<SingleItemModel> singleItem;
 
     //AsynLoadImageUrls as = null;
     AsynLoadMenuItems asynLoadMenuItems = null;
@@ -388,10 +388,10 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
     @Override
     public void onLoadVideosAsyncPreExecuteStarted() {
 
-        if (firstTime == false){
+        if (firstTime == false) {
 
 
-            if (getActivity()!=null) {
+            if (getActivity() != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -402,7 +402,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
             }
 
-        }else {
+        } else {
                /* if (counter >= 0 && counter >= menuList.size()-1) {
                     Log.v("MUVI","COUNTER");
                     loading_completed = true;
@@ -413,9 +413,19 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
     @Override
     public void onLoadVideosAsyncPostExecuteCompleted(ArrayList<LoadVideoOutput> loadVideoOutputs, int code, String status) {
 
+        try {
+            if (mProgressBarHandler != null && mProgressBarHandler.isShowing()) {
+                mProgressBarHandler.hide();
+                mProgressBarHandler = null;
+            }
+        }catch (IllegalArgumentException ex) {
+
+        }
         String movieImageStr = "";
 
-        for (int i = 0; i < loadVideoOutputs.size() ; i++) {
+        singleItem = new ArrayList<SingleItemModel>();
+
+        for (int i = 0; i < loadVideoOutputs.size(); i++) {
             movieImageStr = loadVideoOutputs.get(i).getPoster_url();
             String movieName = loadVideoOutputs.get(i).getName();
             String videoTypeIdStr = loadVideoOutputs.get(i).getContent_types_id();
@@ -427,33 +437,37 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
             int isAPV = loadVideoOutputs.get(i).getIs_advance();
 
 
-           singleItem.add(new SingleItemModel(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+            singleItem.add(new SingleItemModel(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
         }
-            if (mProgressBarHandler != null) {
-                mProgressBarHandler.hide();
-                mProgressBarHandler = null;
-            }
+        if (mProgressBarHandler != null) {
+            mProgressBarHandler.hide();
+            mProgressBarHandler = null;
+        }
+
+        if (code == 200) {
+
             allSampleData.add(new SectionDataModel(menuList.get(counter).getName(), menuList.get(counter).getSectionId(), singleItem));
 
+        }
+        boolean isNetwork = Util.checkNetwork(context);
+        if (isNetwork == true) {
 
-            boolean isNetwork = Util.checkNetwork(context);
-            if (isNetwork == true) {
+            if (getActivity() != null) {
+                new RetrieveFeedTask().execute(movieImageStr);
 
-                if (getActivity() != null) {
-                    new RetrieveFeedTask().execute(movieImageStr);
-
-                }
-
-
-            } else {
-                noInternetLayout.setVisibility(View.VISIBLE);
             }
+
+
+        } else {
+            noInternetLayout.setVisibility(View.VISIBLE);
+        }
 
 
         return;
 
     }
-//        private class AsynLoadVideos extends AsyncTask<String, Void, Void> {
+
+    //        private class AsynLoadVideos extends AsyncTask<String, Void, Void> {
 //
 //        String responseStr;
 //        int status;
@@ -859,16 +873,18 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
                     }
 
 
+
+
                 /*    loading_completed = loading_completed + 1;
                     Log.v("MUVI","loading_completed"+loading_completed);
                     Log.v("MUVI","ui_completed"+ui_completed);*/
 
                     // default data
-                    LoadVideoInput loadVideoInput=new LoadVideoInput();
+                    LoadVideoInput loadVideoInput = new LoadVideoInput();
                     loadVideoInput.setAuthToken(Util.authTokenStr);
                     loadVideoInput.setLang_code(Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                     loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
-                    asynLoadVideos = new GetLoadVideosAsync(loadVideoInput,HomeFragment.this,context);
+                    asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
                     asynLoadVideos.executeOnExecutor(threadPoolExecutor);
 
                 } else {
@@ -1207,11 +1223,11 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
                     my_recycler_view.setAdapter(adapter);
                     my_recycler_view.setVisibility(View.VISIBLE);
 
-                    LoadVideoInput loadVideoInput=new LoadVideoInput();
+                    LoadVideoInput loadVideoInput = new LoadVideoInput();
                     loadVideoInput.setAuthToken(Util.authTokenStr);
                     loadVideoInput.setLang_code(Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                     loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
-                    asynLoadVideos = new GetLoadVideosAsync(loadVideoInput,HomeFragment.this,context);
+                    asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
                     asynLoadVideos.executeOnExecutor(threadPoolExecutor);
 
                     // default data

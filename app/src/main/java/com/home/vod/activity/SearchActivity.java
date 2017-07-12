@@ -465,7 +465,14 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     @Override
     public void onSearchDataPostExecuteCompleted(ArrayList<Search_Data_otput> contentListOutputArray, int status, int totalItems, String message) {
 
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        }catch (IllegalArgumentException ex) {
 
+        }
             if (contentListOutputArray.size() <= 0) {
                 runOnUiThread(new Runnable() {
                     @Override

@@ -402,6 +402,7 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
     }
 
     public void UpdateProfile() {
+
         Update_UserProfile_Input update_userProfile_input = new Update_UserProfile_Input();
         update_userProfile_input.setAuthToken(Util.authTokenStr);
         update_userProfile_input.setUser_id(preferenceManager.getUseridFromPref().trim());
@@ -425,6 +426,15 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
 
     @Override
     public void onUpdateUserProfilePostExecuteCompleted(Update_UserProfile_Output update_userProfile_output, int code, String message) {
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        }catch (IllegalArgumentException ex) {
+
+        }
 
         String confirmPasswordStr = editNewPassword.getText().toString().trim();
         if (update_userProfile_output == null) {
@@ -737,7 +747,16 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
     @Override
     public void onGet_UserProfilePostExecuteCompleted(Get_UserProfile_Output get_userProfile_output, int code, String message, String status) {
 
-                if (Selected_Country_Id.equals("0")) {
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        }catch (IllegalArgumentException ex) {
+
+        }
+
+            if (Selected_Country_Id.equals("0")) {
                 country_spinner.setSelection(224);
                 Selected_Country_Id = Country_Code_List.get(224);
                 LogUtil.showLog("Muvi", "country not  matched =" + Selected_Country + "==" + Selected_Country_Id);
@@ -822,8 +841,7 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
                     }
                 }
             }
-
-        }
+    }
 
 //    private class AsynLoadProfileDetails extends AsyncTask<Void, Void, Void> {
 //        ProgressBarHandler pDialog;

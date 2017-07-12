@@ -48,7 +48,6 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 public class CastAndCrewActivity extends AppCompatActivity implements GetCelibrityAsyntask.GetCelibrity {
 
 
-
     Toolbar mActionBarToolbar;
     TextView castCrewTitleTextView;
     RecyclerView castCrewListRecyclerView;
@@ -66,7 +65,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
     LinearLayout primary_layout;
     boolean isNetwork;
 
-    String movie_id,movie_uniq_id;
+    String movie_id, movie_uniq_id;
 
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -89,33 +88,31 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
             }
         });
 
-        noInternetLayout =(RelativeLayout)findViewById(R.id.noInternet);
-        noDataLayout =(RelativeLayout)findViewById(R.id.noData);
-        noInternetTextView =(TextView)findViewById(R.id.noInternetTextView);
-        noDataTextView =(TextView)findViewById(R.id.noDataTextView);
-        noInternetTextView.setText(Util.getTextofLanguage(CastAndCrewActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION));
-        noDataTextView.setText(Util.getTextofLanguage(CastAndCrewActivity.this,Util.NO_CONTENT,Util.DEFAULT_NO_CONTENT));
+        noInternetLayout = (RelativeLayout) findViewById(R.id.noInternet);
+        noDataLayout = (RelativeLayout) findViewById(R.id.noData);
+        noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
+        noDataTextView = (TextView) findViewById(R.id.noDataTextView);
+        noInternetTextView.setText(Util.getTextofLanguage(CastAndCrewActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
+        noDataTextView.setText(Util.getTextofLanguage(CastAndCrewActivity.this, Util.NO_CONTENT, Util.DEFAULT_NO_CONTENT));
 
 
-        primary_layout = (LinearLayout)findViewById(R.id.primary_layout);
+        primary_layout = (LinearLayout) findViewById(R.id.primary_layout);
         castCrewTitleTextView = (TextView) findViewById(R.id.castCrewTitleTextView);
-        Typeface custom_name = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        Typeface custom_name = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         castCrewTitleTextView.setTypeface(custom_name);
-        castCrewTitleTextView.setText(Util.getTextofLanguage(CastAndCrewActivity.this,Util.CAST_CREW_BUTTON_TITLE,Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
+        castCrewTitleTextView.setText(Util.getTextofLanguage(CastAndCrewActivity.this, Util.CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
         cast_crew_crid = (GridView) findViewById(R.id.cast_crew_crid);
         isNetwork = Util.checkNetwork(CastAndCrewActivity.this);
-
-
 
 
         if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
             cast_crew_crid.setNumColumns(2);
 
-        }else {
+        } else {
             //"Mobile";
             cast_crew_crid.setNumColumns(1);
         }
-        castCrewAdapter = new CastCrewAdapter(CastAndCrewActivity.this,castCrewItems);
+        castCrewAdapter = new CastCrewAdapter(CastAndCrewActivity.this, castCrewItems);
         cast_crew_crid.setAdapter(castCrewAdapter);
         GetCsatCrewDetails();
 
@@ -161,17 +158,16 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         //castCrewAdapter.notifyDataSetChanged();
     }*/
 
-    public void GetCsatCrewDetails()
-    {
+    public void GetCsatCrewDetails() {
         noInternetLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
         primary_layout.setVisibility(View.VISIBLE);
 
-        CelibrityInputModel celibrityInputModel=new CelibrityInputModel();
+        CelibrityInputModel celibrityInputModel = new CelibrityInputModel();
         celibrityInputModel.setAuthToken(Util.authTokenStr);
         celibrityInputModel.setMovie_id(getIntent().getStringExtra("cast_movie_id"));
-        celibrityInputModel.setLang_code(Util.getTextofLanguage(CastAndCrewActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-        GetCelibrityAsyntask asynGetCsatDetails = new GetCelibrityAsyntask(celibrityInputModel,this,this);
+        celibrityInputModel.setLang_code(Util.getTextofLanguage(CastAndCrewActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        GetCelibrityAsyntask asynGetCsatDetails = new GetCelibrityAsyntask(celibrityInputModel, this, this);
         asynGetCsatDetails.executeOnExecutor(threadPoolExecutor);
 
     }
@@ -180,17 +176,25 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
     public void onGetCelibrityPreExecuteStarted() {
 
         pDialog = new ProgressBarHandler(CastAndCrewActivity.this);
-            pDialog.show();
+        pDialog.show();
 
     }
 
     @Override
-    public void onGetCelibrityPostExecuteCompleted(ArrayList<CelibrityOutputModel> celibrityOutputModel, int status,String msg) {
-        if(status==200){
+    public void onGetCelibrityPostExecuteCompleted(ArrayList<CelibrityOutputModel> celibrityOutputModel, int status, String msg) {
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
 
-            for (int i = 0; i < celibrityOutputModel.size() ; i++) {
-                GetCastCrewItem   movie = new GetCastCrewItem(celibrityOutputModel.get(i).getName(),
-                        celibrityOutputModel.get(i).getCast_type(),celibrityOutputModel.get(i).getCelebrity_image());
+        } catch (IllegalArgumentException ex) {
+        }
+        if (status == 200) {
+
+            for (int i = 0; i < celibrityOutputModel.size(); i++) {
+                GetCastCrewItem movie = new GetCastCrewItem(celibrityOutputModel.get(i).getName(),
+                        celibrityOutputModel.get(i).getCast_type(), celibrityOutputModel.get(i).getCelebrity_image());
                 castCrewItems.add(movie);
             }
             noDataLayout.setVisibility(View.GONE);
@@ -198,10 +202,9 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
             primary_layout.setVisibility(View.VISIBLE);
             // Set the grid adapter here.
             castCrewAdapter.notifyDataSetChanged();
-        }else if(status==448){
+        } else if (status == 448) {
             ShowDialog(msg);
-        }
-        else if(status==0){
+        } else if (status == 0) {
             primary_layout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.VISIBLE);
             noInternetLayout.setVisibility(View.GONE);
@@ -369,11 +372,11 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
 
     public void ShowDialog(String msg) {
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(CastAndCrewActivity.this, R.style.MyAlertDialogStyle);
-        dlgAlert.setTitle(Util.getTextofLanguage(CastAndCrewActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE));
+        dlgAlert.setTitle(Util.getTextofLanguage(CastAndCrewActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE));
         dlgAlert.setMessage(msg);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(CastAndCrewActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+        dlgAlert.setPositiveButton(Util.getTextofLanguage(CastAndCrewActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
         dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(CastAndCrewActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+        dlgAlert.setPositiveButton(Util.getTextofLanguage(CastAndCrewActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -390,9 +393,6 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
 //        overridePendingTransition(0, 0);
         super.onBackPressed();
     }*/
-
-
-
 
 
 }

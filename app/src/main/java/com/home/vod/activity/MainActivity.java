@@ -707,7 +707,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onLogoutPostExecuteCompleted(int code, String status, String message) {
-        if (status == null) {
+        if (code != 200) {
             Toast.makeText(MainActivity.this, Util.getTextofLanguage(MainActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
         }

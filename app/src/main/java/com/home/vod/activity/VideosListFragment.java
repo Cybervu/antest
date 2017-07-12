@@ -1225,6 +1225,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
 
         String movieImageStr="";
+
         for (int i = 0; i < contentListOutputArray.size(); i++) {
 
             String movieName = contentListOutputArray.get(i).getName();

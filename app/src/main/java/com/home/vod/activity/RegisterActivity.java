@@ -690,6 +690,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
     public void onRegistrationDetailsPostExecuteCompleted(Registration_output registration_output, int status, String message) {
 
         if (status == 0) {
+
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.ERROR_IN_REGISTRATION, Util.DEFAULT_ERROR_IN_REGISTRATION));
             dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE));
@@ -706,6 +707,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
         if (status > 0) {
 
             if (status == 422) {
+
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
                 dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
@@ -724,13 +726,13 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                 // Take appropiate step here.
 
                 preferenceManager.setLogInStatusToPref("1");
-                preferenceManager.setUserIdToPref(registrationIdStr);
+                preferenceManager.setUserIdToPref(registration_output.getId());
                 preferenceManager.setPwdToPref(editPassword.getText().toString().trim());
                 preferenceManager.setEmailIdToPref(registration_output.getEmail());
                 preferenceManager.setDispNameToPref(registration_output.getDisplay_name());
                 preferenceManager.setLoginProfImgoPref(registration_output.getProfile_image());
                 preferenceManager.setIsSubscribedToPref(isSubscribedStr);
-                preferenceManager.setLoginHistIdPref(preferenceManager.getLoginHistIdFromPref());
+                preferenceManager.setLoginHistIdPref(registration_output.getLogin_history_id());
 
                 Date todayDate = new Date();
                 String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);

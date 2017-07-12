@@ -171,7 +171,17 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
 
     @Override
     public void onForgotpassDetailsPostExecuteCompleted(Forgotpassword_output forgotpassword_output, int status, String message) {
-        if (forgotpassword_output == null) {
+        try {
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
+                }
+            } catch (IllegalArgumentException ex) {
+                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
+
+            }
+
+        if (status!=200) {
             ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
 
         }
