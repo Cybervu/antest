@@ -67,23 +67,13 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -481,21 +471,21 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
         Selected_Country_Id =
                 preferenceManager.getCountryCodeFromPref();
-        LogUtil.showLog("BIBHU", "primary Selected_Country_Id=" + Selected_Country_Id);
+        LogUtil.showLog("MUVI", "primary Selected_Country_Id=" + Selected_Country_Id);
         if (Selected_Country_Id.equals("0")) {
             country_spinner.setSelection(224);
             Selected_Country_Id = Country_Code_List.get(224);
-            LogUtil.showLog("BIBHU", "country not  matche" + "==" + Selected_Country_Id);
+            LogUtil.showLog("MUVI", "country not  matche" + "==" + Selected_Country_Id);
         } else {
             for (int i = 0; i < Country_Code_List.size(); i++) {
 
-                LogUtil.showLog("BIBHU", "Country names =" + Country_Code_List.get(i));
+                LogUtil.showLog("MUVI", "Country names =" + Country_Code_List.get(i));
 
                 if (Selected_Country_Id.trim().equals(Country_Code_List.get(i))) {
                     country_spinner.setSelection(i);
                     Selected_Country_Id = Country_Code_List.get(i);
 
-                    LogUtil.showLog("BIBHU", "country  matched =" + Selected_Country_Id);
+                    LogUtil.showLog("MUVI", "country  matched =" + Selected_Country_Id);
                 }
             }
         }
@@ -690,6 +680,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
     public void onRegistrationDetailsPostExecuteCompleted(Registration_output registration_output, int status, String message) {
 
         if (status == 0) {
+
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.ERROR_IN_REGISTRATION, Util.DEFAULT_ERROR_IN_REGISTRATION));
             dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE));
@@ -706,6 +697,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
         if (status > 0) {
 
             if (status == 422) {
+
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
                 dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
@@ -724,13 +716,13 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                 // Take appropiate step here.
 
                 preferenceManager.setLogInStatusToPref("1");
-                preferenceManager.setUserIdToPref(registrationIdStr);
+                preferenceManager.setUserIdToPref(registration_output.getId());
                 preferenceManager.setPwdToPref(editPassword.getText().toString().trim());
                 preferenceManager.setEmailIdToPref(registration_output.getEmail());
                 preferenceManager.setDispNameToPref(registration_output.getDisplay_name());
                 preferenceManager.setLoginProfImgoPref(registration_output.getProfile_image());
                 preferenceManager.setIsSubscribedToPref(isSubscribedStr);
-                preferenceManager.setLoginHistIdPref(preferenceManager.getLoginHistIdFromPref());
+                preferenceManager.setLoginHistIdPref(registration_output.getLogin_history_id());
 
                 Date todayDate = new Date();
                 String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
@@ -831,6 +823,8 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
     @Override
     public void onVideoDetailsPostExecuteCompleted(Get_Video_Details_Output get_video_details_output, int code, String status, String message) {
+
+
         if (status == null) {
             status = "0";
             Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));

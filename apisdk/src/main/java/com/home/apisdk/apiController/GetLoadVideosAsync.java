@@ -63,6 +63,10 @@ public class GetLoadVideosAsync extends AsyncTask<LoadVideoInput, Void, Void> {
             httppost.addHeader("section_id", this.loadVideoInput.getSection_id());
             httppost.addHeader("lang_code", this.loadVideoInput.getLang_code());
 
+            Log.v("Abhi Auth",this.loadVideoInput.getAuthToken());
+            Log.v("Abhi Session",this.loadVideoInput.getSection_id());
+            Log.v("Abhi Lang",this.loadVideoInput.getLang_code());
+
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());

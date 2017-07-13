@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -1223,8 +1222,17 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     @Override
     public void onGetContentListPostExecuteCompleted(ArrayList<ContentListOutput> contentListOutputArray, int status, int totalItems, String message) {
 
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        }catch (IllegalArgumentException ex) {
+
+        }
 
         String movieImageStr="";
+
         for (int i = 0; i < contentListOutputArray.size(); i++) {
 
             String movieName = contentListOutputArray.get(i).getName();

@@ -1281,6 +1281,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
     @Override
     public void onGetValidateUserPostExecuteCompleted(ValidateUserOutput validateUserOutput, int status, String message) {
+
+
         String Subscription_Str = preferenceManager.getIsSubscribedFromPref();
         String validUserStr = validateUserOutput.getValiduser_str();
 

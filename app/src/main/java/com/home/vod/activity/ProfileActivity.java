@@ -6,13 +6,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -39,18 +37,6 @@ import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -402,6 +388,7 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
     }
 
     public void UpdateProfile() {
+
         Update_UserProfile_Input update_userProfile_input = new Update_UserProfile_Input();
         update_userProfile_input.setAuthToken(Util.authTokenStr);
         update_userProfile_input.setUser_id(preferenceManager.getUseridFromPref().trim());
@@ -425,6 +412,15 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
 
     @Override
     public void onUpdateUserProfilePostExecuteCompleted(Update_UserProfile_Output update_userProfile_output, int code, String message) {
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        }catch (IllegalArgumentException ex) {
+
+        }
 
         String confirmPasswordStr = editNewPassword.getText().toString().trim();
         if (update_userProfile_output == null) {
@@ -737,7 +733,16 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
     @Override
     public void onGet_UserProfilePostExecuteCompleted(Get_UserProfile_Output get_userProfile_output, int code, String message, String status) {
 
-                if (Selected_Country_Id.equals("0")) {
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        }catch (IllegalArgumentException ex) {
+
+        }
+
+            if (Selected_Country_Id.equals("0")) {
                 country_spinner.setSelection(224);
                 Selected_Country_Id = Country_Code_List.get(224);
                 LogUtil.showLog("Muvi", "country not  matched =" + Selected_Country + "==" + Selected_Country_Id);
@@ -822,8 +827,7 @@ public class ProfileActivity extends AppCompatActivity implements UpadteUserProf
                     }
                 }
             }
-
-        }
+    }
 
 //    private class AsynLoadProfileDetails extends AsyncTask<Void, Void, Void> {
 //        ProgressBarHandler pDialog;

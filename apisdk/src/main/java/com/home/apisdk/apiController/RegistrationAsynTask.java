@@ -138,9 +138,6 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
                 }
                 if ((mainJson.has("login_history_id")) && mainJson.optString("login_history_id").trim() != null && !mainJson.optString("login_history_id").trim().isEmpty() && !mainJson.optString("login_history_id").trim().equals("null") && !mainJson.optString("login_history_id").trim().matches("")) {
                     registration_output.setLogin_history_id(mainJson.optString("login_history_id"));
-                } else {
-                    registration_output.setLogin_history_id("");
-
                 }
 
                 if ((mainJson.has("studio_id")) && mainJson.optString("studio_id").trim() != null && !mainJson.optString("studio_id").trim().isEmpty() && !mainJson.optString("studio_id").trim().equals("null") && !mainJson.optString("studio_id").trim().matches("")) {

@@ -25,17 +25,6 @@ import com.home.apisdk.apiModel.ContactUsOutputModel;
 import com.home.vod.R;
 import com.home.vod.util.Util;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -277,7 +266,7 @@ public class ContactUs extends Fragment implements ContactUsAsynTask.ContactUs {
     @Override
     public void onContactUsPostExecuteCompleted(ContactUsOutputModel contactUsOutputModel, int code, String message, String status) {
 
-        Toast.makeText(getActivity(), sucessMsg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), contactUsOutputModel.getSuccess_msg(), Toast.LENGTH_SHORT).show();
 
 //        try {
 //            if (pDialog != null && pDialog.isShowing()) {
