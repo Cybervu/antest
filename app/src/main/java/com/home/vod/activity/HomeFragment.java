@@ -413,6 +413,8 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
     @Override
     public void onLoadVideosAsyncPostExecuteCompleted(ArrayList<LoadVideoOutput> loadVideoOutputs, int code, String status) {
 
+
+
         String movieImageStr = "";
 
         for (int i = 0; i < loadVideoOutputs.size() ; i++) {

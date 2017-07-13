@@ -271,14 +271,14 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         Util.DefaultSubtitle = "Off";
 
-        if (getIntent().getStringArrayListExtra("SubTitleName") != null) {
-            SubTitleName = getIntent().getStringArrayListExtra("SubTitleName");
+        if (getIntent().getStringArrayListExtra("subTitleName") != null) {
+            SubTitleName = getIntent().getStringArrayListExtra("subTitleName");
         } else {
             SubTitleName.clear();
         }
 
-        if (getIntent().getStringArrayListExtra("SubTitlePath") != null) {
-            SubTitlePath = getIntent().getStringArrayListExtra("SubTitlePath");
+        if (getIntent().getStringArrayListExtra("subTitlePath") != null) {
+            SubTitlePath = getIntent().getStringArrayListExtra("subTitlePath");
         } else {
             SubTitlePath.clear();
         }
@@ -289,10 +289,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 Util.call_finish_at_onUserLeaveHint = false;
                 Intent intent = new Intent(ExoPlayerActivity.this, Subtitle_Resolution.class);
-                intent.putExtra("ResolutionFormat", ResolutionFormat);
-                intent.putExtra("ResolutionUrl", ResolutionUrl);
-                intent.putExtra("SubTitleName", SubTitleName);
-                intent.putExtra("SubTitlePath", SubTitlePath);
+                intent.putExtra("resolutionFormat", ResolutionFormat);
+                intent.putExtra("resolutionUrl", ResolutionUrl);
+                intent.putExtra("subTitleName", SubTitleName);
+                intent.putExtra("subTitlePath", SubTitlePath);
                 startActivityForResult(intent, 3333);
 
 
@@ -307,15 +307,15 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         Util.VideoResolution = "Auto";
 
-        if (getIntent().getStringArrayListExtra("ResolutionFormat") != null) {
-            ResolutionFormat = getIntent().getStringArrayListExtra("ResolutionFormat");
+        if (getIntent().getStringArrayListExtra("resolutionFormat") != null) {
+            ResolutionFormat = getIntent().getStringArrayListExtra("resolutionFormat");
         } else {
             ResolutionFormat.clear();
 
         }
 
-        if (getIntent().getStringArrayListExtra("ResolutionUrl") != null) {
-            ResolutionUrl = getIntent().getStringArrayListExtra("ResolutionUrl");
+        if (getIntent().getStringArrayListExtra("resolutionUrl") != null) {
+            ResolutionUrl = getIntent().getStringArrayListExtra("resolutionUrl");
         } else {
             ResolutionUrl.clear();
         }
@@ -2364,7 +2364,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         String Subtitle_Path = "";
 
         public SubtitleProcessingTask(String path) {
-//            Log.v("MUVI","SubTitlePath size ==="+SubTitlePath.size());
+//            Log.v("MUVI","subTitlePath size ==="+subTitlePath.size());
 //             Subtitle_Path = Environment.getExternalStorageDirectory().toString()+"/"+"sub.vtt";
             Subtitle_Path = SubTitlePath.get((Integer.parseInt(path) - 1));
         }
@@ -2373,7 +2373,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         protected void onPreExecute() {
 //            subtitleText.setText("Loading subtitles..");
             super.onPreExecute();
-            Log.v("MUVI", "SubTitlePath size at pre execute===" + SubTitlePath.size());
+            Log.v("MUVI", "subTitlePath size at pre execute===" + SubTitlePath.size());
         }
 
         @Override

@@ -128,6 +128,9 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
 
 
                         }
+
+                        get_video_details_output.setSubTitleName(SubTitleName);
+                        get_video_details_output.setFakeSubTitlePath(FakeSubTitlePath);
                     }
                 }
 
@@ -153,7 +156,11 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                             Log.v("MUVISDK","Resolution Format Name ="+ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
                             Log.v("MUVISDK","Resolution url ="+ResolutionJosnArray.getJSONObject(i).optString("url").trim());
                         }
+
+                        get_video_details_output.setResolutionFormat(ResolutionFormat);
+                        get_video_details_output.setResolutionUrl(ResolutionUrl);
                     }
+
                 }
 
             }

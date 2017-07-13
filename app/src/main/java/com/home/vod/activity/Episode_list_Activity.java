@@ -370,10 +370,10 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                                 Download_SubTitle(FakeSubTitlePath.get(0).trim());
                             } else {
                                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                playVideoIntent.putExtra("SubTitleName", SubTitleName);
-                                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-                                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);
+                                playVideoIntent.putExtra("subTitleName", SubTitleName);
+                                playVideoIntent.putExtra("subTitlePath", SubTitlePath);
+                                playVideoIntent.putExtra("resolutionFormat", ResolutionFormat);
+                                playVideoIntent.putExtra("resolutionUrl", ResolutionUrl);
                                 startActivity(playVideoIntent);
                             }
 
@@ -1211,8 +1211,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 //                            {
 //                                for(int i=0;i<SubtitleJosnArray.length();i++)
 //                                {
-//                                    SubTitleName.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
-//                                    FakeSubTitlePath.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
+//                                    subTitleName.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
+//                                    fakeSubTitlePath.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
 //
 //                                    Log.v("MUVI","SUbtitle Name ="+SubtitleJosnArray.getJSONObject(i).optString("language").trim());
 //                                    Log.v("MUVI","SUbtitle FAke Path ="+SubtitleJosnArray.getJSONObject(i).optString("url").trim());
@@ -1228,14 +1228,14 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 //                                {
 //                                    if((ResolutionJosnArray.getJSONObject(i).optString("resolution").trim()).equals("BEST"))
 //                                    {
-//                                        ResolutionFormat.add(ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
+//                                        resolutionFormat.add(ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
 //                                    }
 //                                    else
 //                                    {
-//                                        ResolutionFormat.add((ResolutionJosnArray.getJSONObject(i).optString("resolution").trim())+"p");
+//                                        resolutionFormat.add((ResolutionJosnArray.getJSONObject(i).optString("resolution").trim())+"p");
 //                                    }
 //
-//                                    ResolutionUrl.add(ResolutionJosnArray.getJSONObject(i).optString("url").trim());
+//                                    resolutionUrl.add(ResolutionJosnArray.getJSONObject(i).optString("url").trim());
 //
 //                                }
 //                            }
@@ -1415,7 +1415,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 //                            }
 //                            runOnUiThread(new Runnable() {
 //                                public void run() {
-//                                    if(FakeSubTitlePath.size()>0)
+//                                    if(fakeSubTitlePath.size()>0)
 //                                    {
 //                                        // This Portion Will Be changed Later.
 //
@@ -1431,15 +1431,15 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 //
 //                                        progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
 //                                        progressBarHandler.show();
-//                                        Download_SubTitle(FakeSubTitlePath.get(0).trim());
+//                                        Download_SubTitle(fakeSubTitlePath.get(0).trim());
 //                                    }
 //                                    else
 //                                    {
 //                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                                        playVideoIntent.putExtra("SubTitleName", SubTitleName);
-//                                        playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-//                                        playVideoIntent.putExtra("ResolutionFormat",ResolutionFormat);
-//                                        playVideoIntent.putExtra("ResolutionUrl",ResolutionUrl);
+//                                        playVideoIntent.putExtra("subTitleName", subTitleName);
+//                                        playVideoIntent.putExtra("subTitlePath", subTitlePath);
+//                                        playVideoIntent.putExtra("resolutionFormat",resolutionFormat);
+//                                        playVideoIntent.putExtra("resolutionUrl",resolutionUrl);
 //                                        startActivity(playVideoIntent);
 //                                    }
 //
@@ -4762,10 +4762,10 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 }
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                playVideoIntent.putExtra("SubTitleName", SubTitleName);
-                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);
+                playVideoIntent.putExtra("subTitleName", SubTitleName);
+                playVideoIntent.putExtra("subTitlePath", SubTitlePath);
+                playVideoIntent.putExtra("resolutionFormat", ResolutionFormat);
+                playVideoIntent.putExtra("resolutionUrl", ResolutionUrl);
                 startActivity(playVideoIntent);
             }
         }

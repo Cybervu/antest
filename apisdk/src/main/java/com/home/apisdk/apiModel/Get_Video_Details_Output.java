@@ -1,5 +1,7 @@
 package com.home.apisdk.apiModel;
 
+import java.util.ArrayList;
+
 /**
  * Created by MUVI on 1/20/2017.
  */
@@ -9,6 +11,52 @@ public class Get_Video_Details_Output {
     String videoResolution;
     String videoUrl;
     String emed_url;
+    ArrayList<String> SubTitleName = new ArrayList<>();
+
+    public ArrayList<String> getSubTitleName() {
+        return SubTitleName;
+    }
+
+    public void setSubTitleName(ArrayList<String> subTitleName) {
+        SubTitleName = subTitleName;
+    }
+
+    public ArrayList<String> getSubTitlePath() {
+        return SubTitlePath;
+    }
+
+    public void setSubTitlePath(ArrayList<String> subTitlePath) {
+        SubTitlePath = subTitlePath;
+    }
+
+    public ArrayList<String> getFakeSubTitlePath() {
+        return FakeSubTitlePath;
+    }
+
+    public void setFakeSubTitlePath(ArrayList<String> fakeSubTitlePath) {
+        FakeSubTitlePath = fakeSubTitlePath;
+    }
+
+    public ArrayList<String> getResolutionFormat() {
+        return ResolutionFormat;
+    }
+
+    public void setResolutionFormat(ArrayList<String> resolutionFormat) {
+        ResolutionFormat = resolutionFormat;
+    }
+
+    public ArrayList<String> getResolutionUrl() {
+        return ResolutionUrl;
+    }
+
+    public void setResolutionUrl(ArrayList<String> resolutionUrl) {
+        ResolutionUrl = resolutionUrl;
+    }
+
+    ArrayList<String> SubTitlePath = new ArrayList<>();
+    ArrayList<String> FakeSubTitlePath = new ArrayList<>();
+    ArrayList<String> ResolutionFormat = new ArrayList<>();
+    ArrayList<String> ResolutionUrl = new ArrayList<>();
 
     public String getThirdparty_url() {
         return thirdparty_url;

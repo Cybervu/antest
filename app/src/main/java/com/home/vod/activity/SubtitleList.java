@@ -38,14 +38,14 @@ public class SubtitleList extends Activity {
         Util.call_finish_at_onUserLeaveHint = true;
 
 
-        if (getIntent().getStringArrayListExtra("SubTitleName") != null) {
-            SubTitleName = getIntent().getStringArrayListExtra("SubTitleName");
+        if (getIntent().getStringArrayListExtra("subTitleName") != null) {
+            SubTitleName = getIntent().getStringArrayListExtra("subTitleName");
         } else {
             SubTitleName.clear();
         }
 
-        if (getIntent().getStringArrayListExtra("SubTitlePath") != null) {
-            SubTitlePath = getIntent().getStringArrayListExtra("SubTitlePath");
+        if (getIntent().getStringArrayListExtra("subTitlePath") != null) {
+            SubTitlePath = getIntent().getStringArrayListExtra("subTitlePath");
         } else {
             SubTitlePath.clear();
         }

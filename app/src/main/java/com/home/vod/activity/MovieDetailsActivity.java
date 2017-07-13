@@ -5,7 +5,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -40,7 +39,6 @@ import android.widget.Toast;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
-import com.home.apisdk.apiController.LoginAsynTask;
 import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
 import com.home.apisdk.apiModel.APVModel;
@@ -56,10 +54,8 @@ import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.R;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.model.DataModel;
-import com.home.vod.model.LanguageModel;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ExpandableTextView;
-import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -72,24 +68,18 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -104,11 +94,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     String filename = "";
     static File mediaStorageDir;
 
-    ArrayList<String> SubTitleName = new ArrayList<>();
-    ArrayList<String> SubTitlePath = new ArrayList<>();
-    ArrayList<String> FakeSubTitlePath = new ArrayList<>();
-    ArrayList<String> ResolutionFormat = new ArrayList<>();
-    ArrayList<String> ResolutionUrl = new ArrayList<>();
+    ArrayList<String> subTitleName = new ArrayList<>();
+    ArrayList<String> subTitlePath = new ArrayList<>();
+    ArrayList<String> fakeSubTitlePath = new ArrayList<>();
+    ArrayList<String> resolutionFormat = new ArrayList<>();
+    ArrayList<String> resolutionUrl = new ArrayList<>();
     ProgressBarHandler pDialog;
     VideoDetailsAsynctask asynLoadVideoUrls;
     GetValidateUserAsynTask asynValidateUserDetails;
@@ -741,10 +731,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 dbModel.setContentTypesId(contentTypesId);
 
                 Util.dataModel = dbModel;
-                SubTitleName.clear();
-                SubTitlePath.clear();
-                ResolutionUrl.clear();
-                ResolutionFormat.clear();
+                subTitleName.clear();
+                subTitlePath.clear();
+                resolutionUrl.clear();
+                resolutionFormat.clear();
 
                 if (isLogin == 1) {
                     if (preferenceManager != null) {
@@ -1465,7 +1455,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     @Override
     public void onVideoDetailsPostExecuteCompleted(Get_Video_Details_Output get_video_details_output, int code, String status, String message) {
 
+
+        fakeSubTitlePath = get_video_details_output.getFakeSubTitlePath();
+        resolutionFormat = get_video_details_output.getResolutionFormat();
+        resolutionUrl = get_video_details_output.getResolutionUrl();
+
         Util.dataModel.setVideoUrl(get_video_details_output.getVideoUrl());
+
+        //player model
 
         if (status == null) {
             status = "0";
@@ -1556,7 +1553,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            if (FakeSubTitlePath.size() > 0) {
+                            if (fakeSubTitlePath.size() > 0) {
                                 // This Portion Will Be changed Later.
 
                                 File dir = new File(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/SubTitleList/");
@@ -1569,13 +1566,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                                 progressBarHandler = new ProgressBarHandler(MovieDetailsActivity.this);
                                 progressBarHandler.show();
-                                Download_SubTitle(FakeSubTitlePath.get(0).trim());
+                                Download_SubTitle(fakeSubTitlePath.get(0).trim());
                             } else {
                                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                playVideoIntent.putExtra("SubTitleName", SubTitleName);
-                                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-                                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);
+                                playVideoIntent.putExtra("subTitleName", subTitleName);
+                                playVideoIntent.putExtra("subTitlePath", subTitlePath);
+                                playVideoIntent.putExtra("resolutionFormat", resolutionFormat);
+                                playVideoIntent.putExtra("resolutionUrl", resolutionUrl);
                                 startActivity(playVideoIntent);
                             }
 
@@ -2857,8 +2854,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 //                            {
 //                                for(int i=0;i<SubtitleJosnArray.length();i++)
 //                                {
-//                                    SubTitleName.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
-//                                    FakeSubTitlePath.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
+//                                    subTitleName.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
+//                                    fakeSubTitlePath.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
 //
 //
 //                                }
@@ -2875,14 +2872,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 //                                {
 //                                    if((ResolutionJosnArray.getJSONObject(i).optString("resolution").trim()).equals("BEST"))
 //                                    {
-//                                        ResolutionFormat.add(ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
+//                                        resolutionFormat.add(ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
 //                                    }
 //                                    else
 //                                    {
-//                                        ResolutionFormat.add((ResolutionJosnArray.getJSONObject(i).optString("resolution").trim())+"p");
+//                                        resolutionFormat.add((ResolutionJosnArray.getJSONObject(i).optString("resolution").trim())+"p");
 //                                    }
 //
-//                                    ResolutionUrl.add(ResolutionJosnArray.getJSONObject(i).optString("url").trim());
+//                                    resolutionUrl.add(ResolutionJosnArray.getJSONObject(i).optString("url").trim());
 //
 //                                    Log.v("MUVI","Resolution Format Name ="+ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
 //                                    Log.v("MUVI","Resolution url ="+ResolutionJosnArray.getJSONObject(i).optString("url").trim());
@@ -3055,7 +3052,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 //                        final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
 //                        runOnUiThread(new Runnable() {
 //                            public void run() {
-//                                if(FakeSubTitlePath.size()>0)
+//                                if(fakeSubTitlePath.size()>0)
 //                                {
 //                                    // This Portion Will Be changed Later.
 //
@@ -3071,15 +3068,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 //
 //                                    progressBarHandler = new ProgressBarHandler(MovieDetailsActivity.this);
 //                                    progressBarHandler.show();
-//                                    Download_SubTitle(FakeSubTitlePath.get(0).trim());
+//                                    Download_SubTitle(fakeSubTitlePath.get(0).trim());
 //                                }
 //                                else
 //                                {
 //                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                                    playVideoIntent.putExtra("SubTitleName", SubTitleName);
-//                                    playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-//                                    playVideoIntent.putExtra("ResolutionFormat",ResolutionFormat);
-//                                    playVideoIntent.putExtra("ResolutionUrl",ResolutionUrl);
+//                                    playVideoIntent.putExtra("subTitleName", subTitleName);
+//                                    playVideoIntent.putExtra("subTitlePath", subTitlePath);
+//                                    playVideoIntent.putExtra("resolutionFormat",resolutionFormat);
+//                                    playVideoIntent.putExtra("resolutionUrl",resolutionUrl);
 //                                    startActivity(playVideoIntent);
 //                                }
 //
@@ -4228,7 +4225,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     }
                 }
 
-                SubTitlePath.add(mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".vtt");
+                subTitlePath.add(mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".vtt");
                 OutputStream output = new FileOutputStream(mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".vtt");
 
                 byte data[] = new byte[1024];
@@ -4256,19 +4253,19 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         @Override
         protected void onPostExecute(String file_url) {
-            FakeSubTitlePath.remove(0);
-            if (FakeSubTitlePath.size() > 0) {
-                Download_SubTitle(FakeSubTitlePath.get(0).trim());
+            fakeSubTitlePath.remove(0);
+            if (fakeSubTitlePath.size() > 0) {
+                Download_SubTitle(fakeSubTitlePath.get(0).trim());
             } else {
                 if (progressBarHandler != null && progressBarHandler.isShowing()) {
                     progressBarHandler.hide();
                 }
                 Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                playVideoIntent.putExtra("SubTitleName", SubTitleName);
-                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);
+                playVideoIntent.putExtra("subTitleName", subTitleName);
+                playVideoIntent.putExtra("subTitlePath", subTitlePath);
+                playVideoIntent.putExtra("resolutionFormat", resolutionFormat);
+                playVideoIntent.putExtra("resolutionUrl", resolutionUrl);
                 startActivity(playVideoIntent);
             }
         }

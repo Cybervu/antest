@@ -38,14 +38,14 @@ public class ResolutionChangeActivity extends Activity {
 
         Util.call_finish_at_onUserLeaveHint = true;
 
-        if (getIntent().getStringArrayListExtra("ResolutionFormat") != null) {
-            ResolutionFormat = getIntent().getStringArrayListExtra("ResolutionFormat");
+        if (getIntent().getStringArrayListExtra("resolutionFormat") != null) {
+            ResolutionFormat = getIntent().getStringArrayListExtra("resolutionFormat");
         } else {
             ResolutionFormat.clear();
         }
 
-        if (getIntent().getStringArrayListExtra("ResolutionUrl") != null) {
-            ResolutionUrl = getIntent().getStringArrayListExtra("ResolutionUrl");
+        if (getIntent().getStringArrayListExtra("resolutionUrl") != null) {
+            ResolutionUrl = getIntent().getStringArrayListExtra("resolutionUrl");
         } else {
             ResolutionUrl.clear();
         }

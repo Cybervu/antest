@@ -612,7 +612,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
 
-//                            if(FakeSubTitlePath.size()>0)
+//                            if(fakeSubTitlePath.size()>0)
 //                            {
 //                                // This Portion Will Be changed Later.
 //
@@ -628,13 +628,13 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //
 //                                progressBarHandler = new ProgressBarHandler(getActivity());
 //                                progressBarHandler.show();
-//                                Download_SubTitle(FakeSubTitlePath.get(0).trim());
+//                                Download_SubTitle(fakeSubTitlePath.get(0).trim());
 //                            }
 //                            else
                             {
                                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                playVideoIntent.putExtra("SubTitleName", SubTitleName);
-                                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
+                                playVideoIntent.putExtra("subTitleName", SubTitleName);
+                                playVideoIntent.putExtra("subTitlePath", SubTitlePath);
                                 context.startActivity(playVideoIntent);
                             }
 
@@ -1878,8 +1878,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                            {
 //                                for(int i=0;i<SubtitleJosnArray.length();i++)
 //                                {
-//                                    SubTitleName.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
-//                                    FakeSubTitlePath.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
+//                                    subTitleName.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
+//                                    fakeSubTitlePath.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
 //
 //                                }
 //                            }
@@ -2003,7 +2003,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                        getActivity().runOnUiThread(new Runnable() {
 //                            public void run() {
 //
-//                                if(FakeSubTitlePath.size()>0)
+//                                if(fakeSubTitlePath.size()>0)
 //                                {
 //                                    // This Portion Will Be changed Later.
 //
@@ -2019,13 +2019,13 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //
 //                                    progressBarHandler = new ProgressBarHandler(getActivity());
 //                                    progressBarHandler.show();
-//                                    Download_SubTitle(FakeSubTitlePath.get(0).trim());
+//                                    Download_SubTitle(fakeSubTitlePath.get(0).trim());
 //                                }
 //                                else
 //                                {
 //                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                                    playVideoIntent.putExtra("SubTitleName", SubTitleName);
-//                                    playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
+//                                    playVideoIntent.putExtra("subTitleName", subTitleName);
+//                                    playVideoIntent.putExtra("subTitlePath", subTitlePath);
 //                                    context.startActivity(playVideoIntent);
 //                                }
 //
@@ -2150,8 +2150,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 }
                 Intent playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                playVideoIntent.putExtra("SubTitleName", SubTitleName);
-                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
+                playVideoIntent.putExtra("subTitleName", SubTitleName);
+                playVideoIntent.putExtra("subTitlePath", SubTitlePath);
                 context.startActivity(playVideoIntent);
             }
         }

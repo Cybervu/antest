@@ -285,19 +285,19 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         //Call For Subtitle Loading // Added By MUVI
 
 
-        if (getIntent().getStringArrayListExtra("SubTitleName") != null) {
-            SubTitleName = getIntent().getStringArrayListExtra("SubTitleName");
+        if (getIntent().getStringArrayListExtra("subTitleName") != null) {
+            SubTitleName = getIntent().getStringArrayListExtra("subTitleName");
         } else {
             SubTitleName.clear();
         }
 
-        if (getIntent().getStringArrayListExtra("SubTitlePath") != null) {
-            SubTitlePath = getIntent().getStringArrayListExtra("SubTitlePath");
+        if (getIntent().getStringArrayListExtra("subTitlePath") != null) {
+            SubTitlePath = getIntent().getStringArrayListExtra("subTitlePath");
         } else {
             SubTitlePath.clear();
         }
 
-       /* if(SubTitlePath.size()<1)
+       /* if(subTitlePath.size()<1)
         {
             subtitle_change_btn.setVisibility(View.INVISIBLE);
             Log.v("MUVI","CC Invisible called");
@@ -310,18 +310,18 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                /* try{
                     Util.call_finish_at_onUserLeaveHint = false;
                     Intent intent = new Intent(MyLibraryPlayer.this,SubtitleList.class);
-                    intent.putExtra("SubTitleName",SubTitleName);
-                    intent.putExtra("SubTitlePath",SubTitlePath);
+                    intent.putExtra("subTitleName",subTitleName);
+                    intent.putExtra("subTitlePath",subTitlePath);
                     startActivityForResult(intent,222);
                 }catch (Exception e){Log.v("MUVI","Exception of subtitle change click ="+e.toString());}*/
 
 
                 Util.call_finish_at_onUserLeaveHint = false;
                 Intent intent = new Intent(MyLibraryPlayer.this,Subtitle_Resolution.class);
-                intent.putExtra("ResolutionFormat",ResolutionFormat);
-                intent.putExtra("ResolutionUrl",ResolutionUrl);
-                intent.putExtra("SubTitleName",SubTitleName);
-                intent.putExtra("SubTitlePath",SubTitlePath);
+                intent.putExtra("resolutionFormat",ResolutionFormat);
+                intent.putExtra("resolutionUrl",ResolutionUrl);
+                intent.putExtra("subTitleName",SubTitleName);
+                intent.putExtra("subTitlePath",SubTitlePath);
                 startActivityForResult(intent,3333);
 
 
@@ -333,19 +333,19 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         //=============================== Resolution Change ===================================//
 
-      /*  if (getIntent().getStringArrayListExtra("ResolutionFormat") != null) {
-            ResolutionFormat = getIntent().getStringArrayListExtra("ResolutionFormat");
+      /*  if (getIntent().getStringArrayListExtra("resolutionFormat") != null) {
+            resolutionFormat = getIntent().getStringArrayListExtra("resolutionFormat");
         } else {
-            ResolutionFormat.clear();
+            resolutionFormat.clear();
         }
 
-        if (getIntent().getStringArrayListExtra("ResolutionUrl") != null) {
-            ResolutionUrl = getIntent().getStringArrayListExtra("ResolutionUrl");
+        if (getIntent().getStringArrayListExtra("resolutionUrl") != null) {
+            resolutionUrl = getIntent().getStringArrayListExtra("resolutionUrl");
         } else {
-            ResolutionUrl.clear();
+            resolutionUrl.clear();
         }
 
-        if(ResolutionUrl.size()<1)
+        if(resolutionUrl.size()<1)
 
         {
             // Add your code
@@ -353,22 +353,22 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         }
         else
         {
-            ResolutionUrl.add(Util.dataModel.getVideoUrl().trim());
-            ResolutionFormat.add("Auto");
+            resolutionUrl.add(Util.dataModel.getVideoUrl().trim());
+            resolutionFormat.add("Auto");
         }
 */
         Util.VideoResolution = "Auto";
         Util.DefaultSubtitle = "Off";
 
-        if (getIntent().getStringArrayListExtra("ResolutionFormat") != null) {
-            ResolutionFormat = getIntent().getStringArrayListExtra("ResolutionFormat");
+        if (getIntent().getStringArrayListExtra("resolutionFormat") != null) {
+            ResolutionFormat = getIntent().getStringArrayListExtra("resolutionFormat");
         } else {
             ResolutionFormat.clear();
 
         }
 
-        if (getIntent().getStringArrayListExtra("ResolutionUrl") != null) {
-            ResolutionUrl = getIntent().getStringArrayListExtra("ResolutionUrl");
+        if (getIntent().getStringArrayListExtra("resolutionUrl") != null) {
+            ResolutionUrl = getIntent().getStringArrayListExtra("resolutionUrl");
         } else {
             ResolutionUrl.clear();
         }
@@ -423,32 +423,32 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 try{
 
-                  *//*  ResolutionFormat.clear();
-                    ResolutionUrl.clear();
+                  *//*  resolutionFormat.clear();
+                    resolutionUrl.clear();
 
                     String url1 = "https://r2---sn-p5qs7n7s.googlevideo.com/videoplayback?ms=au&clen=9643006&mv=m&mt=1490847859&expire=1490869548&ei=zIjcWNiIB4--1gK12J2wDg&requiressl=yes&ipbits=0&mn=sn-p5qs7n7s&mm=31&id=o-AOBNENDOg3dWResPJrDOrzcdkVLJzIAYZWhQU5ZbrB4w&itag=17&key=yt6&ip=159.253.144.86&dur=965.578&lmt=1476270027971356&upn=CmLw7ROk5F8&mime=video%2F3gpp&sparams=clen%2Cdur%2Cei%2Cgir%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Crequiressl%2Csource%2Cupn%2Cexpire&initcwndbps=3532500&gir=yes&source=youtube&pl=24&signature=D4A534C89E9CF57FCA86E4F48F551DAE17C35A42.1BED6199D2C1CBC51FE759376BA25E3CA16B6592&title=8+Future+Trucks+%26+Buses+YOU+MUST+SEE.mp4";
                     String url2 = "https://r2---sn-p5qs7n7s.googlevideo.com/videoplayback?ms=au&ei=zIjcWNiIB4--1gK12J2wDg&mv=m&mt=1490847859&expire=1490869548&requiressl=yes&ipbits=0&mn=sn-p5qs7n7s&mm=31&id=o-AOBNENDOg3dWResPJrDOrzcdkVLJzIAYZWhQU5ZbrB4w&itag=22&key=yt6&ip=159.253.144.86&dur=965.508&lmt=1476447036908539&upn=CmLw7ROk5F8&mime=video%2Fmp4&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cupn%2Cexpire&initcwndbps=3532500&ratebypass=yes&source=youtube&pl=24&signature=03EA48DAB77BB926A74DE6071C1166B96E95D247.62FF4140E2C639E6E4F5EE1CDEEE174B37C65739&title=8+Future+Trucks+%26+Buses+YOU+MUST+SEE.mp4";
-                    ResolutionFormat.add("144p");
-                    ResolutionFormat.add("720p");
-                    ResolutionFormat.add("Auto");
+                    resolutionFormat.add("144p");
+                    resolutionFormat.add("720p");
+                    resolutionFormat.add("Auto");
 
-                    ResolutionUrl.add(url1);
-                    ResolutionUrl.add(url2);
-                    ResolutionUrl.add(url1);*//*
+                    resolutionUrl.add(url1);
+                    resolutionUrl.add(url2);
+                    resolutionUrl.add(url1);*//*
 
                     Util.call_finish_at_onUserLeaveHint = false;
                     Intent intent = new Intent(MyLibraryPlayer.this,Subtitle_Resolution.class);
-                    intent.putExtra("ResolutionFormat",ResolutionFormat);
-                    intent.putExtra("ResolutionUrl",ResolutionUrl);
-                    intent.putExtra("SubTitleName",SubTitleName);
-                    intent.putExtra("SubTitlePath",SubTitlePath);
+                    intent.putExtra("resolutionFormat",resolutionFormat);
+                    intent.putExtra("resolutionUrl",resolutionUrl);
+                    intent.putExtra("subTitleName",subTitleName);
+                    intent.putExtra("subTitlePath",subTitlePath);
                     startActivityForResult(intent,3333);
 
 
                 *//*    Util.call_finish_at_onUserLeaveHint = false;
                     Intent intent = new Intent(MyLibraryPlayer.this,ResolutionChangeActivity.class);
-                    intent.putExtra("ResolutionFormat",ResolutionFormat);
-                    intent.putExtra("ResolutionUrl",ResolutionUrl);
+                    intent.putExtra("resolutionFormat",resolutionFormat);
+                    intent.putExtra("resolutionUrl",resolutionUrl);
                     startActivityForResult(intent,3333);*//*
                 }catch (Exception e){Log.v("MUVI","Exception of subtitle change click ="+e.toString());}
 
@@ -1978,7 +1978,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         String Subtitle_Path = "";
         public SubtitleProcessingTask(String path) {
-//            Log.v("MUVI","SubTitlePath size ==="+SubTitlePath.size());
+//            Log.v("MUVI","subTitlePath size ==="+subTitlePath.size());
 //             Subtitle_Path = Environment.getExternalStorageDirectory().toString()+"/"+"sub.vtt";
             Subtitle_Path = SubTitlePath.get((Integer.parseInt(path)-1));
         }
@@ -1987,7 +1987,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         protected void onPreExecute() {
 //            subtitleText.setText("Loading subtitles..");
             super.onPreExecute();
-            LogUtil.showLog("MUVI","SubTitlePath size at pre execute==="+SubTitlePath.size());
+            LogUtil.showLog("MUVI","subTitlePath size at pre execute==="+SubTitlePath.size());
         }
 
         @Override
