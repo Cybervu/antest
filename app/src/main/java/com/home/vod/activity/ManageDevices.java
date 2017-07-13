@@ -1,13 +1,11 @@
 package com.home.vod.activity;
 
-import android.content.SharedPreferences;
+
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,21 +18,9 @@ import com.home.apisdk.apiModel.LoadRegisteredDevicesOutput;
 import com.home.vod.R;
 import com.home.vod.adapter.DeviceListAdapter;
 import com.home.vod.preferences.PreferenceManager;
-import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -88,9 +74,9 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
 
         userId = preferenceManager.getUseridFromPref();
         emailId = preferenceManager.getEmailIdFromPref();
-        LoadRegisteredDevicesInput loadRegisteredDevicesInput = new LoadRegisteredDevicesInput();
-        loadRegisteredDevicesInput.setAuthToken(Util.authTokenStr);
-        loadRegisteredDevicesInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        LoadRegisteredDevicesInput loadRegisteredDevicesInput=new LoadRegisteredDevicesInput();
+        loadRegisteredDevicesInput.setAuthToken(Util.authTokenStr.trim());
+        loadRegisteredDevicesInput.setDevice(Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID));
         loadRegisteredDevicesInput.setUser_id(userId);
         loadRegisteredDevicesInput.setLang_code(Util.getTextofLanguage(ManageDevices.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
         LoadRegisteredDevicesAsync asynLoadRegisteredDevices = new LoadRegisteredDevicesAsync(loadRegisteredDevicesInput, this, this);

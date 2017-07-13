@@ -1,6 +1,6 @@
 package com.home.vod.activity;
 
-import android.os.AsyncTask;
+
 import android.os.Bundle;
 import android.support.v7.widget.ActionBarOverlayLayout;
 import android.support.v7.widget.Toolbar;
@@ -19,28 +19,12 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.HttpsURLConnection;
 
 public class YouTubeAPIActivity extends YouTubeBaseActivity implements
         YouTubePlayer.OnInitializedListener, SensorOrientationChangeNotifier.Listener, ActionBarOverlayLayout.ActionBarVisibilityCallback,
