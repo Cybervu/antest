@@ -1222,6 +1222,14 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     @Override
     public void onGetContentListPostExecuteCompleted(ArrayList<ContentListOutput> contentListOutputArray, int status, int totalItems, String message) {
 
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        }catch (IllegalArgumentException ex) {
+
+        }
 
         String movieImageStr="";
 

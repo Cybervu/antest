@@ -823,6 +823,8 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
     @Override
     public void onVideoDetailsPostExecuteCompleted(Get_Video_Details_Output get_video_details_output, int code, String status, String message) {
+
+
         if (status == null) {
             status = "0";
             Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
