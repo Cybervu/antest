@@ -149,9 +149,9 @@ public class Util {
 
  public static boolean hide_pause = false;
  public static boolean call_finish_at_onUserLeaveHint = true;
- public static final String authTokenStr = "e8ae05a2ef3fd0c6688952c8f7557823"; //vishwam.tv
+ // public static final String authTokenStr = "e8ae05a2ef3fd0c6688952c8f7557823"; //vishwam.tv
  // public static final String authTokenStr = "4d4fe07c6d8c8317ab45e6b1a2dff08a"; //monica studio
- //public static final String authTokenStr = "6a9c6e9bfeee69e63d4bab668c01dc0a"; //monica studio
+ public static final String authTokenStr = "6a9c6e9bfeee69e63d4bab668c01dc0a"; //monica studio
 //   public static final String authTokenStr = "445882348316089103b8729dcb397c51"; //classic demo
 //   public static final String authTokenStr = "6c8387e47eefeafa57dd5386bc90454c"; //testsanchi
 //   public static final String authTokenStr = "a2478e71219f606cb5b7a3d3f7a35fe8"; //Cmax
