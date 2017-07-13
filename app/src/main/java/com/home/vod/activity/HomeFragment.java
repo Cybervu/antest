@@ -442,7 +442,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
             allSampleData.add(new SectionDataModel(menuList.get(counter).getName(), menuList.get(counter).getSectionId(), singleItem));
 
-        }
+
         boolean isNetwork = Util.checkNetwork(context);
         if (isNetwork == true) {
 
