@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/purchaseHistoryTitleTextView"
             android:text="Purchase History"
-            android:textSize="22dp"
+            android:textSize="@dimen/purchase_text_size"
             android:layout_margin="5dp"
             android:padding="5dp"
             android:textColor="@color/pageTitleColor"
@@ -52,7 +52,7 @@
             android:singleLine="false"
 
             android:textColor="@color/noInternetColor"
-            android:textSize="36sp"
+            android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
         <Button
@@ -65,7 +65,7 @@
             android:padding="8dp"
             android:text="Try again !"
             android:textColor="@color/buttonTextColor"
-            android:textSize="20dp" />
+            android:textSize="@dimen/tryagainbtn_text_size" />
     </RelativeLayout>
 
 

@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="19dp"
+        android:textSize="@dimen/videotitle_text_size"
         android:id="@+id/manage_device_text"
         android:padding="8dp"
         android:textColor="@color/pageTitleColor"

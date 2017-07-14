@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Transaction Details"
-            android:textSize="20dp"
+            android:textSize="@dimen/transcationdetail_text_size"
             android:layout_marginTop="15dp"
             android:textColor="@color/pageTitleColor"
             android:layout_marginBottom="15dp"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/transactionDateTitleTextView"
                 android:text="Transaction Date :"
-                android:textSize="14dp"
+                android:textSize="@dimen/transcation_text_size"
                 android:textColor="@color/alreadyMemberTextColor"
                 android:layout_weight="1"/>
 
@@ -57,7 +57,7 @@
                 android:textColor="@color/alreadyMemberTextColor"
                 android:maxLines="1"
                 android:text=""
-                android:textSize="14dp"/>
+                android:textSize="@dimen/transcation_text_size"/>
         </LinearLayout>
 
         <LinearLayout
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/transactionOrderTitletextView"
                 android:text="Order Id :"
-                android:textSize="14dp"
+                android:textSize="@dimen/transcation_text_size"
                 android:textColor="@color/alreadyMemberTextColor"
 
                 android:layout_weight="1"/>
@@ -87,7 +87,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:layout_weight="1"
-                android:textSize="14dp"
+                android:textSize="@dimen/transcation_text_size"
                 android:textColor="@color/alreadyMemberTextColor"
                 />
 
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/transactionAmountTitletextView"
                 android:text="Amount :"
-                android:textSize="14dp"
+                android:textSize="@dimen/transcation_text_size"
                 android:textColor="@color/alreadyMemberTextColor"
 
                 android:layout_weight="1"/>
@@ -118,7 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/transactionAmounttextView"
-                android:textSize="14dp"
+                android:textSize="@dimen/transcation_text_size"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:layout_weight="1"
@@ -141,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/transactionInvoiceTitletextView"
                 android:text="Invoice :"
-                android:textSize="14dp"
+                android:textSize="@dimen/transcation_text_size"
                 android:textColor="@color/alreadyMemberTextColor"
 
                 android:layout_weight="1"/>
@@ -150,7 +150,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14dp"
+                android:textSize="@dimen/transcation_text_size"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:id="@+id/transactionInvoicetextView"
@@ -174,7 +174,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/transactionStatusTitletextView"
                 android:text="Transaction Status :"
-                android:textSize="14dp"
+                android:textSize="@dimen/transcation_text_size"
                 android:textColor="@color/alreadyMemberTextColor"
 
                 android:layout_weight="1"/>
@@ -185,7 +185,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/transactionStatustextView"
                 android:layout_weight="1"
-                android:textSize="14dp"
+                android:textSize="@dimen/transcation_text_size"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/alreadyMemberTextColor"
@@ -208,7 +208,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/transactionPlanNameTitleTextView"
                 android:text="Plan Name :"
-                android:textSize="14dp"
+                android:textSize="@dimen/transcation_text_size"
                 android:textColor="@color/alreadyMemberTextColor"
                 android:layout_weight="1"/>
 
@@ -218,7 +218,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/transactionPlanNameTextView"
                 android:layout_weight="1"
-                android:textSize="14dp"
+                android:textSize="@dimen/transcation_text_size"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/alreadyMemberTextColor"
@@ -227,8 +227,8 @@
         </LinearLayout>
 
         <Button
-            android:layout_width="150dp"
-            android:layout_height="44dp"
+            android:layout_width="@dimen/transcationbtn_width"
+            android:layout_height="@dimen/transcationbtn_height"
             android:id="@+id/transactionDownloadButton"
             android:text="DOWNLOAD"
             android:background="@drawable/button_radious"
@@ -273,7 +273,7 @@
             android:padding="8dp"
             android:text="Try again !"
             android:textColor="@color/buttonTextColor"
-            android:textSize="20dp" />
+            android:textSize="@dimen/tryagainbtn_text_size" />
     </RelativeLayout>
 
 </LinearLayout>

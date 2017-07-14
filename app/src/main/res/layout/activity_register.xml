@@ -29,8 +29,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp">
+                android:paddingLeft="@dimen/layout_padding_left"
+                android:paddingRight="@dimen/layout_padding_right">
 
                 <RelativeLayout
                     android:id="@+id/loginLayout"
@@ -39,7 +39,7 @@
                     android:layout_below="@+id/registerImageView"
                     android:layout_centerInParent="true"
                     android:gravity="center"
-                    android:padding="10dp">
+                    android:padding="@dimen/registerlayout_padding">
 
 
                     <EditText
@@ -49,10 +49,10 @@
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
                         android:drawablePadding="10dp"
-                        android:padding="17dp"
+                        android:padding="@dimen/register_edittext_padding"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
-                        android:textSize="16dp" />
+                        android:textSize="@dimen/edit_text_size" />
 
                     <EditText
                         android:id="@+id/editEmailStr"
@@ -62,11 +62,11 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="12dp"
                         android:drawablePadding="10dp"
-                        android:padding="17dp"
+                        android:padding="@dimen/register_edittext_padding"
 
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
-                        android:textSize="16dp" />
+                        android:textSize="@dimen/edit_text_size" />
 
                     <EditText
                         android:id="@+id/editPasswordStr"
@@ -78,10 +78,10 @@
 
                         android:drawablePadding="10dp"
                         android:inputType="textPassword"
-                        android:padding="17dp"
+                        android:padding="@dimen/register_edittext_padding"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
-                        android:textSize="16dp"
+                        android:textSize="@dimen/edit_text_size"
 
 
                         />
@@ -95,11 +95,10 @@
                         android:layout_marginTop="12dp"
                         android:drawablePadding="10dp"
                         android:inputType="textPassword"
-                        android:padding="17dp"
+                        android:padding="@dimen/register_edittext_padding"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
-                        android:textSize="16dp"
-
+                        android:textSize="@dimen/edit_text_size"
 
                         />
 
@@ -142,22 +141,22 @@
                         <TextView
                             android:id="@+id/alreadyMemberText"
                             android:layout_width="wrap_content"
-                            android:layout_height="40dp"
+                            android:layout_height="@dimen/alreadymember_height"
                             android:layout_marginTop="20dp"
                             android:gravity="center"
                             android:textColor="@color/alreadyMemberTextColor"
-                            android:textSize="15dp" />
+                            android:textSize="@dimen/alreadymember_text_size" />
 
                         <TextView
                             android:id="@+id/alreadyHaveALoginButton"
                             android:layout_width="wrap_content"
-                            android:layout_height="40dp"
+                            android:layout_height="@dimen/alreadymember_height"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="20dp"
                             android:clickable="true"
                             android:gravity="center"
                             android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                            android:textSize="16dp"
+                            android:textSize="@dimen/already_login_size"
                             android:textStyle="bold" />
 
                     </LinearLayout>
@@ -165,7 +164,7 @@
                     <Button
                         android:id="@+id/registerButton"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="@dimen/registerbtn_height"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/countrySpinner"
@@ -174,7 +173,7 @@
                         android:textAllCaps="false"
                         android:stateListAnimator="@null"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="18dp" />
+                        android:textSize="@dimen/register_button" />
                     <LinearLayout
                         android:id="@+id/btnLogin"
                         android:layout_width="match_parent"
@@ -204,7 +203,7 @@
                             android:layout_margin="5dp"
                             android:gravity="center"
                             android:textColor="@color/fb_text_color"
-                            android:textSize="16dp"
+                            android:textSize="@dimen/fb_text_size"
 
                             android:text="@string/fb_registration_text" />
                     </LinearLayout>
@@ -236,11 +235,11 @@
 
                 <ImageView
                     android:id="@+id/registerImageView"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="@dimen/forgot_logo_width"
+                    android:layout_height="@dimen/forgot_logo_height"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="@dimen/registerimg_margin_top"
                     android:background="@drawable/logo" />
             </RelativeLayout>
         </LinearLayout>

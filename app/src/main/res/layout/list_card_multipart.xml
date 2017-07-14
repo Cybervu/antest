@@ -19,41 +19,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 -->
-    <ImageView
-        android:id="@+id/itemImage"
-        android:layout_width="171dp"
-        android:layout_height="117dp"
-        android:src="@drawable/logo"
-        android:adjustViewBounds="true"
-        android:layout_gravity="center"/>
+  <ImageView
+      android:id="@+id/itemImage"
+      android:layout_width="@dimen/listcard_width"
+      android:layout_height="@dimen/listcard_height"
+      android:src="@drawable/logo"
+      android:adjustViewBounds="true"
+      android:layout_gravity="center"/>
 
-    <ImageView
-        android:id="@+id/movieImageOverlay"
-        android:layout_width="171dp"
-        android:layout_height="117dp"
-        android:adjustViewBounds="true"
-        android:layout_gravity="center"
-        android:background="@drawable/content_list_overlay"
+  <ImageView
+      android:id="@+id/movieImageOverlay"
+      android:layout_width="@dimen/listcard_width"
+      android:layout_height="@dimen/listcard_height"
+      android:adjustViewBounds="true"
+      android:layout_gravity="center"
+      android:background="@drawable/content_list_overlay"
 
-        />
-<!--
-    </RelativeLayout>
--->
+      />
+  <!--
+      </RelativeLayout>
+  -->
 
-    <TextView
-        android:id="@+id/itemTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/itemImage"
-        android:layout_alignRight="@+id/itemImage"
-        android:layout_alignBottom="@+id/movieImageOverlay"
-        android:layout_alignBaseline="@+id/movieImageOverlay"
-        android:gravity="left"
-        android:text=""
-        android:ellipsize="end"
-        android:maxLength="18"
-        android:textColor="@color/contentTitleColor"
-        android:textSize="15sp" />
+  <TextView
+      android:id="@+id/itemTitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignLeft="@+id/itemImage"
+      android:layout_alignRight="@+id/itemImage"
+      android:layout_alignBottom="@+id/movieImageOverlay"
+      android:layout_alignBaseline="@+id/movieImageOverlay"
+      android:gravity="left"
+      android:text=""
+      android:ellipsize="end"
+      android:maxLength="18"
+      android:textColor="@color/contentTitleColor"
+      android:textSize="@dimen/itemtitle1_text_size" />
 
 
 </RelativeLayout>

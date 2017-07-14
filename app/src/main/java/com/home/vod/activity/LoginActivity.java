@@ -121,7 +121,14 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     @Override
     public void onLoginPostExecuteCompleted(Login_output login_output, int status, String message) {
+        try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
 
+                }
 
         if (status > 0) {
 
