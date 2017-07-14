@@ -1,6 +1,7 @@
 package com.home.vod.util;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -8,6 +9,7 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.text.TextUtils;
 import android.view.Display;
@@ -27,7 +29,6 @@ import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.PPVModel;
 import com.home.vod.QueueDataProvider;
 import com.home.vod.R;
-import com.home.vod.activity.LoginActivity;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.LanguageModel;
@@ -149,13 +150,13 @@ public class Util {
 
  public static boolean hide_pause = false;
  public static boolean call_finish_at_onUserLeaveHint = true;
- public static final String authTokenStr = "e8ae05a2ef3fd0c6688952c8f7557823"; //vishwam.tv
+ //public static final String authTokenStr = "e8ae05a2ef3fd0c6688952c8f7557823"; //vishwam.tv
  // public static final String authTokenStr = "4d4fe07c6d8c8317ab45e6b1a2dff08a"; //monica studio
- //public static final String authTokenStr = "6a9c6e9bfeee69e63d4bab668c01dc0a"; //monica studio
+public static final String authTokenStr = "6a9c6e9bfeee69e63d4bab668c01dc0a"; //monica studio
 //   public static final String authTokenStr = "445882348316089103b8729dcb397c51"; //classic demo
 //   public static final String authTokenStr = "6c8387e47eefeafa57dd5386bc90454c"; //testsanchi
 //   public static final String authTokenStr = "a2478e71219f606cb5b7a3d3f7a35fe8"; //Cmax
- //  public static final String authTokenStr = "25e74a5c88d19c4b57c8138bf47abdf7"; //MobPlay
+// public static final String authTokenStr = "25e74a5c88d19c4b57c8138bf47abdf7"; //MobPlay
 
  public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
 
@@ -743,5 +744,26 @@ public class Util {
   */
  public static void showToast(Context mContext,String message){
   Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
+ }
+
+ /**
+  * @auther alok
+  * @param mContext
+  *
+  * Method to show no video available alert.
+  */
+ public static void showNoDataAlert(Context mContext){
+  AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext,  R.style.MyAlertDialogStyle);
+  dlgAlert.setMessage(com.muvi.player.utils.Util.getTextofLanguage(mContext,NO_VIDEO_AVAILABLE,DEFAULT_NO_VIDEO_AVAILABLE));
+  dlgAlert.setTitle(com.muvi.player.utils.Util.getTextofLanguage(mContext,SORRY,DEFAULT_SORRY));
+  dlgAlert.setPositiveButton(com.muvi.player.utils.Util.getTextofLanguage(mContext,BUTTON_OK,DEFAULT_BUTTON_OK), null);
+  dlgAlert.setCancelable(false);
+  dlgAlert.setPositiveButton(com.muvi.player.utils.Util.getTextofLanguage(mContext,BUTTON_OK,DEFAULT_BUTTON_OK),
+          new DialogInterface.OnClickListener() {
+           public void onClick(DialogInterface dialog, int id) {
+            dialog.cancel();
+           }
+          });
+  dlgAlert.create().show();
  }
 }

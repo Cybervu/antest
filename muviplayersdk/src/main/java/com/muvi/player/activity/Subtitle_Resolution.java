@@ -1,4 +1,4 @@
-package com.home.vod.activity;
+package com.muvi.player.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,8 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-import com.home.vod.R;
-import com.home.vod.util.Util;
+import com.example.muviplayersdk.R;
+import com.muvi.player.utils.Util;
 
 import java.util.ArrayList;
 
@@ -43,28 +43,28 @@ public class Subtitle_Resolution extends Activity {
         resolution_text.setText("Quality: "+ Util.VideoResolution);
         subtitle_text.setText("Subtitle: "+ Util.DefaultSubtitle);
 
-        if (getIntent().getStringArrayListExtra("subTitleName") != null) {
-            SubTitleName = getIntent().getStringArrayListExtra("subTitleName");
+        if (getIntent().getStringArrayListExtra("SubTitleName") != null) {
+            SubTitleName = getIntent().getStringArrayListExtra("SubTitleName");
         } else {
             SubTitleName.clear();
         }
 
-        if (getIntent().getStringArrayListExtra("subTitlePath") != null) {
-            SubTitlePath = getIntent().getStringArrayListExtra("subTitlePath");
+        if (getIntent().getStringArrayListExtra("SubTitlePath") != null) {
+            SubTitlePath = getIntent().getStringArrayListExtra("SubTitlePath");
         } else {
             SubTitlePath.clear();
         }
 
 
 
-        if (getIntent().getStringArrayListExtra("resolutionFormat") != null) {
-            ResolutionFormat = getIntent().getStringArrayListExtra("resolutionFormat");
+        if (getIntent().getStringArrayListExtra("ResolutionFormat") != null) {
+            ResolutionFormat = getIntent().getStringArrayListExtra("ResolutionFormat");
         } else {
             ResolutionFormat.clear();
         }
 
-        if (getIntent().getStringArrayListExtra("resolutionUrl") != null) {
-            ResolutionUrl = getIntent().getStringArrayListExtra("resolutionUrl");
+        if (getIntent().getStringArrayListExtra("ResolutionUrl") != null) {
+            ResolutionUrl = getIntent().getStringArrayListExtra("ResolutionUrl");
         } else {
             ResolutionUrl.clear();
         }
@@ -87,8 +87,8 @@ public class Subtitle_Resolution extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Subtitle_Resolution.this,ResolutionChangeActivity.class);
-                intent.putExtra("resolutionFormat",ResolutionFormat);
-                intent.putExtra("resolutionUrl",ResolutionUrl);
+                intent.putExtra("ResolutionFormat",ResolutionFormat);
+                intent.putExtra("ResolutionUrl",ResolutionUrl);
                 intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivity(intent);
                 finish();
@@ -100,8 +100,8 @@ public class Subtitle_Resolution extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Subtitle_Resolution.this,SubtitleList.class);
-                intent.putExtra("subTitleName",SubTitleName);
-                intent.putExtra("subTitlePath",SubTitlePath);
+                intent.putExtra("SubTitleName",SubTitleName);
+                intent.putExtra("SubTitlePath",SubTitlePath);
                 intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivity(intent);
                 finish();

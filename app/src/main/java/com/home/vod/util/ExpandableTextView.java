@@ -8,7 +8,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.TextView;
 
 import com.home.vod.R;
 

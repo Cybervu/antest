@@ -1,4 +1,4 @@
-package com.home.vod.activity;
+package com.muvi.player.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,9 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 
-import com.home.vod.R;
-import com.home.vod.adapter.ResolutionChangeAdapter;
-import com.home.vod.util.Util;
+import com.example.muviplayersdk.R;
+import com.muvi.player.adapter.ResolutionChangeAdapter;
+import com.muvi.player.utils.Util;
 
 import java.util.ArrayList;
 
@@ -38,14 +38,14 @@ public class ResolutionChangeActivity extends Activity {
 
         Util.call_finish_at_onUserLeaveHint = true;
 
-        if (getIntent().getStringArrayListExtra("resolutionFormat") != null) {
-            ResolutionFormat = getIntent().getStringArrayListExtra("resolutionFormat");
+        if (getIntent().getStringArrayListExtra("ResolutionFormat") != null) {
+            ResolutionFormat = getIntent().getStringArrayListExtra("ResolutionFormat");
         } else {
             ResolutionFormat.clear();
         }
 
-        if (getIntent().getStringArrayListExtra("resolutionUrl") != null) {
-            ResolutionUrl = getIntent().getStringArrayListExtra("resolutionUrl");
+        if (getIntent().getStringArrayListExtra("ResolutionUrl") != null) {
+            ResolutionUrl = getIntent().getStringArrayListExtra("ResolutionUrl");
         } else {
             ResolutionUrl.clear();
         }

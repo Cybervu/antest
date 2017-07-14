@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -162,6 +163,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
         if (preferenceManager != null) {
             emailIdStr = preferenceManager.getEmailIdFromPref();
             userIdStr = preferenceManager.getUseridFromPref();
+            Log.v("BKS","userid trailer=="+userIdStr);
 
         } else {
             emailIdStr = "";

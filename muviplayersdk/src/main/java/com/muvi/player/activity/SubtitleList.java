@@ -1,4 +1,4 @@
-package com.home.vod.activity;
+package com.muvi.player.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,9 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 
-import com.home.vod.R;
-import com.home.vod.adapter.SubtitleAdapter;
-import com.home.vod.util.Util;
+import com.example.muviplayersdk.R;
+import com.muvi.player.adapter.SubtitleAdapter;
+import com.muvi.player.utils.Util;
 
 import java.util.ArrayList;
 
@@ -38,14 +38,14 @@ public class SubtitleList extends Activity {
         Util.call_finish_at_onUserLeaveHint = true;
 
 
-        if (getIntent().getStringArrayListExtra("subTitleName") != null) {
-            SubTitleName = getIntent().getStringArrayListExtra("subTitleName");
+        if (getIntent().getStringArrayListExtra("SubTitleName") != null) {
+            SubTitleName = getIntent().getStringArrayListExtra("SubTitleName");
         } else {
             SubTitleName.clear();
         }
 
-        if (getIntent().getStringArrayListExtra("subTitlePath") != null) {
-            SubTitlePath = getIntent().getStringArrayListExtra("subTitlePath");
+        if (getIntent().getStringArrayListExtra("SubTitlePath") != null) {
+            SubTitlePath = getIntent().getStringArrayListExtra("SubTitlePath");
         } else {
             SubTitlePath.clear();
         }
