@@ -1500,7 +1500,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
     @Override
     public void onVideoDetailsPostExecuteCompleted(Get_Video_Details_Output get_video_details_output, int statusCode, String stus, String message) {
-        // get_video_details_output.setThirdparty_url("https://www.youtube.com/watch?v=fqU2FzATTPY&spfreload=10");
+
+
+        get_video_details_output.setThirdparty_url("https://www.youtube.com/watch?v=iWcnxTZMXS4");
        // get_video_details_output.setThirdparty_url("https://player.vimeo.com/video/192417650?color=00ff00&badge=0");
 
      /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
