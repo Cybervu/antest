@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.AuthUserPaymentInfoInputModel;
 import com.home.apisdk.apiModel.AuthUserPaymentInfoOutputModel;
 
@@ -58,7 +59,7 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
             HttpPost httppost = new HttpPost(APIUrlConstant.getAuthUserPaymentInfoUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.authUserPaymentInfoInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.authUserPaymentInfoInputModel.getAuthToken());
             httppost.addHeader("nameOnCard", this.authUserPaymentInfoInputModel.getName_on_card());
             httppost.addHeader("expiryMonth", this.authUserPaymentInfoInputModel.getExpiryMonth());
             httppost.addHeader("expiryYear", this.authUserPaymentInfoInputModel.getExpiryYear());

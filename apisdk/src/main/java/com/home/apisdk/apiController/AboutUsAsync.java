@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.AboutUsInput;
 
 import org.apache.http.HttpResponse;
@@ -56,7 +57,7 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
             HttpPost httppost = new HttpPost(APIUrlConstant.getAboutUs());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.aboutUsInput.getAuthToken());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.aboutUsInput.getAuthToken());
             httppost.addHeader("permalink", this.aboutUsInput.getPermalink());
             httppost.addHeader("lang_code", this.aboutUsInput.getLang_code());
 
