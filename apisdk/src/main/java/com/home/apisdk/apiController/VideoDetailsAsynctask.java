@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.Get_Video_Details_Output;
 
@@ -68,11 +69,11 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
             HttpPost httppost = new HttpPost(APIUrlConstant.getVideoDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.getVideoDetailsInput.getAuthToken());
-            httppost.addHeader("content_uniq_id", this.getVideoDetailsInput.getContent_uniq_id());
-            httppost.addHeader("stream_uniq_id", this.getVideoDetailsInput.getStream_uniq_id());
-            httppost.addHeader("internet_speed", this.getVideoDetailsInput.getInternetSpeed());
-            httppost.addHeader("user_id", this.getVideoDetailsInput.getUser_id());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.getVideoDetailsInput.getAuthToken());
+            httppost.addHeader(CommonConstants.CONTENT_UNIQ_ID, this.getVideoDetailsInput.getContent_uniq_id());
+            httppost.addHeader(CommonConstants.STREAM_UNIQ_ID, this.getVideoDetailsInput.getStream_uniq_id());
+            httppost.addHeader(CommonConstants.INTERNET_SPEED, this.getVideoDetailsInput.getInternetSpeed());
+            httppost.addHeader(CommonConstants.USER_ID, this.getVideoDetailsInput.getUser_id());
 
             // Execute HTTP Post Request
             try {

@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.LoadVideoInput;
 import com.home.apisdk.apiModel.LoadVideoOutput;
 
@@ -59,9 +60,9 @@ public class GetLoadVideosAsync extends AsyncTask<LoadVideoInput, Void, Void> {
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetFeatureContentUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.loadVideoInput.getAuthToken());
-            httppost.addHeader("section_id", this.loadVideoInput.getSection_id());
-            httppost.addHeader("lang_code", this.loadVideoInput.getLang_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.loadVideoInput.getAuthToken());
+            httppost.addHeader(CommonConstants.SECTION_ID, this.loadVideoInput.getSection_id());
+            httppost.addHeader(CommonConstants.LANG_CODE, this.loadVideoInput.getLang_code());
 
             Log.v("Abhi Auth",this.loadVideoInput.getAuthToken());
             Log.v("Abhi Session",this.loadVideoInput.getSection_id());

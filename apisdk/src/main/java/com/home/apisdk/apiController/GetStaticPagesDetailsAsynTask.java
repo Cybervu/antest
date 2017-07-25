@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.GetStaticPageDetailsModelOutput;
 import com.home.apisdk.apiModel.GetStaticPagesDeatilsModelInput;
 
@@ -59,8 +60,8 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetstaticpagesUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.getStaticPagesDeatilsModelInput.getAuthToken());
-            httppost.addHeader("permalink", this.getStaticPagesDeatilsModelInput.getPermalink());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.getStaticPagesDeatilsModelInput.getAuthToken());
+            httppost.addHeader(CommonConstants.PERMALINK, this.getStaticPagesDeatilsModelInput.getPermalink());
 
 
             // Execute HTTP Post Request

@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.ValidateVoucherInputModel;
 import com.home.apisdk.apiModel.ValidateVoucherOutputModel;
 
@@ -59,13 +60,13 @@ public class ValidateVoucherAsynTask extends AsyncTask<ValidateVoucherInputModel
             HttpPost httppost = new HttpPost(APIUrlConstant.getValidateVoucherUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.validateVoucherInputModel.getAuthToken());
-            httppost.addHeader("movie_id", this.validateVoucherInputModel.getMovie_id());
-            httppost.addHeader("stream_id", this.validateVoucherInputModel.getStream_id());
-            httppost.addHeader("purchase_type", this.validateVoucherInputModel.getPurchase_type());
-            httppost.addHeader("season", this.validateVoucherInputModel.getSeason());
-            httppost.addHeader("voucher_code", this.validateVoucherInputModel.getVoucher_code());
-            httppost.addHeader("user_id", this.validateVoucherInputModel.getUser_id());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.validateVoucherInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.MOVIE_ID, this.validateVoucherInputModel.getMovie_id());
+            httppost.addHeader(CommonConstants.STREAM_ID, this.validateVoucherInputModel.getStream_id());
+            httppost.addHeader(CommonConstants.PURCHASE_TYPE, this.validateVoucherInputModel.getPurchase_type());
+            httppost.addHeader(CommonConstants.SEASON, this.validateVoucherInputModel.getSeason());
+            httppost.addHeader(CommonConstants.VOUCHER_CODE, this.validateVoucherInputModel.getVoucher_code());
+            httppost.addHeader(CommonConstants.USER_ID, this.validateVoucherInputModel.getUser_id());
 
 
             // Execute HTTP Post Request

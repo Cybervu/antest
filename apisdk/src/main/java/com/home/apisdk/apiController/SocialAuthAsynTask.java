@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.SocialAuthInputModel;
 import com.home.apisdk.apiModel.SocialAuthOutputModel;
 
@@ -60,12 +61,12 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getSocialauthUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader("authToken", this.socialAuthInputModel.getAuthToken());
-            httppost.addHeader("email", this.socialAuthInputModel.getEmail());
-            httppost.addHeader("password", this.socialAuthInputModel.getPassword());
-            httppost.addHeader("name", this.socialAuthInputModel.getName());
-            httppost.addHeader("fb_userid", this.socialAuthInputModel.getFb_userid());
-            httppost.addHeader("lang_code",this.socialAuthInputModel.getLanguage());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.socialAuthInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.EMAIL, this.socialAuthInputModel.getEmail());
+            httppost.addHeader(CommonConstants.PASSWORD, this.socialAuthInputModel.getPassword());
+            httppost.addHeader(CommonConstants.NAME, this.socialAuthInputModel.getName());
+            httppost.addHeader(CommonConstants.FB_USER_ID, this.socialAuthInputModel.getFb_userid());
+            httppost.addHeader(CommonConstants.LANG_CODE,this.socialAuthInputModel.getLanguage());
 
 
             // Execute HTTP Post Request

@@ -60,13 +60,13 @@ public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Inp
             HttpPost httppost = new HttpPost(APIUrlConstant.getUpdateProfileUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.update_userProfile_input.getAuthToken());
-            httppost.addHeader("user_id", this.update_userProfile_input.getUser_id());
-            httppost.addHeader("name", this.update_userProfile_input.getName());
-            httppost.addHeader("password", this.update_userProfile_input.getPassword());
-            httppost.addHeader("custom_languages",this.update_userProfile_input.getCustom_languages());
-            httppost.addHeader("custom_country",this.update_userProfile_input.getCustom_country());
-            httppost.addHeader("lang_code",this.update_userProfile_input.getLang_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.update_userProfile_input.getAuthToken());
+            httppost.addHeader(CommonConstants.USER_ID, this.update_userProfile_input.getUser_id());
+            httppost.addHeader(CommonConstants.NAME, this.update_userProfile_input.getName());
+            httppost.addHeader(CommonConstants.PASSWORD, this.update_userProfile_input.getPassword());
+            httppost.addHeader(CommonConstants.CUSTOM_LANGUAGES,this.update_userProfile_input.getCustom_languages());
+            httppost.addHeader(CommonConstants.CUSTOM_COUNTRY,this.update_userProfile_input.getCustom_country());
+            httppost.addHeader(CommonConstants.LANG_CODE,this.update_userProfile_input.getLang_code());
 
             // Execute HTTP Post Request
             try {

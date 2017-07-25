@@ -19,6 +19,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.CookieHandler;
 
 /**
  * Created by MUVI on 1/20/2017.
@@ -60,12 +61,12 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader(CommonConstants.AUTH_TOKEN, this.authUserPaymentInfoInputModel.getAuthToken());
-            httppost.addHeader("nameOnCard", this.authUserPaymentInfoInputModel.getName_on_card());
-            httppost.addHeader("expiryMonth", this.authUserPaymentInfoInputModel.getExpiryMonth());
-            httppost.addHeader("expiryYear", this.authUserPaymentInfoInputModel.getExpiryYear());
-            httppost.addHeader("cardNumber", this.authUserPaymentInfoInputModel.getCardNumber());
-            httppost.addHeader("cvv", this.authUserPaymentInfoInputModel.getCvv());
-            httppost.addHeader("email", this.authUserPaymentInfoInputModel.getEmail());
+            httppost.addHeader(CommonConstants.NAME_ON_CARD, this.authUserPaymentInfoInputModel.getName_on_card());
+            httppost.addHeader(CommonConstants.EXPIRY_MONTH, this.authUserPaymentInfoInputModel.getExpiryMonth());
+            httppost.addHeader(CommonConstants.EXPIRY_YEAR, this.authUserPaymentInfoInputModel.getExpiryYear());
+            httppost.addHeader(CommonConstants.CARD_NUMBER, this.authUserPaymentInfoInputModel.getCardNumber());
+            httppost.addHeader(CommonConstants.CVV, this.authUserPaymentInfoInputModel.getCvv());
+            httppost.addHeader(CommonConstants.EMAIL, this.authUserPaymentInfoInputModel.getEmail());
 
 
             try {

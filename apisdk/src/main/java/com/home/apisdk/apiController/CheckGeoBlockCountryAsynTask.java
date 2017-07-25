@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
 import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
 
@@ -60,8 +61,8 @@ public class CheckGeoBlockCountryAsynTask extends AsyncTask<CheckGeoBlockInputMo
                 HttpPost httppost = new HttpPost(url);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-                httppost.addHeader("authToken", this.checkGeoBlockInputModel.getAuthToken());
-                httppost.addHeader("ip", this.checkGeoBlockInputModel.getIp());
+                httppost.addHeader(CommonConstants.AUTH_TOKEN, this.checkGeoBlockInputModel.getAuthToken());
+                httppost.addHeader(CommonConstants.IP, this.checkGeoBlockInputModel.getIp());
 
 
                 // Execute HTTP Post Request
