@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.RegisterUserPaymentInputModel;
 import com.home.apisdk.apiModel.RegisterUserPaymentOutputModel;
 
@@ -60,25 +61,25 @@ public class RegisterUserPaymentAsyntask extends AsyncTask<RegisterUserPaymentIn
             HttpPost httppost = new HttpPost(APIUrlConstant.getRegisterUserPaymentUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.registerUserPaymentInputModel.getAuthToken());
-            httppost.addHeader("user_id", this.registerUserPaymentInputModel.getUser_id());
-            httppost.addHeader("card_last_fourdigit", this.registerUserPaymentInputModel.getCard_last_fourdigit());
-            httppost.addHeader("card_name", this.registerUserPaymentInputModel.getCard_name());
-            httppost.addHeader("card_number", this.registerUserPaymentInputModel.getCard_number());
-            httppost.addHeader("card_type", this.registerUserPaymentInputModel.getCard_type());
-            httppost.addHeader("country", this.registerUserPaymentInputModel.getCountry());
-            httppost.addHeader("currency_id", this.registerUserPaymentInputModel.getCurrency_id());
-            httppost.addHeader("cvv", this.registerUserPaymentInputModel.getCvv());
-            httppost.addHeader("email", this.registerUserPaymentInputModel.getEmail());
-            httppost.addHeader("episode_id", this.registerUserPaymentInputModel.getEpisode_id());
-            httppost.addHeader("exp_month", this.registerUserPaymentInputModel.getExp_month());
-            httppost.addHeader("exp_year", this.registerUserPaymentInputModel.getExp_year());
-            httppost.addHeader("name", this.registerUserPaymentInputModel.getName());
-            httppost.addHeader("plan_id", this.registerUserPaymentInputModel.getPlan_id());
-            httppost.addHeader("season_id", this.registerUserPaymentInputModel.getSeason_id());
-            httppost.addHeader("profile_id", this.registerUserPaymentInputModel.getProfile_id());
-            httppost.addHeader("token", this.registerUserPaymentInputModel.getToken());
-            httppost.addHeader("coupon_code",this.registerUserPaymentInputModel.getCouponCode());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.registerUserPaymentInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.USER_ID, this.registerUserPaymentInputModel.getUser_id());
+            httppost.addHeader(CommonConstants.CARD_LAST_FOUR_DIGIT, this.registerUserPaymentInputModel.getCard_last_fourdigit());
+            httppost.addHeader(CommonConstants.CARD_NAME, this.registerUserPaymentInputModel.getCard_name());
+            httppost.addHeader(CommonConstants.CARD_NUMBER, this.registerUserPaymentInputModel.getCard_number());
+            httppost.addHeader(CommonConstants.CARD_TYPE, this.registerUserPaymentInputModel.getCard_type());
+            httppost.addHeader(CommonConstants.COUNTRY, this.registerUserPaymentInputModel.getCountry());
+            httppost.addHeader(CommonConstants.CURRENCY_ID, this.registerUserPaymentInputModel.getCurrency_id());
+            httppost.addHeader(CommonConstants.CVV, this.registerUserPaymentInputModel.getCvv());
+            httppost.addHeader(CommonConstants.EMAIL, this.registerUserPaymentInputModel.getEmail());
+            httppost.addHeader(CommonConstants.EPISODE_ID, this.registerUserPaymentInputModel.getEpisode_id());
+            httppost.addHeader(CommonConstants.EXP_MONTH, this.registerUserPaymentInputModel.getExp_month());
+            httppost.addHeader(CommonConstants.EXP_YEAR, this.registerUserPaymentInputModel.getExp_year());
+            httppost.addHeader(CommonConstants.NAME, this.registerUserPaymentInputModel.getName());
+            httppost.addHeader(CommonConstants.PLAN_ID, this.registerUserPaymentInputModel.getPlan_id());
+            httppost.addHeader(CommonConstants.SEASON_ID, this.registerUserPaymentInputModel.getSeason_id());
+            httppost.addHeader(CommonConstants.PROFILE_ID, this.registerUserPaymentInputModel.getProfile_id());
+            httppost.addHeader(CommonConstants.TOKEN, this.registerUserPaymentInputModel.getToken());
+            httppost.addHeader(CommonConstants.COUPAN_CODE,this.registerUserPaymentInputModel.getCouponCode());
 
 
             try {

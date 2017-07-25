@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.GetCardListForPPVInputModel;
 import com.home.apisdk.apiModel.GetCardListForPPVOutputModel;
 
@@ -62,8 +63,8 @@ public class GetCardListForPPVAsynTask extends AsyncTask<GetCardListForPPVInputM
                 HttpPost httppost = new HttpPost(APIUrlConstant.getGetCardListForPpvUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-                httppost.addHeader("authToken", this.getCardListForPPVInputModel.getAuthToken());
-                httppost.addHeader("user_id", this.getCardListForPPVInputModel.getUser_id());
+                httppost.addHeader(CommonConstants.AUTH_TOKEN, this.getCardListForPPVInputModel.getAuthToken());
+                httppost.addHeader(CommonConstants.USER_ID, this.getCardListForPPVInputModel.getUser_id());
 
 
                 // Execute HTTP Post Request

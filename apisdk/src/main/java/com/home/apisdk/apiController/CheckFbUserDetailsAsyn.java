@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.CheckFbUserDetailsInput;
 
 import org.apache.http.HttpResponse;
@@ -59,8 +60,8 @@ public class CheckFbUserDetailsAsyn extends AsyncTask<CheckFbUserDetailsInput,Vo
             HttpPost httppost = new HttpPost(APIUrlConstant.getFbUserExistsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.checkFbUserDetailsInput.getAuthToken());
-            httppost.addHeader("fb_userid", this.checkFbUserDetailsInput.getFb_userid());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.checkFbUserDetailsInput.getAuthToken());
+            httppost.addHeader(CommonConstants.FB_USER_ID, this.checkFbUserDetailsInput.getFb_userid());
 
 
             try {

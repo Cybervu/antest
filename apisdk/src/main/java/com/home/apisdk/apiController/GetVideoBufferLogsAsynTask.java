@@ -7,6 +7,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.VideoBufferLogsInputModel;
 import com.home.apisdk.apiModel.VideoBufferLogsOutputModel;
 
@@ -70,18 +71,18 @@ public class GetVideoBufferLogsAsynTask extends AsyncTask<VideoBufferLogsInputMo
                 conn.setDoOutput(true);
 
                 Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("authToken", this.videoBufferLogsInputModel.getAuthToken())
-                        .appendQueryParameter("user_id", this.videoBufferLogsInputModel.getUserId())
-                        .appendQueryParameter("ip_address", this.videoBufferLogsInputModel.getIpAddress())
-                        .appendQueryParameter("movie_id", this.videoBufferLogsInputModel.getMuviUniqueId())
-                        .appendQueryParameter("episode_id", this.videoBufferLogsInputModel.getEpisodeStreamUniqueId())
-                        .appendQueryParameter("log_id", this.videoBufferLogsInputModel.getBufferLogId())
-                        .appendQueryParameter("resolution", this.videoBufferLogsInputModel.getVideoResolution())
-                        .appendQueryParameter("device_type", this.videoBufferLogsInputModel.getDeviceType())
-                        .appendQueryParameter("start_time", this.videoBufferLogsInputModel.getBufferStartTime())
-                        .appendQueryParameter("end_time", this.videoBufferLogsInputModel.getBufferEndTime())
-                        .appendQueryParameter("log_unique_id", this.videoBufferLogsInputModel.getBufferLogUniqueId())
-                        .appendQueryParameter("location", this.videoBufferLogsInputModel.getLocation());
+                        .appendQueryParameter(CommonConstants.AUTH_TOKEN, this.videoBufferLogsInputModel.getAuthToken())
+                        .appendQueryParameter(CommonConstants.USER_ID, this.videoBufferLogsInputModel.getUserId())
+                        .appendQueryParameter(CommonConstants.IP_ADDRESS, this.videoBufferLogsInputModel.getIpAddress())
+                        .appendQueryParameter(CommonConstants.MOVIE_ID, this.videoBufferLogsInputModel.getMuviUniqueId())
+                        .appendQueryParameter(CommonConstants.EPISODE_ID, this.videoBufferLogsInputModel.getEpisodeStreamUniqueId())
+                        .appendQueryParameter(CommonConstants.LOG_ID, this.videoBufferLogsInputModel.getBufferLogId())
+                        .appendQueryParameter(CommonConstants.RESOLUTION, this.videoBufferLogsInputModel.getVideoResolution())
+                        .appendQueryParameter(CommonConstants.DEVICE_TYPE, this.videoBufferLogsInputModel.getDeviceType())
+                        .appendQueryParameter(CommonConstants.START_TIME, this.videoBufferLogsInputModel.getBufferStartTime())
+                        .appendQueryParameter(CommonConstants.END_TIME, this.videoBufferLogsInputModel.getBufferEndTime())
+                        .appendQueryParameter(CommonConstants.LOG_UNIQUE_ID, this.videoBufferLogsInputModel.getBufferLogUniqueId())
+                        .appendQueryParameter(CommonConstants.LOCATION, this.videoBufferLogsInputModel.getLocation());
 
                 String query = builder.build().getEncodedQuery();
 

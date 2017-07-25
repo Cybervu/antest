@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.GetImageForDownloadInputModel;
 import com.home.apisdk.apiModel.GetImageForDownloadOutputModel;
 
@@ -59,7 +60,7 @@ public class GetImageForDownloadAsynTask extends AsyncTask<GetImageForDownloadIn
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetImageForDownloadUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.getImageForDownloadInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.getImageForDownloadInputModel.getAuthToken());
 
 
             // Execute HTTP Post Request

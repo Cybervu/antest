@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.ResumeVideoLogDetailsInput;
 
 import org.json.JSONException;
@@ -71,13 +72,13 @@ public class ResumeVideoLogDetailsAsync extends AsyncTask<ResumeVideoLogDetailsI
                 conn.setDoOutput(true);
 
                 Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("authToken", this.resumeVideoLogDetailsInput.getAuthToken())
-                        .appendQueryParameter("user_id", this.resumeVideoLogDetailsInput.getUser_id())
-                        .appendQueryParameter("ip_address", this.resumeVideoLogDetailsInput.getIp_address())
-                        .appendQueryParameter("movie_id", this.resumeVideoLogDetailsInput.getMovie_id())
-                        .appendQueryParameter("episode_id", this.resumeVideoLogDetailsInput.getEpisode_id())
-                        .appendQueryParameter("played_length", this.resumeVideoLogDetailsInput.getPlayed_length())
-                        .appendQueryParameter("watch_status", this.resumeVideoLogDetailsInput.getWatch_status());
+                        .appendQueryParameter(CommonConstants.AUTH_TOKEN, this.resumeVideoLogDetailsInput.getAuthToken())
+                        .appendQueryParameter(CommonConstants.USER_ID, this.resumeVideoLogDetailsInput.getUser_id())
+                        .appendQueryParameter(CommonConstants.IP_ADDRESS, this.resumeVideoLogDetailsInput.getIp_address())
+                        .appendQueryParameter(CommonConstants.MOVIE_ID, this.resumeVideoLogDetailsInput.getMovie_id())
+                        .appendQueryParameter(CommonConstants.EPISODE_ID, this.resumeVideoLogDetailsInput.getEpisode_id())
+                        .appendQueryParameter(CommonConstants.PLAYED_LENGTH, this.resumeVideoLogDetailsInput.getPlayed_length())
+                        .appendQueryParameter(CommonConstants.WATCH_STATUS, this.resumeVideoLogDetailsInput.getWatch_status());
 
                 String query = builder.build().getEncodedQuery();
 

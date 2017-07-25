@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.GetVoucherPlanInputModel;
 import com.home.apisdk.apiModel.GetVoucherPlanOutputModel;
 
@@ -59,11 +60,11 @@ public class GetVoucherPlanAsynTask extends AsyncTask<GetVoucherPlanInputModel, 
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetVoucherPlanUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.getVoucherPlanInputModel.getAuthToken());
-            httppost.addHeader("movie_id", this.getVoucherPlanInputModel.getMovie_id());
-            httppost.addHeader("stream_id", this.getVoucherPlanInputModel.getStream_id());
-            httppost.addHeader("season", this.getVoucherPlanInputModel.getSeason());
-            httppost.addHeader("user_id", this.getVoucherPlanInputModel.getUser_id());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.getVoucherPlanInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.MOVIE_ID, this.getVoucherPlanInputModel.getMovie_id());
+            httppost.addHeader(CommonConstants.STREAM_ID, this.getVoucherPlanInputModel.getStream_id());
+            httppost.addHeader(CommonConstants.SEASON, this.getVoucherPlanInputModel.getSeason());
+            httppost.addHeader(CommonConstants.USER_ID, this.getVoucherPlanInputModel.getUser_id());
 
 
             // Execute HTTP Post Request

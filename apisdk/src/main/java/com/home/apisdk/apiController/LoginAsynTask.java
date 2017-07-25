@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.Login_input;
 import com.home.apisdk.apiModel.Login_output;
 
@@ -60,13 +61,13 @@ public class LoginAsynTask extends AsyncTask<Login_input, Void, Void> {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getLoginUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader("authToken", this.login_input.getAuthToken());
-            httppost.addHeader("email", this.login_input.getEmail());
-            httppost.addHeader("password", this.login_input.getPassword());
-            httppost.addHeader("lang_code", this.login_input.getLang_code());
-            httppost.addHeader("device_id", this.login_input.getDevice_id());
-            httppost.addHeader("google_id", this.login_input.getGoogle_id());
-            httppost.addHeader("device_type", "1");
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.login_input.getAuthToken());
+            httppost.addHeader(CommonConstants.EMAIL, this.login_input.getEmail());
+            httppost.addHeader(CommonConstants.PASSWORD, this.login_input.getPassword());
+            httppost.addHeader(CommonConstants.LANG_CODE, this.login_input.getLang_code());
+            httppost.addHeader(CommonConstants.DEVICE_ID, this.login_input.getDevice_id());
+            httppost.addHeader(CommonConstants.GOOGLE_ID, this.login_input.getGoogle_id());
+            httppost.addHeader(CommonConstants.DEVICE_TYPE, "1");
 
             // Execute HTTP Post Request
             try {

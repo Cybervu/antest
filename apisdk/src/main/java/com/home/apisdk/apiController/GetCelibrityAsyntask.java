@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.CelibrityInputModel;
 import com.home.apisdk.apiModel.CelibrityOutputModel;
 
@@ -61,9 +62,9 @@ public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel,Void ,Vo
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetCelibrityUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.celibrityInputModel.getAuthToken());
-            httppost.addHeader("movie_id", this.celibrityInputModel.getMovie_id());
-            httppost.addHeader("lang_code",this.celibrityInputModel.getLang_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.celibrityInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.MOVIE_ID, this.celibrityInputModel.getMovie_id());
+            httppost.addHeader(CommonConstants.LANG_CODE,this.celibrityInputModel.getLang_code());
 
             Log.v("MUVISDK","lang_code = "+ this.celibrityInputModel.getLang_code());
             Log.v("MUVISDK","authToken = "+ this.celibrityInputModel.getAuthToken());

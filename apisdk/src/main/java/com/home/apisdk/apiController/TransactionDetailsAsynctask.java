@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.TransactionInputModel;
 import com.home.apisdk.apiModel.TransactionOutputModel;
 
@@ -60,9 +61,9 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getTransactionUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader("authToken", this.transactionInputModel.getAuthToken());
-            httppost.addHeader("user_id", this.transactionInputModel.getUser_id());
-            httppost.addHeader("id", this.transactionInputModel.getId());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.transactionInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.USER_ID, this.transactionInputModel.getUser_id());
+            httppost.addHeader(CommonConstants.ID, this.transactionInputModel.getId());
 
             // Execute HTTP Post Request
             try {

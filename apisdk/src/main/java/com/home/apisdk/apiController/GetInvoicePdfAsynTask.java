@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.GetInvoicePdfInputModel;
 import com.home.apisdk.apiModel.GetInvoicePdfOutputModel;
 
@@ -58,11 +59,11 @@ public class GetInvoicePdfAsynTask extends AsyncTask<GetInvoicePdfInputModel, Vo
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetInvoicePdfUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.getInvoicePdfInputModel.getAuthToken());
-            httppost.addHeader("id", this.getInvoicePdfInputModel.getId());
-            httppost.addHeader("user_id", this.getInvoicePdfInputModel.getUser_id());
-            httppost.addHeader("device_type", this.getInvoicePdfInputModel.getDevice_type());
-            httppost.addHeader("lang_code", this.getInvoicePdfInputModel.getLang_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.getInvoicePdfInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.ID, this.getInvoicePdfInputModel.getId());
+            httppost.addHeader(CommonConstants.USER_ID, this.getInvoicePdfInputModel.getUser_id());
+            httppost.addHeader(CommonConstants.DEVICE_TYPE, this.getInvoicePdfInputModel.getDevice_type());
+            httppost.addHeader(CommonConstants.LANG_CODE, this.getInvoicePdfInputModel.getLang_code());
             // Execute HTTP Post Request
             try {
                 HttpResponse response = httpclient.execute(httppost);

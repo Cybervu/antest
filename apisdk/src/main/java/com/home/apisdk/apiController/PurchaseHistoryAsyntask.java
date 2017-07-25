@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.PurchaseHistoryInputModel;
 import com.home.apisdk.apiModel.PurchaseHistoryOutputModel;
 
@@ -62,10 +63,10 @@ public class PurchaseHistoryAsyntask extends AsyncTask<PurchaseHistoryInputModel
             HttpPost httppost = new HttpPost(APIUrlConstant.getPurchaseHistoryUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.purchaseHistoryInputModel.getAuthToken());
-            httppost.addHeader("user_id", this.purchaseHistoryInputModel.getUser_id());
-            httppost.addHeader("lang_code",this.purchaseHistoryInputModel.getLang_code());
-            httppost.addHeader("id",this.purchaseHistoryInputModel.getId());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.purchaseHistoryInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.USER_ID, this.purchaseHistoryInputModel.getUser_id());
+            httppost.addHeader(CommonConstants.LANG_CODE,this.purchaseHistoryInputModel.getLang_code());
+            httppost.addHeader(CommonConstants.ID,this.purchaseHistoryInputModel.getId());
 
 
             try {

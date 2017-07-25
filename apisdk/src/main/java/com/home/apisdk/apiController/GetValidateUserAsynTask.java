@@ -7,6 +7,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 
@@ -78,13 +79,13 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
                 Log.v("MUVISDK","this.validateUserInput.getUserId()"+this.validateUserInput.getPurchaseType());
 
                 Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("authToken", this.validateUserInput.getAuthToken())
-                        .appendQueryParameter("user_id", this.validateUserInput.getUserId())
-                        .appendQueryParameter("movie_id", this.validateUserInput.getMuviUniqueId())
-                        .appendQueryParameter("episode_id", this.validateUserInput.getEpisodeStreamUniqueId())
-                        .appendQueryParameter("season_id", this.validateUserInput.getSeasonId())
-                        .appendQueryParameter("lang_code", this.validateUserInput.getLanguageCode())
-                        .appendQueryParameter("purchase_type", this.validateUserInput.getPurchaseType());
+                        .appendQueryParameter(CommonConstants.AUTH_TOKEN, this.validateUserInput.getAuthToken())
+                        .appendQueryParameter(CommonConstants.USER_ID, this.validateUserInput.getUserId())
+                        .appendQueryParameter(CommonConstants.MOVIE_ID, this.validateUserInput.getMuviUniqueId())
+                        .appendQueryParameter(CommonConstants.EPISODE_ID, this.validateUserInput.getEpisodeStreamUniqueId())
+                        .appendQueryParameter(CommonConstants.SEASON_ID, this.validateUserInput.getSeasonId())
+                        .appendQueryParameter(CommonConstants.LANG_CODE, this.validateUserInput.getLanguageCode())
+                        .appendQueryParameter(CommonConstants.PURCHASE_TYPE, this.validateUserInput.getPurchaseType());
                 String query = builder.build().getEncodedQuery();
 
                 Log.v("MUVISDK", "authToken" +this.validateUserInput.getAuthToken());

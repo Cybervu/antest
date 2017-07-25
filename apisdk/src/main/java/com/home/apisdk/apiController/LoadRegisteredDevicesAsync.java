@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.LoadRegisteredDevicesInput;
 import com.home.apisdk.apiModel.LoadRegisteredDevicesOutput;
 
@@ -73,10 +74,10 @@ public class LoadRegisteredDevicesAsync extends AsyncTask<LoadRegisteredDevicesI
                 conn.setDoOutput(true);
 
                 Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("authToken", this.loadRegisteredDevicesInput.getAuthToken())
-                        .appendQueryParameter("user_id", this.loadRegisteredDevicesInput.getUser_id())
-                        .appendQueryParameter("device", this.loadRegisteredDevicesInput.getDevice())
-                        .appendQueryParameter("lang_code", this.loadRegisteredDevicesInput.getLang_code());
+                        .appendQueryParameter(CommonConstants.AUTH_TOKEN, this.loadRegisteredDevicesInput.getAuthToken())
+                        .appendQueryParameter(CommonConstants.USER_ID, this.loadRegisteredDevicesInput.getUser_id())
+                        .appendQueryParameter(CommonConstants.DEVICE, this.loadRegisteredDevicesInput.getDevice())
+                        .appendQueryParameter(CommonConstants.LANG_CODE, this.loadRegisteredDevicesInput.getLang_code());
                 String query = builder.build().getEncodedQuery();
 
 

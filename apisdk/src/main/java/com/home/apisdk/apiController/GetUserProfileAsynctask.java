@@ -61,10 +61,10 @@ public class GetUserProfileAsynctask extends AsyncTask<Get_UserProfile_Input, Vo
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetProfileDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.get_userProfile_input.getAuthToken());
-            httppost.addHeader("email", this.get_userProfile_input.getEmail());
-            httppost.addHeader("user_id", this.get_userProfile_input.getUser_id());
-            httppost.addHeader("lang_code", this.get_userProfile_input.getLang_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.get_userProfile_input.getAuthToken());
+            httppost.addHeader(CommonConstants.EMAIL, this.get_userProfile_input.getEmail());
+            httppost.addHeader(CommonConstants.USER_ID, this.get_userProfile_input.getUser_id());
+            httppost.addHeader(CommonConstants.LANG_CODE, this.get_userProfile_input.getLang_code());
 
             // Execute HTTP Post Request
             try {

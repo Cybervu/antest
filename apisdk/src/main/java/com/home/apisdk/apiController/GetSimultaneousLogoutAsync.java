@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.SimultaneousLogoutInput;
 
 import org.apache.http.HttpResponse;
@@ -57,9 +58,9 @@ public class GetSimultaneousLogoutAsync extends AsyncTask<SimultaneousLogoutInpu
             HttpPost httppost = new HttpPost(APIUrlConstant.getLogoutAll());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.simultaneousLogoutInput.getAuthToken());
-            httppost.addHeader("device_type", this.simultaneousLogoutInput.getDevice_type());
-            httppost.addHeader("email_id", this.simultaneousLogoutInput.getEmail_id());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.simultaneousLogoutInput.getAuthToken());
+            httppost.addHeader(CommonConstants.DEVICE_TYPE, this.simultaneousLogoutInput.getDevice_type());
+            httppost.addHeader(CommonConstants.EMAIL_ID, this.simultaneousLogoutInput.getEmail_id());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.AuthUserPaymentInfoInputModel;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 
@@ -55,8 +56,8 @@ public class GetTranslateLanguageAsync extends AsyncTask<Void,Void,String> {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(urlRouteList);
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader("authToken",languageListInputModel.getAuthToken());
-            httppost.addHeader("lang_code", languageListInputModel.getLangCode());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN,languageListInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.LANG_CODE, languageListInputModel.getLangCode());
 
 
             // Execute HTTP Post Request

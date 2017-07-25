@@ -7,6 +7,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.VideoLogsInputModel;
 
 import org.json.JSONException;
@@ -72,15 +73,15 @@ public class GetVideoLogsAsynTask extends AsyncTask<VideoLogsInputModel, Void, V
                 conn.setDoOutput(true);
 
                 Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("authToken", this.videoLogsInputModel.getAuthToken())
-                        .appendQueryParameter("user_id", this.videoLogsInputModel.getUserId())
-                        .appendQueryParameter("ip_address", this.videoLogsInputModel.getIpAddress())
-                        .appendQueryParameter("movie_id", this.videoLogsInputModel.getMuviUniqueId())
-                        .appendQueryParameter("episode_id", this.videoLogsInputModel.getEpisodeStreamUniqueId())
-                        .appendQueryParameter("played_length", this.videoLogsInputModel.getPlayedLength())
-                        .appendQueryParameter("watch_status", this.videoLogsInputModel.getWatchStatus())
-                        .appendQueryParameter("device_type", this.videoLogsInputModel.getDeviceType())
-                        .appendQueryParameter("log_id", this.videoLogsInputModel.getVideoLogId());
+                        .appendQueryParameter(CommonConstants.AUTH_TOKEN, this.videoLogsInputModel.getAuthToken())
+                        .appendQueryParameter(CommonConstants.USER_ID, this.videoLogsInputModel.getUserId())
+                        .appendQueryParameter(CommonConstants.IP_ADDRESS, this.videoLogsInputModel.getIpAddress())
+                        .appendQueryParameter(CommonConstants.MOVIE_ID, this.videoLogsInputModel.getMuviUniqueId())
+                        .appendQueryParameter(CommonConstants.EPISODE_ID, this.videoLogsInputModel.getEpisodeStreamUniqueId())
+                        .appendQueryParameter(CommonConstants.PLAYED_LENGTH, this.videoLogsInputModel.getPlayedLength())
+                        .appendQueryParameter(CommonConstants.WATCH_STATUS, this.videoLogsInputModel.getWatchStatus())
+                        .appendQueryParameter(CommonConstants.DEVICE_TYPE, this.videoLogsInputModel.getDeviceType())
+                        .appendQueryParameter(CommonConstants.LOG_ID, this.videoLogsInputModel.getVideoLogId());
                 String query = builder.build().getEncodedQuery();
 
                 OutputStream os = conn.getOutputStream();

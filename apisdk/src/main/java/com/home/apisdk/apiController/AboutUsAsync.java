@@ -58,8 +58,8 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader(CommonConstants.AUTH_TOKEN, this.aboutUsInput.getAuthToken());
-            httppost.addHeader("permalink", this.aboutUsInput.getPermalink());
-            httppost.addHeader("lang_code", this.aboutUsInput.getLang_code());
+            httppost.addHeader(CommonConstants.PERMALINK, this.aboutUsInput.getPermalink());
+            httppost.addHeader(CommonConstants.LANG_CODE, this.aboutUsInput.getLang_code());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);
