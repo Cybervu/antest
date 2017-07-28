@@ -62,22 +62,18 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         GetLanguageListAsynTask.GetLanguageList,
         GetGenreListAsynctask.GenreList, GetUserProfileAsynctask.Get_UserProfile, GetTranslateLanguageAsync.GetTranslateLanguageInfoListner {
 
-    String[] genreArrToSend;
-    String[] genreValueArrayToSend;
+    private String[] genreArrToSend;
+    private String[] genreValueArrayToSend;
+    private RelativeLayout noInternetLayout;
+    private RelativeLayout geoBlockedLayout;
+    private String default_Language = "";
+    private ArrayList<LanguageModel> languageModels = new ArrayList<>();
+    private TextView noInternetTextView,geoTextView;
 
-    RelativeLayout noInternetLayout;
-    RelativeLayout geoBlockedLayout;
-    String default_Language = "";
-    ArrayList<LanguageModel> languageModels = new ArrayList<>();
-    TextView noInternetTextView;
-    TextView geoTextView;
+    private ArrayList<String> genreArrayList = new ArrayList<String>();
+    private ArrayList<String> genreValueArrayList = new ArrayList<String>();
 
-    ArrayList<String> genreArrayList = new ArrayList<String>();
-    ArrayList<String> genreValueArrayList = new ArrayList<String>();
-
-    String User_Id = "";
-    String Email_Id = "";
-    String isSubscribed = "0";
+    private String user_Id = "", email_Id = "",isSubscribed = "0";
 
     //============================Added For FCM===========================//
     Timer GoogleIdGeneraterTimer;
@@ -95,14 +91,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
     PreferenceManager preferenceManager;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        // TODO Auto-generated method stub
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen);
+
+    private void _init(){
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.release.cmaxtv",  // replace with your unique package name
@@ -165,8 +155,17 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 geoBlockedLayout.setVisibility(View.GONE);
             }
         }
+    }
 
-
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash_screen);
+        _init();
     }
 
     @Override
@@ -422,10 +421,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 .trim()).equals("1")) {
 
             if (preferenceManager != null) {
-                User_Id = preferenceManager.getUseridFromPref();
-                Email_Id = preferenceManager.getEmailIdFromPref();
+                user_Id = preferenceManager.getUseridFromPref();
+                email_Id = preferenceManager.getEmailIdFromPref();
 
-                if (User_Id != null && Email_Id != null) {
+                if (user_Id != null && email_Id != null) {
                     Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
                     get_userProfile_input.setAuthToken(Util.authTokenStr);
                     get_userProfile_input.setEmail(get_userProfile_input.getEmail());
@@ -1162,10 +1161,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //                    .trim()).equals("1")) {
 //
 //                if (pref != null) {
-//                    User_Id = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-//                    Email_Id = pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
+//                    user_Id = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+//                    email_Id = pref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
 //
-//                    if (User_Id != null && Email_Id != null) {
+//                    if (user_Id != null && email_Id != null) {
 //
 //                        AsynLoadProfileDetails asynLoadProfileDetails = new AsynLoadProfileDetails();
 //                        asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
