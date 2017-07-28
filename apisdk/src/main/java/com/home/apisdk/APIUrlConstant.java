@@ -52,6 +52,57 @@ public class APIUrlConstant {
     public static  String LogoutAll = "LogoutAll";
     public static  String fbUserExistsUrl = "getFbUserStatus";
     public static  String AboutUs = "getStaticPagedetails";
+    public static  String ViewContentRating = "ViewContentRatingListner";
+    public static  String AddContentRating = "AddContentRatingListner";
+    public static  String ViewFavorite = "ViewFavouriteListener";
+    public static  String AddtoFavlist = "AddtoFavlist";
+    public static  String DeleteFavList = "DeleteFavList";
+    public static  String GetMenusUrl = "GetMenus";
+    public static  String UpdateGoogleid = "UpdateGoogleid";
+
+    public static String getGetCastDetails() {
+        return BASE_URl+GetCastDetails;
+    }
+
+    public static  String GetCastDetails = "getCastDetail";
+
+    public static String getUpdateGoogleid() {
+        return BASE_URl+UpdateGoogleid;
+    }
+
+
+    public static String getGetMenusUrl() {
+        return BASE_URl+GetMenusUrl;
+    }
+
+    public static String getViewFavorite() {
+        return BASE_URl+ViewFavorite;
+    }
+
+    public static String getAddtoFavlist() {
+        return BASE_URl+AddtoFavlist;
+    }
+
+    public static String getDeleteFavList() {
+        return BASE_URl+DeleteFavList;
+    }
+
+
+
+
+
+
+
+
+    public static String getAddContentRating() {
+        return BASE_URl+AddContentRating;
+    }
+
+
+
+    public static String getViewContentRating() {
+        return BASE_URl+ViewContentRating;
+    }
 
     public static String getAddSubscriptionUrl() {
         return BASE_URl+addSubscriptionUrl;
