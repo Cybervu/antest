@@ -7,6 +7,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 
@@ -169,21 +170,21 @@ public class GetLanguageListAsynTask extends AsyncTask<LanguageListInputModel, V
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onGetLanguageListPreExecuteStarted();
-           /* status= 0;
-            responseStr = "0";*/
-           /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+            status= 0;
+            responseStr = "0";
+            if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
                 message = "Packge Name Not Matched";
-                listener.onGetLanguageListPostExecuteCompleted(languageListOutputArray, status, message);
+                listener.onGetLanguageListPostExecuteCompleted(languageListOutputArray, status, message,defaultLanguage);
                 return;
             }
             if(CommonConstants.hashKey.equals(""))
             {
                 this.cancel(true);
                 message = "Hash Key Is Not Available. Please Initialize The SDK";
-                listener.onGetLanguageListPostExecuteCompleted(languageListOutputArray, status, message);
-            }*/
+                listener.onGetLanguageListPostExecuteCompleted(languageListOutputArray, status, message,defaultLanguage);
+            }
     }
 
 

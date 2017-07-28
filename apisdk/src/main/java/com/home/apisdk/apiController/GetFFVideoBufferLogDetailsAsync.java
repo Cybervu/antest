@@ -158,6 +158,18 @@ public class GetFFVideoBufferLogDetailsAsync extends AsyncTask<VideoBufferLogsIn
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onGetFFVideoBufferLogsPreExecuteStarted();
+        status = 0;
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+            this.cancel(true);
+            message = "Packge Name Not Matched";
+            listener.onGetFFVideoBufferLogsPostExecuteCompleted(videoBufferLogsOutputModel, status, message);
+            return;
+        }
+        if (CommonConstants.hashKey.equals("")) {
+            this.cancel(true);
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
+            listener.onGetFFVideoBufferLogsPostExecuteCompleted(videoBufferLogsOutputModel, status, message);
+        }
     }
 
     @Override

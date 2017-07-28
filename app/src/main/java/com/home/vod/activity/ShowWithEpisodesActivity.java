@@ -48,6 +48,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
@@ -1288,7 +1289,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
 
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.detailsUrl.trim());
+                HttpPost httppost = new HttpPost(APIUrlConstant.getContentDetailsUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
                 httppost.addHeader("permalink", permalinkStr);
@@ -1982,7 +1983,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
 
         @Override
         protected Void doInBackground(Void... params) {
-            String urlRouteList = Util.rootUrl().trim() + Util.episodesUrl.trim();
+            String urlRouteList = APIUrlConstant.getGetEpisodeDetailsUrl();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);

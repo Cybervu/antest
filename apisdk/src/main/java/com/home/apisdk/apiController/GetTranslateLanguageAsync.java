@@ -87,12 +87,24 @@ public class GetTranslateLanguageAsync extends AsyncTask<Void,Void,String> {
     @Override
     protected void onPostExecute(String resultJsonString) {
         listener.onGetTranslateLanguagePostExecuteCompleted(resultJsonString,code);
+
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onGetTranslateLanguagePreExecuteStarted();
-        code= 0;
+        code = 0;
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+            this.cancel(true);
+            message = "Packge Name Not Matched";
+            listener.onGetTranslateLanguagePostExecuteCompleted(resultJsonString,code);
+            return;
+        }
+        if (CommonConstants.hashKey.equals("")) {
+            this.cancel(true);
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
+            listener.onGetTranslateLanguagePostExecuteCompleted(resultJsonString,code);
+        }
     }
 }

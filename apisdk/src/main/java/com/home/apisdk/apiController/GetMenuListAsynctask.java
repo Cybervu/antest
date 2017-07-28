@@ -145,7 +145,7 @@ public class GetMenuListAsynctask extends AsyncTask<MenuListInput,Void ,Void > {
         super.onPreExecute();
         listener.onGetMenuListPreExecuteStarted();
         code= 0;
-      /*  if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
@@ -157,7 +157,7 @@ public class GetMenuListAsynctask extends AsyncTask<MenuListInput,Void ,Void > {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onGetMenuListPostExecuteCompleted(menuListOutput,footermenuListOutput,code,message);
-        }*/
+        }
     }
 
     @Override

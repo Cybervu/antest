@@ -35,7 +35,7 @@ public class GetFeatureContentAsynTask extends AsyncTask<FeatureContentInputMode
     public interface GetFeatureContent {
         void onGetFeatureContentPreExecuteStarted();
 
-        void onGetFeatureContentPostExecuteCompleted(ArrayList<FeatureContentOutputModel> featureContentOutputModelArray, int status, String message);
+        void onGetFeatureContentPostExecuteCompleted(ArrayList<FeatureContentOutputModel> featureContentOutputModel, int status, String message);
     }
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
@@ -167,19 +167,19 @@ public class GetFeatureContentAsynTask extends AsyncTask<FeatureContentInputMode
         listener.onGetFeatureContentPreExecuteStarted();
         responseStr = "0";
         status = 0;
-           /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+            if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
                 message = "Packge Name Not Matched";
-                listener.onGetContentListPostExecuteCompleted(featureContentOutputModel,status,totalItems,message);
+                listener.onGetFeatureContentPostExecuteCompleted(featureContentOutputModel,status,message);
                 return;
             }
             if(CommonConstants.hashKey.equals(""))
             {
                 this.cancel(true);
                 message = "Hash Key Is Not Available. Please Initialize The SDK";
-                listener.onGetContentListPostExecuteCompleted(featureContentOutputModel,status,totalItems,message);
-            }*/
+                listener.onGetFeatureContentPostExecuteCompleted(featureContentOutputModel,status,message);
+            }
 
 
     }

@@ -36,6 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
 import com.home.apisdk.apiController.LogoutAsynctask;
@@ -1738,7 +1739,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.detailsUrl.trim());
+                HttpPost httppost = new HttpPost(APIUrlConstant.getContentDetailsUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
                 httppost.addHeader("permalink", permalinkStr);
@@ -2401,7 +2402,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.loadVideoUrl.trim());
+                HttpPost httppost = new HttpPost(APIUrlConstant.getVideoDetailsUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
                 httppost.addHeader("content_uniq_id", movieUniqueId);
@@ -3536,7 +3537,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = Util.rootUrl().trim() + Util.LanguageTranslation.trim();
+            String urlRouteList = APIUrlConstant.getLanguageTranslation();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);

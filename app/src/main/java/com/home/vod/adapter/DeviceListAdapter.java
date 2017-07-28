@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.home.apisdk.APIUrlConstant;
 import com.home.vod.R;
 import com.home.vod.activity.ManageDevices;
 import com.home.vod.preferences.PreferenceManager;
@@ -155,7 +156,7 @@ public class DeviceListAdapter extends BaseAdapter {
 
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.RemoveDevice.trim());
+                HttpPost httppost = new HttpPost(APIUrlConstant.getRemoveDevice());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
                 httppost.addHeader("user_id",preferenceManager.getUseridFromPref());

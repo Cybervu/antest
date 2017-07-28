@@ -29,7 +29,7 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
 
     public AuthUserPaymentInfoInputModel authUserPaymentInfoInputModel;
     String PACKAGE_NAME, message, responseStr,responseMessageStr;
-    int code;
+    int code,status;
 
     public interface AuthUserPaymentInfo {
         void onAuthUserPaymentInfoPreExecuteStarted();
@@ -150,17 +150,17 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
         super.onPreExecute();
         listener.onAuthUserPaymentInfoPreExecuteStarted();
         code = 0;
-     /*   if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
-            listener.onGetPlanListPostExecuteCompleted(planListOutput,code);
+            listener.onAuthUserPaymentInfoPostExecuteCompleted(authUserPaymentInfoOutputModel,code,message);
             return;
         }
         if(CommonConstants.hashKey.equals(""))
         {
             this.cancel(true);
-            listener.onGetPlanListPostExecuteCompleted(planListOutput,code);
-        }*/
+            listener.onAuthUserPaymentInfoPostExecuteCompleted(authUserPaymentInfoOutputModel,code,message);
+        }
 
     }
 

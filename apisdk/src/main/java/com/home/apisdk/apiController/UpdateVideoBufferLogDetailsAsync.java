@@ -155,6 +155,18 @@ public class UpdateVideoBufferLogDetailsAsync extends AsyncTask<VideoBufferLogsI
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onUpdateVideoBufferLogPreExecuteStarted();
+        status = 0;
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+            this.cancel(true);
+            message = "Packge Name Not Matched";
+            listener.onUpdateVideoBufferLogPostExecuteCompleted(videoBufferLogsOutputModel, status, message);
+            return;
+        }
+        if (CommonConstants.hashKey.equals("")) {
+            this.cancel(true);
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
+            listener.onUpdateVideoBufferLogPostExecuteCompleted(videoBufferLogsOutputModel, status, message);
+        }
     }
 
     @Override

@@ -54,6 +54,7 @@ import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiController.GetEpisodeDeatailsAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
@@ -2357,7 +2358,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
         @Override
         protected Void doInBackground(Void... params) {
-            String urlRouteList = Util.rootUrl().trim() + Util.episodesUrl.trim();
+            String urlRouteList = APIUrlConstant.getGetEpisodeDetailsUrl();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);

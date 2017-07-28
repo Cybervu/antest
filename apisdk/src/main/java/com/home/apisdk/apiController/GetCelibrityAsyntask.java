@@ -34,7 +34,7 @@ public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel,Void ,Vo
 
     public interface GetCelibrity{
         void onGetCelibrityPreExecuteStarted();
-        void onGetCelibrityPostExecuteCompleted(ArrayList<CelibrityOutputModel> celibrityOutputModel, int status,String msg);
+        void onGetCelibrityPostExecuteCompleted(ArrayList<CelibrityOutputModel> celibrityOutputModel, int code,String msg);
     }
 
     private GetCelibrity listener;
@@ -150,17 +150,17 @@ public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel,Void ,Vo
         super.onPreExecute();
         listener.onGetCelibrityPreExecuteStarted();
         code= 0;
-     /*   if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
-            listener.onGetPlanListPostExecuteCompleted(planListOutput,code);
+            listener.onGetCelibrityPostExecuteCompleted(celibrityOutputModel,code,msg);
             return;
         }
         if(CommonConstants.hashKey.equals(""))
         {
             this.cancel(true);
-            listener.onGetPlanListPostExecuteCompleted(planListOutput,code);
-        }*/
+            listener.onGetCelibrityPostExecuteCompleted(celibrityOutputModel,code,msg);
+        }
 
     }
 

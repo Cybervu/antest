@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiController.AuthUserPaymentInfoAsyntask;
 import com.home.apisdk.apiController.GetCardListForPPVAsynTask;
 import com.home.apisdk.apiController.GetPPVPaymentAsync;
@@ -2049,7 +2050,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
             }
 
 
-            String urlRouteList = Util.rootUrl().trim() + Util.userValidationUrl.trim();
+            String urlRouteList = APIUrlConstant.getValidateUserForContentUrl();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);

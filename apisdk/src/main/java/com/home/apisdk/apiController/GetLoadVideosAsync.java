@@ -28,7 +28,7 @@ import java.util.ArrayList;
 public class GetLoadVideosAsync extends AsyncTask<LoadVideoInput, Void, Void> {
 
     public LoadVideoInput loadVideoInput;
-    String PACKAGE_NAME, message, responseStr;
+    String PACKAGE_NAME, message, responseStr,status;
     int code;
 
     public interface LoadVideosAsync {
@@ -147,6 +147,18 @@ public class GetLoadVideosAsync extends AsyncTask<LoadVideoInput, Void, Void> {
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onLoadVideosAsyncPreExecuteStarted();
+        code = 0;
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+            this.cancel(true);
+            message = "Packge Name Not Matched";
+            listener.onLoadVideosAsyncPostExecuteCompleted(loadVideoOutputs,code,responseStr);
+            return;
+        }
+        if (CommonConstants.hashKey.equals("")) {
+            this.cancel(true);
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
+            listener.onLoadVideosAsyncPostExecuteCompleted(loadVideoOutputs,code,responseStr);
+        }
     }
 
     @Override

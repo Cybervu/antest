@@ -176,19 +176,19 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
         listener.onMyLibraryPreExecuteStarted();
         responseStr = "0";
         status = 0;
-           /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+            if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
                 message = "Packge Name Not Matched";
-                listener.onGetContentListPostExecuteCompleted(contentListOutput,status,totalItems,message);
+                listener.onMyLibraryPostExecuteCompleted(myLibraryOutputModel, status, totalItems, responseStr);
                 return;
             }
             if(CommonConstants.hashKey.equals(""))
             {
                 this.cancel(true);
                 message = "Hash Key Is Not Available. Please Initialize The SDK";
-                listener.onGetContentListPostExecuteCompleted(contentListOutput,status,totalItems,message);
-            }*/
+                listener.onMyLibraryPostExecuteCompleted(myLibraryOutputModel, status, totalItems, responseStr);
+            }
 
     }
 

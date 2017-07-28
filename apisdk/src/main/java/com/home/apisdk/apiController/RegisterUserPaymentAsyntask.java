@@ -125,17 +125,19 @@ public class RegisterUserPaymentAsyntask extends AsyncTask<RegisterUserPaymentIn
         super.onPreExecute();
         listener.onRegisterUserPaymentPreExecuteStarted();
         code = 0;
-     /*   if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
-            listener.onGetPlanListPostExecuteCompleted(planListOutput,code);
+            message = "Packge Name Not Matched";
+            listener.onRegisterUserPaymentPostExecuteCompleted(registerUserPaymentOutputModel, code);
             return;
         }
         if(CommonConstants.hashKey.equals(""))
         {
             this.cancel(true);
-            listener.onGetPlanListPostExecuteCompleted(planListOutput,code);
-        }*/
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
+            listener.onRegisterUserPaymentPostExecuteCompleted(registerUserPaymentOutputModel, code);
+        }
 
     }
 

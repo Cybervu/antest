@@ -129,19 +129,19 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
        // String s=forgotpassword_input.getPakagename();
         listener.onForgotpassDetailsPreExecuteStarted();
         status = 0;
-//        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
-//        {
-//            this.cancel(true);
-//            message = "Packge Name Not Matched";
-//            listener.onForgotpassDetailsPostExecuteCompleted(forgotpassword_output, status, message);
-//            return;
-//        }
-//        if(CommonConstants.hashKey.equals(""))
-//        {
-//            this.cancel(true);
-//            message = "Hash Key Is Not Available. Please Initialize The SDK";
-//            listener.onForgotpassDetailsPostExecuteCompleted(forgotpassword_output, status, message);
-//        }
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+       {
+           this.cancel(true);
+           message = "Packge Name Not Matched";
+           listener.onForgotpassDetailsPostExecuteCompleted(forgotpassword_output, status, message);
+           return;
+       }
+       if(CommonConstants.hashKey.equals(""))
+       {
+           this.cancel(true);
+           message = "Hash Key Is Not Available. Please Initialize The SDK";
+           listener.onForgotpassDetailsPostExecuteCompleted(forgotpassword_output, status, message);
+       }
     }
 
     @Override
