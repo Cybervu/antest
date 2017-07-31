@@ -116,6 +116,16 @@ public class Util {
     public static final String RemoveDevice = "RemoveDevice";
     public static final String ManageDevices = "ManageDevices";
 
+    public static final String ValidateVoucher = "ValidateVoucher";
+    public static final String VoucherSubscription = "VoucherSubscription";
+    public static final String ViewContentRating = "ViewContentRating";
+    public static final String AddContentRating = "AddContentRating";
+    public static final String filmographyUrl = "getCastDetail";
+    public static final String ViewFavorite = "ViewFavourite";
+    public static final String AddtoFavlist = "AddtoFavlist";
+    public static final String DeleteFavList = "DeleteFavList";
+    public static final String GetMenusUrl = "GetMenus";
+
 
     //==========Added For FCM===============//
 

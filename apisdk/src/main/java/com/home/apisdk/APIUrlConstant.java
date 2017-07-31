@@ -52,19 +52,49 @@ public class APIUrlConstant {
     public static  String LogoutAll = "LogoutAll";
     public static  String fbUserExistsUrl = "getFbUserStatus";
     public static  String AboutUs = "getStaticPagedetails";
-    public static  String ViewContentRating = "ViewContentRatingListner";
-    public static  String AddContentRating = "AddContentRatingListner";
     public static  String ViewFavorite = "ViewFavouriteListener";
     public static  String AddtoFavlist = "AddtoFavlist";
     public static  String DeleteFavList = "DeleteFavList";
     public static  String GetMenusUrl = "GetMenus";
     public static  String UpdateGoogleid = "UpdateGoogleid";
+    public static  String GetCastDetails = "getCastDetail";
+    public static final String ViewContentRating = "ViewContentRating";
+    public static final String AddContentRating = "AddContentRating";
+    public static  String addSubscriptionUrl = "ppvpayment";
+    public static final String ManageDevices = "ManageDevices";
+    public static  String VALIDATE_COUPON_CODE_URL = "validateCouponCode";
+    public static final String updateBufferLogUrl = "updateBufferLogs";
+    public static  String VIDEO_BUFFER_LOGS_URL = "bufferLogs";
+    public static  String VALIDATE_USER_FOR_CONTENT_URL = "isContentAuthorized";
+    public static  String IP_ADDRESS_URL = "https://api.ipify.org/?format=json";
+    public static  String GET_LANGUAGE_LIST_URL = "getLanguageList";
+    public static  String VIDEO_LOGS_URL = "videoLogs";
+
+
+
+    public static final String RemoveDevice = "RemoveDevice";
+
+
+    public static final String CheckIfUserLoggedIn = "CheckIfUserLoggedIn";
+
+
+
+
+
+    public static String getRemoveDevice() {
+        return BASE_URl+RemoveDevice;
+    }
+
+    public static String getCheckIfUserLoggedIn() {
+        return BASE_URl+CheckIfUserLoggedIn;
+    }
+
 
     public static String getGetCastDetails() {
         return BASE_URl+GetCastDetails;
     }
 
-    public static  String GetCastDetails = "getCastDetail";
+
 
     public static String getUpdateGoogleid() {
         return BASE_URl+UpdateGoogleid;
@@ -87,18 +117,9 @@ public class APIUrlConstant {
         return BASE_URl+DeleteFavList;
     }
 
-
-
-
-
-
-
-
     public static String getAddContentRating() {
         return BASE_URl+AddContentRating;
     }
-
-
 
     public static String getViewContentRating() {
         return BASE_URl+ViewContentRating;
@@ -108,17 +129,9 @@ public class APIUrlConstant {
         return BASE_URl+addSubscriptionUrl;
     }
 
-    public static  String addSubscriptionUrl = "ppvpayment";
-
-
     public static String getManageDevices() {
         return BASE_URl+ManageDevices;
     }
-
-    public static final String ManageDevices = "ManageDevices";
-
-
-
 
     public static String getAboutUs() {
         return BASE_URl+AboutUs;
@@ -312,20 +325,12 @@ public class APIUrlConstant {
         return BASE_URl+VALIDATE_USER_FOR_CONTENT_URL;
     }
 
-    public static  String VALIDATE_COUPON_CODE_URL = "validateCouponCode";
-
-
-    public static  String IP_ADDRESS_URL = "https://api.ipify.org/?format=json";
-    public static  String GET_LANGUAGE_LIST_URL = "getLanguageList";
-    public static  String VIDEO_LOGS_URL = "videoLogs";
 
     public static String getUpdateBufferLogUrl() {
         return BASE_URl+updateBufferLogUrl;
     }
 
-    public static final String updateBufferLogUrl = "updateBufferLogs";
-    public static  String VIDEO_BUFFER_LOGS_URL = "bufferLogs";
-    public static  String VALIDATE_USER_FOR_CONTENT_URL = "isContentAuthorized";
+
 
 
 
