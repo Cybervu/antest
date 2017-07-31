@@ -5,8 +5,8 @@ package com.home.apisdk;
  */
 
 public class CommonConstants {
-    public static String hashKey = "";
-    public static String user_Package_Name_At_Api = "";
+    public static String hashKey = "x";
+    public static String user_Package_Name_At_Api = "com.release.vishwamtv";
 
 
     //constant use in header

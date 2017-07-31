@@ -122,6 +122,18 @@ public class GetPPVPaymentAsync extends AsyncTask<RegisterUserPaymentInputModel,
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onGetPPVPaymentPreExecuteStarted();
+        code = 0;
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+            this.cancel(true);
+            message = "Packge Name Not Matched";
+            listener.onGetPPVPaymentPostExecuteCompleted(registerUserPaymentOutputModel,code,responseStr);
+            return;
+        }
+        if (CommonConstants.hashKey.equals("")) {
+            this.cancel(true);
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
+            listener.onGetPPVPaymentPostExecuteCompleted(registerUserPaymentOutputModel,code,responseStr);
+        }
     }
 
     @Override

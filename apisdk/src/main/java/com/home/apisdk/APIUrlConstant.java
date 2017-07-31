@@ -52,6 +52,11 @@ public class APIUrlConstant {
     public static  String LogoutAll = "LogoutAll";
     public static  String fbUserExistsUrl = "getFbUserStatus";
     public static  String AboutUs = "getStaticPagedetails";
+    public static  String RemoveDevice = "RemoveDevice";
+
+    public static String getRemoveDevice() {
+        return RemoveDevice;
+    }
     public static  String ViewFavorite = "ViewFavouriteListener";
     public static  String AddtoFavlist = "AddtoFavlist";
     public static  String DeleteFavList = "DeleteFavList";

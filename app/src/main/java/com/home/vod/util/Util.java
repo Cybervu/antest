@@ -57,14 +57,8 @@ public class Util {
     public static final String CAST_INTENT_KEY = "CAST";
     public static final String SEASON_INTENT_KEY = "SEASON";
 
-    //public static final String LOGIN_PREF = "VishwamLogin";
-    //public static final String COUNTRY_PREF = "VishwamCountry";
-    public static String LANGUAGE_SHARED_PRE = "VishwamLanguage";
-// public static String IS_LOGIN_SHARED_PRE = "VishwamLoginCheck";
-// public static String IS_LOGIN_PREF_KEY = "VishwamisLogin";
-// public static final String LANGUAGE_LIST_PREF = "VishwamLanguageListPref";
-// public static String GENRE_ARRAY_PREF_KEY = "genreArray";
-// public static String GENRE_VALUES_ARRAY_PREF_KEY = "genreValueArray";
+
+ public static String LANGUAGE_SHARED_PRE = "VishwamLanguage";
 
     public static final String loginUrl = "login";
     public static final String forgotpasswordUrl = "forgotPassword";

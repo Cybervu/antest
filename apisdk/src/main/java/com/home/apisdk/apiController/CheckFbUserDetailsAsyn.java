@@ -27,7 +27,7 @@ import java.io.IOException;
 public class CheckFbUserDetailsAsyn extends AsyncTask<CheckFbUserDetailsInput,Void ,Void > {
 
     public CheckFbUserDetailsInput checkFbUserDetailsInput;
-    String PACKAGE_NAME, responseStr;
+    String PACKAGE_NAME, responseStr,message;
     int isNewUserStr = 1;
     int code;
     JSONObject myJson = null;
@@ -95,6 +95,19 @@ public class CheckFbUserDetailsAsyn extends AsyncTask<CheckFbUserDetailsInput,Vo
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onCheckFbUserDetailsAsynPreExecuteStarted();
+
+        code = 0;
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+            this.cancel(true);
+            message = "Packge Name Not Matched";
+            listener.onCheckFbUserDetailsAsynPostExecuteCompleted(code);
+            return;
+        }
+        if (CommonConstants.hashKey.equals("")) {
+            this.cancel(true);
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
+            listener.onCheckFbUserDetailsAsynPostExecuteCompleted(code);
+        }
     }
 
     @Override

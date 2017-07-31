@@ -35,7 +35,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class GetFFVideoLogDetailsAsync extends AsyncTask<FFVideoLogDetailsInput, Void, Void> {
     public FFVideoLogDetailsInput ffVideoLogDetailsInput;
-    String responseStr;
+    String responseStr,message;
     int code;
     String PACKAGE_NAME, videoLogId = "";
 
@@ -144,6 +144,18 @@ public class GetFFVideoLogDetailsAsync extends AsyncTask<FFVideoLogDetailsInput,
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onGetFFVideoLogsPreExecuteStarted();
+        code = 0;
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+            this.cancel(true);
+            message = "Packge Name Not Matched";
+            listener.onGetFFVideoLogsPostExecuteCompleted(code,responseStr, videoLogId);
+            return;
+        }
+        if (CommonConstants.hashKey.equals("")) {
+            this.cancel(true);
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
+            listener.onGetFFVideoLogsPostExecuteCompleted(code, responseStr, videoLogId);
+        }
     }
 
     @Override
