@@ -77,5 +77,10 @@ public class CommonConstants {
     public static final String STREAM_UNIQ_ID="stream_uniq_id";
     public static final String INTERNET_SPEED="internet_speed";
     public static final String IS_PREORDER="is_preorder";
+    public static final String CONTENT_ID="content_id";
+    public static final String RATING="rating";
+    public static final String REVIEW="review";
+    public static final String MOVIE_UNIQ_ID="movie_uniq_id";
+    public static final String CONTENT_TYPE="content_type";
 
 }
