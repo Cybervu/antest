@@ -12,8 +12,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
         android:layout_below="@+id/toolbar"
+        android:fillViewport="true"
 
         >
 
@@ -104,29 +104,28 @@
 
                     <Spinner
                         android:id="@+id/languageSpinner"
+                        style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:popupBackground="#ffffff"
-                        android:theme="@style/ThemeOverlay.AppCompat.Light"
-                        android:spinnerMode="dropdown"
-                        android:layout_marginTop="15dp"
-                        style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                         android:layout_below="@+id/editConfirmPasswordStr"
+                        android:layout_marginTop="15dp"
+                        android:popupBackground="#ffffff"
+                        android:spinnerMode="dropdown"
+                        android:theme="@style/ThemeOverlay.AppCompat.Light"
 
                         />
 
 
                     <Spinner
                         android:id="@+id/countrySpinner"
+                        style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:popupBackground="#ffffff"
                         android:layout_below="@+id/languageSpinner"
                         android:layout_marginTop="15dp"
-                        android:theme="@style/ThemeOverlay.AppCompat.Light"
+                        android:popupBackground="#ffffff"
                         android:spinnerMode="dropdown"
-                        style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                        />
+                        android:theme="@style/ThemeOverlay.AppCompat.Light" />
 
 
                     <LinearLayout
@@ -170,22 +169,23 @@
                         android:layout_below="@+id/countrySpinner"
                         android:layout_marginTop="40dp"
                         android:background="@drawable/button_radious"
-                        android:textAllCaps="false"
                         android:stateListAnimator="@null"
+                        android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="@dimen/register_button" />
+
                     <LinearLayout
                         android:id="@+id/btnLogin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/registerButton"
+                        android:layout_marginTop="16dp"
                         android:background="@drawable/fbbg"
                         android:clickable="true"
-                        android:padding="6dp"
-                        android:layout_marginTop="16dp"
                         android:gravity="center_horizontal"
 
-                        android:layout_below="@+id/registerButton"
-                        android:orientation="horizontal" >
+                        android:orientation="horizontal"
+                        android:padding="6dp">
 
                         <ImageView
                             android:id="@+id/fbIcon"
@@ -202,10 +202,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_margin="5dp"
                             android:gravity="center"
+                            android:text="@string/fb_registration_text"
                             android:textColor="@color/fb_text_color"
-                            android:textSize="@dimen/fb_text_size"
 
-                            android:text="@string/fb_registration_text" />
+                            android:textSize="@dimen/fb_text_size" />
                     </LinearLayout>
 
                     <!--    <TextView android:text="Login With Facebook"
@@ -224,23 +224,23 @@
                             android:layout_height="wrap_content" />-->
 
                     <com.facebook.login.widget.LoginButton
-                        android:visibility="gone"
                         android:id="@+id/loginWithFacebookButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="30dp"
                         android:layout_marginTop="30dp"
-                        android:layout_marginBottom="30dp" />
+                        android:visibility="gone" />
                 </RelativeLayout>
 
                 <ImageView
                     android:id="@+id/registerImageView"
                     android:layout_width="@dimen/forgot_logo_width"
                     android:layout_height="@dimen/forgot_logo_height"
-                    android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/registerimg_margin_top"
                     android:background="@drawable/logo" />
+
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

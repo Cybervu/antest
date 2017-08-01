@@ -22,7 +22,7 @@
     <dimen name="forgot_text_size">16dp</dimen>
     <dimen name="pass_text_size">16dp</dimen>
     <dimen name="edit_text_size">16dp</dimen>
-    <dimen name="submit_text_size">14dp</dimen>
+    <dimen name="submit_text_size">12dp</dimen>
     <dimen name="listitemlayout_height">200dp</dimen>
     <dimen name="slider_height">210dp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
@@ -49,7 +49,7 @@
     <dimen name="fragmentimgview_width">120dp</dimen>
     <dimen name="fragmentimgview_height">120dp</dimen>
     <dimen name="view_margin_top">10dp</dimen>
-    <dimen name="registerimg_margin_top">190dp</dimen>
+    <dimen name="registerimg_margin_top">300dp</dimen>
     <dimen name="layout_padding_left">25dp</dimen>
     <dimen name="layout_padding_right">25dp</dimen>
     <dimen name="register_edittext_padding">17dp</dimen>

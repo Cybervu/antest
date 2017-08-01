@@ -95,7 +95,7 @@
                 <ImageView
                     android:id="@+id/bannerImageView"
                     android:layout_width="match_parent"
-                    android:layout_height="210dp"
+                    android:layout_height="@dimen/banerimg_height"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:adjustViewBounds="true"
@@ -104,7 +104,7 @@
                 <ImageView
                     android:id="@+id/bannerOverlay"
                     android:layout_width="match_parent"
-                    android:layout_height="210dp"
+                    android:layout_height="@dimen/banerimg_height"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:adjustViewBounds="true"
@@ -141,7 +141,7 @@
                         android:textAllCaps="false"
                         android:stateListAnimator="@null"
                         android:textColor="@color/preOrderButtonTextColor"
-                        android:textSize="14dp"
+                        android:textSize="@dimen/preorderbtn_text_size"
                         android:layout_marginRight="6dp"
                         android:visibility="gone"
                         />
@@ -157,7 +157,7 @@
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="14dp"
+                        android:textSize="@dimen/trailerbtn_text_size"
                         android:visibility="gone"
 
                         />
@@ -184,7 +184,7 @@
                         android:layout_marginLeft="10dp"
                         android:textColor="@color/textColor"
                         android:text=""
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/vdioduration_text_size" />
 
                     <TextView
                         android:id="@+id/videoCensorRatingTextView"
@@ -274,7 +274,7 @@
                     android:layout_marginTop="10dp"
                     android:visibility="gone" />
 
-                <com.home.vod.utils.ExpandableTextView
+                <com.home.vod.util.ExpandableTextView
                     android:id="@+id/videoStoryTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

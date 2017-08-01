@@ -46,7 +46,7 @@
     <dimen name="fragmentimgview_width">120dp</dimen>
     <dimen name="fragmentimgview_height">120dp</dimen>
     <dimen name="view_margin_top">10dp</dimen>
-    <dimen name="registerimg_margin_top">150dp</dimen>
+    <dimen name="registerimg_margin_top">300dp</dimen>
     <dimen name="layout_padding_left">10dp</dimen>
     <dimen name="layout_padding_right">10dp</dimen>
     <dimen name="register_edittext_padding">10dp</dimen>

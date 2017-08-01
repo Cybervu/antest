@@ -153,6 +153,19 @@
                         android:textSize="@dimen/login_text_size"
 
                         />
+                    <Button
+                        android:id="@+id/manage_devices"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/editNewPasswordStr"
+                        android:layout_marginTop="18dp"
+                        android:background="@drawable/button_radious"
+                        android:textAllCaps="false"
+                        android:stateListAnimator="@null"
+                        android:textColor="@color/buttonTextColor"
+                        android:textSize="17dp"
+
+                        />
 
 
 
