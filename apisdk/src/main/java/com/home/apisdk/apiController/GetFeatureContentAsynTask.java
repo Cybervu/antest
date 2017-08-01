@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.FeatureContentInputModel;
 import com.home.apisdk.apiModel.FeatureContentOutputModel;
 
@@ -34,7 +35,7 @@ public class GetFeatureContentAsynTask extends AsyncTask<FeatureContentInputMode
     public interface GetFeatureContent {
         void onGetFeatureContentPreExecuteStarted();
 
-        void onGetFeatureContentPostExecuteCompleted(ArrayList<FeatureContentOutputModel> featureContentOutputModelArray, int status, String message);
+        void onGetFeatureContentPostExecuteCompleted(ArrayList<FeatureContentOutputModel> featureContentOutputModel, int status, String message);
     }
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
@@ -62,9 +63,9 @@ public class GetFeatureContentAsynTask extends AsyncTask<FeatureContentInputMode
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetFeatureContentUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.featureContentInputModel.getAuthToken());
-            httppost.addHeader("section_id", this.featureContentInputModel.getSection_id());
-            httppost.addHeader("lang_code",this.featureContentInputModel.getLang_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.featureContentInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.SECTION_ID, this.featureContentInputModel.getSection_id());
+            httppost.addHeader(CommonConstants.LANG_CODE,this.featureContentInputModel.getLang_code());
 
             Log.v("MuviSDK","authToken = "+ this.featureContentInputModel.getAuthToken());
             Log.v("MuviSDK","section_id = "+ this.featureContentInputModel.getSection_id());
@@ -166,19 +167,19 @@ public class GetFeatureContentAsynTask extends AsyncTask<FeatureContentInputMode
         listener.onGetFeatureContentPreExecuteStarted();
         responseStr = "0";
         status = 0;
-           /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+            if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
                 message = "Packge Name Not Matched";
-                listener.onGetContentListPostExecuteCompleted(featureContentOutputModel,status,totalItems,message);
+                listener.onGetFeatureContentPostExecuteCompleted(featureContentOutputModel,status,message);
                 return;
             }
             if(CommonConstants.hashKey.equals(""))
             {
                 this.cancel(true);
                 message = "Hash Key Is Not Available. Please Initialize The SDK";
-                listener.onGetContentListPostExecuteCompleted(featureContentOutputModel,status,totalItems,message);
-            }*/
+                listener.onGetFeatureContentPostExecuteCompleted(featureContentOutputModel,status,message);
+            }
 
 
     }

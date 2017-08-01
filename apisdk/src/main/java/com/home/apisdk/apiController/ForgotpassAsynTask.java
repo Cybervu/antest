@@ -61,9 +61,9 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
             HttpClient httpclient=new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getForgotPasswordUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader("authToken", this.forgotpassword_input.getAuthToken());
-            httppost.addHeader("email", this.forgotpassword_input.getEmail());
-            httppost.addHeader("lang_code",this.forgotpassword_input.getLang_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.forgotpassword_input.getAuthToken());
+            httppost.addHeader(CommonConstants.EMAIL, this.forgotpassword_input.getEmail());
+            httppost.addHeader(CommonConstants.LANG_CODE,this.forgotpassword_input.getLang_code());
 
             Log.v("MUVISDK", "responseStr"+this.forgotpassword_input.getAuthToken());
             Log.v("MUVISDK", "responseStr"+this.forgotpassword_input.getEmail());
@@ -129,19 +129,19 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
        // String s=forgotpassword_input.getPakagename();
         listener.onForgotpassDetailsPreExecuteStarted();
         status = 0;
-//        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
-//        {
-//            this.cancel(true);
-//            message = "Packge Name Not Matched";
-//            listener.onForgotpassDetailsPostExecuteCompleted(forgotpassword_output, status, message);
-//            return;
-//        }
-//        if(CommonConstants.hashKey.equals(""))
-//        {
-//            this.cancel(true);
-//            message = "Hash Key Is Not Available. Please Initialize The SDK";
-//            listener.onForgotpassDetailsPostExecuteCompleted(forgotpassword_output, status, message);
-//        }
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+       {
+           this.cancel(true);
+           message = "Packge Name Not Matched";
+           listener.onForgotpassDetailsPostExecuteCompleted(forgotpassword_output, status, message);
+           return;
+       }
+       if(CommonConstants.hashKey.equals(""))
+       {
+           this.cancel(true);
+           message = "Hash Key Is Not Available. Please Initialize The SDK";
+           listener.onForgotpassDetailsPostExecuteCompleted(forgotpassword_output, status, message);
+       }
     }
 
     @Override

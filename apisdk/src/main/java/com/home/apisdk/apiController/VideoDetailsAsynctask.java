@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.Get_Video_Details_Output;
 
@@ -68,11 +69,11 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
             HttpPost httppost = new HttpPost(APIUrlConstant.getVideoDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.getVideoDetailsInput.getAuthToken());
-            httppost.addHeader("content_uniq_id", this.getVideoDetailsInput.getContent_uniq_id());
-            httppost.addHeader("stream_uniq_id", this.getVideoDetailsInput.getStream_uniq_id());
-            httppost.addHeader("internet_speed", this.getVideoDetailsInput.getInternetSpeed());
-            httppost.addHeader("user_id", this.getVideoDetailsInput.getUser_id());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.getVideoDetailsInput.getAuthToken());
+            httppost.addHeader(CommonConstants.CONTENT_UNIQ_ID, this.getVideoDetailsInput.getContent_uniq_id());
+            httppost.addHeader(CommonConstants.STREAM_UNIQ_ID, this.getVideoDetailsInput.getStream_uniq_id());
+            httppost.addHeader(CommonConstants.INTERNET_SPEED, this.getVideoDetailsInput.getInternetSpeed());
+            httppost.addHeader(CommonConstants.USER_ID, this.getVideoDetailsInput.getUser_id());
 
             // Execute HTTP Post Request
             try {
@@ -128,6 +129,9 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
 
 
                         }
+
+                        get_video_details_output.setSubTitleName(SubTitleName);
+                        get_video_details_output.setFakeSubTitlePath(FakeSubTitlePath);
                     }
                 }
 
@@ -153,7 +157,11 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                             Log.v("MUVISDK","Resolution Format Name ="+ResolutionJosnArray.getJSONObject(i).optString("resolution").trim());
                             Log.v("MUVISDK","Resolution url ="+ResolutionJosnArray.getJSONObject(i).optString("url").trim());
                         }
+
+                        get_video_details_output.setResolutionFormat(ResolutionFormat);
+                        get_video_details_output.setResolutionUrl(ResolutionUrl);
                     }
+
                 }
 
             }
@@ -172,7 +180,7 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
         listener.onVideoDetailsPreExecuteStarted();
         code = 0;
         status = "";
-       /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
@@ -184,7 +192,7 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onVideoDetailsPostExecuteCompleted(get_video_details_output,code,status,message);
-        }*/
+        }
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.home.vod.activity;
+package com.muvi.player.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,8 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-import com.home.vod.R;
-import com.home.vod.util.Util;
+import com.example.muviplayersdk.R;
+import com.muvi.player.utils.Util;
 
 import java.util.ArrayList;
 

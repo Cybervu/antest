@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.GetStaticPageDetailsModelOutput;
 import com.home.apisdk.apiModel.GetStaticPagesDeatilsModelInput;
 
@@ -59,8 +60,8 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetstaticpagesUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.getStaticPagesDeatilsModelInput.getAuthToken());
-            httppost.addHeader("permalink", this.getStaticPagesDeatilsModelInput.getPermalink());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.getStaticPagesDeatilsModelInput.getAuthToken());
+            httppost.addHeader(CommonConstants.PERMALINK, this.getStaticPagesDeatilsModelInput.getPermalink());
 
 
             // Execute HTTP Post Request
@@ -125,7 +126,7 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
         super.onPreExecute();
         listener.onGetStaticPageDetailsPreExecuteStarted();
         code = 0;
-       /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
@@ -137,7 +138,7 @@ public class GetStaticPagesDetailsAsynTask extends AsyncTask<GetStaticPagesDeati
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onGetStaticPageDetailsPostExecuteCompleted(getStaticPageDetailsModelOutput,code,message,status);
-        }*/
+        }
         listener.onGetStaticPageDetailsPostExecuteCompleted(getStaticPageDetailsModelOutput, code, message, status);
 
     }

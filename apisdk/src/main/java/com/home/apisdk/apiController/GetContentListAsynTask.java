@@ -64,14 +64,14 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetContentListUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.contentListInput.getAuthToken());
-            httppost.addHeader("permalink", this.contentListInput.getPermalink());
-            httppost.addHeader("limit", this.contentListInput.getLimit());
-            httppost.addHeader("offset", this.contentListInput.getOffset());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.contentListInput.getAuthToken());
+            httppost.addHeader(CommonConstants.PERMALINK, this.contentListInput.getPermalink());
+            httppost.addHeader(CommonConstants.LIMIT, this.contentListInput.getLimit());
+            httppost.addHeader(CommonConstants.OFFSET, this.contentListInput.getOffset());
 //            httppost.addHeader("orderby", this.contentListInput.getOrderby());
-            httppost.addHeader("country", this.contentListInput.getCountry());
-            httppost.addHeader("lang_code",this.contentListInput.getLanguage());
-            httppost.addHeader("orderby",this.contentListInput.getOrderby());
+            httppost.addHeader(CommonConstants.COUNTRY, this.contentListInput.getCountry());
+            httppost.addHeader(CommonConstants.LANG_CODE,this.contentListInput.getLanguage());
+            httppost.addHeader(CommonConstants.ORDER_BY,this.contentListInput.getOrderby());
 
             // Execute HTTP Post Request
             try {
@@ -170,17 +170,17 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
         listener.onGetContentListPreExecuteStarted();
         responseStr = "0";
         status = 0;
-//        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
-//            this.cancel(true);
-//            message = "Packge Name Not Matched";
-//            listener.onGetContentListPostExecuteCompleted(contentListOutput, status, totalItems, message);
-//            return;
-//        }
-//        if (CommonConstants.hashKey.equals("")) {
-//            this.cancel(true);
-//            message = "Hash Key Is Not Available. Please Initialize The SDK";
-//            listener.onGetContentListPostExecuteCompleted(contentListOutput, status, totalItems, message);
-//        }
+       if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+            this.cancel(true);
+            message = "Packge Name Not Matched";
+            listener.onGetContentListPostExecuteCompleted(contentListOutput, status, totalItems, message);
+            return;
+       }
+        if (CommonConstants.hashKey.equals("")) {
+            this.cancel(true);
+           message = "Hash Key Is Not Available. Please Initialize The SDK";
+        listener.onGetContentListPostExecuteCompleted(contentListOutput, status, totalItems, message);
+        }
 
     }
 

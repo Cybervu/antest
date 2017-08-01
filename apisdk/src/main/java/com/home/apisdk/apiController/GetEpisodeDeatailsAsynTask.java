@@ -60,13 +60,13 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
             HttpClient httpclient=new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetEpisodeDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader("authToken", this.episode_details_input.getAuthtoken());
-            httppost.addHeader("permalink", this.episode_details_input.getPermalink());
-            httppost.addHeader("limit",this.episode_details_input.getLimit());
-            httppost.addHeader("offset",this.episode_details_input.getOffset());
-            httppost.addHeader("country",this.episode_details_input.getCountry());
-            httppost.addHeader("series_number",this.episode_details_input.getSeries_number());
-            httppost.addHeader("lang_code",this.episode_details_input.getLang_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.episode_details_input.getAuthtoken());
+            httppost.addHeader(CommonConstants.PERMALINK, this.episode_details_input.getPermalink());
+            httppost.addHeader(CommonConstants.LIMIT,this.episode_details_input.getLimit());
+            httppost.addHeader(CommonConstants.OFFSET,this.episode_details_input.getOffset());
+            httppost.addHeader(CommonConstants.COUNTRY,this.episode_details_input.getCountry());
+            httppost.addHeader(CommonConstants.SERIES_NUMBER,this.episode_details_input.getSeries_number());
+            httppost.addHeader(CommonConstants.LANG_CODE,this.episode_details_input.getLang_code());
 
             // Execute HTTP Post Request
             try {

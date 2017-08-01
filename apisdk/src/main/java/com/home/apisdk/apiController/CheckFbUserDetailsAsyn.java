@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.CheckFbUserDetailsInput;
 
 import org.apache.http.HttpResponse;
@@ -26,7 +27,7 @@ import java.io.IOException;
 public class CheckFbUserDetailsAsyn extends AsyncTask<CheckFbUserDetailsInput,Void ,Void > {
 
     public CheckFbUserDetailsInput checkFbUserDetailsInput;
-    String PACKAGE_NAME, responseStr;
+    String PACKAGE_NAME, responseStr,message;
     int isNewUserStr = 1;
     int code;
     JSONObject myJson = null;
@@ -59,8 +60,8 @@ public class CheckFbUserDetailsAsyn extends AsyncTask<CheckFbUserDetailsInput,Vo
             HttpPost httppost = new HttpPost(APIUrlConstant.getFbUserExistsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.checkFbUserDetailsInput.getAuthToken());
-            httppost.addHeader("fb_userid", this.checkFbUserDetailsInput.getFb_userid());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.checkFbUserDetailsInput.getAuthToken());
+            httppost.addHeader(CommonConstants.FB_USER_ID, this.checkFbUserDetailsInput.getFb_userid());
 
 
             try {
@@ -94,6 +95,19 @@ public class CheckFbUserDetailsAsyn extends AsyncTask<CheckFbUserDetailsInput,Vo
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onCheckFbUserDetailsAsynPreExecuteStarted();
+
+        code = 0;
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+            this.cancel(true);
+            message = "Packge Name Not Matched";
+            listener.onCheckFbUserDetailsAsynPostExecuteCompleted(code);
+            return;
+        }
+        if (CommonConstants.hashKey.equals("")) {
+            this.cancel(true);
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
+            listener.onCheckFbUserDetailsAsynPostExecuteCompleted(code);
+        }
     }
 
     @Override

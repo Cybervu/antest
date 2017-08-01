@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.AuthUserPaymentInfoInputModel;
 import com.home.apisdk.apiModel.AuthUserPaymentInfoOutputModel;
 
@@ -18,6 +19,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.CookieHandler;
 
 /**
  * Created by MUVI on 1/20/2017.
@@ -27,7 +29,7 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
 
     public AuthUserPaymentInfoInputModel authUserPaymentInfoInputModel;
     String PACKAGE_NAME, message, responseStr,responseMessageStr;
-    int code;
+    int code,status;
 
     public interface AuthUserPaymentInfo {
         void onAuthUserPaymentInfoPreExecuteStarted();
@@ -58,13 +60,13 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
             HttpPost httppost = new HttpPost(APIUrlConstant.getAuthUserPaymentInfoUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.authUserPaymentInfoInputModel.getAuthToken());
-            httppost.addHeader("nameOnCard", this.authUserPaymentInfoInputModel.getName_on_card());
-            httppost.addHeader("expiryMonth", this.authUserPaymentInfoInputModel.getExpiryMonth());
-            httppost.addHeader("expiryYear", this.authUserPaymentInfoInputModel.getExpiryYear());
-            httppost.addHeader("cardNumber", this.authUserPaymentInfoInputModel.getCardNumber());
-            httppost.addHeader("cvv", this.authUserPaymentInfoInputModel.getCvv());
-            httppost.addHeader("email", this.authUserPaymentInfoInputModel.getEmail());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.authUserPaymentInfoInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.NAME_ON_CARD, this.authUserPaymentInfoInputModel.getName_on_card());
+            httppost.addHeader(CommonConstants.EXPIRY_MONTH, this.authUserPaymentInfoInputModel.getExpiryMonth());
+            httppost.addHeader(CommonConstants.EXPIRY_YEAR, this.authUserPaymentInfoInputModel.getExpiryYear());
+            httppost.addHeader(CommonConstants.CARD_NUMBER, this.authUserPaymentInfoInputModel.getCardNumber());
+            httppost.addHeader(CommonConstants.CVV, this.authUserPaymentInfoInputModel.getCvv());
+            httppost.addHeader(CommonConstants.EMAIL, this.authUserPaymentInfoInputModel.getEmail());
 
 
             try {
@@ -148,17 +150,17 @@ public class AuthUserPaymentInfoAsyntask extends AsyncTask<AuthUserPaymentInfoIn
         super.onPreExecute();
         listener.onAuthUserPaymentInfoPreExecuteStarted();
         code = 0;
-     /*   if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
-            listener.onGetPlanListPostExecuteCompleted(planListOutput,code);
+            listener.onAuthUserPaymentInfoPostExecuteCompleted(authUserPaymentInfoOutputModel,code,message);
             return;
         }
         if(CommonConstants.hashKey.equals(""))
         {
             this.cancel(true);
-            listener.onGetPlanListPostExecuteCompleted(planListOutput,code);
-        }*/
+            listener.onAuthUserPaymentInfoPostExecuteCompleted(authUserPaymentInfoOutputModel,code,message);
+        }
 
     }
 

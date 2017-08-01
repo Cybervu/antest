@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.GetCardListForPPVInputModel;
 import com.home.apisdk.apiModel.GetCardListForPPVOutputModel;
 
@@ -34,7 +35,7 @@ public class GetCardListForPPVAsynTask extends AsyncTask<GetCardListForPPVInputM
 
     public interface GetCardListForPPV {
         void onGetCardListForPPVPreExecuteStarted();
-        void onGetCardListForPPVPostExecuteCompleted(ArrayList<GetCardListForPPVOutputModel> getCardListForPPVOutputModelArray, int status, int totalItems, String message);
+        void onGetCardListForPPVPostExecuteCompleted(ArrayList<GetCardListForPPVOutputModel> getCardListForPPVOutputModel, int status, int totalItems, String message);
     }
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
@@ -62,8 +63,8 @@ public class GetCardListForPPVAsynTask extends AsyncTask<GetCardListForPPVInputM
                 HttpPost httppost = new HttpPost(APIUrlConstant.getGetCardListForPpvUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-                httppost.addHeader("authToken", this.getCardListForPPVInputModel.getAuthToken());
-                httppost.addHeader("user_id", this.getCardListForPPVInputModel.getUser_id());
+                httppost.addHeader(CommonConstants.AUTH_TOKEN, this.getCardListForPPVInputModel.getAuthToken());
+                httppost.addHeader(CommonConstants.USER_ID, this.getCardListForPPVInputModel.getUser_id());
 
 
                 // Execute HTTP Post Request
@@ -135,19 +136,19 @@ public class GetCardListForPPVAsynTask extends AsyncTask<GetCardListForPPVInputM
             listener.onGetCardListForPPVPreExecuteStarted();
             responseStr = "0";
             status = 0;
-           /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+            if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
                 message = "Packge Name Not Matched";
-                listener.onGetContentListPostExecuteCompleted(contentListOutput,status,totalItems,message);
+                listener.onGetCardListForPPVPostExecuteCompleted(getCardListForPPVOutputModel,status,totalItems,message);
                 return;
             }
             if(CommonConstants.hashKey.equals(""))
             {
                 this.cancel(true);
                 message = "Hash Key Is Not Available. Please Initialize The SDK";
-                listener.onGetContentListPostExecuteCompleted(contentListOutput,status,totalItems,message);
-            }*/
+                listener.onGetCardListForPPVPostExecuteCompleted(getCardListForPPVOutputModel,status,totalItems,message);
+            }
 
         }
 

@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.ContactUsInputModel;
 import com.home.apisdk.apiModel.ContactUsOutputModel;
 
@@ -57,11 +58,11 @@ public class ContactUsAsynTask extends AsyncTask<ContactUsInputModel,Void ,Void 
             HttpPost httppost = new HttpPost(APIUrlConstant.getContactUsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.contactUsInputModel.getAuthToken());
-            httppost.addHeader("email", this.contactUsInputModel.getEmail());
-            httppost.addHeader("name", this.contactUsInputModel.getName());
-            httppost.addHeader("message", this.contactUsInputModel.getMessage());
-            httppost.addHeader("lang_code",this.contactUsInputModel.getLang_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.contactUsInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.EMAIL, this.contactUsInputModel.getEmail());
+            httppost.addHeader(CommonConstants.NAME, this.contactUsInputModel.getName());
+            httppost.addHeader(CommonConstants.MESSAGE, this.contactUsInputModel.getMessage());
+            httppost.addHeader(CommonConstants.LANG_CODE,this.contactUsInputModel.getLang_code());
 
             // Execute HTTP Post Request
             try {
@@ -106,7 +107,7 @@ public class ContactUsAsynTask extends AsyncTask<ContactUsInputModel,Void ,Void 
         super.onPreExecute();
         listener.onContactUsPreExecuteStarted();
         code= 0;
-       /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
@@ -118,7 +119,7 @@ public class ContactUsAsynTask extends AsyncTask<ContactUsInputModel,Void ,Void 
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onContactUsPostExecuteCompleted(contactUsOutputModel,code,message,status);
-        }*/
+        }
 
 
     }

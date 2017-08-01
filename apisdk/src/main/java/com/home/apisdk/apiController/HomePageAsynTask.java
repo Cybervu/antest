@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.HomePageBannerModel;
 import com.home.apisdk.apiModel.HomePageInputModel;
 import com.home.apisdk.apiModel.HomePageOutputModel;
@@ -67,8 +68,8 @@ public class HomePageAsynTask extends AsyncTask<HomePageInputModel, Void, Void> 
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getHomepageUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader("authToken", this.homePageInputModel.getAuthToken());
-            httppost.addHeader("lang_code",this.homePageInputModel.getLang_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.homePageInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.LANG_CODE,this.homePageInputModel.getLang_code());
 
             Log.v("MUVISDK","authToken = "+ this.homePageInputModel.getAuthToken());
 
@@ -224,7 +225,7 @@ public class HomePageAsynTask extends AsyncTask<HomePageInputModel, Void, Void> 
         super.onPreExecute();
         listener.onHomePagePreExecuteStarted();
         status = 0;
-       /* if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onHomePagePostExecuteCompleted(homePageOutputModel, status, message);
@@ -235,7 +236,6 @@ public class HomePageAsynTask extends AsyncTask<HomePageInputModel, Void, Void> 
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onHomePagePostExecuteCompleted(homePageOutputModel, status, message);
         }
-*/
         listener.onHomePagePostExecuteCompleted(homePageOutputModel,status,message);
     }
 

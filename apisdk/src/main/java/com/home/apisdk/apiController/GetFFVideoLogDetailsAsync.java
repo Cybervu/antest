@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.FFVideoLogDetailsInput;
 
 import org.apache.http.client.HttpClient;
@@ -34,7 +35,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class GetFFVideoLogDetailsAsync extends AsyncTask<FFVideoLogDetailsInput, Void, Void> {
     public FFVideoLogDetailsInput ffVideoLogDetailsInput;
-    String responseStr;
+    String responseStr,message;
     int code;
     String PACKAGE_NAME, videoLogId = "";
 
@@ -76,15 +77,15 @@ public class GetFFVideoLogDetailsAsync extends AsyncTask<FFVideoLogDetailsInput,
                 conn.setDoOutput(true);
 
                 Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("authToken", this.ffVideoLogDetailsInput.getAuthToken())
-                        .appendQueryParameter("user_id", this.ffVideoLogDetailsInput.getUser_id())
-                        .appendQueryParameter("ip_address", this.ffVideoLogDetailsInput.getIp_address())
-                        .appendQueryParameter("movie_id", this.ffVideoLogDetailsInput.getMovie_id())
-                        .appendQueryParameter("episode_id", this.ffVideoLogDetailsInput.getEpisode_id())
-                        .appendQueryParameter("played_length", this.ffVideoLogDetailsInput.getPlayed_length())
-                        .appendQueryParameter("watch_status", this.ffVideoLogDetailsInput.getWatch_status())
-                        .appendQueryParameter("device_type", this.ffVideoLogDetailsInput.getDevice_type())
-                        .appendQueryParameter("log_id", this.ffVideoLogDetailsInput.getLog_id());
+                        .appendQueryParameter(CommonConstants.AUTH_TOKEN, this.ffVideoLogDetailsInput.getAuthToken())
+                        .appendQueryParameter(CommonConstants.USER_ID, this.ffVideoLogDetailsInput.getUser_id())
+                        .appendQueryParameter(CommonConstants.IP_ADDRESS, this.ffVideoLogDetailsInput.getIp_address())
+                        .appendQueryParameter(CommonConstants.MOVIE_ID, this.ffVideoLogDetailsInput.getMovie_id())
+                        .appendQueryParameter(CommonConstants.EPISODE_ID, this.ffVideoLogDetailsInput.getEpisode_id())
+                        .appendQueryParameter(CommonConstants.PLAYED_LENGTH, this.ffVideoLogDetailsInput.getPlayed_length())
+                        .appendQueryParameter(CommonConstants.WATCH_STATUS, this.ffVideoLogDetailsInput.getWatch_status())
+                        .appendQueryParameter(CommonConstants.DEVICE_TYPE, this.ffVideoLogDetailsInput.getDevice_type())
+                        .appendQueryParameter(CommonConstants.LOG_ID, this.ffVideoLogDetailsInput.getLog_id());
                 String query = builder.build().getEncodedQuery();
 
                 OutputStream os = conn.getOutputStream();
@@ -143,6 +144,18 @@ public class GetFFVideoLogDetailsAsync extends AsyncTask<FFVideoLogDetailsInput,
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onGetFFVideoLogsPreExecuteStarted();
+        code = 0;
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+            this.cancel(true);
+            message = "Packge Name Not Matched";
+            listener.onGetFFVideoLogsPostExecuteCompleted(code,responseStr, videoLogId);
+            return;
+        }
+        if (CommonConstants.hashKey.equals("")) {
+            this.cancel(true);
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
+            listener.onGetFFVideoLogsPostExecuteCompleted(code, responseStr, videoLogId);
+        }
     }
 
     @Override

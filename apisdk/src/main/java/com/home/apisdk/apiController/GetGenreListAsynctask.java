@@ -60,7 +60,7 @@ public class GetGenreListAsynctask extends AsyncTask<GenreListInput,Void ,Void >
             HttpPost httppost = new HttpPost(APIUrlConstant.getGenreListUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.genreListInput.getAuthToken());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.genreListInput.getAuthToken());
 
             // Execute HTTP Post Request
             try {

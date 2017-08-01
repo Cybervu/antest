@@ -63,9 +63,9 @@ public class GetMenuListAsynctask extends AsyncTask<MenuListInput,Void ,Void > {
             HttpPost httppost = new HttpPost(APIUrlConstant.getMenuListUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.menuListInput.getAuthToken());
-            httppost.addHeader("country", this.menuListInput.getCountry());
-            httppost.addHeader("lang_code", this.menuListInput.getLang_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.menuListInput.getAuthToken());
+            httppost.addHeader(CommonConstants.COUNTRY, this.menuListInput.getCountry());
+            httppost.addHeader(CommonConstants.LANG_CODE, this.menuListInput.getLang_code());
 
             // Execute HTTP Post Request
             try {
@@ -145,7 +145,7 @@ public class GetMenuListAsynctask extends AsyncTask<MenuListInput,Void ,Void > {
         super.onPreExecute();
         listener.onGetMenuListPreExecuteStarted();
         code= 0;
-      /*  if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
@@ -157,7 +157,7 @@ public class GetMenuListAsynctask extends AsyncTask<MenuListInput,Void ,Void > {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onGetMenuListPostExecuteCompleted(menuListOutput,footermenuListOutput,code,message);
-        }*/
+        }
     }
 
     @Override

@@ -39,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
+import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiController.GetContentListAsynTask;
 import com.home.apisdk.apiModel.ContentListInput;
 import com.home.apisdk.apiModel.ContentListOutput;
@@ -823,7 +824,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = Util.rootUrl().trim() + Util.listUrl.trim();
+            String urlRouteList = APIUrlConstant.getGetContentListUrl();
             if (genreArray != null && genreArray.size() > 0) {
                 String[] mStringArray = new String[genreArray.size()];
                 mStringArray = genreArray.toArray(mStringArray);

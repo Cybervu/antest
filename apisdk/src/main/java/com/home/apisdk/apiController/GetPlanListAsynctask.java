@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.SubscriptionPlanInputModel;
 import com.home.apisdk.apiModel.SubscriptionPlanOutputModel;
@@ -62,8 +63,8 @@ public class GetPlanListAsynctask extends AsyncTask<SubscriptionPlanInputModel, 
             HttpPost httppost = new HttpPost(APIUrlConstant.getSubscriptionPlanLists());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.planListInput.getAuthToken());
-            httppost.addHeader("lang_code", this.planListInput.getLang());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.planListInput.getAuthToken());
+            httppost.addHeader(CommonConstants.LANG_CODE, this.planListInput.getLang());
 
             Log.v("MUVISDK", "authToken = " + this.planListInput.getAuthToken());
             // Execute HTTP Post Request
@@ -179,17 +180,19 @@ public class GetPlanListAsynctask extends AsyncTask<SubscriptionPlanInputModel, 
         super.onPreExecute();
         listener.onGetPlanListPreExecuteStarted();
         code = 0;
-     /*   if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
+            message = "Packge Name Not Matched";
             listener.onGetPlanListPostExecuteCompleted(planListOutput,code);
             return;
         }
         if(CommonConstants.hashKey.equals(""))
         {
             this.cancel(true);
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onGetPlanListPostExecuteCompleted(planListOutput,code);
-        }*/
+        }
 
 
     }

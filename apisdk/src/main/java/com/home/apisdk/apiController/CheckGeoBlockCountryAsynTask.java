@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
 import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
 
@@ -60,8 +61,8 @@ public class CheckGeoBlockCountryAsynTask extends AsyncTask<CheckGeoBlockInputMo
                 HttpPost httppost = new HttpPost(url);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-                httppost.addHeader("authToken", this.checkGeoBlockInputModel.getAuthToken());
-                httppost.addHeader("ip", this.checkGeoBlockInputModel.getIp());
+                httppost.addHeader(CommonConstants.AUTH_TOKEN, this.checkGeoBlockInputModel.getAuthToken());
+                httppost.addHeader(CommonConstants.IP, this.checkGeoBlockInputModel.getIp());
 
 
                 // Execute HTTP Post Request
@@ -112,19 +113,19 @@ public class CheckGeoBlockCountryAsynTask extends AsyncTask<CheckGeoBlockInputMo
             super.onPreExecute();
             listener.onCheckGeoBlockCountryPreExecuteStarted();
             responseStr = "0";
-            status = 0;
-           /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+           /* status = 0;
+            if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
                 message = "Packge Name Not Matched";
-                listener.onGetContentListPostExecuteCompleted(featureContentOutputModel,status,totalItems,message);
+                listener.onCheckGeoBlockCountryPostExecuteCompleted(checkGeoBlockOutputModel,status,message);
                 return;
             }
             if(CommonConstants.hashKey.equals(""))
             {
                 this.cancel(true);
                 message = "Hash Key Is Not Available. Please Initialize The SDK";
-                listener.onGetContentListPostExecuteCompleted(featureContentOutputModel,status,totalItems,message);
+                listener.onCheckGeoBlockCountryPostExecuteCompleted(checkGeoBlockOutputModel,status,totalItems,message);
             }*/
 
 

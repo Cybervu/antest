@@ -58,16 +58,54 @@
             android:name=".activity.SearchActivity"
             android:label=""
             android:screenOrientation="portrait" />
+        <activity android:name="com.muvi.player.activity.ExoPlayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            />
+        <activity
+            android:name="com.muvi.player.activity.ThirdPartyPlayer"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label=""
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.muvi.player.activity.YouTubeAPIActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label=""
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.muvi.player.activity.Subtitle_Resolution"
+            android:configChanges="screenSize|orientation"
+            android:label=""
+            android:screenOrientation="sensor"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity
+            android:name="com.muvi.player.activity.SubtitleList"
+            android:configChanges="screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
+
+        <activity
+            android:name="com.muvi.player.activity.ResolutionChangeActivity"
+            android:configChanges="screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <activity
+            android:name="com.muvi.player.activity.ResumePopupActivity"
+            android:configChanges="screenSize|orientation"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".activity.MovieDetailsActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Episode_list_Activity"
+            android:label=""
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ViewMoreActivity"
-            android:label=""
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.LoginActivity"
-            android:label=""
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.RegisterActivity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
@@ -79,31 +117,24 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.MovieDetailsActivity"
+            android:name=".activity.ShowWithEpisodesActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.PaymentInfoActivity" />
+        <activity android:name=".activity.PPvPaymentInfoActivity"></activity>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.RegisterActivity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CastAndCrewActivity"
             android:label=""
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.ShowWithEpisodesActivity"
-            android:label=""
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.Episode_list_Activity"
-            android:label=""
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.YouTubeAPIActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label=""
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".activity.ThirdPartyPlayer"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label=""
-            android:windowSoftInputMode="stateHidden" />
+
 
         <activity
             android:name=".activity.TrailerActivity"
@@ -164,11 +195,6 @@
         </activity>
 
 
-        <activity
-            android:name=".activity.SubtitleList"
-            android:configChanges="screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
-
         <service android:name=".FCM_Support.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -190,8 +216,6 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity android:name=".activity.SubscriptionActivity" />
-        <activity android:name=".activity.PaymentInfoActivity" />
-        <activity android:name=".activity.PPvPaymentInfoActivity"></activity>
 
         <activity
             android:name=".activity.MyLibraryPlayer"
@@ -200,28 +224,6 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateHidden" />
 
-        <activity
-            android:name=".activity.Subtitle_Resolution"
-            android:configChanges="screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
-
-        <activity
-            android:name=".activity.ResolutionChangeActivity"
-            android:configChanges="screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <activity
-            android:name=".activity.ExoPlayerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label=""
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".activity.ResumePopupActivity"
-            android:configChanges="screenSize|orientation"
-            android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".activity.MyLibraryResumePopupActivity"
             android:configChanges="screenSize|orientation"

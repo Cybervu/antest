@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.MyLibraryInputModel;
 import com.home.apisdk.apiModel.MyLibraryOutputModel;
 
@@ -63,12 +64,12 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
             HttpPost httppost = new HttpPost(APIUrlConstant.getMylibraryUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.myLibraryInputModel.getAuthToken());
-            httppost.addHeader("user_id", this.myLibraryInputModel.getUser_id());
-            httppost.addHeader("limit",this.myLibraryInputModel.getLimit());
-            httppost.addHeader("offset",this.myLibraryInputModel.getOffset());
-            httppost.addHeader("country",this.myLibraryInputModel.getCountry());
-            httppost.addHeader("lang_code",this.myLibraryInputModel.getLang_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.myLibraryInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.USER_ID, this.myLibraryInputModel.getUser_id());
+            httppost.addHeader(CommonConstants.LIMIT,this.myLibraryInputModel.getLimit());
+            httppost.addHeader(CommonConstants.OFFSET,this.myLibraryInputModel.getOffset());
+            httppost.addHeader(CommonConstants.COUNTRY,this.myLibraryInputModel.getCountry());
+            httppost.addHeader(CommonConstants.LANG_CODE,this.myLibraryInputModel.getLang_code());
 
 
             // Execute HTTP Post Request
@@ -175,19 +176,19 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
         listener.onMyLibraryPreExecuteStarted();
         responseStr = "0";
         status = 0;
-           /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+            if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
                 message = "Packge Name Not Matched";
-                listener.onGetContentListPostExecuteCompleted(contentListOutput,status,totalItems,message);
+                listener.onMyLibraryPostExecuteCompleted(myLibraryOutputModel, status, totalItems, responseStr);
                 return;
             }
             if(CommonConstants.hashKey.equals(""))
             {
                 this.cancel(true);
                 message = "Hash Key Is Not Available. Please Initialize The SDK";
-                listener.onGetContentListPostExecuteCompleted(contentListOutput,status,totalItems,message);
-            }*/
+                listener.onMyLibraryPostExecuteCompleted(myLibraryOutputModel, status, totalItems, responseStr);
+            }
 
     }
 

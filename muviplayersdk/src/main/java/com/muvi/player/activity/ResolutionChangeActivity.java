@@ -1,4 +1,4 @@
-package com.home.vod.activity;
+package com.muvi.player.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,53 +12,52 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 
-import com.home.vod.R;
-import com.home.vod.adapter.SubtitleAdapter;
-import com.home.vod.util.Util;
+import com.example.muviplayersdk.R;
+import com.muvi.player.adapter.ResolutionChangeAdapter;
+import com.muvi.player.utils.Util;
 
 import java.util.ArrayList;
 
-public class SubtitleList extends Activity {
+public class ResolutionChangeActivity extends Activity {
 
     ListView listView;
-    ArrayList<String> subtitle_list = new ArrayList<>();
-    SubtitleAdapter subtitleAdapter;
+    ArrayList<String> resolutionformst_list = new ArrayList<>();
+    ResolutionChangeAdapter resolutionChangeAdapter;
     LinearLayout total_layout;
 
-    ArrayList<String> SubTitleName = new ArrayList<>();
-    ArrayList<String> SubTitlePath = new ArrayList<>();
+    ArrayList<String> ResolutionFormat = new ArrayList<>();
+    ArrayList<String> ResolutionUrl = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_subtitle_list);
+        setContentView(R.layout.activity_resolution_change);
+
         listView = (ListView) findViewById(R.id.listView);
         total_layout = (LinearLayout) findViewById(R.id.total_layout);
 
         Util.call_finish_at_onUserLeaveHint = true;
 
-
-        if (getIntent().getStringArrayListExtra("SubTitleName") != null) {
-            SubTitleName = getIntent().getStringArrayListExtra("SubTitleName");
+        if (getIntent().getStringArrayListExtra("ResolutionFormat") != null) {
+            ResolutionFormat = getIntent().getStringArrayListExtra("ResolutionFormat");
         } else {
-            SubTitleName.clear();
+            ResolutionFormat.clear();
         }
 
-        if (getIntent().getStringArrayListExtra("SubTitlePath") != null) {
-            SubTitlePath = getIntent().getStringArrayListExtra("SubTitlePath");
+        if (getIntent().getStringArrayListExtra("ResolutionUrl") != null) {
+            ResolutionUrl = getIntent().getStringArrayListExtra("ResolutionUrl");
         } else {
-            SubTitlePath.clear();
+            ResolutionUrl.clear();
         }
 
-        subtitle_list.add("Off");
 
-        for(int i=0;i<SubTitleName.size();i++)
+        for(int i=0;i<ResolutionFormat.size();i++)
         {
-            subtitle_list.add(SubTitleName.get(i));
+            resolutionformst_list.add(ResolutionFormat.get(i));
         }
 
-        subtitleAdapter = new SubtitleAdapter(SubtitleList.this,subtitle_list);
-        listView.setAdapter(subtitleAdapter);
+        resolutionChangeAdapter = new ResolutionChangeAdapter(ResolutionChangeActivity.this,resolutionformst_list);
+        listView.setAdapter(resolutionChangeAdapter);
 
         Animation topTobottom = AnimationUtils.loadAnimation(this, R.anim.bottom_top);
         listView.startAnimation(topTobottom );
@@ -68,19 +67,11 @@ public class SubtitleList extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if(position==0)
-                {
-                    Util.DefaultSubtitle ="Off";
-                }
-                else
-                {
-                    Util.DefaultSubtitle =SubTitleName.get(position).trim();
-                }
-
+                Util.VideoResolution = ResolutionFormat.get(position).trim();
 
                 Intent playerIntent = new Intent();
                 playerIntent.putExtra("position", ""+position);
-                playerIntent.putExtra("type", "subtitle");
+                playerIntent.putExtra("type", "resolution");
                 setResult(RESULT_OK, playerIntent);
                 finish();
             }
@@ -90,14 +81,13 @@ public class SubtitleList extends Activity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 Intent playerIntent = new Intent();
-                playerIntent.putExtra("type", "subtitle");
                 playerIntent.putExtra("position", "nothing");
+                playerIntent.putExtra("type", "resolution");
                 setResult(RESULT_OK, playerIntent);
                 finish();
                 return false;
             }
         });
-
 
     }
 
@@ -105,8 +95,8 @@ public class SubtitleList extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent playerIntent = new Intent();
-        playerIntent.putExtra("type", "subtitle");
         playerIntent.putExtra("position", "nothing");
+        playerIntent.putExtra("type", "resolution");
         setResult(RESULT_OK, playerIntent);
         finish();
     }

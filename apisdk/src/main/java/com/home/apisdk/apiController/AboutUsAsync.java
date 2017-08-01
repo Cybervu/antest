@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.AboutUsInput;
 
 import org.apache.http.HttpResponse;
@@ -26,7 +27,8 @@ import java.io.IOException;
 public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
 
     public AboutUsInput aboutUsInput;
-    String PACKAGE_NAME, about, responseStr;
+    int status;
+    String message,PACKAGE_NAME, about, responseStr;
 
     public interface AboutUs {
         void onAboutUsPreExecuteStarted();
@@ -56,9 +58,9 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
             HttpPost httppost = new HttpPost(APIUrlConstant.getAboutUs());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.aboutUsInput.getAuthToken());
-            httppost.addHeader("permalink", this.aboutUsInput.getPermalink());
-            httppost.addHeader("lang_code", this.aboutUsInput.getLang_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.aboutUsInput.getAuthToken());
+            httppost.addHeader(CommonConstants.PERMALINK, this.aboutUsInput.getPermalink());
+            httppost.addHeader(CommonConstants.LANG_CODE, this.aboutUsInput.getLang_code());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);
@@ -98,6 +100,18 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onAboutUsPreExecuteStarted();
+        status = 0;
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+            this.cancel(true);
+            message = "Packge Name Not Matched";
+            listener.onAboutUsPostExecuteCompleted(about);
+            return;
+        }
+        if (CommonConstants.hashKey.equals("")) {
+            this.cancel(true);
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
+            listener.onAboutUsPostExecuteCompleted(about);
+        }
     }
 
     @Override

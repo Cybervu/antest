@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.ValidateCouponCodeInputModel;
 import com.home.apisdk.apiModel.ValidateCouponCodeOutputModel;
 
@@ -62,11 +63,11 @@ public class ValidateCouponCodeAsynTask extends AsyncTask<ValidateCouponCodeInpu
             HttpPost httppost = new HttpPost(APIUrlConstant.getValidateCouponCodeUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.validateCouponCodeInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.validateCouponCodeInputModel.getAuthToken());
 
-            httppost.addHeader("user_id", this.validateCouponCodeInputModel.getUser_id());
-            httppost.addHeader("couponCode", this.validateCouponCodeInputModel.getCouponCode());
-            httppost.addHeader("currencyId", this.validateCouponCodeInputModel.getCurrencyId());
+            httppost.addHeader(CommonConstants.USER_ID, this.validateCouponCodeInputModel.getUser_id());
+            httppost.addHeader(CommonConstants.COUPAN_CODE, this.validateCouponCodeInputModel.getCouponCode());
+            httppost.addHeader(CommonConstants.CURRENCY_ID, this.validateCouponCodeInputModel.getCurrencyId());
 
 
             // Execute HTTP Post Request
@@ -137,19 +138,19 @@ public class ValidateCouponCodeAsynTask extends AsyncTask<ValidateCouponCodeInpu
         listener.onValidateCouponCodePreExecuteStarted();
         responseStr = "0";
         status = 0;
-           /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+            if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
                 message = "Packge Name Not Matched";
-                listener.onGetContentListPostExecuteCompleted(featureContentOutputModel,status,totalItems,message);
+                listener.onValidateCouponCodePostExecuteCompleted(validateCouponCodeOutputModel, status, responseStr);
                 return;
             }
             if(CommonConstants.hashKey.equals(""))
             {
                 this.cancel(true);
                 message = "Hash Key Is Not Available. Please Initialize The SDK";
-                listener.onGetContentListPostExecuteCompleted(featureContentOutputModel,status,totalItems,message);
-            }*/
+                listener.onValidateCouponCodePostExecuteCompleted(validateCouponCodeOutputModel, status, responseStr);
+            }
 
 
     }

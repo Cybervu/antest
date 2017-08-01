@@ -1,4 +1,4 @@
-package com.home.vod.activity;
+package com.muvi.player.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,12 +13,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.home.vod.R;
-import com.home.vod.util.SensorOrientationChangeNotifier;
-import com.home.vod.util.Util;
+import com.example.muviplayersdk.R;
+import com.muvi.player.utils.SensorOrientationChangeNotifier;
+import com.muvi.player.utils.Util;
 
 
 public class ResumePopupActivity extends Activity implements SensorOrientationChangeNotifier.Listener {
+    TranslatedLanguage translatedLanguage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +45,10 @@ public class ResumePopupActivity extends Activity implements SensorOrientationCh
         Button yesButton = (Button) findViewById(R.id.yesButton);
         Button cancelButton = (Button) findViewById(R.id.cancelButton);
         TextView resumeTitleTextView = (TextView) findViewById(R.id.resumeTitleTextView);
-        resumeTitleTextView.setText(Util.getTextofLanguage(ResumePopupActivity.this, Util.RESUME_MESSAGE, Util.DEFAULT_RESUME_MESSAGE));
-        yesButton.setText(Util.getTextofLanguage(ResumePopupActivity.this, Util.CONTINUE_BUTTON, Util.DEAFULT_CONTINUE_BUTTON));
-        cancelButton.setText(Util.getTextofLanguage(ResumePopupActivity.this, Util.CANCEL_BUTTON, Util.DEAFULT_CANCEL_BUTTON));
+        translatedLanguage=new TranslatedLanguage(ResumePopupActivity.this);
+        resumeTitleTextView.setText(translatedLanguage.getResumeMsg());
+        yesButton.setText(translatedLanguage.getContinuebtn());
+        cancelButton.setText(translatedLanguage.getCancelBtn());
 
         Animation topTobottom = AnimationUtils.loadAnimation(this, R.anim.top_bottom);
         popupLayout.startAnimation(topTobottom);

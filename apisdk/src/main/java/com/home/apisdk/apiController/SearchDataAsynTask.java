@@ -68,12 +68,12 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
             HttpPost httppost = new HttpPost(APIUrlConstant.getSearchDataUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.search_data_input.getAuthToken());
-            httppost.addHeader("limit", this.search_data_input.getLimit());
-            httppost.addHeader("offset", this.search_data_input.getOffset());
-            httppost.addHeader("q", this.search_data_input.getQ());
-            httppost.addHeader("country",this.search_data_input.getCountry());
-            httppost.addHeader("lang_code",this.search_data_input.getLanguage_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.search_data_input.getAuthToken());
+            httppost.addHeader(CommonConstants.LIMIT, this.search_data_input.getLimit());
+            httppost.addHeader(CommonConstants.OFFSET, this.search_data_input.getOffset());
+            httppost.addHeader(CommonConstants.Q, this.search_data_input.getQ());
+            httppost.addHeader(CommonConstants.COUNTRY,this.search_data_input.getCountry());
+            httppost.addHeader(CommonConstants.LANG_CODE,this.search_data_input.getLanguage_code());
 
 
             // Execute HTTP Post Request
@@ -209,17 +209,17 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
 
         status = 0;
         totalItems = 0;
-//        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
-//            this.cancel(true);
-//            message = "Packge Name Not Matched";
-//            listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);
-//            return;
-//        }
-//        if (CommonConstants.hashKey.equals("")) {
-//            this.cancel(true);
-//            message = "Hash Key Is Not Available. Please Initialize The SDK";
-//            listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);
-//        }
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+            this.cancel(true);
+            message = "Packge Name Not Matched";
+            listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);
+            return;
+        }
+        if (CommonConstants.hashKey.equals("")) {
+            this.cancel(true);
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
+            listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);
+        }
     }
 
 

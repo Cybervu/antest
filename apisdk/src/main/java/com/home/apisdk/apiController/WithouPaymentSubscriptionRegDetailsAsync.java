@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.WithouPaymentSubscriptionRegDetailsInput;
 
 import org.json.JSONException;
@@ -68,27 +69,27 @@ public class WithouPaymentSubscriptionRegDetailsAsync extends AsyncTask<WithouPa
                 conn.setDoOutput(true);
 
                 Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("authToken", this.withouPaymentSubscriptionRegDetailsInput.getAuthToken())
-                        .appendQueryParameter("is_advance", this.withouPaymentSubscriptionRegDetailsInput.getIs_advance())
-                        .appendQueryParameter("card_name", this.withouPaymentSubscriptionRegDetailsInput.getCard_name())
-                        .appendQueryParameter("exp_month", this.withouPaymentSubscriptionRegDetailsInput.getExp_month())
-                        .appendQueryParameter("card_number", this.withouPaymentSubscriptionRegDetailsInput.getCard_number())
-                        .appendQueryParameter("exp_year", this.withouPaymentSubscriptionRegDetailsInput.getExp_year())
-                        .appendQueryParameter("email", this.withouPaymentSubscriptionRegDetailsInput.getEmail())
-                        .appendQueryParameter("movie_id", this.withouPaymentSubscriptionRegDetailsInput.getMovie_id())
-                        .appendQueryParameter("user_id", this.withouPaymentSubscriptionRegDetailsInput.getUser_id())
-                        .appendQueryParameter("coupon_code", this.withouPaymentSubscriptionRegDetailsInput.getCoupon_code())
-                        .appendQueryParameter("card_type", this.withouPaymentSubscriptionRegDetailsInput.getCard_type())
-                        .appendQueryParameter("card_last_fourdigit", this.withouPaymentSubscriptionRegDetailsInput.getCard_last_fourdigit())
-                        .appendQueryParameter("profile_id", this.withouPaymentSubscriptionRegDetailsInput.getProfile_id())
-                        .appendQueryParameter("token", this.withouPaymentSubscriptionRegDetailsInput.getToken())
-                        .appendQueryParameter("cvv", this.withouPaymentSubscriptionRegDetailsInput.getCvv())
-                        .appendQueryParameter("country", this.withouPaymentSubscriptionRegDetailsInput.getCountry())
-                        .appendQueryParameter("season_id", this.withouPaymentSubscriptionRegDetailsInput.getSeason_id())
-                        .appendQueryParameter("episode_id", this.withouPaymentSubscriptionRegDetailsInput.getEpisode_id())
-                        .appendQueryParameter("currency_id", this.withouPaymentSubscriptionRegDetailsInput.getCurrency_id())
-                        .appendQueryParameter("is_save_this_card", this.withouPaymentSubscriptionRegDetailsInput.getIs_save_this_card())
-                        .appendQueryParameter("existing_card_id", this.withouPaymentSubscriptionRegDetailsInput.getExisting_card_id());
+                        .appendQueryParameter(CommonConstants.AUTH_TOKEN, this.withouPaymentSubscriptionRegDetailsInput.getAuthToken())
+                        .appendQueryParameter(CommonConstants.IS_ADVANCE, this.withouPaymentSubscriptionRegDetailsInput.getIs_advance())
+                        .appendQueryParameter(CommonConstants.CARD_NAME, this.withouPaymentSubscriptionRegDetailsInput.getCard_name())
+                        .appendQueryParameter(CommonConstants.EXP_MONTH, this.withouPaymentSubscriptionRegDetailsInput.getExp_month())
+                        .appendQueryParameter(CommonConstants.CARD_NUMBER, this.withouPaymentSubscriptionRegDetailsInput.getCard_number())
+                        .appendQueryParameter(CommonConstants.EXP_YEAR, this.withouPaymentSubscriptionRegDetailsInput.getExp_year())
+                        .appendQueryParameter(CommonConstants.EMAIL, this.withouPaymentSubscriptionRegDetailsInput.getEmail())
+                        .appendQueryParameter(CommonConstants.MOVIE_ID, this.withouPaymentSubscriptionRegDetailsInput.getMovie_id())
+                        .appendQueryParameter(CommonConstants.USER_ID, this.withouPaymentSubscriptionRegDetailsInput.getUser_id())
+                        .appendQueryParameter(CommonConstants.COUPAN_CODE, this.withouPaymentSubscriptionRegDetailsInput.getCoupon_code())
+                        .appendQueryParameter(CommonConstants.CARD_TYPE, this.withouPaymentSubscriptionRegDetailsInput.getCard_type())
+                        .appendQueryParameter(CommonConstants.CARD_LAST_FOUR_DIGIT, this.withouPaymentSubscriptionRegDetailsInput.getCard_last_fourdigit())
+                        .appendQueryParameter(CommonConstants.PROFILE_ID, this.withouPaymentSubscriptionRegDetailsInput.getProfile_id())
+                        .appendQueryParameter(CommonConstants.TOKEN, this.withouPaymentSubscriptionRegDetailsInput.getToken())
+                        .appendQueryParameter(CommonConstants.CVV, this.withouPaymentSubscriptionRegDetailsInput.getCvv())
+                        .appendQueryParameter(CommonConstants.COUNTRY, this.withouPaymentSubscriptionRegDetailsInput.getCountry())
+                        .appendQueryParameter(CommonConstants.SEASON_ID, this.withouPaymentSubscriptionRegDetailsInput.getSeason_id())
+                        .appendQueryParameter(CommonConstants.EPISODE_ID, this.withouPaymentSubscriptionRegDetailsInput.getEpisode_id())
+                        .appendQueryParameter(CommonConstants.CURRENCY_ID, this.withouPaymentSubscriptionRegDetailsInput.getCurrency_id())
+                        .appendQueryParameter(CommonConstants.IS_SAVE_THIS_CARD, this.withouPaymentSubscriptionRegDetailsInput.getIs_save_this_card())
+                        .appendQueryParameter(CommonConstants.EXISTING_CARD_ID, this.withouPaymentSubscriptionRegDetailsInput.getExisting_card_id());
                 String query = builder.build().getEncodedQuery();
 
                 OutputStream os = conn.getOutputStream();
@@ -143,6 +144,19 @@ public class WithouPaymentSubscriptionRegDetailsAsync extends AsyncTask<WithouPa
     protected void onPreExecute() {
         super.onPreExecute();
         listener.onGetWithouPaymentSubscriptionRegDetailsPreExecuteStarted();
+        status = 0;
+        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+            this.cancel(true);
+            message = "Packge Name Not Matched";
+            listener.onGetWithouPaymentSubscriptionRegDetailsPostExecuteCompleted(status,responseStr);
+            return;
+        }
+        if (CommonConstants.hashKey.equals("")) {
+            this.cancel(true);
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
+            listener.onGetWithouPaymentSubscriptionRegDetailsPostExecuteCompleted(status,responseStr);
+        }
+
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.DeleteInvoicePdfInputModel;
 import com.home.apisdk.apiModel.DeleteInvoicePdfOutputModel;
 
@@ -57,9 +58,9 @@ public class DeleteInvoicePdfAsynTask extends AsyncTask<DeleteInvoicePdfInputMod
             HttpPost httppost = new HttpPost(APIUrlConstant.getDeleteInvoicePdfUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader("authToken", this.deleteInvoicePdfInputModel.getAuthToken());
-            httppost.addHeader("filepath", this.deleteInvoicePdfInputModel.getFilepath());
-            httppost.addHeader("lang_code",this.deleteInvoicePdfInputModel.getLanguage_code());
+            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.deleteInvoicePdfInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.FILE_PATH, this.deleteInvoicePdfInputModel.getFilepath());
+            httppost.addHeader(CommonConstants.LANG_CODE,this.deleteInvoicePdfInputModel.getLanguage_code());
 
 
             // Execute HTTP Post Request
@@ -104,19 +105,19 @@ public class DeleteInvoicePdfAsynTask extends AsyncTask<DeleteInvoicePdfInputMod
         super.onPreExecute();
         listener.onDeleteInvoicePdfPreExecuteStarted();
         code= 0;
-       /* if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
-            listener.onContactUsPostExecuteCompleted(contactUsOutputModel,code,message,status);
+            listener.onDeleteInvoicePdfPostExecuteCompleted(deleteInvoicePdfOutputModel,code,message,status);
             return;
         }
         if(CommonConstants.hashKey.equals(""))
         {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
-            listener.onContactUsPostExecuteCompleted(contactUsOutputModel,code,message,status);
-        }*/
+            listener.onDeleteInvoicePdfPostExecuteCompleted(deleteInvoicePdfOutputModel,code,message,status);
+        }
 
 
     }
