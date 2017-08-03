@@ -740,11 +740,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 playerModel.setVideoReleaseDate(videoReleaseDateTextView.getText().toString());
                 playerModel.setCensorRating(censorRatingStr);
 
-                Log.v("BKS","stramid="+playerModel.getStreamUniqueId());
-                Log.v("BKS","movieID="+playerModel.getMovieUniqueId());
-                Log.v("BKS","userid="+preferenceManager.getUseridFromPref());
-                Log.v("BKS","emailid="+playerModel.getEmailId());
-
+                Log.v("BKS","stramid=="+playerModel.getStreamUniqueId());
+                Log.v("BKS","movieID=="+playerModel.getMovieUniqueId());
+                Log.v("BKS","userid=="+preferenceManager.getUseridFromPref());
+                Log.v("BKS","emailid=="+preferenceManager.getEmailIdFromPref());
+                Log.v("BKS","freecontent=="+playerModel.getIsFreeContent());
+                Log.v("BKS","videotitle=="+playerModel.getVideoTitle());
+                Log.v("BKS","video story==="+playerModel.getVideoStory());
+                Log.v("BKS","video genre=="+playerModel.getVideoGenre());
+                Log.v("BKS","duration=="+playerModel.getVideoDuration());
+                Log.v("BKS","release date=="+playerModel.getVideoReleaseDate());
+                Log.v("BKS","sensor rating=="+playerModel.getCensorRating());
 
 
 
@@ -1520,7 +1526,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             if (get_video_details_output.getThirdparty_url() == null || get_video_details_output.getThirdparty_url().matches("")) {
                 if (get_video_details_output.getVideoUrl() != null || !get_video_details_output.getVideoUrl().matches("")) {
                     playerModel.setVideoUrl(get_video_details_output.getVideoUrl());
-                    Log.v("BISHAL", "videourl===" + playerModel.getVideoUrl());
+                    Log.v("BKS", "videourl===" + playerModel.getVideoUrl());
                     playerModel.setThirdPartyPlayer(false);
                 } else {
                     //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
@@ -1563,7 +1569,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             playerModel.setFakeSubTitlePath(get_video_details_output.getFakeSubTitlePath());
             playerModel.setVideoResolution(get_video_details_output.getVideoResolution());
             FakeSubTitlePath = get_video_details_output.getFakeSubTitlePath();
-
+            Log.v("BKS","subtitlename=="+playerModel.getSubTitleName());
+            Log.v("BKS","subtitlepath=="+playerModel.getSubTitlePath());
+            Log.v("BKS","resolutionformat=="+playerModel.getResolutionFormat());
+            Log.v("BKS","fakesubtitlepath=="+playerModel.getFakeSubTitlePath());
+            Log.v("BKS","videoresolution=="+playerModel.getVideoResolution());
+            Log.v("BKS","resolution url=="+playerModel.getResolutionUrl());
 
 
             if (playerModel.getVideoUrl() == null ||
