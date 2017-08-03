@@ -29,8 +29,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp">
+                android:paddingLeft="@dimen/layout_padding_left"
+                android:paddingRight="@dimen/layout_padding_right">
 
                 <RelativeLayout
                     android:id="@+id/loginLayout"
@@ -38,11 +38,11 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/registerImageView"
                     android:layout_centerInParent="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="@dimen/left_padding"
+                    android:layout_marginRight="@dimen/right_padding"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:padding="10dp">
+                    android:padding="@dimen/login_padding">
 
                     <EditText
                         android:id="@+id/editEmailStr"
@@ -56,7 +56,7 @@
                         android:textColorHint="@color/hint_color"
                         android:paddingTop="17dp"
                         android:textColor="@color/editTextColor"
-                        android:textSize="16dp"/>
+                        android:textSize="@dimen/email_text_size"/>
 
                     <EditText
                         android:id="@+id/editPasswordStr"
@@ -71,7 +71,7 @@
                         android:textColorHint="@color/hint_color"
                         android:paddingTop="17dp"
                         android:textColor="@color/editTextColor"
-                        android:textSize="16dp"
+                        android:textSize="@dimen/pass_text_size"
 
                         />
 
@@ -80,27 +80,28 @@
                         android:id="@+id/alreadyLoginLinearLayout"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:orientation="horizontal"
                         android:layout_below="@+id/editPasswordStr"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="20dp"
-                        android:orientation="horizontal">
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true">
 
                         <TextView
                             android:id="@+id/forgotPasswordTextView"
-                            android:layout_width="100dp"
+                            android:layout_width="@dimen/forgot_logo_width"
                             android:layout_height="wrap_content"
                             android:textColor="@color/forgotPasswordTextViewColor"
                             android:gravity="center"
                             android:maxLines="4"
-                            android:textSize="15dp" />
+                            android:textSize="@dimen/forgot_text_size" />
 
                         <Button
                             android:id="@+id/loginButton"
-                            android:layout_width="100dp"
-                            android:layout_height="40dp"
+                            android:layout_width="@dimen/login_butn_width"
+                            android:layout_height="@dimen/login_butn_height"
                             android:background="@drawable/button_radious"
                             android:textColor="@color/buttonTextColor"
-                            android:textSize="16dp"
+                            android:textSize="@dimen/submit_text_size"
                             android:text=""
                             android:stateListAnimator="@null"
                             android:gravity="center"
@@ -108,13 +109,13 @@
                             android:layout_alignParentEnd="true" />
 
                     </RelativeLayout>
-                   <!-- <com.facebook.login.widget.LoginButton
-                        android:id="@+id/loginWithFacebookButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginBottom="30dp" />-->
+                    <!-- <com.facebook.login.widget.LoginButton
+                         android:id="@+id/loginWithFacebookButton"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_gravity="center_horizontal"
+                         android:layout_marginTop="30dp"
+                         android:layout_marginBottom="30dp" />-->
                     <LinearLayout
                         android:id="@+id/btnLogin"
                         android:layout_width="match_parent"
@@ -144,7 +145,7 @@
                             android:layout_margin="5dp"
                             android:gravity="center"
                             android:textColor="@color/fb_text_color"
-                            android:textSize="16dp"
+                            android:textSize="@dimen/fb_text_size"
 
                             android:text="@string/fb_login_text" />
                     </LinearLayout>
@@ -172,18 +173,18 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="30dp"
                         android:layout_marginBottom="30dp" />
-                  <!--  <Button
-                        android:id="@+id/loginWithFacebookButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_below="@+id/alreadyLoginLinearLayout"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/button_radious"
-                        android:textColor="@color/white"
-                        android:textSize="18dp"
-                        android:visibility="gone"
+                    <!--  <Button
+                          android:id="@+id/loginWithFacebookButton"
+                          android:layout_width="match_parent"
+                          android:layout_height="40dp"
+                          android:layout_below="@+id/alreadyLoginLinearLayout"
+                          android:layout_marginTop="20dp"
+                          android:background="@drawable/button_radious"
+                          android:textColor="@color/white"
+                          android:textSize="18dp"
+                          android:visibility="gone"
 
-                        />-->
+                          />-->
 
                     <LinearLayout
                         android:id="@+id/newUserLinearLayout"
@@ -202,7 +203,7 @@
                             android:clickable="true"
                             android:gravity="center"
                             android:textColor="@color/login_new_user_text_color"
-                            android:textSize="15dp"
+                            android:textSize="@dimen/login_newuser_size"
 
                             />
 
@@ -215,7 +216,7 @@
                             android:clickable="true"
                             android:gravity="center"
                             android:textColor="@color/sign_up_text_color"
-                            android:textSize="15dp"
+                            android:textSize="@dimen/signup_textsize"
                             android:textStyle="bold" />
 
                     </LinearLayout>
@@ -225,8 +226,8 @@
 
                 <ImageView
                     android:id="@+id/registerImageView"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="@dimen/forgot_logo_width"
+                    android:layout_height="@dimen/forgot_logo_height"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/logo" />

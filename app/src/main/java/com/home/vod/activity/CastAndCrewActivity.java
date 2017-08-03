@@ -2,7 +2,6 @@ package com.home.vod.activity;
 
 import android.content.DialogInterface;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -55,7 +54,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
     LinearLayout primary_layout;
     boolean isNetwork;
 
-    String movie_id, movie_uniq_id;
+    String movie_id;
 
     int corePoolSize = 60;
     int maximumPoolSize = 80;

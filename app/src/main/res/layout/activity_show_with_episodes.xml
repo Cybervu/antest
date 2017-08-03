@@ -107,9 +107,7 @@
                         android:layout_centerHorizontal="true"
                         android:adjustViewBounds="true"
                         android:background="@drawable/content_list_overlay"
-                        android:scaleType="centerCrop"
-
-                        />
+                        android:scaleType="centerCrop"/>
 
 
                     <RelativeLayout

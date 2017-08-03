@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/sectionTitle"
 
-        android:textSize="22dp"
+        android:textSize="@dimen/sectiontitle_text_size"
         android:padding="6dp"
         android:textStyle="normal"
         android:textColor="@color/pageTitleColor"/>
@@ -73,7 +73,7 @@
             android:maxLines="4"
             android:singleLine="false"
             android:textColor="@color/noInternetColor"
-            android:textSize="36sp"
+            android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
 
@@ -97,7 +97,7 @@
             android:maxLines="4"
             android:singleLine="false"
             android:textColor="@color/noInternetColor"
-            android:textSize="36sp"
+            android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
 
@@ -124,7 +124,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/demoListView"
-            android:layout_width="250dp"
+            android:layout_width="@dimen/recylerview_width"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/arrowIv"

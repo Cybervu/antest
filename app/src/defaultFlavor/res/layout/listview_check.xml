@@ -10,7 +10,7 @@
         android:id="@+id/listTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14dp"
+        android:textSize="@dimen/video_text_size"
         android:layout_weight="1"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
@@ -20,8 +20,8 @@
         android:text=""/>
 
     <ImageView
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="@dimen/listview_img_width"
+        android:layout_height="@dimen/listview_img_height"
         android:id="@+id/listCheckBox"
         android:clickable="true"
         android:layout_marginTop="5dp"

@@ -5,11 +5,11 @@
     android:clickable="true"
     android:orientation="vertical">
 
-   <!-- <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/navIconImageView"
-        android:src="@drawable/ic_search"/>-->
+    <!-- <ImageView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:id="@+id/navIconImageView"
+         android:src="@drawable/ic_search"/>-->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -31,12 +31,12 @@
         android:textColor="@color/nav_drawer_text_Color"
         android:text=""
         android:textStyle="bold" />
-   <!-- <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:padding="8dp"
+    <!-- <TextView
+         android:layout_width="match_parent"
+         android:layout_height="1dp"
+         android:padding="8dp"
 
-        android:background="@color/black"
-        />
--->
+         android:background="@color/black"
+         />
+ -->
 </LinearLayout>

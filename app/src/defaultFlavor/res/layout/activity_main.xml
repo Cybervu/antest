@@ -62,7 +62,7 @@
             android:singleLine="false"
             android:layout_centerInParent="true"
             android:textColor="@color/noInternetColor"
-            android:textSize="36sp"
+            android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
 
