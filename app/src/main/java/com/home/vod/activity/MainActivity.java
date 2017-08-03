@@ -348,7 +348,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
 
-        MenuItem item7 = null;
+        MenuItem item7 =  menu.findItem(R.id.menu_item_favorite);
 
         loggedInStr = preferenceManager.getLoginStatusFromPref();
         id = preferenceManager.getUseridFromPref();

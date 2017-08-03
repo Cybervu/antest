@@ -1213,7 +1213,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
         /***************chromecast**********************/
 
         MenuItem item, item1, item2, item3, item4, item5, item6;
-        MenuItem item7 = null;
+        MenuItem item7=  menu.findItem(R.id.menu_item_favorite);
         item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
         String loggedInStr = preferenceManager.getLoginStatusFromPref();

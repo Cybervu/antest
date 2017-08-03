@@ -217,7 +217,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     String movieStreamUniqueId,bannerImageId,posterImageId
             ,priceForUnsubscribedStr,priceFosubscribedStr,currencyIdStr,currencyCountryCodeStr,
             currencySymbolStr;
-    String movieUniqueId ,isEpisode= "";
+    String movieUniqueId="" ,isEpisode= "";
     int isFreeContent,isPPV,isConverted,contentTypesId,isAPV;
     SharedPreferences pref;
     RelativeLayout noInternetConnectionLayout,noDataLayout,iconImageRelativeLayout,bannerImageRelativeLayout;
@@ -295,7 +295,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         MenuItem item,item1,item2,item3,item4,item5,item6;
         item= menu.findItem(R.id.action_filter);
         item.setVisible(false);
-        MenuItem item7 = null;
+        MenuItem item7 =  menu.findItem(R.id.menu_item_favorite);
         item= menu.findItem(R.id.action_filter);
         item.setVisible(false);
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
@@ -973,6 +973,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         movieUniqueId = contentDetailsOutput.getMuviUniqId();
         isEpisode = contentDetailsOutput.getIsEpisode();
+        movieStreamUniqueId=contentDetailsOutput.getMovieStreamUniqId();
+        movieNameStr=contentDetailsOutput.getName();
+        movieTrailerUrlStr=contentDetailsOutput.getTrailerUrl();
+        videoduration=contentDetailsOutput.getVideoDuration();
+        censorRatingStr=contentDetailsOutput.getCensorRating();
+        movieTypeStr=contentDetailsOutput.getGenre();
+
+
         //  castValue = contentDetailsOutput.getCastStr();
 
 //        Log.v("SUBHA2","cast value" +castValue);
@@ -1578,6 +1586,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                                     asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                                    Log.v("BKS","contentid"+getVideoDetailsInput.getContent_uniq_id());
                                 } else {
                                     ValidateUserInput validateUserInput = new ValidateUserInput();
                                     validateUserInput.setAuthToken(Util.authTokenStr);
