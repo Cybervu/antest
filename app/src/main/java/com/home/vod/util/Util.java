@@ -141,6 +141,7 @@ public class Util {
 
     public static String GOOGLE_FCM_TOKEN = "GOOGLE_FCM_TOKEN";
     public static String DEFAULT_GOOGLE_FCM_TOKEN = "0";
+    public static boolean favorite_clicked = false;
 
     public static int check_for_subscription = 0;
 
@@ -156,11 +157,12 @@ public class Util {
     public static boolean call_finish_at_onUserLeaveHint = true;
     //public static final String authTokenStr = "e8ae05a2ef3fd0c6688952c8f7557823"; //vishwam.tv
     // public static final String authTokenStr = "4d4fe07c6d8c8317ab45e6b1a2dff08a"; //monica studio
-    public static final String authTokenStr = "6a9c6e9bfeee69e63d4bab668c01dc0a"; //monica studio
+//    public static final String authTokenStr = "6a9c6e9bfeee69e63d4bab668c01dc0a"; //monica studio
 //   public static final String authTokenStr = "445882348316089103b8729dcb397c51"; //classic demo
 //   public static final String authTokenStr = "6c8387e47eefeafa57dd5386bc90454c"; //testsanchi
 //   public static final String authTokenStr = "a2478e71219f606cb5b7a3d3f7a35fe8"; //Cmax
 // public static final String authTokenStr = "25e74a5c88d19c4b57c8138bf47abdf7"; //MobPlay
+ public static final String authTokenStr = "4298851905443517c9f161e6b0471969"; //AAtto
 
     public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
 
@@ -288,6 +290,8 @@ public class Util {
     public static String IS_RESTRICT_DEVICE = "IS_RESTRICT_DEVICE";
     public static String DEFAULT_IS_RESTRICT_DEVICE = "0";
 
+   public static String HAS_FAVORITE = "HAS_FAVORITE";
+   public static String DEFAULT_HAS_FAVORITE = "0";
 
     public static String IS_ONE_STEP_REGISTRATION = "IS_ONE_STEP_REGISTRATION";
     public static String DEFAULT_IS_ONE_STEP_REGISTRATION = "0";
@@ -454,7 +458,16 @@ public class Util {
     public static String MANAGE_DEVICE = "MANAGE_DEVICE";
     public static String YOUR_DEVICE = "YOUR_DEVICE";
     public static String ANDROID_VERSION = "OS_VERSION";
-
+    public static String SUBMIT_YOUR_RATING_TITLE = "SUBMIT_YOUR_RATING_TITLE";
+    public static String BTN_POST_REVIEW = "BTN_POST_REVIEW";
+    public static String ENTER_REVIEW_HERE = "ENTER_REVIEW_HERE";
+    public static String NEED_LOGIN_TO_REVIEW = "NEED_LOGIN_TO_REVIEW";
+    public static String CLICK_HERE = "CLICK_HERE";
+    public static String TO_LOGIN = "TO_LOGIN";
+    public static String ADD_A_REVIEW = "ADD_A_REVIEW";
+    public static String REVIEWS = "REVIEWS";
+    public static String LOGIN_FACEBOOK = "LOGIN_FACEBOOK";
+    public static String REGISTER_FACEBOOK = "REGISTER_FACEBOOK";
 
 // ======================= Constants For The Language Default Key =========================//
 
@@ -462,7 +475,18 @@ public class Util {
     public static String DEFAULT_DEREGISTER = "Deregister";
     public static String DEFAULT_MANAGE_DEVICE = "Manage Device";
     public static String DEFAULT_YOUR_DEVICE = "Your Devices";
-
+    public static String DEFAULT_NEED_LOGIN_TO_REVIEW = "You need to login to add your review.";
+    public static String DEFAULT_BTN_POST_REVIEW = "Post Review";
+    public static String DEFAULT_ENTER_REVIEW_HERE = "Enter your Review here...max 50 characters";
+    public static String DEFAULT_SUBMIT_YOUR_RATING_TITLE = "Submit Your Rating";
+    public static String DEFAULT_CLICK_HERE = "Click here";
+    public static String DEFAULT_TO_LOGIN = "to login.";
+    public static String DEFAULT_ADD_A_REVIEW = "Add a Review";
+    public static String DEFAULT_REVIEWS = "Reviews";
+    public static String DEFAULT_LOGIN_FACEBOOK = "LOGIN WITH FACEBOOK";
+    public static String DEFAULT_REGISTER_FACEBOOK = "REGISTER WITH FACEBOOK";
+    public static String DEFAULT_VIDEO_ISSUE = "There's a problem with a video or Internet connection";
+    public static String DEFAULT_MY_FAVOURITE = "My Favourite";
 
     public static String DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE = "Logout process has been successfully completed. Now you are authorized to login.";
     public static String DEFAULT_LOGIN_STATUS_MESSAGE = "You are no longer logged in . Please log in again.";

@@ -63,6 +63,7 @@ import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
 import com.home.apisdk.apiModel.APVModel;
 import com.home.apisdk.apiModel.CurrencyModel;
+import com.home.apisdk.apiModel.Episode_Details_input;
 import com.home.apisdk.apiModel.Episode_Details_output;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.Get_Video_Details_Output;
@@ -135,7 +136,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
     int previousTotal = 0;
     VideoDetailsAsynctask asynLoadVideoUrls;
-    AsynEpisodeDetails asynEpisodeDetails;
+    GetEpisodeDeatailsAsynTask asynEpisodeDetails;
     GetValidateUserAsynTask asynValidateUserDetails;
     EpisodesListModel itemToPlay;
     String permalinkStr;
@@ -631,6 +632,25 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     @Override
     public void onGetEpisodeDetailsPostExecuteCompleted(ArrayList<Episode_Details_output> episode_details_output, int i, int status, String message) {
 
+
+        if (itemData.size() <= 0) {
+            footerView.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.GONE);
+            episodelist.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            AsynLOADUI loadui = new AsynLOADUI();
+            loadui.executeOnExecutor(threadPoolExecutor);
+
+            //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
+        } else {
+            footerView.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.GONE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            episodelist.setVisibility(View.VISIBLE);
+            AsynLOADUI loadui = new AsynLOADUI();
+            loadui.executeOnExecutor(threadPoolExecutor);
+        }
+
     }
 
     @Override
@@ -891,7 +911,18 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             } else {
                 //Call whatever you want
                 if (isNetwork == true) {
-                    asynEpisodeDetails = new AsynEpisodeDetails();
+
+                    Episode_Details_input episodeDetailsInput = new Episode_Details_input();
+                    episodeDetailsInput.setAuthtoken(Util.authTokenStr);
+                    episodeDetailsInput.setPermalink(permalinkStr);
+                    episodeDetailsInput.setSeries_number(getIntent().getStringExtra(Util.SEASON_INTENT_KEY));
+                    episodeDetailsInput.setLimit(String.valueOf(limit));
+                    episodeDetailsInput.setOffset(String.valueOf(offset));
+                    episodeDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
+                    episodeDetailsInput.setLang_code(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+
+
+                    asynEpisodeDetails = new GetEpisodeDeatailsAsynTask(episodeDetailsInput,Episode_list_Activity.this,Episode_list_Activity.this);
                     asynEpisodeDetails.executeOnExecutor(threadPoolExecutor);
                 } else {
                     noInternetConnectionLayout.setVisibility(View.VISIBLE);
@@ -936,7 +967,17 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     boolean isNetwork = Util.checkNetwork(Episode_list_Activity.this);
                     if (isNetwork == true) {
                         // default data
-                        asynEpisodeDetails = new AsynEpisodeDetails();
+                        Episode_Details_input episodeDetailsInput = new Episode_Details_input();
+                        episodeDetailsInput.setAuthtoken(Util.authTokenStr);
+                        episodeDetailsInput.setPermalink(permalinkStr);
+                        episodeDetailsInput.setSeries_number(getIntent().getStringExtra(Util.SEASON_INTENT_KEY));
+                        episodeDetailsInput.setLimit(String.valueOf(limit));
+                        episodeDetailsInput.setOffset(String.valueOf(offset));
+                        episodeDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
+                        episodeDetailsInput.setLang_code(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+
+
+                        asynEpisodeDetails = new GetEpisodeDeatailsAsynTask(episodeDetailsInput,Episode_list_Activity.this,Episode_list_Activity.this);
                         asynEpisodeDetails.executeOnExecutor(threadPoolExecutor);
                     }
 
@@ -2347,6 +2388,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     }*/
 
 
+/*
     private class AsynEpisodeDetails extends AsyncTask<Void, Void, Void> {
         // ProgressDialog pDialog;
         String responseStr;
@@ -2909,6 +2951,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
 
     }
+*/
 
     private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
         @Override
@@ -3318,7 +3361,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         MenuItem item, item1, item2, item3, item4, item5, item6;
         item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
-
+        MenuItem item7 = null;
         mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(Episode_list_Activity.this, menu, R.id.media_route_menu_item);
 
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
@@ -3343,6 +3386,13 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             item1.setTitle(Util.getTextofLanguage(Episode_list_Activity.this, Util.PROFILE, Util.DEFAULT_PROFILE));
 
             item1.setVisible(true);
+
+            if ((Util.getTextofLanguage(Episode_list_Activity.this, Util.HAS_FAVORITE, Util.DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
+                item7.setVisible(true);
+            }else{
+                item7.setVisible(false);
+
+            }
             item2 = menu.findItem(R.id.action_purchage);
             item2.setTitle(Util.getTextofLanguage(Episode_list_Activity.this, Util.PURCHASE_HISTORY, Util.DEFAULT_PURCHASE_HISTORY));
 
@@ -4714,7 +4764,17 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                         boolean isNetwork = Util.checkNetwork(Episode_list_Activity.this);
                         if (isNetwork == true) {
-                            asynEpisodeDetails = new AsynEpisodeDetails();
+                            Episode_Details_input episodeDetailsInput = new Episode_Details_input();
+                            episodeDetailsInput.setAuthtoken(Util.authTokenStr);
+                            episodeDetailsInput.setPermalink(permalinkStr);
+                            episodeDetailsInput.setSeries_number(getIntent().getStringExtra(Util.SEASON_INTENT_KEY));
+                            episodeDetailsInput.setLimit(String.valueOf(limit));
+                            episodeDetailsInput.setOffset(String.valueOf(offset));
+                            episodeDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
+                            episodeDetailsInput.setLang_code(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+
+
+                            asynEpisodeDetails = new GetEpisodeDeatailsAsynTask(episodeDetailsInput,Episode_list_Activity.this,Episode_list_Activity.this);
                             asynEpisodeDetails.executeOnExecutor(threadPoolExecutor);
                         } else {
                             noInternetConnectionLayout.setVisibility(View.VISIBLE);

@@ -109,44 +109,6 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
 
     }
 
- /*   private void prepareMovieData() {
-        GetCastCrewItem movie = new GetCastCrewItem("Mad Max: Fury Road", "Action & Adventure", R.mipmap.ic_launcher);
-        castCrewItems.add(movie);
-
-        movie = new GetCastCrewItem("Inside Out", "Animation, Kids & Family", R.mipmap.ic_launcher);
-        castCrewItems.add(movie);
-
-        movie = new GetCastCrewItem("Star Wars: Episode VII - The Force Awakens, eyfgey yugyef yyugfewf ygew", "Action", R.drawable.logo);
-        castCrewItems.add(movie);
-
-        movie = new GetCastCrewItem("Shaun the Sheep", "Animation", R.drawable.logo);
-        castCrewItems.add(movie);
-
-        movie = new GetCastCrewItem("The Martian", "Science Fiction & Fantasy", R.mipmap.ic_launcher);
-        castCrewItems.add(movie);
-
-        movie = new GetCastCrewItem("Mission: Impossible Rogue Nation", "Action", R.drawable.logo);
-        castCrewItems.add(movie);
-
-        movie = new GetCastCrewItem("Up", "Animation", R.drawable.logo);
-        castCrewItems.add(movie);
-
-        movie = new GetCastCrewItem("Star Trek", "Science Fiction", R.drawable.logo);
-        castCrewItems.add(movie);
-
-        movie = new GetCastCrewItem("The LEGO Movie", "Animation", R.drawable.logo);
-        castCrewItems.add(movie);
-
-        movie = new GetCastCrewItem("Iron Man", "Action & Adventure", R.drawable.logo);
-        castCrewItems.add(movie);
-
-        movie = new GetCastCrewItem("Aliens", "Science Fiction", R.drawable.logo);
-        castCrewItems.add(movie);
-
-
-
-        //castCrewAdapter.notifyDataSetChanged();
-    }*/
 
     public void GetCsatCrewDetails() {
         noInternetLayout.setVisibility(View.GONE);

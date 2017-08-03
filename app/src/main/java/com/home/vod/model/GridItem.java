@@ -10,6 +10,25 @@ public class GridItem {
 	private int isPPV;
 	private int isAPV;
 
+	private boolean isClicked;
+	private boolean isSelected;
+
+	public boolean isClicked() {
+		return isClicked;
+	}
+
+	public void setClicked(boolean clicked) {
+		isClicked = clicked;
+	}
+	public boolean isSelected() {
+		return isSelected;
+	}
+
+	public void setSelected(boolean selected) {
+		isSelected = selected;
+	}
+
+
 	public int getIsAPV() {
 		return isAPV;
 	}

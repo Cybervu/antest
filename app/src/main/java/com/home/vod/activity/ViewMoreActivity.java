@@ -1213,6 +1213,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
         /***************chromecast**********************/
 
         MenuItem item, item1, item2, item3, item4, item5, item6;
+        MenuItem item7 = null;
         item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
@@ -1239,6 +1240,13 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
             item2.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.PURCHASE_HISTORY, Util.DEFAULT_PURCHASE_HISTORY));
 
             item2.setVisible(true);
+
+            if ((Util.getTextofLanguage(ViewMoreActivity.this, Util.HAS_FAVORITE, Util.DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
+                item7.setVisible(true);
+            }else{
+                item7.setVisible(false);
+
+            }
             item3 = menu.findItem(R.id.action_logout);
             item3.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.LOGOUT, Util.DEFAULT_LOGOUT));
             item3.setVisible(true);

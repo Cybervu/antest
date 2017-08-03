@@ -1,15 +1,55 @@
 package com.home.apisdk.apiModel;
 
+import java.util.ArrayList;
+
 /**
  * Created by Muvi on 9/28/2016.
  */
 public class ContentDetailsOutput{
-String movieStreamUniqId,muviUniqId,censorRating,
-        releaseDate,story,videoDuration,isFreeContent,isAdvance,actor,
-        director,cast_detail,trailerUrl,movieUrlForTv,movieUrl,embeddedUrl,
-        banner,poster,comments,epDetails,name,
-        contentTypesId,permalink,genre;
+String movieStreamUniqId = "";
+    String muviUniqId = "";
+    String censorRating = "";
+    String releaseDate = "";
+    String story = "";
+    String videoDuration = "";
+    String isFreeContent = "";
+    String isAdvance = "";
+    String actor = "";
+    String director;
+    String cast_detail;
+    String trailerUrl;
+    String movieUrlForTv;
+    String movieUrl;
+    String embeddedUrl;
+    String banner;
+    String poster;
+    String comments;
+    String epDetails;
+    String name;
+    String contentTypesId;
+    String permalink;
+    String genre = "";
+
+    public String getIsEpisode() {
+        return isEpisode;
+    }
+
+    public void setIsEpisode(String isEpisode) {
+        this.isEpisode = isEpisode;
+    }
+
+    String isEpisode = "";
     int isConverted;
+
+    public Boolean getCastStr() {
+        return castStr;
+    }
+
+    public void setCastStr(Boolean castStr) {
+        this.castStr = castStr;
+    }
+
+    Boolean castStr;
 
     public int getIsPpv() {
         return isPpv;
@@ -24,6 +64,8 @@ String movieStreamUniqId,muviUniqId,censorRating,
     APVModel apvDetails;
     PPVModel ppvDetails;
     CurrencyModel currencyDetails;
+
+
 
     public APVModel getApvDetails() {
         return apvDetails;

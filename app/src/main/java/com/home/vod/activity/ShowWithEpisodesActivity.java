@@ -49,12 +49,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.apiController.GetContentDetailsAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
 import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
 import com.home.apisdk.apiModel.APVModel;
+import com.home.apisdk.apiModel.ContentDetailsInput;
+import com.home.apisdk.apiModel.ContentDetailsOutput;
 import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.Get_Video_Details_Output;
@@ -108,7 +111,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ShowWithEpisodesActivity extends AppCompatActivity implements VideoDetailsAsynctask.VideoDetails, GetValidateUserAsynTask.GetValidateUser,
-        LogoutAsynctask.Logout, GetLanguageListAsynTask.GetLanguageList, GetTranslateLanguageAsync.GetTranslateLanguageInfoListner {
+        LogoutAsynctask.Logout, GetLanguageListAsynTask.GetLanguageList, GetContentDetailsAsynTask.GetContentDetails ,GetTranslateLanguageAsync.GetTranslateLanguageInfoListner {
     String movieDetailsStr = "";
     String priceForUnsubscribedStr, priceFosubscribedStr;
     PPVModel ppvmodel;
@@ -129,88 +132,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
         /*subtitle-------------------------------------*/
 
 
-   /* *//*chromecast-------------------------------------*//*
-    View view;
-
-
-
-    public enum PlaybackLocation {
-        LOCAL,
-        REMOTE
-    }
-
-    */
-    /**
-     * List of various states that we can be in
-     *//*
-    public enum PlaybackState {
-        PLAYING, PAUSED, BUFFERING, IDLE
-    }
-
-    private PlaybackLocation mLocation;
-    private PlaybackState mPlaybackState;
-    private final float mAspectRatio = 72f / 128;
-    private AQuery mAquery;
-    private MediaInfo mSelectedMedia;
-
-
-    private CastContext mCastContext;
-    private SessionManagerListener<CastSession> mSessionManagerListener =
-            new MySessionManagerListener();
-    private CastSession mCastSession;
-
-
-    private class MySessionManagerListener implements SessionManagerListener<CastSession> {
-
-        @Override
-        public void onSessionEnded(CastSession session, int error) {
-            if (session == mCastSession) {
-                mCastSession = null;
-            }
-            invalidateOptionsMenu();
-        }
-
-        @Override
-        public void onSessionResumed(CastSession session, boolean wasSuspended) {
-            mCastSession = session;
-            invalidateOptionsMenu();
-        }
-
-        @Override
-        public void onSessionStarted(CastSession session, String sessionId) {
-            mCastSession = session;
-            invalidateOptionsMenu();
-        }
-
-        @Override
-        public void onSessionStarting(CastSession session) {
-        }
-
-        @Override
-        public void onSessionStartFailed(CastSession session, int error) {
-        }
-
-        @Override
-        public void onSessionEnding(CastSession session) {
-        }
-
-        @Override
-        public void onSessionResuming(CastSession session, String sessionId) {
-        }
-
-        @Override
-        public void onSessionResumeFailed(CastSession session, int error) {
-        }
-
-        @Override
-        public void onSessionSuspended(CastSession session, int reason) {
-        }
-    }
-
-
-    MediaInfo mediaInfo;
-    *//*chromecast-------------------------------------*//*
-*/
 
     public static ProgressBarHandler progressBarHandler;
     String email, id;
@@ -219,6 +140,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
     String Previous_Selected_Language = "";
     int prevPosition = 0;
 
+    GetContentDetailsAsynTask asynLoadMovieDetails;
 
     VideoDetailsAsynctask asynLoadVideoUrls;
     GetValidateUserAsynTask asynValidateUserDetails;
@@ -687,8 +609,12 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
             //Call whatever you want
             if (Util.checkNetwork(ShowWithEpisodesActivity.this)) {
 
-                AsynLoadMovieDetails asyncLoadVideos = new AsynLoadMovieDetails();
-                asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
+                ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
+                contentDetailsInput.setAuthToken(Util.authTokenStr);
+                contentDetailsInput.setPermalink(permalinkStr);
+
+                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput,ShowWithEpisodesActivity.this,ShowWithEpisodesActivity.this);
+                asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
 
 
             } else {
@@ -1269,6 +1195,168 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
         if (progressBarHandler.isShowing()) {
             progressBarHandler.hide();
             progressBarHandler = null;
+
+        }
+    }
+
+    @Override
+    public void onGetContentDetailsPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onGetContentDetailsPostExecuteCompleted(ContentDetailsOutput contentDetailsOutput, int status, String message) {
+
+
+        movieUniqueId = contentDetailsOutput.getMuviUniqId();
+        //  castValue = contentDetailsOutput.getCastStr();
+
+
+        Log.v("SUBHA","movieUniqueId====== kjdsvnib"+movieUniqueId);
+        noInternetConnectionLayout.setVisibility(View.GONE);
+        noDataLayout.setVisibility(View.GONE);
+        if (contentDetailsOutput.getIsApv() == 1) {
+            playButton.setVisibility(View.INVISIBLE);
+
+        } else if (contentDetailsOutput.getIsApv() == 0 && contentDetailsOutput.getIsPpv() == 0 && contentDetailsOutput.getIsConverted() == 0) {
+            if (contentDetailsOutput.getContentTypesId().equals(4)) {
+                playButton.setVisibility(View.VISIBLE);
+
+            } else {
+                playButton.setVisibility(View.INVISIBLE);
+
+            }
+
+        } else if (contentDetailsOutput.getIsApv() == 0 && contentDetailsOutput.getIsPpv() == 0 && contentDetailsOutput.getIsConverted() == 1) {
+            playButton.setVisibility(View.VISIBLE);
+
+
+        }
+        videoTitle.setVisibility(View.VISIBLE);
+        Typeface castDescriptionTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+        videoTitle.setTypeface(castDescriptionTypeface);
+        videoTitle.setText(contentDetailsOutput.getName());
+
+        if (contentDetailsOutput.getTrailerUrl().matches("") || contentDetailsOutput.getTrailerUrl().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+            watchTrailerButton.setVisibility(View.INVISIBLE);
+        } else {
+            watchTrailerButton.setText(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.VIEW_TRAILER, Util.DEFAULT_VIEW_TRAILER));
+
+            watchTrailerButton.setVisibility(View.VISIBLE);
+        }
+
+        if (contentDetailsOutput.getGenre() != null && contentDetailsOutput.getGenre().matches("") || contentDetailsOutput.getGenre().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+            videoGenreTextView.setVisibility(View.GONE);
+
+        } else {
+            videoGenreTextView.setVisibility(View.VISIBLE);
+            Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+            videoGenreTextView.setTypeface(videoGenreTextViewTypeface);
+            videoGenreTextView.setText(contentDetailsOutput.getGenre());
+
+        }
+        if(contentDetailsOutput.getVideoDuration().matches("") || contentDetailsOutput.getVideoDuration().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))){
+            videoDurationTextView.setVisibility(View.GONE);
+
+        }else{
+
+            videoDurationTextView.setVisibility(View.VISIBLE);
+            Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+            videoDurationTextView.setTypeface(videoGenreTextViewTypeface);
+            videoDurationTextView.setText(contentDetailsOutput.getVideoDuration());
+        }
+
+
+        if(contentDetailsOutput.getReleaseDate().matches("") || contentDetailsOutput.getReleaseDate().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))){
+            videoReleaseDateTextView.setVisibility(View.GONE);
+        }else{
+            videoReleaseDateTextView.setVisibility(View.VISIBLE);
+            Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+            videoReleaseDateTextView.setTypeface(videoGenreTextViewTypeface);
+            movieReleaseDateStr = Util.formateDateFromstring("yyyy-mm-dd", "yyyy", contentDetailsOutput.getReleaseDate());
+            videoReleaseDateTextView.setText(movieReleaseDateStr);
+
+        }
+
+        if(contentDetailsOutput.getStory().matches("") || contentDetailsOutput.getStory().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))){
+            videoStoryTextView.setVisibility(View.GONE);
+
+        }else{
+            videoStoryTextView.setVisibility(View.VISIBLE);
+            Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+            videoStoryTextView.setTypeface(videoGenreTextViewTypeface);
+            videoStoryTextView.setText(contentDetailsOutput.getStory());
+
+        }
+
+        if (contentDetailsOutput.getCensorRating().matches("") || contentDetailsOutput.getCensorRating().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+            videoCensorRatingTextView.setVisibility(View.GONE);
+            videoCensorRatingTextView1.setVisibility(View.GONE);
+
+        } else {
+
+            if (contentDetailsOutput.getCensorRating().contains("-")) {
+                String Data[] = contentDetailsOutput.getCensorRating().split("-");
+                videoCensorRatingTextView.setVisibility(View.VISIBLE);
+                videoCensorRatingTextView1.setVisibility(View.VISIBLE);
+                Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                videoCensorRatingTextView.setTypeface(videoGenreTextViewTypeface);
+                videoCensorRatingTextView1.setTypeface(videoGenreTextViewTypeface);
+
+                videoCensorRatingTextView.setText(Data[0]);
+                videoCensorRatingTextView1.setText(Data[1]);
+
+            } else {
+                videoCensorRatingTextView.setVisibility(View.VISIBLE);
+                videoCensorRatingTextView1.setVisibility(View.GONE);
+                Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                videoCensorRatingTextView.setTypeface(videoGenreTextViewTypeface);
+                videoCensorRatingTextView.setText(contentDetailsOutput.getCensorRating());
+            }
+
+
+        }
+
+       /* if (castValue == true){
+            videoCastCrewTitleTextView.setText(Util.getTextofLanguage(MovieDetailsActivity.this, Util.CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
+            Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+            videoCastCrewTitleTextView.setTypeface(videoGenreTextViewTypeface);
+            videoCastCrewTitleTextView.setVisibility(View.VISIBLE);
+        }
+*/
+        if (contentDetailsOutput.getBanner().trim().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+
+            if (contentDetailsOutput.getPoster().trim().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+
+                moviePoster.setImageResource(R.drawable.logo);
+            } else {
+
+
+                ImageLoader imageLoader = ImageLoader.getInstance();
+                imageLoader.init(ImageLoaderConfiguration.createDefault(ShowWithEpisodesActivity.this));
+
+                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
+                        .cacheOnDisc(true).resetViewBeforeLoading(true)
+                        .showImageForEmptyUri(R.drawable.logo)
+                        .showImageOnFail(R.drawable.logo)
+                        .showImageOnLoading(R.drawable.logo).build();
+                imageLoader.displayImage(contentDetailsOutput.getPoster(), moviePoster, options);
+
+            }
+
+        } else {
+
+
+            ImageLoader imageLoader = ImageLoader.getInstance();
+            imageLoader.init(ImageLoaderConfiguration.createDefault(ShowWithEpisodesActivity.this));
+
+            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
+                    .cacheOnDisc(true).resetViewBeforeLoading(true)
+                    .showImageForEmptyUri(R.drawable.logo)
+                    .showImageOnFail(R.drawable.logo)
+                    .showImageOnLoading(R.drawable.logo).build();
+            imageLoader.displayImage(contentDetailsOutput.getPoster().trim(), moviePoster, options);
+
 
         }
     }
@@ -3585,6 +3673,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
 
 */
         MenuItem item, item1, item2, item3, item4, item5, item6;
+        MenuItem item7 = null;
         item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
@@ -3607,6 +3696,12 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
             item1.setTitle(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.PROFILE, Util.DEFAULT_PROFILE));
             item1.setVisible(true);
 
+            if ((Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.HAS_FAVORITE, Util.DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
+                item7.setVisible(true);
+            }else{
+                item7.setVisible(false);
+
+            }
             item2 = menu.findItem(R.id.action_purchage);
             item2.setTitle(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.PURCHASE_HISTORY, Util.DEFAULT_PURCHASE_HISTORY));
             item2.setVisible(true);
@@ -5088,8 +5183,13 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
 
                         if (Util.checkNetwork(ShowWithEpisodesActivity.this)) {
 
-                            AsynLoadMovieDetails asyncLoadVideos = new AsynLoadMovieDetails();
-                            asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
+                            ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
+                            contentDetailsInput.setAuthToken(Util.authTokenStr);
+                            contentDetailsInput.setPermalink(permalinkStr);
+
+                            asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput,ShowWithEpisodesActivity.this,ShowWithEpisodesActivity.this);
+                            asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+
 
                         } else {
                             Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();

@@ -115,6 +115,27 @@
 
 
                 <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/favorite"
+                    android:gravity="right"
+                    android:layout_alignTop="@+id/bannerImageView"
+                    android:layout_alignRight="@+id/bannerImageView"
+                    android:layout_marginTop="20dp"
+                    >
+
+                    <ImageView
+                        android:id="@+id/favorite_view"
+                        android:visibility="visible"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/favorite_unselected"
+                        android:layout_marginRight="20dp"
+                        />
+
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:id="@+id/relativeOverlayLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -267,24 +288,68 @@
                 android:orientation="vertical"
                 android:visibility="visible">
 
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone" />
+                    android:orientation="horizontal">
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        style="@style/customRatingBar"
+                        android:focusable="false"
+                        android:visibility="visible" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
 
-                <com.home.vod.util.ExpandableTextView
-                    android:id="@+id/videoStoryTextView"
+                        android:gravity="center"
+                        android:id="@+id/viewRatingTextView"
+                        android:clickable="true"
+                        android:textStyle="bold"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="8dp"
+                        android:layout_centerVertical="true"
+                        android:textSize="14dp"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/viewStoryLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="7dp"
+                    >
 
-                    android:textColor="@color/videotextColor"
-                    android:textSize="14dp" />
+                    <TextView
+                        android:id="@+id/videoStoryTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:ellipsize="end"
+                        android:text=""
+                        android:textColor="@color/videotextColor"
+                        android:textSize="14dp"
+                        />
+                    <Button
+                        android:id="@+id/storyViewMoreButton"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="View More"
+                        android:visibility="gone"
+                        android:textAllCaps="false"
+                        android:textSize="14dp"
+                        android:background="@color/transparent"
+                        android:textColor="@color/button_background"
+                        android:layout_centerVertical="true"/>
+                </RelativeLayout>
+
 
                 <TextView
                     android:id="@+id/videoCastCrewTitleTextView"

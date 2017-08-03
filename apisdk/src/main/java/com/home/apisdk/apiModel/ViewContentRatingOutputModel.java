@@ -9,12 +9,12 @@ import java.util.ArrayList;
 public class ViewContentRatingOutputModel {
 
     ArrayList<Rating> RatingArray = new ArrayList<>();
-    String showrating;
-    public String getShowrating() {
+    int showrating;
+    public int getShowrating() {
         return showrating;
     }
 
-    public void setShowrating(String showrating) {
+    public void setShowrating(int showrating) {
         this.showrating = showrating;
     }
 
