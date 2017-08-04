@@ -20,6 +20,8 @@ import com.home.apisdk.apiModel.SubscriptionPlanOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.PlanAdapter;
 import com.home.vod.model.PlanModel;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -29,6 +31,16 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import static com.home.vod.preferences.LanguagePreference.ACTIAVTE_PLAN_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIAVTE_PLAN_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECT_PLAN;
+import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SELECT_PLAN;
+import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 
 public class SubscriptionActivity extends AppCompatActivity implements GetPlanListAsynctask.GetStudioPlanLists {
     RecyclerView subcription;
@@ -42,6 +54,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
     int keepAliveTime = 10;
     String planId;
     TextView subscriptionTitleTextView;
+    LanguagePreference languagePreference;
     int selected_subscription_plan = 0 ;
     ProgressBarHandler progressBarHandler;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
@@ -54,9 +67,9 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
         activation_plan= (Button) findViewById(R.id.activationplan);
         Toolbar toolbar= (Toolbar) findViewById(R.id.toolbar);
         subscriptionTitleTextView = (TextView) findViewById(R.id.subscriptionTitleTextView);
+        languagePreference = LanguagePreference.getLanguagePreference(SubscriptionActivity.this);
 
-
-        if ((Util.getTextofLanguage(SubscriptionActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
+        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
             toolbar.setNavigationIcon(null);
             toolbar.setTitle(getResources().getString(R.string.app_name));
@@ -79,18 +92,18 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
 
         Typeface typeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
         subscriptionTitleTextView.setTypeface(typeface);
-        subscriptionTitleTextView.setText(Util.getTextofLanguage(SubscriptionActivity.this,Util.SELECT_PLAN,Util.DEFAULT_SELECT_PLAN)+" :");
+        subscriptionTitleTextView.setText(languagePreference.getTextofLanguage(SELECT_PLAN,DEFAULT_SELECT_PLAN)+" :");
 
         Typeface typeface1 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
         activation_plan.setTypeface(typeface1);
-        activation_plan.setText(Util.getTextofLanguage(SubscriptionActivity.this,Util.ACTIAVTE_PLAN_TITLE,Util.DEFAULT_ACTIAVTE_PLAN_TITLE));
+        activation_plan.setText(languagePreference.getTextofLanguage(ACTIAVTE_PLAN_TITLE,DEFAULT_ACTIAVTE_PLAN_TITLE));
 
 
         mLayoutManager = new LinearLayoutManager(SubscriptionActivity.this, LinearLayoutManager.VERTICAL, false);
-        if(Util.checkNetwork(SubscriptionActivity.this)) {
+        if(NetworkStatus.getInstance().isConnected(this)) {
             SubscriptionPlanInputModel planListInput=new SubscriptionPlanInputModel();
-            planListInput.setAuthToken(Util.authTokenStr);
-            planListInput.setLang(Util.getTextofLanguage(SubscriptionActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+            planListInput.setAuthToken(authTokenStr);
+            planListInput.setLang(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             GetPlanListAsynctask asynLoadPlanDetails = new GetPlanListAsynctask(planListInput,this,this);
             asynLoadPlanDetails.executeOnExecutor(threadPoolExecutor);
         }
@@ -210,7 +223,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
 //                HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.getStudioPlanLists.trim());
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //                httppost.addHeader("authToken", Util.authTokenStr.trim());
-//                httppost.addHeader("lang_code", Util.getTextofLanguage(SubscriptionActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //
 //
@@ -227,7 +240,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
 //                            noDataLayout.setVisibility(View.GONE);
 //                            subscriptionPlanRecyclerView.setVisibility(View.GONE);*/
 //
-//                            Toast.makeText(SubscriptionActivity.this,Util.getTextofLanguage(SubscriptionActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(SubscriptionActivity.this,languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                        }
 //
@@ -271,14 +284,14 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
 //                                    if ((jsonChildNode.has("id")) && jsonChildNode.getString("id").trim() != null && !jsonChildNode.getString("id").trim().isEmpty() && !jsonChildNode.getString("id").trim().equals("null") && !jsonChildNode.getString("id").trim().matches("")) {
 //                                        planIdStr = jsonChildNode.getString("id");
 //                                    } else {
-//                                        planIdStr = Util.getTextofLanguage(SubscriptionActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA);
+//                                        planIdStr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
 //
 //                                    }
 //
 //                                    if ((jsonChildNode.has("name")) && jsonChildNode.getString("name").trim() != null && !jsonChildNode.getString("name").trim().isEmpty() && !jsonChildNode.getString("name").trim().equals("null") && !jsonChildNode.getString("name").trim().matches("")) {
 //                                        planNamestr = jsonChildNode.getString("name");
 //                                    } else {
-//                                        planNamestr = Util.getTextofLanguage(SubscriptionActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA);
+//                                        planNamestr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
 //
 //
 //                                    }
@@ -286,21 +299,21 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
 //                                    if ((jsonChildNode.has("recurrence")) && jsonChildNode.getString("recurrence").trim() != null && !jsonChildNode.getString("recurrence").trim().isEmpty() && !jsonChildNode.getString("recurrence").trim().equals("null") && !jsonChildNode.getString("recurrence").trim().matches("")) {
 //                                        planRecurrenceStr = jsonChildNode.getString("recurrence");
 //                                    } else {
-//                                        planRecurrenceStr = Util.getTextofLanguage(SubscriptionActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA);
+//                                        planRecurrenceStr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
 //
 //                                    }
 //
 //                                    if ((jsonChildNode.has("frequency")) && jsonChildNode.getString("frequency").trim() != null && !jsonChildNode.getString("frequency").trim().isEmpty() && !jsonChildNode.getString("frequency").trim().equals("null") && !jsonChildNode.getString("frequency").trim().matches("")) {
 //                                        planFrequencyStr = jsonChildNode.getString("frequency");
 //                                    } else {
-//                                        planFrequencyStr = Util.getTextofLanguage(SubscriptionActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA);
+//                                        planFrequencyStr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
 //
 //                                    }
 //
 //                                    if ((jsonChildNode.has("studio_id")) && jsonChildNode.getString("studio_id").trim() != null && !jsonChildNode.getString("studio_id").trim().isEmpty() && !jsonChildNode.getString("studio_id").trim().equals("null") && !jsonChildNode.getString("studio_id").trim().matches("")) {
 //                                        planStudioIdStr = jsonChildNode.getString("studio_id");
 //                                    } else {
-//                                        planStudioIdStr =Util.getTextofLanguage(SubscriptionActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA);
+//                                        planStudioIdStr =languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
 //
 //                                    }
 //
@@ -314,13 +327,13 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
 //                                    if ((jsonChildNode.has("language_id")) && jsonChildNode.getString("language_id").trim() != null && !jsonChildNode.getString("language_id").trim().isEmpty() && !jsonChildNode.getString("language_id").trim().equals("null") && !jsonChildNode.getString("language_id").trim().matches("")) {
 //                                        planLanguage_idStr = jsonChildNode.getString("language_id");
 //                                    } else {
-//                                        planLanguage_idStr = Util.getTextofLanguage(SubscriptionActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA);
+//                                        planLanguage_idStr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
 //
 //                                    }
 //                                    if ((jsonChildNode.has("price")) && jsonChildNode.getString("price").trim() != null && !jsonChildNode.getString("price").trim().isEmpty() && !jsonChildNode.getString("price").trim().equals("null") && !jsonChildNode.getString("price").trim().matches("")) {
 //                                        planPriceStr = jsonChildNode.getString("price");
 //                                    } else {
-//                                        planPriceStr = Util.getTextofLanguage(SubscriptionActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA);
+//                                        planPriceStr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
 //
 //                                    }
 //                                    if (jsonChildNode.has("trial_period") && jsonChildNode.getString("trial_period").trim() != null && !jsonChildNode.getString("trial_period").trim().isEmpty() && !jsonChildNode.getString("trial_period").trim().equals("null") && !jsonChildNode.getString("trial_period").trim().matches("")) {
@@ -465,7 +478,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
 //                    }
 //
 //                });
-//                Toast.makeText(SubscriptionActivity.this,Util.getTextofLanguage(SubscriptionActivity.this,Util.NO_DETAILS_AVAILABLE,Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
+//                Toast.makeText(SubscriptionActivity.this,languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE,Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
 //                onBackPressed();
 //
 //            }else{

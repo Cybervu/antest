@@ -21,6 +21,8 @@ import com.home.apisdk.apiModel.CelibrityOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.CastCrewAdapter;
 import com.home.vod.model.GetCastCrewItem;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -34,6 +36,19 @@ import java.util.concurrent.TimeUnit;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.FAILURE;
+import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.util.Constant.authTokenStr;
 
 public class CastAndCrewActivity extends AppCompatActivity implements GetCelibrityAsyntask.GetCelibrity {
 
@@ -56,6 +71,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
     boolean isNetwork;
 
     String movie_id, movie_uniq_id;
+    LanguagePreference languagePreference;
 
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -68,6 +84,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cast_and_crew);
+        languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
@@ -82,17 +99,17 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         noDataLayout = (RelativeLayout) findViewById(R.id.noData);
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
         noDataTextView = (TextView) findViewById(R.id.noDataTextView);
-        noInternetTextView.setText(Util.getTextofLanguage(CastAndCrewActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
-        noDataTextView.setText(Util.getTextofLanguage(CastAndCrewActivity.this, Util.NO_CONTENT, Util.DEFAULT_NO_CONTENT));
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+        noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT, DEFAULT_NO_CONTENT));
 
 
         primary_layout = (LinearLayout) findViewById(R.id.primary_layout);
         castCrewTitleTextView = (TextView) findViewById(R.id.castCrewTitleTextView);
         Typeface custom_name = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         castCrewTitleTextView.setTypeface(custom_name);
-        castCrewTitleTextView.setText(Util.getTextofLanguage(CastAndCrewActivity.this, Util.CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
+        castCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
         cast_crew_crid = (GridView) findViewById(R.id.cast_crew_crid);
-        isNetwork = Util.checkNetwork(CastAndCrewActivity.this);
+        isNetwork = NetworkStatus.getInstance().isConnected(this);
 
 
         if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
@@ -154,9 +171,9 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         primary_layout.setVisibility(View.VISIBLE);
 
         CelibrityInputModel celibrityInputModel = new CelibrityInputModel();
-        celibrityInputModel.setAuthToken(Util.authTokenStr);
+        celibrityInputModel.setAuthToken(authTokenStr);
         celibrityInputModel.setMovie_id(getIntent().getStringExtra("cast_movie_id"));
-        celibrityInputModel.setLang_code(Util.getTextofLanguage(CastAndCrewActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        celibrityInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         GetCelibrityAsyntask asynGetCsatDetails = new GetCelibrityAsyntask(celibrityInputModel, this, this);
         asynGetCsatDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -218,9 +235,9 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
                 HttpClient httpclient=new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.CsatAndCrew.trim());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("movie_id",getIntent().getStringExtra("cast_movie_id"));
-                httppost.addHeader("lang_code",Util.getTextofLanguage(CastAndCrewActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("lang_code",languagePreference.getTextofLanguage(CastAndCrewActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
                *//* httppost.addHeader("authToken", "1836d3f6a8d75407a162bcc5eece68c7");
                 httppost.addHeader("movie_id","acb089ace5126fe0e1e6054edd86dc6d");*//*
@@ -362,11 +379,11 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
 
     public void ShowDialog(String msg) {
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(CastAndCrewActivity.this, R.style.MyAlertDialogStyle);
-        dlgAlert.setTitle(Util.getTextofLanguage(CastAndCrewActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE));
+        dlgAlert.setTitle(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE));
         dlgAlert.setMessage(msg);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(CastAndCrewActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
         dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(CastAndCrewActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();

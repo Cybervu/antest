@@ -45,6 +45,8 @@ import com.home.vod.R;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.model.NavDrawerItem;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.LogUtil;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
@@ -66,6 +68,56 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.ADDED_TO_FAV;
+import static com.home.vod.preferences.LanguagePreference.ADD_TO_FAV;
+import static com.home.vod.preferences.LanguagePreference.ADVANCE_PURCHASE;
+import static com.home.vod.preferences.LanguagePreference.ALERT;
+import static com.home.vod.preferences.LanguagePreference.ALREADY_MEMBER;
+import static com.home.vod.preferences.LanguagePreference.AMOUNT;
+import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.COUPON_CANCELLED;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
+import static com.home.vod.preferences.LanguagePreference.EPISODE_TITLE;
+import static com.home.vod.preferences.LanguagePreference.HOME;
+import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
+import static com.home.vod.preferences.LanguagePreference.NO;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.PROFILE;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
+import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_A_Z;
+import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_Z_A;
+import static com.home.vod.preferences.LanguagePreference.TRANSACTION_STATUS_ACTIVE;
+import static com.home.vod.preferences.LanguagePreference.YES;
+import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.util.Util.languageModel;
+
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,
         LogoutAsynctask.Logout, GetMenuListAsynctask.GetMenuList, GetLanguageListAsynTask.GetLanguageList,GetTranslateLanguageAsync.GetTranslateLanguageInfoListner {
@@ -73,6 +125,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     public MainActivity() {
     }
+
+    LanguagePreference languagePreference;
 
    /* *//*** chromecast**************//*
 
@@ -214,6 +268,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             menuList.clear();
         }
 
+        languagePreference = LanguagePreference.getLanguagePreference(this);
 
         /*Set Toolbar*/
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -264,22 +319,22 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         noInternetLayout = (RelativeLayout) findViewById(R.id.noInternet);
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
-        noInternetTextView.setText(Util.getTextofLanguage(MainActivity.this, Util.NO_INTERNET_NO_DATA, Util.DEFAULT_NO_INTERNET_NO_DATA));
+        noInternetTextView.setText(languagePreference.getTextofLanguage( NO_INTERNET_NO_DATA, DEFAULT_NO_INTERNET_NO_DATA));
         noInternetLayout.setVisibility(View.GONE);
 
-        boolean isNetwork = Util.checkNetwork(MainActivity.this);
-        if (isNetwork == true) {
+
+        if (NetworkStatus.getInstance().isConnected(MainActivity.this)) {
             if (asynLoadMenuItems != null) {
                 asynLoadMenuItems = null;
             }
             MenuListInput menuListInput = new MenuListInput();
-            menuListInput.setAuthToken(Util.authTokenStr);
+            menuListInput.setAuthToken(authTokenStr);
             String countryCodeStr = preferenceManager.getCountryCodeFromPref();
             if (countryCodeStr == null) {
                 menuListInput.setCountry("IN");
             }
             menuListInput.setCountry(countryCodeStr);
-            menuListInput.setLang_code(Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+            menuListInput.setLang_code(languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynLoadMenuItems = new GetMenuListAsynctask(menuListInput, MainActivity.this, this);
             asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
 
@@ -353,10 +408,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         id = preferenceManager.getUseridFromPref();
         email=preferenceManager.getEmailIdFromPref();
 
-       // SharedPreferences language_list_pref = getSharedPreferences(Util.LANGUAGE_LIST_PREF, 0);
+       // SharedPreferences language_list_pref = getSharedPreferences(LANGUAGE_LIST_PREF, 0);
 
 
-        (menu.findItem(R.id.menu_item_language)).setTitle(Util.getTextofLanguage(MainActivity.this, Util.LANGUAGE_POPUP_LANGUAGE, Util.DEFAULT_LANGUAGE_POPUP_LANGUAGE));
+        (menu.findItem(R.id.menu_item_language)).setTitle(languagePreference.getTextofLanguage( LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE));
 
 
         if(preferenceManager.getLanguageListFromPref().equals("1"))
@@ -364,33 +419,33 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         if(loggedInStr!=null){
             item4= menu.findItem(R.id.action_login);
-            item4.setTitle(Util.getTextofLanguage(MainActivity.this,Util.LANGUAGE_POPUP_LOGIN,Util.DEFAULT_LANGUAGE_POPUP_LOGIN));
+            item4.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN,DEFAULT_LANGUAGE_POPUP_LOGIN));
             item4.setVisible(false);
             item5= menu.findItem(R.id.action_register);
-            item5.setTitle(Util.getTextofLanguage(MainActivity.this,Util.BTN_REGISTER,Util.DEFAULT_BTN_REGISTER));
+            item5.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER,DEFAULT_BTN_REGISTER));
             item5.setVisible(false);
           /*  item6= menu.findItem(R.id.menu_item_language);
-            item6.setTitle(Util.getTextofLanguage(MainActivity.this,Util.LANGUAGE_POPUP_LANGUAGE,Util.DEFAULT_LANGUAGE_POPUP_LANGUAGE));
+            item6.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE,DEFAULT_LANGUAGE_POPUP_LANGUAGE));
             item6.setVisible(true);*/
             item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(Util.getTextofLanguage(MainActivity.this,Util.PROFILE,Util.DEFAULT_PROFILE));
+            item1.setTitle(languagePreference.getTextofLanguage(PROFILE,DEFAULT_PROFILE));
             item1.setVisible(true);
 
             item2 = menu.findItem(R.id.action_purchage);
-            item2.setTitle(Util.getTextofLanguage(MainActivity.this, Util.PURCHASE_HISTORY, Util.DEFAULT_PURCHASE_HISTORY));
+            item2.setTitle(languagePreference.getTextofLanguage( PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
             item2.setVisible(true);
 
             item3 = menu.findItem(R.id.action_logout);
-            item3.setTitle(Util.getTextofLanguage(MainActivity.this, Util.LOGOUT, Util.DEFAULT_LOGOUT));
+            item3.setTitle(languagePreference.getTextofLanguage( LOGOUT, DEFAULT_LOGOUT));
             item3.setVisible(true);
 
         } else if (loggedInStr == null) {
             item4 = menu.findItem(R.id.action_login);
-            item4.setTitle(Util.getTextofLanguage(MainActivity.this, Util.LANGUAGE_POPUP_LOGIN, Util.DEFAULT_LANGUAGE_POPUP_LOGIN));
+            item4.setTitle(languagePreference.getTextofLanguage( LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
 
 
             item5 = menu.findItem(R.id.action_register);
-            item5.setTitle(Util.getTextofLanguage(MainActivity.this, Util.BTN_REGISTER, Util.DEFAULT_BTN_REGISTER));
+            item5.setTitle(languagePreference.getTextofLanguage( BTN_REGISTER, DEFAULT_BTN_REGISTER));
             if (isLogin == 1) {
                 item4.setVisible(true);
                 item5.setVisible(true);
@@ -401,16 +456,16 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
             }
            /* item6= menu.findItem(R.id.menu_item_language);
-            item6.setTitle(Util.getTextofLanguage(MainActivity.this,Util.LANGUAGE_POPUP_LANGUAGE,Util.DEFAULT_LANGUAGE_POPUP_LANGUAGE));
+            item6.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE,DEFAULT_LANGUAGE_POPUP_LANGUAGE));
             item6.setVisible(true);*/
             item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(Util.getTextofLanguage(MainActivity.this, Util.PROFILE, Util.DEFAULT_PROFILE));
+            item1.setTitle(languagePreference.getTextofLanguage( PROFILE, DEFAULT_PROFILE));
             item1.setVisible(false);
             item2= menu.findItem(R.id.action_purchage);
-            item2.setTitle(Util.getTextofLanguage(MainActivity.this,Util.PURCHASE_HISTORY,Util.DEFAULT_PURCHASE_HISTORY));
+            item2.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY));
             item2.setVisible(false);
             item3= menu.findItem(R.id.action_logout);
-            item3.setTitle(Util.getTextofLanguage(MainActivity.this,Util.LOGOUT,Util.DEFAULT_LOGOUT));
+            item3.setTitle(languagePreference.getTextofLanguage(LOGOUT,DEFAULT_LOGOUT));
             item3.setVisible(false);
         }
         return true;
@@ -446,17 +501,17 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             case R.id.menu_item_language:
 
                 // Not implemented here
-                Default_Language = Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE);
-                Previous_Selected_Language = Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE);
+                Default_Language = languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
+                Previous_Selected_Language = languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
 
-                if (Util.languageModel != null && Util.languageModel.size() > 0) {
+                if (languageModel != null && languageModel.size() > 0) {
 
 
                     ShowLanguagePopup();
 
                 } else {
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-                    languageListInputModel.setAuthToken(Util.authTokenStr);
+                    languageListInputModel.setAuthToken(authTokenStr);
                     GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
@@ -478,22 +533,22 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             case R.id.action_logout:
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(MainActivity.this, Util.SIGN_OUT_WARNING, Util.DEFAULT_SIGN_OUT_WARNING));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage( SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
                 dlgAlert.setTitle("");
 
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MainActivity.this, Util.YES, Util.DEFAULT_YES), new DialogInterface.OnClickListener() {
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
                         // Do nothing but close the dialog
 
                         // dialog.cancel();
                         LogoutInput logoutInput = new LogoutInput();
-                        logoutInput.setAuthToken(Util.authTokenStr);
-                        LogUtil.showLog("Abhi", Util.authTokenStr);
+                        logoutInput.setAuthToken(authTokenStr);
+                        LogUtil.showLog("Abhi", authTokenStr);
                         String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
                         logoutInput.setLogin_history_id(loginHistoryIdStr);
-                        logoutInput.setLang_code(Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                        LogUtil.showLog("Abhi", Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                        logoutInput.setLang_code(languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        LogUtil.showLog("Abhi", languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MainActivity.this, MainActivity.this);
                         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -502,7 +557,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                     }
                 });
 
-                dlgAlert.setNegativeButton(Util.getTextofLanguage(MainActivity.this, Util.NO, Util.DEFAULT_NO), new DialogInterface.OnClickListener() {
+                dlgAlert.setNegativeButton(languagePreference.getTextofLanguage( NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -619,7 +674,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             } else {
 
 
-                fragment = new AboutUs();
+                fragment = new AboutUsFragment();
                 bundle.putString("item", str);
                 bundle.putString("title", titleStr);
 
@@ -698,18 +753,18 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     public void onLogoutPostExecuteCompleted(int code, String status, String message) {
         if (code != 200) {
-            Toast.makeText(MainActivity.this, Util.getTextofLanguage(MainActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
         }
         if (code == 0) {
-            Toast.makeText(MainActivity.this, Util.getTextofLanguage(MainActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
         }
         if (code > 0) {
             if (code == 200) {
                preferenceManager.clearLoginPref();
 
-                if ((Util.getTextofLanguage(MainActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
+                if ((languagePreference.getTextofLanguage( IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
                     final Intent startIntent = new Intent(MainActivity.this, SplashScreen.class);
                     runOnUiThread(new Runnable() {
@@ -717,7 +772,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(startIntent);
-                            Toast.makeText(MainActivity.this, Util.getTextofLanguage(MainActivity.this, Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
 
                             finish();
 
@@ -730,7 +785,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(startIntent);
-                            Toast.makeText(MainActivity.this, Util.getTextofLanguage(MainActivity.this, Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
 
                             finish();
 
@@ -740,7 +795,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
             } else {
-                Toast.makeText(MainActivity.this, Util.getTextofLanguage(MainActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
             }
         }
@@ -781,7 +836,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
         } else {
-            menuList.add(new NavDrawerItem(Util.getTextofLanguage(MainActivity.this, Util.HOME, Util.DEFAULT_HOME), "-101", true, "-101"));
+            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage( HOME, DEFAULT_HOME), "-101", true, "-101"));
             for (MenuListOutput menuListOutput : menuListOutputList) {
                 LogUtil.showLog("Alok", "menuListOutputList ::" + menuListOutput.getPermalink());
                 if (menuListOutput.getLink_type() != null && !menuListOutput.getLink_type().equalsIgnoreCase("") && menuListOutput.getLink_type().equalsIgnoreCase("0")) {
@@ -789,7 +844,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 }
             }
 
-            menuList.add(new NavDrawerItem(Util.getTextofLanguage(MainActivity.this, Util.MY_LIBRARY, Util.DEFAULT_MY_LIBRARY), "102", true, "102"));
+            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage( MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
             LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
 
             for (MenuListOutput menuListOutput : footermenuListOutputList) {
@@ -799,9 +854,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 }
             }
 
-            boolean isNetwork = Util.checkNetwork(MainActivity.this);
+
             imageUrlStr = "https://dadc-muvi.s3-eu-west-1.amazonaws.com/check-download-speed.jpg";
-            if (isNetwork == true) {
+            if (NetworkStatus.getInstance().isConnected(MainActivity.this)) {
 
                 new Thread(mWorker).start();
             } else {
@@ -1127,7 +1182,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //                httppost.addHeader("authToken", Util.authTokenStr.trim());
 //                httppost.addHeader("login_history_id", loginHistoryIdStr);
-//                httppost.addHeader("lang_code", Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage( Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //
 //                try {
@@ -1142,7 +1197,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //                                pDialog = null;
 //                            }
 //                            responseCode = 0;
-//                            Toast.makeText(MainActivity.this, Util.getTextofLanguage(MainActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                        }
 //
@@ -1182,15 +1237,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //
 //                }
 //            } catch (IllegalArgumentException ex) {
-//                Toast.makeText(MainActivity.this, Util.getTextofLanguage(MainActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 //
 //            }
 //            if (responseStr == null) {
-//                Toast.makeText(MainActivity.this, Util.getTextofLanguage(MainActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 //
 //            }
 //            if (responseCode == 0) {
-//                Toast.makeText(MainActivity.this, Util.getTextofLanguage(MainActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 //
 //            }
 //            if (responseCode > 0) {
@@ -1211,7 +1266,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //                        countryEditor.commit();
 //                    }*/
 //
-//                    if ((Util.getTextofLanguage(MainActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
+//                    if ((languagePreference.getTextofLanguage( Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
 //                            .trim()).equals("1")) {
 //                        final Intent startIntent = new Intent(MainActivity.this, SplashScreen.class);
 //                        runOnUiThread(new Runnable() {
@@ -1219,7 +1274,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 //                                startActivity(startIntent);
-//                                Toast.makeText(MainActivity.this, Util.getTextofLanguage(MainActivity.this, Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+//                                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
 //
 //                                finish();
 //
@@ -1232,7 +1287,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 //                                startActivity(startIntent);
-//                                Toast.makeText(MainActivity.this, Util.getTextofLanguage(MainActivity.this, Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+//                                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
 //
 //                                finish();
 //
@@ -1242,7 +1297,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //
 //
 //                } else {
-//                    Toast.makeText(MainActivity.this, Util.getTextofLanguage(MainActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//                    Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 //
 //                }
 //            }
@@ -1280,7 +1335,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //                    httppost.addHeader("country", "IN");
 //
 //                }
-//                httppost.addHeader("lang_code", Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage( Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //                // Execute HTTP Post Request
 //                try {
@@ -1439,7 +1494,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //                            }
 //                        }
 //
-//                        menuList.add(new NavDrawerItem(Util.getTextofLanguage(MainActivity.this, Util.MY_LIBRARY, Util.DEFAULT_MY_LIBRARY), "102", true, "102"));
+//                        menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage( Util.MY_LIBRARY, Util.DEFAULT_MY_LIBRARY), "102", true, "102"));
 //
 //
 //                        /*** footer menu******/
@@ -1640,7 +1695,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //                        as = null;
 //                    }
 //
-//                    menuList.add(0, new NavDrawerItem(Util.getTextofLanguage(MainActivity.this, Util.HOME, Util.DEFAULT_HOME), "-101", true, "-101"));
+//                    menuList.add(0, new NavDrawerItem(languagePreference.getTextofLanguage( Util.HOME, Util.DEFAULT_HOME), "-101", true, "-101"));
 //
 //                    // menuList.add(new NavDrawerItem("Home", "",true,"0"));
 //                   /* menuList.add(new NavDrawerItem("Terms", "",false,"-1"));
@@ -1716,21 +1771,21 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         View convertView = (View) inflater.inflate(R.layout.language_pop_up, null);
         TextView titleTextView = (TextView) convertView.findViewById(R.id.languagePopupTitle);
-        titleTextView.setText(Util.getTextofLanguage(MainActivity.this, Util.APP_SELECT_LANGUAGE, Util.DEFAULT_APP_SELECT_LANGUAGE));
+        titleTextView.setText(languagePreference.getTextofLanguage( APP_SELECT_LANGUAGE, DEFAULT_APP_SELECT_LANGUAGE));
 
         alertDialog.setView(convertView);
         alertDialog.setTitle("");
 
         RecyclerView recyclerView = (RecyclerView) convertView.findViewById(R.id.language_recycler_view);
         Button apply = (Button) convertView.findViewById(R.id.apply_btn);
-        apply.setText(Util.getTextofLanguage(MainActivity.this, Util.BUTTON_APPLY, Util.DEFAULT_BUTTON_APPLY));
+        apply.setText(languagePreference.getTextofLanguage( BUTTON_APPLY, DEFAULT_BUTTON_APPLY));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        languageCustomAdapter = new LanguageCustomAdapter(MainActivity.this, Util.languageModel);
+        languageCustomAdapter = new LanguageCustomAdapter(MainActivity.this, languageModel);
         // Util.languageModel.get(0).setSelected(true);
-      /*  if (Util.languageModel.get(i).getLanguageId().equalsIgnoreCase(Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE))) {
+      /*  if (Util.languageModel.get(i).getLanguageId().equalsIgnoreCase(languagePreference.getTextofLanguage( Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE))) {
             prevPosition = i;
             Util.languageModel.get(i).setSelected(true);
 
@@ -1742,7 +1797,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
     /*    for (int i = 0 ; i < Util.languageModel.size() - 1 ; i ++){
-                if (Util.languageModel.get(i).getLanguageId().equalsIgnoreCase(Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE))) {
+                if (Util.languageModel.get(i).getLanguageId().equalsIgnoreCase(languagePreference.getTextofLanguage( Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE))) {
                     prevPosition = i;
                     Util.languageModel.get(i).setSelected(true);
                     break;
@@ -1761,19 +1816,19 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             public void onClick(View view, int position) {
                 Util.itemclicked = true;
 
-                Util.languageModel.get(position).setSelected(true);
+                languageModel.get(position).setSelected(true);
 
 
                 if (prevPosition != position) {
-                    Util.languageModel.get(prevPosition).setSelected(false);
+                    languageModel.get(prevPosition).setSelected(false);
                     prevPosition = position;
 
                 }
 
-                Default_Language = Util.languageModel.get(position).getLanguageId();
+                Default_Language = languageModel.get(position).getLanguageId();
 
 
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.languageModel.get(position).getLanguageId());
+                languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, languageModel.get(position).getLanguageId());
                 languageCustomAdapter.notifyDataSetChanged();
 
                 // default_Language = Util.languageModel.get(position).getLanguageId();
@@ -1802,7 +1857,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
                     LanguageListInputModel languageListInputModel=new LanguageListInputModel();
                     languageListInputModel.setLangCode(Default_Language);
-                    languageListInputModel.setAuthToken(Util.authTokenStr);
+                    languageListInputModel.setAuthToken(authTokenStr);
                     GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel,MainActivity.this,MainActivity.this);
                     asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
                 }
@@ -1817,7 +1872,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Previous_Selected_Language);
+                languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, Previous_Selected_Language);
             }
         });
 
@@ -1851,7 +1906,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             languageModels.add(languageModel);
         }
 
-        Util.languageModel = languageModels;
+        languageModel = languageModels;
         ShowLanguagePopup();
     }
 
@@ -1934,9 +1989,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //                    JSONObject json = new JSONObject(responseStr);
 //                    try {
 //                        status = Integer.parseInt(json.optString("code"));
-//                        Default_Language = json.optString("default_lang");
-//                        if (!Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, "").equals("")) {
-//                            Default_Language = Util.getTextofLanguage(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE);
+//                        default_Language = json.optString("default_lang");
+//                        if (!languagePreference.getTextofLanguage( Util.SELECTED_LANGUAGE_CODE, "").equals("")) {
+//                            default_Language = languagePreference.getTextofLanguage( Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE);
 //                        }
 //
 //                    } catch (Exception e) {
@@ -1984,7 +2039,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //                            languageModel.setLanguageId(language_id);
 //                            languageModel.setLanguageName(language_name);
 //
-//                            if (Default_Language.equalsIgnoreCase(language_id)) {
+//                            if (default_Language.equalsIgnoreCase(language_id)) {
 //                                languageModel.setIsSelected(true);
 //                            } else {
 //                                languageModel.setIsSelected(false);
@@ -2038,182 +2093,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         if (status > 0 && status == 200) {
 
             try {
-                JSONObject json = new JSONObject(jsonResponse);
 
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.ALREADY_MEMBER,json.optString("already_member").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.ACTIAVTE_PLAN_TITLE,json.optString("activate_plan_title").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANSACTION_STATUS_ACTIVE,json.optString("transaction_status_active").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.ADD_TO_FAV,json.optString("add_to_fav").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.ADDED_TO_FAV,json.optString("added_to_fav").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.ADVANCE_PURCHASE,json.optString("advance_purchase").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.ALERT,json.optString("alert").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.EPISODE_TITLE,json.optString("episodes_title").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SORT_ALPHA_A_Z,json.optString("sort_alpha_a_z").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SORT_ALPHA_Z_A,json.optString("sort_alpha_z_a").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.AMOUNT,json.optString("amount").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.COUPON_CANCELLED,json.optString("coupon_cancelled").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.BUTTON_APPLY,json.optString("btn_apply").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SIGN_OUT_WARNING,json.optString("sign_out_warning").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.DISCOUNT_ON_COUPON,json.optString("discount_on_coupon").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.CREDIT_CARD_CVV_HINT,json.optString("credit_card_cvv_hint").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.CAST,json.optString("cast").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.CAST_CREW_BUTTON_TITLE,json.optString("cast_crew_button_title").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.CENSOR_RATING,json.optString("censor_rating").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.ENTER_EMPTY_FIELD,json.optString("enter_register_fields_data").trim());
-
-
-                if(json.optString("change_password").trim()==null || json.optString("change_password").trim().equals("")) {
-                    Util.setLanguageSharedPrefernce(MainActivity.this, Util.CHANGE_PASSWORD, Util.DEFAULT_CHANGE_PASSWORD);
-                }
-                else {
-                    Util.setLanguageSharedPrefernce(MainActivity.this, Util.CHANGE_PASSWORD, json.optString("change_password").trim());
-                }
-
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.CONFIRM_PASSWORD,json.optString("confirm_password").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.CREDIT_CARD_DETAILS,json.optString("credit_card_detail").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.DIRECTOR,json.optString("director").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.DOWNLOAD_BUTTON_TITLE,json.optString("download_button_title").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.DESCRIPTION,json.optString("description").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.EMAIL_EXISTS,json.optString("email_exists").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.EMAIL_DOESNOT_EXISTS,json.optString("email_does_not_exist").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.EMAIL_PASSWORD_INVALID,json.optString("email_password_invalid").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.COUPON_CODE_HINT,json.optString("coupon_code_hint").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SEARCH_ALERT,json.optString("search_alert").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.CREDIT_CARD_NUMBER_HINT,json.optString("credit_card_number_hint").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.TEXT_EMIAL,json.optString("text_email").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.NAME_HINT,json.optString("name_hint").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.CREDIT_CARD_NAME_HINT,json.optString("credit_card_name_hint").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.TEXT_PASSWORD,json.optString("text_password").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.ERROR_IN_PAYMENT_VALIDATION, json.optString("error_in_payment_validation").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.ERROR_IN_REGISTRATION, json.optString("error_in_registration").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.TRANSACTION_STATUS_EXPIRED, json.optString("transaction_status_expired").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.DETAILS_NOT_FOUND_ALERT, json.optString("details_not_found_alert").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.HOME, json.optString("home").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.FAILURE, json.optString("failure").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.FILTER_BY, json.optString("filter_by").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.FORGOT_PASSWORD, json.optString("forgot_password").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.GENRE, json.optString("genre").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.AGREE_TERMS, json.optString("agree_terms").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.INVALID_COUPON, json.optString("invalid_coupon").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.INVOICE, json.optString("invoice").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.LANGUAGE_POPUP_LANGUAGE, json.optString("language_popup_language").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.SORT_LAST_UPLOADED, json.optString("sort_last_uploaded").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.LANGUAGE_POPUP_LOGIN,json.optString("language_popup_login").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.LOGIN,json.optString("login").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.LOGOUT,json.optString("logout").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.LOGOUT_SUCCESS,json.optString("logout_success").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.MY_FAVOURITE,json.optString("my_favourite").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.NEW_PASSWORD,json.optString("new_password").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.NEW_HERE_TITLE,json.optString("new_here_title").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.NO,json.optString("no").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.NO_DATA,json.optString("no_data").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.NO_INTERNET_CONNECTION,json.optString("no_internet_connection").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.NO_INTERNET_NO_DATA,json.optString("no_internet_no_data").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.NO_DETAILS_AVAILABLE,json.optString("no_details_available").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.BUTTON_OK,json.optString("btn_ok").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.OLD_PASSWORD,json.optString("old_password").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.OOPS_INVALID_EMAIL,json.optString("oops_invalid_email").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.ORDER,json.optString("order").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANSACTION_DETAILS_ORDER_ID,json.optString("transaction_detail_order_id").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.PASSWORD_RESET_LINK,json.optString("password_reset_link").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.PASSWORDS_DO_NOT_MATCH,json.optString("password_donot_match").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.PAY_BY_PAYPAL,json.optString("pay_by_paypal").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.BTN_PAYNOW,json.optString("btn_paynow").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.PAY_WITH_CREDIT_CARD,json.optString("pay_with_credit_card").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.PAYMENT_OPTIONS_TITLE,json.optString("payment_options_title").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.PLAN_NAME,json.optString("plan_name").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,json.optString("activate_subscription_watch_video").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.COUPON_ALERT,json.optString("coupon_alert").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.VALID_CONFIRM_PASSWORD,json.optString("valid_confirm_password").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.PROFILE,json.optString("profile").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.PROFILE_UPDATED,json.optString("profile_updated").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.PURCHASE,json.optString("purchase").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANSACTION_DETAIL_PURCHASE_DATE,json.optString("transaction_detail_purchase_date").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.PURCHASE_HISTORY,json.optString("purchase_history").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.BTN_REGISTER,json.optString("btn_register").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SORT_RELEASE_DATE,json.optString("sort_release_date").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SAVE_THIS_CARD,json.optString("save_this_card").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.TEXT_SEARCH_PLACEHOLDER,json.optString("text_search_placeholder").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SEASON,json.optString("season").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SELECT_OPTION_TITLE,json.optString("select_option_title").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SELECT_PLAN,json.optString("select_plan").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SIGN_UP_TITLE,json.optString("signup_title").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SLOW_INTERNET_CONNECTION,json.optString("slow_internet_connection").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SLOW_ISSUE_INTERNET_CONNECTION,json.optString("slow_issue_internet_connection").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SORRY,json.optString("sorry").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.GEO_BLOCKED_ALERT,json.optString("geo_blocked_alert").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.SIGN_OUT_ERROR, json.optString("sign_out_error").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.ALREADY_PURCHASE_THIS_CONTENT, json.optString("already_purchase_this_content").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.CROSSED_MAXIMUM_LIMIT, json.optString("crossed_max_limit_of_watching").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.SORT_BY, json.optString("sort_by").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.STORY_TITLE, json.optString("story_title").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.BTN_SUBMIT,json.optString("btn_submit").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANSACTION_STATUS,json.optString("transaction_success").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.VIDEO_ISSUE,json.optString("video_issue").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.NO_CONTENT,json.optString("no_content").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.NO_VIDEO_AVAILABLE,json.optString("no_video_available").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY,json.optString("content_not_available_in_your_country").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANSACTION_DATE,json.optString("transaction_date").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANASCTION_DETAIL,json.optString("transaction_detail").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANSACTION_STATUS,json.optString("transaction_status").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRANSACTION,json.optString("transaction").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.TRY_AGAIN,json.optString("try_again").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.UNPAID,json.optString("unpaid").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.USE_NEW_CARD,json.optString("use_new_card").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.VIEW_MORE,json.optString("view_more").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.VIEW_TRAILER,json.optString("view_trailer").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.WATCH,json.optString("watch").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.WATCH_NOW,json.optString("watch_now").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SIGN_OUT_ALERT,json.optString("sign_out_alert").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.UPDATE_PROFILE_ALERT,json.optString("update_profile_alert").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.YES,json.optString("yes").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.PURCHASE_SUCCESS_ALERT,json.optString("purchase_success_alert").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.CARD_WILL_CHARGE,json.optString("card_will_charge").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this,Util.SEARCH_HINT,json.optString("search_hint").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.TERMS, json.optString("terms").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.UPDATE_PROFILE, json.optString("btn_update_profile").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.APP_ON, json.optString("app_on").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.APP_SELECT_LANGUAGE, json.optString("app_select_language").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.CANCEL_BUTTON, json.optString("btn_cancel").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.RESUME_MESSAGE, json.optString("resume_watching").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.CONTINUE_BUTTON, json.optString("continue").trim());
-
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.FILL_FORM_BELOW, json.optString("Fill_form_below").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.MESSAGE, json.optString("text_message").trim());
-                Util.getTextofLanguage(MainActivity.this, Util.PURCHASE, Util.DEFAULT_PURCHASE);
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Default_Language);
-
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, json.optString("simultaneous_logout_message").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.LOGIN_STATUS_MESSAGE, json.optString("login_status_message").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.FILL_FORM_BELOW, json.optString("fill_form_below").trim());
-                Util.setLanguageSharedPrefernce(MainActivity.this, Util.MESSAGE, json.optString("text_message").trim());
-
-                //Call For Language PopUp Dialog
+                Util.parseLanguage(languagePreference,jsonResponse,Default_Language);
 
                 languageCustomAdapter.notifyDataSetChanged();
 
@@ -2249,7 +2130,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //                HttpPost httppost = new HttpPost(urlRouteList);
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //                httppost.addHeader("authToken", Util.authTokenStr);
-//                httppost.addHeader("lang_code", Default_Language);
+//                httppost.addHeader("lang_code", default_Language);
 //
 //
 //
@@ -2465,8 +2346,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //
 //                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.FILL_FORM_BELOW, json.optString("Fill_form_below").trim());
 //                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.MESSAGE, json.optString("text_message").trim());
-//                        Util.getTextofLanguage(MainActivity.this, Util.PURCHASE, Util.DEFAULT_PURCHASE);
-//                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, Default_Language);
+//                        languagePreference.getTextofLanguage( Util.PURCHASE, Util.DEFAULT_PURCHASE);
+//                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SELECTED_LANGUAGE_CODE, default_Language);
 //
 //                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, json.optString("simultaneous_logout_message").trim());
 //                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.LOGIN_STATUS_MESSAGE, json.optString("login_status_message").trim());
@@ -2578,8 +2459,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(final Message msg) {
-            boolean isNetwork = Util.checkNetwork(MainActivity.this);
-            if (isNetwork == true) {
+
+            if (NetworkStatus.getInstance().isConnected(MainActivity.this)) {
                 switch (msg.what) {
                     case MSG_UPDATE_STATUS:
                         break;
@@ -2614,7 +2495,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
             try {
                 int bytesIn = 0;
-                boolean isNetwork = Util.checkNetwork(MainActivity.this);
+
                 String downloadFileUrl = imageUrlStr;
                 long startCon = System.currentTimeMillis();
                 URL url = new URL(downloadFileUrl);

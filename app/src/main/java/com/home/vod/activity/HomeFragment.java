@@ -37,6 +37,8 @@ import com.home.vod.adapter.RecyclerViewDataAdapter;
 import com.home.vod.model.GetMenuItem;
 import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -65,6 +67,14 @@ import java.util.concurrent.TimeUnit;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_GOOGLE_FCM_TOKEN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.util.Constant.authTokenStr;
 
 /**
  * Created by Muvi on 11/24/2016.
@@ -182,7 +192,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
     RelativeLayout noDataLayout;
     TextView noDataTextView;
     TextView noInternetTextView;
-
+    LanguagePreference languagePreference;
 
     RecyclerView my_recycler_view;
     Context context;
@@ -223,9 +233,10 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
         context = getActivity();
         setHasOptionsMenu(true);
         Util.image_orentiation.clear();
-
+        languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
-        LogUtil.showLog("MUVI", "google_id already created =" + Util.getTextofLanguage(getActivity(), Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+        String GOOGLE_FCM_TOKEN;
+       // LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage( GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
 
 
 
@@ -265,15 +276,15 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
         noDataLayout = (RelativeLayout) rootView.findViewById(R.id.noData);
         noInternetTextView = (TextView) rootView.findViewById(R.id.noInternetTextView);
         noDataTextView = (TextView) rootView.findViewById(R.id.noDataTextView);
-        noInternetTextView.setText(Util.getTextofLanguage(context, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
-        noDataTextView.setText(Util.getTextofLanguage(context, Util.NO_CONTENT, Util.DEFAULT_NO_CONTENT));
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+        noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT, DEFAULT_NO_CONTENT));
 
         footerView.setVisibility(View.GONE);
 
         my_recycler_view.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-        boolean isNetwork = Util.checkNetwork(getActivity());
-        if (isNetwork == true) {
+
+        if (NetworkStatus.getInstance().isConnected(getActivity())) {
             // default data
             menuList = new ArrayList<GetMenuItem>();
 
@@ -444,8 +455,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
             allSampleData.add(new SectionDataModel(menuList.get(counter).getName(), menuList.get(counter).getSectionId(), singleItem));
 
 
-        boolean isNetwork = Util.checkNetwork(context);
-        if (isNetwork == true) {
+        if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
             if (getActivity() != null) {
                 new RetrieveFeedTask().execute(movieImageStr);
@@ -583,8 +593,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
             });*/
             if (counter >= 0 && counter < menuList.size() - 1) {
                 counter = counter + 1;
-                boolean isNetwork = Util.checkNetwork(context);
-                if (isNetwork == true) {
+                if (NetworkStatus.getInstance().isConnected(getActivity())) {
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -604,8 +613,8 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
                     // default data
                     LoadVideoInput loadVideoInput = new LoadVideoInput();
-                    loadVideoInput.setAuthToken(Util.authTokenStr);
-                    loadVideoInput.setLang_code(Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                    loadVideoInput.setAuthToken(authTokenStr);
+                    loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
                     asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
                     asynLoadVideos.executeOnExecutor(threadPoolExecutor);
@@ -664,8 +673,8 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(APIUrlConstant.getHomepageUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("lang_code", Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("authToken", authTokenStr.trim());
+                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
               /*  httppost.addHeader("limit", "1");
                 httppost.addHeader("offset", String.valueOf(counter));*/
@@ -936,10 +945,9 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
                     mProgressBarHandler.hide();
                     mProgressBarHandler = null;
                 }
-                boolean isNetwork = Util.checkNetwork(context);
 
 
-                if (isNetwork == true) {
+                if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
                     my_recycler_view.setLayoutManager(mLayoutManager);
                     adapter = new RecyclerViewDataAdapter(context, allSampleData, url_maps, firstTime, MainActivity.vertical);
@@ -947,8 +955,8 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
                     my_recycler_view.setVisibility(View.VISIBLE);
 
                     LoadVideoInput loadVideoInput = new LoadVideoInput();
-                    loadVideoInput.setAuthToken(Util.authTokenStr);
-                    loadVideoInput.setLang_code(Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                    loadVideoInput.setAuthToken(authTokenStr);
+                    loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
                     asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
                     asynLoadVideos.executeOnExecutor(threadPoolExecutor);

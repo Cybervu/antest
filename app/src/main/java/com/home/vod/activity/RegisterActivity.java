@@ -62,6 +62,8 @@ import com.home.apisdk.apiModel.SocialAuthOutputModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.R;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -92,6 +94,64 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.ALREADY_MEMBER;
+import static com.home.vod.preferences.LanguagePreference.ANDROID_VERSION;
+import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.CONFIRM_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ALREADY_MEMBER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ANDROID_VERSION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONFIRM_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_EXISTS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_GOOGLE_FCM_TOKEN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_RESTRICT_DEVICE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_OOPS_INVALID_EMAIL;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PASSWORDS_DO_NOT_MATCH;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SLOW_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALERT;
+import static com.home.vod.preferences.LanguagePreference.EMAIL_EXISTS;
+import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
+import static com.home.vod.preferences.LanguagePreference.ERROR_IN_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.FAILURE;
+import static com.home.vod.preferences.LanguagePreference.GOOGLE_FCM_TOKEN;
+import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
+import static com.home.vod.preferences.LanguagePreference.LOGIN;
+import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.OOPS_INVALID_EMAIL;
+import static com.home.vod.preferences.LanguagePreference.PASSWORDS_DO_NOT_MATCH;
+import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.SLOW_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
+import static com.home.vod.preferences.LanguagePreference.TEXT_PASSWORD;
+import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
+
 public class RegisterActivity extends AppCompatActivity implements RegistrationAsynTask.RegistrationDetails, VideoDetailsAsynctask.VideoDetails,
         GetValidateUserAsynTask.GetValidateUser, SocialAuthAsynTask.SocialAuth, LogoutAsynctask.Logout, CheckDeviceAsyncTask.CheckDevice,
         CheckFbUserDetailsAsyn.CheckFbUserDetails{
@@ -99,6 +159,8 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
     String UniversalIsSubscribed = "";
     String deviceName = "";
     ProgressBarHandler pDialog;
+    
+    LanguagePreference languagePreference;
     int countryPosition = 0;
     int langPosition = 0;
     /*********fb****/
@@ -261,7 +323,6 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
     int keepAliveTime = 10;
     PreferenceManager preferenceManager;
     Toolbar mActionBarToolbar;
-
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
@@ -292,8 +353,8 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
         setSupportActionBar(mActionBarToolbar);
         playerModel=new Player();
 
-
-        if ((Util.getTextofLanguage(RegisterActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
+languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.this);
+        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
             mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
@@ -345,13 +406,13 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
         Typeface loginTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         loginTextView.setTypeface(loginTextViewTypeface);
 
-        editName.setHint(Util.getTextofLanguage(RegisterActivity.this, Util.NAME_HINT, Util.DEFAULT_NAME_HINT));
-        editEmail.setHint(Util.getTextofLanguage(RegisterActivity.this, Util.TEXT_EMIAL, Util.DEFAULT_TEXT_EMIAL));
-        editPassword.setHint(Util.getTextofLanguage(RegisterActivity.this, Util.TEXT_PASSWORD, Util.DEFAULT_TEXT_PASSWORD));
-        editConfirmPassword.setHint(Util.getTextofLanguage(RegisterActivity.this, Util.CONFIRM_PASSWORD, Util.DEFAULT_CONFIRM_PASSWORD));
-        registerButton.setText(Util.getTextofLanguage(RegisterActivity.this, Util.BTN_REGISTER, Util.DEFAULT_BTN_REGISTER));
-        alreadyMemmberText.setText(Util.getTextofLanguage(RegisterActivity.this, Util.ALREADY_MEMBER, Util.DEFAULT_ALREADY_MEMBER));
-        loginTextView.setText(Util.getTextofLanguage(RegisterActivity.this, Util.LOGIN, Util.DEFAULT_LOGIN));
+        editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
+        editEmail.setHint(languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
+        editPassword.setHint(languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD));
+        editConfirmPassword.setHint(languagePreference.getTextofLanguage(CONFIRM_PASSWORD, DEFAULT_CONFIRM_PASSWORD));
+        registerButton.setText(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
+        alreadyMemmberText.setText(languagePreference.getTextofLanguage(ALREADY_MEMBER, DEFAULT_ALREADY_MEMBER));
+        loginTextView.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
 
         /**********fb*********/
         loginWithFacebookButton = (LoginButton) findViewById(R.id.loginWithFacebookButton);
@@ -372,7 +433,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
         });*/
 
 
-        PlanId = (Util.getTextofLanguage(RegisterActivity.this, Util.PLAN_ID, Util.DEFAULT_PLAN_ID)).trim();
+        PlanId = (languagePreference.getTextofLanguage(PLAN_ID, DEFAULT_PLAN_ID)).trim();
         loginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -637,38 +698,37 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
         regPasswordStr = editPassword.getText().toString();
         regConfirmPasswordStr = editConfirmPassword.getText().toString();
 
-        boolean isNetwork = Util.checkNetwork(RegisterActivity.this);
-        if (isNetwork == true) {
+        if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
             if (!regNameStr.matches("") && (!regEmailStr.matches("")) && (!regPasswordStr.matches("")) && !regNameStr.equals("")) {
                 boolean isValidEmail = Util.isValidMail(regEmailStr);
                 if (isValidEmail) {
                     if (regPasswordStr.equals(regConfirmPasswordStr)) {
                         Registration_input registration_input = new Registration_input();
-                        registration_input.setAuthToken(Util.authTokenStr);
+                        registration_input.setAuthToken(authTokenStr);
                         registration_input.setName(regNameStr);
                         registration_input.setEmail(regEmailStr);
                         registration_input.setPassword(regPasswordStr);
                         registration_input.setCustom_country(Selected_Country_Id);
                         registration_input.setCustom_languages(Selected_Language_Id);
                         registration_input.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                        registration_input.setGoogle_id(Util.getTextofLanguage(RegisterActivity.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+                        registration_input.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
                         registration_input.setDevice_type("1");
-                        registration_input.setLang_code(Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                        registration_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
                         asyncReg = new RegistrationAsynTask(registration_input, this, this);
                         asyncReg.executeOnExecutor(threadPoolExecutor);
                     } else {
-                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.PASSWORDS_DO_NOT_MATCH, Util.DEFAULT_PASSWORDS_DO_NOT_MATCH), Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH, DEFAULT_PASSWORDS_DO_NOT_MATCH), Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.OOPS_INVALID_EMAIL, Util.DEFAULT_OOPS_INVALID_EMAIL), Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL, DEFAULT_OOPS_INVALID_EMAIL), Toast.LENGTH_LONG).show();
                 }
             } else {
-                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.ENTER_REGISTER_FIELDS_DATA, Util.DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
 
             }
         } else {
-            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
         }
 
 
@@ -688,11 +748,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
         if (status == 0) {
 
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.ERROR_IN_REGISTRATION, Util.DEFAULT_ERROR_IN_REGISTRATION));
-            dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE));
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_REGISTRATION, DEFAULT_ERROR_IN_REGISTRATION));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -705,11 +765,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
             if (status == 422) {
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
-                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(EMAIL_EXISTS, DEFAULT_EMAIL_EXISTS));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -735,16 +795,16 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                 preferenceManager.setLoginDatePref(todayStr);
 
 
-                if (Util.checkNetwork(RegisterActivity.this) == true) {
+                if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
                         pDialog = null;
                     }
                 } else {
-                    Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 }
 
-                if (Util.checkNetwork(RegisterActivity.this) == true) {
+                if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
                         pDialog = null;
@@ -753,27 +813,27 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                 }
 
 
-                if (Util.getTextofLanguage(RegisterActivity.this, Util.IS_RESTRICT_DEVICE, Util.DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
+                if (languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
                     // Call For Check Api.
                     CheckDeviceInput checkDeviceInput = new CheckDeviceInput();
-                    checkDeviceInput.setAuthToken(Util.authTokenStr);
+                    checkDeviceInput.setAuthToken(authTokenStr);
                     String userIdStr = preferenceManager.getUseridFromPref();
                     checkDeviceInput.setUser_id(userIdStr);
                     checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID));
-                    checkDeviceInput.setGoogle_id(Util.getTextofLanguage(RegisterActivity.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
+                    checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN,DEFAULT_GOOGLE_FCM_TOKEN));
                     checkDeviceInput.setDevice_type("1");
-                    checkDeviceInput.setLang_code(Util.getTextofLanguage(RegisterActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                    checkDeviceInput.setDevice_info(deviceName+","+Util.getTextofLanguage(RegisterActivity.this, Util.ANDROID_VERSION,Util.DEFAULT_ANDROID_VERSION)+" "+Build.VERSION.RELEASE);
+                    checkDeviceInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+                    checkDeviceInput.setDevice_info(deviceName+","+languagePreference.getTextofLanguage(ANDROID_VERSION,DEFAULT_ANDROID_VERSION)+" "+Build.VERSION.RELEASE);
                     CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput,this,this);
                     asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                 } else {
                     if (Util.check_for_subscription == 1) {
                         // Go for subscription
 
-                        if (Util.checkNetwork(RegisterActivity.this) == true) {
+                        if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                             if (Util.dataModel.getIsFreeContent() == 1) {
                                 GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                                getVideoDetailsInput.setAuthToken(authTokenStr);
                                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -782,18 +842,18 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                             } else {
                                 ValidateUserInput validateUserInput = new ValidateUserInput();
-                                validateUserInput.setAuthToken(Util.authTokenStr);
+                                validateUserInput.setAuthToken(authTokenStr);
                                 validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                                 validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
                                 validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                                 validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
                                 validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                validateUserInput.setLanguageCode(Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                                validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                                 asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, RegisterActivity.this, RegisterActivity.this);
                                 asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                             }
                         } else {
-                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
 
                     } else {
@@ -844,7 +904,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                     playerModel.setThirdPartyPlayer(false);
                 } else {
                     //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
-                    playerModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
 
                 }
             } else {
@@ -854,7 +914,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
                 } else {
                     //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
-                    playerModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
 
                 }
             }
@@ -894,15 +954,15 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                         pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
-                    playerModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
                 }
                 Util.showNoDataAlert(RegisterActivity.this);
               /*  AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -916,7 +976,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                         pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
-                    playerModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
                 }
 
 
@@ -1013,24 +1073,24 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
         } else {
 
-            playerModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+            playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
             try {
                 if (pDialog != null && pDialog.isShowing()) {
                     pDialog.hide();
                     pDialog = null;
                 }
             } catch (IllegalArgumentException ex) {
-                playerModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
                 // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
             }
-            playerModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+            playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
             //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
             /*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-            dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -1068,11 +1128,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                     status = 0;
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this);
-                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -1094,11 +1154,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                     status = 0;
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this);
-                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -1127,13 +1187,13 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                     if (message != null && message.equalsIgnoreCase("")) {
                         dlgAlert.setMessage(message);
                     } else {
-                        dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, Util.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
+                        dlgAlert.setMessage(languagePreference.getTextofLanguage(CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
 
                     }
-                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -1154,9 +1214,9 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                         }
 
                         if ((validateUserOutput.getValiduser_str().trim().equalsIgnoreCase("OK")) || (validateUserOutput.getValiduser_str().trim().matches("OK")) || (validateUserOutput.getValiduser_str().trim().equals("OK"))) {
-                            if (Util.checkNetwork(RegisterActivity.this) == true) {
+                            if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                                 GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                                getVideoDetailsInput.setAuthToken(authTokenStr);
                                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -1164,7 +1224,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                                 asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
                                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                             } else {
-                                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                                 onBackPressed();
                             }
                         } else {
@@ -1215,11 +1275,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                 } else if (Util.dataModel.getIsConverted() == 0) {
                     Util.showNoDataAlert(RegisterActivity.this);
                   /*  AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this);
-                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -1228,9 +1288,9 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                             });
                     dlgAlert.create().show();*/
                 } else {
-                    if (Util.checkNetwork(RegisterActivity.this) == true) {
+                    if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                        getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                        getVideoDetailsInput.setAuthToken(authTokenStr);
                         getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -1238,7 +1298,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                         asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
                         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                     } else {
-                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         onBackPressed();
                     }
                 }
@@ -1297,7 +1357,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                                pDialog = null;
 //                            }
 //                            status = 0;
-//                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                        }
 //
@@ -1350,9 +1410,9 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //            }
 //            if (status == 0) {
 //                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-//                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.ERROR_IN_REGISTRATION, Util.DEFAULT_ERROR_IN_REGISTRATION));
+//                dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_REGISTRATION, Util.DEFAULT_ERROR_IN_REGISTRATION));
 //                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE));
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                dlgAlert.setCancelable(false);
 //                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
 //                        new DialogInterface.OnClickListener() {
@@ -1366,11 +1426,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //
 //                if (status == 422) {
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-//                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
-//                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setMessage(languagePreference.getTextofLanguage(EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -1410,7 +1470,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                            pDialog = null;
 //                        }
 //                    } else {
-//                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //                    }
 //
 //                    if (Util.checkNetwork(RegisterActivity.this) == true) {
@@ -1442,7 +1502,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 //                                }
 //                            } else {
-//                                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //                            }
 //
 //                        }
@@ -1508,8 +1568,8 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                                pDialog = null;
 //                            }
 //                            responseStr = "0";
-//                            Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-//                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
+//                            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                        }
 //
@@ -1521,7 +1581,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                        pDialog = null;
 //                    }
 //                    responseStr = "0";
-//                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //                    e.printStackTrace();
 //                }
 //
@@ -1544,13 +1604,13 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //
 //                if (statusCode >= 0) {
 //                    if (statusCode == 200) {
-//                        if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+//                        if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA))) {
 //                            if ((myJson.has("videoUrl")) && myJson.getString("videoUrl").trim() != null && !myJson.getString("videoUrl").trim().isEmpty() && !myJson.getString("videoUrl").trim().equals("null") && !myJson.getString("videoUrl").trim().matches("")) {
 //                                Util.dataModel.setVideoUrl(myJson.getString("videoUrl"));
 //
 //
 //                            } else {
-//                                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //
 //                            }
 //                        } else {
@@ -1558,7 +1618,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                                Util.dataModel.setVideoUrl(myJson.getString("thirdparty_url"));
 //
 //                            } else {
-//                                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //
 //                            }
 //                        }
@@ -1604,7 +1664,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                } else {
 //
 //                    responseStr = "0";
-//                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //                }
 //            } catch (JSONException e1) {
 //                if (pDialog != null && pDialog.isShowing()) {
@@ -1612,7 +1672,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                    pDialog = null;
 //                }
 //                responseStr = "0";
-//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //                e1.printStackTrace();
 //            } catch (Exception e) {
 //                if (pDialog != null && pDialog.isShowing()) {
@@ -1620,7 +1680,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                    pDialog = null;
 //                }
 //                responseStr = "0";
-//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //
 //                e.printStackTrace();
 //
@@ -1642,7 +1702,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //        }*/
 //            if (responseStr == null) {
 //                responseStr = "0";
-//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //
 //                //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
 //            }
@@ -1654,17 +1714,17 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                        pDialog = null;
 //                    }
 //                } catch (IllegalArgumentException ex) {
-//                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //                    // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
 //                }
-//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //                //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
 //                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-//                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-//                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+//                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                dlgAlert.setCancelable(false);
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                        new DialogInterface.OnClickListener() {
 //                            public void onClick(DialogInterface dialog, int id) {
 //                                dialog.cancel();
@@ -1682,14 +1742,14 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                            pDialog = null;
 //                        }
 //                    } catch (IllegalArgumentException ex) {
-//                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                        Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //                    }
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-//                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-//                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -1698,21 +1758,21 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                                }
 //                            });
 //                    dlgAlert.create().show();
-//                } else if (Util.dataModel.getVideoUrl().matches("") || Util.dataModel.getVideoUrl().equalsIgnoreCase(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+//                } else if (Util.dataModel.getVideoUrl().matches("") || Util.dataModel.getVideoUrl().equalsIgnoreCase(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA))) {
 //                    try {
 //                        if (pDialog != null && pDialog.isShowing()) {
 //                            pDialog.hide();
 //                            pDialog = null;
 //                        }
 //                    } catch (IllegalArgumentException ex) {
-//                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                        Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //                    }
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-//                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-//                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -1728,9 +1788,9 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                            pDialog = null;
 //                        }
 //                    } catch (IllegalArgumentException ex) {
-//                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                        Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //                    }
-//                    if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+//                    if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA))) {
 //                        /*if (mCastSession != null && mCastSession.isConnected()) {
 //
 //
@@ -1912,7 +1972,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //
 //                }    */
 //
-//                httppost.addHeader("lang_code", Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //                // Execute HTTP Post Request
 //                try {
@@ -1939,7 +1999,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                                pDialog = null;
 //                            }
 //                            status = 0;
-//                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                        }
 //
@@ -2000,11 +2060,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                    status = 0;
 //                }
 //                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this);
-//                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-//                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
+//                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                dlgAlert.setCancelable(false);
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                        new DialogInterface.OnClickListener() {
 //                            public void onClick(DialogInterface dialog, int id) {
 //                                dialog.cancel();
@@ -2026,11 +2086,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                    status = 0;
 //                }
 //                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this);
-//                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-//                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
+//                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                dlgAlert.setCancelable(false);
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                        new DialogInterface.OnClickListener() {
 //                            public void onClick(DialogInterface dialog, int id) {
 //                                dialog.cancel();
@@ -2059,13 +2119,13 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                    if (userMessage != null && userMessage.equalsIgnoreCase("")) {
 //                        dlgAlert.setMessage(userMessage);
 //                    } else {
-//                        dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, Util.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
+//                        dlgAlert.setMessage(languagePreference.getTextofLanguage(CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, Util.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
 //
 //                    }
-//                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -2096,7 +2156,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,RegisterActivity.this,RegisterActivity.this);
 //                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 //                            } else {
-//                                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //                                onBackPressed();
 //                            }
 //                        } else {
@@ -2146,11 +2206,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //
 //                } else if (Util.dataModel.getIsConverted() == 0) {
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this);
-//                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-//                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -2169,7 +2229,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                        asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,RegisterActivity.this,RegisterActivity.this);
 //                        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 //                    } else {
-//                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //                        onBackPressed();
 //                    }
 //                }
@@ -2193,11 +2253,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
             try {
                 if (Util.currencyModel.getCurrencySymbol() == null) {
-                    Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
 
                 }
             } catch (Exception e) {
-                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
                 finish();
             }
 
@@ -2246,11 +2306,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
             try {
                 if (Util.currencyModel.getCurrencySymbol() == null) {
-                    Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
 
                 }
             } catch (Exception e) {
-                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
                 finish();
             }
 
@@ -2862,11 +2922,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
     public void onSocialAuthPostExecuteCompleted(SocialAuthOutputModel socialAuthOutputModel, int status, String message) {
         if (status == 0) {
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.ERROR_IN_REGISTRATION, Util.DEFAULT_ERROR_IN_REGISTRATION));
-            dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE));
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_REGISTRATION, DEFAULT_ERROR_IN_REGISTRATION));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -2878,11 +2938,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
             if (status == 422) {
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
-                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(EMAIL_EXISTS, DEFAULT_EMAIL_EXISTS));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -2895,10 +2955,10 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                 if (Util.check_for_subscription == 1) {
                     // Go for subscription
 
-                    if (Util.checkNetwork(RegisterActivity.this) == true) {
+                    if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                         if (Util.dataModel.getIsFreeContent() == 1) {
                             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                            getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                            getVideoDetailsInput.setAuthToken(authTokenStr);
                             getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                             getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                             getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -2907,18 +2967,18 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
                             ValidateUserInput validateUserInput = new ValidateUserInput();
-                            validateUserInput.setAuthToken(Util.authTokenStr);
+                            validateUserInput.setAuthToken(authTokenStr);
                             validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                             validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
                             validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                             validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
                             validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                            validateUserInput.setLanguageCode(Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, RegisterActivity.this, RegisterActivity.this);
                             asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                         }
                     } else {
-                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
 
                 } else {
@@ -2930,16 +2990,16 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                 }
 
 
-                if (Util.checkNetwork(RegisterActivity.this) == true) {
+                if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
                         pDialog = null;
                     }
                 } else {
-                    Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 }
 
-                if (Util.checkNetwork(RegisterActivity.this) == true) {
+                if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
                         pDialog = null;
@@ -3118,7 +3178,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                                     loginWithFacebookButton.setVisibility(View.GONE);
                                     btnLogin.setVisibility(View.GONE);
                                     CheckFbUserDetailsInput checkFbUserDetailsInput=new CheckFbUserDetailsInput();
-                                    checkFbUserDetailsInput.setAuthToken(Util.authTokenStr);
+                                    checkFbUserDetailsInput.setAuthToken(authTokenStr);
                                     checkFbUserDetailsInput.setFb_userid(fbUserId.trim());
                                     asynCheckFbUserDetails = new CheckFbUserDetailsAsyn(checkFbUserDetailsInput,RegisterActivity.this,RegisterActivity.this);
                                     asynCheckFbUserDetails.executeOnExecutor(threadPoolExecutor);
@@ -3148,7 +3208,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
             registerButton.setVisibility(View.VISIBLE);
             loginWithFacebookButton.setVisibility(View.GONE);
             btnLogin.setVisibility(View.VISIBLE);
-            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
+            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
             //progressDialog.dismiss();
         }
 
@@ -3158,7 +3218,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
             registerButton.setVisibility(View.VISIBLE);
             loginWithFacebookButton.setVisibility(View.GONE);
             btnLogin.setVisibility(View.VISIBLE);
-            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
+            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
 
             //progressDialog.dismiss();
         }
@@ -3183,11 +3243,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                 pDialog = null;
             }
             android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
-            dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-            dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT,DEFAULT_DETAILS_NOT_FOUND_ALERT));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK));
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -3206,11 +3266,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                     asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
                 }else{
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
-                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -3219,12 +3279,12 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                     dlgAlert.create().show();
                 }*/
             SocialAuthInputModel socialAuthInputModel = new SocialAuthInputModel();
-            socialAuthInputModel.setAuthToken(Util.authTokenStr);
+            socialAuthInputModel.setAuthToken(authTokenStr);
             socialAuthInputModel.setName(fbName.trim());
             socialAuthInputModel.setEmail(fbEmail.trim());
             socialAuthInputModel.setPassword("");
             socialAuthInputModel.setFb_userid(fbUserId.trim());
-            socialAuthInputModel.setLanguage(Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+            socialAuthInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynFbRegDetails = new SocialAuthAsynTask(socialAuthInputModel, RegisterActivity.this, RegisterActivity.this);
             asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -3235,11 +3295,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                 pDialog = null;
             }
             android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
-            dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-            dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK));
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -3309,11 +3369,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                    pDialog = null;
 //                }
 //                android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-//                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
-//                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
+//                dlgAlert.setMessage(languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
+//                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setMessage(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK));
 //                dlgAlert.setCancelable(false);
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                        new DialogInterface.OnClickListener() {
 //                            public void onClick(DialogInterface dialog, int id) {
 //                                dialog.cancel();
@@ -3332,11 +3392,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                    asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
 //                }else{
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-//                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
-//                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setMessage(languagePreference.getTextofLanguage(EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -3350,7 +3410,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                socialAuthInputModel.setEmail(fbEmail.trim());
 //                socialAuthInputModel.setPassword("");
 //                socialAuthInputModel.setFb_userid(fbUserId.trim());
-//                socialAuthInputModel.setLanguage(Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                socialAuthInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //                asynFbRegDetails = new SocialAuthAsynTask(socialAuthInputModel, RegisterActivity.this, RegisterActivity.this);
 //                asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
 //
@@ -3361,11 +3421,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                    pDialog = null;
 //                }
 //                android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-//                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
-//                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK));
+//                dlgAlert.setMessage(languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, Util.DEFAULT_DETAILS_NOT_FOUND_ALERT));
+//                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setMessage(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK));
 //                dlgAlert.setCancelable(false);
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                        new DialogInterface.OnClickListener() {
 //                            public void onClick(DialogInterface dialog, int id) {
 //                                dialog.cancel();
@@ -3414,7 +3474,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                httppost.addHeader("password", "");
 //                httppost.addHeader("authToken", Util.authTokenStr.trim());
 //                httppost.addHeader("fb_userid", fbUserId.trim());
-//                httppost.addHeader("lang_code", Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //                try {
 //                    HttpResponse response = httpclient.execute(httppost);
@@ -3426,7 +3486,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                        @Override
 //                        public void run() {
 //                            statusCode = 0;
-//                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                        }
 //
@@ -3476,11 +3536,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //            }
 //            if (statusCode == 0) {
 //                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-//                dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.ERROR_IN_REGISTRATION, Util.DEFAULT_ERROR_IN_REGISTRATION));
-//                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE));
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_REGISTRATION, Util.DEFAULT_ERROR_IN_REGISTRATION));
+//                dlgAlert.setTitle(languagePreference.getTextofLanguage(FAILURE, Util.DEFAULT_FAILURE));
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                dlgAlert.setCancelable(false);
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                        new DialogInterface.OnClickListener() {
 //                            public void onClick(DialogInterface dialog, int id) {
 //                                dialog.cancel();
@@ -3492,11 +3552,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //
 //                if (statusCode == 422) {
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-//                    dlgAlert.setMessage(Util.getTextofLanguage(RegisterActivity.this, Util.EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
-//                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setMessage(languagePreference.getTextofLanguage(EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -3552,7 +3612,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 //                            }
 //                        } else {
-//                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //                        }
 //
 //                    } else {
@@ -3570,7 +3630,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                            pDialog = null;
 //                        }
 //                    } else {
-//                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //                    }
 //
 //                    if (Util.checkNetwork(RegisterActivity.this) == true) {
@@ -3661,10 +3721,10 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                 if (Util.check_for_subscription == 1) {
                     // Go for subscription
 
-                    if (Util.checkNetwork(RegisterActivity.this) == true) {
+                    if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                         if (Util.dataModel.getIsFreeContent() == 1) {
                             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                            getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                            getVideoDetailsInput.setAuthToken(authTokenStr);
                             getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                             getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                             getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -3673,18 +3733,18 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
                             ValidateUserInput validateUserInput = new ValidateUserInput();
-                            validateUserInput.setAuthToken(Util.authTokenStr);
+                            validateUserInput.setAuthToken(authTokenStr);
                             validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                             validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
                             validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                             validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
                             validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                            validateUserInput.setLanguageCode(Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, RegisterActivity.this, RegisterActivity.this);
                             asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                         }
                     } else {
-                        Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
 
                 } else {
@@ -3737,10 +3797,10 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                httppost.addHeader("user_id", userIdStr.trim());
 //                httppost.addHeader("authToken", Util.authTokenStr.trim());
 //                httppost.addHeader("device", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-//                httppost.addHeader("google_id", Util.getTextofLanguage(RegisterActivity.this, Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+//                httppost.addHeader("google_id", languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
 //                httppost.addHeader("device_type", "1");
-//                httppost.addHeader("lang_code", Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-//                httppost.addHeader("device_info", deviceName + "," + Util.getTextofLanguage(RegisterActivity.this, Util.ANDROID_VERSION, Util.DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
+//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("device_info", deviceName + "," + languagePreference.getTextofLanguage(ANDROID_VERSION, Util.DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
 //
 //
 //                // Execute HTTP Post Request
@@ -3753,7 +3813,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                        @Override
 //                        public void run() {
 //                            statusCode = 0;
-//                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //                        }
 //
 //                    });
@@ -3822,7 +3882,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 //                            }
 //                        } else {
-//                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //                        }
 //
 //                    } else {
@@ -3862,8 +3922,8 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
     public void LogOut() {
 
         LogoutInput logoutInput = new LogoutInput();
-        logoutInput.setAuthToken(Util.authTokenStr);
-        logoutInput.setLang_code(Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        logoutInput.setAuthToken(authTokenStr);
+        logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         logoutInput.setLogin_history_id(logoutInput.getLogin_history_id());
         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, this, this);
         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
@@ -3878,11 +3938,11 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
     @Override
     public void onLogoutPostExecuteCompleted(int code, String status, String message) {
         if (status == null) {
-            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
         }
         if (code == 0) {
-            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
         }
         if (code > 0) {
@@ -3891,10 +3951,10 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(UniversalErrorMessage);
-                dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -3903,7 +3963,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
                 dlgAlert.create().show();
 
             } else {
-                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
             }
         }
@@ -3927,7 +3987,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //                httppost.addHeader("authToken", Util.authTokenStr.trim());
 //                httppost.addHeader("login_history_id", loginHistoryIdStr);
-//                httppost.addHeader("lang_code", Util.getTextofLanguage(RegisterActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //
 //                try {
@@ -3942,7 +4002,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                                pDialog = null;
 //                            }
 //                            responseCode = 0;
-//                            Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                        }
 //
@@ -3982,15 +4042,15 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //
 //                }
 //            } catch (IllegalArgumentException ex) {
-//                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 //
 //            }
 //            if (responseStr == null) {
-//                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 //
 //            }
 //            if (responseCode == 0) {
-//                Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 //
 //            }
 //            if (responseCode > 0) {
@@ -4007,10 +4067,10 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
 //                    dlgAlert.setMessage(UniversalErrorMessage);
-//                    dlgAlert.setTitle(Util.getTextofLanguage(RegisterActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(RegisterActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -4019,7 +4079,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 //                    dlgAlert.create().show();
 //
 //                } else {
-//                    Toast.makeText(RegisterActivity.this, Util.getTextofLanguage(RegisterActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//                    Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 //
 //                }
 //            }

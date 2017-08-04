@@ -33,6 +33,8 @@ import com.home.apisdk.apiModel.FFVideoLogDetailsInput;
 import com.home.apisdk.apiModel.ResumeVideoLogDetailsInput;
 import com.home.apisdk.apiModel.VideoLogsInputModel;
 import com.home.vod.R;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ExpandableTextView;
 import com.home.vod.util.SensorOrientationChangeNotifier;
@@ -49,6 +51,13 @@ import java.util.concurrent.TimeUnit;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.util.Constant.authTokenStr;
 
 
 /*enum ContentTypes1 {
@@ -134,10 +143,9 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     private EMVideoView emVideoView;
     int seek_label_pos = 0;
     int content_types_id = 0;
-
-
-
     boolean censor_layout = true;
+    LanguagePreference languagePreference;
+    
     @Override
     protected void onResume() {
         super.onResume();
@@ -148,6 +156,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
+        languagePreference = LanguagePreference.getLanguagePreference(this);
         content_types_id = Util.dataModel.getContentTypesId();
        // played_length = Util.dataModel.getPlayPos() * 1000;
 
@@ -200,7 +209,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
         Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
         videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
-        videoCastCrewTitleTextView.setText(Util.getTextofLanguage(TrailerActivity.this, Util.CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
+        videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE,DEFAULT_CAST_CREW_BUTTON_TITLE));
 
         //Call For Subtitle Loading // Added By Bibhu
 
@@ -259,7 +268,8 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
             videoCensorRatingTextView.setVisibility(View.GONE);
             videoCensorRatingTextView1.setVisibility(View.GONE);
         }
-        if (Util.dataModel.getCensorRating().trim() != null && Util.dataModel.getCensorRating().trim().equalsIgnoreCase(Util.getTextofLanguage(TrailerActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+        if (Util.dataModel.getCensorRating().trim() != null && Util.dataModel.getCensorRating().trim()
+                .equalsIgnoreCase(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))) {
             videoCensorRatingTextView.setVisibility(View.GONE);
             videoCensorRatingTextView1.setVisibility(View.GONE);
         }
@@ -300,7 +310,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
         videoCastCrewTitleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Util.checkNetwork(TrailerActivity.this)) {
+                if (NetworkStatus.getInstance().isConnected(TrailerActivity.this)) {
                     //Will Add Some Data to send
                     Util.call_finish_at_onUserLeaveHint = false;
                     Util.hide_pause = true;
@@ -320,7 +330,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                     detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(detailsIntent);
                 } else {
-                    Toast.makeText(getApplicationContext(), Util.getTextofLanguage(TrailerActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -645,7 +655,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
 
                         VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
-                        videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                        videoLogsInputModel.setAuthToken(authTokenStr);
                         videoLogsInputModel.setIpAddress(ipAddressStr.trim());
                         videoLogsInputModel.setMuviUniqueId(movieId.trim());
                         videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
@@ -675,7 +685,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
 
                         VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
-                        videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                        videoLogsInputModel.setAuthToken(authTokenStr);
                         videoLogsInputModel.setIpAddress(ipAddressStr.trim());
                         videoLogsInputModel.setMuviUniqueId(movieId.trim());
                         videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
@@ -748,7 +758,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 //                HttpClient httpclient = new DefaultHttpClient();
 //                HttpPost httppost = new HttpPost(urlRouteList);
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("authToken", authTokenStr.trim());
 //                httppost.addHeader("user_id", userIdStr.trim());
 //                httppost.addHeader("ip_address", ipAddressStr.trim());
 //                httppost.addHeader("movie_id", movieId.trim());
@@ -863,7 +873,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
                                     FFVideoLogDetailsInput ffVideoLogDetailsInput=new FFVideoLogDetailsInput();
-                                    ffVideoLogDetailsInput.setAuthToken(Util.authTokenStr);
+                                    ffVideoLogDetailsInput.setAuthToken(authTokenStr);
                                     ffVideoLogDetailsInput.setUser_id(userIdStr);
                                     ffVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
                                     ffVideoLogDetailsInput.setMovie_id(movieId.trim());
@@ -877,7 +887,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                                     asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else {
                                     FFVideoLogDetailsInput ffVideoLogDetailsInput=new FFVideoLogDetailsInput();
-                                    ffVideoLogDetailsInput.setAuthToken(Util.authTokenStr);
+                                    ffVideoLogDetailsInput.setAuthToken(authTokenStr);
                                     ffVideoLogDetailsInput.setUser_id(userIdStr);
                                     ffVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
                                     ffVideoLogDetailsInput.setMovie_id(movieId.trim());
@@ -898,7 +908,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
                                     VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
-                                    videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                                    videoLogsInputModel.setAuthToken(authTokenStr);
                                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
                                     videoLogsInputModel.setMuviUniqueId(movieId.trim());
                                     videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
@@ -912,7 +922,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else if (currentPositionStr > 0 && currentPositionStr % 60 == 0) {
                                     VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
-                                    videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                                    videoLogsInputModel.setAuthToken(authTokenStr);
                                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
                                     videoLogsInputModel.setMuviUniqueId(movieId.trim());
                                     videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
@@ -969,7 +979,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 //                HttpClient httpclient = new DefaultHttpClient();
 //                HttpPost httppost = new HttpPost(urlRouteList);
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("authToken", authTokenStr.trim());
 //                httppost.addHeader("user_id", userIdStr);
 //                httppost.addHeader("ip_address", ipAddressStr.trim());
 //                httppost.addHeader("movie_id", movieId.trim());
@@ -1345,7 +1355,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
         if (video_completed == false) {
 
             ResumeVideoLogDetailsInput resumeVideoLogDetailsInput=new ResumeVideoLogDetailsInput();
-            resumeVideoLogDetailsInput.setAuthToken(Util.authTokenStr);
+            resumeVideoLogDetailsInput.setAuthToken(authTokenStr);
             resumeVideoLogDetailsInput.setUser_id(userIdStr.trim());
             resumeVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
             resumeVideoLogDetailsInput.setMovie_id(movieId.trim());
@@ -1393,7 +1403,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
             timer = null;
         }
         ResumeVideoLogDetailsInput resumeVideoLogDetailsInput=new ResumeVideoLogDetailsInput();
-        resumeVideoLogDetailsInput.setAuthToken(Util.authTokenStr);
+        resumeVideoLogDetailsInput.setAuthToken(authTokenStr);
         resumeVideoLogDetailsInput.setUser_id(userIdStr.trim());
         resumeVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
         resumeVideoLogDetailsInput.setMovie_id(movieId.trim());
@@ -1660,7 +1670,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 //                HttpClient httpclient = new DefaultHttpClient();
 //                HttpPost httppost = new HttpPost(urlRouteList);
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("authToken", authTokenStr.trim());
 //                httppost.addHeader("user_id", userIdStr.trim());
 //                httppost.addHeader("ip_address", ipAddressStr.trim());
 //                httppost.addHeader("movie_id", movieId.trim());

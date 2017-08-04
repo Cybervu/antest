@@ -20,6 +20,8 @@ import com.home.apisdk.apiController.ForgotpassAsynTask;
 import com.home.apisdk.apiModel.Forgotpassword_input;
 import com.home.apisdk.apiModel.Forgotpassword_output;
 import com.home.vod.R;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import java.util.concurrent.BlockingQueue;
@@ -27,6 +29,32 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_SUBMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_DOESNOT_EXISTS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_OOPS_INVALID_EMAIL;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PASSWORD_RESET_LINK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
+import static com.home.vod.preferences.LanguagePreference.EMAIL_DOESNOT_EXISTS;
+import static com.home.vod.preferences.LanguagePreference.FAILURE;
+import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.LOGIN;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.OOPS_INVALID_EMAIL;
+import static com.home.vod.preferences.LanguagePreference.PASSWORD_RESET_LINK;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
+import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 
 
 public class ForgotPasswordActivity extends AppCompatActivity implements ForgotpassAsynTask.ForgotpassDetails{
@@ -45,16 +73,17 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-
+    LanguagePreference languagePreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
+        languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
 
-        if ((Util.getTextofLanguage(ForgotPasswordActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
+        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
             mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
@@ -86,9 +115,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         logintextView.setTypeface(logintextViewTypeface);
 
 
-        editEmailStr.setHint(Util.getTextofLanguage(ForgotPasswordActivity.this, Util.TEXT_EMIAL, Util.DEFAULT_TEXT_EMIAL));
-        submitButton.setText(Util.getTextofLanguage(ForgotPasswordActivity.this, Util.BTN_SUBMIT, Util.DEFAULT_BTN_SUBMIT));
-        logintextView.setText(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.LOGIN,Util.DEFAULT_LOGIN));
+        editEmailStr.setHint(languagePreference.getTextofLanguage( TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
+        submitButton.setText(languagePreference.getTextofLanguage( BTN_SUBMIT, DEFAULT_BTN_SUBMIT));
+        logintextView.setText(languagePreference.getTextofLanguage(LOGIN,DEFAULT_LOGIN));
        /* editEmailStr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -123,24 +152,22 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
     public void forgotPasswordButtonClicked() {
 
         loginEmailStr = editEmailStr.getText().toString().trim();
-        boolean isNetwork = Util.checkNetwork(ForgotPasswordActivity.this);
-
-        if (isNetwork) {
+        if (NetworkStatus.getInstance().isConnected(this)) {
             boolean isValidEmail = Util.isValidMail(loginEmailStr);
             if (isValidEmail == true) {
                 Forgotpassword_input forgotpassword_input=new Forgotpassword_input();
-                forgotpassword_input.setAuthToken(Util.authTokenStr);
-                forgotpassword_input.setLang_code(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                forgotpassword_input.setAuthToken(authTokenStr);
+                forgotpassword_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
                 forgotpassword_input.setEmail(loginEmailStr);
                 ForgotpassAsynTask asyncPasswordForgot = new ForgotpassAsynTask(forgotpassword_input,this,this);
                 asyncPasswordForgot.executeOnExecutor(threadPoolExecutor);
             } else {
 
-                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.OOPS_INVALID_EMAIL,Util.DEFAULT_OOPS_INVALID_EMAIL));
+                ShowDialog(languagePreference.getTextofLanguage(FAILURE,DEFAULT_FAILURE), languagePreference.getTextofLanguage(OOPS_INVALID_EMAIL,DEFAULT_OOPS_INVALID_EMAIL));
 
             }
         } else {
-            ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.SORRY,Util.DEFAULT_SORRY), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION));
+            ShowDialog(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
 
         }
     }
@@ -155,22 +182,16 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
     @Override
     public void onForgotpassDetailsPostExecuteCompleted(Forgotpassword_output forgotpassword_output, int status, String message) {
         try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
-
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
             }
-
-        if (status!=200) {
-            ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
+        } catch (IllegalArgumentException ex) {
+            ShowDialog(languagePreference.getTextofLanguage(FAILURE,DEFAULT_FAILURE),
+                    languagePreference.getTextofLanguage(EMAIL_DOESNOT_EXISTS,DEFAULT_EMAIL_DOESNOT_EXISTS));
 
         }
-        if (status == 0) {
-            ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
-        }
+
         if (status > 0) {
             if (status == 200) {
                 if (pDialog != null && pDialog.isShowing()) {
@@ -178,136 +199,19 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
                     pDialog = null;
                 }
                 navigation=true;
-                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.PASSWORD_RESET_LINK,Util.DEFAULT_PASSWORD_RESET_LINK));
-
+                ShowDialog("",languagePreference.getTextofLanguage(PASSWORD_RESET_LINK,DEFAULT_PASSWORD_RESET_LINK));
 
             } else {
-                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
+                ShowDialog(languagePreference.getTextofLanguage(FAILURE,DEFAULT_FAILURE),
+                        languagePreference.getTextofLanguage(EMAIL_DOESNOT_EXISTS,DEFAULT_EMAIL_DOESNOT_EXISTS));
             }
+        }else {
+            ShowDialog(languagePreference.getTextofLanguage(FAILURE,DEFAULT_FAILURE),
+                    languagePreference.getTextofLanguage(EMAIL_DOESNOT_EXISTS,DEFAULT_EMAIL_DOESNOT_EXISTS));
         }
 
     }
 
-//    private class AsynForgotPasswordDetails extends AsyncTask<Void, Void, Void> {
-//        ProgressBarHandler pDialog;
-//        String loginEmailIdStr = editEmailStr.getText().toString();
-//        int responseCode;
-//        String responseStr;
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//
-//            ArrayList<NameValuePair> cred = new ArrayList<NameValuePair>();
-//            cred.add(new BasicNameValuePair("email", loginEmailIdStr));
-//            cred.add(new BasicNameValuePair("authToken", Util.authTokenStr.trim()));
-//
-//            String urlRouteList = Util.rootUrl().trim() + Util.forgotpasswordUrl.trim();
-//            try {
-//                HttpClient httpclient = new DefaultHttpClient();
-//                HttpPost httppost = new HttpPost(urlRouteList);
-//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("email", loginEmailIdStr);
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
-//                httppost.addHeader("lang_code",Util.getTextofLanguage(ForgotPasswordActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-//
-//
-//                try {
-//                    httppost.setEntity(new UrlEncodedFormEntity(cred, "UTF-8"));
-//                } catch (UnsupportedEncodingException e) {
-//                    if (pDialog != null && pDialog.isShowing()) {
-//                        pDialog.hide();
-//                        pDialog = null;
-//                    }
-//                    responseCode = 0;
-//                    e.printStackTrace();
-//                }
-//                try {
-//                    HttpResponse response = httpclient.execute(httppost);
-//                    responseStr = EntityUtils.toString(response.getEntity());
-//
-//
-//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (pDialog != null && pDialog.isShowing()) {
-//                                pDialog.hide();
-//                                pDialog = null;
-//                            }
-//                            responseCode = 0;
-//                            Toast.makeText(ForgotPasswordActivity.this, Util.getTextofLanguage(ForgotPasswordActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-//
-//
-//                        }
-//
-//                    });
-//
-//                } catch (IOException e) {
-//                    if (pDialog != null && pDialog.isShowing()) {
-//                        pDialog.hide();
-//                        pDialog = null;
-//                    }
-//                    responseCode = 0;
-//                    e.printStackTrace();
-//                }
-//                if (responseStr != null) {
-//                    JSONObject myJson = new JSONObject(responseStr);
-//                    responseCode = Integer.parseInt(myJson.optString("code"));
-//                }
-//
-//            } catch (Exception e) {
-//                if (pDialog != null && pDialog.isShowing()) {
-//                    pDialog.hide();
-//                    pDialog = null;
-//                }
-//                responseCode = 0;
-//
-//            }
-//
-//            return null;
-//        }
-//
-//
-//        protected void onPostExecute(Void result) {
-//            try {
-//                if (pDialog != null && pDialog.isShowing()) {
-//                    pDialog.hide();
-//                    pDialog = null;
-//                }
-//            } catch (IllegalArgumentException ex) {
-//                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
-//
-//            }
-//            if (responseStr == null) {
-//                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
-//
-//            }
-//            if (responseCode == 0) {
-//                ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
-//            }
-//            if (responseCode > 0) {
-//                if (responseCode == 200) {
-//                    if (pDialog != null && pDialog.isShowing()) {
-//                        pDialog.hide();
-//                        pDialog = null;
-//                    }
-//                    navigation=true;
-//                    ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.PASSWORD_RESET_LINK,Util.DEFAULT_PASSWORD_RESET_LINK));
-//
-//
-//                } else {
-//                    ShowDialog(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE), Util.getTextofLanguage(ForgotPasswordActivity.this,Util.EMAIL_DOESNOT_EXISTS,Util.DEFAULT_EMAIL_DOESNOT_EXISTS));
-//                }
-//            }
-//
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            pDialog = new ProgressBarHandler(ForgotPasswordActivity.this);
-//            pDialog.show();
-//        }
-//    }
 
     @Override
     public void onBackPressed() {
@@ -329,9 +233,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ForgotPasswordActivity.this, R.style.MyAlertDialogStyle);
         dlgAlert.setMessage(msg);
         dlgAlert.setTitle(Title);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(ForgotPasswordActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
         dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(ForgotPasswordActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (navigation) {

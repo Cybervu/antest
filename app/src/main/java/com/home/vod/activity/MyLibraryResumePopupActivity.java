@@ -13,16 +13,27 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.home.vod.R;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
 
+import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
+import static com.home.vod.preferences.LanguagePreference.CONTINUE_BUTTON;
+import static com.home.vod.preferences.LanguagePreference.DEAFULT_CANCEL_BUTTON;
+import static com.home.vod.preferences.LanguagePreference.DEAFULT_CONTINUE_BUTTON;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_RESUME_MESSAGE;
+import static com.home.vod.preferences.LanguagePreference.RESUME_MESSAGE;
+
 
  public class MyLibraryResumePopupActivity extends Activity implements SensorOrientationChangeNotifier.Listener {
+
+     LanguagePreference languagePreference;
 
      @Override
      protected void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_resume_playing);
+         languagePreference = LanguagePreference.getLanguagePreference(MyLibraryResumePopupActivity.this);
          setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
          LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainlayout);
 
@@ -30,9 +41,9 @@ import com.home.vod.util.Util;
          Button yesButton = (Button) findViewById(R.id.yesButton);
          Button cancelButton = (Button) findViewById(R.id.cancelButton);
          TextView resumeTitleTextView = (TextView) findViewById(R.id.resumeTitleTextView);
-         resumeTitleTextView.setText(Util.getTextofLanguage(MyLibraryResumePopupActivity.this, Util.RESUME_MESSAGE, Util.DEFAULT_RESUME_MESSAGE));
-         yesButton.setText(Util.getTextofLanguage(MyLibraryResumePopupActivity.this, Util.CONTINUE_BUTTON, Util.DEAFULT_CONTINUE_BUTTON));
-         cancelButton.setText(Util.getTextofLanguage(MyLibraryResumePopupActivity.this, Util.CANCEL_BUTTON, Util.DEAFULT_CANCEL_BUTTON));
+         resumeTitleTextView.setText(languagePreference.getTextofLanguage(RESUME_MESSAGE, DEFAULT_RESUME_MESSAGE));
+         yesButton.setText(languagePreference.getTextofLanguage(CONTINUE_BUTTON, DEAFULT_CONTINUE_BUTTON));
+         cancelButton.setText(languagePreference.getTextofLanguage(CANCEL_BUTTON, DEAFULT_CANCEL_BUTTON));
 
          Animation topTobottom = AnimationUtils.loadAnimation(this, R.anim.top_bottom);
          popupLayout.startAnimation(topTobottom);

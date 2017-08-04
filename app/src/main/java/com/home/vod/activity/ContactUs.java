@@ -23,7 +23,26 @@ import com.home.apisdk.apiController.ContactUsAsynTask;
 import com.home.apisdk.apiModel.ContactUsInputModel;
 import com.home.apisdk.apiModel.ContactUsOutputModel;
 import com.home.vod.R;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
+import com.nostra13.universalimageloader.utils.L;
+
+import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_SUBMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILL_FORM_BELOW;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MESSAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
+import static com.home.vod.preferences.LanguagePreference.FILL_FORM_BELOW;
+import static com.home.vod.preferences.LanguagePreference.MESSAGE;
+import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
+import static com.home.vod.util.Constant.authTokenStr;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +57,7 @@ public class ContactUs extends Fragment implements ContactUsAsynTask.ContactUs {
     String contEmail;
     ContactUsAsynTask asynContactUs;
     boolean validate = true;
+    LanguagePreference languagePreference;
 
 
 
@@ -54,6 +74,7 @@ public class ContactUs extends Fragment implements ContactUsAsynTask.ContactUs {
         setHasOptionsMenu(true);*/
         View v = inflater.inflate(R.layout.fragment_contact_us, container, false);
         context = getActivity();
+        languagePreference = LanguagePreference.getLanguagePreference(context);
 
         TextView categoryTitle = (TextView) v.findViewById(R.id.categoryTitle);
         Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
@@ -63,27 +84,27 @@ public class ContactUs extends Fragment implements ContactUsAsynTask.ContactUs {
         contactFormTitle = (TextView) v.findViewById(R.id.contactFormTitle);
         Typeface contactFormTitleTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
         contactFormTitle.setTypeface(contactFormTitleTypeface);
-        contactFormTitle.setHint(Util.getTextofLanguage(context, Util.FILL_FORM_BELOW, Util.DEFAULT_FILL_FORM_BELOW));
+        contactFormTitle.setHint(languagePreference.getTextofLanguage(FILL_FORM_BELOW, DEFAULT_FILL_FORM_BELOW));
 
         editEmailStr=(EditText) v.findViewById(R.id.contact_email) ;
         Typeface editEmailStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
         editEmailStr.setTypeface(editEmailStrTypeface);
-        editEmailStr.setHint(Util.getTextofLanguage(context, Util.TEXT_EMIAL, Util.DEFAULT_TEXT_EMIAL));
+        editEmailStr.setHint(languagePreference.getTextofLanguage( TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
 
         editNameStr=(EditText) v.findViewById(R.id.contact_name) ;
         Typeface editNameStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
         editNameStr.setTypeface(editNameStrTypeface);
-        editNameStr.setHint(Util.getTextofLanguage(context, Util.NAME_HINT, Util.DEFAULT_NAME_HINT));
+        editNameStr.setHint(languagePreference.getTextofLanguage( NAME_HINT, DEFAULT_NAME_HINT));
 
         editMessageStr=(EditText) v.findViewById(R.id.contact_msg) ;
         Typeface editMessageStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
         editMessageStr.setTypeface(editMessageStrTypeface);
-        editMessageStr.setHint(Util.getTextofLanguage(context, Util.MESSAGE, Util.DEFAULT_MESSAGE));
+        editMessageStr.setHint(languagePreference.getTextofLanguage( MESSAGE, DEFAULT_MESSAGE));
 
         submit = (Button) v.findViewById(R.id.submit_cont);
         Typeface submitTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         submit.setTypeface(submitTypeface);
-        submit.setText(Util.getTextofLanguage(context, Util.BTN_SUBMIT, Util.DEFAULT_BTN_SUBMIT));
+        submit.setText(languagePreference.getTextofLanguage( BTN_SUBMIT, DEFAULT_BTN_SUBMIT));
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,19 +235,18 @@ public class ContactUs extends Fragment implements ContactUsAsynTask.ContactUs {
 
     if (validate){
 
-        boolean isNetwork = Util.checkNetwork(getActivity());
-        if (isNetwork){
+        if (NetworkStatus.getInstance().isConnected(context)){
             ContactUsInputModel contactUsInputModel=new ContactUsInputModel();
-            contactUsInputModel.setAuthToken(Util.authTokenStr);
+            contactUsInputModel.setAuthToken(authTokenStr);
             contactUsInputModel.setEmail(String.valueOf(regEmailStr));
             contactUsInputModel.setName(String.valueOf(regNameStr));
             contactUsInputModel.setMessage(String.valueOf(regMessageStr));
-            contactUsInputModel.setLang_code(Util.getTextofLanguage(context,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+            contactUsInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
             ContactUsAsynTask asynContactUs = new ContactUsAsynTask(contactUsInputModel, this,context);
             asynContactUs.execute();
 
         }else{
-            Toast.makeText(getActivity(), Util.getTextofLanguage(getActivity(), Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(),languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
         }
     }else {
         validate=true;
@@ -319,7 +339,7 @@ public class ContactUs extends Fragment implements ContactUsAsynTask.ContactUs {
 //            httppost.addHeader("name", String.valueOf(regNameStr));
 //            httppost.addHeader("email", String.valueOf(regEmailStr));
 //            httppost.addHeader("message", String.valueOf(regMessageStr));
-//            httppost.addHeader("lang_code",Util.getTextofLanguage(context,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//            httppost.addHeader("lang_code",languagePreference.getTextofLanguage(Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //            try {
 //                HttpResponse response = httpclient.execute(httppost);

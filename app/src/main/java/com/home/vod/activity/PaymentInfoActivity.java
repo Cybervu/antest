@@ -44,6 +44,8 @@ import com.home.apisdk.apiModel.RegisterUserPaymentOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.model.CardModel;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -69,6 +71,36 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_PAY_NOW;
+import static com.home.vod.preferences.LanguagePreference.CARD_WILL_CHARGE;
+import static com.home.vod.preferences.LanguagePreference.CREDIT_CARD_DETAILS;
+import static com.home.vod.preferences.LanguagePreference.CREDIT_CARD_NAME_HINT;
+import static com.home.vod.preferences.LanguagePreference.CREDIT_CARD_NUMBER_HINT;
+import static com.home.vod.preferences.LanguagePreference.CVV_ALERT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_PAY_NOW;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CARD_WILL_CHARGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CREDIT_CARD_DETAILS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CREDIT_CARD_NAME_HINT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CREDIT_CARD_NUMBER_HINT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CVV_ALERT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_SUBSCRIPTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SUBSCRIPTION_COMPLETED;
+import static com.home.vod.preferences.LanguagePreference.ERROR_IN_SUBSCRIPTION;
+import static com.home.vod.preferences.LanguagePreference.FAILURE;
+import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.SUBSCRIPTION_COMPLETED;
+import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
+
 
 public class PaymentInfoActivity extends ActionBarActivity implements VideoDetailsAsynctask.VideoDetails, AuthUserPaymentInfoAsyntask.AuthUserPaymentInfo, RegisterUserPaymentAsyntask.RegisterUserPayment {
     CardModel[] cardSavedArray;
@@ -82,7 +114,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
     String isCheckedToSavetheCard = "1";
 
     String videoResolution = "BEST";
-
+LanguagePreference languagePreference;
     PreferenceManager preferenceManager;
     ProgressBarHandler progressBarHandler;
     Toolbar mActionBarToolbar;
@@ -186,7 +218,8 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_info);
-        videoPreview = Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+        languagePreference = LanguagePreference.getLanguagePreference(PaymentInfoActivity.this);
+        videoPreview = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         creditCardDetailsTitleTextView = (TextView) findViewById(R.id.creditCardDetailsTitleTextView);
 
         //Set toolbar
@@ -195,7 +228,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
         playerModel=new Player();
 
 
-        if ((Util.getTextofLanguage(PaymentInfoActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
+        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
             mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
@@ -278,14 +311,14 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
         Typeface typeface2 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         creditCardDetailsTitleTextView.setTypeface(typeface2);
-        creditCardDetailsTitleTextView.setText(Util.getTextofLanguage(PaymentInfoActivity.this, Util.CREDIT_CARD_DETAILS, Util.DEFAULT_CREDIT_CARD_DETAILS));
+        creditCardDetailsTitleTextView.setText(languagePreference.getTextofLanguage(CREDIT_CARD_DETAILS, DEFAULT_CREDIT_CARD_DETAILS));
 
         Typeface typeface3 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         chargedPriceTextView.setTypeface(typeface3);
 
         Typeface typeface4 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         payNowButton.setTypeface(typeface4);
-        payNowButton.setText(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_PAY_NOW, Util.DEFAULT_BUTTON_PAY_NOW));
+        payNowButton.setText(languagePreference.getTextofLanguage(BUTTON_PAY_NOW, DEFAULT_BUTTON_PAY_NOW));
 
 
 
@@ -470,7 +503,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
             }
         });
 
-        chargedPriceTextView.setText(Util.getTextofLanguage(PaymentInfoActivity.this, Util.CARD_WILL_CHARGE, Util.DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + getIntent().getStringExtra("price"));
+        chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + getIntent().getStringExtra("price"));
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -494,13 +527,13 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 String securityCodeStr = securityCodeEditText.getText().toString().trim();
 
                 if (nameOnCardStr.matches("")) {
-                    Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.CREDIT_CARD_NAME_HINT, Util.DEFAULT_CREDIT_CARD_NAME_HINT), Toast.LENGTH_LONG).show();
+                    Toast.makeText(PaymentInfoActivity.this, languagePreference.getTextofLanguage(CREDIT_CARD_NAME_HINT, DEFAULT_CREDIT_CARD_NAME_HINT), Toast.LENGTH_LONG).show();
 
                 } else if (cardNumberStr.matches("")) {
-                    Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.CREDIT_CARD_NUMBER_HINT, Util.DEFAULT_CREDIT_CARD_NUMBER_HINT), Toast.LENGTH_LONG).show();
+                    Toast.makeText(PaymentInfoActivity.this, languagePreference.getTextofLanguage(CREDIT_CARD_NUMBER_HINT, DEFAULT_CREDIT_CARD_NUMBER_HINT), Toast.LENGTH_LONG).show();
 
                 } else if (securityCodeStr.matches("")) {
-                    Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.CVV_ALERT, Util.DEFAULT_CVV_ALERT), Toast.LENGTH_LONG).show();
+                    Toast.makeText(PaymentInfoActivity.this, languagePreference.getTextofLanguage(CVV_ALERT, DEFAULT_CVV_ALERT), Toast.LENGTH_LONG).show();
 
 
                 } else if (expiryMonthStr <= 0) {
@@ -510,14 +543,14 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 //                    Toast.makeText(PaymentInfoActivity.this, "Please enter expiry year", Toast.LENGTH_LONG).show();
 
                 } else {
-                    boolean isNetwork = Util.checkNetwork(PaymentInfoActivity.this);
-                    if (isNetwork == false) {
+
+                    if (NetworkStatus.getInstance().isConnected(PaymentInfoActivity.this)) {
                         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
-                        dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
-                        dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                        dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+                        dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                         dlgAlert.setCancelable(false);
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
@@ -532,7 +565,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                         cardNumberStr = cardNumberEditText.getText().toString().trim();
                         securityCodeStr = securityCodeEditText.getText().toString().trim();
                         AuthUserPaymentInfoInputModel authUserPaymentInfoInputModel = new AuthUserPaymentInfoInputModel();
-                        authUserPaymentInfoInputModel.setAuthToken(Util.authTokenStr);
+                        authUserPaymentInfoInputModel.setAuthToken(authTokenStr);
                         authUserPaymentInfoInputModel.setName_on_card(nameOnCardStr);
                         authUserPaymentInfoInputModel.setExpiryMonth(String.valueOf(expiryMonthStr).trim());
                         authUserPaymentInfoInputModel.setExpiryYear(String.valueOf(expiryYearStr).trim());
@@ -551,14 +584,14 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isNetwork = Util.checkNetwork(PaymentInfoActivity.this);
-                if (isNetwork == false) {
+
+                if (NetworkStatus.getInstance().isConnected(PaymentInfoActivity.this)) {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
-                    dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
-                    dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -612,7 +645,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     playerModel.setThirdPartyPlayer(false);
                 } else {
                     //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
-                    playerModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
 
                 }
             } else {
@@ -622,7 +655,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
                 } else {
                     //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
-                    playerModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
 
                 }
             }
@@ -662,7 +695,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                         pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
-                    playerModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
                 }
                 Util.showNoDataAlert(PaymentInfoActivity.this);
               /*  AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this, R.style.MyAlertDialogStyle);
@@ -684,7 +717,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                         pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
-                    playerModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
                 }
 
 
@@ -781,17 +814,17 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
         } else {
 
-            playerModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+            playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
             try {
                 if (pDialog != null && pDialog.isShowing()) {
                     pDialog.hide();
                     pDialog = null;
                 }
             } catch (IllegalArgumentException ex) {
-                playerModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
                 // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
             }
-            playerModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+            playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
             //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
           /*  AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
@@ -833,9 +866,9 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
             dlgAlert.setMessage(responseMessageStr);
             dlgAlert.setTitle("Failure");
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -843,8 +876,8 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     });
             dlgAlert.create().show();
         } else if (status == 1) {
-            boolean isNetwork = Util.checkNetwork(PaymentInfoActivity.this);
-            if (isNetwork == false) {
+
+            if (!NetworkStatus.getInstance().isConnected(PaymentInfoActivity.this)) {
                 try {
                     if (progressBarHandler.isShowing())
                         progressBarHandler.hide();
@@ -852,11 +885,11 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     status = 0;
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
-                dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
-                dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -866,7 +899,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
             } else {
                 RegisterUserPaymentInputModel registerUserPaymentInputModel = new RegisterUserPaymentInputModel();
-                registerUserPaymentInputModel.setAuthToken(Util.authTokenStr);
+                registerUserPaymentInputModel.setAuthToken(authTokenStr);
                 registerUserPaymentInputModel.setCard_name(cardNumberEditText.getText().toString().trim());
                 registerUserPaymentInputModel.setExp_month(String.valueOf(expiryMonthStr).trim());
                 registerUserPaymentInputModel.setCard_number(cardNumberEditText.getText().toString().trim());
@@ -1122,11 +1155,11 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 status = 0;
             }
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
-            dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.ERROR_IN_SUBSCRIPTION, Util.DEFAULT_ERROR_IN_SUBSCRIPTION));
-            dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.FAILURE, Util.DEFAULT_FAILURE));
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_SUBSCRIPTION, DEFAULT_ERROR_IN_SUBSCRIPTION));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -1138,7 +1171,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
             if (status == 200) {
                 if (progressBarHandler.isShowing())
                     progressBarHandler.hide();
-                Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.SUBSCRIPTION_COMPLETED, Util.DEFAULT_SUBSCRIPTION_COMPLETED), Toast.LENGTH_LONG).show();
+                Toast.makeText(PaymentInfoActivity.this, languagePreference.getTextofLanguage(SUBSCRIPTION_COMPLETED, DEFAULT_SUBSCRIPTION_COMPLETED), Toast.LENGTH_LONG).show();
                 if (Util.check_for_subscription == 0) {
                     Intent intent = new Intent(PaymentInfoActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -1146,10 +1179,10 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     startActivity(intent);
                     finish();
                 } else {
-                    if (Util.checkNetwork(PaymentInfoActivity.this) == true) {
+                    if (NetworkStatus.getInstance().isConnected(this)) {
 
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                        getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                        getVideoDetailsInput.setAuthToken(authTokenStr);
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                         getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
@@ -1163,7 +1196,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
                         finish();
-                        Toast.makeText(PaymentInfoActivity.this, Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        Toast.makeText(PaymentInfoActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -1175,11 +1208,11 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     status = 0;
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
-                dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.ERROR_IN_SUBSCRIPTION, Util.DEFAULT_ERROR_IN_SUBSCRIPTION));
-                dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_SUBSCRIPTION, DEFAULT_ERROR_IN_SUBSCRIPTION));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();

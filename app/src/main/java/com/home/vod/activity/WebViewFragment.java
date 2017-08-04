@@ -22,8 +22,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.home.vod.R;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
+
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 
 
 public class WebViewFragment extends Fragment {
@@ -42,6 +47,7 @@ public class WebViewFragment extends Fragment {
     Context context;
     Activity activity;
     private int mRedirectedCount=0;
+    LanguagePreference languagePreference;
 
     public WebViewFragment() {
         // Required empty public constructor
@@ -54,12 +60,13 @@ public class WebViewFragment extends Fragment {
         context = getActivity();
         setHasOptionsMenu(true);
         res = context.getResources();
+        languagePreference = LanguagePreference.getLanguagePreference(context);
         View rootView = inflater.inflate(R.layout.fragment_web_view, container, false);
 
         mActionBarToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
 
         noInternetConnectionTextView = (TextView)rootView.findViewById(R.id.noInternetConnection);
-        noInternetConnectionTextView.setText(Util.getTextofLanguage(context,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION));
+        noInternetConnectionTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
         noInternetConnectionTextView.setVisibility(View.GONE);
 
         urlStr =  getArguments().getString("item");
@@ -77,8 +84,7 @@ public class WebViewFragment extends Fragment {
         webView.clearCache(true);
         webView.clearHistory();
         CookieManager.getInstance().removeAllCookie();
-        boolean isNetwork = Util.checkNetwork(activity);
-        if (isNetwork==true){
+        if (NetworkStatus.getInstance().isConnected(getActivity())){
             startWebView(urlStr);
         }else{
             noInternetConnectionTextView.setVisibility(View.VISIBLE);
@@ -270,9 +276,9 @@ public class WebViewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        boolean isNetwork = Util.checkNetwork(activity);
-        if (isNetwork==false) {
-            Toast.makeText(activity, Util.getTextofLanguage(activity,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+        if (!NetworkStatus.getInstance().isConnected(activity)) {
+            Toast.makeText(activity, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,
+                    DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 
         }
 

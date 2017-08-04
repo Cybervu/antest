@@ -48,6 +48,8 @@ import com.home.vod.adapter.GenreFilterAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.model.GridItem;
 import com.home.vod.model.ListItem;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -76,6 +78,24 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SLOW_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SLOW_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
+import static com.home.vod.util.Constant.authTokenStr;
 
 /*
 import com.twotoasters.jazzylistview.JazzyGridView;
@@ -280,6 +300,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
     View header;
     public static boolean isLoading = false;
+    LanguagePreference languagePreference;
 
 
     @Override
@@ -334,8 +355,9 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);
         genreListData.setItemAnimator(new DefaultItemAnimator());
+        languagePreference = LanguagePreference.getLanguagePreference(getActivity());
 
-        posterUrl = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+        posterUrl = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
 
         gridView = (GridView) rootView.findViewById(R.id.imagesGridView);
        /* gridView.setHasFixedSize(true);
@@ -348,8 +370,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         noDataLayout = (RelativeLayout)rootView.findViewById(R.id.noData);
         noInternetTextView =(TextView)rootView.findViewById(R.id.noInternetTextView);
         noDataTextView =(TextView)rootView.findViewById(R.id.noDataTextView);
-        noInternetTextView.setText(Util.getTextofLanguage(context,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION));
-        noDataTextView.setText(Util.getTextofLanguage(context,Util.NO_CONTENT,Util.DEFAULT_NO_CONTENT));
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
+        noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT,DEFAULT_NO_CONTENT));
 
         noInternetConnectionLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
@@ -360,8 +382,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
         //Detect Network Connection
 
-        boolean isNetwork = Util.checkNetwork(context);
-        if (isNetwork == false) {
+        if (!NetworkStatus.getInstance().isConnected(context)) {
             noInternetConnectionLayout.setVisibility(View.VISIBLE);
             noDataLayout.setVisibility(View.GONE);
             gridView.setVisibility(View.GONE);
@@ -369,12 +390,12 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         }
         resetData();
         ContentListInput contentListInput = new ContentListInput();
-        contentListInput.setAuthToken(Util.authTokenStr);
+        contentListInput.setAuthToken(authTokenStr);
         contentListInput.setOffset(String.valueOf(offset));
         contentListInput.setLimit(String.valueOf(limit));
         String strtext = getArguments().getString("item");
         contentListInput.setPermalink(strtext.trim());
-        contentListInput.setLanguage(Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
         String countryCodeStr = preferenceManager.getCountryCodeFromPref();
         if (countryCodeStr != null) {
@@ -479,17 +500,16 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
                         }
                         offset += 1;
-                        boolean isNetwork = Util.checkNetwork(context);
-                        if (isNetwork == true) {
+                        if (NetworkStatus.getInstance().isConnected(context)) {
 
                             // default data
                             ContentListInput contentListInput = new ContentListInput();
-                            contentListInput.setAuthToken(Util.authTokenStr);
+                            contentListInput.setAuthToken(authTokenStr);
                             contentListInput.setOffset(String.valueOf(offset));
                             contentListInput.setLimit(String.valueOf(limit));
                             String strtext = getArguments().getString("item");
                             contentListInput.setPermalink(strtext.trim());
-                            contentListInput.setLanguage(Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                            contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             String countryCodeStr = preferenceManager.getCountryCodeFromPref();
                             if (countryCodeStr != null) {
                                 contentListInput.setCountry(countryCodeStr);
@@ -530,13 +550,13 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 movieUniqueId = item.getMovieUniqueId();
                 movieStreamUniqueId = item.getMovieStreamUniqueId();
 
-                if (moviePermalink.matches(Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(context, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(context, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                    dlgAlert.setTitle(Util.getTextofLanguage(context, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(context, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(context, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -548,7 +568,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
                     if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
                         final Intent movieDetailsIntent = new Intent(context, MovieDetailsActivity.class);
-                        movieDetailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                        movieDetailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
@@ -560,7 +580,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
                         final Intent detailsIntent = new Intent(context, ShowWithEpisodesActivity.class);
-                        detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -601,10 +621,9 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                     if (itemData != null && itemData.size() > 0) {
                         itemData.clear();
                     }
-                    boolean isNetwork = Util.checkNetwork(context);
                     isSearched = false;
 
-                    if (isNetwork == false) {
+                    if (!NetworkStatus.getInstance().isConnected(context)) {
                         noInternetConnectionLayout.setVisibility(View.VISIBLE);
                         gridView.setVisibility(View.GONE);
                         if (filterMenuItem != null) {
@@ -811,10 +830,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         String responseStr;
         int status;
         String movieGenreStr = "";
-        String movieName = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        String movieImageStr = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        String moviePermalinkStr = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-        String videoTypeIdStr = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+        String movieName = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String movieImageStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String moviePermalinkStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         String isEpisodeStr = "";
         int isAPV = 0;
         int isPPV = 0;
@@ -849,10 +868,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("limit", String.valueOf(limit));
                 httppost.addHeader("offset", String.valueOf(offset));
-                httppost.addHeader("lang_code", Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
                 if (filterPermalink.trim() != null && !filterPermalink.trim().equalsIgnoreCase("") && !filterPermalink.trim().matches("")) {
                     httppost.addHeader("permalink", filterPermalink.trim());
@@ -900,7 +919,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                             }
 
                             footerView.setVisibility(View.GONE);
-                            Toast.makeText(context,Util.getTextofLanguage(context,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context,languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION,DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 
                         }
 
@@ -1314,10 +1333,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 //    String responseStr;
 //    int status;
 //    String movieGenreStr = "";
-//    String movieName = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-//    String movieImageStr = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-//    String moviePermalinkStr = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-//    String videoTypeIdStr = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+//    String movieName = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//    String movieImageStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//    String moviePermalinkStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//    String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
 //    String isEpisodeStr = "";
 //    int isAPV = 0;
 //    int isPPV = 0;
@@ -1333,7 +1352,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 //            HttpPost httppost = new HttpPost(urlRouteList);
 //            httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //
-//            httppost.addHeader("authToken", Util.authTokenStr.trim());
+//            httppost.addHeader("authToken", authTokenStr.trim());
 //            String strtext = getArguments().getString("item");
 //            httppost.addHeader("permalink", strtext.trim());
 //            filterPermalink = strtext.trim();
@@ -1349,7 +1368,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 //                httppost.addHeader("country", "IN");
 //
 //            }
-//            httppost.addHeader("lang_code", Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//            httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //            // Execute HTTP Post Request
 //            try {
@@ -1372,7 +1391,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 //                        }
 //
 //                        footerView.setVisibility(View.GONE);
-//                        Toast.makeText(context, Util.getTextofLanguage(context, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(context, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                    }
 //
@@ -1874,13 +1893,13 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
 
         // for deafult no search
-            if (moviePermalink.matches(Util.getTextofLanguage(context,Util.NO_DATA,Util.DEFAULT_NO_DATA))) {
+            if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA))) {
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(context);
-                dlgAlert.setMessage(Util.getTextofLanguage(context,Util.NO_DETAILS_AVAILABLE,Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(context,Util.SORRY,Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(context,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE,Util.DEFAULT_NO_DETAILS_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY,Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(context,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -1973,10 +1992,9 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                         if (itemData != null && itemData.size() > 0) {
                             itemData.clear();
                         }
-                        boolean isNetwork = Util.checkNetwork(context);
                         isSearched = false
                         ;
-                        if (isNetwork == false) {
+                        if (!NetworkStatus.getInstance().isConnected(context)) {
                             noInternetConnectionLayout.setVisibility(View.VISIBLE);
                             gridView.setVisibility(View.GONE);
                             if (filterMenuItem != null) {

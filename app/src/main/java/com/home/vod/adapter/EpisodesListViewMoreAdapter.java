@@ -14,10 +14,14 @@ import android.widget.TextView;
 
 import com.home.vod.R;
 import com.home.vod.model.EpisodesListModel;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 
 public class EpisodesListViewMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -33,6 +37,7 @@ public class EpisodesListViewMoreAdapter extends RecyclerView.Adapter<RecyclerVi
     private Context context;
     private int layoutResourceId;
     private int isThirdParty = 0;
+    private LanguagePreference languagePreference;
 
 
 
@@ -54,6 +59,7 @@ public class EpisodesListViewMoreAdapter extends RecyclerView.Adapter<RecyclerVi
         this.context = context;
         this.data = data;
         this.listener = listener;
+        languagePreference = LanguagePreference.getLanguagePreference(context);
 
 
     }
@@ -91,7 +97,8 @@ public class EpisodesListViewMoreAdapter extends RecyclerView.Adapter<RecyclerVi
             //episodeDateTextView.setText(item.getEpisodeTelecastOn());
             episodeDateTextView.setText("");
 
-                if(episodeDateTextView.getText().toString().matches("") || episodeDateTextView.getText().toString().matches(Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                if(episodeDateTextView.getText().toString().matches("") || episodeDateTextView.getText().toString().matches(languagePreference
+                        .getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))) {
 
 
                     episodeDateTextView.setVisibility(View.GONE);
@@ -100,7 +107,7 @@ public class EpisodesListViewMoreAdapter extends RecyclerView.Adapter<RecyclerVi
 
 
 
-            if(imageId.matches("") || imageId.matches(Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA))){
+            if(imageId.matches("") || imageId.matches(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){
                 episodeImageView.setImageResource(R.drawable.logo);
 
             }else {

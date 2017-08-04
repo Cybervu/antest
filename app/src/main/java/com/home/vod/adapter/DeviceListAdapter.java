@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.home.apisdk.APIUrlConstant;
 import com.home.vod.R;
 import com.home.vod.activity.ManageDevices;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -40,6 +42,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DEREGISTER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEREGISTER;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.util.Constant.authTokenStr;
+
 public class DeviceListAdapter extends BaseAdapter {
     private Context mContext;
     ArrayList<String> deviceName = new ArrayList<>();
@@ -54,7 +68,7 @@ public class DeviceListAdapter extends BaseAdapter {
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-
+    LanguagePreference languagePreference;
 
 
     public DeviceListAdapter(Context mContext, ArrayList<String> deviceName, ArrayList<String> deviceInfo, ArrayList<String> deviceFlag) {
@@ -63,6 +77,7 @@ public class DeviceListAdapter extends BaseAdapter {
         this.deviceInfo = deviceInfo;
         this.deviceFlag = deviceFlag;
         preferenceManager = PreferenceManager.getPreferenceManager(mContext);
+        languagePreference = LanguagePreference.getLanguagePreference(mContext);
     }
 
     @Override
@@ -111,7 +126,7 @@ public class DeviceListAdapter extends BaseAdapter {
             os_version.setText(info[1]);
         }
 
-        delete_device.setText(Util.getTextofLanguage(mContext, Util.DEREGISTER,Util.DEFAULT_DEREGISTER));
+        delete_device.setText(languagePreference.getTextofLanguage(DEREGISTER,DEFAULT_DEREGISTER));
 
         if((deviceFlag.get(position)).trim().equals("1"))
         {
@@ -124,8 +139,7 @@ public class DeviceListAdapter extends BaseAdapter {
         delete_device.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isNetwork = Util.checkNetwork(mContext);
-                if(isNetwork)
+                if(NetworkStatus.getInstance().isConnected(mContext))
                 {
 
                     if((deviceFlag.get(position)).trim().equals("0"))
@@ -137,7 +151,7 @@ public class DeviceListAdapter extends BaseAdapter {
 
                 }
                 else {
-                    Toast.makeText(mContext,Util.getTextofLanguage(mContext,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext,languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -158,10 +172,10 @@ public class DeviceListAdapter extends BaseAdapter {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(APIUrlConstant.getRemoveDevice());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("user_id",preferenceManager.getUseridFromPref());
                 httppost.addHeader("device",devie_id);
-                httppost.addHeader("lang_code",Util.getTextofLanguage(mContext,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("lang_code",languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
 
                 Log.v("BIBHU","devie_id="+devie_id);
 
@@ -208,9 +222,9 @@ public class DeviceListAdapter extends BaseAdapter {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
                     dlgAlert.setMessage(message);
                     dlgAlert.setTitle(null);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -227,10 +241,10 @@ public class DeviceListAdapter extends BaseAdapter {
                 {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
                     dlgAlert.setMessage(message);
-                    dlgAlert.setTitle(Util.getTextofLanguage(mContext, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -244,10 +258,10 @@ public class DeviceListAdapter extends BaseAdapter {
                 // Show Try Again Msg and finish here.
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(message);
-                dlgAlert.setTitle(Util.getTextofLanguage(mContext, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();

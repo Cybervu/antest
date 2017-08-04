@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
@@ -29,10 +31,17 @@ import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.PPVModel;
 import com.home.vod.QueueDataProvider;
 import com.home.vod.R;
+import com.home.vod.activity.SplashScreen;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.LanguageModel;
+import com.home.vod.preferences.LanguagePreference;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,729 +52,588 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.home.vod.preferences.LanguagePreference.*;
+import static com.home.vod.preferences.LanguagePreference.ALREADY_PURCHASE_THIS_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.APP_ON;
+import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
+import static com.home.vod.preferences.LanguagePreference.CARD_WILL_CHARGE;
+import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE;
+import static com.home.vod.preferences.LanguagePreference.FILL_FORM_BELOW;
+import static com.home.vod.preferences.LanguagePreference.GEO_BLOCKED_ALERT;
+import static com.home.vod.preferences.LanguagePreference.LOGIN_STATUS_MESSAGE;
+import static com.home.vod.preferences.LanguagePreference.MESSAGE;
+import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE_SUCCESS_ALERT;
+import static com.home.vod.preferences.LanguagePreference.SEARCH_HINT;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ALERT;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE;
+import static com.home.vod.preferences.LanguagePreference.SLOW_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SLOW_ISSUE_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SORT_BY;
+import static com.home.vod.preferences.LanguagePreference.STORY_TITLE;
+import static com.home.vod.preferences.LanguagePreference.TERMS;
+import static com.home.vod.preferences.LanguagePreference.TRANASCTION_DETAIL;
+import static com.home.vod.preferences.LanguagePreference.TRANSACTION;
+import static com.home.vod.preferences.LanguagePreference.TRANSACTION_DATE;
+import static com.home.vod.preferences.LanguagePreference.TRANSACTION_STATUS;
+import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
+import static com.home.vod.preferences.LanguagePreference.UNPAID;
+import static com.home.vod.preferences.LanguagePreference.UPDATE_PROFILE;
+import static com.home.vod.preferences.LanguagePreference.UPDATE_PROFILE_ALERT;
+import static com.home.vod.preferences.LanguagePreference.USE_NEW_CARD;
+import static com.home.vod.preferences.LanguagePreference.VIDEO_ISSUE;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.VIEW_TRAILER;
+import static com.home.vod.preferences.LanguagePreference.WATCH;
+import static com.home.vod.preferences.LanguagePreference.WATCH_NOW;
+import static com.home.vod.preferences.LanguagePreference.YES;
+
 /**
  * Created by User on 24-07-2015.
  */
 public class Util {
-    private static final int PRELOAD_TIME_S = 20;
-    public static final String IS_CAST_CONNECTED_INTENT_KEY = "IS_CAST_CONNECTED_INTENT_KEY";
-
-    public static final String PERMALINK_INTENT_KEY = "PERMALINK_INTENT_KEY";
-    public static final String GENRE_INTENT_KEY = "GENRE";
-    public static final String STORY_INTENT_KEY = "STORY";
-    public static final String CENSOR_RATING_INTENT_KEY = "CENSORRATING";
-    public static final String CAST_INTENT_KEY = "CAST";
-    public static final String SEASON_INTENT_KEY = "SEASON";
 
 
- public static String LANGUAGE_SHARED_PRE = "VishwamLanguage";
-
-    public static final String loginUrl = "login";
-    public static final String forgotpasswordUrl = "forgotPassword";
-    public static final String registrationUrl = "registerUser";
-    public static final String detailsUrl = "getContentDetails";
-    public static final String episodesUrl = "episodeDetails";
-    public static final String loadVideoUrl = "getVideoDetails";
-    public static final String listUrl = "getContentList";
-    public static final String searchUrl = "searchData";
-    public static final String userValidationUrl = "isContentAuthorized";
-    public static final String downloadImageUrl = "GetImageForDownload";
-    public static final String loadMenuUrl = "getMenuList";
-    public static final String loadCountryUrl = "checkGeoBlock";
-    public static final String loadIPUrl = "https://api.ipify.org/?format=json";
-    public static final String loadBannerImageUrl = "getBannerSectionList";
-    public static final String getFeaturedContent = "homepage";
-    public static final String getContent = "getFeaturedContent";
-    public static final String LanguageList = "getLanguageList";
-    public static final String LanguageTranslation = "textTranslation";
-    public static final String loadSectionName = "getSectionName";
-    public static final String getGenreListUrl = "getGenreList";
-    public static final String logoutUrl = "logout";
-    public static final String loadProfileUrl = "getProfileDetails";
-    public static final String updateProfileUrl = "updateUserProfile";
-    public static final String videoLogUrl = "videoLogs";
-    public static final String bufferLogUrl = "bufferLogs";
-    public static final String updateBufferLogUrl = "updateBufferLogs";
-    public static final String CsatAndCrew = "getCelibrity";
-    public static final String isRegistrationEnabledurl = "isRegistrationEnabled";
-    public static final String fbRegUrl = "socialAuth";
-    public static final String fbUserExistsUrl = "getFbUserStatus";
-    public static final String myLibrary = "MyLibrary";
-    public static final String AboutUs = "getStaticPagedetails";
-    public static final String ContactUs = "contactUs";
-    public static final String PurchaseHistory = "PurchaseHistory";
-    public static final String DeleteInvoicePath = "DeleteInvoicePath";
-    public static final String PurchaseHistoryDetails = "Transaction";
-    public static final String GetInvoicePDF = "GetInvoicePDF";
-    public static final String getStudioPlanLists = "getStudioPlanLists";
-    public static final String getCardDetailsUrl = "getCardsListForPPV";
-    public static final String couponCodeValidationUrl = "validateCouponCode";
-    public static final String authenticatedCardValidationUrl = "authUserPaymentInfo";
-    public static final String addSubscriptionUrl = "ppvpayment";
-    public static final String subscriptionUrl = "registerUserPayment";
-
-    //Following APIs are ure used for the Device Mangement purpose.
-
-    public static final String CheckDevice = "CheckDevice";
-    public static final String RemoveDevice = "RemoveDevice";
-    public static final String ManageDevices = "ManageDevices";
-
-    public static final String ValidateVoucher = "ValidateVoucher";
-    public static final String VoucherSubscription = "VoucherSubscription";
-    public static final String ViewContentRating = "ViewContentRating";
-    public static final String AddContentRating = "AddContentRating";
-    public static final String filmographyUrl = "getCastDetail";
-    public static final String ViewFavorite = "ViewFavourite";
-    public static final String AddtoFavlist = "AddtoFavlist";
-    public static final String DeleteFavList = "DeleteFavList";
-    public static final String GetMenusUrl = "GetMenus";
+   public static boolean drawer_line_visibility = true;
+   public static boolean itemclicked = false;
+   public static String DEFAULT_IS_ONE_STEP_REGISTRATION = "0";
 
 
-    //==========Added For FCM===============//
+   public static PPVModel ppvModel = null;
+   public static APVModel apvModel = null;
+   public static CurrencyModel currencyModel = null;
+   public static DataModel dataModel = null;
+   public static ArrayList<LanguageModel> languageModel = null;
 
-    public static final String CheckIfUserLoggedIn = "CheckIfUserLoggedIn";
-    public static final String LogoutAll = "LogoutAll";
-    public static final String UpdateGoogleid = "UpdateGoogleid";
+   public static boolean goToLibraryplayer = false;
+   public static boolean my_library_visibility = false;
 
-    //=========End========================//
+   public static ArrayList<Integer> image_orentiation = new ArrayList<>();
 
-    public static boolean drawer_line_visibility = true;
-    public static PPVModel ppvModel = null;
-    public static APVModel apvModel = null;
-    public static CurrencyModel currencyModel = null;
-    public static DataModel dataModel = null;
-    public static ArrayList<LanguageModel> languageModel = null;
-    public static boolean goToLibraryplayer = false;
-    public static boolean my_library_visibility = false;
-    public static ArrayList<Integer> image_orentiation = new ArrayList<>();
+   public static String GOOGLE_FCM_TOKEN = "GOOGLE_FCM_TOKEN";
+   public static String DEFAULT_GOOGLE_FCM_TOKEN = "0";
 
-    public static String GOOGLE_FCM_TOKEN = "GOOGLE_FCM_TOKEN";
-    public static String DEFAULT_GOOGLE_FCM_TOKEN = "0";
+   public static int check_for_subscription = 0;
 
-    public static int check_for_subscription = 0;
+   public static String selected_season_id = "0";
+   public static String selected_episode_id = "0";
 
-    public static String selected_season_id = "0";
-    public static String selected_episode_id = "0";
+   public static String VideoResolution = "Auto";
+   public static String DefaultSubtitle = "Off";
+   public static boolean player_description = true;
+   public static boolean landscape = true;
 
-    public static String VideoResolution = "Auto";
-    public static String DefaultSubtitle = "Off";
-    public static boolean player_description = true;
-    public static boolean landscape = true;
+   public static boolean hide_pause = false;
+   public static boolean call_finish_at_onUserLeaveHint = true;
 
-    public static boolean hide_pause = false;
-    public static boolean call_finish_at_onUserLeaveHint = true;
-    //public static final String authTokenStr = "e8ae05a2ef3fd0c6688952c8f7557823"; //vishwam.tv
-    // public static final String authTokenStr = "4d4fe07c6d8c8317ab45e6b1a2dff08a"; //monica studio
-    public static final String authTokenStr = "6a9c6e9bfeee69e63d4bab668c01dc0a"; //monica studio
-//   public static final String authTokenStr = "445882348316089103b8729dcb397c51"; //classic demo
-//   public static final String authTokenStr = "6c8387e47eefeafa57dd5386bc90454c"; //testsanchi
-//   public static final String authTokenStr = "a2478e71219f606cb5b7a3d3f7a35fe8"; //Cmax
-// public static final String authTokenStr = "25e74a5c88d19c4b57c8138bf47abdf7"; //MobPlay
+   public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
 
-    public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
-
-    public static boolean checkNetwork(Context context) {
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        if (isConnected == false) {
-            return false;
-        }
-        return true;
-    }
+   /*public static boolean checkNetwork(Context context) {
+      ConnectivityManager cm =
+              (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+      NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+      boolean isConnected = activeNetwork != null &&
+              activeNetwork.isConnectedOrConnecting();
+      if (isConnected == false) {
+         return false;
+      }
+      return true;
+   }*/
 
 
-    //Array Contains a string
-    public static boolean containsString(String[] list, String str) {
-        if (Arrays.asList(list).contains(str)) {
-            return true;
-        }
-        return false;
-    }
+   //Array Contains a string
+   public static boolean containsString(String[] list, String str) {
+      if (Arrays.asList(list).contains(str)) {
+         return true;
+      }
+      return false;
+   }
 
 
-    public static String rootUrl() {
-        //String rootUrl = "https://sonydadc.muvi.com/rest/";
+   /*public static String rootUrl() {
+      //String rootUrl = "https://sonydadc.muvi.com/rest/";
 //        String rootUrl = "http://muvistudio.edocent.com/rest/";
-        String rootUrl = "https://www.muvi.com/rest/";
+      String rootUrl = "https://www.muvi.com/rest/";
 //        String rootUrl = "https://www.idogic.com/rest/";
-        return rootUrl;
+      return rootUrl;
 
-    }
+   }*/
 
-    public static int isDouble(String str) {
-        Double d = Double.parseDouble(str);
-        int i = d.intValue();
-        return i;
-    }
 
-    public static String formateDateFromstring(String inputFormat, String outputFormat, String inputDate) {
+   public static int isDouble(String str) {
+      Double d = Double.parseDouble(str);
+      int i = d.intValue();
+      return i;
+   }
 
-        Date parsed = null;
-        String outputDate = "";
+   public static String formateDateFromstring(String inputFormat, String outputFormat, String inputDate) {
 
-        SimpleDateFormat df_input = new SimpleDateFormat(inputFormat, java.util.Locale.getDefault());
-        SimpleDateFormat df_output = new SimpleDateFormat(outputFormat, java.util.Locale.getDefault());
+      Date parsed = null;
+      String outputDate = "";
 
-        try {
+      SimpleDateFormat df_input = new SimpleDateFormat(inputFormat, java.util.Locale.getDefault());
+      SimpleDateFormat df_output = new SimpleDateFormat(outputFormat, java.util.Locale.getDefault());
 
-            parsed = df_input.parse(inputDate);
-            outputDate = df_output.format(parsed);
+      try {
 
-        } catch (ParseException e) {
-            e.printStackTrace();
-            outputDate = "";
-        }
-        return outputDate;
+         parsed = df_input.parse(inputDate);
+         outputDate = df_output.format(parsed);
 
-    }
+      } catch (ParseException e) {
+         e.printStackTrace();
+         outputDate = "";
+      }
+      return outputDate;
 
-    public static long calculateDays(Date dateEarly, Date dateLater) {
-        return (dateLater.getTime() - dateEarly.getTime()) / (24 * 60 * 60 * 1000);
-    }
+   }
 
-    //Email Validation for login
-    public static boolean isValidMail(String email2) {
-        boolean check;
-        Pattern p;
-        Matcher m;
-        String EMAIL_STRING = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        p = Pattern.compile(EMAIL_STRING);
-        m = p.matcher(email2);
-        check = m.matches();
-        if (!check) {
-        }
-        return check;
-    }
+   public static long calculateDays(Date dateEarly, Date dateLater) {
+      return (dateLater.getTime() - dateEarly.getTime()) / (24 * 60 * 60 * 1000);
+   }
 
-    public static boolean isConfirmPassword(String password, String confirmPassword) {
-        Pattern pattern = Pattern.compile(password, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(confirmPassword);
+   //Email Validation for login
+   public static boolean isValidMail(String email2) {
+      boolean check;
+      Pattern p;
+      Matcher m;
+      String EMAIL_STRING = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+              + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+      p = Pattern.compile(EMAIL_STRING);
+      m = p.matcher(email2);
+      check = m.matches();
+      if (!check) {
+      }
+      return check;
+   }
 
-        if (!matcher.matches()) {
-            // do your Toast("passwords are not matching");
-            return false;
-        }
-        return true;
-    }
+   public static boolean isConfirmPassword(String password, String confirmPassword) {
+      Pattern pattern = Pattern.compile(password, Pattern.CASE_INSENSITIVE);
+      Matcher matcher = pattern.matcher(confirmPassword);
 
-    public static boolean containsIgnoreCase(List<Integer> list, int soughtFor) {
-        for (Integer current : list) {
-            if (current == soughtFor) {
-                return true;
+      if (!matcher.matches()) {
+         // do your Toast("passwords are not matching");
+         return false;
+      }
+      return true;
+   }
+
+   public static boolean containsIgnoreCase(List<Integer> list, int soughtFor) {
+      for (Integer current : list) {
+         if (current == soughtFor) {
+            return true;
+         }
+      }
+      return false;
+   }
+
+
+
+
+  /* public static SharedPreferences getLanguageSharedPrefernce(Context context) {
+      SharedPreferences languageSharedPref = context.getSharedPreferences(Util.LANGUAGE_SHARED_PRE, 0); // 0 - for private mode
+      return languageSharedPref;
+   }
+
+   public static void setLanguageSharedPrefernce(Context context, String Key, String Value) {
+      SharedPreferences languageSharedPref = context.getSharedPreferences(Util.LANGUAGE_SHARED_PRE, 0); // 0 - for private mode
+      SharedPreferences.Editor editor = languageSharedPref.edit();
+      editor.putString(Key, Value);
+      editor.commit();
+   }*/
+
+   /*public static String getTextofLanguage(Context context, String tempKey, String defaultValue) {
+      SharedPreferences sp = Util.getLanguageSharedPrefernce(context);
+      String str = sp.getString(tempKey, defaultValue);
+      return str;
+   }
+*/
+
+
+
+
+   /*****************
+    * chromecvast*-------------------------------------
+    */
+   public static void showQueuePopup(final Context context, View view, final MediaInfo mediaInfo) {
+      CastSession castSession =
+              CastContext.getSharedInstance(context).getSessionManager().getCurrentCastSession();
+      if (castSession == null || !castSession.isConnected()) {
+         return;
+      }
+      final RemoteMediaClient remoteMediaClient = castSession.getRemoteMediaClient();
+      if (remoteMediaClient == null) {
+         return;
+      }
+      final QueueDataProvider provider = QueueDataProvider.getInstance(context);
+      PopupMenu popup = new PopupMenu(context, view);
+      popup.getMenuInflater().inflate(
+              provider.isQueueDetached() || provider.getCount() == 0
+                      ? R.menu.detached_popup_add_to_queue
+                      : R.menu.popup_add_to_queue, popup.getMenu());
+      PopupMenu.OnMenuItemClickListener clickListener = new PopupMenu.OnMenuItemClickListener() {
+         @Override
+         public boolean onMenuItemClick(MenuItem menuItem) {
+            QueueDataProvider provider = QueueDataProvider.getInstance(context);
+            MediaQueueItem queueItem = new MediaQueueItem.Builder(mediaInfo).setAutoplay(
+                    true).setPreloadTime(Constant.PRELOAD_TIME_S).build();
+            MediaQueueItem[] newItemArray = new MediaQueueItem[]{queueItem};
+            String toastMessage = null;
+            if (provider.isQueueDetached() && provider.getCount() > 0) {
+               if ((menuItem.getItemId() == R.id.action_play_now)) {
+                  MediaQueueItem[] items = Util
+                          .rebuildQueueAndAppend(provider.getItems(), queueItem);
+                  remoteMediaClient.queueLoad(items, provider.getCount(),
+                          MediaStatus.REPEAT_MODE_REPEAT_OFF, null);
+               } else {
+                  return false;
+               }
+            } else {
+               if (provider.getCount() == 0) {
+                  remoteMediaClient.queueLoad(newItemArray, 0,
+                          MediaStatus.REPEAT_MODE_REPEAT_OFF, null);
+               } else {
+                  int currentId = provider.getCurrentItemId();
+                  if (menuItem.getItemId() == R.id.action_play_now) {
+                     remoteMediaClient.queueInsertAndPlayItem(queueItem, currentId, null);
+                  } else {
+                     return false;
+                  }
+               }
             }
-        }
-        return false;
-    }
-
-
-    public static boolean itemclicked = false;
-
-    public static SharedPreferences getLanguageSharedPrefernce(Context context) {
-        SharedPreferences languageSharedPref = context.getSharedPreferences(Util.LANGUAGE_SHARED_PRE, 0); // 0 - for private mode
-        return languageSharedPref;
-    }
-
-    public static void setLanguageSharedPrefernce(Context context, String Key, String Value) {
-        SharedPreferences languageSharedPref = context.getSharedPreferences(Util.LANGUAGE_SHARED_PRE, 0); // 0 - for private mode
-        SharedPreferences.Editor editor = languageSharedPref.edit();
-        editor.putString(Key, Value);
-        editor.commit();
-    }
-
-    public static String getTextofLanguage(Context context, String tempKey, String defaultValue) {
-        SharedPreferences sp = Util.getLanguageSharedPrefernce(context);
-        String str = sp.getString(tempKey, defaultValue);
-        return str;
-    }
-
-    public static String IS_MYLIBRARY = "IS_MYLIBRARY";
-    public static String DEFAULT_IS_MYLIBRARY = "0";
-
-    public static String IS_RESTRICT_DEVICE = "IS_RESTRICT_DEVICE";
-    public static String DEFAULT_IS_RESTRICT_DEVICE = "0";
-
-
-    public static String IS_ONE_STEP_REGISTRATION = "IS_ONE_STEP_REGISTRATION";
-    public static String DEFAULT_IS_ONE_STEP_REGISTRATION = "0";
-
-    public static String SELECTED_LANGUAGE_CODE = "SELECTED_LANGUAGE_CODE";
-
-    public static String SEARCH_PLACEHOLDER = "SEARCH_PLACEHOLDER";
-    public static String VIEW_TRAILER = "VIEW_TRAILER";
-    public static String WATCH_NOW = "WATCH_NOW";
-    public static String WATCH = "WATCH";
-    public static String DESCRIPTION = "DESCRIPTION";
-    public static String GENRE = "GENRE";
-    public static String CENSOR_RATING = "CENSOR_RATING";
-    public static String CAST = "CAST";
-    public static String DIRECTOR = "DIRECTOR";
-    public static String VIEW_MORE = "VIEW_MORE";
-    public static String FILTER_BY = "FILTER_BY";
-    public static String SORT_BY = "SORT_BY";
-    public static String FORGOT_PASSWORD = "FORGOT_PASSWORD";
-    public static String LOGIN = "LOGIN";
-    public static String CONFIRM_PASSWORD = "CONFIRM_PASSWORD";
-
-    public static String UPDATE_PROFILE = "UPDATE_PROFILE";
-    public static String DEFAULT_UPDATE_PROFILE = "Update Profile";
-    public static String DEFAULT_APP_ON = "On";
-    public static String APP_ON = "APP_ON";
-    public static String DEFAULT_APP_SELECT_LANGUAGE = "Select Language";
-    public static String APP_SELECT_LANGUAGE = "APP_SELECT_LANGUAGE";
-    public static String RESUME_MESSAGE = "RESUME_MESSAGE";
-
-
-    public static String PROFILE = "PROFILE";
-    public static String PURCHASE_HISTORY = "PURCHASE_HISTORY";
-    public static String LOGOUT = "LOGOUT";
-    public static String CHANGE_PASSWORD = "Change Password";
-    public static String TRANSACTION = "TRANSACTION";
-    public static String INVOICE = "INVOICE";
-    public static String TRANSACTION_DATE = "TRANSACTION_DATE";
-    public static String ORDER = "ORDER";
-    public static String AMOUNT = "AMOUNT";
-    public static String TRANSACTION_STATUS = "TRANSACTION_STATUS";
-    public static String PLAN_NAME = "PLAN_NAME";
-    public static String SEASON = "SEASON";
-    public static String SELECT_PLAN = "SELECT_PLAN";
-    public static String PURCHASE = "PURCHASE";
-    public static String CREDIT_CARD_DETAILS = "CREDIT_CARD_DETAILS";
-    public static String CARD_WILL_CHARGE = "CARD_WILL_CHARGE";
-    public static String SAVE_THIS_CARD = "SAVE_THIS_CARD";
-    public static String USE_NEW_CARD = "USE_NEW_CARD";
-    public static String BUTTON_APPLY = "BUTTON_APPLY";
-    public static String BUTTON_OK = "BUTTON_OK";
-    public static String AGREE_TERMS = "AGREE_TERMS";
-    public static String TERMS = "TERMS";
-    public static String OOPS_INVALID_EMAIL = "OOPS_INVALID_EMAIL";
-    public static String VALID_CONFIRM_PASSWORD = "VALID_CONFIRM_PASSWORD";
-    public static String PASSWORDS_DO_NOT_MATCH = "PASSWORDS_DO_NOT_MATCH";
-    public static String EMAIL_EXISTS = "EMAIL_EXISTS";
-    public static String EMAIL_DOESNOT_EXISTS = "EMAIL_DOESNOT_EXISTS";
-    public static String PASSWORD_RESET_LINK = "PASSWORD_RESET_LINK";
-    public static String YES = "YES";
-    public static String NO = "NO";
-    public static String PROFILE_UPDATED = "PROFILE_UPDATED";
-    public static String INVALID_COUPON = "INVALID_COUPON";
-    public static String DISCOUNT_ON_COUPON = "DISCOUNT_ON_COUPON";
-    public static String HOME = "HOME";
-
-    public static String ACTIVATE_SUBSCRIPTION_WATCH_VIDEO = "ACTIVATE_SUBSCRIPTION_WATCH_VIDEO";
-    public static String CROSSED_MAXIMUM_LIMIT = "CROSSED_MAXIMUM_LIMIT";
-    public static String CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY = "CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY";
-    public static String ALREADY_PURCHASE_THIS_CONTENT = "ALREADY_PURCHASE_THIS_CONTENT";
-    public static String SORT_ALPHA_A_Z = "SORT_ALPHA_A_Z";
-    public static String SORT_ALPHA_Z_A = "SORT_ALPHA_Z_A";
-    public static String SORT_LAST_UPLOADED = "SORT_LAST_UPLOADED";
-    public static String SEARCH_HINT = "SEARCH_HINT";
-    public static String GEO_BLOCKED_ALERT = "GEO_BLOCKED_ALERT";
-    public static String NO_INTERNET_NO_DATA = "NO_INTERNET_NO_DATA";
-    public static String TRY_AGAIN = "TRY_AGAIN";
-    public static String SLOW_INTERNET_CONNECTION = "SLOW_INTERNET_CONNECTION";
-    public static String NO_INTERNET_CONNECTION = "NO_INTERNET_CONNECTION";
-    public static String NEW_HERE_TITLE = "NEW_HERE_TITLE";
-    public static String SIGN_UP_TITLE = "SIGN_UP_TITLE";
-    public static String NAME_HINT = "NAME_HINT";
-    public static String ALREADY_MEMBER = "ALREADY_MEMBER";
-    public static String LANGUAGE_POPUP_LOGIN = "LANGUAGE_POPUP_LOGIN";
-    public static String LANGUAGE_POPUP_LANGUAGE = "LANGUAGE_POPUP_LANGUAGE";
-    public static String OLD_PASSWORD = "OLD_PASSWORD";
-    public static String NEW_PASSWORD = "NEW_PASSWORD";
-    public static String TRANSACTION_STATUS_ACTIVE = "TRANSACTION_STATUS_ACTIVE";
-    public static String TRANSACTION_STATUS_EXPIRED = "TRANSACTION_STATUS_EXPIRED";
-    public static String TRANSACTION_DETAIL_PURCHASE_DATE = "TRANSACTION_DETAIL_PURCHASE_DATE";
-    public static String DOWNLOAD_BUTTON_TITLE = "DOWNLOAD_BUTTON_TITLE";
-    public static String CAST_CREW_BUTTON_TITLE = "CAST_CREW_BUTTON_TITLE";
-    public static String EPISODE_TITLE = "EPISODE_TITLE";
-
-    public static String ACTIAVTE_PLAN_TITLE = "ACTIAVTE_PLAN_TITLE";
-    public static String SELECT_OPTION_TITLE = "SELECT_OPTION_TITLE";
-    public static String CREDIT_CARD_NAME_HINT = "CREDIT_CARD_NAME_HINT";
-    public static String CREDIT_CARD_NUMBER_HINT = "CREDIT_CARD_NUMBER_HINT";
-    public static String CREDIT_CARD_CVV_HINT = "CREDIT_CARD_CVV_HINT";
-    public static String COUPON_CODE_HINT = "COUPON_CODE_HINT";
-    public static String PAYMENT_OPTIONS_TITLE = "PAYMENT_OPTIONS_TITLE";
-    public static String UPDATE_PROFILE_ALERT = "UPDATE_PROFILE_ALERT";
-    public static String ALERT = "ALERT";
-    public static String STORY_TITLE = "STORY_TITLE";
-    public static String NO_DETAILS_AVAILABLE = "NO_DETAILS_AVAILABLE";
-    public static String SORRY = "SORRY";
-    public static String NO_VIDEO_AVAILABLE = "NO_VIDEO_AVAILABLE";
-    public static String NO_DATA = "NO_DATA";
-    public static String NO_CONTENT = "NO_CONTENT";
-    public static String VIDEO_ISSUE = "VIDEO_ISSUE";
-    public static String ERROR_IN_REGISTRATION = "ERROR_IN_REGISTRATION";
-    public static String LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
-    public static String PAY_WITH_CREDIT_CARD = "PAY_WITH_CREDIT_CARD";
-    public static String ENTER_EMPTY_FIELD = "ENTER_EMPTY_FIELD";
-
-    public static String EMAIL_PASSWORD_INVALID = "EMAIL_PASSWORD_INVALID";
-    public static String ADVANCE_PURCHASE = "ADVANCE_PURCHASE";
-    public static String FAILURE = "FAILURE";
-    public static String COUPON_CANCELLED = "COUPON_CANCELLED";
-    public static String COUPON_ALERT = "COUPON_ALERT";
-    public static String DETAILS_NOT_FOUND_ALERT = "DETAILS_NOT_FOUND_ALERT";
-    public static String DEFAULT_DETAILS_NOT_FOUND_ALERT = "Failed to find details.";
-
-    public static String UNPAID = "UNPAID";
-    public static String ERROR_IN_PAYMENT_VALIDATION = "ERROR_IN_PAYMENT_VALIDATION";
-    public static String PURCHASE_SUCCESS_ALERT = "PURCHASE_SUCCESS_ALERT";
-    public static String NO_RECORD = "NO_RECORD";
-
-    public static String CANCEL_BUTTON = "CANCEL_BUTTON";
-    public static String CONTINUE_BUTTON = "CONTINUE_BUTTON";
-
-
-    public static String ADD_TO_FAV = "ADD_TO_FAV";
-    public static String ADDED_TO_FAV = "ADDED_TO_FAV";
-    public static String SIGN_OUT_WARNING = "SIGN_OUT_WARNING";
-    public static String SEARCH_ALERT = "SEARCH_ALERT";
-    public static String TEXT_EMIAL = "TEXT_EMIAL";
-    public static String TEXT_PASSWORD = "TEXT_PASSWORD";
-    public static String MY_FAVOURITE = "MY_FAVOURITE";
-    public static String TRANSACTION_DETAILS_ORDER_ID = "TRANSACTION_DETAILS_ORDER_ID";
-    public static String PAY_BY_PAYPAL = "PAY_BY_PAYPAL";
-    public static String BTN_PAYNOW = "BTN_PAYNOW";
-    public static String BTN_REGISTER = "BTN_REGISTER";
-    public static String SORT_RELEASE_DATE = "SORT_RELEASE_DATE";
-    public static String TEXT_SEARCH_PLACEHOLDER = "TEXT_SEARCH_PLACEHOLDER";
-    public static String SLOW_ISSUE_INTERNET_CONNECTION = "SLOW_ISSUE_INTERNET_CONNECTION";
-    public static String SIGN_OUT_ERROR = "SIGN_OUT_ERROR";
-    public static String BTN_SUBMIT = "BTN_SUBMIT";
-
-
-    public static String TRANASCTION_DETAIL = "TRANASCTION_DETAIL";
-    public static String SIGN_OUT_ALERT = "SIGN_OUT_ALERT";
-
-
-    public static String ENTER_REGISTER_FIELDS_DATA = "ENTER_REGISTER_FIELDS_DATA";
-
-    public static String MY_LIBRARY = "MY_LIBRARY";
-    public static String ABOUT_US = "ABOUT_US";
-    public static String FILL_FORM_BELOW = "FILL_FORM_BELOW";
-    public static String MESSAGE = "MESSAGE";
-    public static String SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE = "SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE";
-    public static String LOGIN_STATUS_MESSAGE = "LOGIN_STATUS_MESSAGE";
-    public static String DEREGISTER = "DEREGISTER";
-    public static String MANAGE_DEVICE = "MANAGE_DEVICE";
-    public static String YOUR_DEVICE = "YOUR_DEVICE";
-    public static String ANDROID_VERSION = "OS_VERSION";
-
-
-// ======================= Constants For The Language Default Key =========================//
-
-    public static String DEFAULT_ANDROID_VERSION = "Android Version";
-    public static String DEFAULT_DEREGISTER = "Deregister";
-    public static String DEFAULT_MANAGE_DEVICE = "Manage Device";
-    public static String DEFAULT_YOUR_DEVICE = "Your Devices";
-
-
-    public static String DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE = "Logout process has been successfully completed. Now you are authorized to login.";
-    public static String DEFAULT_LOGIN_STATUS_MESSAGE = "You are no longer logged in . Please log in again.";
-
-    //ADD LATER FOR PURCHASE AND TRANSACTION DETAILS
-    public static String PLAN_ID = "PLAN_ID";
-    public static String DEFAULT_PLAN_ID = "0";
-    public static String NO_PDF = "NO_PDF";
-    public static String DEFAULT_NO_PDF = "PDF Not Available.";
-    public static String DOWNLOAD_INTERRUPTED = "DOWNLOAD_INTERRUPTED";
-    public static String DEFAULT_DOWNLOAD_INTERRUPTED = "Download Interrupted.";
-    public static String DOWNLOAD_COMPLETED = "DOWNLOAD_COMPLETED";
-    public static String DEFAULT_DOWNLOAD_COMPLETED = "Download Completed.";
-    public static String TRANSACTION_TITLE = "TRANSACTION_TITLE";
-    public static String DEFAULT_TRANSACTION_TITLE = "Transaction";
-    public static String FREE = "FREE";
-    public static String DEFAULT_FREE = "FREE";
-    public static String SUBSCRIPTION_COMPLETED = "SUBSCRIPTION_COMPLETED";
-    public static String DEFAULT_SUBSCRIPTION_COMPLETED = "Your subscription process completed successfully.";
-    public static String CVV_ALERT = "CVV_ALERT";
-    public static String DEFAULT_CVV_ALERT = "Please enter your CVV.";
-    public static String DEFAULT_CANCEL_BUTTON = "Cancel";
-    public static String DEFAULT_INVOICE = "Invoice";
-    public static String TRANSACTION_ORDER_ID = "TRANSACTION_ORDER_ID";
-    public static String DEFAULT_TRANSACTION_ORDER_ID = "Order Id";
-    public static String DEFAULT_TRANSACTION_DETAIL_PURCHASE_DATE = "Purchase Date";
-    public static String DEFAULT_TRANSACTION_DETAILS_TITLE = "Transaction Details";
-    public static String DEFAULT_TRANSACTION_DATE = "Transaction Date";
-    public static String DEFAULT_ORDER = "Order";
-    public static String DEFAULT_AMOUNT = "Amount";
-    public static String DEFAULT_TRANSACTION_STATUS = "Transaction Status";
-    public static String DEFAULT_PLAN_NAME = "Plan Name";
-    public static String DEFAULT_TRANASCTION_DETAIL = "Transaction Details";
-    public static String DEFAULT_DOWNLOAD_BUTTON_TITLE = "DOWNLOAD";
-    public static String DEFAULT_ACTIAVTE_PLAN_TITLE = "Activate Plan";
-    public static String DEFAULT_SAVE_THIS_CARD = "Save this card for faster checkouts";
-    public static String BUTTON_PAY_NOW = "BUTTON_PAY_NOW";
-    public static String DEFAULT_CARD_WILL_CHARGE = "Your card will be charged now :";
-    public static String DEFAULT_CREDIT_CARD_NAME_HINT = "Enter your Name on Card";
-    public static String DEFAULT_CREDIT_CARD_NUMBER_HINT = "Enter your Card Number";
-    public static String DEFAULT_COUPON_CANCELLED = "Applied coupon is cancelled.";
-    public static String DEFAULT_CREDIT_CARD_DETAILS = "Credit Card Details";
-    public static String DEFAULT_BUTTON_PAY_NOW = "Pay Now";
-    public static String DEFAULT_SELECT_PLAN = "Select Your Plan";
-    public static String DEFAULT_CONTINUE_BUTTON = "Continue";
-    public static String DEFAULT_USE_NEW_CARD = "Use New Card";
-    public static String DEFAULT_DISCOUNT_ON_COUPON = "Awesome, You just saved";
-    public static String DEFAULT_INVALID_COUPON = "Invalid Coupon!";
-    public static String DEFAULT_ERROR_IN_PAYMENT_VALIDATION = "Error in payment validation";
-    public static String ERROR_IN_SUBSCRIPTION = "ERROR_IN_SUBSCRIPTION";
-    public static String DEFAULT_ERROR_IN_SUBSCRIPTION = "Error in Subscription";
-    public static String DEFAULT_PURCHASE_SUCCESS_ALERT = "You have successfully purchased the content.";
-    public static String DEFAULT_COUPON_CODE_HINT = "Enter Coupon Code";
-
-    //ADD LATER FOR PURCHASE AND TRANSACTION DETAILS
-
-
-    public static String DEFAULT_TRY_AGAIN = "Try Again !";
-    public static String DEFAULT_FILL_FORM_BELOW = "Fill the form below.";
-    public static String DEFAULT_MESSAGE = "Message";
-
-    public static String DEFAULT_MY_LIBRARY = "My Library";
-    public static String DEFAULT_SELECTED_LANGUAGE_CODE = "en";
-    public static String DEFAULT_HOME = "Home";
-    public static String DEFAULT_ENTER_REGISTER_FIELDS_DATA = "Fill the empty field(s)";
-    public static String DEFAULT_TERMS_AND_CONDITIONS = "Termes & Conditions";
-    public static String DEFAULT_ABOUT_US = "About Us";
-    public static String DEFAULT_CONTACT_US = "Contact Us";
-
-    public static String DEFAULT_SEARCH_PLACEHOLDER = "Search";
-    public static String DEFAULT_VIEW_TRAILER = "View Trailer";
-    public static String DEFAULT_VIEW_MORE = "View All";
-    public static String DEFAULT_FILTER_BY = "Filter By";
-    public static String DEFAULT_SORT_BY = "Sort By";
-    public static String DEFAULT_FORGOT_PASSWORD = "Forgot Password?";
-    public static String DEFAULT_LOGIN = "Login";
-    public static String DEFAULT_CONFIRM_PASSWORD = "Confirm Password";
-    public static String DEFAULT_PROFILE = "Profile";
-    public static String DEFAULT_PURCHASE_HISTORY = "Purchase History";
-    public static String DEFAULT_LOGOUT = "Logout";
-    public static String DEFAULT_CHANGE_PASSWORD = "Change Password";
-    public static String DEFAULT_SEASON = "Season";
-
-    public static String DEFAULT_PURCHASE = "Purchase";
-    public static String DEFAULT_BUTTON_APPLY = "Apply";
-    public static String DEFAULT_BUTTON_OK = "Ok";
-    public static String DEFAULT_OOPS_INVALID_EMAIL = "Oops! Invalid email.";
-    public static String DEFAULT_PASSWORDS_DO_NOT_MATCH = "Passwords do not match";
-    public static String DEFAULT_EMAIL_EXISTS = "Email already exists";
-    public static String DEFAULT_EMAIL_DOESNOT_EXISTS = "Email does not exist. Please enter correct email.";
-    public static String DEFAULT_PASSWORD_RESET_LINK = "Password Reset link has been emailed to your registered email ID. Please check your email to reset password.";
-    public static String DEFAULT_YES = "Yes";
-    public static String DEFAULT_NO = "No";
-    public static String DEFAULT_PROFILE_UPDATED = "Profile updated successfully.";
-
-    public static String DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO = "You are not authorised to view this content. Please activate";
-    public static String DEFAULT_CROSSED_MAXIMUM_LIMIT = "Sorry, you have exceeded the maximum number of views for this content.";
-    public static String DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY = "This content is not available to stream in your country";
-    public static String DEFAULT_ALREADY_PURCHASE_THIS_CONTENT = "Sorry, you have already purchased this content earlier.";
-    public static String DEFAULT_SORT_ALPHA_A_Z = "Alphabetic A-Z";
-    public static String DEFAULT_SORT_ALPHA_Z_A = "Alphabetic Z-A";
-    public static String DEFAULT_SORT_LAST_UPLOADED = "Last Uploaded";
-    public static String DEFAULT_GEO_BLOCKED_ALERT = "Sorry, this app is not available in your country.";
-    public static String DEFAULT_NO_INTERNET_NO_DATA = "No Internet Connection / No Data";
-    public static String DEFAULT_SLOW_INTERNET_CONNECTION = "Slow Internet Connection";
-    public static String DEFAULT_NO_INTERNET_CONNECTION = "No Internet Connection";
-    public static String DEFAULT_NEW_HERE_TITLE = "New here ?";
-    public static String DEFAULT_SIGN_UP_TITLE = "Sign Up";
-
-    public static String DEFAULT_NAME_HINT = "Enter your Name";
-    public static String DEFAULT_ALREADY_MEMBER = "Already Member";
-    public static String DEFAULT_LANGUAGE_POPUP_LOGIN = "Log in";
-    public static String DEFAULT_LANGUAGE_POPUP_LANGUAGE = "Language";
-    public static String DEFAULT_OLD_PASSWORD = "New Password";
-    public static String DEFAULT_NEW_PASSWORD = "Confirm Password";
-    public static String DEFAULT_CAST_CREW_BUTTON_TITLE = "Cast and Crew";
-    public static String DEFAULT_EPISODE_TITLE = "All Episodes";
-
-    public static String DEFAULT_UPDATE_PROFILE_ALERT = "We could not be able to update your profile. Please try again.";
-    public static String DEFAULT_NO_DETAILS_AVAILABLE = "No details available";
-    public static String DEFAULT_SORRY = "Sorry !";
-    public static String DEFAULT_NO_VIDEO_AVAILABLE = "There's some error. Please try again !";
-    public static String DEFAULT_NO_DATA = "No Data";
-    public static String DEFAULT_NO_CONTENT = "There's no matching content found.";
-    public static String DEFAULT_ERROR_IN_REGISTRATION = "Error in registration";
-    public static String DEFAULT_LOGOUT_SUCCESS = "Logout Success";
-    public static String DEFAULT_ENTER_EMPTY_FIELD = "Fill the empty field(s)";
-
-    public static String DEFAULT_EMAIL_PASSWORD_INVALID = "Email or Password is invalid!";
-    public static String DEFAULT_ADVANCE_PURCHASE = "Advance Purchase";
-    public static String DEFAULT_FAILURE = "Failure !";
-    public static String DEFAULT_NO_RECORD = "No record found!!!";
-    public static String DEFAULT_SIGN_OUT_WARNING = "Are you sure you want to sign out ?";
-    public static String DEFAULT_SEARCH_ALERT = "Enter some text to search ...";
-    public static String DEFAULT_TEXT_EMIAL = "Enter your Email Address";
-    public static String DEFAULT_TEXT_PASSWORD = "Enter your Password";
-    public static String DEFAULT_BTN_REGISTER = "Register";
-    public static String DEFAULT_SORT_RELEASE_DATE = "Release Date";
-    public static String DEFAULT_TEXT_SEARCH_PLACEHOLDER = "Search";
-    public static String DEFAULT_SIGN_OUT_ERROR = "Sorry, we can not be able to log out. Try again!.";
-    public static String DEFAULT_BTN_SUBMIT = "Submit";
-    public static String DEFAULT_RESUME_MESSAGE = "Continue watching where you left?";
-    public static String DEAFULT_CANCEL_BUTTON = "Cancel";
-    public static String DEAFULT_CONTINUE_BUTTON = "Continue";
-
-    /*****************
-     * chromecvast*-------------------------------------
-     */
-    public static void showQueuePopup(final Context context, View view, final MediaInfo mediaInfo) {
-        CastSession castSession =
-                CastContext.getSharedInstance(context).getSessionManager().getCurrentCastSession();
-        if (castSession == null || !castSession.isConnected()) {
-            return;
-        }
-        final RemoteMediaClient remoteMediaClient = castSession.getRemoteMediaClient();
-        if (remoteMediaClient == null) {
-            return;
-        }
-        final QueueDataProvider provider = QueueDataProvider.getInstance(context);
-        PopupMenu popup = new PopupMenu(context, view);
-        popup.getMenuInflater().inflate(
-                provider.isQueueDetached() || provider.getCount() == 0
-                        ? R.menu.detached_popup_add_to_queue
-                        : R.menu.popup_add_to_queue, popup.getMenu());
-        PopupMenu.OnMenuItemClickListener clickListener = new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                QueueDataProvider provider = QueueDataProvider.getInstance(context);
-                MediaQueueItem queueItem = new MediaQueueItem.Builder(mediaInfo).setAutoplay(
-                        true).setPreloadTime(PRELOAD_TIME_S).build();
-                MediaQueueItem[] newItemArray = new MediaQueueItem[]{queueItem};
-                String toastMessage = null;
-                if (provider.isQueueDetached() && provider.getCount() > 0) {
-                    if ((menuItem.getItemId() == R.id.action_play_now)) {
-                        MediaQueueItem[] items = Util
-                                .rebuildQueueAndAppend(provider.getItems(), queueItem);
-                        remoteMediaClient.queueLoad(items, provider.getCount(),
-                                MediaStatus.REPEAT_MODE_REPEAT_OFF, null);
-                    } else {
-                        return false;
-                    }
-                } else {
-                    if (provider.getCount() == 0) {
-                        remoteMediaClient.queueLoad(newItemArray, 0,
-                                MediaStatus.REPEAT_MODE_REPEAT_OFF, null);
-                    } else {
-                        int currentId = provider.getCurrentItemId();
-                        if (menuItem.getItemId() == R.id.action_play_now) {
-                            remoteMediaClient.queueInsertAndPlayItem(queueItem, currentId, null);
-                        } else {
-                            return false;
-                        }
-                    }
-                }
-                if (menuItem.getItemId() == R.id.action_play_now) {
-                    Intent intent = new Intent(context, ExpandedControlsActivity.class);
-                    context.startActivity(intent);
-                }
-                if (!TextUtils.isEmpty(toastMessage)) {
-                    Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show();
-                }
-                return true;
+            if (menuItem.getItemId() == R.id.action_play_now) {
+               Intent intent = new Intent(context, ExpandedControlsActivity.class);
+               context.startActivity(intent);
             }
-        };
-        popup.setOnMenuItemClickListener(clickListener);
-        popup.show();
-    }
+            if (!TextUtils.isEmpty(toastMessage)) {
+               Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show();
+            }
+            return true;
+         }
+      };
+      popup.setOnMenuItemClickListener(clickListener);
+      popup.show();
+   }
 
-    public static MediaQueueItem[] rebuildQueue(List<MediaQueueItem> items) {
-        if (items == null || items.isEmpty()) {
-            return null;
-        }
-        MediaQueueItem[] rebuiltQueue = new MediaQueueItem[items.size()];
-        for (int i = 0; i < items.size(); i++) {
-            rebuiltQueue[i] = rebuildQueueItem(items.get(i));
-        }
+   public static MediaQueueItem[] rebuildQueue(List<MediaQueueItem> items) {
+      if (items == null || items.isEmpty()) {
+         return null;
+      }
+      MediaQueueItem[] rebuiltQueue = new MediaQueueItem[items.size()];
+      for (int i = 0; i < items.size(); i++) {
+         rebuiltQueue[i] = rebuildQueueItem(items.get(i));
+      }
 
-        return rebuiltQueue;
-    }
+      return rebuiltQueue;
+   }
 
-    public static MediaQueueItem[] rebuildQueueAndAppend(List<MediaQueueItem> items,
-                                                         MediaQueueItem currentItem) {
-        if (items == null || items.isEmpty()) {
-            return new MediaQueueItem[]{currentItem};
-        }
-        MediaQueueItem[] rebuiltQueue = new MediaQueueItem[items.size() + 1];
-        for (int i = 0; i < items.size(); i++) {
-            rebuiltQueue[i] = rebuildQueueItem(items.get(i));
-        }
-        rebuiltQueue[items.size()] = currentItem;
+   public static MediaQueueItem[] rebuildQueueAndAppend(List<MediaQueueItem> items,
+                                                        MediaQueueItem currentItem) {
+      if (items == null || items.isEmpty()) {
+         return new MediaQueueItem[]{currentItem};
+      }
+      MediaQueueItem[] rebuiltQueue = new MediaQueueItem[items.size() + 1];
+      for (int i = 0; i < items.size(); i++) {
+         rebuiltQueue[i] = rebuildQueueItem(items.get(i));
+      }
+      rebuiltQueue[items.size()] = currentItem;
 
-        return rebuiltQueue;
-    }
+      return rebuiltQueue;
+   }
 
-    public static MediaQueueItem rebuildQueueItem(MediaQueueItem item) {
-        return new MediaQueueItem.Builder(item).clearItemId().build();
-    }
-
-    public static int HoursToSecond(String time) {
-
-        StringTokenizer tokens = new StringTokenizer(time, ":");
-        int hour = Integer.parseInt(tokens.nextToken()) * 3600;
-        int minute = Integer.parseInt(tokens.nextToken()) * 60;
-        int second = Integer.parseInt(tokens.nextToken()) + hour + minute;
-        return second;
-    }
-
-    public static Point getDisplaySize(Context context) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        int width = display.getWidth();
-        int height = display.getHeight();
-        return new Point(width, height);
-    }
-
-    public static boolean isOrientationPortrait(Context context) {
-        return context.getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_PORTRAIT;
-    }
-
-    public static String getAppVersionName(Context context) {
-        String versionString = null;
-        try {
-            PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(),
-                    0 /* basic info */);
-            versionString = info.versionName;
-        } catch (Exception e) {
-            // do nothing
-        }
-        return versionString;
-    }
-    /*****************chromecvast*-------------------------------------*/
-
-// =======================  End Of Constants For The Language Default Key ======================//
-
-// ======================= End Of Language Translation ================================================//
+   public static MediaQueueItem rebuildQueueItem(MediaQueueItem item) {
+      return new MediaQueueItem.Builder(item).clearItemId().build();
+   }
 
     /**
-     * Show toast message
-     *
-     * @param mContext
-     * @param message
+     * Method to convert hr to sec.
+     * @param time
+     * @return
      */
-    public static void showToast(Context mContext, String message) {
-        Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
-    }
+   public static int HoursToSecond(String time) {
 
-    /**
-     * @param mContext Method to show no video available alert.
-     * @auther alok
-     */
-    public static void showNoDataAlert(Context mContext) {
-        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
-        dlgAlert.setMessage(com.muvi.player.utils.Util.getTextofLanguage(mContext, NO_VIDEO_AVAILABLE, DEFAULT_NO_VIDEO_AVAILABLE));
-        dlgAlert.setTitle(com.muvi.player.utils.Util.getTextofLanguage(mContext, SORRY, DEFAULT_SORRY));
-        dlgAlert.setPositiveButton(com.muvi.player.utils.Util.getTextofLanguage(mContext, BUTTON_OK, DEFAULT_BUTTON_OK), null);
-        dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(com.muvi.player.utils.Util.getTextofLanguage(mContext, BUTTON_OK, DEFAULT_BUTTON_OK),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        dlgAlert.create().show();
-    }
+      StringTokenizer tokens = new StringTokenizer(time, ":");
+      int hour = Integer.parseInt(tokens.nextToken()) * 3600;
+      int minute = Integer.parseInt(tokens.nextToken()) * 60;
+      int second = Integer.parseInt(tokens.nextToken()) + hour + minute;
+      return second;
+   }
+
+
+   /**
+    * Method to get display size of device.
+    * @param context
+    * @return
+    */
+   public static Point getDisplaySize(Context context) {
+      WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+      Display display = wm.getDefaultDisplay();
+      int width = display.getWidth();
+      int height = display.getHeight();
+      return new Point(width, height);
+   }
+
+   /**
+    * Method to check portrait orientation.
+    * @param context
+    * @return
+    */
+   public static boolean isOrientationPortrait(Context context) {
+      return context.getResources().getConfiguration().orientation
+              == Configuration.ORIENTATION_PORTRAIT;
+   }
+
+   public static String getAppVersionName(Context context) {
+      String versionString = null;
+      try {
+         PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(),
+                 0 /* basic info */);
+         versionString = info.versionName;
+      } catch (Exception e) {
+         // do nothing
+      }
+      return versionString;
+   }
+
+
+
+   /**
+    * Show toast message
+    *
+    * @param mContext
+    * @param message
+    */
+   public static void showToast(Context mContext, String message) {
+      Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
+   }
+
+
+   /**
+    * @param mContext Method to show no video available alert.
+    * @auther alok
+    */
+   public static void showNoDataAlert(Context mContext) {
+      LanguagePreference languagePreference = LanguagePreference.getLanguagePreference(mContext);
+      AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
+      dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, DEFAULT_NO_VIDEO_AVAILABLE));
+      dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+      dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+      dlgAlert.setCancelable(false);
+      dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+              new DialogInterface.OnClickListener() {
+                 public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                 }
+              });
+      dlgAlert.create().show();
+   }
+   
+   
+   public static void printMD5Key(Context mContext){
+
+      try {
+         PackageInfo info = mContext.getPackageManager().getPackageInfo(
+                 "com.release.cmaxtv",  // replace with your unique package name
+                 PackageManager.GET_SIGNATURES);
+         for (Signature signature : info.signatures) {
+            MessageDigest md = MessageDigest.getInstance("SHA");
+            md.update(signature.toByteArray());
+            //  Log.v("MUVI:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+
+         }
+      } catch (PackageManager.NameNotFoundException e) {
+
+      } catch (NoSuchAlgorithmException e) {
+
+      }
+   }
+
+   /**
+    * Parse language key and store in prefernces.
+    * @param languagePreference
+    * @param jsonResponse
+    * @param default_Language
+    * @throws JSONException
+    */
+   
+   public static void parseLanguage(LanguagePreference languagePreference, String jsonResponse,String default_Language) throws JSONException {
+         JSONObject json = new JSONObject(jsonResponse);
+
+
+         languagePreference.setLanguageSharedPrefernce( ALREADY_MEMBER, json.optString("already_member").trim());
+         languagePreference.setLanguageSharedPrefernce( ACTIAVTE_PLAN_TITLE, json.optString("activate_plan_title").trim());
+         languagePreference.setLanguageSharedPrefernce( TRANSACTION_STATUS_ACTIVE, json.optString("transaction_status_active").trim());
+         languagePreference.setLanguageSharedPrefernce( ADD_TO_FAV, json.optString("add_to_fav").trim());
+         languagePreference.setLanguageSharedPrefernce( ADDED_TO_FAV, json.optString("added_to_fav").trim());
+         languagePreference.setLanguageSharedPrefernce( ENTER_EMPTY_FIELD, json.optString("enter_register_fields_data").trim());
+
+         languagePreference.setLanguageSharedPrefernce( ADVANCE_PURCHASE, json.optString("advance_purchase").trim());
+         languagePreference.setLanguageSharedPrefernce( ALERT, json.optString("alert").trim());
+         languagePreference.setLanguageSharedPrefernce( EPISODE_TITLE, json.optString("episodes_title").trim());
+         languagePreference.setLanguageSharedPrefernce( SORT_ALPHA_A_Z, json.optString("sort_alpha_a_z").trim());
+         languagePreference.setLanguageSharedPrefernce( SORT_ALPHA_Z_A, json.optString("sort_alpha_z_a").trim());
+
+         languagePreference.setLanguageSharedPrefernce( AMOUNT, json.optString("amount").trim());
+         languagePreference.setLanguageSharedPrefernce( LanguagePreference.COUPON_CANCELLED, json.optString("coupon_cancelled").trim());
+         languagePreference.setLanguageSharedPrefernce( BUTTON_APPLY, json.optString("btn_apply").trim());
+         languagePreference.setLanguageSharedPrefernce( SIGN_OUT_WARNING, json.optString("sign_out_warning").trim());
+         languagePreference.setLanguageSharedPrefernce( DISCOUNT_ON_COUPON, json.optString("discount_on_coupon").trim());
+         languagePreference.setLanguageSharedPrefernce( MY_LIBRARY, json.optString("my_library").trim());
+         languagePreference.setLanguageSharedPrefernce( CREDIT_CARD_CVV_HINT, json.optString("credit_card_cvv_hint").trim());
+         languagePreference.setLanguageSharedPrefernce( CAST, json.optString("cast").trim());
+         languagePreference.setLanguageSharedPrefernce( CAST_CREW_BUTTON_TITLE, json.optString("cast_crew_button_title").trim());
+         languagePreference.setLanguageSharedPrefernce( CENSOR_RATING, json.optString("censor_rating").trim());
+         if (json.optString("change_password").trim() == null || json.optString("change_password").trim().equals("")) {
+            languagePreference.setLanguageSharedPrefernce( CHANGE_PASSWORD, DEFAULT_CHANGE_PASSWORD);
+         } else {
+            languagePreference.setLanguageSharedPrefernce( CHANGE_PASSWORD, json.optString("change_password").trim());
+         }
+         languagePreference.setLanguageSharedPrefernce( CANCEL_BUTTON, json.optString("btn_cancel").trim());
+         languagePreference.setLanguageSharedPrefernce( RESUME_MESSAGE, json.optString("resume_watching").trim());
+         languagePreference.setLanguageSharedPrefernce( CONTINUE_BUTTON, json.optString("continue").trim());
+
+
+         languagePreference.setLanguageSharedPrefernce( CONFIRM_PASSWORD, json.optString("confirm_password").trim());
+         languagePreference.setLanguageSharedPrefernce( CREDIT_CARD_DETAILS, json.optString("credit_card_detail").trim());
+         languagePreference.setLanguageSharedPrefernce( DIRECTOR, json.optString("director").trim());
+         languagePreference.setLanguageSharedPrefernce( DOWNLOAD_BUTTON_TITLE, json.optString("download_button_title").trim());
+         languagePreference.setLanguageSharedPrefernce( DESCRIPTION, json.optString("description").trim());
+         languagePreference.setLanguageSharedPrefernce( HOME, json.optString("home").trim());
+
+         languagePreference.setLanguageSharedPrefernce( EMAIL_EXISTS, json.optString("email_exists").trim());
+         languagePreference.setLanguageSharedPrefernce( EMAIL_DOESNOT_EXISTS, json.optString("email_does_not_exist").trim());
+         languagePreference.setLanguageSharedPrefernce( EMAIL_PASSWORD_INVALID, json.optString("email_password_invalid").trim());
+         languagePreference.setLanguageSharedPrefernce( COUPON_CODE_HINT, json.optString("coupon_code_hint").trim());
+         languagePreference.setLanguageSharedPrefernce( SEARCH_ALERT, json.optString("search_alert").trim());
+
+         languagePreference.setLanguageSharedPrefernce( CREDIT_CARD_NUMBER_HINT, json.optString("credit_card_number_hint").trim());
+         languagePreference.setLanguageSharedPrefernce( TEXT_EMIAL, json.optString("text_email").trim());
+         languagePreference.setLanguageSharedPrefernce( NAME_HINT, json.optString("name_hint").trim());
+         languagePreference.setLanguageSharedPrefernce( CREDIT_CARD_NAME_HINT, json.optString("credit_card_name_hint").trim());
+         languagePreference.setLanguageSharedPrefernce( TEXT_PASSWORD, json.optString("text_password").trim());
+
+         languagePreference.setLanguageSharedPrefernce( ERROR_IN_PAYMENT_VALIDATION, json.optString("error_in_payment_validation").trim());
+         languagePreference.setLanguageSharedPrefernce( ERROR_IN_REGISTRATION, json.optString("error_in_registration").trim());
+         languagePreference.setLanguageSharedPrefernce( TRANSACTION_STATUS_EXPIRED, json.optString("transaction_status_expired").trim());
+         languagePreference.setLanguageSharedPrefernce( DETAILS_NOT_FOUND_ALERT, json.optString("details_not_found_alert").trim());
+
+         languagePreference.setLanguageSharedPrefernce( FAILURE, json.optString("failure").trim());
+         languagePreference.setLanguageSharedPrefernce( FILTER_BY, json.optString("filter_by").trim());
+         languagePreference.setLanguageSharedPrefernce( FORGOT_PASSWORD, json.optString("forgot_password").trim());
+         languagePreference.setLanguageSharedPrefernce( GENRE, json.optString("genre").trim());
+
+         languagePreference.setLanguageSharedPrefernce( AGREE_TERMS, json.optString("agree_terms").trim());
+         languagePreference.setLanguageSharedPrefernce( INVALID_COUPON, json.optString("invalid_coupon").trim());
+         languagePreference.setLanguageSharedPrefernce( INVOICE, json.optString("invoice").trim());
+         languagePreference.setLanguageSharedPrefernce( LANGUAGE_POPUP_LANGUAGE, json.optString("language_popup_language").trim());
+         languagePreference.setLanguageSharedPrefernce( SORT_LAST_UPLOADED, json.optString("sort_last_uploaded").trim());
+
+         languagePreference.setLanguageSharedPrefernce( LANGUAGE_POPUP_LOGIN, json.optString("language_popup_login").trim());
+         languagePreference.setLanguageSharedPrefernce( LOGIN, json.optString("login").trim());
+         languagePreference.setLanguageSharedPrefernce( LOGOUT, json.optString("logout").trim());
+         languagePreference.setLanguageSharedPrefernce( LOGOUT_SUCCESS, json.optString("logout_success").trim());
+         languagePreference.setLanguageSharedPrefernce( MY_FAVOURITE, json.optString("my_favourite").trim());
+
+         languagePreference.setLanguageSharedPrefernce( NEW_PASSWORD, json.optString("new_password").trim());
+         languagePreference.setLanguageSharedPrefernce( NEW_HERE_TITLE, json.optString("new_here_title").trim());
+         languagePreference.setLanguageSharedPrefernce( NO, json.optString("no").trim());
+         languagePreference.setLanguageSharedPrefernce( NO_DATA, json.optString("no_data").trim());
+         languagePreference.setLanguageSharedPrefernce( NO_INTERNET_CONNECTION, json.optString("no_internet_connection").trim());
+         languagePreference.setLanguageSharedPrefernce( ENTER_REGISTER_FIELDS_DATA, json.optString("enter_register_fields_data").trim());
+
+         languagePreference.setLanguageSharedPrefernce( NO_INTERNET_NO_DATA, json.optString("no_internet_no_data").trim());
+         languagePreference.setLanguageSharedPrefernce( NO_DETAILS_AVAILABLE, json.optString("no_details_available").trim());
+         languagePreference.setLanguageSharedPrefernce( BUTTON_OK, json.optString("btn_ok").trim());
+         languagePreference.setLanguageSharedPrefernce( OLD_PASSWORD, json.optString("old_password").trim());
+         languagePreference.setLanguageSharedPrefernce( OOPS_INVALID_EMAIL, json.optString("oops_invalid_email").trim());
+
+         languagePreference.setLanguageSharedPrefernce( ORDER, json.optString("order").trim());
+         languagePreference.setLanguageSharedPrefernce( TRANSACTION_DETAILS_ORDER_ID, json.optString("transaction_detail_order_id").trim());
+         languagePreference.setLanguageSharedPrefernce( PASSWORD_RESET_LINK, json.optString("password_reset_link").trim());
+         languagePreference.setLanguageSharedPrefernce( PASSWORDS_DO_NOT_MATCH, json.optString("password_donot_match").trim());
+         languagePreference.setLanguageSharedPrefernce( PAY_BY_PAYPAL, json.optString("pay_by_paypal").trim());
+
+         languagePreference.setLanguageSharedPrefernce( BTN_PAYNOW, json.optString("btn_paynow").trim());
+         languagePreference.setLanguageSharedPrefernce( PAY_WITH_CREDIT_CARD, json.optString("pay_with_credit_card").trim());
+         languagePreference.setLanguageSharedPrefernce( PAYMENT_OPTIONS_TITLE, json.optString("payment_options_title").trim());
+         languagePreference.setLanguageSharedPrefernce( PLAN_NAME, json.optString("plan_name").trim());
+         languagePreference.setLanguageSharedPrefernce( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, json.optString("activate_subscription_watch_video").trim());
+
+         languagePreference.setLanguageSharedPrefernce( COUPON_ALERT, json.optString("coupon_alert").trim());
+         languagePreference.setLanguageSharedPrefernce( VALID_CONFIRM_PASSWORD, json.optString("valid_confirm_password").trim());
+         languagePreference.setLanguageSharedPrefernce( PROFILE, json.optString("profile").trim());
+         languagePreference.setLanguageSharedPrefernce( PROFILE_UPDATED, json.optString("profile_updated").trim());
+
+         languagePreference.setLanguageSharedPrefernce( PURCHASE, json.optString("purchase").trim());
+         languagePreference.setLanguageSharedPrefernce( TRANSACTION_DETAIL_PURCHASE_DATE, json.optString("transaction_detail_purchase_date").trim());
+         languagePreference.setLanguageSharedPrefernce( PURCHASE_HISTORY, json.optString("purchase_history").trim());
+         languagePreference.setLanguageSharedPrefernce( BTN_REGISTER, json.optString("btn_register").trim());
+         languagePreference.setLanguageSharedPrefernce( SORT_RELEASE_DATE, json.optString("sort_release_date").trim());
+
+         languagePreference.setLanguageSharedPrefernce( SAVE_THIS_CARD, json.optString("save_this_card").trim());
+         languagePreference.setLanguageSharedPrefernce( TEXT_SEARCH_PLACEHOLDER, json.optString("text_search_placeholder").trim());
+         languagePreference.setLanguageSharedPrefernce( SEASON, json.optString("season").trim());
+         languagePreference.setLanguageSharedPrefernce( SELECT_OPTION_TITLE, json.optString("select_option_title").trim());
+         languagePreference.setLanguageSharedPrefernce( SELECT_PLAN, json.optString("select_plan").trim());
+
+         languagePreference.setLanguageSharedPrefernce( SIGN_UP_TITLE, json.optString("signup_title").trim());
+         languagePreference.setLanguageSharedPrefernce( SLOW_INTERNET_CONNECTION, json.optString("slow_internet_connection").trim());
+         languagePreference.setLanguageSharedPrefernce( SLOW_ISSUE_INTERNET_CONNECTION, json.optString("slow_issue_internet_connection").trim());
+         languagePreference.setLanguageSharedPrefernce( SORRY, json.optString("sorry").trim());
+         languagePreference.setLanguageSharedPrefernce( GEO_BLOCKED_ALERT, json.optString("geo_blocked_alert").trim());
+
+         languagePreference.setLanguageSharedPrefernce( SIGN_OUT_ERROR, json.optString("sign_out_error").trim());
+         languagePreference.setLanguageSharedPrefernce( ALREADY_PURCHASE_THIS_CONTENT, json.optString("already_purchase_this_content").trim());
+         languagePreference.setLanguageSharedPrefernce( CROSSED_MAXIMUM_LIMIT, json.optString("crossed_max_limit_of_watching").trim());
+         languagePreference.setLanguageSharedPrefernce( SORT_BY, json.optString("sort_by").trim());
+         languagePreference.setLanguageSharedPrefernce( STORY_TITLE, json.optString("story_title").trim());
+
+         languagePreference.setLanguageSharedPrefernce( BTN_SUBMIT, json.optString("btn_submit").trim());
+         languagePreference.setLanguageSharedPrefernce( TRANSACTION_STATUS, json.optString("transaction_success").trim());
+         languagePreference.setLanguageSharedPrefernce( VIDEO_ISSUE, json.optString("video_issue").trim());
+         languagePreference.setLanguageSharedPrefernce( NO_CONTENT, json.optString("no_content").trim());
+         languagePreference.setLanguageSharedPrefernce( NO_VIDEO_AVAILABLE, json.optString("no_video_available").trim());
+
+         languagePreference.setLanguageSharedPrefernce( CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, json.optString("content_not_available_in_your_country").trim());
+         languagePreference.setLanguageSharedPrefernce( TRANSACTION_DATE, json.optString("transaction_date").trim());
+         languagePreference.setLanguageSharedPrefernce( TRANASCTION_DETAIL, json.optString("transaction_detail").trim());
+         languagePreference.setLanguageSharedPrefernce( TRANSACTION_STATUS, json.optString("transaction_status").trim());
+         languagePreference.setLanguageSharedPrefernce( TRANSACTION, json.optString("transaction").trim());
+
+         languagePreference.setLanguageSharedPrefernce( TRY_AGAIN, json.optString("try_again").trim());
+         languagePreference.setLanguageSharedPrefernce( UNPAID, json.optString("unpaid").trim());
+         languagePreference.setLanguageSharedPrefernce( USE_NEW_CARD, json.optString("use_new_card").trim());
+         languagePreference.setLanguageSharedPrefernce( VIEW_MORE, json.optString("view_more").trim());
+         languagePreference.setLanguageSharedPrefernce( VIEW_TRAILER, json.optString("view_trailer").trim());
+
+         languagePreference.setLanguageSharedPrefernce( WATCH, json.optString("watch").trim());
+         languagePreference.setLanguageSharedPrefernce( WATCH_NOW, json.optString("watch_now").trim());
+         languagePreference.setLanguageSharedPrefernce( SIGN_OUT_ALERT, json.optString("sign_out_alert").trim());
+         languagePreference.setLanguageSharedPrefernce( UPDATE_PROFILE_ALERT, json.optString("update_profile_alert").trim());
+         languagePreference.setLanguageSharedPrefernce( YES, json.optString("yes").trim());
+
+         languagePreference.setLanguageSharedPrefernce( PURCHASE_SUCCESS_ALERT, json.optString("purchase_success_alert").trim());
+         languagePreference.setLanguageSharedPrefernce( CARD_WILL_CHARGE, json.optString("card_will_charge").trim());
+         languagePreference.setLanguageSharedPrefernce( SEARCH_HINT, json.optString("search_hint").trim());
+         languagePreference.setLanguageSharedPrefernce( TERMS, json.optString("terms").trim());
+         languagePreference.setLanguageSharedPrefernce( UPDATE_PROFILE, json.optString("btn_update_profile").trim());
+         languagePreference.setLanguageSharedPrefernce( APP_ON, json.optString("app_on").trim());
+         languagePreference.setLanguageSharedPrefernce( APP_SELECT_LANGUAGE, json.optString("app_select_language").trim());
+         languagePreference.setLanguageSharedPrefernce( FILL_FORM_BELOW, json.optString("Fill_form_below").trim());
+         languagePreference.setLanguageSharedPrefernce( MESSAGE, json.optString("text_message").trim());
+
+
+         languagePreference.setLanguageSharedPrefernce( SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, json.optString("simultaneous_logout_message").trim());
+         languagePreference.setLanguageSharedPrefernce( LOGIN_STATUS_MESSAGE, json.optString("login_status_message").trim());
+         languagePreference.setLanguageSharedPrefernce( FILL_FORM_BELOW, json.optString("fill_form_below").trim());
+         languagePreference.setLanguageSharedPrefernce( MESSAGE, json.optString("text_message").trim());
+
+         languagePreference.setLanguageSharedPrefernce( SELECTED_LANGUAGE_CODE, default_Language);
+
+   }
 }

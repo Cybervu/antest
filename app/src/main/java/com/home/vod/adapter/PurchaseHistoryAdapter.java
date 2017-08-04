@@ -12,19 +12,31 @@ import android.widget.TextView;
 
 import com.home.vod.R;
 import com.home.vod.model.PurchaseHistoryModel;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
 
 import java.util.ArrayList;
+
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_INVOICE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRANSACTION_DETAIL_PURCHASE_DATE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRANSACTION_ORDER_ID;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRANSACTION_TITLE;
+import static com.home.vod.preferences.LanguagePreference.INVOICE;
+import static com.home.vod.preferences.LanguagePreference.TRANSACTION_DETAIL_PURCHASE_DATE;
+import static com.home.vod.preferences.LanguagePreference.TRANSACTION_ORDER_ID;
+import static com.home.vod.preferences.LanguagePreference.TRANSACTION_TITLE;
 
 
 public class PurchaseHistoryAdapter extends RecyclerView.Adapter<PurchaseHistoryAdapter.ViewHolder>{
     Context context;
     ArrayList<PurchaseHistoryModel> purchaseData;
+    LanguagePreference languagePreference;
 
 
     public PurchaseHistoryAdapter(Context context, ArrayList<PurchaseHistoryModel> purchaseData) {
         this.context = context;
         this.purchaseData = purchaseData;
+        languagePreference =  LanguagePreference.getLanguagePreference(context);
     }
 
     @Override
@@ -40,19 +52,19 @@ public class PurchaseHistoryAdapter extends RecyclerView.Adapter<PurchaseHistory
 
         Typeface typeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         holder.transactionTitleTextView.setTypeface(typeface);
-        holder.transactionTitleTextView.setText(Util.getTextofLanguage(context,Util.TRANSACTION_TITLE,Util.DEFAULT_TRANSACTION_TITLE));
+        holder.transactionTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_TITLE,DEFAULT_TRANSACTION_TITLE));
 
         Typeface typeface1 = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         holder.transactionInvoiceTitleTextView.setTypeface(typeface1);
-        holder.transactionInvoiceTitleTextView.setText(Util.getTextofLanguage(context,Util.INVOICE,Util.DEFAULT_INVOICE)+" :");
+        holder.transactionInvoiceTitleTextView.setText(languagePreference.getTextofLanguage(INVOICE,DEFAULT_INVOICE)+" :");
 
         Typeface typeface2 = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         holder.transactionOrderTitleTextView.setTypeface(typeface2);
-        holder.transactionOrderTitleTextView.setText(Util.getTextofLanguage(context,Util.TRANSACTION_ORDER_ID,Util.DEFAULT_TRANSACTION_ORDER_ID)+" :");
+        holder.transactionOrderTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_ORDER_ID,DEFAULT_TRANSACTION_ORDER_ID)+" :");
 
         Typeface typeface3 = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         holder.transactionPurchaseDateTitleTextView.setTypeface(typeface3);
-        holder.transactionPurchaseDateTitleTextView.setText(Util.getTextofLanguage(context,Util.TRANSACTION_DETAIL_PURCHASE_DATE,Util.DEFAULT_TRANSACTION_DETAIL_PURCHASE_DATE)+" :");
+        holder.transactionPurchaseDateTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_DETAIL_PURCHASE_DATE,DEFAULT_TRANSACTION_DETAIL_PURCHASE_DATE)+" :");
 
         if((purchaseData.get(position).getTransctionActiveInactive().contains("Active")) ||(purchaseData.get(position).getTransctionActiveInactive().contains("active")))
         {

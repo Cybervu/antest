@@ -60,6 +60,8 @@ import com.home.vod.adapter.GenreFilterAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.GridItem;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -86,6 +88,32 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.APP_ON;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_VIDEO_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.NO_VIDEO_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
+import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
+import static com.home.vod.util.Constant.authTokenStr;
 
 /*
 import com.twotoasters.jazzylistview.JazzyGridView;
@@ -112,6 +140,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     private static int firstVisibleInListview;
     private final String KEY_RECYCLER_STATE = "recycler_state";
     private static Bundle mBundleRecyclerViewState;
+
+    LanguagePreference languagePreference;
 
     //for no internet
 
@@ -214,13 +244,14 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         context = getActivity();
         //for search for each activity
         setHasOptionsMenu(true);
+        languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         genreListData = (RecyclerView) rootView.findViewById(R.id.demoListView);
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);
         genreListData.setItemAnimator(new DefaultItemAnimator());
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());// 0 - for private mode
         sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
-        posterUrl = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+        posterUrl = languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA);
 
         gridView = (GridView) rootView.findViewById(R.id.imagesGridView);
        /* gridView.setHasFixedSize(true);
@@ -233,8 +264,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         noDataLayout = (RelativeLayout) rootView.findViewById(R.id.noData);
         noInternetTextView = (TextView) rootView.findViewById(R.id.noInternetTextView);
         noDataTextView = (TextView) rootView.findViewById(R.id.noDataTextView);
-        noInternetTextView.setText(Util.getTextofLanguage(context, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
-        noDataTextView.setText(Util.getTextofLanguage(context, Util.NO_CONTENT, Util.DEFAULT_NO_CONTENT));
+        noInternetTextView.setText(languagePreference.getTextofLanguage( NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+        noDataTextView.setText(languagePreference.getTextofLanguage( NO_CONTENT, DEFAULT_NO_CONTENT));
 
         noInternetConnectionLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
@@ -255,8 +286,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
         //Detect Network Connection
 
-        boolean isNetwork = Util.checkNetwork(context);
-        if (isNetwork == false) {
+
+        if (!NetworkStatus.getInstance().isConnected(getActivity())) {
             noInternetConnectionLayout.setVisibility(View.VISIBLE);
             noDataLayout.setVisibility(View.GONE);
             gridView.setVisibility(View.GONE);
@@ -275,10 +306,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             }
         } else {
             //Call whatever you want
-            if (Util.checkNetwork(getActivity())) {
+            if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
                 MyLibraryInputModel myLibraryInputModel=new MyLibraryInputModel();
-                myLibraryInputModel.setAuthToken(Util.authTokenStr);
+                myLibraryInputModel.setAuthToken(authTokenStr);
                 myLibraryInputModel.setUser_id(preferenceManager.getUseridFromPref());
                 myLibraryInputModel.setLimit(String.valueOf(limit));
                 myLibraryInputModel.setOffset(String.valueOf(offset));
@@ -288,12 +319,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 }else {
                     myLibraryInputModel.setCountry("IN");
                 }
-                myLibraryInputModel.setLang_code(Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                myLibraryInputModel.setLang_code(languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                 MyLibraryAsynTask asyncLoadVideos = new MyLibraryAsynTask(myLibraryInputModel,MyLibraryFragment.this,context);
                 asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
             } else {
-                Toast.makeText(getActivity(), Util.getTextofLanguage(getActivity(), Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 getActivity().finish();
             }
         }
@@ -346,12 +377,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
                         }
                         offset += 1;
-                        boolean isNetwork = Util.checkNetwork(context);
-                        if (isNetwork == true) {
+
+                        if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
                             // default data
                             MyLibraryInputModel myLibraryInputModel=new MyLibraryInputModel();
-                            myLibraryInputModel.setAuthToken(Util.authTokenStr);
+                            myLibraryInputModel.setAuthToken(authTokenStr);
                             myLibraryInputModel.setUser_id(preferenceManager.getUseridFromPref());
                             myLibraryInputModel.setLimit(String.valueOf(limit));
                             myLibraryInputModel.setOffset(String.valueOf(offset));
@@ -361,7 +392,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             }else {
                                 myLibraryInputModel.setCountry("IN");
                             }
-                            myLibraryInputModel.setLang_code(Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                            myLibraryInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             MyLibraryAsynTask asyncLoadVideos = new MyLibraryAsynTask(myLibraryInputModel,MyLibraryFragment.this,context);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
                             scrolling = false;
@@ -399,13 +430,13 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 Util.dataModel = dbModel;
 
 
-                if (moviePermalink.matches(Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                if (moviePermalink.matches(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA))) {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(context, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(context, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                    dlgAlert.setTitle(Util.getTextofLanguage(context, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(context, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage( NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(context, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -417,7 +448,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
                     if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
                         final Intent movieDetailsIntent = new Intent(context, MovieDetailsActivity.class);
-                        movieDetailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                        movieDetailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
@@ -435,25 +466,25 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             /*AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);*/
                             ValidateUserInput validateUserInput = new ValidateUserInput();
-                            validateUserInput.setAuthToken(Util.authTokenStr);
+                            validateUserInput.setAuthToken(authTokenStr);
                             validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                             validateUserInput.setMuviUniqueId(movieUniqueId.trim());
                             validateUserInput.setPurchaseType("episode");
                             validateUserInput.setSeasonId("" + season_id);
                             validateUserInput.setEpisodeStreamUniqueId(movieStreamUniqueId);
-                            validateUserInput.setLanguageCode(Util.getTextofLanguage(getActivity(), Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MyLibraryFragment.this, context);
                             asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 
                         } else {
                             ValidateUserInput validateUserInput = new ValidateUserInput();
-                            validateUserInput.setAuthToken(Util.authTokenStr);
+                            validateUserInput.setAuthToken(authTokenStr);
                             validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                             validateUserInput.setMuviUniqueId(movieUniqueId.trim());
                             validateUserInput.setPurchaseType("episode");
                             validateUserInput.setSeasonId("" + season_id);
                             validateUserInput.setEpisodeStreamUniqueId(movieStreamUniqueId);
-                            validateUserInput.setLanguageCode(Util.getTextofLanguage(getActivity(), Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MyLibraryFragment.this, context);
                             asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                         }
@@ -461,7 +492,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3")) && isEpisode.equals("0") && season_id == 0) {
                         final Intent detailsIntent = new Intent(context, ShowWithEpisodesActivity.class);
-                        detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -474,8 +505,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         final Intent detailsIntent = new Intent(context, Episode_list_Activity.class);
                         Util.goToLibraryplayer = true;
 
-                        detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
-                        detailsIntent.putExtra(Util.SEASON_INTENT_KEY, "" + season_id);
+                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
+                        detailsIntent.putExtra(SEASON_INTENT_KEY, "" + season_id);
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -515,7 +546,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     public void onVideoDetailsPostExecuteCompleted(Get_Video_Details_Output get_video_details_output, int code, String status, String message) {
         if (status == null) {
             status = "0";
-            Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA));
+            Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA));
             //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
         }
 
@@ -526,17 +557,17 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     pDialog = null;
                 }
             } catch (IllegalArgumentException ex) {
-                Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA));
                 // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
             }
-            Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA));
+            Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA));
             //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-            dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage( NO_VIDEO_AVAILABLE, DEFAULT_NO_VIDEO_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -552,35 +583,35 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
-                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA));
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage( NO_VIDEO_AVAILABLE, DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
                         });
                 dlgAlert.create().show();
-            } else if (Util.dataModel.getVideoUrl().matches("") || Util.dataModel.getVideoUrl().equalsIgnoreCase(Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+            } else if (Util.dataModel.getVideoUrl().matches("") || Util.dataModel.getVideoUrl().equalsIgnoreCase(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA))) {
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
                         pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
-                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA));
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage( NO_VIDEO_AVAILABLE, DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -594,9 +625,9 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
-                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA));
                 }
-                if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(Util.getTextofLanguage(getActivity(), Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA))) {
                     final Intent playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
@@ -683,11 +714,11 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 status = 0;
             }
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-            dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage( NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -704,11 +735,11 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 status = 0;
             }
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-            dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage( NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -731,12 +762,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
 
-                dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
 
-                dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -757,12 +788,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     status = 0;
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + Util.getTextofLanguage(getActivity(), Util.APP_ON, Util.DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 
-                dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -783,12 +814,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     status = 0;
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.CROSSED_MAXIMUM_LIMIT, Util.CROSSED_MAXIMUM_LIMIT) + " " + Util.getTextofLanguage(getActivity(), Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + Util.getTextofLanguage(getActivity(), Util.APP_ON, Util.DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage( CROSSED_MAXIMUM_LIMIT, CROSSED_MAXIMUM_LIMIT) + " " + languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 
-                dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -812,15 +843,15 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
                         dlgAlert.setMessage(userMessage);
                     }else{
-                        dlgAlert.setMessage(Util.getTextofLanguage(getActivity(),Util.ALREADY_PURCHASE_THIS_CONTENT,Util.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT));
+                        dlgAlert.setMessage(languagePreference.getTextofLanguage(Util.ALREADY_PURCHASE_THIS_CONTENT,Util.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT));
 
                     }
-                    //dlgAlert.setMessage(Util.getTextofLanguage(getActivity(),Util.ALREADY_PURCHASE_THIS_CONTENT,Util.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT)+ " " +getResources().getString(R.string.studio_site));
+                    //dlgAlert.setMessage(languagePreference.getTextofLanguage(Util.ALREADY_PURCHASE_THIS_CONTENT,Util.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT)+ " " +getResources().getString(R.string.studio_site));
 
-                    dlgAlert.setTitle(Util.getTextofLanguage(getActivity(),Util.SORRY,Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(),Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(Util.SORRY,Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(),Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -843,12 +874,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
 
-                dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + Util.getTextofLanguage(getActivity(), Util.APP_ON, Util.DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 
-                dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -874,13 +905,13 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 if (message != null && message.equalsIgnoreCase("")) {
                     dlgAlert.setMessage(message);
                 } else {
-                    dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, Util.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage( CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
 
                 }
-                dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -901,12 +932,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     }
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
 
-                    dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + Util.getTextofLanguage(getActivity(), Util.APP_ON, Util.DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 
-                    dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -932,7 +963,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
                     {
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                        getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                        getVideoDetailsInput.setAuthToken(authTokenStr);
                         getVideoDetailsInput.setContent_uniq_id(movieUniqueId);
                         getVideoDetailsInput.setStream_uniq_id(movieStreamUniqueId);
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -951,12 +982,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
                             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
 
-                            dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + Util.getTextofLanguage(getActivity(), Util.APP_ON, Util.DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+                            dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 
-                            dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-                            dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                            dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
                             dlgAlert.setCancelable(false);
-                            dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             dialog.cancel();
@@ -1101,10 +1132,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //        String responseStr;
 //        int status;
 //        String movieGenreStr = "";
-//        String movieName = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-//        String movieImageStr = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-//        String moviePermalinkStr = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-//        String videoTypeIdStr = Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+//        String movieName = languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA);
+//        String movieImageStr = languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA);
+//        String moviePermalinkStr = languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA);
+//        String videoTypeIdStr = languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA);
 //        String isEpisodeStr = "";
 //
 //
@@ -1126,7 +1157,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                httppost.addHeader("limit", String.valueOf(limit));
 //                httppost.addHeader("offset", String.valueOf(offset));
 //
-//                SharedPreferences countryPref = context.getSharedPreferences(Util.COUNTRY_PREF, 0);
+//                SharedPreferences countryPref = context.getSharedPreferences(COUNTRY_PREF, 0);
 //
 //                if (countryPref != null) {
 //                    String countryCodeStr = countryPref.getString("countryCode", null);
@@ -1134,15 +1165,15 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                } else {
 //                    httppost.addHeader("country", "IN");
 //                }
-//                httppost.addHeader("lang_code", Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 //*/
 //
-//                String urlRouteList = Util.rootUrl().trim() + Util.myLibrary.trim();
+//                String urlRouteList = rootUrl().trim() + myLibrary.trim();
 //                HttpClient httpclient = new DefaultHttpClient();
 //                HttpPost httppost = new HttpPost(urlRouteList);
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("authToken", authTokenStr.trim());
 //                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
 //
 //
@@ -1156,7 +1187,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                } else {
 //                    httppost.addHeader("country", "IN");
 //                }
-//                httppost.addHeader("lang_code", Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //
 //                // Execute HTTP Post Request
@@ -1181,7 +1212,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                            }
 //
 //                            footerView.setVisibility(View.GONE);
-//                            Toast.makeText(context, Util.getTextofLanguage(context, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(context, languagePreference.getTextofLanguage( SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //                        }
 //
 //                    });
@@ -1723,10 +1754,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 if (grantResults.length > 0) {
                     if ((grantResults.length > 0) && (grantResults[0]) == PackageManager.PERMISSION_GRANTED) {
                         //Call whatever you want
-                        if (Util.checkNetwork(getActivity())) {
+                        if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
                             MyLibraryInputModel myLibraryInputModel=new MyLibraryInputModel();
-                            myLibraryInputModel.setAuthToken(Util.authTokenStr);
+                            myLibraryInputModel.setAuthToken(authTokenStr);
                             myLibraryInputModel.setUser_id(preferenceManager.getUseridFromPref());
                             myLibraryInputModel.setLimit(String.valueOf(limit));
                             myLibraryInputModel.setOffset(String.valueOf(offset));
@@ -1736,11 +1767,11 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             }else {
                                 myLibraryInputModel.setCountry("IN");
                             }
-                            myLibraryInputModel.setLang_code(Util.getTextofLanguage(context, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                            myLibraryInputModel.setLang_code(languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             MyLibraryAsynTask asyncLoadVideos = new MyLibraryAsynTask(myLibraryInputModel,MyLibraryFragment.this,context);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
                         } else {
-                            Toast.makeText(getActivity(), Util.getTextofLanguage(getActivity(), Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), languagePreference.getTextofLanguage( NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                             getActivity().finish();
                         }
                     } else {
@@ -1764,9 +1795,9 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //        protected Void doInBackground(Void... params) {
 //            try {
 //                HttpClient httpclient=new DefaultHttpClient();
-//                HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.loadVideoUrl.trim());
+//                HttpPost httppost = new HttpPost(rootUrl().trim()+loadVideoUrl.trim());
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("authToken", authTokenStr.trim());
 //                httppost.addHeader("content_uniq_id",movieUniqueId);
 //                httppost.addHeader("stream_uniq_id",movieStreamUniqueId);
 //                httppost.addHeader("internet_speed",MainActivity.internetSpeed.trim());
@@ -1807,8 +1838,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                                pDialog = null;
 //                            }
 //                            responseStr = "0";
-//                            Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA));
-//                            Toast.makeText(getActivity(), Util.getTextofLanguage(getActivity(),Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
+//                            Toast.makeText(getActivity(), languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION,DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                        }
 //
@@ -1820,7 +1851,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                        pDialog = null;
 //                    }
 //                    responseStr = "0";
-//                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA));
+//                    dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
 //                    e.printStackTrace();
 //                }
 //
@@ -1836,29 +1867,29 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                    if (statusCode == 200) {
 //                        if (myJson.optString("thirdparty_url").trim().equals("") || myJson.optString("thirdparty_url").trim()==null ) {
 //                            if ((myJson.has("studio_approved_url")) && myJson.getString("studio_approved_url").trim() != null && !myJson.getString("studio_approved_url").trim().isEmpty() && !myJson.getString("studio_approved_url").trim().equals("null") && !myJson.getString("studio_approved_url").trim().matches("")) {
-//                                Util.dataModel.setVideoUrl(myJson.getString("studio_approved_url"));
+//                                dataModel.setVideoUrl(myJson.getString("studio_approved_url"));
 //                            }
 //                           /* if ((myJson.has("videoUrl")) && myJson.getString("videoUrl").trim() != null && !myJson.getString("videoUrl").trim().isEmpty() && !myJson.getString("videoUrl").trim().equals("null") && !myJson.getString("videoUrl").trim().matches("")) {
-//                                Util.dataModel.setVideoUrl(myJson.getString("videoUrl"));
+//                                dataModel.setVideoUrl(myJson.getString("videoUrl"));
 //                            }*/
 //                            else{
-//                                Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA));
+//                                dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
 //                            }
 //                        }else{
 //                            if ((myJson.has("thirdparty_url")) && myJson.getString("thirdparty_url").trim() != null && !myJson.getString("thirdparty_url").trim().isEmpty() && !myJson.getString("thirdparty_url").trim().equals("null") && !myJson.getString("thirdparty_url").trim().matches("")) {
-//                                Util.dataModel.setVideoUrl(myJson.getString("thirdparty_url"));
+//                                dataModel.setVideoUrl(myJson.getString("thirdparty_url"));
 //                            }
 //                            else{
-//                                Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA));
+//                                dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
 //
 //                            }
 //                        }
 //                        if ((myJson.has("videoResolution")) && myJson.getString("videoResolution").trim() != null && !myJson.getString("videoResolution").trim().isEmpty() && !myJson.getString("videoResolution").trim().equals("null") && !myJson.getString("videoResolution").trim().matches("")) {
-//                            Util.dataModel.setVideoResolution(myJson.getString("videoResolution"));
+//                            dataModel.setVideoResolution(myJson.getString("videoResolution"));
 //
 //                        }
 //                        if ((myJson.has("played_length")) && myJson.getString("played_length").trim() != null && !myJson.getString("played_length").trim().isEmpty() && !myJson.getString("played_length").trim().equals("null") && !myJson.getString("played_length").trim().matches("")) {
-//                            Util.dataModel.setPlayPos(Util.isDouble(myJson.getString("played_length")));
+//                            dataModel.setPlayPos(isDouble(myJson.getString("played_length")));
 //                        }
 //
 //                        if(SubtitleJosnArray!=null)
@@ -1879,7 +1910,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                else {
 //
 //                    responseStr = "0";
-//                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA));
+//                    dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
 //                }
 //            } catch (JSONException e1) {
 //                if (pDialog != null && pDialog.isShowing()) {
@@ -1887,7 +1918,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                    pDialog = null;
 //                }
 //                responseStr = "0";
-//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA));
+//                dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
 //                e1.printStackTrace();
 //            }
 //
@@ -1895,7 +1926,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //            {
 //
 //                responseStr = "0";
-//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA));
+//                dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
 //
 //                e.printStackTrace();
 //            }
@@ -1906,7 +1937,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //
 //            if (responseStr == null) {
 //                responseStr = "0";
-//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA));
+//                dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
 //                //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
 //            }
 //
@@ -1917,17 +1948,17 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                        pDialog = null;
 //                    }
 //                } catch (IllegalArgumentException ex) {
-//                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA));
+//                    dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
 //                    // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
 //                }
-//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA));
+//                dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
 //                //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
 //                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(),R.style.MyAlertDialogStyle);
-//                dlgAlert.setMessage(Util.getTextofLanguage(getActivity(),Util.NO_VIDEO_AVAILABLE,Util.DEFAULT_NO_VIDEO_AVAILABLE));
-//                dlgAlert.setTitle(Util.getTextofLanguage(getActivity(),Util.SORRY,Util.DEFAULT_SORRY));
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(),Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE,DEFAULT_NO_VIDEO_AVAILABLE));
+//                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
 //                dlgAlert.setCancelable(false);
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(),Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
 //                        new DialogInterface.OnClickListener() {
 //                            public void onClick(DialogInterface dialog, int id) {
 //                                dialog.cancel();
@@ -1936,42 +1967,42 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                dlgAlert.create().show();
 //            } else {
 //
-//                if (Util.dataModel.getVideoUrl() == null) {
+//                if (dataModel.getVideoUrl() == null) {
 //                    try {
 //                        if (pDialog != null && pDialog.isShowing()) {
 //                            pDialog.hide();
 //                            pDialog = null;
 //                        }
 //                    } catch (IllegalArgumentException ex) {
-//                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA));
+//                        dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
 //                    }
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(),R.style.MyAlertDialogStyle);
-//                    dlgAlert.setMessage(Util.getTextofLanguage(getActivity(),Util.NO_VIDEO_AVAILABLE,Util.DEFAULT_NO_VIDEO_AVAILABLE));
-//                    dlgAlert.setTitle(Util.getTextofLanguage(getActivity(),Util.SORRY,Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(),Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE,DEFAULT_NO_VIDEO_AVAILABLE));
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(),Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
 //                                }
 //                            });
 //                    dlgAlert.create().show();
-//                } else if (Util.dataModel.getVideoUrl().matches("") || Util.dataModel.getVideoUrl().equalsIgnoreCase(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA))) {
+//                } else if (dataModel.getVideoUrl().matches("") || dataModel.getVideoUrl().equalsIgnoreCase(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))) {
 //                    try {
 //                        if (pDialog != null && pDialog.isShowing()) {
 //                            pDialog.hide();
 //                            pDialog = null;
 //                        }
 //                    } catch (IllegalArgumentException ex) {
-//                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA));
+//                        dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
 //                    }
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(),R.style.MyAlertDialogStyle);
-//                    dlgAlert.setMessage(Util.getTextofLanguage(getActivity(),Util.NO_VIDEO_AVAILABLE,Util.DEFAULT_NO_VIDEO_AVAILABLE));
-//                    dlgAlert.setTitle(Util.getTextofLanguage(getActivity(),Util.SORRY,Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(),Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE,DEFAULT_NO_VIDEO_AVAILABLE));
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(),Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -1985,9 +2016,9 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                            pDialog = null;
 //                        }
 //                    } catch (IllegalArgumentException ex) {
-//                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA));
+//                        dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
 //                    }
-//                    if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(Util.getTextofLanguage(getActivity(),Util.NO_DATA,Util.DEFAULT_NO_DATA))) {
+//                    if (dataModel.getThirdPartyUrl().matches("") || dataModel.getThirdPartyUrl().equalsIgnoreCase(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))) {
 //                        final Intent playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);
 //                        getActivity().runOnUiThread(new Runnable() {
 //                            public void run() {
@@ -2021,8 +2052,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                            }
 //                        });
 //                    }else{
-//                        if (Util.dataModel.getVideoUrl().contains("://www.youtube") || Util.dataModel.getVideoUrl().contains("://www.youtu.be")){
-//                            if(Util.dataModel.getVideoUrl().contains("live_stream?channel")) {
+//                        if (dataModel.getVideoUrl().contains("://www.youtube") || dataModel.getVideoUrl().contains("://www.youtu.be")){
+//                            if(dataModel.getVideoUrl().contains("live_stream?channel")) {
 //                                final Intent playVideoIntent = new Intent(getActivity(), ThirdPartyPlayer.class);
 //                                getActivity().runOnUiThread(new Runnable() {
 //                                    public void run() {
@@ -2165,17 +2196,17 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //
 //
 //            try {
-//                String urlRouteList = Util.rootUrl().trim() + Util.userValidationUrl.trim();
+//                String urlRouteList = rootUrl().trim() + userValidationUrl.trim();
 //                HttpClient httpclient = new DefaultHttpClient();
 //                HttpPost httppost = new HttpPost(urlRouteList);
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //                httppost.addHeader("user_id", loggedInIdStr.trim());
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("authToken", authTokenStr.trim());
 //                httppost.addHeader("movie_id", movieUniqueId.trim());
 //                httppost.addHeader("purchase_type", "episode");
 //                httppost.addHeader("season_id", "" + season_id);
 //                httppost.addHeader("episode_id", movieStreamUniqueId);
-//                httppost.addHeader("lang_code", Util.getTextofLanguage(getActivity(), Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //             /*   String urlRouteList ="http://www.idogic.com/rest/isPPVSubscribed";
 //                HttpClient httpclient=new DefaultHttpClient();
@@ -2187,7 +2218,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                httppost.addHeader("purchase_type","episode");
 //                httppost.addHeader("season_id",""+season_id);
 //                httppost.addHeader("episode_id",movieStreamUniqueId);
-//                httppost.addHeader("lang_code",Util.getTextofLanguage(getActivity(),Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("lang_code",languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
 //*/
 //
 //                // Execute HTTP Post Request
@@ -2215,7 +2246,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                                pDialog = null;
 //                            }
 //                            status = 0;
-//                            Toast.makeText(getActivity(), Util.getTextofLanguage(getActivity(), Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(getActivity(), languagePreference.getTextofLanguage( SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                        }
 //
@@ -2271,11 +2302,11 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                    status = 0;
 //                }
 //                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-//                dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-//                dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setMessage(languagePreference.getTextofLanguage( NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+//                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
 //                dlgAlert.setCancelable(false);
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
 //                        new DialogInterface.OnClickListener() {
 //                            public void onClick(DialogInterface dialog, int id) {
 //                                dialog.cancel();
@@ -2292,11 +2323,11 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                    status = 0;
 //                }
 //                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-//                dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-//                dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setMessage(languagePreference.getTextofLanguage( NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+//                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
 //                dlgAlert.setCancelable(false);
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
 //                        new DialogInterface.OnClickListener() {
 //                            public void onClick(DialogInterface dialog, int id) {
 //                                dialog.cancel();
@@ -2319,12 +2350,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                    }
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
 //
-//                    dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+//                    dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
 //
-//                    dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -2345,12 +2376,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                        status = 0;
 //                    }
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-//                    dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + Util.getTextofLanguage(getActivity(), Util.APP_ON, Util.DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+//                    dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 //
-//                    dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -2371,12 +2402,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                        status = 0;
 //                    }
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-//                    dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.CROSSED_MAXIMUM_LIMIT, Util.CROSSED_MAXIMUM_LIMIT) + " " + Util.getTextofLanguage(getActivity(), Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + Util.getTextofLanguage(getActivity(), Util.APP_ON, Util.DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+//                    dlgAlert.setMessage(languagePreference.getTextofLanguage( CROSSED_MAXIMUM_LIMIT, CROSSED_MAXIMUM_LIMIT) + " " + languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 //
-//                    dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -2385,7 +2416,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                            });
 //                    dlgAlert.create().show();
 //                }
-//           /*     else if (Util.dataModel.getIsAPV() == 1 && status == 431){
+//           /*     else if (dataModel.getIsAPV() == 1 && status == 431){
 //
 //                    try {
 //                        if (pDialog != null && pDialog.isShowing()) {
@@ -2400,15 +2431,15 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                    if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
 //                        dlgAlert.setMessage(userMessage);
 //                    }else{
-//                        dlgAlert.setMessage(Util.getTextofLanguage(getActivity(),Util.ALREADY_PURCHASE_THIS_CONTENT,Util.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT));
+//                        dlgAlert.setMessage(languagePreference.getTextofLanguage(ALREADY_PURCHASE_THIS_CONTENT,DEFAULT_ALREADY_PURCHASE_THIS_CONTENT));
 //
 //                    }
-//                    //dlgAlert.setMessage(Util.getTextofLanguage(getActivity(),Util.ALREADY_PURCHASE_THIS_CONTENT,Util.DEFAULT_ALREADY_PURCHASE_THIS_CONTENT)+ " " +getResources().getString(R.string.studio_site));
+//                    //dlgAlert.setMessage(languagePreference.getTextofLanguage(ALREADY_PURCHASE_THIS_CONTENT,DEFAULT_ALREADY_PURCHASE_THIS_CONTENT)+ " " +getResources().getString(R.string.studio_site));
 //
-//                    dlgAlert.setTitle(Util.getTextofLanguage(getActivity(),Util.SORRY,Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(),Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(),Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -2431,12 +2462,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                    }
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
 //
-//                    dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + Util.getTextofLanguage(getActivity(), Util.APP_ON, Util.DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+//                    dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 //
-//                    dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -2462,13 +2493,13 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                    if (userMessage != null && userMessage.equalsIgnoreCase("")) {
 //                        dlgAlert.setMessage(userMessage);
 //                    } else {
-//                        dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, Util.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
+//                        dlgAlert.setMessage(languagePreference.getTextofLanguage( CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
 //
 //                    }
-//                    dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -2489,12 +2520,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                        }
 //                        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
 //
-//                        dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + Util.getTextofLanguage(getActivity(), Util.APP_ON, Util.DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+//                        dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 //
-//                        dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-//                        dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                        dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+//                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
 //                        dlgAlert.setCancelable(false);
-//                        dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
 //                                new DialogInterface.OnClickListener() {
 //                                    public void onClick(DialogInterface dialog, int id) {
 //                                        dialog.cancel();
@@ -2520,7 +2551,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //
 //                        {
 //                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-//                            getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+//                            getVideoDetailsInput.setAuthToken(authTokenStr);
 //                            getVideoDetailsInput.setContent_uniq_id(movieUniqueId);
 //                            getVideoDetailsInput.setStream_uniq_id(movieStreamUniqueId);
 //                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -2539,12 +2570,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                            if ((userMessage.trim().equalsIgnoreCase("Unpaid")) || (userMessage.trim().matches("Unpaid")) || (userMessage.trim().equals("Unpaid"))) {
 //                                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
 //
-//                                dlgAlert.setMessage(Util.getTextofLanguage(getActivity(), Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + Util.getTextofLanguage(getActivity(), Util.APP_ON, Util.DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+//                                dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 //
-//                                dlgAlert.setTitle(Util.getTextofLanguage(getActivity(), Util.SORRY, Util.DEFAULT_SORRY));
-//                                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
+//                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
 //                                dlgAlert.setCancelable(false);
-//                                dlgAlert.setPositiveButton(Util.getTextofLanguage(getActivity(), Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
 //                                        new DialogInterface.OnClickListener() {
 //                                            public void onClick(DialogInterface dialog, int id) {
 //                                                dialog.cancel();

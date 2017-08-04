@@ -20,11 +20,17 @@ import android.view.ViewGroup;
 import com.home.vod.R;
 import com.home.vod.adapter.NavigationDrawerAdapter;
 import com.home.vod.model.NavDrawerItem;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_MYLIBRARY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
+import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
+import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 
 
 public class FragmentDrawer extends Fragment {
@@ -39,6 +45,7 @@ public class FragmentDrawer extends Fragment {
     private static ArrayList<NavDrawerItem> titles = null;
     private static TypedArray navMenuIcons;
     private FragmentDrawerListener drawerListener;
+    private LanguagePreference languagePreference;
 
     public FragmentDrawer() {
 
@@ -80,6 +87,8 @@ public class FragmentDrawer extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        
+        languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         // Inflating view layout
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
@@ -120,12 +129,12 @@ public class FragmentDrawer extends Fragment {
 
                     for (int i = 0; i < titles.size(); i++) {
                         LogUtil.showLog("alok setUp ::",titles.get(i).getTitle());
-                        if (titles.get(i).getTitle().trim().equals(Util.getTextofLanguage(getActivity(),Util.MY_LIBRARY,Util.DEFAULT_MY_LIBRARY))) {
-                            LogUtil.showLog("SUBHA", "IS_MYLIBRARY =" + Util.getTextofLanguage(getActivity(), Util.IS_MYLIBRARY, Util.DEFAULT_IS_MYLIBRARY));
+                        if (titles.get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_LIBRARY,DEFAULT_MY_LIBRARY))) {
+                            LogUtil.showLog("SUBHA", "IS_MYLIBRARY =" + languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY));
                             LogUtil.showLog("SUBHA", "loggedInStr value =" + loggedInStr);
                             mylibrary_title_added = true;
 
-                            if (Util.getTextofLanguage(getActivity(), Util.IS_MYLIBRARY, Util.DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
+                            if (languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
 
                             } else {
                                 titles.remove(i);
@@ -140,8 +149,8 @@ public class FragmentDrawer extends Fragment {
                             if(titles.get(i).getIsEnabled()==false)
                             {
                                 if(!mylibrary_title_added) {
-                                    if (Util.getTextofLanguage(getActivity(), Util.IS_MYLIBRARY, Util.DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
-                                        titles.add(i,new NavDrawerItem(Util.getTextofLanguage(getActivity(), Util.MY_LIBRARY, Util.DEFAULT_MY_LIBRARY), "102", true, "102"));
+                                    if (languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
+                                        titles.add(i,new NavDrawerItem(languagePreference.getTextofLanguage( MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
                                         mylibrary_title_added = true;
                                         LogUtil.showLog("SUBHA", "My lib added");
                                     }
@@ -150,7 +159,7 @@ public class FragmentDrawer extends Fragment {
                         }
 
                     }
-                    // titles.add(new NavDrawerItem(Util.getTextofLanguage(getActivity(),Util.ABOUT_US,Util.DEFAULT_ABOUT_US),"103",true,"103"));
+                    // titles.add(new NavDrawerItem(languagePreference.getTextofLanguage(Util.ABOUT_US,Util.DEFAULT_ABOUT_US),"103",true,"103"));
 
 
                /* } else {
