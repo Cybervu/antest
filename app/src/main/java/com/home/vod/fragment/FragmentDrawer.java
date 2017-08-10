@@ -1,4 +1,4 @@
-package com.home.vod.activity;
+package com.home.vod.fragment;
 
 
 import android.content.Context;

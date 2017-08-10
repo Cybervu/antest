@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.Get_Video_Details_Output;
 
@@ -69,11 +69,11 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
             HttpPost httppost = new HttpPost(APIUrlConstant.getVideoDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.getVideoDetailsInput.getAuthToken());
-            httppost.addHeader(CommonConstants.CONTENT_UNIQ_ID, this.getVideoDetailsInput.getContent_uniq_id());
-            httppost.addHeader(CommonConstants.STREAM_UNIQ_ID, this.getVideoDetailsInput.getStream_uniq_id());
-            httppost.addHeader(CommonConstants.INTERNET_SPEED, this.getVideoDetailsInput.getInternetSpeed());
-            httppost.addHeader(CommonConstants.USER_ID, this.getVideoDetailsInput.getUser_id());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getVideoDetailsInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.CONTENT_UNIQ_ID, this.getVideoDetailsInput.getContent_uniq_id());
+            httppost.addHeader(HeaderConstants.STREAM_UNIQ_ID, this.getVideoDetailsInput.getStream_uniq_id());
+            httppost.addHeader(HeaderConstants.INTERNET_SPEED, this.getVideoDetailsInput.getInternetSpeed());
+            httppost.addHeader(HeaderConstants.USER_ID, this.getVideoDetailsInput.getUser_id());
 
             // Execute HTTP Post Request
             try {
@@ -180,14 +180,14 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
         listener.onVideoDetailsPreExecuteStarted();
         code = 0;
         status = "";
-        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onVideoDetailsPostExecuteCompleted(get_video_details_output,code,status,message);
             return;
         }
-        if(CommonConstants.hashKey.equals(""))
+        if(HeaderConstants.hashKey.equals(""))
         {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";

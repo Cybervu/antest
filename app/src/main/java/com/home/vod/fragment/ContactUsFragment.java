@@ -1,4 +1,4 @@
-package com.home.vod.activity;
+package com.home.vod.fragment;
 
 
 import android.content.Context;
@@ -47,7 +47,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactUs extends Fragment implements ContactUsAsynTask.ContactUs {
+public class ContactUsFragment extends Fragment implements ContactUsAsynTask.ContactUs {
     Context context;
     String regEmailStr, regNameStr,regMessageStr;
     EditText editEmailStr, editNameStr,editMessageStr;
@@ -61,7 +61,7 @@ public class ContactUs extends Fragment implements ContactUsAsynTask.ContactUs {
 
 
 
-    public ContactUs() {
+    public ContactUsFragment() {
         // Required empty public constructor
     }
 
@@ -329,7 +329,7 @@ public class ContactUs extends Fragment implements ContactUsAsynTask.ContactUs {
 //    @Override
 //    protected Void doInBackground(String... params) {
 //
-//        String urlRouteList = Util.rootUrl().trim() + Util.ContactUs.trim();
+//        String urlRouteList = Util.rootUrl().trim() + Util.ContactUsFragment.trim();
 //
 //        try {
 //            HttpClient httpclient = new DefaultHttpClient();

@@ -7,7 +7,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 
@@ -79,13 +79,13 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
                 Log.v("MUVISDK","this.validateUserInput.getUserId()"+this.validateUserInput.getPurchaseType());
 
                 Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter(CommonConstants.AUTH_TOKEN, this.validateUserInput.getAuthToken())
-                        .appendQueryParameter(CommonConstants.USER_ID, this.validateUserInput.getUserId())
-                        .appendQueryParameter(CommonConstants.MOVIE_ID, this.validateUserInput.getMuviUniqueId())
-                        .appendQueryParameter(CommonConstants.EPISODE_ID, this.validateUserInput.getEpisodeStreamUniqueId())
-                        .appendQueryParameter(CommonConstants.SEASON_ID, this.validateUserInput.getSeasonId())
-                        .appendQueryParameter(CommonConstants.LANG_CODE, this.validateUserInput.getLanguageCode())
-                        .appendQueryParameter(CommonConstants.PURCHASE_TYPE, this.validateUserInput.getPurchaseType());
+                        .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.validateUserInput.getAuthToken())
+                        .appendQueryParameter(HeaderConstants.USER_ID, this.validateUserInput.getUserId())
+                        .appendQueryParameter(HeaderConstants.MOVIE_ID, this.validateUserInput.getMuviUniqueId())
+                        .appendQueryParameter(HeaderConstants.EPISODE_ID, this.validateUserInput.getEpisodeStreamUniqueId())
+                        .appendQueryParameter(HeaderConstants.SEASON_ID, this.validateUserInput.getSeasonId())
+                        .appendQueryParameter(HeaderConstants.LANG_CODE, this.validateUserInput.getLanguageCode())
+                        .appendQueryParameter(HeaderConstants.PURCHASE_TYPE, this.validateUserInput.getPurchaseType());
                 String query = builder.build().getEncodedQuery();
 
                 Log.v("MUVISDK", "authToken" +this.validateUserInput.getAuthToken());
@@ -207,14 +207,14 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
         listener.onGetValidateUserPreExecuteStarted();
 
         status = 0;
-        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetValidateUserPostExecuteCompleted(validateUserOutput, status, message);
             return;
         }
-        if(CommonConstants.hashKey.equals(""))
+        if(HeaderConstants.hashKey.equals(""))
         {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";

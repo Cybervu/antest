@@ -1,4 +1,4 @@
-package com.home.vod.activity;
+package com.home.vod.fragment;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +32,7 @@ import com.home.apisdk.apiController.GetLoadVideosAsync;
 import com.home.apisdk.apiModel.LoadVideoInput;
 import com.home.apisdk.apiModel.LoadVideoOutput;
 import com.home.vod.R;
+import com.home.vod.activity.MainActivity;
 import com.home.vod.adapter.RecyclerViewDataAdapter;
 import com.home.vod.model.GetMenuItem;
 import com.home.vod.model.SectionDataModel;
@@ -67,7 +67,6 @@ import java.util.concurrent.TimeUnit;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_GOOGLE_FCM_TOKEN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
@@ -81,97 +80,6 @@ import static com.home.vod.util.Constant.authTokenStr;
  */
 public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVideosAsync {
 
-    /***************chromecast*********************
-     public enum PlaybackLocation {
-     LOCAL,
-     REMOTE
-     }
-
-     public enum PlaybackState {
-     PLAYING, PAUSED, BUFFERING, IDLE
-     }
-
-
-
-     private VideoView mVideoView;
-     private TextView mTitleView;
-     private TextView mDescriptionView;
-     private TextView mStartText;
-     private TextView mEndText;
-     private SeekBar mSeekbar;
-     private ImageView mPlayPause;
-     private ProgressBar mLoading;
-     private View mControllers;
-     private View mContainer;
-     private ImageView mCoverArt;
-     private Timer mSeekbarTimer;
-     private Timer mControllersTimer;
-     private PlaybackLocation mLocation;
-     private PlaybackState mPlaybackState;
-     private final Handler mHandler = new Handler();
-     private final float mAspectRatio = 72f / 128;
-     private AQuery mAquery;
-     private MediaInfo mSelectedMedia;
-     private boolean mControllersVisible;
-     private int mDuration;
-     private TextView mAuthorView;
-     private ImageButton mPlayCircle;
-
-
-     private CastContext mCastContext;
-     private SessionManagerListener<CastSession> mSessionManagerListener =
-     new MySessionManagerListener();
-     private CastSession mCastSession;
-     private MenuItem mediaRouteMenuItem;
-     private IntroductoryOverlay mIntroductoryOverlay;
-     private CastStateListener mCastStateListener;
-
-     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
-
-    @Override public void onSessionEnded(CastSession session, int error) {
-    if (session == mCastSession) {
-    mCastSession = null;
-    }
-    //invalidateOptionsMenu();
-    }
-
-    @Override public void onSessionResumed(CastSession session, boolean wasSuspended) {
-    mCastSession = session;
-    //invalidateOptionsMenu();
-    }
-
-    @Override public void onSessionStarted(CastSession session, String sessionId) {
-    mCastSession = session;
-    //invalidateOptionsMenu();
-    }
-
-    @Override public void onSessionStarting(CastSession session) {
-    }
-
-    @Override public void onSessionStartFailed(CastSession session, int error) {
-    }
-
-    @Override public void onSessionEnding(CastSession session) {
-    }
-
-    @Override public void onSessionResuming(CastSession session, String sessionId) {
-    }
-
-    @Override public void onSessionResumeFailed(CastSession session, int error) {
-    }
-
-    @Override public void onSessionSuspended(CastSession session, int reason) {
-    }
-    }
-
-
-
-
-
-     MediaInfo mediaInfo;
-     **************chromecast*********************
-
-     */
 
     int videoHeight = 185;
     int videoWidth = 256;

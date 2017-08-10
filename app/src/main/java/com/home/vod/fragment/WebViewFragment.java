@@ -1,4 +1,4 @@
-package com.home.vod.activity;
+package com.home.vod.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.home.vod.R;
+import com.home.vod.activity.MainActivity;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;

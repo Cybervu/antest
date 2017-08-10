@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.APVModel;
 import com.home.apisdk.apiModel.ContentDetailsInput;
 import com.home.apisdk.apiModel.ContentDetailsOutput;
@@ -64,8 +64,8 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getContentDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.contentDetailsInput.getAuthToken());
-            httppost.addHeader(CommonConstants.PERMALINK, this.contentDetailsInput.getPermalink());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.contentDetailsInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.PERMALINK, this.contentDetailsInput.getPermalink());
 
             // Execute HTTP Post Request
             try {
@@ -339,13 +339,13 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
         listener.onGetContentDetailsPreExecuteStarted();
 
         status = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetContentDetailsPostExecuteCompleted(contentDetailsOutput, status, message);
             return;
         }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onGetContentDetailsPostExecuteCompleted(contentDetailsOutput, status, message);

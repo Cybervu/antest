@@ -4,7 +4,7 @@ package com.home.apisdk;
  * Created by MUVI on 1/18/2017.
  */
 
-public class CommonConstants {
+public class HeaderConstants {
     public static String hashKey = "x";
     public static String user_Package_Name_At_Api = "com.release.vishwamtv";
 

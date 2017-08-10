@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.ViewFavouriteInputModel;
 import com.home.apisdk.apiModel.ViewFavouriteOutputModel;
 
@@ -63,9 +63,9 @@ public class ViewFavouriteAsynTask extends AsyncTask<ViewFavouriteInputModel, Vo
             HttpPost httppost = new HttpPost(APIUrlConstant.getViewFavorite());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.viewFavouriteInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.viewFavouriteInputModel.getAuthToken());
 
-            httppost.addHeader(CommonConstants.USER_ID,this.viewFavouriteInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.USER_ID,this.viewFavouriteInputModel.getUser_id());
 
             // Execute HTTP Post Request
             try {
@@ -150,13 +150,13 @@ public class ViewFavouriteAsynTask extends AsyncTask<ViewFavouriteInputModel, Vo
         listener.onViewFavouritePreExecuteStarted();
         responseStr = "0";
         status = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onViewFavouritePostExecuteCompleted(viewFavouriteOutputModel, status, totalItems, message);
             return;
         }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onViewFavouritePostExecuteCompleted(viewFavouriteOutputModel, status, totalItems, message);

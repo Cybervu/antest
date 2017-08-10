@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.AddContentRatingInputModel;
 import com.home.apisdk.apiModel.AddContentRatingOutputModel;
 
@@ -58,12 +58,12 @@ public class AddContentRatingAsynTask extends AsyncTask<AddContentRatingInputMod
             HttpClient httpclient=new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getAddContentRating());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.addContentRatingInputModel.getAuthToken());
-            httppost.addHeader(CommonConstants.LANG_CODE, this.addContentRatingInputModel.getLang_code());
-            httppost.addHeader(CommonConstants.CONTENT_ID, this.addContentRatingInputModel.getContent_id());
-            httppost.addHeader(CommonConstants.USER_ID, this.addContentRatingInputModel.getUser_id());
-            httppost.addHeader(CommonConstants.RATING, this.addContentRatingInputModel.getRating());
-            httppost.addHeader(CommonConstants.REVIEW, this.addContentRatingInputModel.getReview());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.addContentRatingInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.addContentRatingInputModel.getLang_code());
+            httppost.addHeader(HeaderConstants.CONTENT_ID, this.addContentRatingInputModel.getContent_id());
+            httppost.addHeader(HeaderConstants.USER_ID, this.addContentRatingInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.RATING, this.addContentRatingInputModel.getRating());
+            httppost.addHeader(HeaderConstants.REVIEW, this.addContentRatingInputModel.getReview());
 
 
             // Execute HTTP Post Request
@@ -127,14 +127,14 @@ public class AddContentRatingAsynTask extends AsyncTask<AddContentRatingInputMod
         listener.onAddContentRatingPreExecuteStarted();
 
         status = 0;
-            if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+            if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
                 message = "Packge Name Not Matched";
                 listener.onAddContentRatingPostExecuteCompleted(addContentRatingOutputModel,status,message);
                 return;
             }
-            if(CommonConstants.hashKey.equals(""))
+            if(HeaderConstants.hashKey.equals(""))
             {
                 this.cancel(true);
                 message = "Hash Key Is Not Available. Please Initialize The SDK";

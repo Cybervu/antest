@@ -43,6 +43,12 @@ import com.home.apisdk.apiModel.MenuListInput;
 import com.home.apisdk.apiModel.MenuListOutput;
 import com.home.vod.R;
 import com.home.vod.adapter.LanguageCustomAdapter;
+import com.home.vod.fragment.AboutUsFragment;
+import com.home.vod.fragment.ContactUsFragment;
+import com.home.vod.fragment.FragmentDrawer;
+import com.home.vod.fragment.HomeFragment;
+import com.home.vod.fragment.MyLibraryFragment;
+import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.network.NetworkStatus;
@@ -53,7 +59,6 @@ import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,16 +73,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.home.vod.preferences.LanguagePreference.ADDED_TO_FAV;
-import static com.home.vod.preferences.LanguagePreference.ADD_TO_FAV;
-import static com.home.vod.preferences.LanguagePreference.ADVANCE_PURCHASE;
-import static com.home.vod.preferences.LanguagePreference.ALERT;
-import static com.home.vod.preferences.LanguagePreference.ALREADY_MEMBER;
-import static com.home.vod.preferences.LanguagePreference.AMOUNT;
 import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
-import static com.home.vod.preferences.LanguagePreference.COUPON_CANCELLED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
@@ -96,7 +94,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGU
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
-import static com.home.vod.preferences.LanguagePreference.EPISODE_TITLE;
 import static com.home.vod.preferences.LanguagePreference.HOME;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
@@ -111,9 +108,6 @@ import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
-import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_A_Z;
-import static com.home.vod.preferences.LanguagePreference.SORT_ALPHA_Z_A;
-import static com.home.vod.preferences.LanguagePreference.TRANSACTION_STATUS_ACTIVE;
 import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
@@ -667,7 +661,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
             if (str.equals("contactus")) {
 
-                fragment = new ContactUs();
+                fragment = new ContactUsFragment();
                 bundle.putString("title", titleStr);
 
 

@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.GetCardListForPPVInputModel;
 import com.home.apisdk.apiModel.GetCardListForPPVOutputModel;
 
@@ -63,8 +63,8 @@ public class GetCardListForPPVAsynTask extends AsyncTask<GetCardListForPPVInputM
                 HttpPost httppost = new HttpPost(APIUrlConstant.getGetCardListForPpvUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-                httppost.addHeader(CommonConstants.AUTH_TOKEN, this.getCardListForPPVInputModel.getAuthToken());
-                httppost.addHeader(CommonConstants.USER_ID, this.getCardListForPPVInputModel.getUser_id());
+                httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getCardListForPPVInputModel.getAuthToken());
+                httppost.addHeader(HeaderConstants.USER_ID, this.getCardListForPPVInputModel.getUser_id());
 
 
                 // Execute HTTP Post Request
@@ -136,14 +136,14 @@ public class GetCardListForPPVAsynTask extends AsyncTask<GetCardListForPPVInputM
             listener.onGetCardListForPPVPreExecuteStarted();
             responseStr = "0";
             status = 0;
-            if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+            if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
                 message = "Packge Name Not Matched";
                 listener.onGetCardListForPPVPostExecuteCompleted(getCardListForPPVOutputModel,status,totalItems,message);
                 return;
             }
-            if(CommonConstants.hashKey.equals(""))
+            if(HeaderConstants.hashKey.equals(""))
             {
                 this.cancel(true);
                 message = "Hash Key Is Not Available. Please Initialize The SDK";

@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.CelibrityInputModel;
 import com.home.apisdk.apiModel.CelibrityOutputModel;
 
@@ -62,9 +62,9 @@ public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel,Void ,Vo
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetCelibrityUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.celibrityInputModel.getAuthToken());
-            httppost.addHeader(CommonConstants.MOVIE_ID, this.celibrityInputModel.getMovie_id());
-            httppost.addHeader(CommonConstants.LANG_CODE,this.celibrityInputModel.getLang_code());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.celibrityInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.MOVIE_ID, this.celibrityInputModel.getMovie_id());
+            httppost.addHeader(HeaderConstants.LANG_CODE,this.celibrityInputModel.getLang_code());
 
             Log.v("MUVISDK","lang_code = "+ this.celibrityInputModel.getLang_code());
             Log.v("MUVISDK","authToken = "+ this.celibrityInputModel.getAuthToken());
@@ -150,13 +150,13 @@ public class GetCelibrityAsyntask extends AsyncTask<CelibrityInputModel,Void ,Vo
         super.onPreExecute();
         listener.onGetCelibrityPreExecuteStarted();
         code= 0;
-        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             listener.onGetCelibrityPostExecuteCompleted(celibrityOutputModel,code,msg);
             return;
         }
-        if(CommonConstants.hashKey.equals(""))
+        if(HeaderConstants.hashKey.equals(""))
         {
             this.cancel(true);
             listener.onGetCelibrityPostExecuteCompleted(celibrityOutputModel,code,msg);

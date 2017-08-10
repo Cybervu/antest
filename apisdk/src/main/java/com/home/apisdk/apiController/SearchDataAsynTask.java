@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.Search_Data_input;
 import com.home.apisdk.apiModel.Search_Data_otput;
 
@@ -68,12 +68,12 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
             HttpPost httppost = new HttpPost(APIUrlConstant.getSearchDataUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.search_data_input.getAuthToken());
-            httppost.addHeader(CommonConstants.LIMIT, this.search_data_input.getLimit());
-            httppost.addHeader(CommonConstants.OFFSET, this.search_data_input.getOffset());
-            httppost.addHeader(CommonConstants.Q, this.search_data_input.getQ());
-            httppost.addHeader(CommonConstants.COUNTRY,this.search_data_input.getCountry());
-            httppost.addHeader(CommonConstants.LANG_CODE,this.search_data_input.getLanguage_code());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.search_data_input.getAuthToken());
+            httppost.addHeader(HeaderConstants.LIMIT, this.search_data_input.getLimit());
+            httppost.addHeader(HeaderConstants.OFFSET, this.search_data_input.getOffset());
+            httppost.addHeader(HeaderConstants.Q, this.search_data_input.getQ());
+            httppost.addHeader(HeaderConstants.COUNTRY,this.search_data_input.getCountry());
+            httppost.addHeader(HeaderConstants.LANG_CODE,this.search_data_input.getLanguage_code());
 
 
             // Execute HTTP Post Request
@@ -209,13 +209,13 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
 
         status = 0;
         totalItems = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);
             return;
         }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onSearchDataPostExecuteCompleted(search_data_otputs, status, totalItems, message);

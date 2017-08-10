@@ -1,4 +1,4 @@
-package com.home.vod.activity;
+package com.home.vod.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -44,6 +44,9 @@ import com.home.apisdk.apiController.GetContentListAsynTask;
 import com.home.apisdk.apiModel.ContentListInput;
 import com.home.apisdk.apiModel.ContentListOutput;
 import com.home.vod.R;
+import com.home.vod.activity.MainActivity;
+import com.home.vod.activity.MovieDetailsActivity;
+import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.adapter.GenreFilterAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.model.GridItem;
@@ -52,7 +55,6 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 

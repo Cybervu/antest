@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.AboutUsInput;
 
 import org.apache.http.HttpResponse;
@@ -58,9 +58,9 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
             HttpPost httppost = new HttpPost(APIUrlConstant.getAboutUs());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.aboutUsInput.getAuthToken());
-            httppost.addHeader(CommonConstants.PERMALINK, this.aboutUsInput.getPermalink());
-            httppost.addHeader(CommonConstants.LANG_CODE, this.aboutUsInput.getLang_code());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.aboutUsInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.PERMALINK, this.aboutUsInput.getPermalink());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.aboutUsInput.getLang_code());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);
@@ -101,13 +101,13 @@ public class AboutUsAsync extends AsyncTask<AboutUsInput, Void, Void> {
         super.onPreExecute();
         listener.onAboutUsPreExecuteStarted();
         status = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onAboutUsPostExecuteCompleted(about);
             return;
         }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onAboutUsPostExecuteCompleted(about);

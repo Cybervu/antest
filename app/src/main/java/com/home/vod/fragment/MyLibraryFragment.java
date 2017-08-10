@@ -1,4 +1,4 @@
-package com.home.vod.activity;
+package com.home.vod.fragment;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -56,6 +56,11 @@ import com.home.apisdk.apiModel.MyLibraryOutputModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.R;
+import com.home.vod.activity.Episode_list_Activity;
+import com.home.vod.activity.MainActivity;
+import com.home.vod.activity.MovieDetailsActivity;
+import com.home.vod.activity.MyLibraryPlayer;
+import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.adapter.GenreFilterAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.model.DataModel;

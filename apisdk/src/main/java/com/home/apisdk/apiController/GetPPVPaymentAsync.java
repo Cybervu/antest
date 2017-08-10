@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.RegisterUserPaymentInputModel;
 import com.home.apisdk.apiModel.RegisterUserPaymentOutputModel;
 
@@ -59,26 +59,26 @@ public class GetPPVPaymentAsync extends AsyncTask<RegisterUserPaymentInputModel,
             HttpPost httppost = new HttpPost(APIUrlConstant.getAddSubscriptionUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.registerUserPaymentInputModel.getAuthToken());
-            httppost.addHeader(CommonConstants.USER_ID, this.registerUserPaymentInputModel.getUser_id());
-            httppost.addHeader(CommonConstants.CARD_LAST_FOUR_DIGIT, this.registerUserPaymentInputModel.getCard_last_fourdigit());
-            httppost.addHeader(CommonConstants.CARD_NAME, this.registerUserPaymentInputModel.getCard_name());
-            httppost.addHeader(CommonConstants.CARD_NUMBER, this.registerUserPaymentInputModel.getCard_number());
-            httppost.addHeader(CommonConstants.CARD_TYPE, this.registerUserPaymentInputModel.getCard_type());
-            httppost.addHeader(CommonConstants.COUNTRY, this.registerUserPaymentInputModel.getCountry());
-            httppost.addHeader(CommonConstants.CURRENCY_ID, this.registerUserPaymentInputModel.getCurrency_id());
-            httppost.addHeader(CommonConstants.CVV, this.registerUserPaymentInputModel.getCvv());
-            httppost.addHeader(CommonConstants.EMAIL, this.registerUserPaymentInputModel.getEmail());
-            httppost.addHeader(CommonConstants.EPISODE_ID, this.registerUserPaymentInputModel.getEpisode_id());
-            httppost.addHeader(CommonConstants.EXP_MONTH, this.registerUserPaymentInputModel.getExp_month());
-            httppost.addHeader(CommonConstants.EXP_YEAR, this.registerUserPaymentInputModel.getExp_year());
-            httppost.addHeader(CommonConstants.SEASON_ID, this.registerUserPaymentInputModel.getSeason_id());
-            httppost.addHeader(CommonConstants.PROFILE_ID, this.registerUserPaymentInputModel.getProfile_id());
-            httppost.addHeader(CommonConstants.TOKEN, this.registerUserPaymentInputModel.getToken());
-            httppost.addHeader(CommonConstants.COUPAN_CODE, this.registerUserPaymentInputModel.getCouponCode());
-            httppost.addHeader(CommonConstants.IS_SAVE_THIS_CARD,this.registerUserPaymentInputModel.getIs_save_this_card());
-            httppost.addHeader(CommonConstants.IS_ADVANCE,this.registerUserPaymentInputModel.getIs_advance());
-            httppost.addHeader(CommonConstants.MOVIE_ID,this.registerUserPaymentInputModel.getMovie_id());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.registerUserPaymentInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.USER_ID, this.registerUserPaymentInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.CARD_LAST_FOUR_DIGIT, this.registerUserPaymentInputModel.getCard_last_fourdigit());
+            httppost.addHeader(HeaderConstants.CARD_NAME, this.registerUserPaymentInputModel.getCard_name());
+            httppost.addHeader(HeaderConstants.CARD_NUMBER, this.registerUserPaymentInputModel.getCard_number());
+            httppost.addHeader(HeaderConstants.CARD_TYPE, this.registerUserPaymentInputModel.getCard_type());
+            httppost.addHeader(HeaderConstants.COUNTRY, this.registerUserPaymentInputModel.getCountry());
+            httppost.addHeader(HeaderConstants.CURRENCY_ID, this.registerUserPaymentInputModel.getCurrency_id());
+            httppost.addHeader(HeaderConstants.CVV, this.registerUserPaymentInputModel.getCvv());
+            httppost.addHeader(HeaderConstants.EMAIL, this.registerUserPaymentInputModel.getEmail());
+            httppost.addHeader(HeaderConstants.EPISODE_ID, this.registerUserPaymentInputModel.getEpisode_id());
+            httppost.addHeader(HeaderConstants.EXP_MONTH, this.registerUserPaymentInputModel.getExp_month());
+            httppost.addHeader(HeaderConstants.EXP_YEAR, this.registerUserPaymentInputModel.getExp_year());
+            httppost.addHeader(HeaderConstants.SEASON_ID, this.registerUserPaymentInputModel.getSeason_id());
+            httppost.addHeader(HeaderConstants.PROFILE_ID, this.registerUserPaymentInputModel.getProfile_id());
+            httppost.addHeader(HeaderConstants.TOKEN, this.registerUserPaymentInputModel.getToken());
+            httppost.addHeader(HeaderConstants.COUPAN_CODE, this.registerUserPaymentInputModel.getCouponCode());
+            httppost.addHeader(HeaderConstants.IS_SAVE_THIS_CARD,this.registerUserPaymentInputModel.getIs_save_this_card());
+            httppost.addHeader(HeaderConstants.IS_ADVANCE,this.registerUserPaymentInputModel.getIs_advance());
+            httppost.addHeader(HeaderConstants.MOVIE_ID,this.registerUserPaymentInputModel.getMovie_id());
 
 
             try {
@@ -123,13 +123,13 @@ public class GetPPVPaymentAsync extends AsyncTask<RegisterUserPaymentInputModel,
         super.onPreExecute();
         listener.onGetPPVPaymentPreExecuteStarted();
         code = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetPPVPaymentPostExecuteCompleted(registerUserPaymentOutputModel,code,responseStr);
             return;
         }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onGetPPVPaymentPostExecuteCompleted(registerUserPaymentOutputModel,code,responseStr);

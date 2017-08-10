@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.FeatureContentInputModel;
 import com.home.apisdk.apiModel.FeatureContentOutputModel;
 
@@ -63,9 +63,9 @@ public class GetFeatureContentAsynTask extends AsyncTask<FeatureContentInputMode
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetFeatureContentUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.featureContentInputModel.getAuthToken());
-            httppost.addHeader(CommonConstants.SECTION_ID, this.featureContentInputModel.getSection_id());
-            httppost.addHeader(CommonConstants.LANG_CODE,this.featureContentInputModel.getLang_code());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.featureContentInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.SECTION_ID, this.featureContentInputModel.getSection_id());
+            httppost.addHeader(HeaderConstants.LANG_CODE,this.featureContentInputModel.getLang_code());
 
             Log.v("MuviSDK","authToken = "+ this.featureContentInputModel.getAuthToken());
             Log.v("MuviSDK","section_id = "+ this.featureContentInputModel.getSection_id());
@@ -167,14 +167,14 @@ public class GetFeatureContentAsynTask extends AsyncTask<FeatureContentInputMode
         listener.onGetFeatureContentPreExecuteStarted();
         responseStr = "0";
         status = 0;
-            if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+            if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
                 message = "Packge Name Not Matched";
                 listener.onGetFeatureContentPostExecuteCompleted(featureContentOutputModel,status,message);
                 return;
             }
-            if(CommonConstants.hashKey.equals(""))
+            if(HeaderConstants.hashKey.equals(""))
             {
                 this.cancel(true);
                 message = "Hash Key Is Not Available. Please Initialize The SDK";

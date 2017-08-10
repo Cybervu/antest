@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.SocialAuthInputModel;
 import com.home.apisdk.apiModel.SocialAuthOutputModel;
 
@@ -61,12 +61,12 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getSocialauthUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.socialAuthInputModel.getAuthToken());
-            httppost.addHeader(CommonConstants.EMAIL, this.socialAuthInputModel.getEmail());
-            httppost.addHeader(CommonConstants.PASSWORD, this.socialAuthInputModel.getPassword());
-            httppost.addHeader(CommonConstants.NAME, this.socialAuthInputModel.getName());
-            httppost.addHeader(CommonConstants.FB_USER_ID, this.socialAuthInputModel.getFb_userid());
-            httppost.addHeader(CommonConstants.LANG_CODE,this.socialAuthInputModel.getLanguage());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.socialAuthInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.EMAIL, this.socialAuthInputModel.getEmail());
+            httppost.addHeader(HeaderConstants.PASSWORD, this.socialAuthInputModel.getPassword());
+            httppost.addHeader(HeaderConstants.NAME, this.socialAuthInputModel.getName());
+            httppost.addHeader(HeaderConstants.FB_USER_ID, this.socialAuthInputModel.getFb_userid());
+            httppost.addHeader(HeaderConstants.LANG_CODE,this.socialAuthInputModel.getLanguage());
 
 
             // Execute HTTP Post Request
@@ -188,14 +188,14 @@ public class SocialAuthAsynTask extends AsyncTask<SocialAuthInputModel, Void, Vo
         listener.onSocialAuthPreExecuteStarted();
 
         status = 0;
-        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onSocialAuthPostExecuteCompleted(socialAuthOutputModel, status, message);
             return;
         }
-        if(CommonConstants.hashKey.equals(""))
+        if(HeaderConstants.hashKey.equals(""))
         {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";

@@ -1,4 +1,4 @@
-package com.home.vod.activity;
+package com.home.vod.fragment;
 
 
 import android.content.Context;
@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.home.apisdk.apiController.AboutUsAsync;
 import com.home.apisdk.apiModel.AboutUsInput;
 import com.home.vod.R;
+import com.home.vod.activity.MainActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
 

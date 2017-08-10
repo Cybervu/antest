@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.LoadRegisteredDevicesInput;
 import com.home.apisdk.apiModel.LoadRegisteredDevicesOutput;
 
@@ -74,10 +74,10 @@ public class LoadRegisteredDevicesAsync extends AsyncTask<LoadRegisteredDevicesI
                 conn.setDoOutput(true);
 
                 Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter(CommonConstants.AUTH_TOKEN, this.loadRegisteredDevicesInput.getAuthToken())
-                        .appendQueryParameter(CommonConstants.USER_ID, this.loadRegisteredDevicesInput.getUser_id())
-                        .appendQueryParameter(CommonConstants.DEVICE, this.loadRegisteredDevicesInput.getDevice())
-                        .appendQueryParameter(CommonConstants.LANG_CODE, this.loadRegisteredDevicesInput.getLang_code());
+                        .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.loadRegisteredDevicesInput.getAuthToken())
+                        .appendQueryParameter(HeaderConstants.USER_ID, this.loadRegisteredDevicesInput.getUser_id())
+                        .appendQueryParameter(HeaderConstants.DEVICE, this.loadRegisteredDevicesInput.getDevice())
+                        .appendQueryParameter(HeaderConstants.LANG_CODE, this.loadRegisteredDevicesInput.getLang_code());
                 String query = builder.build().getEncodedQuery();
 
 
@@ -171,13 +171,13 @@ public class LoadRegisteredDevicesAsync extends AsyncTask<LoadRegisteredDevicesI
         super.onPreExecute();
         listener.onLoadRegisteredDevicesPreExecuteStarted();
         status = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onLoadRegisteredDevicesPostExecuteCompleted(loadRegisteredDevicesOutputArrayList,status,responseStr);
             return;
         }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onLoadRegisteredDevicesPostExecuteCompleted(loadRegisteredDevicesOutputArrayList,status,responseStr);

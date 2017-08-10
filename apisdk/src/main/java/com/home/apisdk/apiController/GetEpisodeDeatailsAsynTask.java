@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.Episode_Details_input;
 import com.home.apisdk.apiModel.Episode_Details_output;
 
@@ -60,13 +60,13 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
             HttpClient httpclient=new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetEpisodeDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.episode_details_input.getAuthtoken());
-            httppost.addHeader(CommonConstants.PERMALINK, this.episode_details_input.getPermalink());
-            httppost.addHeader(CommonConstants.LIMIT,this.episode_details_input.getLimit());
-            httppost.addHeader(CommonConstants.OFFSET,this.episode_details_input.getOffset());
-            httppost.addHeader(CommonConstants.COUNTRY,this.episode_details_input.getCountry());
-            httppost.addHeader(CommonConstants.SERIES_NUMBER,this.episode_details_input.getSeries_number());
-            httppost.addHeader(CommonConstants.LANG_CODE,this.episode_details_input.getLang_code());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.episode_details_input.getAuthtoken());
+            httppost.addHeader(HeaderConstants.PERMALINK, this.episode_details_input.getPermalink());
+            httppost.addHeader(HeaderConstants.LIMIT,this.episode_details_input.getLimit());
+            httppost.addHeader(HeaderConstants.OFFSET,this.episode_details_input.getOffset());
+            httppost.addHeader(HeaderConstants.COUNTRY,this.episode_details_input.getCountry());
+            httppost.addHeader(HeaderConstants.SERIES_NUMBER,this.episode_details_input.getSeries_number());
+            httppost.addHeader(HeaderConstants.LANG_CODE,this.episode_details_input.getLang_code());
 
             // Execute HTTP Post Request
             try {
@@ -169,14 +169,14 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
         super.onPreExecute();
         listener.onGetEpisodeDetailsPreExecuteStarted();
         status = 0;
-        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetEpisodeDetailsPostExecuteCompleted(episode_details_output, status, item_count, message);
             return;
         }
-        if(CommonConstants.hashKey.equals(""))
+        if(HeaderConstants.hashKey.equals(""))
         {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";

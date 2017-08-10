@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
 
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.DeleteFavInputModel;
 import com.home.apisdk.apiModel.DeleteFavOutputModel;
 
@@ -54,10 +54,10 @@ public class DeleteFavAsync extends  AsyncTask<DeleteFavInputModel,Void,Void>{
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(APIUrlConstant.getDeleteFavList());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader(CommonConstants.AUTH_TOKEN, this.deleteFavInputModel.getAuthTokenStr().trim());
-                httppost.addHeader(CommonConstants.MOVIE_UNIQ_ID, this.deleteFavInputModel.getMovieUniqueId());
-                httppost.addHeader(CommonConstants.CONTENT_TYPE, this.deleteFavInputModel.getIsEpisode());
-                httppost.addHeader(CommonConstants.USER_ID, this.deleteFavInputModel.getLoggedInStr());
+                httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.deleteFavInputModel.getAuthTokenStr().trim());
+                httppost.addHeader(HeaderConstants.MOVIE_UNIQ_ID, this.deleteFavInputModel.getMovieUniqueId());
+                httppost.addHeader(HeaderConstants.CONTENT_TYPE, this.deleteFavInputModel.getIsEpisode());
+                httppost.addHeader(HeaderConstants.USER_ID, this.deleteFavInputModel.getLoggedInStr());
 
                 try {
                     HttpResponse response = httpclient.execute(httppost);
