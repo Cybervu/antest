@@ -152,6 +152,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AV
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
@@ -171,6 +172,7 @@ import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATI
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
@@ -189,6 +191,12 @@ import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.muvi.player.utils.Util.ADD_A_REVIEW;
+import static com.muvi.player.utils.Util.DEFAULT_ADD_A_REVIEW;
+import static com.muvi.player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static com.muvi.player.utils.Util.DEFAULT_REVIEWS;
+import static com.muvi.player.utils.Util.HAS_FAVORITE;
+import static com.muvi.player.utils.Util.REVIEWS;
 
 public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsynctask.Logout,
         GetValidateUserAsynTask.GetValidateUser, VideoDetailsAsynctask.VideoDetails, GetLanguageListAsynTask.GetLanguageList,
@@ -235,7 +243,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
 
     String default_Language = "";
-    String Previous_Selected_Language = "";
     private boolean isThirdPartyTrailer = false;
     String Default_Language = "";
     String Previous_Selected_Language="";
@@ -248,7 +255,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
     boolean isExpanded = false;
 
-    TextView videoTitle, videoGenreTextView, videoDurationTextView,videoCensorRatingTextView,videoCensorRatingTextView1, videoReleaseDateTextView, videoCastCrewTitleTextView;
+    TextView videoTitle, videoGenreTextView, videoDurationTextView,videoCensorRatingTextView,videoCensorRatingTextView1,
+            videoReleaseDateTextView, videoCastCrewTitleTextView;
     String movieNameStr;
     String movieTypeStr = "";
     boolean castStr = false;
@@ -326,7 +334,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         /**FAVORITE*/
         if(Util.favorite_clicked == true){
             ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-            contentDetailsInput.setAuthToken(Util.authTokenStr);
+            contentDetailsInput.setAuthToken(authTokenStr);
             contentDetailsInput.setPermalink(permalinkStr);
 
             asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput,MovieDetailsActivity.this,MovieDetailsActivity.this);
@@ -392,7 +400,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             item3.setTitle(languagePreference.getTextofLanguage( LOGOUT, DEFAULT_LOGOUT));
             item3.setVisible(true);
 
-            if ((Util.getTextofLanguage(MovieDetailsActivity.this, Util.HAS_FAVORITE, Util.DEFAULT_HAS_FAVORITE)
+            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE)
                     .trim()).equals("1")) {
                 item7.setVisible(true);
             }else{
@@ -429,7 +437,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             item3.setVisible(false);
 
             item7 = menu.findItem(R.id.menu_item_favorite);
-            item7.setTitle(Util.getTextofLanguage(this,Util.MY_FAVOURITE,Util.DEFAULT_MY_FAVOURITE));
+            item7.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE));
             item7.setVisible(false);
 
 
@@ -630,11 +638,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 status = 0;
             }
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this);
-            dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-            dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -654,11 +662,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 status = 0;
             }
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this);
-            dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-            dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -685,13 +693,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 if (message != null && message.equalsIgnoreCase("")) {
                     dlgAlert.setMessage(message);
                 } else {
-                    dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, Util.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
 
                 }
-                dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -713,9 +721,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     }
 
                     if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
-                        if (Util.checkNetwork(MovieDetailsActivity.this) == true) {
+                        if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
                             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                            getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                            getVideoDetailsInput.setAuthToken(authTokenStr);
                             getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                             getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                             getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -723,7 +731,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                             asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
-                            Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
                     } else {
 
@@ -754,11 +762,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             } else if (Util.dataModel.getIsConverted() == 0) {
                 Util.showNoDataAlert(MovieDetailsActivity.this);
                /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this);
-                dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -766,9 +774,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         });
                 dlgAlert.create().show();*/
             } else {
-                if (Util.checkNetwork(MovieDetailsActivity.this) == true) {
+                if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                    getVideoDetailsInput.setAuthToken(authTokenStr);
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -776,7 +784,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                 } else {
-                    Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -828,7 +836,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     playerModel.setThirdPartyPlayer(false);
                 } else {
                     //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
-                    playerModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
 
                 }
             } else {
@@ -838,7 +846,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 } else {
                     //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
-                    playerModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
 
                 }
             }
@@ -875,11 +883,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 Util.showNoDataAlert(MovieDetailsActivity.this);
 
                 /*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -893,7 +901,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
-                    playerModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
                 }
 
 
@@ -989,15 +997,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         } else {
 
-            playerModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+            playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
             //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
             Util.showNoDataAlert(MovieDetailsActivity.this);
            /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-            dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -1054,7 +1062,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         noDataLayout.setVisibility(View.GONE);
         if (contentDetailsOutput.getIsApv() == 1) {
             playButton.setVisibility(View.INVISIBLE);
-            preorderButton.setText(Util.getTextofLanguage(MovieDetailsActivity.this, Util.ADVANCE_PURCHASE, Util.DEFAULT_ADVANCE_PURCHASE));
+            preorderButton.setText(languagePreference.getTextofLanguage(ADVANCE_PURCHASE, DEFAULT_ADVANCE_PURCHASE));
             preorderButton.setVisibility(View.VISIBLE);
         } else if (contentDetailsOutput.getIsApv() == 0 && contentDetailsOutput.getIsPpv() == 0 && contentDetailsOutput.getIsConverted() == 0) {
             if (contentDetailsOutput.getContentTypesId().equals(4)) {
@@ -1078,15 +1086,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         videoTitle.setTypeface(castDescriptionTypeface);
         videoTitle.setText(contentDetailsOutput.getName());
 
-        if (contentDetailsOutput.getTrailerUrl().matches("") || contentDetailsOutput.getTrailerUrl().matches(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+        if (contentDetailsOutput.getTrailerUrl().matches("") || contentDetailsOutput.getTrailerUrl().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
             watchTrailerButton.setVisibility(View.INVISIBLE);
         } else {
-            watchTrailerButton.setText(Util.getTextofLanguage(MovieDetailsActivity.this, Util.VIEW_TRAILER, Util.DEFAULT_VIEW_TRAILER));
+            watchTrailerButton.setText(languagePreference.getTextofLanguage(VIEW_TRAILER, DEFAULT_VIEW_TRAILER));
 
             watchTrailerButton.setVisibility(View.VISIBLE);
         }
 
-        if (contentDetailsOutput.getGenre() != null && contentDetailsOutput.getGenre().matches("") || contentDetailsOutput.getGenre().matches(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+        if (contentDetailsOutput.getGenre() != null && contentDetailsOutput.getGenre().matches("") || contentDetailsOutput.getGenre().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
             videoGenreTextView.setVisibility(View.GONE);
 
         } else {
@@ -1096,7 +1104,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             videoGenreTextView.setText(contentDetailsOutput.getGenre());
 
         }
-        if(contentDetailsOutput.getVideoDuration().matches("") || contentDetailsOutput.getVideoDuration().matches(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))){
+        if(contentDetailsOutput.getVideoDuration().matches("") || contentDetailsOutput.getVideoDuration().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))){
             videoDurationTextView.setVisibility(View.GONE);
 
         }else{
@@ -1108,7 +1116,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
 
 
-        if(contentDetailsOutput.getReleaseDate().matches("") || contentDetailsOutput.getReleaseDate().matches(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))){
+        if(contentDetailsOutput.getReleaseDate().matches("") || contentDetailsOutput.getReleaseDate().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))){
             videoReleaseDateTextView.setVisibility(View.GONE);
         }else{
             videoReleaseDateTextView.setVisibility(View.VISIBLE);
@@ -1119,7 +1127,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         }
 
-        if(contentDetailsOutput.getStory().matches("") || contentDetailsOutput.getStory().matches(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))){
+        if(contentDetailsOutput.getStory().matches("") || contentDetailsOutput.getStory().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))){
             videoStoryTextView.setVisibility(View.GONE);
 
         }else{
@@ -1130,7 +1138,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         }
 
-        if (contentDetailsOutput.getCensorRating().matches("") || contentDetailsOutput.getCensorRating().matches(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+        if (contentDetailsOutput.getCensorRating().matches("") || contentDetailsOutput.getCensorRating().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
             videoCensorRatingTextView.setVisibility(View.GONE);
             videoCensorRatingTextView1.setVisibility(View.GONE);
 
@@ -1159,15 +1167,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
 
        /* if (castValue == true){
-            videoCastCrewTitleTextView.setText(Util.getTextofLanguage(MovieDetailsActivity.this, Util.CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
+            videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
             Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
             videoCastCrewTitleTextView.setTypeface(videoGenreTextViewTypeface);
             videoCastCrewTitleTextView.setVisibility(View.VISIBLE);
         }
 */
-        if (contentDetailsOutput.getBanner().trim().matches(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+        if (contentDetailsOutput.getBanner().trim().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
 
-            if (contentDetailsOutput.getPoster().trim().matches(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+            if (contentDetailsOutput.getPoster().trim().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
 
                 moviePoster.setImageResource(R.drawable.logo);
             } else {
@@ -1234,21 +1242,21 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             if (pref != null) {
                 String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
                 if (loggedInStr == null) {
-                    viewRatingTextView.setText(Util.getTextofLanguage(MovieDetailsActivity.this, Util.ADD_A_REVIEW, Util.DEFAULT_ADD_A_REVIEW));
+                    viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, DEFAULT_ADD_A_REVIEW));
 
                 } else {
                     if (viewContentRatingOutputModel.getShowrating() == 1) {
-                        viewRatingTextView.setText(Util.getTextofLanguage(MovieDetailsActivity.this, Util.ADD_A_REVIEW, Util.DEFAULT_ADD_A_REVIEW));
+                        viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, DEFAULT_ADD_A_REVIEW));
 
                     } else {
                         viewRatingTextView.setText("reviews (" + reviews + ")");
-                        viewRatingTextView.setText(Util.getTextofLanguage(MovieDetailsActivity.this, Util.REVIEWS, Util.DEFAULT_REVIEWS) + " (" + reviews + ") ");
+                        viewRatingTextView.setText(languagePreference.getTextofLanguage(REVIEWS, DEFAULT_REVIEWS) + " (" + reviews + ") ");
 
                     }
 
                 }
             }else{
-                viewRatingTextView.setText(Util.getTextofLanguage(MovieDetailsActivity.this, Util.ADD_A_REVIEW, Util.DEFAULT_ADD_A_REVIEW));
+                viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, DEFAULT_ADD_A_REVIEW));
 
             }
         }
@@ -1259,7 +1267,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             Util.favorite_clicked = false;
             AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-            addToFavInputModel.setAuthToken(Util.authTokenStr);
+            addToFavInputModel.setAuthToken(authTokenStr);
             addToFavInputModel.setMovie_uniq_id(movieUniqueId);
             addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
             addToFavInputModel.setIsEpisodeStr(isEpisode);
@@ -1518,7 +1526,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         Log.v("goofy","Item deleted");
 
                         DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
-                        deleteFavInputModel.setAuthTokenStr(Util.authTokenStr);
+                        deleteFavInputModel.setAuthTokenStr(authTokenStr);
                         deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
                         deleteFavInputModel.setMovieUniqueId(movieUniqueId);
                         deleteFavInputModel.setIsEpisode(isEpisode);
@@ -1530,7 +1538,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     }else{
 
                         AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-                        addToFavInputModel.setAuthToken(Util.authTokenStr);
+                        addToFavInputModel.setAuthToken(authTokenStr);
                         addToFavInputModel.setMovie_uniq_id(movieUniqueId);
                         addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
                         addToFavInputModel.setIsEpisodeStr(isEpisode);
@@ -1740,8 +1748,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 Util.dataModel = dbModel;
 
                 if (isLogin == 1) {
-                    if (pref != null) {
-                        String loggedInStr = preferenceManager.getLoginStatusFromPref();
+                    if (preferenceManager.getLoginFeatureFromPref() == 1) {
+                        String loggedInStr = preferenceManager.getUseridFromPref();
 
                         if (loggedInStr == null) {
 
@@ -1756,8 +1764,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                             });
                             //showLoginDialog();
                         } else {
-                            if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
-                            String loggedinDateStr = pref.getString("date", null);
+                            //String loggedinDateStr = pref.getString("date", null);
+                            String loggedinDateStr = preferenceManager.getLoginDateFromPref();
                             if (loggedinDateStr != null) {
                                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                                 Date loggedInDate = null;
@@ -1769,9 +1777,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                 Date today = new Date();
                                 long differenceInDays = (int) Util.calculateDays(loggedInDate, today) + 1;
                                 if (differenceInDays >= 7) {
-                                    SharedPreferences.Editor editor = pref.edit();
-                                    editor.clear();
-                                    editor.commit();
+                           /* SharedPreferences.Editor editor = pref.edit();
+                            editor.clear();
+                            editor.commit();*/
 
                                     final Intent registerActivity = new Intent(MovieDetailsActivity.this, RegisterActivity.class);
                                     runOnUiThread(new Runnable() {
@@ -1785,10 +1793,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                     });
                                 } else {
 
-                                    if (Util.checkNetwork(MovieDetailsActivity.this) == true) {
+                                    if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
 
                                         ValidateUserInput validateUserInput = new ValidateUserInput();
-                                        validateUserInput.setAuthToken(Util.authTokenStr);
+                                        validateUserInput.setAuthToken(authTokenStr);
                                         if (preferenceManager != null) {
                                             loggedInIdStr = preferenceManager.getUseridFromPref();
                                         }
@@ -1797,11 +1805,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                         validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                                         validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
                                         validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                        validateUserInput.setLanguageCode(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                                        validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
                                         asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                                         asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                                     } else {
-                                        Util.showToast(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION));
+                                        Util.showToast(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
 
                                         // Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                                     }
@@ -1826,9 +1834,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                     }
                 } else {
-                        if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
+                    if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
                         // subhalaxmi
-
+                        Log.v("SUBHA","VV VV");
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                         getVideoDetailsInput.setAuthToken(authTokenStr);
                         getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
@@ -1839,13 +1847,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
                     } else {
-                            Util.showToast(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION));
+                        Util.showToast(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
+
+                        //Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
                 }
 
 
             }
         });
+
 
         watchTrailerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2028,16 +2039,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
 
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                contentDetailsInput.setAuthToken(Util.authTokenStr);
+                contentDetailsInput.setAuthToken(authTokenStr);
                 contentDetailsInput.setPermalink(permalinkStr);
 
                 asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput,MovieDetailsActivity.this,MovieDetailsActivity.this);
                 asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
 
             } else {
-                Util.showToast(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION));
+                Util.showToast(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
 
-                // Toast.makeText(getApplicationContext(), Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                // Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 finish();
             }
         }
@@ -2063,15 +2074,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
 
                             ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                            contentDetailsInput.setAuthToken(Util.authTokenStr);
+                            contentDetailsInput.setAuthToken(authTokenStr);
                             contentDetailsInput.setPermalink(permalinkStr);
 
                             asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput,MovieDetailsActivity.this,MovieDetailsActivity.this);
                             asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
                         } else {
-                            Util.showToast(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION));
+                            Util.showToast(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
 
-                            // Toast.makeText(getApplicationContext(), Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            // Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                             finish();
                         }
 
@@ -2128,7 +2139,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("user_id", loggedInIdStr.trim());
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("movie_id", Util.dataModel.getMovieUniqueId().trim());
                 httppost.addHeader("purchase_type", Util.dataModel.getPurchase_type());
                 httppost.addHeader("season_id", Util.dataModel.getSeason_id());
@@ -2142,7 +2153,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 }         *//*
 
-                httppost.addHeader("lang_code",Util.getTextofLanguage(MovieDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("lang_code",languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
                 // Execute HTTP Post Request
                 try {
@@ -2169,9 +2180,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                 pDialog = null;
                             }
                             status = 0;
-                            Util.showToast(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION));
+                            Util.showToast(MovieDetailsActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION));
 
-                            // Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            // Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 
                         }
 
@@ -2240,11 +2251,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     status = 0;
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -2264,11 +2275,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     status = 0;
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -2295,13 +2306,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     if (userMessage != null && !userMessage.equalsIgnoreCase("")) {
                         dlgAlert.setMessage(userMessage);
                     } else {
-                        dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, Util.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
+                        dlgAlert.setMessage(languagePreference.getTextofLanguage(CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, Util.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
 
                     }
-                    dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -2328,13 +2339,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         if (userMessage != null && !userMessage.equalsIgnoreCase("")) {
                             dlgAlert.setMessage(userMessage);
                         } else {
-                            dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, Util.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
+                            dlgAlert.setMessage(languagePreference.getTextofLanguage(CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, Util.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
 
                         }
-                        dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                        dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                         dlgAlert.setCancelable(false);
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
@@ -2360,7 +2371,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
                             if (Util.checkNetwork(MovieDetailsActivity.this) == true) {
                                 GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                                getVideoDetailsInput.setAuthToken(authTokenStr);
                                 getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -2368,7 +2379,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                 asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                             } else {
-                                Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                                Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                             }
                         } else {
 
@@ -2400,11 +2411,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     startActivity(intent);
                 } else if (Util.dataModel.getIsConverted() == 0) {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this);
-                    dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                    dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -2414,7 +2425,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 } else {
                     if (Util.checkNetwork(MovieDetailsActivity.this) == true) {
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                        getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                        getVideoDetailsInput.setAuthToken(authTokenStr);
                         getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                         getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -2422,7 +2433,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                     } else {
-                        Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -2444,15 +2455,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             try {
                 if (Util.currencyModel.getCurrencySymbol() == null) {
-                    Util.showToast(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this,Util.NO_DETAILS_AVAILABLE,Util.DEFAULT_NO_DETAILS_AVAILABLE));
+                    Util.showToast(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE,DEFAULT_NO_DETAILS_AVAILABLE));
 
-                    // Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
+                    // Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
 
                 }
             } catch (Exception e) {
-                Util.showToast(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this,Util.NO_DETAILS_AVAILABLE,Util.DEFAULT_NO_DETAILS_AVAILABLE));
+                Util.showToast(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE,DEFAULT_NO_DETAILS_AVAILABLE));
 
-                //  Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
+                //  Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
                 return;
 
             }
@@ -2510,12 +2521,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 HttpClient httpclient=new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.loadVideoUrl.trim());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("content_uniq_id", Util.dataModel.getMovieUniqueId().trim());
                 httppost.addHeader("stream_uniq_id", Util.dataModel.getStreamUniqueId().trim());
                 httppost.addHeader("internet_speed",MainActivity.internetSpeed.trim());
                 httppost.addHeader("user_id",pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
-                httppost.addHeader("lang_code",Util.getTextofLanguage(MovieDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("lang_code",languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
                 // Execute HTTP Post Request
@@ -2533,10 +2544,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                 pDialog = null;
                             }
                             responseStr = "0";
-                            Util.dataModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-                            Util.showToast(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION));
+                            Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
+                            Util.showToast(MovieDetailsActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION));
 
-                            //  Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            //  Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 
                         }
 
@@ -2548,7 +2559,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         pDialog = null;
                     }
                     responseStr = "0";
-                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
                     e.printStackTrace();
                 }
 
@@ -2569,7 +2580,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 if (statusCode >= 0) {
                     if (statusCode == 200) {
-                        if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                        if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA))) {
                             if ((myJson.has("studio_approved_url")) && myJson.getString("studio_approved_url").trim() != null && !myJson.getString("studio_approved_url").trim().isEmpty() && !myJson.getString("studio_approved_url").trim().equals("null") && !myJson.getString("studio_approved_url").trim().matches("")) {
                                 Util.dataModel.setVideoUrl(myJson.getString("studio_approved_url"));
                                 if ((myJson.has("licenseUrl")) && myJson.getString("licenseUrl").trim() != null && !myJson.getString("licenseUrl").trim().isEmpty() && !myJson.getString("licenseUrl").trim().equals("null") && !myJson.getString("licenseUrl").trim().matches("")) {
@@ -2579,7 +2590,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 //                                    Util.dataModel.setMpdVideoUrl(myJson.getString("videoUrl"));
 
                                 }else {
-//                                    Util.dataModel.setMpdVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                                    Util.dataModel.setMpdVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
                                 }
                             }
 
@@ -2592,7 +2603,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                     Util.dataModel.setVideoUrl(myJson.getString("videoUrl"));
 
                                 }else {
-                                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                                    Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
                                 }
                             }
 
@@ -2601,7 +2612,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                 Util.dataModel.setVideoUrl(myJson.getString("thirdparty_url"));
 
                             } else {
-                                Util.dataModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 
                             }
                         }
@@ -2647,12 +2658,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 else {
 
                     responseStr = "0";
-                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
                 }
             } catch (JSONException e1) {
 
                 responseStr = "0";
-                Util.dataModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
                 e1.printStackTrace();
             }
 
@@ -2660,7 +2671,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             {
 
                 responseStr = "0";
-                Util.dataModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 
                 e.printStackTrace();
 
@@ -2683,10 +2694,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(message);
-                dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -2701,7 +2712,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             //=====================End========================================//
             if (responseStr == null) {
                 responseStr = "0";
-                Util.dataModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
                 //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
             }
 
@@ -2712,17 +2723,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         pDialog = null;
                     }
                 } catch (IllegalArgumentException ex) {
-                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                    Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
                     // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
                 }
-                Util.dataModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
                 //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -2738,35 +2749,35 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                             pDialog = null;
                         }
                     } catch (IllegalArgumentException ex) {
-                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                        Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
                     }
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                    dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,Util.DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
                                 }
                             });
                     dlgAlert.create().show();
-                } else if (Util.dataModel.getVideoUrl().matches("") || Util.dataModel.getVideoUrl().equalsIgnoreCase(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                } else if (Util.dataModel.getVideoUrl().matches("") || Util.dataModel.getVideoUrl().equalsIgnoreCase(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA))) {
                     try {
                         if (pDialog != null && pDialog.isShowing()) {
                             pDialog.hide();
                             pDialog = null;
                         }
                     } catch (IllegalArgumentException ex) {
-                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                        Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
                     }
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                    dlgAlert.setTitle(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(MovieDetailsActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,Util.DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -2780,15 +2791,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                             pDialog = null;
                         }
                     } catch (IllegalArgumentException ex) {
-                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                        Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
                     }
 
-                    if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                    if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA))) {
 
 
 
                             if (Util.dataModel.getVideoUrl().contains("rtmp://") || Util.dataModel.getVideoUrl().contains("rtmp://")) {
-                                Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this, Util.VIDEO_ISSUE, Util.DEFAULT_VIDEO_ISSUE), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(VIDEO_ISSUE, Util.DEFAULT_VIDEO_ISSUE), Toast.LENGTH_SHORT).show();
                             } else {
                                 final Intent playVideoIntent;
 
@@ -2968,7 +2979,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 alert.dismiss();
 
                 LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-                languageListInputModel.setAuthToken(Util.authTokenStr);
+                languageListInputModel.setAuthToken(authTokenStr);
                 languageListInputModel.setLangCode(Default_Language);
 
                 if (!Previous_Selected_Language.equals(default_Language)) {
@@ -3057,7 +3068,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
 
 
                 // Execute HTTP Post Request
@@ -3073,9 +3084,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     try {
                         status = Integer.parseInt(json.optString("code"));
                         Default_Language = json.optString("default_lang");
-                        if(!Util.getTextofLanguage(MovieDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,"").equals(""))
+                        if(!languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,"").equals(""))
                         {
-                            Default_Language = Util.getTextofLanguage(MovieDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE);
+                            Default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE);
                         }
 
                     } catch (Exception e) {
@@ -3180,7 +3191,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr);
+                httppost.addHeader("authToken", authTokenStr);
                 httppost.addHeader("lang_code", Default_Language);
 
 
@@ -3379,11 +3390,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         // Language Implemented Here //
 
-        content_label.setText(" "+ Util.getTextofLanguage(MovieDetailsActivity.this,Util.PURCHASE,Util.DEFAULT_PURCHASE)+" :");
-        voucher_success.setText(" "+ Util.getTextofLanguage(MovieDetailsActivity.this,Util.VOUCHER_SUCCESS,Util.DEFAULT_VOUCHER_SUCCESS)+" ");
-        apply.setText(" "+ Util.getTextofLanguage(MovieDetailsActivity.this,Util.BUTTON_APPLY,Util.DEFAULT_BUTTON_APPLY)+" ");
-        watch_now.setText(" "+ Util.getTextofLanguage(MovieDetailsActivity.this,Util.WATCH_NOW,Util.DEFAULT_WATCH_NOW)+" ");
-        voucher_code.setHint(" "+ Util.getTextofLanguage(MovieDetailsActivity.this,Util.VOUCHER_CODE,Util.DEFAULT_VOUCHER_CODE)+" ");
+        content_label.setText(" "+ languagePreference.getTextofLanguage(PURCHASE,Util.DEFAULT_PURCHASE)+" :");
+        voucher_success.setText(" "+ languagePreference.getTextofLanguage(VOUCHER_SUCCESS,Util.DEFAULT_VOUCHER_SUCCESS)+" ");
+        apply.setText(" "+ languagePreference.getTextofLanguage(BUTTON_APPLY,Util.DEFAULT_BUTTON_APPLY)+" ");
+        watch_now.setText(" "+ languagePreference.getTextofLanguage(WATCH_NOW,Util.DEFAULT_WATCH_NOW)+" ");
+        voucher_code.setHint(" "+ languagePreference.getTextofLanguage(VOUCHER_CODE,Util.DEFAULT_VOUCHER_CODE)+" ");
 
 
 
@@ -3410,7 +3421,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(),Util.getTextofLanguage(MovieDetailsActivity.this,Util.VOUCHER_BLANK_MESSAGE,Util.DEFAULT_VOUCHER_BLANK_MESSAGE), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),languagePreference.getTextofLanguage(VOUCHER_BLANK_MESSAGE,Util.DEFAULT_VOUCHER_BLANK_MESSAGE), Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -3470,14 +3481,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 HttpClient httpclient=new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("user_id", loggedInIdStr.trim());
                 httppost.addHeader("movie_id", movieUniqueId.trim());
                 httppost.addHeader("stream_id",movieStreamUniqueId);
                 // httppost.addHeader("season", Util.dataModel.getSeason_id());  // This is optional,so don't need to send here
                 httppost.addHeader("voucher_code", VoucherCode);
                 httppost.addHeader("purchase_type","show");
-                httppost.addHeader("lang_code",Util.getTextofLanguage(MovieDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("lang_code",languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
               *//*  String urlRouteList = "http://www.idogic.com/rest/ValidateVoucher";
@@ -3511,7 +3522,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                 progressDialog1 = null;
                             }
                             status = 0;
-                            Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -3608,7 +3619,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 HttpClient httpclient=new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("user_id", loggedInIdStr.trim());
                 httppost.addHeader("movie_id", movieUniqueId.trim());
                 httppost.addHeader("stream_id", Util.dataModel.getStreamUniqueId());
@@ -3616,7 +3627,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 httppost.addHeader("voucher_code", VoucherCode);
                 httppost.addHeader("purchase_type","show");
                 httppost.addHeader("is_preorder",""+Util.dataModel.getIsAPV());
-                httppost.addHeader("lang_code",Util.getTextofLanguage(MovieDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("lang_code",languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
         *//*        String urlRouteList = "http://www.idogic.com/rest/VoucherSubscription";
@@ -3651,7 +3662,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                 progressDialog1 = null;
                             }
                             status = 0;
-                            Toast.makeText(MovieDetailsActivity.this, Util.getTextofLanguage(MovieDetailsActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -3708,7 +3719,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 apply.setTextColor(Color.parseColor("#7f7f7f"));*//*
 
                 GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                getVideoDetailsInput.setAuthToken(authTokenStr);
                 getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -3767,7 +3778,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("movie_uniq_id", movieUniqueId);
                 httppost.addHeader("content_type", isEpisode);
                 httppost.addHeader("user_id", loggedInStr);
@@ -3863,7 +3874,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("movie_uniq_id", movieUniqueId);
                 httppost.addHeader("content_type", isEpisode);
                 httppost.addHeader("user_id", loggedInStr);
@@ -3962,16 +3973,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 //
         if(requestCode==30060)
         {
-            if (Util.checkNetwork(MovieDetailsActivity.this)) {
+            if (NetworkStatus.getInstance().isConnected(this)) {
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                contentDetailsInput.setAuthToken(Util.authTokenStr);
+                contentDetailsInput.setAuthToken(authTokenStr);
                 contentDetailsInput.setPermalink(permalinkStr);
 
                 asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput,MovieDetailsActivity.this,MovieDetailsActivity.this);
                 asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
 
             } else {
-                Toast.makeText(getApplicationContext(), Util.getTextofLanguage(MovieDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 finish();
             }
 
@@ -3996,7 +4007,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     {
 
         ViewContentRatingInputModel viewContentRatingInputModel = new ViewContentRatingInputModel();
-        viewContentRatingInputModel.setAuthToken(Util.authTokenStr);
+        viewContentRatingInputModel.setAuthToken(authTokenStr);
         viewContentRatingInputModel.setUser_id(preferenceManager.getUseridFromPref());
         viewContentRatingInputModel.setContent_id(movieUniqueId.trim());
         viewContentRatingInputModel.setLang_code(preferenceManager.getLanguageListFromPref());
@@ -4020,14 +4031,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 HttpClient httpclient=new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.ViewContentRating.trim());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("content_id",movieIdStr.trim());
                 if (pref != null) {
                     loggedInStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
                     httppost.addHeader("user_id",loggedInStr);
 
                 }
-                httppost.addHeader("lang_code", Util.getTextofLanguage(MovieDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
                 // Execute HTTP Post Request
@@ -4100,21 +4111,21 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 if (pref != null) {
                     String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
                     if (loggedInStr == null) {
-                        viewRatingTextView.setText(Util.getTextofLanguage(MovieDetailsActivity.this, Util.ADD_A_REVIEW, Util.DEFAULT_ADD_A_REVIEW));
+                        viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, Util.DEFAULT_ADD_A_REVIEW));
 
                     } else {
                         if (ratingAddedByUser == 1) {
-                            viewRatingTextView.setText(Util.getTextofLanguage(MovieDetailsActivity.this, Util.ADD_A_REVIEW, Util.DEFAULT_ADD_A_REVIEW));
+                            viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, Util.DEFAULT_ADD_A_REVIEW));
 
                         } else {
                             viewRatingTextView.setText("reviews (" + reviews + ")");
-                            viewRatingTextView.setText(Util.getTextofLanguage(MovieDetailsActivity.this, Util.REVIEWS, Util.DEFAULT_REVIEWS) + " (" + reviews + ") ");
+                            viewRatingTextView.setText(languagePreference.getTextofLanguage(REVIEWS, Util.DEFAULT_REVIEWS) + " (" + reviews + ") ");
 
                         }
 
                     }
                 }else{
-                    viewRatingTextView.setText(Util.getTextofLanguage(MovieDetailsActivity.this, Util.ADD_A_REVIEW, Util.DEFAULT_ADD_A_REVIEW));
+                    viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, Util.DEFAULT_ADD_A_REVIEW));
 
                 }
             }
@@ -4125,7 +4136,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 Util.favorite_clicked = false;
                 AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-                addToFavInputModel.setAuthToken(Util.authTokenStr);
+                addToFavInputModel.setAuthToken(authTokenStr);
                 addToFavInputModel.setMovie_uniq_id(movieUniqueId);
                 addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
                 addToFavInputModel.setIsEpisodeStr(isEpisode);

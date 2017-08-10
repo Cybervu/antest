@@ -103,6 +103,7 @@ public class Util {
    public static boolean drawer_line_visibility = true;
    public static boolean itemclicked = false;
    public static String DEFAULT_IS_ONE_STEP_REGISTRATION = "0";
+    public static final String UpdateGoogleid = "UpdateGoogleid";
 
 
    public static PPVModel ppvModel = null;

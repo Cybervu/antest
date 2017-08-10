@@ -120,6 +120,8 @@ import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.muvi.player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static com.muvi.player.utils.Util.HAS_FAVORITE;
 
 public class ViewMoreActivity extends AppCompatActivity implements LogoutAsynctask.Logout, GetLanguageListAsynTask.GetLanguageList,
         GetTranslateLanguageAsync.GetTranslateLanguageInfoListner, GetFeatureContentAsynTask.GetFeatureContent {
@@ -1284,7 +1286,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 
             item2.setVisible(true);
 
-            if ((Util.getTextofLanguage(ViewMoreActivity.this, Util.HAS_FAVORITE, Util.DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
+            if ((languagePreference.getTextofLanguage(HAS_FAVORITE,DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
                 item7.setVisible(true);
             }else{
                 item7.setVisible(false);

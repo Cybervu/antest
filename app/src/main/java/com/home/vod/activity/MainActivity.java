@@ -111,6 +111,8 @@ import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
+import static com.muvi.player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static com.muvi.player.utils.Util.HAS_FAVORITE;
 
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,
@@ -426,7 +428,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             item1.setTitle(languagePreference.getTextofLanguage(PROFILE,DEFAULT_PROFILE));
             item1.setVisible(true);
 
-            if ((Util.getTextofLanguage(MainActivity.this, Util.HAS_FAVORITE, Util.DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
+            if ((languagePreference.getTextofLanguage(HAS_FAVORITE,DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
                 item7.setVisible(true);
             }else{
                 item7.setVisible(false);

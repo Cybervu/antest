@@ -152,6 +152,7 @@ public class LanguagePreference {
     public static final String TEXT_EMIAL = "TEXT_EMIAL";
     public static final String TEXT_PASSWORD = "TEXT_PASSWORD";
     public static final String MY_FAVOURITE = "MY_FAVOURITE";
+    public static final String DEFAULT_MY_FAVOURITE = "My Favourite";
     public static final String TRANSACTION_DETAILS_ORDER_ID = "TRANSACTION_DETAILS_ORDER_ID";
     public static final String PAY_BY_PAYPAL = "PAY_BY_PAYPAL";
     public static final String BTN_PAYNOW = "BTN_PAYNOW";

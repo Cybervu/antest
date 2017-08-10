@@ -10,6 +10,10 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.home.vod.R;
+import com.home.vod.preferences.LanguagePreference;
+
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 
 
 /**
@@ -25,16 +29,18 @@ public class ExpandableTextView extends android.support.v7.widget.AppCompatTextV
     private BufferType bufferType;
     private boolean trim = true;
     private int trimLength;
+    LanguagePreference languagePreference;
 
     public ExpandableTextView(Context context) {
         this(context, null);
+        languagePreference = LanguagePreference.getLanguagePreference(context);
 
     }
 
     public ExpandableTextView(final Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        ELLIPSIS = "  " + Util.getTextofLanguage(context, Util.VIEW_MORE, Util.DEFAULT_VIEW_MORE);
+        languagePreference = LanguagePreference.getLanguagePreference(context);
+        ELLIPSIS = "  " + languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ExpandableTextView);
         this.trimLength = typedArray.getInt(R.styleable.ExpandableTextView_trimLength, DEFAULT_TRIM_LENGTH);
         typedArray.recycle();

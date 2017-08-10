@@ -7,6 +7,8 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.home.vod.BuildConfig;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.Util;
 
@@ -23,6 +25,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import static com.home.vod.preferences.LanguagePreference.GOOGLE_FCM_TOKEN;
+import static com.home.vod.util.Constant.authTokenStr;
 
 
 /**
@@ -42,6 +47,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
+    LanguagePreference languagePreference;
 
     @Override
     public void onCreate() {
@@ -49,6 +55,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         loggedInStr = preferenceManager.getUseridFromPref();
+        languagePreference = LanguagePreference.getLanguagePreference(this);
 
         Log.e(TAG, "On create called="+loggedInStr);
         Log.e(TAG, "refreshedToken="+refreshedToken);
@@ -71,7 +78,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
         // Saving reg id to shared preferences
-        Util.setLanguageSharedPrefernce(MyFirebaseInstanceIDService.this, Util.GOOGLE_FCM_TOKEN, refreshedToken);
+        languagePreference.setLanguageSharedPrefernce(GOOGLE_FCM_TOKEN, refreshedToken);
         Log.e(TAG, "sendRegistrationToServer: " + refreshedToken);
 
         onCreate();
@@ -87,9 +94,9 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.UpdateGoogleid.trim());
+                HttpPost httppost = new HttpPost(BuildConfig.SERVICE_BASE_PATH.trim() + Util.UpdateGoogleid.trim());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("google_id", refreshedToken);
                 httppost.addHeader("device_id", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
                 httppost.addHeader("user_id", loggedInStr);

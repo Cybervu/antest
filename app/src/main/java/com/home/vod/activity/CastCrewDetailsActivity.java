@@ -30,6 +30,7 @@ import com.home.apisdk.apiModel.GetCastDetailsOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.FilmographyAdapter;
 import com.home.vod.model.GridItem;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -57,6 +58,21 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
+import static com.home.vod.util.Constant.authTokenStr;
+
 public class CastCrewDetailsActivity extends AppCompatActivity implements GetCastDetailsAsynTask.GetCastDetailsListener {
     ProgressBarHandler pDialog;
     Toolbar mActionBarToolbar;
@@ -83,12 +99,13 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
+    LanguagePreference languagePreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cast_crew_details);
-
+        languagePreference = LanguagePreference.getLanguagePreference(this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
@@ -125,7 +142,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
         Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
         btnmore.setTypeface(videoGenreTextViewTypeface);
 
-        btnmore.setText(Util.getTextofLanguage(CastCrewDetailsActivity.this, Util.VIEW_MORE, Util.DEFAULT_VIEW_MORE));
+        btnmore.setText(languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE));
 
         btnmore.setVisibility(View.GONE);
         btnmore.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +151,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
 
 
                 final Intent episode = new Intent(CastCrewDetailsActivity.this, ViewMoreActivity.class);
-                episode.putExtra(Util.PERMALINK_INTENT_KEY, castpermalinkStr);
+                episode.putExtra(PERMALINK_INTENT_KEY, castpermalinkStr);
                 episode.putExtra("cast", "fromcast");
                 episode.putExtra("sectionName", castNameTextView.getText().toString().trim());
 
@@ -159,13 +176,13 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                 String moviePermalink = item.getPermalink();
                 String movieTypeId = item.getVideoTypeId();
 
-                if (moviePermalink.matches(Util.getTextofLanguage(CastCrewDetailsActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA))) {
+                if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))) {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(CastCrewDetailsActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(CastCrewDetailsActivity.this,Util.NO_DETAILS_AVAILABLE,Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                    dlgAlert.setTitle(Util.getTextofLanguage(CastCrewDetailsActivity.this,Util.SORRY,Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(CastCrewDetailsActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE,DEFAULT_NO_DETAILS_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(CastCrewDetailsActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -177,7 +194,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
 
                     if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
                         final Intent movieDetailsIntent = new Intent(CastCrewDetailsActivity.this, MovieDetailsActivity.class);
-                        movieDetailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                        movieDetailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         runOnUiThread(new Runnable() {
                             public void run() {
@@ -189,7 +206,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3")) ) {
                         final Intent detailsIntent = new Intent(CastCrewDetailsActivity.this, ShowWithEpisodesActivity.class);
-                        detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -225,12 +242,12 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
     {
 
         GetCastDetailsInput getCastDetailsInput = new GetCastDetailsInput();
-        getCastDetailsInput.setAuthToken(Util.authTokenStr);
+        getCastDetailsInput.setAuthToken(authTokenStr);
         getCastDetailsInput.setLimit(String.valueOf(4));
         getCastDetailsInput.setOffset(String.valueOf(0));
         getCastDetailsInput.setPermalink(castpermalinkStr);
         getCastDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-        getCastDetailsInput.setLanguage(Util.getTextofLanguage(CastCrewDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        getCastDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
 
          GetCastDetailsAsynTask getCastDetailsAsynTask = new GetCastDetailsAsynTask(getCastDetailsInput, CastCrewDetailsActivity.this, CastCrewDetailsActivity.this);
          getCastDetailsAsynTask.executeOnExecutor(threadPoolExecutor);
@@ -252,7 +269,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
         if (totalItems > 4){
             btnmore.setVisibility(View.VISIBLE);
         }
-        if(getCastDetailsOutputModelArray.getCastImage().trim().matches(Util.getTextofLanguage(CastCrewDetailsActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA))){
+        if(getCastDetailsOutputModelArray.getCastImage().trim().matches(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){
             castImageView.setImageResource(R.drawable.logo);
         }else{
 
@@ -343,10 +360,10 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
 
         int status;
         String movieGenreStr = "";
-        String movieName = Util.getTextofLanguage(CastCrewDetailsActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA);
-        String movieImageStr = Util.getTextofLanguage(CastCrewDetailsActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA);
-        String moviePermalinkStr = Util.getTextofLanguage(CastCrewDetailsActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA);
-        String videoTypeIdStr = Util.getTextofLanguage(CastCrewDetailsActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA);
+        String movieName = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
+        String movieImageStr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
+        String moviePermalinkStr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
+        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
         String isEpisodeStr = "";
 
         int isAPV = 0;
@@ -376,7 +393,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                     httppost.addHeader("country", "IN");
 
                 }
-                httppost.addHeader("lang_code",Util.getTextofLanguage(CastCrewDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("lang_code",languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
                 // Execute HTTP Post Request
                 try {
@@ -425,7 +442,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                         castImageStr = myJson.getString("cast_image");
 
                     }else{
-                        castImageStr = Util.getTextofLanguage(CastCrewDetailsActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA);
+                        castImageStr = languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA);
                     }
 
 
@@ -515,7 +532,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
             if (itemsInServer > 4){
                 btnmore.setVisibility(View.VISIBLE);
             }
-            if(castImageStr.trim().matches(Util.getTextofLanguage(CastCrewDetailsActivity.this,Util.NO_DATA,Util.DEFAULT_NO_DATA))){
+            if(castImageStr.trim().matches(languagePreference.getTextofLanguage(NO_DATA,Util.DEFAULT_NO_DATA))){
                 castImageView.setImageResource(R.drawable.logo);
             }else{
 

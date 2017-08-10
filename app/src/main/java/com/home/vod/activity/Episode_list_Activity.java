@@ -176,6 +176,8 @@ import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.muvi.player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static com.muvi.player.utils.Util.HAS_FAVORITE;
 
 /**
  * Created by Muvi on 2/6/2017.
@@ -973,13 +975,13 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 //Call whatever you want
                 if (isNetwork) {
                     Episode_Details_input episodeDetailsInput = new Episode_Details_input();
-                    episodeDetailsInput.setAuthtoken(Util.authTokenStr);
+                    episodeDetailsInput.setAuthtoken(authTokenStr);
                     episodeDetailsInput.setPermalink(permalinkStr);
-                    episodeDetailsInput.setSeries_number(getIntent().getStringExtra(Util.SEASON_INTENT_KEY));
+                    episodeDetailsInput.setSeries_number(getIntent().getStringExtra(SEASON_INTENT_KEY));
                     episodeDetailsInput.setLimit(String.valueOf(limit));
                     episodeDetailsInput.setOffset(String.valueOf(offset));
                     episodeDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-                    episodeDetailsInput.setLang_code(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                    episodeDetailsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
                     asynEpisodeDetails = new GetEpisodeDeatailsAsynTask(episodeDetailsInput,Episode_list_Activity.this,Episode_list_Activity.this);
@@ -1027,13 +1029,13 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     if (NetworkStatus.getInstance().isConnected(Episode_list_Activity.this)) {
                         // default data
                         Episode_Details_input episodeDetailsInput = new Episode_Details_input();
-                        episodeDetailsInput.setAuthtoken(Util.authTokenStr);
+                        episodeDetailsInput.setAuthtoken(authTokenStr);
                         episodeDetailsInput.setPermalink(permalinkStr);
-                        episodeDetailsInput.setSeries_number(getIntent().getStringExtra(Util.SEASON_INTENT_KEY));
+                        episodeDetailsInput.setSeries_number(getIntent().getStringExtra(SEASON_INTENT_KEY));
                         episodeDetailsInput.setLimit(String.valueOf(limit));
                         episodeDetailsInput.setOffset(String.valueOf(offset));
                         episodeDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-                        episodeDetailsInput.setLang_code(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                        episodeDetailsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
                         asynEpisodeDetails = new GetEpisodeDeatailsAsynTask(episodeDetailsInput,Episode_list_Activity.this,Episode_list_Activity.this);
@@ -2275,7 +2277,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
             item1.setVisible(true);
 
-            if ((Util.getTextofLanguage(Episode_list_Activity.this, Util.HAS_FAVORITE, Util.DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
+            if ((languagePreference.getTextofLanguage(HAS_FAVORITE,DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
                 item7.setVisible(true);
             }else{
                 item7.setVisible(false);
@@ -2949,13 +2951,13 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         //Call whatever you want
                         if (NetworkStatus.getInstance().isConnected(Episode_list_Activity.this)) {
                             Episode_Details_input episodeDetailsInput = new Episode_Details_input();
-                            episodeDetailsInput.setAuthtoken(Util.authTokenStr);
+                            episodeDetailsInput.setAuthtoken(authTokenStr);
                             episodeDetailsInput.setPermalink(permalinkStr);
-                            episodeDetailsInput.setSeries_number(getIntent().getStringExtra(Util.SEASON_INTENT_KEY));
+                            episodeDetailsInput.setSeries_number(getIntent().getStringExtra(SEASON_INTENT_KEY));
                             episodeDetailsInput.setLimit(String.valueOf(limit));
                             episodeDetailsInput.setOffset(String.valueOf(offset));
                             episodeDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-                            episodeDetailsInput.setLang_code(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                            episodeDetailsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
                             asynEpisodeDetails = new GetEpisodeDeatailsAsynTask(episodeDetailsInput,Episode_list_Activity.this,Episode_list_Activity.this);

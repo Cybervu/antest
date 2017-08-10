@@ -174,6 +174,8 @@ import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.STORY_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
+import static com.muvi.player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static com.muvi.player.utils.Util.HAS_FAVORITE;
 
 public class ShowWithEpisodesActivity extends AppCompatActivity implements VideoDetailsAsynctask.VideoDetails, GetValidateUserAsynTask.GetValidateUser,
         LogoutAsynctask.Logout, GetLanguageListAsynTask.GetLanguageList, GetContentDetailsAsynTask.GetContentDetails ,GetTranslateLanguageAsync.GetTranslateLanguageInfoListner {
@@ -677,7 +679,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
             if (NetworkStatus.getInstance().isConnected(ShowWithEpisodesActivity.this)) {
 
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                contentDetailsInput.setAuthToken(Util.authTokenStr);
+                contentDetailsInput.setAuthToken(authTokenStr);
                 contentDetailsInput.setPermalink(permalinkStr);
 
                 asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput,ShowWithEpisodesActivity.this,ShowWithEpisodesActivity.this);
@@ -1304,15 +1306,15 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
         videoTitle.setTypeface(castDescriptionTypeface);
         videoTitle.setText(contentDetailsOutput.getName());
 
-        if (contentDetailsOutput.getTrailerUrl().matches("") || contentDetailsOutput.getTrailerUrl().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+        if (contentDetailsOutput.getTrailerUrl().matches("") || contentDetailsOutput.getTrailerUrl().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
             watchTrailerButton.setVisibility(View.INVISIBLE);
         } else {
-            watchTrailerButton.setText(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.VIEW_TRAILER, Util.DEFAULT_VIEW_TRAILER));
+            watchTrailerButton.setText(languagePreference.getTextofLanguage(VIEW_TRAILER, DEFAULT_VIEW_TRAILER));
 
             watchTrailerButton.setVisibility(View.VISIBLE);
         }
 
-        if (contentDetailsOutput.getGenre() != null && contentDetailsOutput.getGenre().matches("") || contentDetailsOutput.getGenre().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+        if (contentDetailsOutput.getGenre() != null && contentDetailsOutput.getGenre().matches("") || contentDetailsOutput.getGenre().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
             videoGenreTextView.setVisibility(View.GONE);
 
         } else {
@@ -1322,7 +1324,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
             videoGenreTextView.setText(contentDetailsOutput.getGenre());
 
         }
-        if(contentDetailsOutput.getVideoDuration().matches("") || contentDetailsOutput.getVideoDuration().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))){
+        if(contentDetailsOutput.getVideoDuration().matches("") ||
+                contentDetailsOutput.getVideoDuration().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))){
             videoDurationTextView.setVisibility(View.GONE);
 
         }else{
@@ -1334,7 +1337,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
         }
 
 
-        if(contentDetailsOutput.getReleaseDate().matches("") || contentDetailsOutput.getReleaseDate().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))){
+        if(contentDetailsOutput.getReleaseDate().matches("") || contentDetailsOutput.getReleaseDate().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))){
             videoReleaseDateTextView.setVisibility(View.GONE);
         }else{
             videoReleaseDateTextView.setVisibility(View.VISIBLE);
@@ -1345,7 +1348,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
 
         }
 
-        if(contentDetailsOutput.getStory().matches("") || contentDetailsOutput.getStory().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))){
+        if(contentDetailsOutput.getStory().matches("") || contentDetailsOutput.getStory().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))){
             videoStoryTextView.setVisibility(View.GONE);
 
         }else{
@@ -1356,7 +1359,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
 
         }
 
-        if (contentDetailsOutput.getCensorRating().matches("") || contentDetailsOutput.getCensorRating().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+        if (contentDetailsOutput.getCensorRating().matches("") || contentDetailsOutput.getCensorRating().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
             videoCensorRatingTextView.setVisibility(View.GONE);
             videoCensorRatingTextView1.setVisibility(View.GONE);
 
@@ -1391,9 +1394,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
             videoCastCrewTitleTextView.setVisibility(View.VISIBLE);
         }
 */
-        if (contentDetailsOutput.getBanner().trim().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+        if (contentDetailsOutput.getBanner().trim().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
 
-            if (contentDetailsOutput.getPoster().trim().matches(Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+            if (contentDetailsOutput.getPoster().trim().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
 
                 moviePoster.setImageResource(R.drawable.logo);
             } else {
@@ -2724,7 +2727,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
 //                HttpClient httpclient=new DefaultHttpClient();
 //                HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.loadVideoUrl.trim());
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("authToken", authTokenStr.trim());
 //                httppost.addHeader("content_uniq_id", Util.dataModel.getMovieUniqueId().trim());
 //                httppost.addHeader("stream_uniq_id", Util.dataModel.getStreamUniqueId().trim());
 //                httppost.addHeader("internet_speed", MainActivity.internetSpeed.trim());
@@ -3138,7 +3141,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
 //                HttpPost httppost = new HttpPost(urlRouteList);
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //                httppost.addHeader("user_id", loggedInIdStr.trim());
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("authToken", authTokenStr.trim());
 //                httppost.addHeader("movie_id", movieUniqueId.trim());
 //                httppost.addHeader("purchase_type", Util.dataModel.getPurchase_type());
 //                httppost.addHeader("season_id", Util.dataModel.getSeason_id());
@@ -3332,7 +3335,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
 //                        {
 //                            if (Util.checkNetwork(ShowWithEpisodesActivity.this) == true) {
 //                                GetVideoDetailsInput getVideoDetailsInput=new GetVideoDetailsInput();
-//                                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+//                                getVideoDetailsInput.setAuthToken(authTokenStr);
 //                                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
 //                                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
 //                                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -3398,7 +3401,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
 //                {
 //                    if (Util.checkNetwork(ShowWithEpisodesActivity.this) == true) {
 //                        GetVideoDetailsInput getVideoDetailsInput=new GetVideoDetailsInput();
-//                        getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+//                        getVideoDetailsInput.setAuthToken(authTokenStr);
 //                        getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
 //                        getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
 //                        getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -3763,7 +3766,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
             item1.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
             item1.setVisible(true);
 
-            if ((Util.getTextofLanguage(ShowWithEpisodesActivity.this, Util.HAS_FAVORITE, Util.DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
+            if ((languagePreference.getTextofLanguage(HAS_FAVORITE,DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
                 item7.setVisible(true);
             }else{
                 item7.setVisible(false);
@@ -3929,7 +3932,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
 //                HttpClient httpclient = new DefaultHttpClient();
 //                HttpPost httppost = new HttpPost(urlRouteList);
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("authToken", authTokenStr.trim());
 //                httppost.addHeader("login_history_id", loginHistoryIdStr);
 //                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
@@ -4253,7 +4256,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
 //                HttpClient httpclient = new DefaultHttpClient();
 //                HttpPost httppost = new HttpPost(urlRouteList);
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
+//                httppost.addHeader("authToken", authTokenStr.trim());
 //
 //
 //                // Execute HTTP Post Request
@@ -4399,7 +4402,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
 //                HttpClient httpclient = new DefaultHttpClient();
 //                HttpPost httppost = new HttpPost(urlRouteList);
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", Util.authTokenStr);
+//                httppost.addHeader("authToken", authTokenStr);
 //                httppost.addHeader("lang_code", default_Language);
 //
 //
@@ -5076,7 +5079,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements Video
                         if (NetworkStatus.getInstance().isConnected(ShowWithEpisodesActivity.this)) {
 
                             ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                            contentDetailsInput.setAuthToken(Util.authTokenStr);
+                            contentDetailsInput.setAuthToken(authTokenStr);
                             contentDetailsInput.setPermalink(permalinkStr);
 
                             asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput,ShowWithEpisodesActivity.this,ShowWithEpisodesActivity.this);

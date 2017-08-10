@@ -57,7 +57,7 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class DeviceListAdapter extends BaseAdapter {
+public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTask.RemoveDeviceListner{
     private Context mContext;
     ArrayList<String> deviceName = new ArrayList<>();
     ArrayList<String> deviceInfo = new ArrayList<>();
@@ -150,10 +150,10 @@ public class DeviceListAdapter extends BaseAdapter {
                         devie_id = deviceName.get(position);
 
                         RemoveDeviceInputModel removeDeviceInputModel = new RemoveDeviceInputModel();
-                        removeDeviceInputModel.setAuthToken(Util.authTokenStr);
+                        removeDeviceInputModel.setAuthToken(authTokenStr);
                         removeDeviceInputModel.setDevice(devie_id);
                         removeDeviceInputModel.setUser_id(preferenceManager.getUseridFromPref());
-                        removeDeviceInputModel.setLang_code(Util.getTextofLanguage(mContext,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                        removeDeviceInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
                         RemoveDeviceAsynTask asynGetPlanid = new RemoveDeviceAsynTask(removeDeviceInputModel, (RemoveDeviceAsynTask.RemoveDeviceListner) mContext, mContext);
                         asynGetPlanid.executeOnExecutor(threadPoolExecutor);
 
@@ -186,9 +186,9 @@ public class DeviceListAdapter extends BaseAdapter {
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(message);
             dlgAlert.setTitle(null);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -205,10 +205,10 @@ public class DeviceListAdapter extends BaseAdapter {
         {
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(message);
-            dlgAlert.setTitle(Util.getTextofLanguage(mContext, Util.SORRY, Util.DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();

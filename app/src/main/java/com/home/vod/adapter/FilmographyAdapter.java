@@ -14,14 +14,19 @@ import android.widget.TextView;
 
 import com.home.vod.R;
 import com.home.vod.model.GridItem;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+
 public class FilmographyAdapter extends RecyclerView.Adapter<FilmographyAdapter.MyViewHolder> {
     private Context context;
     private int layoutResourceId;
+    LanguagePreference languagePreference;
     private ArrayList<GridItem> data = new ArrayList<GridItem>();
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -40,6 +45,7 @@ public class FilmographyAdapter extends RecyclerView.Adapter<FilmographyAdapter.
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
+        languagePreference = LanguagePreference.getLanguagePreference(context);
     }
 
  /*   public FilmographyAdapter(List<Movie> moviesList) {
@@ -60,7 +66,7 @@ public class FilmographyAdapter extends RecyclerView.Adapter<FilmographyAdapter.
         String imageId = item.getImage();
         holder.videoImageview.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.movieImageView,holder.videoImageview.getDrawable().getIntrinsicWidth(),holder.videoImageview.getDrawable().getIntrinsicHeight()));
 
-        if(imageId.matches("") || imageId.matches(Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA))){
+        if(imageId.matches("") || imageId.matches(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){
             holder.videoImageview.setImageResource(R.drawable.logo);
 
         }else {
