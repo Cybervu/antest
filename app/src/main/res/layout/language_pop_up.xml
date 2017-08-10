@@ -18,49 +18,49 @@
             android:background="@color/languagePopupFadeColor"
             android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:layout_marginBottom="8dp"
-            android:layout_margin="20dp"
-            android:id="@+id/languagePopupTitle"
-            android:textColor="@color/textColor"
-            android:textSize="19dp"
-            android:textStyle="bold" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_marginTop="10dp">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/language_recycler_view"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="vertical" />
-        </LinearLayout>
+                android:layout_marginLeft="6dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="30dp"
+                android:id="@+id/languagePopupTitle"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/languagepop_text_size"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/apply_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:stateListAnimator="@null"
-            android:background="@drawable/button_radious"
-            android:gravity="center_horizontal|center"
-            android:textColor="@color/buttonTextColor"
-            android:textSize="16dp"
-            android:textStyle="bold" />
-    </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/language_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/apply_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/applybtn_height"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:stateListAnimator="@null"
+                android:background="@drawable/button_radious"
+                android:gravity="center_horizontal|center"
+                android:textColor="@color/buttonTextColor"
+                android:textSize="@dimen/applybtn_text_size"
+                android:textStyle="bold" />
+        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:background="@color/border_color" />
-        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

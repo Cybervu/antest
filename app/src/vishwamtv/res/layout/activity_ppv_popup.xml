@@ -15,14 +15,14 @@
             android:layout_width="match_parent"
             android:paddingLeft="10dp"
             android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/pageTitleColor"
-            android:text="Select Your Option"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            android:layout_marginLeft="6dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/pageTitleColor"
+                android:text="Select Your Option"
+                android:textSize="@dimen/selectopt_text_size"
+                android:textStyle="bold"
+                android:layout_marginLeft="6dp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Arrow Completeseason"
-                android:textSize="15dp"
+                android:textSize="@dimen/radiobtn_text_size"
                 android:button="@drawable/radiobutton_style"
                 android:textColor="#afafaf"
                 android:id="@+id/completeRadioButton"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/alreadyHaveALoginButtonTextColor"
                 android:text="$07.00"
-                android:textSize="15dp"
+                android:textSize="@dimen/radiobtn_text_size"
                 android:gravity="right"
                 android:id="@+id/completePriceTextView"
                 />
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Arrow Season3"
-                android:textSize="15dp"
+                android:textSize="@dimen/radiobtn_text_size"
                 android:button="@drawable/radiobutton_style"
                 android:textColor="#afafaf"
                 android:id="@+id/seasonRadioButton"
@@ -70,7 +70,7 @@
                 android:textColor="@color/alreadyHaveALoginButtonTextColor"
                 android:text="$05.00"
 
-                android:textSize="15dp"
+                android:textSize="@dimen/radiobtn_text_size"
                 android:gravity="right"
                 android:id="@+id/seasonPriceTextView"
                 android:paddingRight="30dp"/>
@@ -85,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Arrow  S03  E01"
-                android:textSize="15dp"
+                android:textSize="@dimen/radiobtn_text_size"
                 android:button="@drawable/radiobutton_style"
                 android:textColor="#afafaf"
                 android:id="@+id/episodeRadioButton"
@@ -95,18 +95,18 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/alreadyHaveALoginButtonTextColor"
                 android:text="$03.00"
-                android:textSize="15dp"
+                android:textSize="@dimen/radiobtn_text_size"
                 android:gravity="right"
                 android:id="@+id/episodePriceTextView"
 
                 android:paddingRight="30dp"/>
         </LinearLayout>
         <Button
-            android:layout_width="80dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/paybtn_width"
+            android:layout_height="@dimen/paybtn_height"
             android:background="@drawable/button_radious"
             android:text="Pay Now"
-            android:textSize="14dp"
+            android:textSize="@dimen/paybtn1_text_size"
             android:layout_marginBottom="20dp"
             android:stateListAnimator="@null"
             android:id="@+id/payNowButton"

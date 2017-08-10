@@ -68,6 +68,8 @@
  <color name="filterBgColor">#fff</color>
  <color name="alertPopupColor">#fff</color>
  <color name="contactFormTitle">#333</color>
+ <color name="btnmoretextcolor">#FFF</color>
 
 
+ <color name="spinnerbackground">#e2e1e1</color>
 </resources>

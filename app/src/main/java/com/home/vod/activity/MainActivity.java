@@ -397,6 +397,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
 
+        MenuItem item7 =  menu.findItem(R.id.menu_item_favorite);
 
         loggedInStr = preferenceManager.getLoginStatusFromPref();
         id = preferenceManager.getUseridFromPref();
@@ -424,6 +425,13 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             item1 = menu.findItem(R.id.menu_item_profile);
             item1.setTitle(languagePreference.getTextofLanguage(PROFILE,DEFAULT_PROFILE));
             item1.setVisible(true);
+
+            if ((Util.getTextofLanguage(MainActivity.this, Util.HAS_FAVORITE, Util.DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
+                item7.setVisible(true);
+            }else{
+                item7.setVisible(false);
+
+            }
 
             item2 = menu.findItem(R.id.action_purchage);
             item2.setTitle(languagePreference.getTextofLanguage( PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));

@@ -31,7 +31,7 @@
             android:id="@+id/noInternetTextView"
             android:layout_below="@+id/noInternetImageView"
             android:gravity="center"
-            android:textSize="36sp"/>
+            android:textSize="@dimen/testview_text_size"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -57,7 +57,7 @@
             android:id="@+id/geoBlockedTextView"
             android:layout_below="@+id/geoBlockedImageView"
             android:gravity="center"
-            android:textSize="36sp"/>
+            android:textSize="@dimen/testview_text_size"/>
     </RelativeLayout>
 
 </RelativeLayout>

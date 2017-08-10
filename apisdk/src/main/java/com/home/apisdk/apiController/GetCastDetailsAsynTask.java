@@ -35,7 +35,7 @@ public class GetCastDetailsAsynTask extends AsyncTask<GetCastDetailsInput, Void,
     public interface GetCastDetailsListener {
         void onGetCastDetailsPreExecuteStarted();
 
-        void onGetCastDetailsPostExecuteCompleted(GetCastDetailsOutputModel getCastDetailsOutputModelArray, int status, String message);
+        void onGetCastDetailsPostExecuteCompleted(GetCastDetailsOutputModel getCastDetailsOutputModelArray, int status, int totalItems,String message);
     }
    /* public class GetContentListAsync extends AsyncTask<Void, Void, Void> {*/
 
@@ -184,13 +184,13 @@ public class GetCastDetailsAsynTask extends AsyncTask<GetCastDetailsInput, Void,
         if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
-            listener.onGetCastDetailsPostExecuteCompleted(getCastDetailsOutputModel, status,  message);
+            listener.onGetCastDetailsPostExecuteCompleted(getCastDetailsOutputModel, status, totalItems, message);
             return;
         }
         if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
-            listener.onGetCastDetailsPostExecuteCompleted(getCastDetailsOutputModel, status,  message);
+            listener.onGetCastDetailsPostExecuteCompleted(getCastDetailsOutputModel, status, totalItems, message);
         }
 
     }
@@ -198,7 +198,7 @@ public class GetCastDetailsAsynTask extends AsyncTask<GetCastDetailsInput, Void,
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onGetCastDetailsPostExecuteCompleted(getCastDetailsOutputModel, status,  message);
+        listener.onGetCastDetailsPostExecuteCompleted(getCastDetailsOutputModel, status,totalItems,  message);
 
     }
 

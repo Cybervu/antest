@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/movieImageView"
-            android:layout_width="125dp"
-            android:layout_height="178dp"
+            android:layout_width="@dimen/videogrid_width"
+            android:layout_height="@dimen/videogrid_height"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
             android:src="@drawable/logo"
@@ -25,8 +25,8 @@
 
         <ImageView
             android:id="@+id/movieImageOverlay"
-            android:layout_width="125dp"
-            android:layout_height="178dp"
+            android:layout_width="@dimen/videogrid_width"
+            android:layout_height="@dimen/videogrid_height"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
@@ -55,9 +55,20 @@
             android:layout_marginBottom="6dp"
 
             android:textColor="@color/contentTitleColor"
-            android:textSize="16sp"
+            android:textSize="@dimen/itemtitle1_text_size"
             android:textStyle="normal" />
 
 
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/close_album_art"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:adjustViewBounds="true"
+        android:src="@drawable/close" />
 </RelativeLayout>

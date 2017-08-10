@@ -27,8 +27,8 @@
                 android:id="@+id/profileLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp">
+                android:paddingLeft="@dimen/layout_padding_left"
+                android:paddingRight="@dimen/layout_padding_right">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                         android:padding="17dp"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
-                        android:textSize="16dp" />
+                        android:textSize="@dimen/edit_text_size" />
 
                     <EditText
                         android:id="@+id/emailAddressEditText"
@@ -79,7 +79,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/editProfileNameEditText"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="13dp"
                         android:popupBackground="#ffffff"
                         android:spinnerMode="dropdown"
                         android:theme="@style/ThemeOverlay.AppCompat.Light" />
@@ -91,7 +91,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/languageSpinner"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="13dp"
 
                         android:popupBackground="#ffffff"
                         android:spinnerMode="dropdown"
@@ -124,35 +124,36 @@
                         android:padding="17dp"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
-                        android:textSize="16dp"
+                        android:textSize="@dimen/changepas_edittest"
                         android:visibility="gone" />
 
                     <Button
                         android:id="@+id/update_profile"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="@dimen/changepas_height"
                         android:layout_below="@+id/editNewPasswordStr"
                         android:layout_marginTop="12dp"
                         android:background="@drawable/button_radious"
                         android:textAllCaps="false"
                         android:stateListAnimator="@null"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="17dp"
+                        android:textSize="@dimen/login_text_size"
 
                         />
                     <Button
                         android:id="@+id/changePasswordButton"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="@dimen/changepas_height"
                         android:layout_below="@+id/editNewPasswordStr"
                         android:layout_marginTop="18dp"
                         android:background="@drawable/button_radious"
                         android:textAllCaps="false"
                         android:stateListAnimator="@null"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="17dp"
+                        android:textSize="@dimen/login_text_size"
 
                         />
+
                     <Button
                         android:id="@+id/manage_devices"
                         android:layout_width="match_parent"
@@ -166,8 +167,6 @@
                         android:textSize="17dp"
 
                         />
-
-
 
 
                 </LinearLayout>
@@ -213,7 +212,7 @@
                             android:visibility="visible"
                             android:padding="3dp"
                             android:scaleType="fitXY"
-                             />
+                            />
                     </RelativeLayout>
 
                     <TextView
@@ -225,7 +224,7 @@
                         android:layout_marginTop="10dp"
                         android:textAllCaps="false"
                         android:textColor="@color/textColor"
-                        android:textSize="30dp"
+                        android:textSize="@dimen/user_text_size"
                         android:textStyle="bold"
                         android:text=""/>
 

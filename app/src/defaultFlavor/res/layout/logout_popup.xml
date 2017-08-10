@@ -24,13 +24,13 @@
             <TextView
                 android:id="@+id/logout_text"
                 android:layout_width="wrap_content"
-                android:layout_height="110dp"
+                android:layout_height="@dimen/logouttext_height"
                 android:gravity="center"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="You have crossed your maximum login limit.Please logout all the devices ."
                 android:textColor="@color/pageTitleColor"
-                android:textSize="16dp"
+                android:textSize="@dimen/logout_text_size"
                 android:textStyle="normal" />
 
 
@@ -46,28 +46,28 @@
 
             <Button
                 android:id="@+id/ok"
-                android:layout_width="100dp"
-                android:layout_height="45dp"
+                android:layout_width="@dimen/okbtn_width"
+                android:layout_height="@dimen/okbtn_height"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/button_radious"
                 android:text="Ok"
                 android:textAllCaps="false"
                 android:textColor="@color/buttonTextColor"
-                android:textSize="16dp"
+                android:textSize="@dimen/okbtn_text_size"
                 android:textStyle="bold" />
 
             <Button
                 android:id="@+id/cancel"
-                android:layout_width="100dp"
-                android:layout_height="45dp"
+                android:layout_width="@dimen/okbtn_width"
+                android:layout_height="@dimen/okbtn_height"
                 android:layout_gravity="right"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/button_radious"
                 android:text="Cancel"
                 android:textAllCaps="false"
                 android:textColor="@color/buttonTextColor"
-                android:textSize="16dp" />
+                android:textSize="@dimen/okbtn_text_size" />
 
         </LinearLayout>
 

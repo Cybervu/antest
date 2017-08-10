@@ -8,6 +8,7 @@ import android.util.Log;
 import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.APVModel;
+import com.home.apisdk.apiModel.CastAndCrewModel;
 import com.home.apisdk.apiModel.ContentDetailsInput;
 import com.home.apisdk.apiModel.ContentDetailsOutput;
 import com.home.apisdk.apiModel.CurrencyModel;
@@ -19,6 +20,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -109,6 +111,13 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                         contentDetailsOutput.setGenre("");
 
                     }
+                    if ((mainJson.has("is_episode")) && mainJson.optString("is_episode").trim() != null && !mainJson.optString("is_episode").trim().isEmpty() && !mainJson.optString("is_episode").trim().equals("null") && !mainJson.optString("is_episode").trim().matches("")) {
+                        contentDetailsOutput.setIsEpisode(mainJson.optString("is_episode"));
+
+                    } else {
+                        contentDetailsOutput.setIsEpisode("0");
+
+                    }
                     if ((mainJson.has("censor_rating")) && mainJson.optString("censor_rating").trim() != null && !mainJson.optString("censor_rating").trim().isEmpty() && !mainJson.optString("censor_rating").trim().equals("null") && !mainJson.optString("censor_rating").trim().matches("")) {
                         contentDetailsOutput.setCensorRating(mainJson.optString("censor_rating"));
 
@@ -139,15 +148,15 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                     }
 
                     if ((mainJson.has("muvi_uniq_id")) && mainJson.optString("muvi_uniq_id").trim() != null && !mainJson.optString("muvi_uniq_id").trim().isEmpty() && !mainJson.optString("muvi_uniq_id").trim().equals("null") && !mainJson.optString("muvi_uniq_id").trim().matches("")) {
-                        contentDetailsOutput.setMuviUniqId(mainJson.optString("movie_stream_uniq_id"));
+                        contentDetailsOutput.setMuviUniqId(mainJson.optString("muvi_uniq_id"));
                     } else {
                         contentDetailsOutput.setMuviUniqId("");
 
                     }
                     if ((mainJson.has("video_duration")) && mainJson.optString("video_duration").trim() != null && !mainJson.optString("video_duration").trim().isEmpty() && !mainJson.optString("video_duration").trim().equals("null") && !mainJson.optString("video_duration").trim().matches("")) {
-                        contentDetailsOutput.setMuviUniqId(mainJson.optString("video_duration"));
+                        contentDetailsOutput.setVideoDuration(mainJson.optString("video_duration"));
                     } else {
-                        contentDetailsOutput.setMuviUniqId("");
+                        contentDetailsOutput.setVideoDuration("");
 
                     }
 
@@ -201,6 +210,11 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                         contentDetailsOutput.setIsApv(Integer.parseInt(mainJson.optString("is_advance")));
                     } else {
                         contentDetailsOutput.setIsApv(0);
+
+                    }
+
+                    if (mainJson.has("cast_detail") && mainJson.has("cast_detail")!= false && mainJson.getString("cast_detail").trim() != null && !mainJson.getString("cast_detail").trim().isEmpty() && !mainJson.getString("cast_detail").trim().equals("null") && !mainJson.getString("cast_detail").trim().equals("false")){
+                        contentDetailsOutput.setCastStr(true);
 
                     }
                     if (contentDetailsOutput.getIsPpv() == 1) {
@@ -280,36 +294,6 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                     }
 
 
-
-
-                       /* if (mainJson.has("cast_detail") && mainJson.has("cast_detail")!= false && mainJson.optString("cast_detail").trim() != null && !mainJson.optString("cast_detail").trim().isEmpty() && !mainJson.optString("cast_detail").trim().equals("null") && !mainJson.optString("cast_detail").trim().equals("false")){
-                            JSONArray castDetailArray = mainJson.getJSONArray("cast_detail");
-                            int lengthJsonArr = castDetailArray.length();
-                            for(int i=0; i < lengthJsonArr; i++) {
-                                JSONObject jsonChildNode;
-                                try {
-                                    jsonChildNode = castDetailArray.getJSONObject(i);
-                                    if (jsonChildNode.has("cast_type") && jsonChildNode.optString("cast_type").equalsIgnoreCase("actor")){
-                                        tempStr.append( jsonChildNode.optString("celeb_name")+"\n");
-                                        castStr = tempStr.toString();
-
-                                    }else  if (jsonChildNode.has("cast_type") && jsonChildNode.optString("cast_type").equalsIgnoreCase("director")){
-                                        crewtempStr.append( jsonChildNode.optString("celeb_name")+"\n");
-                                        crewStr = crewtempStr.toString();
-
-                                    }
-
-                                } catch (Exception e) {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                }
-                            }
-
-                        }else{
-                            castStr = "";
-                            crewStr = "";
-                        }
-*/
                 }
             } else {
 

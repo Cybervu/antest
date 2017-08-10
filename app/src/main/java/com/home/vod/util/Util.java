@@ -118,6 +118,7 @@ public class Util {
 
    public static String GOOGLE_FCM_TOKEN = "GOOGLE_FCM_TOKEN";
    public static String DEFAULT_GOOGLE_FCM_TOKEN = "0";
+    public static boolean favorite_clicked = false;
 
    public static int check_for_subscription = 0;
 
@@ -432,8 +433,8 @@ public class Util {
               });
       dlgAlert.create().show();
    }
-   
-   
+
+
    public static void printMD5Key(Context mContext){
 
       try {
@@ -460,7 +461,7 @@ public class Util {
     * @param default_Language
     * @throws JSONException
     */
-   
+
    public static void parseLanguage(LanguagePreference languagePreference, String jsonResponse,String default_Language) throws JSONException {
          JSONObject json = new JSONObject(jsonResponse);
 

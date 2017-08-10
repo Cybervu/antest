@@ -18,6 +18,9 @@ import android.widget.Toast;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.apiController.RemoveDeviceAsynTask;
+import com.home.apisdk.apiModel.RemoveDeviceInputModel;
+import com.home.apisdk.apiModel.RemoveDeviceOutputModel;
 import com.home.vod.R;
 import com.home.vod.activity.ManageDevices;
 import com.home.vod.network.NetworkStatus;
@@ -145,8 +148,17 @@ public class DeviceListAdapter extends BaseAdapter {
                     if((deviceFlag.get(position)).trim().equals("0"))
                     {
                         devie_id = deviceName.get(position);
-                        AsynDeleteDevices asynDeleteDevices = new AsynDeleteDevices();
-                        asynDeleteDevices.executeOnExecutor(threadPoolExecutor);
+
+                        RemoveDeviceInputModel removeDeviceInputModel = new RemoveDeviceInputModel();
+                        removeDeviceInputModel.setAuthToken(Util.authTokenStr);
+                        removeDeviceInputModel.setDevice(devie_id);
+                        removeDeviceInputModel.setUser_id(preferenceManager.getUseridFromPref());
+                        removeDeviceInputModel.setLang_code(Util.getTextofLanguage(mContext,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                        RemoveDeviceAsynTask asynGetPlanid = new RemoveDeviceAsynTask(removeDeviceInputModel, (RemoveDeviceAsynTask.RemoveDeviceListner) mContext, mContext);
+                        asynGetPlanid.executeOnExecutor(threadPoolExecutor);
+
+                      /*  AsynDeleteDevices asynDeleteDevices = new AsynDeleteDevices();
+                        asynDeleteDevices.executeOnExecutor(threadPoolExecutor);*/
                     }
 
                 }
@@ -159,127 +171,54 @@ public class DeviceListAdapter extends BaseAdapter {
         return view;
     }
 
-    private class AsynDeleteDevices extends AsyncTask<Void, Void, Void> {
-        ProgressBarHandler pDialog;
-        String responseStr="0";
-        int statusCode;
-        String message;
+    @Override
+    public void onRemoveDevicePreExecuteStarted() {
 
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(APIUrlConstant.getRemoveDevice());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", authTokenStr.trim());
-                httppost.addHeader("user_id",preferenceManager.getUseridFromPref());
-                httppost.addHeader("device",devie_id);
-                httppost.addHeader("lang_code",languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-
-                Log.v("BIBHU","devie_id="+devie_id);
-
-                // Execute HTTP Post Request
-                try {
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("BIBHU","responseStr of delete device ="+responseStr);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-                    message = myJson.optString("msg");
-                }
-
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-            }
-            if (responseStr != null) {
-                if (statusCode==200) {
-                    // Show Success Message
-
-                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(message);
-                    dlgAlert.setTitle(null);
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                    Intent intent = new Intent(mContext,ManageDevices.class);
-                                    ((Activity)mContext).startActivity(intent);
-                                    ((Activity)mContext).finish();
-                                }
-                            });
-                    dlgAlert.create().show();
-
-
-                }
-                else
-                {
-                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(message);
-                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-
-                                }
-                            });
-                    dlgAlert.create().show();
-                }
-            }
-            else{
-                // Show Try Again Msg and finish here.
-                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(message);
-                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
-                dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-
-                            }
-                        });
-                dlgAlert.create().show();
-            }
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-
-            pDialog = new ProgressBarHandler(mContext);
-            pDialog.show();
-        }
     }
+
+    @Override
+    public void onRemoveDevicePostExecuteCompleted(RemoveDeviceOutputModel removeDeviceOutputModel, int status, String message) {
+
+
+        if (status==200) {
+            // Show Success Message
+
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(message);
+            dlgAlert.setTitle(null);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            Intent intent = new Intent(mContext,ManageDevices.class);
+                            ((Activity)mContext).startActivity(intent);
+                            ((Activity)mContext).finish();
+                        }
+                    });
+            dlgAlert.create().show();
+
+
+        }
+        else
+        {
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(message);
+            dlgAlert.setTitle(Util.getTextofLanguage(mContext, Util.SORRY, Util.DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+
+                        }
+                    });
+            dlgAlert.create().show();
+        }
+
+    }
+
+
 }

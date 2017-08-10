@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.home.apisdk.apiController.AboutUsAsync;
 import com.home.apisdk.apiModel.AboutUsInput;
 import com.home.vod.R;
+import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
@@ -39,6 +40,7 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUs {
     Context context;
     ProgressBar progresBar;
     WebView webView;
+    ProgressBarHandler pDialog;
     AboutUsAsync asyncAboutUS;
     LanguagePreference languagePreference;
 
@@ -114,11 +116,22 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUs {
 
     @Override
     public void onAboutUsPreExecuteStarted() {
-
+        pDialog = new ProgressBarHandler(context);
+        pDialog.show();
     }
 
     @Override
     public void onAboutUsPostExecuteCompleted(String about) {
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        }catch (IllegalArgumentException ex) {
+
+        }
+
         progresBar.setVisibility(View.GONE);
         String bodyData = about;
 
