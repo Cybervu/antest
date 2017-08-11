@@ -4,8 +4,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+
 import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.CommonConstants;
+import com.home.apisdk.apiModel.ContentListInput;
+import com.home.apisdk.apiModel.ContentListOutput;
 import com.home.apisdk.apiModel.ViewFavouriteInputModel;
 import com.home.apisdk.apiModel.ViewFavouriteOutputModel;
 
@@ -51,7 +54,7 @@ public class ViewFavouriteAsynTask extends AsyncTask<ViewFavouriteInputModel, Vo
         this.viewFavouriteInputModel = viewFavouriteInputModel;
         PACKAGE_NAME = context.getPackageName();
         Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
-        Log.v("MUVISDK", "GetContentListAsynTask");
+        Log.v("MUVISDK", "view favorite data");
 
     }
 
@@ -64,14 +67,17 @@ public class ViewFavouriteAsynTask extends AsyncTask<ViewFavouriteInputModel, Vo
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader(CommonConstants.AUTH_TOKEN, this.viewFavouriteInputModel.getAuthToken());
+            httppost.addHeader(CommonConstants.USER_ID, this.viewFavouriteInputModel.getUser_id());
 
-            httppost.addHeader(CommonConstants.USER_ID,this.viewFavouriteInputModel.getUser_id());
-
+            Log.v("SUBHA", "AUTH_TOKEN" + CommonConstants.AUTH_TOKEN);
+            Log.v("SUBHA", "USER_ID" + CommonConstants.USER_ID);
+            Log.v("SUBHA", "authtoken" + this.viewFavouriteInputModel.getAuthToken());
+            Log.v("SUBHA", "user id" + this.viewFavouriteInputModel.getUser_id());
             // Execute HTTP Post Request
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("MUVISDK", "RES" + responseStr);
+                Log.v("SUBHA", "RES" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 status = 0;
@@ -108,24 +114,37 @@ public class ViewFavouriteAsynTask extends AsyncTask<ViewFavouriteInputModel, Vo
                             content.setMovieId(jsonChildNode.optString("movie_uniq_id"));
                         }
 
+                        Log.v("SUBHA","movieid " +jsonChildNode.optString("movie_uniq_id") );
+
+
+
                         if ((jsonChildNode.has("title")) && jsonChildNode.optString("title").trim() != null && !jsonChildNode.optString("title").trim().isEmpty() && !jsonChildNode.optString("title").trim().equals("null") && !jsonChildNode.optString("title").trim().matches("")) {
                             content.setTitle(jsonChildNode.optString("title"));
                         }
+                        Log.v("SUBHA","title " +jsonChildNode.optString("title") );
                         if ((jsonChildNode.has("poster")) && jsonChildNode.optString("poster").trim() != null && !jsonChildNode.optString("poster").trim().isEmpty() && !jsonChildNode.optString("poster").trim().equals("null") && !jsonChildNode.optString("poster").trim().matches("")) {
                             content.setPoster(jsonChildNode.optString("poster"));
 
                         }
+                        Log.v("SUBHA","poster " +jsonChildNode.optString("poster") );
                         if ((jsonChildNode.has("permalink")) && jsonChildNode.optString("permalink").trim() != null && !jsonChildNode.optString("permalink").trim().isEmpty() && !jsonChildNode.optString("permalink").trim().equals("null") && !jsonChildNode.optString("permalink").trim().matches("")) {
                             content.setPermalink(jsonChildNode.optString("permalink"));
                         }
+                        Log.v("SUBHA","permalink " +jsonChildNode.optString("permalink") );
                         if ((jsonChildNode.has("content_types_id")) && jsonChildNode.optString("content_types_id").trim() != null && !jsonChildNode.optString("content_types_id").trim().isEmpty() && !jsonChildNode.optString("content_types_id").trim().equals("null") && !jsonChildNode.optString("content_types_id").trim().matches("")) {
                             content.setContentTypesId(jsonChildNode.optString("content_types_id"));
 
                         }
+                        Log.v("SUBHA","content_types_id " +jsonChildNode.optString("content_types_id") );
+                        //videoTypeIdStr = "1";
+
+
                         if ((jsonChildNode.has("is_episode")) && jsonChildNode.optString("is_episode").trim() != null && !jsonChildNode.optString("is_episode").trim().isEmpty() && !jsonChildNode.optString("is_episode").trim().equals("null") && !jsonChildNode.optString("is_episode").trim().matches("")) {
                             content.setIsEpisodeStr(jsonChildNode.optString("is_episode"));
 
                         }
+
+                        Log.v("SUBHA","is_episode " +jsonChildNode.optString("is_episode") );
                         viewFavouriteOutputModel.add(content);
                     } catch (Exception e) {
                         status = 0;

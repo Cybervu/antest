@@ -421,8 +421,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                     boolean isNetwork = Util.checkNetwork(context);
                     if (isNetwork == true) {
                         // default data
-                        AsynLoadVideos asyncLoadVideos = new AsynLoadVideos();
-                        asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
+                        AsynLoadVideos asyncViewFavorite = new AsynLoadVideos();
+                        asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
                     }
 
                 }

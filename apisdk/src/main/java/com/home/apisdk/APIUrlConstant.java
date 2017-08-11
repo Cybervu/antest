@@ -53,7 +53,7 @@ public class APIUrlConstant {
     public static  String fbUserExistsUrl = "getFbUserStatus";
     public static  String AboutUs = "getStaticPagedetails";
 
-    public static  String ViewFavorite = "ViewFavouriteListener";
+    public static  String ViewFavorite = "ViewFavourite";
     public static  String AddtoFavlist = "AddtoFavlist";
     public static  String DeleteFavList = "DeleteFavList";
     public static  String GetMenusUrl = "GetMenus";
@@ -61,7 +61,7 @@ public class APIUrlConstant {
     public static  String GetCastDetails = "getCastDetail";
     public static final String ViewContentRating = "ViewContentRating";
     public static final String AddContentRating = "AddContentRating";
-    public static  String addSubscriptionUrl = "ppvpayment";
+    public static final String addSubscriptionUrl = "ppvpayment";
     public static final String ManageDevices = "ManageDevices";
     public static  String VALIDATE_COUPON_CODE_URL = "validateCouponCode";
     public static final String updateBufferLogUrl = "updateBufferLogs";

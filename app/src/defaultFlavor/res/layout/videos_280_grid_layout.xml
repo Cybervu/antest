@@ -62,6 +62,16 @@
             android:layout_alignBaseline="@+id/movieImageOverlay"/>
 
     </RelativeLayout>
+    <ImageView
+        android:id="@+id/close_album_art"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:adjustViewBounds="true"
+        android:src="@drawable/close" />
 
 </RelativeLayout>
 

@@ -185,7 +185,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
     private RelativeLayout noInternetLayout;
-    public static String internetSpeed;
+    public static String internetSpeed ="0";
     Fragment fragment = null;
     private ProgressBarHandler pDialog = null;
     String loggedInStr, loginHistoryIdStr, email, id;
@@ -349,7 +349,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         item.setVisible(false);
 
         MenuItem item7 =  menu.findItem(R.id.menu_item_favorite);
-
+        item7.setTitle(Util.getTextofLanguage(MainActivity.this,Util.MY_FAVOURITE,Util.DEFAULT_MY_FAVOURITE));
         loggedInStr = preferenceManager.getLoginStatusFromPref();
         id = preferenceManager.getUseridFromPref();
         email=preferenceManager.getEmailIdFromPref();
@@ -420,6 +420,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             item3= menu.findItem(R.id.action_logout);
             item3.setTitle(Util.getTextofLanguage(MainActivity.this,Util.LOGOUT,Util.DEFAULT_LOGOUT));
             item3.setVisible(false);
+
+            item7.setVisible(false);
         }
         return true;
     }
@@ -449,6 +451,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
                 Util.check_for_subscription = 0;
                 startActivity(registerIntent);
+                // Not implemented here
+                return false;
+            case R.id.menu_item_favorite:
+
+                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
+//                favoriteIntent.putExtra("EMAIL",email);
+//                favoriteIntent.putExtra("LOGID",id);
+                favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(favoriteIntent);
                 // Not implemented here
                 return false;
             case R.id.menu_item_language:

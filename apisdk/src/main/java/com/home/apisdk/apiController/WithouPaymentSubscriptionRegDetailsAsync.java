@@ -78,7 +78,7 @@ public class WithouPaymentSubscriptionRegDetailsAsync extends AsyncTask<WithouPa
                         .appendQueryParameter(CommonConstants.EMAIL, this.withouPaymentSubscriptionRegDetailsInput.getEmail())
                         .appendQueryParameter(CommonConstants.MOVIE_ID, this.withouPaymentSubscriptionRegDetailsInput.getMovie_id())
                         .appendQueryParameter(CommonConstants.USER_ID, this.withouPaymentSubscriptionRegDetailsInput.getUser_id())
-                        .appendQueryParameter(CommonConstants.COUPAN_CODE, this.withouPaymentSubscriptionRegDetailsInput.getCoupon_code())
+                        .appendQueryParameter(CommonConstants.COUPON_CODE_WITHOUT_PAYMENT, this.withouPaymentSubscriptionRegDetailsInput.getCoupon_code())
                         .appendQueryParameter(CommonConstants.CARD_TYPE, this.withouPaymentSubscriptionRegDetailsInput.getCard_type())
                         .appendQueryParameter(CommonConstants.CARD_LAST_FOUR_DIGIT, this.withouPaymentSubscriptionRegDetailsInput.getCard_last_fourdigit())
                         .appendQueryParameter(CommonConstants.PROFILE_ID, this.withouPaymentSubscriptionRegDetailsInput.getProfile_id())

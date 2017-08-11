@@ -73,6 +73,23 @@ public class Player implements Serializable{
     String Episode_id;
     int isFreeContent;
     String videoResolution;
+    String licenseUrl,mpdVideoUrl;
+
+    public String getMpdVideoUrl() {
+        return mpdVideoUrl;
+    }
+
+    public void setMpdVideoUrl(String mpdVideoUrl) {
+        this.mpdVideoUrl = mpdVideoUrl;
+    }
+
+    public String getLicenseUrl() {
+        return licenseUrl;
+    }
+
+    public void setLicenseUrl(String licenseUrl) {
+        this.licenseUrl = licenseUrl;
+    }
 
     public String getVideoResolution() {
         return videoResolution;

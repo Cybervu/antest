@@ -12,6 +12,23 @@ public class Get_Video_Details_Output {
     String videoUrl;
     String emed_url;
     ArrayList<String> SubTitleName = new ArrayList<>();
+    String studio_approved_url,licenseUrl;
+
+    public String getStudio_approved_url() {
+        return studio_approved_url;
+    }
+
+    public void setStudio_approved_url(String studio_approved_url) {
+        this.studio_approved_url = studio_approved_url;
+    }
+
+    public String getLicenseUrl() {
+        return licenseUrl;
+    }
+
+    public void setLicenseUrl(String licenseUrl) {
+        this.licenseUrl = licenseUrl;
+    }
 
     public ArrayList<String> getSubTitleName() {
         return SubTitleName;

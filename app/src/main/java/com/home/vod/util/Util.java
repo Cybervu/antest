@@ -56,7 +56,7 @@ public class Util {
     public static final String CENSOR_RATING_INTENT_KEY = "CENSORRATING";
     public static final String CAST_INTENT_KEY = "CAST";
     public static final String SEASON_INTENT_KEY = "SEASON";
-
+    public static final String VIDEO_TITLE_INTENT_KEY = "VIDEO_TITLE_INTENT_KEY";
 
  public static String LANGUAGE_SHARED_PRE = "VishwamLanguage";
 
@@ -161,7 +161,7 @@ public class Util {
 //   public static final String authTokenStr = "445882348316089103b8729dcb397c51"; //classic demo
 //   public static final String authTokenStr = "6c8387e47eefeafa57dd5386bc90454c"; //testsanchi
 //   public static final String authTokenStr = "a2478e71219f606cb5b7a3d3f7a35fe8"; //Cmax
-// public static final String authTokenStr = "25e74a5c88d19c4b57c8138bf47abdf7"; //MobPlay
+// public static final String authTokenStr = "6c8387e47eefeafa57dd5386bc90454c"; //sanchi
  public static final String authTokenStr = "4298851905443517c9f161e6b0471969"; //AAtto
 
     public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
@@ -292,6 +292,12 @@ public class Util {
 
    public static String HAS_FAVORITE = "HAS_FAVORITE";
    public static String DEFAULT_HAS_FAVORITE = "0";
+    public static String RATING = "RATING";
+   public static String DEFAULT_RATING = "0";
+
+
+    public static String IS_STREAMING_RESTRICTION = "IS_STREAMING_RESTRICTION";
+    public static String DEFAULT_IS_IS_STREAMING_RESTRICTION = "0";
 
     public static String IS_ONE_STEP_REGISTRATION = "IS_ONE_STEP_REGISTRATION";
     public static String DEFAULT_IS_ONE_STEP_REGISTRATION = "0";

@@ -103,6 +103,9 @@ public class IsRegistrationEnabledAsynTask extends AsyncTask<IsRegistrationEnabl
                 if ((myJson.has("has_favourite")) && myJson.optString("has_favourite").trim() != null && !myJson.optString("has_favourite").trim().isEmpty() && !myJson.optString("has_favourite").trim().equals("null") && !myJson.optString("has_favourite").trim().matches("")) {
                     isRegistrationEnabledOutputModel.setHas_favourite(Integer.parseInt(myJson.optString("has_favourite")));
                 }
+                if ((myJson.has("isRating")) && myJson.optString("isRating").trim() != null && !myJson.optString("isRating").trim().isEmpty() && !myJson.optString("isRating").trim().equals("null") && !myJson.optString("isRating").trim().matches("")) {
+                    isRegistrationEnabledOutputModel.setHas_favourite(Integer.parseInt(myJson.optString("isRating")));
+                }
 
                 if ((myJson.has("isRestrictDevice")) && myJson.optString("isRestrictDevice").trim() != null && !myJson.optString("isRestrictDevice").trim().isEmpty()
                         && !myJson.optString("isRestrictDevice").trim().equals("null") && !myJson.optString("isRestrictDevice").trim().matches("")) {

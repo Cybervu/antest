@@ -17,7 +17,8 @@
         android:layout_below="@+id/toolbar"
         android:clickable="true"
         android:gravity="center"
-        android:textSize="18dp"
+        android:textColor="@color/pageTitleColor"
+        android:textSize="@dimen/review_text_size"
         android:layout_marginTop="10dp"
         android:text="@string/addReview"/>
     <RelativeLayout
@@ -26,6 +27,7 @@
         android:layout_below="@+id/clickHereToLogin"
         android:orientation="vertical"
         android:visibility="gone"
+
         android:layout_marginTop="16dp"
         android:id="@+id/submitRatingLayout">
 
@@ -33,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/sectionTitle"
-            android:textSize="18dp"
+            android:textSize="@dimen/review_text_size"
             android:padding="6dp"
             android:text="Submit Your Rating"
             android:textStyle="bold"
@@ -68,12 +70,12 @@
             android:layout_below="@+id/ratingBar"
             android:textColor="@color/editTextColor"
             android:textColorHint="@color/hint_color"
-            android:textSize="16dp" />
+            android:textSize="@dimen/review_edittext_size" />
 
         <Button
             android:id="@+id/submitReviewButton"
-            android:layout_width="90dp"
-            android:layout_height="38dp"
+            android:layout_width="@dimen/review_btn_width"
+            android:layout_height="@dimen/review_btn_height"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:layout_below="@+id/reviewEditText"
@@ -82,14 +84,14 @@
             android:textAllCaps="false"
             android:text="Submit"
             android:textColor="@color/buttonTextColor"
-            android:textSize="14dp"
+            android:textSize="@dimen/review_btn_textsize"
 
 
             />
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/com_facebook_likeboxcountview_border_color"
+            android:layout_height="@dimen/border_line_height"
+            android:background="@color/pageTitleColor"
             android:layout_below="@+id/submitReviewButton"
             android:layout_margin="20dp"
             />
@@ -144,7 +146,7 @@
             android:singleLine="false"
             android:layout_centerInParent="true"
             android:textColor="@color/noInternetColor"
-            android:textSize="36sp"
+            android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
 
@@ -167,7 +169,7 @@
             android:singleLine="false"
             android:layout_centerInParent="true"
             android:textColor="@color/noInternetColor"
-            android:textSize="36sp"
+            android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
 

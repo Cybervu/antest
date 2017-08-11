@@ -51,7 +51,7 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
             holder = new ViewHolder();
             holder.title = (TextView) row.findViewById(R.id.movieTitle);
             holder.videoImageview = (ImageView) row.findViewById(R.id.movieImageView);
-           // holder.closeAlbumArt = (ImageView) row.findViewById(R.id.close_album_art);
+            holder.closeAlbumArt = (ImageView) row.findViewById(R.id.close_album_art);
 
 
 
@@ -98,9 +98,6 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
         Log.v("Nihar_feb",""+imageId);
 
 
-//        Glide.with(mActivity)
-//                .load("https://d1yjifjuhwl7lc.cloudfront.net/public/system/posters/67000/standard/ChitKwintShiThee_1491303251.jpg")
-//                .into(holder.videoImageview);
 
         holder.closeAlbumArt.setOnClickListener(new View.OnClickListener() {
             @Override

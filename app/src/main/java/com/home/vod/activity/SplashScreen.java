@@ -269,7 +269,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_RESTRICT_DEVICE, isRegistrationEnabledOutputModel.getIsRestrictDevice());
         Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_ONE_STEP_REGISTRATION, "" + isRegistrationEnabledOutputModel.getSignup_step());
         Util.setLanguageSharedPrefernce(SplashScreen.this, Util.IS_MYLIBRARY, "" + isRegistrationEnabledOutputModel.getIsMylibrary());
-
+        Util.setLanguageSharedPrefernce(SplashScreen.this,Util.HAS_FAVORITE,"" + isRegistrationEnabledOutputModel.getHas_favourite());
+        Util.setLanguageSharedPrefernce(SplashScreen.this,Util.RATING,"" + isRegistrationEnabledOutputModel.getRating());
 
         preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
 

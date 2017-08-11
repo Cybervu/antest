@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/toastMsg"
-        android:padding="10dp"
+        android:padding="@dimen/toastmsg_padding"
         android:textColor="#fcf6f6"
         android:textStyle="bold"
         android:background="#c6151616"

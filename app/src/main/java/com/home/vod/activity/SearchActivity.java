@@ -360,8 +360,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
 
 
-       /* AsynLoadVideos asyncLoadVideos = new AsynLoadVideos();
-        asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
+       /* AsynLoadVideos asyncViewFavorite = new AsynLoadVideos();
+        asyncViewFavorite.executeOnExecutor(threadPoolExecutor);*/
     /*    gridView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -398,8 +398,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
 
                         // searched data
-                        AsynLoadSearchVideos asyncLoadVideos = new AsynLoadSearchVideos();
-                        asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
+                        AsynLoadSearchVideos asyncViewFavorite = new AsynLoadSearchVideos();
+                        asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
 
                     }
                     //isLoading = true;
@@ -412,8 +412,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
     @Override
     public void onBackPressed() {
-     /*   if (asyncLoadVideos!=null){
-            asyncLoadVideos.cancel(true);
+     /*   if (asyncViewFavorite!=null){
+            asyncViewFavorite.cancel(true);
         }
         if (asynLoadVideoUrls!=null){
             asynLoadVideoUrls.cancel(true);

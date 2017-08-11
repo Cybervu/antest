@@ -18,6 +18,36 @@ public class PPVModel implements Serializable {
     private int isShow;
     private int isSeason;
     private int isEpisode;
+    String validity_recurrence;
+    String pricing_id;
+    String validity_period;
+
+
+
+    public void setPricing_id(String pricing_id) {
+        this.pricing_id = pricing_id;
+    }
+
+
+    public String getValidity_recurrence() {
+        return validity_recurrence;
+    }
+
+    public void setValidity_recurrence(String validity_recurrence) {
+        this.validity_recurrence = validity_recurrence;
+    }
+
+
+
+    public String getValidity_period() {
+        return validity_period;
+    }
+
+    public void setValidity_period(String validity_period) {
+        this.validity_period = validity_period;
+    }
+
+
 
     public String getPpvShowUnsubscribedStr() {
         return ppvShowUnsubscribedStr;

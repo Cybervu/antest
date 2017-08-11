@@ -89,7 +89,7 @@ public class EpisodesListModel {
     public EpisodesListModel(String episodeNumber, String episodeDescription, String episodeTelecastOn,
                              String episodeThumbnailImageView, String episodeTitle, String episodeVideoUrl,
                              String episodeSeriesNo, String episodeMuviUniqueId, String episodeStreamUniqueId,
-                             String thirdPartyUrl, int episodeContentTypesId, String episodeDuration) {
+                             String thirdPartyUrl, String episodeDuration) {
         this.episodeNumber = episodeNumber;
         this.episodeDescription = episodeDescription;
         this.episodeTelecastOn = episodeTelecastOn;

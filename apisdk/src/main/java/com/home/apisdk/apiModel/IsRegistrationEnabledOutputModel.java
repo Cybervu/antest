@@ -10,6 +10,17 @@ public class IsRegistrationEnabledOutputModel {
     int is_login =0;
     int signup_step =0;
     int has_favourite=0;
+    int rating=0;
+
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
 
     public String getIsRestrictDevice() {
         return isRestrictDevice;
