@@ -325,7 +325,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         playerModel.setMpdVideoUrl(get_video_details_output.getVideoUrl());
 
                     } else {
-                        playerModel.setMpdVideoUrl(Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                        playerModel.setMpdVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
                     }
                 } else {
                     if (get_video_details_output.getVideoUrl() != null || !get_video_details_output.getVideoUrl().matches("")) {
@@ -334,7 +334,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         playerModel.setThirdPartyPlayer(false);
                     } else {
                         //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
-                        playerModel.setVideoUrl(Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                        playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
 
                     }
                 }
@@ -1072,7 +1072,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
 
         mLayoutManager = new LinearLayoutManager(Episode_list_Activity.this, LinearLayoutManager.VERTICAL, false);
-        permalinkStr = getIntent().getStringExtra(Util.PERMALINK_INTENT_KEY);
+        permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
         Log.v("BKS", "permslink  najhjh == " + permalinkStr);
 
         footerView = (RelativeLayout) findViewById(R.id.loadingPanel);
@@ -1325,8 +1325,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         playerModel.setCensorRating(getIntent().getStringExtra(CENSOR_RATING_INTENT_KEY));
 
 
-        if (!getIntent().getStringExtra(Util.SEASON_INTENT_KEY).equals("")) {
-            dbModel.setSeason_id(getIntent().getStringExtra(Util.SEASON_INTENT_KEY));
+        if (!getIntent().getStringExtra(SEASON_INTENT_KEY).equals("")) {
+            dbModel.setSeason_id(getIntent().getStringExtra(SEASON_INTENT_KEY));
 
         } else {
             dbModel.setSeason_id("0");
@@ -1342,8 +1342,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         ResolutionFormat.clear();
 
 
-        String loggedInStr = preferenceManager.getLoginStatusFromPref();
-        if (isLogin == 1) {
+        //String loggedInStr = preferenceManager.getLoginStatusFromPref();
+        /*if (isLogin == 1) {
             if (preferenceManager.getUseridFromPref() != null) {
                 //String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
@@ -1402,12 +1402,12 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                                 validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                                 validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
                                 validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                validateUserInput.setLanguageCode(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                                validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                                 asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, Episode_list_Activity.this, Episode_list_Activity.this);
                                 asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 
                             } else {
-                                Util.showToast(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
+                                Util.showToast(Episode_list_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
 
                                 //  Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
                             }
@@ -1432,11 +1432,11 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 });
             }
         } else {
-            if (Util.checkNetwork(Episode_list_Activity.this) == true) {
+            if (NetworkStatus.getInstance().isConnected(this)) {
                 // subhalaxmi
 
                 GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
+                getVideoDetailsInput.setAuthToken(authTokenStr);
                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -1445,18 +1445,18 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
             } else {
-                Util.showToast(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
+                Util.showToast(Episode_list_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
 
                 //Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
             }
         }
 
-
+*/
 
 
 
         //comment by bishal
-  /*      if (isLogin == 1) {
+       if (isLogin == 1) {
 
                 String loggedInStr = preferenceManager.getUseridFromPref();
 
@@ -1508,7 +1508,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             } else {
                 Toast.makeText(Episode_list_Activity.this, languagePreference.getTextofLanguage( NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
             }
-        }*/
+        }
 
 
     }

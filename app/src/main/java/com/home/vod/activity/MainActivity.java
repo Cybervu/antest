@@ -85,6 +85,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
@@ -100,6 +101,7 @@ import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAG
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
@@ -400,7 +402,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         item.setVisible(false);
 
         MenuItem item7 =  menu.findItem(R.id.menu_item_favorite);
-        item7.setTitle(Util.getTextofLanguage(MainActivity.this,Util.MY_FAVOURITE,Util.DEFAULT_MY_FAVOURITE));
+        item7.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE));
         loggedInStr = preferenceManager.getLoginStatusFromPref();
         id = preferenceManager.getUseridFromPref();
         email=preferenceManager.getEmailIdFromPref();

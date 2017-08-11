@@ -354,8 +354,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
         //playerModel=new Player();
 
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
-        if ((Util.getTextofLanguage(RegisterActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
-languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.this);
+        languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.this);
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
             mActionBarToolbar.setNavigationIcon(null);
@@ -925,7 +924,7 @@ languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.t
                         playerModel.setMpdVideoUrl(get_video_details_output.getVideoUrl());
 
                     }else {
-                        playerModel.setMpdVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                        playerModel.setMpdVideoUrl(languagePreference .getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
                     }
                 }
 
@@ -936,7 +935,7 @@ languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.t
                         playerModel.setThirdPartyPlayer(false);
                     } else {
                         //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
-                        playerModel.setVideoUrl(Util.getTextofLanguage(RegisterActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                        playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
 
                     }
                 }

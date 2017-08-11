@@ -83,7 +83,7 @@
         <activity
             android:name="com.muvi.player.activity.SubtitleList"
             android:configChanges="screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <activity
             android:name="com.muvi.player.activity.ResolutionChangeActivity"
@@ -121,7 +121,7 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity android:name=".activity.PaymentInfoActivity" />
-        <activity android:name=".activity.PPvPaymentInfoActivity"></activity>
+        <activity android:name=".activity.PPvPaymentInfoActivity"/>
         <activity
             android:name=".activity.LoginActivity"
             android:label=""

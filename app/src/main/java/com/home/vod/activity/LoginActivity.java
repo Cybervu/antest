@@ -265,7 +265,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                                     }
                                 } else {
-                                    Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                                 }
 
                             } else {
@@ -591,7 +591,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         playerModel.setMpdVideoUrl(get_video_details_output.getVideoUrl());
 
                     }else {
-                        playerModel.setMpdVideoUrl(Util.getTextofLanguage(LoginActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                        playerModel.setMpdVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
                     }
                 }
 
@@ -602,7 +602,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         playerModel.setThirdPartyPlayer(false);
                     } else {
                         //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
-                        playerModel.setVideoUrl(Util.getTextofLanguage(LoginActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                        playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
 
                     }
                 }
@@ -2235,7 +2235,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                    pDialog = null;
 //                }
 //                responseStr = "0";
-//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(LoginActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //                e1.printStackTrace();
 //            }
 //
@@ -2246,7 +2246,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                    pDialog = null;
 //                }
 //                responseStr = "0";
-//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(LoginActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //
 //                e.printStackTrace();
 //

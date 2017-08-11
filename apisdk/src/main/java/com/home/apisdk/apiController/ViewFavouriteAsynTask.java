@@ -6,7 +6,6 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.ContentListInput;
 import com.home.apisdk.apiModel.ContentListOutput;
 import com.home.apisdk.HeaderConstants;
@@ -71,8 +70,8 @@ public class ViewFavouriteAsynTask extends AsyncTask<ViewFavouriteInputModel, Vo
 
             httppost.addHeader(HeaderConstants.USER_ID,this.viewFavouriteInputModel.getUser_id());
 
-            Log.v("SUBHA", "AUTH_TOKEN" + CommonConstants.AUTH_TOKEN);
-            Log.v("SUBHA", "USER_ID" + CommonConstants.USER_ID);
+            Log.v("SUBHA", "AUTH_TOKEN" + HeaderConstants.AUTH_TOKEN);
+            Log.v("SUBHA", "USER_ID" + HeaderConstants.USER_ID);
             Log.v("SUBHA", "authtoken" + this.viewFavouriteInputModel.getAuthToken());
             Log.v("SUBHA", "user id" + this.viewFavouriteInputModel.getUser_id());
             // Execute HTTP Post Request

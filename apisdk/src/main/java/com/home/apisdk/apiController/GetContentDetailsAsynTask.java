@@ -399,7 +399,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onGetContentDetailsPostExecuteCompleted(contentDetailsOutput, status, message);
-        }*/
+        }
 
 
     }

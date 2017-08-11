@@ -15,5 +15,6 @@ public class Constant {
     public static final String CAST_INTENT_KEY = "CAST";
     public static final String SEASON_INTENT_KEY = "SEASON";
     public static final String authTokenStr = "6a9c6e9bfeee69e63d4bab668c01dc0a"; //monica studio
+    public static final String VIDEO_TITLE_INTENT_KEY = "VIDEO TITLE";
 
 }

@@ -60,6 +60,7 @@ import com.home.vod.adapter.FavoriteAdapter;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.model.GridItem;
 import com.home.vod.model.LanguageModel;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.muvi.player.utils.Util;
@@ -90,12 +91,22 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
+import static com.home.vod.util.Constant.authTokenStr;
 
 public class FavoriteActivity extends AppCompatActivity implements GetLanguageListAsynTask.GetLanguageList,ViewFavouriteAsynTask.ViewFavouriteListener,
         LogoutAsynctask.Logout, GetTranslateLanguageAsync.GetTranslateLanguageInfoListner,DeleteFavAsync.DeleteFavListener{
     public static ProgressBarHandler progressBarHandler;
     String email, id;
     LanguageCustomAdapter languageCustomAdapter;
+    LanguagePreference languagePreference;
     String Default_Language = "";
     String Previous_Selected_Language = "";
     int prevPosition = 0;
@@ -194,6 +205,7 @@ PreferenceManager preferenceManager;
 
         /////
         preferenceManager = PreferenceManager.getPreferenceManager(this);
+        languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
@@ -520,17 +532,17 @@ PreferenceManager preferenceManager;
     public void onLogoutPostExecuteCompleted(int code, String status, String message) {
 
         if (status == null) {
-            Toast.makeText(FavoriteActivity.this, com.home.vod.util.Util.getTextofLanguage(FavoriteActivity.this, com.home.vod.util.Util.SIGN_OUT_ERROR, com.home.vod.util.Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+            Toast.makeText(FavoriteActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
         }
         if (code == 0) {
-            Toast.makeText(FavoriteActivity.this, com.home.vod.util.Util.getTextofLanguage(FavoriteActivity.this, com.home.vod.util.Util.SIGN_OUT_ERROR, com.home.vod.util.Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+            Toast.makeText(FavoriteActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
         }
         if (code > 0) {
             if (code == 200) {
                 preferenceManager.clearLoginPref();
-                if ((com.home.vod.util.Util.getTextofLanguage(FavoriteActivity.this, com.home.vod.util.Util.IS_ONE_STEP_REGISTRATION, com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
+                if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
                     final Intent startIntent = new Intent(FavoriteActivity.this, SplashScreen.class);
                     runOnUiThread(new Runnable() {
@@ -538,7 +550,7 @@ PreferenceManager preferenceManager;
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(startIntent);
-                            Toast.makeText(FavoriteActivity.this, com.home.vod.util.Util.getTextofLanguage(FavoriteActivity.this, com.home.vod.util.Util.LOGOUT_SUCCESS, com.home.vod.util.Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                            Toast.makeText(FavoriteActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
                             finish();
 
                         }
@@ -550,7 +562,7 @@ PreferenceManager preferenceManager;
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(startIntent);
-                            Toast.makeText(FavoriteActivity.this, com.home.vod.util.Util.getTextofLanguage(FavoriteActivity.this, com.home.vod.util.Util.LOGOUT_SUCCESS, com.home.vod.util.Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                            Toast.makeText(FavoriteActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS,DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
                             finish();
 
                         }
@@ -558,7 +570,7 @@ PreferenceManager preferenceManager;
                 }
 
             } else {
-                Toast.makeText(FavoriteActivity.this, com.home.vod.util.Util.getTextofLanguage(FavoriteActivity.this, com.home.vod.util.Util.SIGN_OUT_ERROR, com.home.vod.util.Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+                Toast.makeText(FavoriteActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
             }
         }
@@ -1042,8 +1054,8 @@ PreferenceManager preferenceManager;
             case R.id.menu_item_language:
 
                 // Not implemented here
-                Default_Language = com.home.vod.util.Util.getTextofLanguage(FavoriteActivity.this, com.home.vod.util.Util.SELECTED_LANGUAGE_CODE, com.home.vod.util.Util.DEFAULT_SELECTED_LANGUAGE_CODE);
-                Previous_Selected_Language = com.home.vod.util.Util.getTextofLanguage(FavoriteActivity.this, com.home.vod.util.Util.SELECTED_LANGUAGE_CODE, com.home.vod.util.Util.DEFAULT_SELECTED_LANGUAGE_CODE);
+                Default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
+                Previous_Selected_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
 
                 if (com.home.vod.util.Util.languageModel!=null && com.home.vod.util.Util.languageModel.size() > 0){
 
@@ -1052,7 +1064,7 @@ PreferenceManager preferenceManager;
 
                 } else {
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-                    languageListInputModel.setAuthToken(com.home.vod.util.Util.authTokenStr);
+                    languageListInputModel.setAuthToken(authTokenStr);
                     GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
@@ -1093,9 +1105,9 @@ PreferenceManager preferenceManager;
 
                         // dialog.cancel();
                         LogoutInput logoutInput = new LogoutInput();
-                        logoutInput.setAuthToken(com.home.vod.util.Util.authTokenStr);
+                        logoutInput.setAuthToken(authTokenStr);
                         logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
-                        logoutInput.setLang_code(Util.getTextofLanguage(FavoriteActivity.this, Util.SELECTED_LANGUAGE_CODE, com.home.vod.util.Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                        logoutInput.setLang_code(Util.getTextofLanguage(FavoriteActivity.this, Util.SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, FavoriteActivity.this, FavoriteActivity.this);
                         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -1220,7 +1232,7 @@ PreferenceManager preferenceManager;
 
 
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-                    languageListInputModel.setAuthToken(com.home.vod.util.Util.authTokenStr);
+                    languageListInputModel.setAuthToken(authTokenStr);
                     languageListInputModel.setLangCode(Default_Language);
 
                     GetTranslateLanguageAsync getTranslateLanguageAsync = new GetTranslateLanguageAsync(languageListInputModel,FavoriteActivity.this,FavoriteActivity.this);

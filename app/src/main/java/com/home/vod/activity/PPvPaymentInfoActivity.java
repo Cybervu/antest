@@ -536,7 +536,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 
                     //withoutCreditCardLayout.setVisibility(View.VISIBLE);
                     //creditCardLayout.setVisibility(View.GONE);
-                    //chargedPriceTextView.setText(Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.CARD_WILL_CHARGE,Util.DEFAULT_CARD_WILL_CHARGE)+" " +currencySymbolStr+chargedPrice);
+                    //chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE,Util.DEFAULT_CARD_WILL_CHARGE)+" " +currencySymbolStr+chargedPrice);
                 } else {
                     //withoutCreditCardLayout.setVisibility(View.GONE);
                     nameOnCardEditText.setVisibility(View.GONE);
@@ -1159,7 +1159,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                         playerModel.setMpdVideoUrl(get_video_details_output.getVideoUrl());
 
                     }else {
-                        playerModel.setMpdVideoUrl(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                        playerModel.setMpdVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
                     }
                 }
                 else {
@@ -1169,7 +1169,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                         playerModel.setThirdPartyPlayer(false);
                     } else {
                         //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
-                        playerModel.setVideoUrl(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+                        playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
 
                     }
                 }
@@ -1358,19 +1358,19 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
     public void onVideoDetailsPostExecuteCompleted(Get_Video_Details_Output get_video_details_output, int code, String status, String message) {
         if (status == null) {
             status = "0";
-            videoUrlStr = Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+            videoUrlStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
         }
 
         if ((status.trim().equalsIgnoreCase("0"))) {
-            videoUrlStr = Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+            videoUrlStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
             Util.showNoDataAlert(PPvPaymentInfoActivity.this);
            */
 /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
-            dlgAlert.setMessage(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-            dlgAlert.setTitle(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -1384,11 +1384,11 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                 Util.showNoDataAlert(PPvPaymentInfoActivity.this);
                */
 /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
-                dlgAlert.setMessage(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -1397,15 +1397,15 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                         });
                 dlgAlert.create().show();*//*
 
-            } else if (videoUrlStr.matches("") || videoUrlStr.equalsIgnoreCase(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+            } else if (videoUrlStr.matches("") || videoUrlStr.equalsIgnoreCase(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA))) {
                 Util.showNoDataAlert(PPvPaymentInfoActivity.this);
                */
 /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
-                dlgAlert.setMessage(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -1518,7 +1518,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 //                            if (cardSavedArray == null || cardSavedArray.length <= 0) {
 //                                creditCardSaveSpinner.setVisibility(View.GONE);
 //                            }
-//                            Toast.makeText(PPvPaymentInfoActivity.this, Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(PPvPaymentInfoActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                        }
 //
@@ -1639,7 +1639,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 //                    creditCardSaveSpinner.setVisibility(View.GONE);
 //
 //                } else {
-//                    savedCards.add(0, new CardModel("0", Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.USE_NEW_CARD, Util.DEFAULT_USE_NEW_CARD)));
+//                    savedCards.add(0, new CardModel("0", languagePreference.getTextofLanguage(USE_NEW_CARD, Util.DEFAULT_USE_NEW_CARD)));
 //                    cardSavedArray = savedCards.toArray(new CardModel[savedCards.size()]);
 //                    creditCardSaveSpinnerAdapter = new CardSpinnerAdapter(PPvPaymentInfoActivity.this, cardSavedArray);
 //                    //cardExpiryYearSpinnerAdapter = new CardSpinnerAdapter<Integer>(this, R.layout.spinner_new, yearArray);
@@ -1702,8 +1702,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 //                                pDialog = null;
 //                            }
 //                            responseStr = "0";
-//                            Util.dataModel.setVideoUrl(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
-//                            Toast.makeText(PPvPaymentInfoActivity.this, Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
+//                            Toast.makeText(PPvPaymentInfoActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                        }
 //
@@ -1715,7 +1715,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 //                        pDialog = null;
 //                    }
 //                    responseStr = "0";
-//                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //                    e.printStackTrace();
 //                }
 //
@@ -1757,7 +1757,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 //                else {
 //
 //                    responseStr = "0";
-//                    Util.dataModel.setVideoUrl(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                    Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //                }
 //            } catch (JSONException e1) {
 //                if (pDialog != null && pDialog.isShowing()) {
@@ -1765,7 +1765,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 //                    pDialog = null;
 //                }
 //                responseStr = "0";
-//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //                e1.printStackTrace();
 //            }
 //
@@ -1776,7 +1776,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 //                    pDialog = null;
 //                }
 //                responseStr = "0";
-//                Util.dataModel.setVideoUrl(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //
 //                e.printStackTrace();
 //
@@ -1794,21 +1794,21 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 //                }
 //            } catch (IllegalArgumentException ex) {
 //                responseStr = "0";
-//                videoUrlStr = Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+//                videoUrlStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
 //            }
 //            if (responseStr == null) {
 //                responseStr = "0";
-//                videoUrlStr = Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+//                videoUrlStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
 //            }
 //
 //            if ((responseStr.trim().equalsIgnoreCase("0"))) {
-//                videoUrlStr = Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+//                videoUrlStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
 //                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
-//                dlgAlert.setMessage(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-//                dlgAlert.setTitle(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+//                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                dlgAlert.setCancelable(false);
-//                dlgAlert.setPositiveButton(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                        new DialogInterface.OnClickListener() {
 //                            public void onClick(DialogInterface dialog, int id) {
 //                                dialog.cancel();
@@ -1819,11 +1819,11 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 //            } else {
 //                if (videoUrlStr == null) {
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
-//                    dlgAlert.setMessage(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-//                    dlgAlert.setTitle(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -1831,13 +1831,13 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 //                                }
 //                            });
 //                    dlgAlert.create().show();
-//                } else if (videoUrlStr.matches("") || videoUrlStr.equalsIgnoreCase(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+//                } else if (videoUrlStr.matches("") || videoUrlStr.equalsIgnoreCase(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA))) {
 //                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PPvPaymentInfoActivity.this);
-//                    dlgAlert.setMessage(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-//                    dlgAlert.setTitle(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+//                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+//                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
 //                    dlgAlert.setCancelable(false);
-//                    dlgAlert.setPositiveButton(Util.getTextofLanguage(PPvPaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+//                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
 //                            new DialogInterface.OnClickListener() {
 //                                public void onClick(DialogInterface dialog, int id) {
 //                                    dialog.cancel();
@@ -1927,23 +1927,23 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
 
                 creditCardLayout.setVisibility(View.VISIBLE);
 
-                chargedPriceTextView.setText(Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.CARD_WILL_CHARGE,Util.DEFAULT_CARD_WILL_CHARGE)+" " + currencySymbolStr + chargedPrice);
+                chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE,DEFAULT_CARD_WILL_CHARGE)+" " + currencySymbolStr + chargedPrice);
                 isCouponCodeAdded = true;
                 validCouponCode = couponCodeEditText.getText().toString().trim();
-                Toast.makeText(PPvPaymentInfoActivity.this,Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.DISCOUNT_ON_COUPON,Util.DEFAULT_DISCOUNT_ON_COUPON), Toast.LENGTH_LONG).show();
+                Toast.makeText(PPvPaymentInfoActivity.this,languagePreference.getTextofLanguage(DISCOUNT_ON_COUPON,DEFAULT_DISCOUNT_ON_COUPON), Toast.LENGTH_LONG).show();
                 if (chargedPrice <= 0.0f && isCouponCodeAdded == true) {
                     creditCardLayout.setVisibility(View.GONE);
 
                     //paywithCreditCardButton.setVisibility(View.GONE);
                     withoutCreditCardLayout.setVisibility(View.VISIBLE);
-                    withoutCreditCardChargedPriceTextView.setText(Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.CARD_WILL_CHARGE,Util.DEFAULT_CARD_WILL_CHARGE)+" : " + currencySymbolStr + chargedPrice);
+                    withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE,DEFAULT_CARD_WILL_CHARGE)+" : " + currencySymbolStr + chargedPrice);
                 }
 
 
             }else{
                 isCouponCodeAdded = false;
                 validCouponCode = "";
-                chargedPriceTextView.setText(Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.CARD_WILL_CHARGE,Util.DEFAULT_CARD_WILL_CHARGE)+" " + currencySymbolStr + planPrice);
+                chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE,DEFAULT_CARD_WILL_CHARGE)+" " + currencySymbolStr + planPrice);
                 //selectShowRadioButton.setText("Entire Show: " + currencySymbolStr + planPrice);
                 isCouponCodeAdded = false;
                 validCouponCode = "";
@@ -1953,13 +1953,13 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                     Toast.makeText(PPvPaymentInfoActivity.this, message, Toast.LENGTH_LONG).show();
 
                 } else {
-                    Toast.makeText(PPvPaymentInfoActivity.this,Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.INVALID_COUPON,Util.DEFAULT_INVALID_COUPON), Toast.LENGTH_LONG).show();
+                    Toast.makeText(PPvPaymentInfoActivity.this,languagePreference.getTextofLanguage(INVALID_COUPON,DEFAULT_INVALID_COUPON), Toast.LENGTH_LONG).show();
 
                 }
             }}else{
             isCouponCodeAdded = false;
             validCouponCode = "";
-            chargedPriceTextView.setText(Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.CARD_WILL_CHARGE,Util.DEFAULT_CARD_WILL_CHARGE)+" " + currencySymbolStr + planPrice);
+            chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE,DEFAULT_CARD_WILL_CHARGE)+" " + currencySymbolStr + planPrice);
             //selectShowRadioButton.setText("Entire Show: " + currencySymbolStr + planPrice);
             isCouponCodeAdded = false;
             validCouponCode = "";
@@ -1969,7 +1969,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
                 Toast.makeText(PPvPaymentInfoActivity.this, message, Toast.LENGTH_LONG).show();
 
             } else {
-                Toast.makeText(PPvPaymentInfoActivity.this,Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.INVALID_COUPON,Util.DEFAULT_INVALID_COUPON), Toast.LENGTH_LONG).show();
+                Toast.makeText(PPvPaymentInfoActivity.this,languagePreference.getTextofLanguage(INVALID_COUPON,DEFAULT_INVALID_COUPON), Toast.LENGTH_LONG).show();
 
             }
         }
