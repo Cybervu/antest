@@ -11,9 +11,13 @@ import android.widget.TextView;
 
 import com.home.vod.R;
 import com.home.vod.model.LanguageModel;
-import com.muvi.player.utils.Util;
+import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.Util;
 
 import java.util.ArrayList;
+
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 
 public class LanguageCustomAdapter extends RecyclerView.Adapter<LanguageCustomAdapter.ViewHolder> {
     public Context mContext;
@@ -55,7 +59,8 @@ public class LanguageCustomAdapter extends RecyclerView.Adapter<LanguageCustomAd
         }
         else
         {
-            if (Util.getTextofLanguage(mContext,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE).equals(languageModels.get(position).getLanguageId())){
+            if (LanguagePreference.getLanguagePreference(mContext).getTextofLanguage(SELECTED_LANGUAGE_CODE,
+                    DEFAULT_SELECTED_LANGUAGE_CODE).equals(languageModels.get(position).getLanguageId())){
                 holder.imageView.setImageResource(R.drawable.selected);
 
 

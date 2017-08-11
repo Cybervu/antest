@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.IsRegistrationEnabledInputModel;
 import com.home.apisdk.apiModel.IsRegistrationEnabledOutputModel;
 
@@ -59,7 +59,7 @@ public class IsRegistrationEnabledAsynTask extends AsyncTask<IsRegistrationEnabl
             HttpClient httpclient=new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getIsRegistrationenabledUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.isRegistrationEnabledInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.isRegistrationEnabledInputModel.getAuthToken());
 
 
             // Execute HTTP Post Request
@@ -140,14 +140,14 @@ public class IsRegistrationEnabledAsynTask extends AsyncTask<IsRegistrationEnabl
         listener.onIsRegistrationenabledPreExecuteStarted();
 
         status = 0;
-            if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+            if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
                 message = "Packge Name Not Matched";
                 listener.onIsRegistrationenabledPostExecuteCompleted(isRegistrationEnabledOutputModel,status,message);
                 return;
             }
-            if(CommonConstants.hashKey.equals(""))
+            if(HeaderConstants.hashKey.equals(""))
             {
                 this.cancel(true);
                 message = "Hash Key Is Not Available. Please Initialize The SDK";

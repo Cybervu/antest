@@ -1,7 +1,6 @@
 package com.home.apisdk;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -75,7 +74,7 @@ public class SDKInitializer {
                 HttpClient httpclient=new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(APIUrlConstant.getInitializationUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader(CommonConstants.AUTH_TOKEN,authToken);
+                httppost.addHeader(HeaderConstants.AUTH_TOKEN,authToken);
 
                 // Execute HTTP Post Request
                 try {
@@ -105,10 +104,10 @@ public class SDKInitializer {
 
                     if (status == 200) {
                         if ((myJson.has("pkgname")) && myJson.getString("pkgname").trim() != null && !myJson.getString("pkgname").trim().isEmpty() && !myJson.getString("pkgname").trim().equals("null") && !myJson.getString("pkgname").trim().matches("")) {
-                            //CommonConstants.User_Package_Name_At_Api = (myJson.getString("pkgname"));
+                            //HeaderConstants.User_Package_Name_At_Api = (myJson.getString("pkgname"));
 
                             String PNAME=myJson.getString("pkgname");
-                            CommonConstants.user_Package_Name_At_Api = PNAME;
+                            HeaderConstants.user_Package_Name_At_Api = PNAME;
                            /* sp = context.getSharedPreferences(mypreference,0);
                             SharedPreferences.Editor editor = sp.edit();
                             editor.putString("PNME", PNAME);
@@ -117,13 +116,13 @@ public class SDKInitializer {
                             Log.v("BIBHU", "pkgname at class="+(myJson.getString("pkgname")));
                             //  Log.v("SANJAY", "pkgname FROM sharedpref="+sp.getString("PNME",""));
                         }else{
-//                        CommonConstants.User_Package_Name_At_Api = "";
+//                        HeaderConstants.User_Package_Name_At_Api = "";
 //                        Log.v("BIBHU", "pkgname at else class="+(myJson.getString("pkgname")));
                         }
 
 
                         if ((myJson.has("hashkey")) && myJson.getString("hashkey").trim() != null && !myJson.getString("hashkey").trim().isEmpty() && !myJson.getString("hashkey").trim().equals("null") && !myJson.getString("hashkey").trim().matches("")) {
-                            CommonConstants.hashKey = (myJson.getString("hashkey"));
+                            HeaderConstants.hashKey = (myJson.getString("hashkey"));
 //                        String HASH=myJson.getString("hashkey");
 //                        sp = context.getSharedPreferences(mypreference,0);
 //                        SharedPreferences.Editor editor1 = sp.edit();
@@ -131,9 +130,9 @@ public class SDKInitializer {
 //                        editor1.commit();
 
                             Log.v("BIBHU", "Hash Key at class="+(myJson.getString("hashkey")));
-                            //  Log.v("SANJAY", "pkgname FROM commonconstant="+CommonConstants.HashKey);
+                            //  Log.v("SANJAY", "pkgname FROM commonconstant="+HeaderConstants.HashKey);
                         }else{
-                            //CommonConstants.HashKey = "";
+                            //HeaderConstants.HashKey = "";
                         }
                     }
                 }else{

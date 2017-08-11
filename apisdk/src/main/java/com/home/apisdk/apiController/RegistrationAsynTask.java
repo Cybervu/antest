@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.Registration_input;
 import com.home.apisdk.apiModel.Registration_output;
 
@@ -60,16 +60,16 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getRegisterUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.registration_input.getAuthToken());
-            httppost.addHeader(CommonConstants.EMAIL, this.registration_input.getEmail());
-            httppost.addHeader(CommonConstants.PASSWORD, this.registration_input.getPassword());
-            httppost.addHeader(CommonConstants.NAME, this.registration_input.getName());
-            httppost.addHeader(CommonConstants.LANG_CODE, this.registration_input.getLang_code());
-            httppost.addHeader(CommonConstants.CUSTOM_COUNTRY, this.registration_input.getCustom_country());
-            httppost.addHeader(CommonConstants.CUSTOM_LANGUAGES, this.registration_input.getCustom_languages());
-            httppost.addHeader(CommonConstants.DEVICE_ID, this.registration_input.getDevice_id());
-            httppost.addHeader(CommonConstants.GOOGLE_ID, this.registration_input.getGoogle_id());
-            httppost.addHeader(CommonConstants.DEVICE_TYPE, this.registration_input.getDevice_type());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.registration_input.getAuthToken());
+            httppost.addHeader(HeaderConstants.EMAIL, this.registration_input.getEmail());
+            httppost.addHeader(HeaderConstants.PASSWORD, this.registration_input.getPassword());
+            httppost.addHeader(HeaderConstants.NAME, this.registration_input.getName());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.registration_input.getLang_code());
+            httppost.addHeader(HeaderConstants.CUSTOM_COUNTRY, this.registration_input.getCustom_country());
+            httppost.addHeader(HeaderConstants.CUSTOM_LANGUAGES, this.registration_input.getCustom_languages());
+            httppost.addHeader(HeaderConstants.DEVICE_ID, this.registration_input.getDevice_id());
+            httppost.addHeader(HeaderConstants.GOOGLE_ID, this.registration_input.getGoogle_id());
+            httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.registration_input.getDevice_type());
 
             // Execute HTTP Post Request
             try {
@@ -182,13 +182,13 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
         listener.onRegistrationDetailsPreExecuteStarted();
 
         status = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onRegistrationDetailsPostExecuteCompleted(registration_output, status, message);
             return;
         }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onRegistrationDetailsPostExecuteCompleted(registration_output, status, message);

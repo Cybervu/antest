@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.CheckFbUserDetailsInput;
 
 import org.apache.http.HttpResponse;
@@ -60,8 +60,8 @@ public class CheckFbUserDetailsAsyn extends AsyncTask<CheckFbUserDetailsInput,Vo
             HttpPost httppost = new HttpPost(APIUrlConstant.getFbUserExistsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.checkFbUserDetailsInput.getAuthToken());
-            httppost.addHeader(CommonConstants.FB_USER_ID, this.checkFbUserDetailsInput.getFb_userid());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.checkFbUserDetailsInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.FB_USER_ID, this.checkFbUserDetailsInput.getFb_userid());
 
 
             try {
@@ -97,13 +97,13 @@ public class CheckFbUserDetailsAsyn extends AsyncTask<CheckFbUserDetailsInput,Vo
         listener.onCheckFbUserDetailsAsynPreExecuteStarted();
 
         code = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onCheckFbUserDetailsAsynPostExecuteCompleted(code);
             return;
         }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onCheckFbUserDetailsAsynPostExecuteCompleted(code);

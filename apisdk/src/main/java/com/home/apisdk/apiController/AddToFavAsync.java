@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.AddToFavInputModel;
 import com.home.apisdk.apiModel.AddToFavOutputModel;
 
@@ -56,10 +56,10 @@ public class AddToFavAsync extends AsyncTask<AddToFavInputModel,Void,Void> {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getAddtoFavlist());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.addToFavInputModel.getAuthToken().trim());
-            httppost.addHeader(CommonConstants.MOVIE_UNIQ_ID,this.addToFavInputModel.getMovie_uniq_id() );
-            httppost.addHeader(CommonConstants.CONTENT_TYPE, this.addToFavInputModel.getIsEpisodeStr());
-            httppost.addHeader(CommonConstants.USER_ID, this.addToFavInputModel.getLoggedInStr());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.addToFavInputModel.getAuthToken().trim());
+            httppost.addHeader(HeaderConstants.MOVIE_UNIQ_ID,this.addToFavInputModel.getMovie_uniq_id() );
+            httppost.addHeader(HeaderConstants.CONTENT_TYPE, this.addToFavInputModel.getIsEpisodeStr());
+            httppost.addHeader(HeaderConstants.USER_ID, this.addToFavInputModel.getLoggedInStr());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);

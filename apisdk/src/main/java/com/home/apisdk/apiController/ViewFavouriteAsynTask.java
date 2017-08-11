@@ -9,6 +9,7 @@ import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.CommonConstants;
 import com.home.apisdk.apiModel.ContentListInput;
 import com.home.apisdk.apiModel.ContentListOutput;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.ViewFavouriteInputModel;
 import com.home.apisdk.apiModel.ViewFavouriteOutputModel;
 
@@ -66,8 +67,9 @@ public class ViewFavouriteAsynTask extends AsyncTask<ViewFavouriteInputModel, Vo
             HttpPost httppost = new HttpPost(APIUrlConstant.getViewFavorite());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.viewFavouriteInputModel.getAuthToken());
-            httppost.addHeader(CommonConstants.USER_ID, this.viewFavouriteInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.viewFavouriteInputModel.getAuthToken());
+
+            httppost.addHeader(HeaderConstants.USER_ID,this.viewFavouriteInputModel.getUser_id());
 
             Log.v("SUBHA", "AUTH_TOKEN" + CommonConstants.AUTH_TOKEN);
             Log.v("SUBHA", "USER_ID" + CommonConstants.USER_ID);
@@ -135,10 +137,6 @@ public class ViewFavouriteAsynTask extends AsyncTask<ViewFavouriteInputModel, Vo
                             content.setContentTypesId(jsonChildNode.optString("content_types_id"));
 
                         }
-                        Log.v("SUBHA","content_types_id " +jsonChildNode.optString("content_types_id") );
-                        //videoTypeIdStr = "1";
-
-
                         if ((jsonChildNode.has("is_episode")) && jsonChildNode.optString("is_episode").trim() != null && !jsonChildNode.optString("is_episode").trim().isEmpty() && !jsonChildNode.optString("is_episode").trim().equals("null") && !jsonChildNode.optString("is_episode").trim().matches("")) {
                             content.setIsEpisodeStr(jsonChildNode.optString("is_episode"));
 
@@ -169,13 +167,13 @@ public class ViewFavouriteAsynTask extends AsyncTask<ViewFavouriteInputModel, Vo
         listener.onViewFavouritePreExecuteStarted();
         responseStr = "0";
         status = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onViewFavouritePostExecuteCompleted(viewFavouriteOutputModel, status, totalItems, message);
             return;
         }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onViewFavouritePostExecuteCompleted(viewFavouriteOutputModel, status, totalItems, message);

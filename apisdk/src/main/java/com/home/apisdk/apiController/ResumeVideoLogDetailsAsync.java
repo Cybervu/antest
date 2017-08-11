@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.ResumeVideoLogDetailsInput;
 
 import org.json.JSONException;
@@ -72,13 +72,13 @@ public class ResumeVideoLogDetailsAsync extends AsyncTask<ResumeVideoLogDetailsI
                 conn.setDoOutput(true);
 
                 Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter(CommonConstants.AUTH_TOKEN, this.resumeVideoLogDetailsInput.getAuthToken())
-                        .appendQueryParameter(CommonConstants.USER_ID, this.resumeVideoLogDetailsInput.getUser_id())
-                        .appendQueryParameter(CommonConstants.IP_ADDRESS, this.resumeVideoLogDetailsInput.getIp_address())
-                        .appendQueryParameter(CommonConstants.MOVIE_ID, this.resumeVideoLogDetailsInput.getMovie_id())
-                        .appendQueryParameter(CommonConstants.EPISODE_ID, this.resumeVideoLogDetailsInput.getEpisode_id())
-                        .appendQueryParameter(CommonConstants.PLAYED_LENGTH, this.resumeVideoLogDetailsInput.getPlayed_length())
-                        .appendQueryParameter(CommonConstants.WATCH_STATUS, this.resumeVideoLogDetailsInput.getWatch_status());
+                        .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.resumeVideoLogDetailsInput.getAuthToken())
+                        .appendQueryParameter(HeaderConstants.USER_ID, this.resumeVideoLogDetailsInput.getUser_id())
+                        .appendQueryParameter(HeaderConstants.IP_ADDRESS, this.resumeVideoLogDetailsInput.getIp_address())
+                        .appendQueryParameter(HeaderConstants.MOVIE_ID, this.resumeVideoLogDetailsInput.getMovie_id())
+                        .appendQueryParameter(HeaderConstants.EPISODE_ID, this.resumeVideoLogDetailsInput.getEpisode_id())
+                        .appendQueryParameter(HeaderConstants.PLAYED_LENGTH, this.resumeVideoLogDetailsInput.getPlayed_length())
+                        .appendQueryParameter(HeaderConstants.WATCH_STATUS, this.resumeVideoLogDetailsInput.getWatch_status());
 
                 String query = builder.build().getEncodedQuery();
 
@@ -137,13 +137,13 @@ public class ResumeVideoLogDetailsAsync extends AsyncTask<ResumeVideoLogDetailsI
         super.onPreExecute();
         listener.onGetResumeVideoLogDetailsPreExecuteStarted();
         status = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetResumeVideoLogDetailsPostExecuteCompleted(status,responseStr,videoLogId);
             return;
         }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onGetResumeVideoLogDetailsPostExecuteCompleted(status,responseStr,videoLogId);

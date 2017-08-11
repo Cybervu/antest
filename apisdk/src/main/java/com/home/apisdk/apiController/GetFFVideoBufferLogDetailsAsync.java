@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.VideoBufferLogsInputModel;
 import com.home.apisdk.apiModel.VideoBufferLogsOutputModel;
 
@@ -71,18 +71,18 @@ public class GetFFVideoBufferLogDetailsAsync extends AsyncTask<VideoBufferLogsIn
                 conn.setDoOutput(true);
 
                 Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter(CommonConstants.AUTH_TOKEN, this.videoBufferLogsInputModel.getAuthToken())
-                        .appendQueryParameter(CommonConstants.USER_ID, this.videoBufferLogsInputModel.getUserId())
-                        .appendQueryParameter(CommonConstants.IP_ADDRESS, this.videoBufferLogsInputModel.getIpAddress())
-                        .appendQueryParameter(CommonConstants.MOVIE_ID, this.videoBufferLogsInputModel.getMuviUniqueId())
-                        .appendQueryParameter(CommonConstants.EPISODE_ID, this.videoBufferLogsInputModel.getEpisodeStreamUniqueId())
-                        .appendQueryParameter(CommonConstants.LOG_ID, this.videoBufferLogsInputModel.getBufferLogId())
-                        .appendQueryParameter(CommonConstants.RESOLUTION, this.videoBufferLogsInputModel.getVideoResolution())
-                        .appendQueryParameter(CommonConstants.DEVICE_TYPE, this.videoBufferLogsInputModel.getDeviceType())
-                        .appendQueryParameter(CommonConstants.START_TIME, this.videoBufferLogsInputModel.getBufferStartTime())
-                        .appendQueryParameter(CommonConstants.END_TIME, this.videoBufferLogsInputModel.getBufferEndTime())
-                        .appendQueryParameter(CommonConstants.LOG_UNIQUE_ID, this.videoBufferLogsInputModel.getBufferLogUniqueId())
-                        .appendQueryParameter(CommonConstants.LOCATION, this.videoBufferLogsInputModel.getLocation());
+                        .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.videoBufferLogsInputModel.getAuthToken())
+                        .appendQueryParameter(HeaderConstants.USER_ID, this.videoBufferLogsInputModel.getUserId())
+                        .appendQueryParameter(HeaderConstants.IP_ADDRESS, this.videoBufferLogsInputModel.getIpAddress())
+                        .appendQueryParameter(HeaderConstants.MOVIE_ID, this.videoBufferLogsInputModel.getMuviUniqueId())
+                        .appendQueryParameter(HeaderConstants.EPISODE_ID, this.videoBufferLogsInputModel.getEpisodeStreamUniqueId())
+                        .appendQueryParameter(HeaderConstants.LOG_ID, this.videoBufferLogsInputModel.getBufferLogId())
+                        .appendQueryParameter(HeaderConstants.RESOLUTION, this.videoBufferLogsInputModel.getVideoResolution())
+                        .appendQueryParameter(HeaderConstants.DEVICE_TYPE, this.videoBufferLogsInputModel.getDeviceType())
+                        .appendQueryParameter(HeaderConstants.START_TIME, this.videoBufferLogsInputModel.getBufferStartTime())
+                        .appendQueryParameter(HeaderConstants.END_TIME, this.videoBufferLogsInputModel.getBufferEndTime())
+                        .appendQueryParameter(HeaderConstants.LOG_UNIQUE_ID, this.videoBufferLogsInputModel.getBufferLogUniqueId())
+                        .appendQueryParameter(HeaderConstants.LOCATION, this.videoBufferLogsInputModel.getLocation());
 
                 String query = builder.build().getEncodedQuery();
 
@@ -159,13 +159,13 @@ public class GetFFVideoBufferLogDetailsAsync extends AsyncTask<VideoBufferLogsIn
         super.onPreExecute();
         listener.onGetFFVideoBufferLogsPreExecuteStarted();
         status = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetFFVideoBufferLogsPostExecuteCompleted(videoBufferLogsOutputModel, status, message);
             return;
         }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onGetFFVideoBufferLogsPostExecuteCompleted(videoBufferLogsOutputModel, status, message);

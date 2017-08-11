@@ -22,6 +22,8 @@ import com.home.vod.R;
 import com.home.vod.adapter.PurchaseHistoryAdapter;
 import com.home.vod.model.PurchaseHistoryModel;
 import com.home.vod.model.RecyclerItemClickListener;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -32,6 +34,16 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
+import static com.home.vod.util.Constant.authTokenStr;
 
 public class PurchaseHistoryActivity extends AppCompatActivity implements PurchaseHistoryAsyntask.PurchaseHistory {
     Toolbar mActionBarToolbar;
@@ -47,7 +59,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements Purcha
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-
+LanguagePreference languagePreference;
     String Invoice,Id,PutrcahseDate,TranactionStatus,Ppvstatus,Amount;
     private String Currency_symbol = "";
     private String currency_code  = "";
@@ -63,6 +75,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements Purcha
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_history);
 
+        languagePreference = LanguagePreference.getLanguagePreference(PurchaseHistoryActivity.this);
         noInternet = (RelativeLayout)findViewById(R.id.noInternet);
         primary_layout = (LinearLayout)findViewById(R.id.primary_layout);
         tryAgainButton = (Button)  findViewById(R.id.tryAgainButton);
@@ -70,8 +83,8 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements Purcha
         recyclerView = (RecyclerView) findViewById(R.id.purchase_history_recyclerview);
         purchaseHistoryTitleTextView = (TextView)findViewById(R.id.purchaseHistoryTitleTextView);
 
-        no_internet_text.setText(Util.getTextofLanguage(PurchaseHistoryActivity.this,Util.NO_INTERNET_NO_DATA,Util.DEFAULT_NO_INTERNET_NO_DATA));
-        tryAgainButton.setText(Util.getTextofLanguage(PurchaseHistoryActivity.this,Util.TRY_AGAIN,Util.DEFAULT_TRY_AGAIN));
+        no_internet_text.setText(languagePreference.getTextofLanguage(NO_INTERNET_NO_DATA,DEFAULT_NO_INTERNET_NO_DATA));
+        tryAgainButton.setText(languagePreference.getTextofLanguage(TRY_AGAIN,DEFAULT_TRY_AGAIN));
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         user_id = preferenceManager.getUseridFromPref();
@@ -79,7 +92,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements Purcha
 
         Typeface typeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
         purchaseHistoryTitleTextView.setTypeface(typeface);
-        purchaseHistoryTitleTextView.setText(Util.getTextofLanguage(PurchaseHistoryActivity.this,Util.PURCHASE_HISTORY,Util.DEFAULT_PURCHASE_HISTORY
+        purchaseHistoryTitleTextView.setText(languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY
         ));
 
 
@@ -97,7 +110,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements Purcha
         tryAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Util.checkNetwork(PurchaseHistoryActivity.this))
+                if(NetworkStatus.getInstance().isConnected(PurchaseHistoryActivity.this))
                     GetPurchaseHistoryDetails();
                 else
                 {
@@ -153,8 +166,8 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements Purcha
         primary_layout.setVisibility(View.VISIBLE);
         PurchaseHistoryInputModel purchaseHistoryInputModel=new PurchaseHistoryInputModel();
         purchaseHistoryInputModel.setUser_id(user_id);
-        purchaseHistoryInputModel.setAuthToken(Util.authTokenStr);
-        purchaseHistoryInputModel.setLang_code(Util.getTextofLanguage(PurchaseHistoryActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        purchaseHistoryInputModel.setAuthToken(authTokenStr);
+        purchaseHistoryInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
         PurchaseHistoryAsyntask asynGetPurchaseDetail = new PurchaseHistoryAsyntask(purchaseHistoryInputModel,this,this);
         asynGetPurchaseDetail.executeOnExecutor(threadPoolExecutor);
     }
@@ -190,7 +203,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements Purcha
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //                httppost.addHeader("authToken",Util.authTokenStr);
 //                httppost.addHeader("user_id",user_id);
-//                httppost.addHeader("lang_code",Util.getTextofLanguage(PurchaseHistoryActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("lang_code",languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //
 //                // Execute HTTP Post Request

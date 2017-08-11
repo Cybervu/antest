@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.VoucherSubscriptionInputModel;
 import com.home.apisdk.apiModel.VoucherSubscriptionOutputModel;
 
@@ -61,14 +61,14 @@ public class VoucherSubscriptionAsyntask extends AsyncTask<VoucherSubscriptionIn
             HttpPost httppost = new HttpPost(APIUrlConstant.getVoucherSubscriptionUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.voucherSubscriptionInputModel.getAuthToken());
-            httppost.addHeader(CommonConstants.USER_ID, this.voucherSubscriptionInputModel.getUser_id());
-            httppost.addHeader(CommonConstants.MOVIE_ID, this.voucherSubscriptionInputModel.getMovie_id());
-            httppost.addHeader(CommonConstants.STREAM_ID, this.voucherSubscriptionInputModel.getStream_id());
-            httppost.addHeader(CommonConstants.PURCHASE_TYPE, this.voucherSubscriptionInputModel.getPurchase_type());
-            httppost.addHeader(CommonConstants.VOUCHER_CODE, this.voucherSubscriptionInputModel.getVoucher_code());
-            httppost.addHeader(CommonConstants.IS_PREORDER, this.voucherSubscriptionInputModel.getIs_preorder());
-            httppost.addHeader(CommonConstants.SEASON, this.voucherSubscriptionInputModel.getSeason());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.voucherSubscriptionInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.USER_ID, this.voucherSubscriptionInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.MOVIE_ID, this.voucherSubscriptionInputModel.getMovie_id());
+            httppost.addHeader(HeaderConstants.STREAM_ID, this.voucherSubscriptionInputModel.getStream_id());
+            httppost.addHeader(HeaderConstants.PURCHASE_TYPE, this.voucherSubscriptionInputModel.getPurchase_type());
+            httppost.addHeader(HeaderConstants.VOUCHER_CODE, this.voucherSubscriptionInputModel.getVoucher_code());
+            httppost.addHeader(HeaderConstants.IS_PREORDER, this.voucherSubscriptionInputModel.getIs_preorder());
+            httppost.addHeader(HeaderConstants.SEASON, this.voucherSubscriptionInputModel.getSeason());
 
 
             try {
@@ -111,13 +111,13 @@ public class VoucherSubscriptionAsyntask extends AsyncTask<VoucherSubscriptionIn
         super.onPreExecute();
         listener.onVoucherSubscriptionPreExecuteStarted();
         code = 0;
-        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             listener.onVoucherSubscriptionPostExecuteCompleted(voucherSubscriptionOutputModel, code);
             return;
         }
-        if(CommonConstants.hashKey.equals(""))
+        if(HeaderConstants.hashKey.equals(""))
         {
             this.cancel(true);
             listener.onVoucherSubscriptionPostExecuteCompleted(voucherSubscriptionOutputModel, code);

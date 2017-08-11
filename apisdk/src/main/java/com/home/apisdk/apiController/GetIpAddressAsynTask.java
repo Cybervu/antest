@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -112,14 +112,14 @@ public class GetIpAddressAsynTask extends AsyncTask<Void,Void ,Void > {
         listener.onIPAddressPreExecuteStarted();
         statusCode= 0;
         Log.v("BKS1","ip value=="+ipAddressStr);
-        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onIPAddressPostExecuteCompleted(message,statusCode,ipAddressStr);
             return;
         }
-        if(CommonConstants.hashKey.equals(""))
+        if(HeaderConstants.hashKey.equals(""))
         {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";

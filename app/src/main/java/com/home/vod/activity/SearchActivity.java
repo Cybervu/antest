@@ -39,6 +39,8 @@ import com.home.apisdk.apiModel.Search_Data_otput;
 import com.home.vod.R;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.model.GridItem;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -55,6 +57,26 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEARCH_ALERT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEARCH_PLACEHOLDER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_SEARCH_PLACEHOLDER;
+import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SEARCH_ALERT;
+import static com.home.vod.preferences.LanguagePreference.SEARCH_PLACEHOLDER;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.TEXT_SEARCH_PLACEHOLDER;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
+import static com.home.vod.util.Constant.authTokenStr;
 
 /*
 import com.twotoasters.jazzylistview.JazzyGridView;
@@ -79,6 +101,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     int videoWidth = 256;
     // SharedPreferences pref;
     GridItem itemToPlay;
+    LanguagePreference languagePreference;
 
     private static int firstVisibleInListview;
 
@@ -160,6 +183,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        languagePreference = LanguagePreference.getLanguagePreference(SearchActivity.this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
@@ -171,7 +195,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         });
         preferenceManager = PreferenceManager.getPreferenceManager(this);
 
-        posterUrl = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+        posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
         gridView = (GridView) findViewById(R.id.imagesGridView);
        /* gridView.setHasFixedSize(true);
@@ -185,8 +209,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         noDataLayout = (RelativeLayout) findViewById(R.id.noData);
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
         noDataTextView = (TextView) findViewById(R.id.noDataTextView);
-        noInternetTextView.setText(Util.getTextofLanguage(SearchActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
-        noDataTextView.setText(Util.getTextofLanguage(SearchActivity.this, Util.NO_CONTENT, Util.DEFAULT_NO_CONTENT));
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+        noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT, DEFAULT_NO_CONTENT));
 
         noInternetConnectionLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
@@ -196,8 +220,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
         //Detect Network Connection
 
-        boolean isNetwork = Util.checkNetwork(SearchActivity.this);
-        if (isNetwork == false) {
+
+        if (!NetworkStatus.getInstance().isConnected(SearchActivity.this)) {
             noInternetConnectionLayout.setVisibility(View.VISIBLE);
             noDataLayout.setVisibility(View.GONE);
             gridView.setVisibility(View.GONE);
@@ -223,13 +247,13 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
                 // for tv shows navigate to episodes
                 if ((movieTypeId.equalsIgnoreCase("3"))) {
-                    if (moviePermalink.matches(Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                    if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(SearchActivity.this, R.style.MyAlertDialogStyle);
-                        dlgAlert.setMessage(Util.getTextofLanguage(SearchActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                        dlgAlert.setTitle(Util.getTextofLanguage(SearchActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(SearchActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                        dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                        dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                         dlgAlert.setCancelable(false);
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(SearchActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
@@ -239,7 +263,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     } else {
 
                         final Intent detailsIntent = new Intent(SearchActivity.this, ShowWithEpisodesActivity.class);
-                        detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -254,13 +278,13 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                 else if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
                     final Intent detailsIntent = new Intent(SearchActivity.this, MovieDetailsActivity.class);
 
-                    if (moviePermalink.matches(Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                    if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(SearchActivity.this, R.style.MyAlertDialogStyle);
-                        dlgAlert.setMessage(Util.getTextofLanguage(SearchActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                        dlgAlert.setTitle(Util.getTextofLanguage(SearchActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(SearchActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                        dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                        dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                         dlgAlert.setCancelable(false);
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(SearchActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
@@ -268,7 +292,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                                 });
                         dlgAlert.create().show();
                     } else {
-                        detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -327,12 +351,12 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
                         }
                         offset += 1;
-                        boolean isNetwork = Util.checkNetwork(SearchActivity.this);
-                        if (isNetwork == true) {
+
+                        if (NetworkStatus.getInstance().isConnected(SearchActivity.this)) {
 
                             // default data
                             Search_Data_input search_data_input = new Search_Data_input();
-                            search_data_input.setAuthToken(Util.authTokenStr);
+                            search_data_input.setAuthToken(authTokenStr);
                             search_data_input.setLimit(String.valueOf(limit));
                             search_data_input.setOffset(String.valueOf(offset));
                             search_data_input.setQ(searchTextStr.trim());
@@ -506,13 +530,13 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 //        ProgressBarHandler pDialog;
 //        String responseStr;
 //        int status;
-//        String videoGenreStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoGenreStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
 //        String videoName = "";
-//        String videoImageStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-//        String videoPermalinkStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-//        String videoTypeStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-//        String videoTypeIdStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-//        String videoUrlStr = Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoImageStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoPermalinkStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoTypeStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoUrlStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
 //        String isEpisodeStr = "";
 //        String movieUniqueIdStr = "";
 //        String movieStreamUniqueIdStr = "";
@@ -542,7 +566,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 //                }else{
 //                    httppost.addHeader("country", "IN");
 //
-//                }                httppost.addHeader("lang_code", Util.getTextofLanguage(SearchActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                }                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //
 //                // Execute HTTP Post Request
@@ -567,7 +591,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 //                                footerView.setVisibility(View.GONE);
 //                            }
 //
-//                            Toast.makeText(SearchActivity.this, Util.getTextofLanguage(SearchActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(SearchActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //                        }
 //
 //                    });
@@ -833,7 +857,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false);
         searchView.setIconifiedByDefault(false);
-        searchView.setQueryHint(Util.getTextofLanguage(SearchActivity.this, Util.SEARCH_PLACEHOLDER, Util.DEFAULT_SEARCH_PLACEHOLDER));
+        searchView.setQueryHint(languagePreference.getTextofLanguage(SEARCH_PLACEHOLDER, DEFAULT_SEARCH_PLACEHOLDER));
         searchView.requestFocus();
         int searchImgId = getResources().getIdentifier(String.valueOf(R.id.search_button), null, null);
         ImageView v = (ImageView) searchView.findViewById(searchImgId);
@@ -843,7 +867,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         final SearchView.SearchAutoComplete theTextArea = (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
         theTextArea.setBackgroundResource(R.drawable.edit);
 
-        theTextArea.setHint(Util.getTextofLanguage(SearchActivity.this, Util.TEXT_SEARCH_PLACEHOLDER, Util.DEFAULT_TEXT_SEARCH_PLACEHOLDER));
+        theTextArea.setHint(languagePreference.getTextofLanguage(TEXT_SEARCH_PLACEHOLDER, DEFAULT_TEXT_SEARCH_PLACEHOLDER));
        /* if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
             theTextArea.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_search_large, 0, 0, 0);
             v.setImageResource(R.drawable.ic_action_search_xlarge);
@@ -875,11 +899,11 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     String query = theTextArea.getText().toString().trim();
                     if (query.equalsIgnoreCase("") || query == null) {
                         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(SearchActivity.this, R.style.MyAlertDialogStyle);
-                        dlgAlert.setMessage(Util.getTextofLanguage(SearchActivity.this, Util.SEARCH_ALERT, Util.DEFAULT_SEARCH_ALERT));
-                        dlgAlert.setTitle(Util.getTextofLanguage(SearchActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(SearchActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                        dlgAlert.setMessage(languagePreference.getTextofLanguage(SEARCH_ALERT, DEFAULT_SEARCH_ALERT));
+                        dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                         dlgAlert.setCancelable(false);
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(SearchActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
@@ -903,15 +927,14 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                         if (itemData != null && itemData.size() > 0) {
                             itemData.clear();
                         }
-                        boolean isNetwork = Util.checkNetwork(SearchActivity.this);
                         isSearched = true;
-                        if (isNetwork == false) {
+                        if (!NetworkStatus.getInstance().isConnected(SearchActivity.this)) {
                             noInternetConnectionLayout.setVisibility(View.VISIBLE);
                             gridView.setVisibility(View.GONE);
 
                         } else {
                             Search_Data_input search_data_input = new Search_Data_input();
-                            search_data_input.setAuthToken(Util.authTokenStr);
+                            search_data_input.setAuthToken(authTokenStr);
                             search_data_input.setLimit(String.valueOf(limit));
                             search_data_input.setOffset(String.valueOf(offset));
                             search_data_input.setQ(searchTextStr.trim());
@@ -1879,13 +1902,13 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
             // for tv shows navigate to episodes
             if ((movieTypeId.equalsIgnoreCase("3"))) {
-                if (moviePermalink.matches(Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA))) {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(SearchActivity.this);
-                    dlgAlert.setMessage(Util.getTextofLanguage(SearchActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                    dlgAlert.setTitle(Util.getTextofLanguage(SearchActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(SearchActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(SearchActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -1910,13 +1933,13 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
             else if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
                 final Intent detailsIntent = new Intent(SearchActivity.this, MovieDetailsActivity.class);
 
-                if (moviePermalink.matches(Util.getTextofLanguage(SearchActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA))) {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(SearchActivity.this);
-                    dlgAlert.setMessage(Util.getTextofLanguage(SearchActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                    dlgAlert.setTitle(Util.getTextofLanguage(SearchActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(SearchActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(SearchActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();

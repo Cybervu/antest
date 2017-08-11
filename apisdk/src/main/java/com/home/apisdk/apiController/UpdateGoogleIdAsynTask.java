@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.UpdateGoogleIdInputModel;
 import com.home.apisdk.apiModel.UpdateGoogleIdOutputModel;
 
@@ -58,10 +58,10 @@ public class UpdateGoogleIdAsynTask extends AsyncTask<UpdateGoogleIdInputModel, 
             HttpClient httpclient=new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getUpdateGoogleid());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.updateGoogleIdInputModel.getAuthToken());
-            httppost.addHeader(CommonConstants.USER_ID, this.updateGoogleIdInputModel.getUser_id());
-            httppost.addHeader(CommonConstants.DEVICE_ID, this.updateGoogleIdInputModel.getDevice_id());
-            httppost.addHeader(CommonConstants.GOOGLE_ID, this.updateGoogleIdInputModel.getGoogle_id());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.updateGoogleIdInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.USER_ID, this.updateGoogleIdInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.DEVICE_ID, this.updateGoogleIdInputModel.getDevice_id());
+            httppost.addHeader(HeaderConstants.GOOGLE_ID, this.updateGoogleIdInputModel.getGoogle_id());
 
 
 
@@ -126,14 +126,14 @@ public class UpdateGoogleIdAsynTask extends AsyncTask<UpdateGoogleIdInputModel, 
         listener.onUpdateGoogleIdPreExecuteStarted();
 
         status = 0;
-            if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+            if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
                 message = "Packge Name Not Matched";
                 listener.onUpdateGoogleIdPostExecuteCompleted(updateGoogleIdOutputModel,status,message);
                 return;
             }
-            if(CommonConstants.hashKey.equals(""))
+            if(HeaderConstants.hashKey.equals(""))
             {
                 this.cancel(true);
                 message = "Hash Key Is Not Available. Please Initialize The SDK";

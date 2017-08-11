@@ -23,6 +23,8 @@ import com.home.apisdk.apiModel.RemoveDeviceInputModel;
 import com.home.apisdk.apiModel.RemoveDeviceOutputModel;
 import com.home.vod.R;
 import com.home.vod.activity.ManageDevices;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -43,7 +45,19 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTask.RemoveDeviceListner {
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DEREGISTER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEREGISTER;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.util.Constant.authTokenStr;
+
+public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTask.RemoveDeviceListner{
     private Context mContext;
     ArrayList<String> deviceName = new ArrayList<>();
     ArrayList<String> deviceInfo = new ArrayList<>();
@@ -57,7 +71,7 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-
+    LanguagePreference languagePreference;
 
 
     public DeviceListAdapter(Context mContext, ArrayList<String> deviceName, ArrayList<String> deviceInfo, ArrayList<String> deviceFlag) {
@@ -66,6 +80,7 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
         this.deviceInfo = deviceInfo;
         this.deviceFlag = deviceFlag;
         preferenceManager = PreferenceManager.getPreferenceManager(mContext);
+        languagePreference = LanguagePreference.getLanguagePreference(mContext);
     }
 
     @Override
@@ -114,7 +129,7 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
             os_version.setText(info[1]);
         }
 
-        delete_device.setText(Util.getTextofLanguage(mContext, Util.DEREGISTER,Util.DEFAULT_DEREGISTER));
+        delete_device.setText(languagePreference.getTextofLanguage(DEREGISTER,DEFAULT_DEREGISTER));
 
         if((deviceFlag.get(position)).trim().equals("1"))
         {
@@ -127,8 +142,7 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
         delete_device.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isNetwork = Util.checkNetwork(mContext);
-                if(isNetwork)
+                if(NetworkStatus.getInstance().isConnected(mContext))
                 {
 
                     if((deviceFlag.get(position)).trim().equals("0"))
@@ -136,10 +150,10 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
                         devie_id = deviceName.get(position);
 
                         RemoveDeviceInputModel removeDeviceInputModel = new RemoveDeviceInputModel();
-                        removeDeviceInputModel.setAuthToken(Util.authTokenStr);
+                        removeDeviceInputModel.setAuthToken(authTokenStr);
                         removeDeviceInputModel.setDevice(devie_id);
                         removeDeviceInputModel.setUser_id(preferenceManager.getUseridFromPref());
-                        removeDeviceInputModel.setLang_code(Util.getTextofLanguage(mContext,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                        removeDeviceInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
                         RemoveDeviceAsynTask asynGetPlanid = new RemoveDeviceAsynTask(removeDeviceInputModel, (RemoveDeviceAsynTask.RemoveDeviceListner) mContext, mContext);
                         asynGetPlanid.executeOnExecutor(threadPoolExecutor);
 
@@ -149,7 +163,7 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
 
                 }
                 else {
-                    Toast.makeText(mContext,Util.getTextofLanguage(mContext,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext,languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -172,9 +186,9 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(message);
             dlgAlert.setTitle(null);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -191,10 +205,10 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
         {
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(message);
-            dlgAlert.setTitle(Util.getTextofLanguage(mContext, Util.SORRY, Util.DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(mContext,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();

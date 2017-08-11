@@ -2,13 +2,11 @@ package com.home.apisdk.apiController;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.View;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.MenuListInput;
 import com.home.apisdk.apiModel.MenuListOutput;
 
@@ -63,9 +61,9 @@ public class GetMenuListAsynctask extends AsyncTask<MenuListInput,Void ,Void > {
             HttpPost httppost = new HttpPost(APIUrlConstant.getMenuListUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.menuListInput.getAuthToken());
-            httppost.addHeader(CommonConstants.COUNTRY, this.menuListInput.getCountry());
-            httppost.addHeader(CommonConstants.LANG_CODE, this.menuListInput.getLang_code());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.menuListInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.COUNTRY, this.menuListInput.getCountry());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.menuListInput.getLang_code());
 
             // Execute HTTP Post Request
             try {
@@ -145,14 +143,14 @@ public class GetMenuListAsynctask extends AsyncTask<MenuListInput,Void ,Void > {
         super.onPreExecute();
         listener.onGetMenuListPreExecuteStarted();
         code= 0;
-        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetMenuListPostExecuteCompleted(menuListOutput,footermenuListOutput,code,message);
             return;
         }
-        if(CommonConstants.hashKey.equals(""))
+        if(HeaderConstants.hashKey.equals(""))
         {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";

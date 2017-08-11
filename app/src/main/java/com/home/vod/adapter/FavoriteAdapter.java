@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.home.vod.R;
 import com.home.vod.activity.FavoriteActivity;
 import com.home.vod.model.GridItem;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
@@ -25,18 +26,22 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 
 public class FavoriteAdapter extends ArrayAdapter<GridItem> {
     private int layoutResourceId;
     boolean close = false;
     private ArrayList<GridItem> data = new ArrayList<GridItem>();
     private FavoriteActivity mActivity;
+    LanguagePreference languagePreference;
 
     public FavoriteAdapter(FavoriteActivity mActivity, int layoutResourceId, ArrayList<GridItem> data) {
         super(mActivity, layoutResourceId, data);
         this.mActivity = mActivity;
         this.layoutResourceId = layoutResourceId;
         this.data = data;
+        languagePreference = LanguagePreference.getLanguagePreference(mActivity);
     }
 
 
@@ -126,7 +131,7 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
 
         }
 
-        if(imageId.matches("") || imageId.matches(Util.getTextofLanguage(mActivity, Util.NO_DATA, Util.DEFAULT_NO_DATA))){
+        if(imageId.matches("") || imageId.matches(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){
             holder.videoImageview.setImageResource(R.drawable.logo);
 
 

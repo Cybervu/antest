@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
 import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
 
@@ -61,8 +61,8 @@ public class CheckGeoBlockCountryAsynTask extends AsyncTask<CheckGeoBlockInputMo
                 HttpPost httppost = new HttpPost(url);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-                httppost.addHeader(CommonConstants.AUTH_TOKEN, this.checkGeoBlockInputModel.getAuthToken());
-                httppost.addHeader(CommonConstants.IP, this.checkGeoBlockInputModel.getIp());
+                httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.checkGeoBlockInputModel.getAuthToken());
+                httppost.addHeader(HeaderConstants.IP, this.checkGeoBlockInputModel.getIp());
 
 
                 // Execute HTTP Post Request
@@ -114,14 +114,14 @@ public class CheckGeoBlockCountryAsynTask extends AsyncTask<CheckGeoBlockInputMo
             listener.onCheckGeoBlockCountryPreExecuteStarted();
             responseStr = "0";
            /* status = 0;
-            if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+            if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
             {
                 this.cancel(true);
                 message = "Packge Name Not Matched";
                 listener.onCheckGeoBlockCountryPostExecuteCompleted(checkGeoBlockOutputModel,status,message);
                 return;
             }
-            if(CommonConstants.hashKey.equals(""))
+            if(HeaderConstants.hashKey.equals(""))
             {
                 this.cancel(true);
                 message = "Hash Key Is Not Available. Please Initialize The SDK";

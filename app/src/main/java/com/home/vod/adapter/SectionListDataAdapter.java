@@ -32,6 +32,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
+
 public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListDataAdapter.SingleItemRowHolder> {
 
     int layoutname = 0;
@@ -153,14 +155,13 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                     Log.v("SUBHA","HHH"+moviePermalink + movieTypeId);
                     if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
                         final Intent detailsIntent = new Intent(mContext, MovieDetailsActivity.class);
-                        detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         mContext.startActivity(detailsIntent);
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
                         final Intent detailsIntent = new Intent(mContext, ShowWithEpisodesActivity.class);
-
-                        detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         mContext.startActivity(detailsIntent);
 

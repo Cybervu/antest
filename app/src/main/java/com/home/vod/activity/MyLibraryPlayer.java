@@ -36,6 +36,7 @@ import com.home.apisdk.apiModel.FFVideoLogDetailsInput;
 import com.home.apisdk.apiModel.ResumeVideoLogDetailsInput;
 import com.home.apisdk.apiModel.VideoLogsInputModel;
 import com.home.vod.R;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.subtitle_support.Caption;
 import com.home.vod.subtitle_support.FormatSRT;
@@ -70,6 +71,11 @@ import java.util.concurrent.TimeUnit;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.util.Constant.authTokenStr;
 
 
 /*enum ContentTypes1 {
@@ -128,7 +134,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     boolean center_pause_paly_timer_is_running = false;
     RelativeLayout player_layout;
 
-
+LanguagePreference languagePreference;
     boolean compressed = true;
     int player_layout_height, player_layout_width;
     int screenWidth, screenHeight;
@@ -223,6 +229,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             userIdStr = "";
 
         }
+        languagePreference = LanguagePreference.getLanguagePreference(MyLibraryPlayer.this);
 
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
         subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
@@ -253,7 +260,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
         Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
-        videoCastCrewTitleTextView.setText(Util.getTextofLanguage(MyLibraryPlayer.this, Util.CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
+        videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
 
 
         MovableTimer = new Timer();
@@ -764,7 +771,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                             }
                             else {
                                 VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
-                                videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                                videoLogsInputModel.setAuthToken(authTokenStr);
                                 videoLogsInputModel.setUserId(userIdStr.trim());
                                 videoLogsInputModel.setIpAddress(ipAddressStr.trim());
                                 videoLogsInputModel.setMuviUniqueId(movieId.trim());
@@ -803,7 +810,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                 }
                                 else {
                                     VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
-                                    videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                                    videoLogsInputModel.setAuthToken(authTokenStr);
                                     videoLogsInputModel.setUserId(userIdStr.trim());
                                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
                                     videoLogsInputModel.setMuviUniqueId(movieId.trim());
@@ -988,7 +995,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
                                     FFVideoLogDetailsInput ffVideoLogDetailsInput= new FFVideoLogDetailsInput();
-                                    ffVideoLogDetailsInput.setAuthToken(Util.authTokenStr);
+                                    ffVideoLogDetailsInput.setAuthToken(authTokenStr);
                                     ffVideoLogDetailsInput.setUser_id(userIdStr);
                                     ffVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
                                     ffVideoLogDetailsInput.setMovie_id(movieId.trim());
@@ -1002,7 +1009,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                     asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else {
                                     FFVideoLogDetailsInput ffVideoLogDetailsInput= new FFVideoLogDetailsInput();
-                                    ffVideoLogDetailsInput.setAuthToken(Util.authTokenStr);
+                                    ffVideoLogDetailsInput.setAuthToken(authTokenStr);
                                     ffVideoLogDetailsInput.setUser_id(userIdStr);
                                     ffVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
                                     ffVideoLogDetailsInput.setMovie_id(movieId.trim());
@@ -1023,7 +1030,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
                                     VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
-                                    videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                                    videoLogsInputModel.setAuthToken(authTokenStr);
                                     videoLogsInputModel.setUserId(userIdStr.trim());
                                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
                                     videoLogsInputModel.setMuviUniqueId(movieId.trim());
@@ -1037,7 +1044,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else if (currentPositionStr > 0 && currentPositionStr % 60 == 0) {
                                     VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
-                                    videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                                    videoLogsInputModel.setAuthToken(authTokenStr);
                                     videoLogsInputModel.setUserId(userIdStr.trim());
                                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
                                     videoLogsInputModel.setMuviUniqueId(movieId.trim());
@@ -1398,7 +1405,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         if (video_completed == false) {
 
             ResumeVideoLogDetailsInput resumeVideoLogDetailsInput=new ResumeVideoLogDetailsInput();
-            resumeVideoLogDetailsInput.setAuthToken(Util.authTokenStr);
+            resumeVideoLogDetailsInput.setAuthToken(authTokenStr);
             resumeVideoLogDetailsInput.setUser_id(userIdStr.trim());
             resumeVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
             resumeVideoLogDetailsInput.setMovie_id(movieId.trim());
@@ -1446,7 +1453,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             timer = null;
         }
         ResumeVideoLogDetailsInput resumeVideoLogDetailsInput=new ResumeVideoLogDetailsInput();
-        resumeVideoLogDetailsInput.setAuthToken(Util.authTokenStr);
+        resumeVideoLogDetailsInput.setAuthToken(authTokenStr);
         resumeVideoLogDetailsInput.setUser_id(userIdStr.trim());
         resumeVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
         resumeVideoLogDetailsInput.setMovie_id(movieId.trim());
@@ -1827,9 +1834,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         dlgAlert.setMessage(msg);
         dlgAlert.setTitle(Title);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(MyLibraryPlayer.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
         dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(MyLibraryPlayer.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -1873,7 +1880,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 }
                 else {
                     VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
-                    videoLogsInputModel.setAuthToken(Util.authTokenStr);
+                    videoLogsInputModel.setAuthToken(authTokenStr);
                     videoLogsInputModel.setUserId(userIdStr.trim());
                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
                     videoLogsInputModel.setMuviUniqueId(movieId.trim());
@@ -2041,7 +2048,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             }
 
             VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
-            videoLogsInputModel.setAuthToken(Util.authTokenStr);
+            videoLogsInputModel.setAuthToken(authTokenStr);
             videoLogsInputModel.setUserId(userIdStr.trim());
             videoLogsInputModel.setIpAddress(ipAddressStr.trim());
             videoLogsInputModel.setMuviUniqueId(movieId.trim());

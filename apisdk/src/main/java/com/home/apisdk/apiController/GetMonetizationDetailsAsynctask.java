@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.GetMonetizationDetailsInputModel;
 import com.home.apisdk.apiModel.GetMonetizationDetailsOutputModel;
 
@@ -60,11 +60,11 @@ public class GetMonetizationDetailsAsynctask extends AsyncTask<GetMonetizationDe
             HttpClient httpclient=new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetMonetizationDetailsUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.getMonetizationDetailsInputModel.getAuthToken());
-            httppost.addHeader(CommonConstants.USER_ID,this.getMonetizationDetailsInputModel.getUser_id());
-            httppost.addHeader(CommonConstants.MOVIE_ID,this.getMonetizationDetailsInputModel.getMovie_id());
-            httppost.addHeader(CommonConstants.PURCHASE_TYPE,this.getMonetizationDetailsInputModel.getPurchase_type());
-            httppost.addHeader(CommonConstants.STREAM_ID,this.getMonetizationDetailsInputModel.getStream_id());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getMonetizationDetailsInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.USER_ID,this.getMonetizationDetailsInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.MOVIE_ID,this.getMonetizationDetailsInputModel.getMovie_id());
+            httppost.addHeader(HeaderConstants.PURCHASE_TYPE,this.getMonetizationDetailsInputModel.getPurchase_type());
+            httppost.addHeader(HeaderConstants.STREAM_ID,this.getMonetizationDetailsInputModel.getStream_id());
 
 
             // Execute HTTP Post Request
@@ -140,14 +140,14 @@ public class GetMonetizationDetailsAsynctask extends AsyncTask<GetMonetizationDe
         listener.onGetMonetizationDetailsPreExecuteStarted();
 
         status = 0;
-        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetMonetizationDetailsPostExecuteCompleted(getMonetizationDetailsOutputModel,status,message);
             return;
         }
-        if(CommonConstants.hashKey.equals(""))
+        if(HeaderConstants.hashKey.equals(""))
         {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";

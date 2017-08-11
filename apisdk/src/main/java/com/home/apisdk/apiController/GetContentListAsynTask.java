@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.ContentListInput;
 import com.home.apisdk.apiModel.ContentListOutput;
 
@@ -64,14 +64,14 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetContentListUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.contentListInput.getAuthToken());
-            httppost.addHeader(CommonConstants.PERMALINK, this.contentListInput.getPermalink());
-            httppost.addHeader(CommonConstants.LIMIT, this.contentListInput.getLimit());
-            httppost.addHeader(CommonConstants.OFFSET, this.contentListInput.getOffset());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.contentListInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.PERMALINK, this.contentListInput.getPermalink());
+            httppost.addHeader(HeaderConstants.LIMIT, this.contentListInput.getLimit());
+            httppost.addHeader(HeaderConstants.OFFSET, this.contentListInput.getOffset());
 //            httppost.addHeader("orderby", this.contentListInput.getOrderby());
-            httppost.addHeader(CommonConstants.COUNTRY, this.contentListInput.getCountry());
-            httppost.addHeader(CommonConstants.LANG_CODE,this.contentListInput.getLanguage());
-            httppost.addHeader(CommonConstants.ORDER_BY,this.contentListInput.getOrderby());
+            httppost.addHeader(HeaderConstants.COUNTRY, this.contentListInput.getCountry());
+            httppost.addHeader(HeaderConstants.LANG_CODE,this.contentListInput.getLanguage());
+            httppost.addHeader(HeaderConstants.ORDER_BY,this.contentListInput.getOrderby());
 
             // Execute HTTP Post Request
             try {
@@ -170,13 +170,13 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
         listener.onGetContentListPreExecuteStarted();
         responseStr = "0";
         status = 0;
-       if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+       if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetContentListPostExecuteCompleted(contentListOutput, status, totalItems, message);
             return;
        }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
            message = "Hash Key Is Not Available. Please Initialize The SDK";
         listener.onGetContentListPostExecuteCompleted(contentListOutput, status, totalItems, message);

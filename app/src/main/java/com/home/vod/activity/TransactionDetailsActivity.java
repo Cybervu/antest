@@ -40,6 +40,8 @@ import com.home.apisdk.apiModel.GetInvoicePdfOutputModel;
 import com.home.apisdk.apiModel.PurchaseHistoryInputModel;
 import com.home.apisdk.apiModel.PurchaseHistoryOutputModel;
 import com.home.vod.R;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import java.io.BufferedInputStream;
@@ -56,6 +58,40 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.AMOUNT;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_AMOUNT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_COMPLETED;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_INTERRUPTED;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_INVOICE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_PDF;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ORDER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_NAME;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRANASCTION_DETAIL;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRANSACTION_DATE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRANSACTION_STATUS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
+import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_COMPLETED;
+import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_INTERRUPTED;
+import static com.home.vod.preferences.LanguagePreference.INVOICE;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_PDF;
+import static com.home.vod.preferences.LanguagePreference.ORDER;
+import static com.home.vod.preferences.LanguagePreference.PLAN_NAME;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.TRANASCTION_DETAIL;
+import static com.home.vod.preferences.LanguagePreference.TRANSACTION_DATE;
+import static com.home.vod.preferences.LanguagePreference.TRANSACTION_STATUS;
+import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
+import static com.home.vod.util.Constant.authTokenStr;
+
 
 public class TransactionDetailsActivity extends AppCompatActivity implements DeleteInvoicePdfAsynTask.DeleteInvoicePdf, PurchaseHistoryAsyntask.PurchaseHistory,
         GetInvoicePdfAsynTask.GetInvoicePdf{
@@ -68,7 +104,6 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
     TextView transactionDateTextView, transactionOrdertextView, transactionAmounttextView, transactionInvoicetextView,
             transactionStatustextView, transactionPlanNameTextView;
     Button transactionDownloadButton;
-    boolean network = false;
 
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -88,7 +123,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
 
     String TransactionDate, OredrId, Amount, Invoice, TransactionStatus, PlanName;
 
-    String Download_Url;
+    String download_Url;
     boolean deletion_success = false;
     AlertDialog msgAlert;
     private String Currency_symbol;
@@ -96,12 +131,14 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
     static File mediaStorageDir;
     TextView no_internet_text;
     ProgressBarHandler Ph;
+    LanguagePreference languagePreference;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_details);
+        languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
@@ -119,8 +156,8 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
         tryAgainButton = (Button) findViewById(R.id.tryAgainButton);
         no_internet_text = (TextView) findViewById(R.id.no_internet_text);
 
-        no_internet_text.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.NO_INTERNET_NO_DATA, Util.DEFAULT_NO_INTERNET_NO_DATA));
-        tryAgainButton.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.TRY_AGAIN, Util.DEFAULT_TRY_AGAIN));
+        no_internet_text.setText(languagePreference.getTextofLanguage(NO_INTERNET_NO_DATA,DEFAULT_NO_INTERNET_NO_DATA));
+        tryAgainButton.setText(languagePreference.getTextofLanguage(TRY_AGAIN,DEFAULT_TRY_AGAIN));
 
 
         transactionDateLayout = (LinearLayout) findViewById(R.id.transactionDateLayout);
@@ -134,43 +171,43 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
         transactionDateTitleTextView = (TextView) findViewById(R.id.transactionDateTitleTextView);
         Typeface typeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionDateTitleTextView.setTypeface(typeface);
-        transactionDateTitleTextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.TRANSACTION_DATE, Util.DEFAULT_TRANSACTION_DATE) + " :");
+        transactionDateTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_DATE, DEFAULT_TRANSACTION_DATE) + " :");
 
         transactionOrderTitletextView = (TextView) findViewById(R.id.transactionOrderTitletextView);
         Typeface typeface1 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionOrderTitletextView.setTypeface(typeface1);
-        transactionOrderTitletextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.ORDER, Util.DEFAULT_ORDER) + " :");
+        transactionOrderTitletextView.setText(languagePreference.getTextofLanguage(ORDER, DEFAULT_ORDER) + " :");
 
         transactionAmountTitletextView = (TextView) findViewById(R.id.transactionAmountTitletextView);
         Typeface typeface2 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionAmountTitletextView.setTypeface(typeface2);
-        transactionAmountTitletextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.AMOUNT, Util.DEFAULT_AMOUNT) + " :");
+        transactionAmountTitletextView.setText(languagePreference.getTextofLanguage(AMOUNT, DEFAULT_AMOUNT) + " :");
 
 
         transactionInvoiceTitletextView = (TextView) findViewById(R.id.transactionInvoiceTitletextView);
         Typeface typeface3 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionInvoiceTitletextView.setTypeface(typeface3);
-        transactionInvoiceTitletextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.INVOICE, Util.DEFAULT_INVOICE) + " :");
+        transactionInvoiceTitletextView.setText(languagePreference.getTextofLanguage(INVOICE, DEFAULT_INVOICE) + " :");
 
         transactionStatusTitletextView = (TextView) findViewById(R.id.transactionStatusTitletextView);
         Typeface typeface4 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionStatusTitletextView.setTypeface(typeface4);
-        transactionStatusTitletextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.TRANSACTION_STATUS, Util.DEFAULT_TRANSACTION_STATUS) + " :");
+        transactionStatusTitletextView.setText(languagePreference.getTextofLanguage(TRANSACTION_STATUS, DEFAULT_TRANSACTION_STATUS) + " :");
 
         transactionPlanNameTitleTextView = (TextView) findViewById(R.id.transactionPlanNameTitleTextView);
         Typeface typeface5 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionPlanNameTitleTextView.setTypeface(typeface5);
-        transactionPlanNameTitleTextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.PLAN_NAME, Util.DEFAULT_PLAN_NAME) + " :");
+        transactionPlanNameTitleTextView.setText(languagePreference.getTextofLanguage(PLAN_NAME, DEFAULT_PLAN_NAME) + " :");
 
         transactionTitleTextView = (TextView) findViewById(R.id.transactionTitleTextView);
         Typeface typeface6 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionTitleTextView.setTypeface(typeface6);
-        transactionTitleTextView.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.TRANASCTION_DETAIL, Util.DEFAULT_TRANASCTION_DETAIL));
+        transactionTitleTextView.setText(languagePreference.getTextofLanguage(TRANASCTION_DETAIL, DEFAULT_TRANASCTION_DETAIL));
 
         transactionDownloadButton = (Button) findViewById(R.id.transactionDownloadButton);
         Typeface typeface7 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         transactionDownloadButton.setTypeface(typeface7);
-        transactionDownloadButton.setText(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.DOWNLOAD_BUTTON_TITLE, Util.DEFAULT_DOWNLOAD_BUTTON_TITLE));
+        transactionDownloadButton.setText(languagePreference.getTextofLanguage(DOWNLOAD_BUTTON_TITLE, DEFAULT_DOWNLOAD_BUTTON_TITLE));
 
         Typeface typeface8 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 
@@ -188,13 +225,12 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
         transactionStatustextView.setTypeface(typeface8);
         transactionPlanNameTextView.setTypeface(typeface8);
 
-        network = Util.checkNetwork(TransactionDetailsActivity.this);
         id = getIntent().getStringExtra("id");
         user_id = getIntent().getStringExtra("user_id");
 
         // Calling Api To get Transaction Details.
 
-        if (Util.checkNetwork(TransactionDetailsActivity.this))
+        if (NetworkStatus.getInstance().isConnected(TransactionDetailsActivity.this))
             GetPurchaseHistoryDetails();
         else {
             noInternet.setVisibility(View.VISIBLE);
@@ -204,7 +240,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
         tryAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Util.checkNetwork(TransactionDetailsActivity.this))
+                if (NetworkStatus.getInstance().isConnected(TransactionDetailsActivity.this))
                     GetPurchaseHistoryDetails();
                 else {
                     noInternet.setVisibility(View.VISIBLE);
@@ -231,13 +267,14 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
                     }
                 } else {
                     //Call whatever you want
-                    if (Util.checkNetwork(TransactionDetailsActivity.this)) {
-                        if (!Download_Url.equals(""))
+                    if (NetworkStatus.getInstance().isConnected(TransactionDetailsActivity.this)) {
+                        if (!download_Url.equals(""))
                             DownloadTransactionDetails();
                         else
-                            Toast.makeText(getApplicationContext(), Util.getTextofLanguage(TransactionDetailsActivity.this, Util.NO_PDF, Util.DEFAULT_NO_PDF), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), 
+                                    languagePreference.getTextofLanguage(NO_PDF, DEFAULT_NO_PDF), Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(getApplicationContext(), Util.getTextofLanguage(TransactionDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -250,9 +287,9 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
     public void DownloadTransactionDetails() {
 
         registerReceiver(InternetStatus, new IntentFilter("android.net.wifi.STATE_CHANGE"));
-        new DownloadFileFromURL().execute(Util.Dwonload_pdf_rootUrl + Download_Url);
+        new DownloadFileFromURL().execute(Util.Dwonload_pdf_rootUrl + download_Url);
 
-        Log.v("MUVI", "Url=" + Util.Dwonload_pdf_rootUrl + Download_Url);
+        Log.v("MUVI", "Url=" + Util.Dwonload_pdf_rootUrl + download_Url);
 
     }
 
@@ -260,11 +297,11 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
         @Override
         public void onReceive(Context context, Intent intent) {
             // Extract data included in the Intent
-            //  Toast.makeText(getApplicationContext(),""+Util.checkNetwork(TransactionDetailsActivity.this),Toast.LENGTH_SHORT).show();
-            if (!Util.checkNetwork(TransactionDetailsActivity.this)) {
+            //  Toast.makeText(getApplicationContext(),""+NetworkStatus.getInstance().isConnected(TransactionDetailsActivity.this),Toast.LENGTH_SHORT).show();
+            if (!NetworkStatus.getInstance().isConnected(TransactionDetailsActivity.this)) {
                 if (pDialog.isShowing() && pDialog != null) {
 
-                    showDialog(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.DOWNLOAD_INTERRUPTED, Util.DEFAULT_DOWNLOAD_INTERRUPTED), 0);
+                    showDialog(languagePreference.getTextofLanguage(DOWNLOAD_INTERRUPTED, DEFAULT_DOWNLOAD_INTERRUPTED), 0);
                     unregisterReceiver(InternetStatus);
                     pDialog.setProgress(0);
                     progressStatus = 0;
@@ -315,11 +352,11 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
 
 
         GetInvoicePdfInputModel getInvoicePdfInputModel=new GetInvoicePdfInputModel();
-        getInvoicePdfInputModel.setAuthToken(Util.authTokenStr);
+        getInvoicePdfInputModel.setAuthToken(authTokenStr);
         getInvoicePdfInputModel.setUser_id(user_id);
         getInvoicePdfInputModel.setId(id);
         getInvoicePdfInputModel.setDevice_type("app");
-        getInvoicePdfInputModel.setLang_code(Util.getTextofLanguage(TransactionDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        getInvoicePdfInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
         GetInvoicePdfAsynTask downloadDocumentDetails = new GetInvoicePdfAsynTask(getInvoicePdfInputModel,this,this);
         downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);
     }
@@ -403,7 +440,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
 
             if ((Integer.parseInt(progress[0])) == 100) {
 
-                showDialog(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.DOWNLOAD_COMPLETED, Util.DEFAULT_DOWNLOAD_COMPLETED), 1);
+                showDialog(languagePreference.getTextofLanguage(DOWNLOAD_COMPLETED, DEFAULT_DOWNLOAD_COMPLETED), 1);
 
                 unregisterReceiver(InternetStatus);
                 pDialog.setProgress(0);
@@ -446,7 +483,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
 //                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.DeleteInvoicePath.trim());//hv to cahnge
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //                httppost.addHeader("authToken", Util.authTokenStr);
-//                httppost.addHeader("filepath", Download_Url);
+//                httppost.addHeader("filepath", download_Url);
 //                httppost.addHeader("lang_code",Util.getTextofLanguage(TransactionDetailsActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //                // Execute HTTP Post Request
@@ -535,8 +572,8 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
         noInternet.setVisibility(View.GONE);
         primary_layout.setVisibility(View.VISIBLE);
         PurchaseHistoryInputModel purchaseHistoryInputModel=new PurchaseHistoryInputModel();
-        purchaseHistoryInputModel.setAuthToken(Util.authTokenStr);
-        purchaseHistoryInputModel.setLang_code(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        purchaseHistoryInputModel.setAuthToken(authTokenStr);
+        purchaseHistoryInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         purchaseHistoryInputModel.setUser_id(user_id);
         purchaseHistoryInputModel.setId(id);
         PurchaseHistoryAsyntask asynGetTransactionDetails = new PurchaseHistoryAsyntask(purchaseHistoryInputModel,this,this);
@@ -561,7 +598,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
 //                httppost.addHeader("authToken", Util.authTokenStr);
 //                httppost.addHeader("user_id", user_id);
 //                httppost.addHeader("id", id);
-//                httppost.addHeader("lang_code", Util.getTextofLanguage(TransactionDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //
 //                // Execute HTTP Post Request
@@ -764,7 +801,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
 //                httppost.addHeader("user_id", user_id);
 //                httppost.addHeader("id", id);
 //                httppost.addHeader("device_type", "app");
-//                httppost.addHeader("lang_code", Util.getTextofLanguage(TransactionDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //
 //                // Execute HTTP Post Request
@@ -785,10 +822,10 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
 //                    if (status == 200) {
 //
 //
-//                        Download_Url = myJson.optString("section");
-//                        if (Download_Url.equals("") || Download_Url == null || Download_Url.equals("null")) {
+//                        download_Url = myJson.optString("section");
+//                        if (download_Url.equals("") || download_Url == null || download_Url.equals("null")) {
 //
-//                            Download_Url = "";
+//                            download_Url = "";
 //                        }
 //                    } else {
 //                        responseStr = "0";
@@ -850,18 +887,18 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
     public void showDialog(String msg, final int deletevalue) {
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(TransactionDetailsActivity.this);
         dlgAlert.setMessage(msg);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
         dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
 
                         if (deletevalue == 1) {
                             DeleteInvoicePdfInputModel deleteInvoicePdfInputModel = new DeleteInvoicePdfInputModel();
-                            deleteInvoicePdfInputModel.setAuthToken(Util.authTokenStr);
-                            deleteInvoicePdfInputModel.setFilepath(Download_Url);
-                            deleteInvoicePdfInputModel.setLanguage_code(Util.getTextofLanguage(TransactionDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                            deleteInvoicePdfInputModel.setAuthToken(authTokenStr);
+                            deleteInvoicePdfInputModel.setFilepath(download_Url);
+                            deleteInvoicePdfInputModel.setLanguage_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             DeleteInvoicePdfAsynTask deletepdf = new DeleteInvoicePdfAsynTask(deleteInvoicePdfInputModel, TransactionDetailsActivity.this, TransactionDetailsActivity.this);
                             deletepdf.executeOnExecutor(threadPoolExecutor);
                         }
@@ -888,13 +925,13 @@ public class TransactionDetailsActivity extends AppCompatActivity implements Del
                 if (grantResults.length > 0) {
                     if ((grantResults.length > 0) && (grantResults[0]) == PackageManager.PERMISSION_GRANTED) {
                         //Call whatever you want
-                        if (Util.checkNetwork(TransactionDetailsActivity.this)) {
-                            if (!Download_Url.equals(""))
+                        if (NetworkStatus.getInstance().isConnected(TransactionDetailsActivity.this)) {
+                            if (!download_Url.equals(""))
                                 DownloadTransactionDetails();
                             else
-                                Toast.makeText(getApplicationContext(), Util.getTextofLanguage(TransactionDetailsActivity.this, Util.NO_PDF, Util.DEFAULT_NO_PDF), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_PDF, DEFAULT_NO_PDF), Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(getApplicationContext(), Util.getTextofLanguage(TransactionDetailsActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
                     } else {
                         finish();

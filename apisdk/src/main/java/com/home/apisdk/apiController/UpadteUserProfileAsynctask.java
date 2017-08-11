@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.Update_UserProfile_Input;
 import com.home.apisdk.apiModel.Update_UserProfile_Output;
 
@@ -60,13 +60,13 @@ public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Inp
             HttpPost httppost = new HttpPost(APIUrlConstant.getUpdateProfileUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.update_userProfile_input.getAuthToken());
-            httppost.addHeader(CommonConstants.USER_ID, this.update_userProfile_input.getUser_id());
-            httppost.addHeader(CommonConstants.NAME, this.update_userProfile_input.getName());
-            httppost.addHeader(CommonConstants.PASSWORD, this.update_userProfile_input.getPassword());
-            httppost.addHeader(CommonConstants.CUSTOM_LANGUAGES,this.update_userProfile_input.getCustom_languages());
-            httppost.addHeader(CommonConstants.CUSTOM_COUNTRY,this.update_userProfile_input.getCustom_country());
-            httppost.addHeader(CommonConstants.LANG_CODE,this.update_userProfile_input.getLang_code());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.update_userProfile_input.getAuthToken());
+            httppost.addHeader(HeaderConstants.USER_ID, this.update_userProfile_input.getUser_id());
+            httppost.addHeader(HeaderConstants.NAME, this.update_userProfile_input.getName());
+            httppost.addHeader(HeaderConstants.PASSWORD, this.update_userProfile_input.getPassword());
+            httppost.addHeader(HeaderConstants.CUSTOM_LANGUAGES,this.update_userProfile_input.getCustom_languages());
+            httppost.addHeader(HeaderConstants.CUSTOM_COUNTRY,this.update_userProfile_input.getCustom_country());
+            httppost.addHeader(HeaderConstants.LANG_CODE,this.update_userProfile_input.getLang_code());
 
             // Execute HTTP Post Request
             try {
@@ -120,13 +120,13 @@ public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Inp
         super.onPreExecute();
         listener.onUpdateUserProfilePreExecuteStarted();
         code = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onUpdateUserProfilePostExecuteCompleted(update_userProfile_output, code, message);
             return;
         }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onUpdateUserProfilePostExecuteCompleted(update_userProfile_output, code, message);

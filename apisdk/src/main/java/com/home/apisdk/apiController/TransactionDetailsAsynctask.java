@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.TransactionInputModel;
 import com.home.apisdk.apiModel.TransactionOutputModel;
 
@@ -61,9 +61,9 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getTransactionUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.transactionInputModel.getAuthToken());
-            httppost.addHeader(CommonConstants.USER_ID, this.transactionInputModel.getUser_id());
-            httppost.addHeader(CommonConstants.ID, this.transactionInputModel.getId());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.transactionInputModel.getAuthToken());
+            httppost.addHeader(HeaderConstants.USER_ID, this.transactionInputModel.getUser_id());
+            httppost.addHeader(HeaderConstants.ID, this.transactionInputModel.getId());
 
             // Execute HTTP Post Request
             try {
@@ -182,14 +182,14 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
         listener.onTransactionPreExecuteStarted();
 
         status = 0;
-        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
         {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onTransactionPostExecuteCompleted(transactionOutputModel,status,message);
             return;
         }
-        if(CommonConstants.hashKey.equals(""))
+        if(HeaderConstants.hashKey.equals(""))
         {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";

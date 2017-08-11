@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.home.vod.R;
 import com.home.vod.model.GridItem;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
@@ -24,6 +25,8 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 
 public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
     private Context context;
@@ -86,7 +89,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
         String imageId = item.getImage();
 
 
-        if(imageId.matches("") || imageId.matches(Util.getTextofLanguage(context, Util.NO_DATA, Util.DEFAULT_NO_DATA))){
+        if(imageId.matches("") || imageId.matches(LanguagePreference.getLanguagePreference(context).getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){
             holder.videoImageview.setImageResource(R.drawable.logo);
 
         }else {

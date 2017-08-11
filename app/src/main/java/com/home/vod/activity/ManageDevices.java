@@ -17,6 +17,7 @@ import com.home.apisdk.apiModel.LoadRegisteredDevicesInput;
 import com.home.apisdk.apiModel.LoadRegisteredDevicesOutput;
 import com.home.vod.R;
 import com.home.vod.adapter.DeviceListAdapter;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -27,6 +28,14 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MANAGE_DEVICE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_YOUR_DEVICE;
+import static com.home.vod.preferences.LanguagePreference.MANAGE_DEVICE;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.YOUR_DEVICE;
+import static com.home.vod.util.Constant.authTokenStr;
 
 public class ManageDevices extends AppCompatActivity implements LoadRegisteredDevicesAsync.LoadRegisteredDevices {
     String userId = "";
@@ -48,23 +57,25 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
     private PreferenceManager preferenceManager;
+    LanguagePreference languagePreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_devices);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
+        languagePreference = LanguagePreference.getLanguagePreference(ManageDevices.this);
         device_list = (ListView) findViewById(R.id.device_list);
         manage_device_text = (TextView) findViewById(R.id.manage_device_text);
 
-        manage_device_text.setText("  " + Util.getTextofLanguage(ManageDevices.this, Util.YOUR_DEVICE, Util.DEFAULT_YOUR_DEVICE));
+        manage_device_text.setText("  " + languagePreference.getTextofLanguage( YOUR_DEVICE, DEFAULT_YOUR_DEVICE));
         Typeface typeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         manage_device_text.setTypeface(typeface);
 
 
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-        mActionBarToolbar.setTitle(Util.getTextofLanguage(ManageDevices.this, Util.MANAGE_DEVICE, Util.DEFAULT_MANAGE_DEVICE));
+        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(MANAGE_DEVICE, DEFAULT_MANAGE_DEVICE));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,10 +86,10 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
         userId = preferenceManager.getUseridFromPref();
         emailId = preferenceManager.getEmailIdFromPref();
         LoadRegisteredDevicesInput loadRegisteredDevicesInput=new LoadRegisteredDevicesInput();
-        loadRegisteredDevicesInput.setAuthToken(Util.authTokenStr.trim());
+        loadRegisteredDevicesInput.setAuthToken(authTokenStr.trim());
         loadRegisteredDevicesInput.setDevice(Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID));
         loadRegisteredDevicesInput.setUser_id(userId);
-        loadRegisteredDevicesInput.setLang_code(Util.getTextofLanguage(ManageDevices.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        loadRegisteredDevicesInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         LoadRegisteredDevicesAsync asynLoadRegisteredDevices = new LoadRegisteredDevicesAsync(loadRegisteredDevicesInput, this, this);
         asynLoadRegisteredDevices.executeOnExecutor(threadPoolExecutor);
     }

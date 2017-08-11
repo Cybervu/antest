@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.Forgotpassword_input;
 import com.home.apisdk.apiModel.Forgotpassword_output;
 
@@ -61,9 +61,9 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
             HttpClient httpclient=new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getForgotPasswordUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.forgotpassword_input.getAuthToken());
-            httppost.addHeader(CommonConstants.EMAIL, this.forgotpassword_input.getEmail());
-            httppost.addHeader(CommonConstants.LANG_CODE,this.forgotpassword_input.getLang_code());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.forgotpassword_input.getAuthToken());
+            httppost.addHeader(HeaderConstants.EMAIL, this.forgotpassword_input.getEmail());
+            httppost.addHeader(HeaderConstants.LANG_CODE,this.forgotpassword_input.getLang_code());
 
             Log.v("MUVISDK", "responseStr"+this.forgotpassword_input.getAuthToken());
             Log.v("MUVISDK", "responseStr"+this.forgotpassword_input.getEmail());
@@ -129,14 +129,14 @@ public class ForgotpassAsynTask extends AsyncTask<Forgotpassword_input, Void, Vo
        // String s=forgotpassword_input.getPakagename();
         listener.onForgotpassDetailsPreExecuteStarted();
         status = 0;
-        if(!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api))
+        if(!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api))
        {
            this.cancel(true);
            message = "Packge Name Not Matched";
            listener.onForgotpassDetailsPostExecuteCompleted(forgotpassword_output, status, message);
            return;
        }
-       if(CommonConstants.hashKey.equals(""))
+       if(HeaderConstants.hashKey.equals(""))
        {
            this.cancel(true);
            message = "Hash Key Is Not Available. Please Initialize The SDK";

@@ -5,12 +5,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
-import com.home.apisdk.apiModel.ContentListInput;
-import com.home.apisdk.apiModel.ContentListOutput;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.GetCastDetailsInput;
 import com.home.apisdk.apiModel.GetCastDetailsOutputModel;
-import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -69,12 +66,12 @@ public class GetCastDetailsAsynTask extends AsyncTask<GetCastDetailsInput, Void,
             HttpPost httppost = new HttpPost(APIUrlConstant.getGetCastDetails());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.getCastDetailsInput.getAuthToken());
-            httppost.addHeader(CommonConstants.PERMALINK, this.getCastDetailsInput.getPermalink());
-            httppost.addHeader(CommonConstants.LIMIT, this.getCastDetailsInput.getLimit());
-            httppost.addHeader(CommonConstants.OFFSET, this.getCastDetailsInput.getOffset());
-            httppost.addHeader(CommonConstants.COUNTRY, this.getCastDetailsInput.getCountry());
-            httppost.addHeader(CommonConstants.LANG_CODE,this.getCastDetailsInput.getLanguage());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.getCastDetailsInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.PERMALINK, this.getCastDetailsInput.getPermalink());
+            httppost.addHeader(HeaderConstants.LIMIT, this.getCastDetailsInput.getLimit());
+            httppost.addHeader(HeaderConstants.OFFSET, this.getCastDetailsInput.getOffset());
+            httppost.addHeader(HeaderConstants.COUNTRY, this.getCastDetailsInput.getCountry());
+            httppost.addHeader(HeaderConstants.LANG_CODE,this.getCastDetailsInput.getLanguage());
 
             // Execute HTTP Post Request
             try {
@@ -184,13 +181,13 @@ public class GetCastDetailsAsynTask extends AsyncTask<GetCastDetailsInput, Void,
         listener.onGetCastDetailsPreExecuteStarted();
         responseStr = "0";
         status = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetCastDetailsPostExecuteCompleted(getCastDetailsOutputModel, status, totalItems, message);
             return;
         }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onGetCastDetailsPostExecuteCompleted(getCastDetailsOutputModel, status, totalItems, message);

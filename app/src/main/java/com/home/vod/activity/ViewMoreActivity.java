@@ -55,6 +55,8 @@ import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.GridItem;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -76,6 +78,50 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
+import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.NO;
+import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.PROFILE;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.YES;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
+import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.muvi.player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static com.muvi.player.utils.Util.HAS_FAVORITE;
 
 public class ViewMoreActivity extends AppCompatActivity implements LogoutAsynctask.Logout, GetLanguageListAsynTask.GetLanguageList,
         GetTranslateLanguageAsync.GetTranslateLanguageInfoListner, GetFeatureContentAsynTask.GetFeatureContent {
@@ -158,12 +204,13 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
     private GridView gridView;
     // private JazzyGridView gridView;
     RelativeLayout footerView;
+    LanguagePreference languagePreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_more);
-
+        languagePreference = LanguagePreference.getLanguagePreference(this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
@@ -191,7 +238,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 
         }
 
-        posterUrl = Util.getTextofLanguage(ViewMoreActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+        posterUrl = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
 
         gridView = (GridView) findViewById(R.id.imagesGridView);
         footerView = (RelativeLayout) findViewById(R.id.loadingPanel);
@@ -200,8 +247,8 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
         noDataLayout = (RelativeLayout) findViewById(R.id.noData);
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
         noDataTextView = (TextView) findViewById(R.id.noDataTextView);
-        noInternetTextView.setText(Util.getTextofLanguage(ViewMoreActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
-        noDataTextView.setText(Util.getTextofLanguage(ViewMoreActivity.this, Util.NO_CONTENT, Util.DEFAULT_NO_CONTENT));
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+        noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT, DEFAULT_NO_CONTENT));
 
         noInternetConnectionLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
@@ -249,13 +296,13 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
                 String moviePermalink = item.getPermalink();
                 String movieTypeId = item.getVideoTypeId();
 
-                if (moviePermalink.matches(Util.getTextofLanguage(ViewMoreActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ViewMoreActivity.this);
-                    dlgAlert.setMessage(Util.getTextofLanguage(ViewMoreActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                    dlgAlert.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ViewMoreActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ViewMoreActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -267,7 +314,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 
                     if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
                         final Intent movieDetailsIntent = new Intent(ViewMoreActivity.this, MovieDetailsActivity.class);
-                        movieDetailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                        movieDetailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         runOnUiThread(new Runnable() {
                             public void run() {
@@ -279,7 +326,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
                         final Intent detailsIntent = new Intent(ViewMoreActivity.this, ShowWithEpisodesActivity.class);
-                        detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -338,14 +385,13 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 
                         }
                         offset += 1;
-                        boolean isNetwork = Util.checkNetwork(ViewMoreActivity.this);
-                        if (isNetwork == true) {
+                        if (NetworkStatus.getInstance().isConnected(ViewMoreActivity.this)) {
 
                             // default data
                             FeatureContentInputModel featureContentInputModel = new FeatureContentInputModel();
-                            featureContentInputModel.setAuthToken(Util.authTokenStr);
+                            featureContentInputModel.setAuthToken(authTokenStr);
                             featureContentInputModel.setSection_id(sectionId.trim());
-                            featureContentInputModel.setLang_code(Util.getTextofLanguage(ViewMoreActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                            featureContentInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             GetFeatureContentAsynTask asyncLoadVideos = new GetFeatureContentAsynTask(featureContentInputModel,ViewMoreActivity.this,ViewMoreActivity.this);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
@@ -364,8 +410,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 
         //Detect Network Connection
 
-        boolean isNetwork = Util.checkNetwork(ViewMoreActivity.this);
-        if (isNetwork == false) {
+        if (!NetworkStatus.getInstance().isConnected(ViewMoreActivity.this)) {
             noInternetConnectionLayout.setVisibility(View.VISIBLE);
             noDataLayout.setVisibility(View.GONE);
             gridView.setVisibility(View.GONE);
@@ -397,9 +442,9 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
         scrolling = false;
 
         FeatureContentInputModel featureContentInputModel = new FeatureContentInputModel();
-        featureContentInputModel.setAuthToken(Util.authTokenStr);
+        featureContentInputModel.setAuthToken(authTokenStr);
         featureContentInputModel.setSection_id(sectionId.trim());
-        featureContentInputModel.setLang_code(Util.getTextofLanguage(ViewMoreActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+        featureContentInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         GetFeatureContentAsynTask asyncLoadVideos = new GetFeatureContentAsynTask(featureContentInputModel,ViewMoreActivity.this,ViewMoreActivity.this);
         asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
@@ -510,13 +555,13 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 
         // for tv shows navigate to episodes
         if ((movieTypeId.equalsIgnoreCase("3"))) {
-            if (moviePermalink.matches(Util.getTextofLanguage(ViewMoreActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+            if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ViewMoreActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(ViewMoreActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ViewMoreActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ViewMoreActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -526,7 +571,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
             } else {
 
                 final Intent detailsIntent = new Intent(ViewMoreActivity.this, ShowWithEpisodesActivity.class);
-                detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                 runOnUiThread(new Runnable() {
                     public void run() {
                         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -541,13 +586,13 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
         else if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
             final Intent detailsIntent = new Intent(ViewMoreActivity.this, MovieDetailsActivity.class);
 
-            if (moviePermalink.matches(Util.getTextofLanguage(ViewMoreActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+            if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ViewMoreActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(ViewMoreActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ViewMoreActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ViewMoreActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -555,7 +600,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
                         });
                 dlgAlert.create().show();
             } else {
-                detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                 runOnUiThread(new Runnable() {
                     public void run() {
                         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -595,21 +640,21 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 
             }
         } catch (IllegalArgumentException ex) {
-            Toast.makeText(ViewMoreActivity.this, Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+            Toast.makeText(ViewMoreActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
         }
         if (status == null) {
-            Toast.makeText(ViewMoreActivity.this, Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+            Toast.makeText(ViewMoreActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
         }
         if (code == 0) {
-            Toast.makeText(ViewMoreActivity.this, Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+            Toast.makeText(ViewMoreActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
         }
         if (code > 0) {
             if (code == 200) {
                 preferenceManager.clearLoginPref();
-                if ((Util.getTextofLanguage(ViewMoreActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
+                if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
                     final Intent startIntent = new Intent(ViewMoreActivity.this, SplashScreen.class);
                     runOnUiThread(new Runnable() {
@@ -617,7 +662,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(startIntent);
-                            Toast.makeText(ViewMoreActivity.this, Util.getTextofLanguage(ViewMoreActivity.this, Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                            Toast.makeText(ViewMoreActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
                             finish();
 
                         }
@@ -629,7 +674,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(startIntent);
-                            Toast.makeText(ViewMoreActivity.this, Util.getTextofLanguage(ViewMoreActivity.this, Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                            Toast.makeText(ViewMoreActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
                             finish();
 
                         }
@@ -637,7 +682,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
                 }
 
             } else {
-                Toast.makeText(ViewMoreActivity.this, Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+                Toast.makeText(ViewMoreActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
             }
         }
@@ -795,10 +840,10 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 //        String responseStr;
 //        int status;
 //        String movieGenreStr = "";
-//        String movieName = Util.getTextofLanguage(ViewMoreActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-//        String movieImageStr = Util.getTextofLanguage(ViewMoreActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-//        String moviePermalinkStr = Util.getTextofLanguage(ViewMoreActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
-//        String videoTypeIdStr = Util.getTextofLanguage(ViewMoreActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+//        String movieName = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//        String movieImageStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//        String moviePermalinkStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
+//        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
 //        String isEpisodeStr = "";
 //        int isAPV = 0;
 //        int isPPV = 0;
@@ -816,7 +861,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 //
 //                httppost.addHeader("authToken", Util.authTokenStr.trim());
 //                httppost.addHeader("section_id", sectionId.trim());
-//                httppost.addHeader("lang_code", Util.getTextofLanguage(ViewMoreActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 //
 //           /*     httppost.addHeader("limit", String.valueOf(limit));
 //                httppost.addHeader("offset", String.valueOf(offset));
@@ -843,7 +888,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 //                            }
 //
 //                            footerView.setVisibility(View.GONE);
-//                            Toast.makeText(ViewMoreActivity.this, Util.getTextofLanguage(ViewMoreActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(ViewMoreActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                        }
 //
@@ -1224,40 +1269,40 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 
         if (loggedInStr != null) {
             item4 = menu.findItem(R.id.action_login);
-            item4.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.LANGUAGE_POPUP_LOGIN, Util.DEFAULT_LANGUAGE_POPUP_LOGIN));
+            item4.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
             item4.setVisible(false);
             item5 = menu.findItem(R.id.action_register);
-            item5.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.BTN_REGISTER, Util.DEFAULT_BTN_REGISTER));
+            item5.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
             item5.setVisible(false);
           /*  item6= menu.findItem(R.id.menu_item_language);
-            item6.setTitle(Util.getTextofLanguage(ViewMoreActivity.this,Util.LANGUAGE_POPUP_LANGUAGE,Util.DEFAULT_LANGUAGE_POPUP_LANGUAGE));
+            item6.setTitle(getTextofLanguage(ViewMoreActivity.this,LANGUAGE_POPUP_LANGUAGE,DEFAULT_LANGUAGE_POPUP_LANGUAGE));
             item6.setVisible(true);*/
             item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.PROFILE, Util.DEFAULT_PROFILE));
+            item1.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
 
             item1.setVisible(true);
             item2 = menu.findItem(R.id.action_purchage);
-            item2.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.PURCHASE_HISTORY, Util.DEFAULT_PURCHASE_HISTORY));
+            item2.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
 
             item2.setVisible(true);
 
-            if ((Util.getTextofLanguage(ViewMoreActivity.this, Util.HAS_FAVORITE, Util.DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
+            if ((languagePreference.getTextofLanguage(HAS_FAVORITE,DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
                 item7.setVisible(true);
             }else{
                 item7.setVisible(false);
 
             }
             item3 = menu.findItem(R.id.action_logout);
-            item3.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.LOGOUT, Util.DEFAULT_LOGOUT));
+            item3.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
             item3.setVisible(true);
 
         } else if (loggedInStr == null) {
             item4 = menu.findItem(R.id.action_login);
-            item4.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.LANGUAGE_POPUP_LOGIN, Util.DEFAULT_LANGUAGE_POPUP_LOGIN));
+            item4.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
 
 
             item5 = menu.findItem(R.id.action_register);
-            item5.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.BTN_REGISTER, Util.DEFAULT_BTN_REGISTER));
+            item5.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
             if (isLogin == 1) {
                 item4.setVisible(true);
                 item5.setVisible(true);
@@ -1271,13 +1316,13 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
             item6.setTitle(Util.getTextofLanguage(ViewMoreActivity.this,Util.LANGUAGE_POPUP_LANGUAGE,Util.DEFAULT_LANGUAGE_POPUP_LANGUAGE));
             item6.setVisible(true);*/
             item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.PROFILE, Util.DEFAULT_PROFILE));
+            item1.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
             item1.setVisible(false);
             item2 = menu.findItem(R.id.action_purchage);
-            item2.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.PURCHASE_HISTORY, Util.DEFAULT_PURCHASE_HISTORY));
+            item2.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
             item2.setVisible(false);
             item3 = menu.findItem(R.id.action_logout);
-            item3.setTitle(Util.getTextofLanguage(ViewMoreActivity.this, Util.LOGOUT, Util.DEFAULT_LOGOUT));
+            item3.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
             item3.setVisible(false);
         }
         return true;
@@ -1695,8 +1740,8 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
             case R.id.menu_item_language:
 
                 // Not implemented here
-                Default_Language = Util.getTextofLanguage(ViewMoreActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE);
-                Previous_Selected_Language = Util.getTextofLanguage(ViewMoreActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE);
+                Default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
+                Previous_Selected_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
 
                 if (Util.languageModel != null && Util.languageModel.size() > 0) {
 
@@ -1705,7 +1750,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 
                 } else {
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-                    languageListInputModel.setAuthToken(Util.authTokenStr);
+                    languageListInputModel.setAuthToken(authTokenStr);
                     GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
@@ -1727,19 +1772,19 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
             case R.id.action_logout:
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ViewMoreActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_WARNING, Util.DEFAULT_SIGN_OUT_WARNING));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
                 dlgAlert.setTitle("");
 
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ViewMoreActivity.this, Util.YES, Util.DEFAULT_YES), new DialogInterface.OnClickListener() {
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
                         // Do nothing but close the dialog
 
                         // dialog.cancel();
                         LogoutInput logoutInput = new LogoutInput();
-                        logoutInput.setAuthToken(Util.authTokenStr);
+                        logoutInput.setAuthToken(authTokenStr);
                         logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
-                        logoutInput.setLang_code(Util.getTextofLanguage(ViewMoreActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                        logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, ViewMoreActivity.this, ViewMoreActivity.this);
                         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -1748,7 +1793,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
                     }
                 });
 
-                dlgAlert.setNegativeButton(Util.getTextofLanguage(ViewMoreActivity.this, Util.NO, Util.DEFAULT_NO), new DialogInterface.OnClickListener() {
+                dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -1801,7 +1846,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 //                                pDialog = null;
 //                            }
 //                            responseCode = 0;
-//                            Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(ViewMoreActivity.this,languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                        }
 //
@@ -1842,15 +1887,15 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 //
 //                }
 //            } catch (IllegalArgumentException ex) {
-//                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//                Toast.makeText(ViewMoreActivity.this,languagePreference.getTextofLanguage(SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 //
 //            }
 //            if(responseStr == null){
-//                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//                Toast.makeText(ViewMoreActivity.this,languagePreference.getTextofLanguage(SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 //
 //            }
 //            if (responseCode == 0) {
-//                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//                Toast.makeText(ViewMoreActivity.this,languagePreference.getTextofLanguage(SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 //
 //            }
 //            if (responseCode > 0) {
@@ -1870,7 +1915,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 //                        countryEditor.clear();
 //                        countryEditor.commit();
 //                    }*/
-//                    if ((Util.getTextofLanguage(ViewMoreActivity.this, Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
+//                    if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
 //                            .trim()).equals("1")) {
 //                        final Intent startIntent = new Intent(ViewMoreActivity.this, SplashScreen.class);
 //                        runOnUiThread(new Runnable() {
@@ -1878,7 +1923,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 //                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 //                                startActivity(startIntent);
-//                                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+//                                Toast.makeText(ViewMoreActivity.this,languagePreference.getTextofLanguage(LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
 //                                finish();
 //
 //                            }
@@ -1892,7 +1937,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 //                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 //                                startActivity(startIntent);
-//                                Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+//                                Toast.makeText(ViewMoreActivity.this,languagePreference.getTextofLanguage(LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
 //                                finish();
 //
 //                            }
@@ -1901,7 +1946,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 //
 //                }
 //                else {
-//                    Toast.makeText(ViewMoreActivity.this,Util.getTextofLanguage(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+//                    Toast.makeText(ViewMoreActivity.this,languagePreference.getTextofLanguage(SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 //
 //                }
 //            }
@@ -1923,14 +1968,14 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 
         View convertView = (View) inflater.inflate(R.layout.language_pop_up, null);
         TextView titleTextView = (TextView) convertView.findViewById(R.id.languagePopupTitle);
-        titleTextView.setText(Util.getTextofLanguage(ViewMoreActivity.this, Util.APP_SELECT_LANGUAGE, Util.DEFAULT_APP_SELECT_LANGUAGE));
+        titleTextView.setText(languagePreference.getTextofLanguage(APP_SELECT_LANGUAGE, DEFAULT_APP_SELECT_LANGUAGE));
 
         alertDialog.setView(convertView);
         alertDialog.setTitle("");
 
         RecyclerView recyclerView = (RecyclerView) convertView.findViewById(R.id.language_recycler_view);
         Button apply = (Button) convertView.findViewById(R.id.apply_btn);
-        apply.setText(Util.getTextofLanguage(ViewMoreActivity.this, Util.BUTTON_APPLY, Util.DEFAULT_BUTTON_APPLY));
+        apply.setText(languagePreference.getTextofLanguage(BUTTON_APPLY, DEFAULT_BUTTON_APPLY));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -1980,7 +2025,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
                 Default_Language = Util.languageModel.get(position).getLanguageId();
 
 
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.languageModel.get(position).getLanguageId());
+                languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, Util.languageModel.get(position).getLanguageId());
                 languageCustomAdapter.notifyDataSetChanged();
 
                 // default_Language = Util.languageModel.get(position).getLanguageId();
@@ -2008,7 +2053,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
                     languageListInputModel.setLangCode(Default_Language);
-                    languageListInputModel.setAuthToken(Util.authTokenStr);
+                    languageListInputModel.setAuthToken(authTokenStr);
                     GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel, ViewMoreActivity.this, ViewMoreActivity.this);
                     asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
                 }
@@ -2023,7 +2068,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
         alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SELECTED_LANGUAGE_CODE, Previous_Selected_Language);
+                languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, Previous_Selected_Language);
             }
         });
 
@@ -2128,10 +2173,10 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 //                    JSONObject json = new JSONObject(responseStr);
 //                    try {
 //                        status = Integer.parseInt(json.optString("code"));
-//                        Default_Language = json.optString("default_lang");
+//                        default_Language = json.optString("default_lang");
 //                        if(!Util.getTextofLanguage(ViewMoreActivity.this,Util.SELECTED_LANGUAGE_CODE,"").equals(""))
 //                        {
-//                            Default_Language = Util.getTextofLanguage(ViewMoreActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE);
+//                            default_Language = Util.getTextofLanguage(ViewMoreActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE);
 //                        }
 //
 //                    } catch (Exception e) {
@@ -2178,7 +2223,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 //                            languageModel.setLanguageId(language_id);
 //                            languageModel.setLanguageName(language_name);
 //
-//                            if(Default_Language.equalsIgnoreCase(language_id))
+//                            if(default_Language.equalsIgnoreCase(language_id))
 //                            {
 //                                languageModel.setIsSelected(true);
 //                            }
@@ -2235,179 +2280,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
         if (status > 0 && status == 200) {
 
             try {
-                JSONObject json = new JSONObject(jsonResponse);
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.ALREADY_MEMBER, json.optString("already_member").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.ACTIAVTE_PLAN_TITLE, json.optString("activate_plan_title").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.TRANSACTION_STATUS_ACTIVE, json.optString("transaction_status_active").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.ADD_TO_FAV, json.optString("add_to_fav").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.ADDED_TO_FAV, json.optString("added_to_fav").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.ADVANCE_PURCHASE, json.optString("advance_purchase").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.ALERT, json.optString("alert").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.EPISODE_TITLE, json.optString("episodes_title").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SORT_ALPHA_A_Z, json.optString("sort_alpha_a_z").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SORT_ALPHA_Z_A, json.optString("sort_alpha_z_a").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.AMOUNT, json.optString("amount").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.COUPON_CANCELLED, json.optString("coupon_cancelled").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.BUTTON_APPLY, json.optString("btn_apply").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SIGN_OUT_WARNING, json.optString("sign_out_warning").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.DISCOUNT_ON_COUPON, json.optString("discount_on_coupon").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CREDIT_CARD_CVV_HINT, json.optString("credit_card_cvv_hint").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CAST, json.optString("cast").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CAST_CREW_BUTTON_TITLE, json.optString("cast_crew_button_title").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CENSOR_RATING, json.optString("censor_rating").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.ENTER_EMPTY_FIELD, json.optString("enter_register_fields_data").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.HOME, json.optString("home").trim());
-
-                if (json.optString("change_password").trim() == null || json.optString("change_password").trim().equals("")) {
-                    Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CHANGE_PASSWORD, Util.DEFAULT_CHANGE_PASSWORD);
-                } else {
-                    Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CHANGE_PASSWORD, json.optString("change_password").trim());
-                }
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CANCEL_BUTTON, json.optString("btn_cancel").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.RESUME_MESSAGE, json.optString("resume_watching").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CONTINUE_BUTTON, json.optString("continue").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CONFIRM_PASSWORD, json.optString("confirm_password").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CREDIT_CARD_DETAILS, json.optString("credit_card_detail").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.DIRECTOR, json.optString("director").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.DOWNLOAD_BUTTON_TITLE, json.optString("download_button_title").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.DESCRIPTION, json.optString("description").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.EMAIL_EXISTS, json.optString("email_exists").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.EMAIL_DOESNOT_EXISTS, json.optString("email_does_not_exist").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.EMAIL_PASSWORD_INVALID, json.optString("email_password_invalid").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.COUPON_CODE_HINT, json.optString("coupon_code_hint").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SEARCH_ALERT, json.optString("search_alert").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CREDIT_CARD_NUMBER_HINT, json.optString("credit_card_number_hint").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.TEXT_EMIAL, json.optString("text_email").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.NAME_HINT, json.optString("name_hint").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CREDIT_CARD_NAME_HINT, json.optString("credit_card_name_hint").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.TEXT_PASSWORD, json.optString("text_password").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.ENTER_REGISTER_FIELDS_DATA, json.optString("enter_register_fields_data").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.ERROR_IN_PAYMENT_VALIDATION, json.optString("error_in_payment_validation").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.ERROR_IN_REGISTRATION, json.optString("error_in_registration").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.TRANSACTION_STATUS_EXPIRED, json.optString("transaction_status_expired").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.DETAILS_NOT_FOUND_ALERT, json.optString("details_not_found_alert").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.FAILURE, json.optString("failure").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.FILTER_BY, json.optString("filter_by").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.FORGOT_PASSWORD, json.optString("forgot_password").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.GENRE, json.optString("genre").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.AGREE_TERMS, json.optString("agree_terms").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.INVALID_COUPON, json.optString("invalid_coupon").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.INVOICE, json.optString("invoice").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.LANGUAGE_POPUP_LANGUAGE, json.optString("language_popup_language").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SORT_LAST_UPLOADED, json.optString("sort_last_uploaded").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.LANGUAGE_POPUP_LOGIN, json.optString("language_popup_login").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.LOGIN, json.optString("login").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.LOGOUT, json.optString("logout").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.LOGOUT_SUCCESS, json.optString("logout_success").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.MY_FAVOURITE, json.optString("my_favourite").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.NEW_PASSWORD, json.optString("new_password").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.NEW_HERE_TITLE, json.optString("new_here_title").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.NO, json.optString("no").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.NO_DATA, json.optString("no_data").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.NO_INTERNET_CONNECTION, json.optString("no_internet_connection").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.NO_INTERNET_NO_DATA, json.optString("no_internet_no_data").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.NO_DETAILS_AVAILABLE, json.optString("no_details_available").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.BUTTON_OK, json.optString("btn_ok").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.OLD_PASSWORD, json.optString("old_password").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.OOPS_INVALID_EMAIL, json.optString("oops_invalid_email").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.ORDER, json.optString("order").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.TRANSACTION_DETAILS_ORDER_ID, json.optString("transaction_detail_order_id").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.PASSWORD_RESET_LINK, json.optString("password_reset_link").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.PASSWORDS_DO_NOT_MATCH, json.optString("password_donot_match").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.PAY_BY_PAYPAL, json.optString("pay_by_paypal").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.BTN_PAYNOW, json.optString("btn_paynow").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.PAY_WITH_CREDIT_CARD, json.optString("pay_with_credit_card").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.PAYMENT_OPTIONS_TITLE, json.optString("payment_options_title").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.PLAN_NAME, json.optString("plan_name").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, json.optString("activate_subscription_watch_video").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.COUPON_ALERT, json.optString("coupon_alert").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.VALID_CONFIRM_PASSWORD, json.optString("valid_confirm_password").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.PROFILE, json.optString("profile").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.PROFILE_UPDATED, json.optString("profile_updated").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.PURCHASE, json.optString("purchase").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.TRANSACTION_DETAIL_PURCHASE_DATE, json.optString("transaction_detail_purchase_date").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.PURCHASE_HISTORY, json.optString("purchase_history").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.BTN_REGISTER, json.optString("btn_register").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SORT_RELEASE_DATE, json.optString("sort_release_date").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SAVE_THIS_CARD, json.optString("save_this_card").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.TEXT_SEARCH_PLACEHOLDER, json.optString("text_search_placeholder").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SEASON, json.optString("season").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SELECT_OPTION_TITLE, json.optString("select_option_title").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SELECT_PLAN, json.optString("select_plan").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SIGN_UP_TITLE, json.optString("signup_title").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SLOW_INTERNET_CONNECTION, json.optString("slow_internet_connection").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SLOW_ISSUE_INTERNET_CONNECTION, json.optString("slow_issue_internet_connection").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SORRY, json.optString("sorry").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.GEO_BLOCKED_ALERT, json.optString("geo_blocked_alert").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SIGN_OUT_ERROR, json.optString("sign_out_error").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.ALREADY_PURCHASE_THIS_CONTENT, json.optString("already_purchase_this_content").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CROSSED_MAXIMUM_LIMIT, json.optString("crossed_max_limit_of_watching").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SORT_BY, json.optString("sort_by").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.STORY_TITLE, json.optString("story_title").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.BTN_SUBMIT, json.optString("btn_submit").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.TRANSACTION_STATUS, json.optString("transaction_success").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.VIDEO_ISSUE, json.optString("video_issue").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.NO_CONTENT, json.optString("no_content").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.NO_VIDEO_AVAILABLE, json.optString("no_video_available").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, json.optString("content_not_available_in_your_country").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.TRANSACTION_DATE, json.optString("transaction_date").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.TRANASCTION_DETAIL, json.optString("transaction_detail").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.TRANSACTION_STATUS, json.optString("transaction_status").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.TRANSACTION, json.optString("transaction").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.TRY_AGAIN, json.optString("try_again").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.UNPAID, json.optString("unpaid").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.USE_NEW_CARD, json.optString("use_new_card").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.VIEW_MORE, json.optString("view_more").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.VIEW_TRAILER, json.optString("view_trailer").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.WATCH, json.optString("watch").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.WATCH_NOW, json.optString("watch_now").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SIGN_OUT_ALERT, json.optString("sign_out_alert").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.UPDATE_PROFILE_ALERT, json.optString("update_profile_alert").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.YES, json.optString("yes").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.PURCHASE_SUCCESS_ALERT, json.optString("purchase_success_alert").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.CARD_WILL_CHARGE, json.optString("card_will_charge").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SEARCH_HINT, json.optString("search_hint").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.TERMS, json.optString("terms").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.UPDATE_PROFILE, json.optString("btn_update_profile").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.APP_ON, json.optString("app_on").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.APP_SELECT_LANGUAGE, json.optString("app_select_language").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.FILL_FORM_BELOW, json.optString("Fill_form_below").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.MESSAGE, json.optString("text_message").trim());
-
-                Util.getTextofLanguage(ViewMoreActivity.this, Util.PURCHASE, Util.DEFAULT_PURCHASE);
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SELECTED_LANGUAGE_CODE, Default_Language);
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.FILL_FORM_BELOW, json.optString("fill_form_below").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.MESSAGE, json.optString("text_message").trim());
-
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, json.optString("simultaneous_logout_message").trim());
-                Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.LOGIN_STATUS_MESSAGE, json.optString("login_status_message").trim());
+               Util.parseLanguage(languagePreference,jsonResponse,Default_Language);
 
                 //Call For Language PopUp Dialog
 
@@ -2442,7 +2315,7 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 //                HttpPost httppost = new HttpPost(urlRouteList);
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //                httppost.addHeader("authToken",Util.authTokenStr);
-//                httppost.addHeader("lang_code",Default_Language);
+//                httppost.addHeader("lang_code",default_Language);
 //
 //
 //
@@ -2657,8 +2530,8 @@ public class ViewMoreActivity extends AppCompatActivity implements LogoutAsyncta
 //                        Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.FILL_FORM_BELOW, json.optString("Fill_form_below").trim());
 //                        Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.MESSAGE, json.optString("text_message").trim());
 //
-//                        Util.getTextofLanguage(ViewMoreActivity.this, Util.PURCHASE, Util.DEFAULT_PURCHASE);
-//                        Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SELECTED_LANGUAGE_CODE, Default_Language);
+//                        languagePreference.getTextofLanguage(PURCHASE, Util.DEFAULT_PURCHASE);
+//                        Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.SELECTED_LANGUAGE_CODE, default_Language);
 //                        Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.FILL_FORM_BELOW, json.optString("fill_form_below").trim());
 //                        Util.setLanguageSharedPrefernce(ViewMoreActivity.this, Util.MESSAGE, json.optString("text_message").trim());
 //

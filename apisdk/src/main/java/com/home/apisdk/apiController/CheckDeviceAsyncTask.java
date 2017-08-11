@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.CommonConstants;
+import com.home.apisdk.HeaderConstants;
 import com.home.apisdk.apiModel.CheckDeviceInput;
 import com.home.apisdk.apiModel.CheckDeviceOutput;
 
@@ -59,13 +59,13 @@ public class CheckDeviceAsyncTask extends AsyncTask<Void, Void, Void> {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getCheckDevice());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader(CommonConstants.USER_ID, this.checkDeviceInput.getUser_id());
-            httppost.addHeader(CommonConstants.AUTH_TOKEN, this.checkDeviceInput.getAuthToken());
-            httppost.addHeader(CommonConstants.DEVICE, this.checkDeviceInput.getDevice());
-            httppost.addHeader(CommonConstants.GOOGLE_ID, this.checkDeviceInput.getGoogle_id());
-            httppost.addHeader(CommonConstants.DEVICE_TYPE, this.checkDeviceInput.getDevice_type());
-            httppost.addHeader(CommonConstants.LANG_CODE, this.checkDeviceInput.getLang_code());
-            httppost.addHeader(CommonConstants.DEVICE_INFO, this.checkDeviceInput.getDevice_info());
+            httppost.addHeader(HeaderConstants.USER_ID, this.checkDeviceInput.getUser_id());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.checkDeviceInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.DEVICE, this.checkDeviceInput.getDevice());
+            httppost.addHeader(HeaderConstants.GOOGLE_ID, this.checkDeviceInput.getGoogle_id());
+            httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.checkDeviceInput.getDevice_type());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.checkDeviceInput.getLang_code());
+            httppost.addHeader(HeaderConstants.DEVICE_INFO, this.checkDeviceInput.getDevice_info());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);
@@ -97,13 +97,13 @@ public class CheckDeviceAsyncTask extends AsyncTask<Void, Void, Void> {
         super.onPreExecute();
         listener.onCheckDevicePreExecuteStarted();
         code = 0;
-        if (!PACKAGE_NAME.equals(CommonConstants.user_Package_Name_At_Api)) {
+        if (!PACKAGE_NAME.equals(HeaderConstants.user_Package_Name_At_Api)) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onCheckDevicePostExecuteCompleted(checkDeviceOutput, code, message);
             return;
         }
-        if (CommonConstants.hashKey.equals("")) {
+        if (HeaderConstants.hashKey.equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onCheckDevicePostExecuteCompleted(checkDeviceOutput, code, message);

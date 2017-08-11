@@ -23,9 +23,13 @@ import com.home.vod.R;
 import com.home.vod.activity.ViewMoreActivity;
 import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
 
 import java.util.ArrayList;
+
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 
 public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDataAdapter.ItemRowHolder>{
     ArrayList<SingleItemModel> singleSectionItems;
@@ -38,6 +42,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
     int vertical = 0;
     boolean loaded = false;
     int counter=0;
+    LanguagePreference languagePreference;
 
   /*  int banner[] = {R.drawable.banner1,R.drawable.banner2,R.drawable.banner3};
     int bannerL[] = {R.drawable.banner1_l,R.drawable.banner2_l,R.drawable.banner3_l};*/
@@ -51,6 +56,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
         this.bannerUrls = bannerUrls;
         this.firstTime = firstTime;
         this.vertical = vertical;
+        languagePreference = LanguagePreference.getLanguagePreference(context);
 
     }
    /* public void swapItems(){
@@ -220,7 +226,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
             this.btnMore= (Button) view.findViewById(R.id.btnMore);
             Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
             this.btnMore.setTypeface(watchTrailerButtonTypeface);
-            this.btnMore.setText(Util.getTextofLanguage(mContext, Util.VIEW_MORE, Util.DEFAULT_VIEW_MORE));
+            this.btnMore.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
             mDemoSlider = (SliderLayout) view.findViewById(R.id.sliderLayout);
             mDemoSliderLayout = (RelativeLayout) view.findViewById(R.id.sliderRelativeLayout);
 
