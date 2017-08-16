@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -151,6 +152,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                     String moviePermalink = itemsList.get(position).getPermalink();
                     String movieTypeId = itemsList.get(position).getVideoTypeId();
 
+                    Log.v("SUBHA","HHH"+moviePermalink + movieTypeId);
                     if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
                         final Intent detailsIntent = new Intent(mContext, MovieDetailsActivity.class);
                         detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);

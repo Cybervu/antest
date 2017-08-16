@@ -235,6 +235,10 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                     } else {
 
+                        if (getIntent().getStringExtra("from") != null) {
+                            /** review **/
+                            onBackPressed();
+                        }else {
                         if (Util.check_for_subscription == 1) {
                             //go to subscription page
                             if (NetworkStatus.getInstance().isConnected(this)) {
@@ -259,24 +263,25 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, this, this);
                                     asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 
+                                    }
+                                } else {
+                                    Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                                 }
-                            } else {
-                                Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage( NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                            }
 
-                        } else {
-                            if (PlanId.equals("1") && login_output.getIsSubscribed().equals("0")) {
-                                Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(intent);
-                                finish();
-                                overridePendingTransition(0, 0);
                             } else {
-                                Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                                in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(in);
-                                finish();
+                                if (PlanId.equals("1") && login_output.getIsSubscribed().equals("0")) {
+                                    Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(intent);
+                                    finish();
+                                    overridePendingTransition(0, 0);
+                                } else {
+                                    Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                                    in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(in);
+                                    finish();
+                                }
                             }
                         }
                     }
@@ -564,14 +569,42 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         if (statusCode == 200) {
             if (get_video_details_output.getThirdparty_url() == null || get_video_details_output.getThirdparty_url().matches("")) {
-                if (get_video_details_output.getVideoUrl() != null || !get_video_details_output.getVideoUrl().matches("")) {
-                    playerModel.setVideoUrl(get_video_details_output.getVideoUrl());
-                    Log.v("BISHAL", "videourl===" + playerModel.getVideoUrl());
-                    playerModel.setThirdPartyPlayer(false);
-                } else {
-                    //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
-                    playerModel.setVideoUrl(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA));
 
+                /**@bishal
+                 * for drm player below condition added
+                 * if studio_approved_url is there in api then set the videourl from this other wise goto 2nd one
+                 */
+
+                if (get_video_details_output.getStudio_approved_url() != null &&
+                        !get_video_details_output.getStudio_approved_url().isEmpty() &&
+                        !get_video_details_output.getStudio_approved_url().equals("null") &&
+                        !get_video_details_output.getStudio_approved_url().matches("")) {
+                    LogUtil.showLog("BISHAL","if called means  studioapproved");
+                    playerModel.setVideoUrl(get_video_details_output.getStudio_approved_url());
+                    LogUtil.showLog("BS","studipapprovedurl===="+playerModel.getVideoUrl());
+
+
+                    if ( get_video_details_output.getLicenseUrl().trim() != null && !get_video_details_output.getLicenseUrl().trim().isEmpty() && !get_video_details_output.getLicenseUrl().trim().equals("null") && !get_video_details_output.getLicenseUrl().trim().matches("")) {
+                        playerModel.setLicenseUrl(get_video_details_output.getLicenseUrl());
+                    }
+                    if ( get_video_details_output.getVideoUrl().trim() != null && !get_video_details_output.getVideoUrl().isEmpty() && !get_video_details_output.getVideoUrl().equals("null") && !get_video_details_output.getVideoUrl().trim().matches("")) {
+                        playerModel.setMpdVideoUrl(get_video_details_output.getVideoUrl());
+
+                    }else {
+                        playerModel.setMpdVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+                    }
+                }
+
+                else {
+                    if (get_video_details_output.getVideoUrl() != null || !get_video_details_output.getVideoUrl().matches("")) {
+                        playerModel.setVideoUrl(get_video_details_output.getVideoUrl());
+                        Log.v("BISHAL", "videourl===" + playerModel.getVideoUrl());
+                        playerModel.setThirdPartyPlayer(false);
+                    } else {
+                        //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
+                        playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+
+                    }
                 }
             } else {
                 if (get_video_details_output.getThirdparty_url() != null || !get_video_details_output.getThirdparty_url().matches("")) {
@@ -1081,9 +1114,14 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             @Override
             public void onClick(View v) {
                 final Intent detailsIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                /****rating ******/
+
+                if (getIntent().getStringExtra("from")!=null){
+                    detailsIntent.putExtra("from", getIntent().getStringExtra("from"));
+                }
                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(detailsIntent);
-                finish();
+                onBackPressed();
             }
         });
 
@@ -1435,6 +1473,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             if ((!regEmailStr.equals("")) && (!regPasswordStr.equals(""))) {
                 boolean isValidEmail = Util.isValidMail(regEmailStr);
                 if (isValidEmail == true) {
+
+                    Log.v("SUBHA","login valid");
                     Login_input login_input = new Login_input();
                     login_input.setAuthToken(authTokenStr);
                     login_input.setEmail(regEmailStr);
@@ -2195,18 +2235,18 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                    pDialog = null;
 //                }
 //                responseStr = "0";
-//                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage( Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //                e1.printStackTrace();
 //            }
 //
 //            catch (Exception e)
-//            {authTokenStr
+//            {
 //                if (pDialog != null && pDialog.isShowing()) {
 //                    pDialog.hide();
 //                    pDialog = null;
 //                }
 //                responseStr = "0";
-//                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage( Util.NO_DATA, Util.DEFAULT_NO_DATA));
+//                Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
 //
 //                e.printStackTrace();
 //
@@ -4430,6 +4470,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 showPaymentIntent.putExtra("seriesNumber", Util.dataModel.getEpisode_series_no());
                 showPaymentIntent.putExtra("isPPV", Util.dataModel.getIsPPV());
                 showPaymentIntent.putExtra("isAPV", Util.dataModel.getIsAPV());
+                showPaymentIntent.putExtra("PlayerModel",playerModel);
                 if (Util.dataModel.getIsAPV() == 1) {
                     showPaymentIntent.putExtra("isConverted", 0);
                 } else {

@@ -246,9 +246,17 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ppv_payment_info);
-        playerModel=new Player();
-languagePreference = LanguagePreference.getLanguagePreference(this);
-        Log.v("SUBHA", "ppvpayment Activity Season Id =" + Util.selected_season_id);
+      //  playerModel=new Player();
+        playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+        languagePreference = LanguagePreference.getLanguagePreference(this);
+        /* playerModel.setVideoTitle(playerModel.getVideoTitle());
+        playerModel.setVideoStory(playerModel.getVideoStory());
+        playerModel.setVideoGenre(playerModel.getVideoGenre());
+        playerModel.setVideoDuration(playerModel.getVideoDuration());
+        playerModel.setVideoReleaseDate(playerModel.getVideoReleaseDate());
+        playerModel.setCensorRating(playerModel.getCensorRating());*/
+
+        Log.v("BKS", "ppvpayment Activity Season Id =" +(Player) getIntent().getSerializableExtra("PlayerModel"));
         Log.v("SUBHA", "ppvpatment Activity episode Id =" + Util.selected_episode_id);
 
         videoPreview = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
@@ -528,7 +536,7 @@ languagePreference = LanguagePreference.getLanguagePreference(this);
 
                     //withoutCreditCardLayout.setVisibility(View.VISIBLE);
                     //creditCardLayout.setVisibility(View.GONE);
-                    //chargedPriceTextView.setText(Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.CARD_WILL_CHARGE,Util.DEFAULT_CARD_WILL_CHARGE)+" " +currencySymbolStr+chargedPrice);
+                    //chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE,Util.DEFAULT_CARD_WILL_CHARGE)+" " +currencySymbolStr+chargedPrice);
                 } else {
                     //withoutCreditCardLayout.setVisibility(View.GONE);
                     nameOnCardEditText.setVisibility(View.GONE);
@@ -1100,8 +1108,14 @@ languagePreference = LanguagePreference.getLanguagePreference(this);
 
     @Override
     public void onVideoDetailsPreExecuteStarted() {
-        pDialog = new ProgressDialog(PPvPaymentInfoActivity.this);
-        pDialog.show();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                pDialog = new ProgressDialog(PPvPaymentInfoActivity.this);
+                pDialog.show();
+            }
+        });
+
     }
 
     @Override
@@ -1113,7 +1127,7 @@ languagePreference = LanguagePreference.getLanguagePreference(this);
         then set thirdpartyurl true here and assign the url to videourl*/
         try {
             if (pDialog != null && pDialog.isShowing()) {
-                pDialog.hide();
+                pDialog.dismiss();
                 pDialog = null;
             }
         } catch (IllegalArgumentException ex) {
@@ -1121,14 +1135,43 @@ languagePreference = LanguagePreference.getLanguagePreference(this);
 
         if (statusCode == 200) {
             if (get_video_details_output.getThirdparty_url() == null || get_video_details_output.getThirdparty_url().matches("")) {
-                if (get_video_details_output.getVideoUrl() != null || !get_video_details_output.getVideoUrl().matches("")) {
-                    playerModel.setVideoUrl(get_video_details_output.getVideoUrl());
-                    Log.v("BISHAL", "videourl===" + playerModel.getVideoUrl());
-                    playerModel.setThirdPartyPlayer(false);
-                } else {
-                    //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
-                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
 
+
+                /**@bishal
+                 * for nondrm player below condition added
+                 * if studio_approved_url is there in api then set the videourl from this other wise goto 2nd one
+                 */
+                Log.v("BKS","studipapprovedurlbefore if entery===="+get_video_details_output.getStudio_approved_url());
+                if (get_video_details_output.getStudio_approved_url() != null &&
+                        !get_video_details_output.getStudio_approved_url().isEmpty() &&
+                        !get_video_details_output.getStudio_approved_url().equals("null") &&
+                        !get_video_details_output.getStudio_approved_url().matches("") && playerModel !=null ){
+                    Log.v("BKS","if called means  studioapproved");
+
+                    playerModel.setVideoUrl(get_video_details_output.getStudio_approved_url());
+                    Log.v("BKS","studipapprovedurl===="+playerModel.getVideoUrl());
+
+
+                    if ( get_video_details_output.getLicenseUrl().trim() != null && !get_video_details_output.getLicenseUrl().trim().isEmpty() && !get_video_details_output.getLicenseUrl().trim().equals("null") && !get_video_details_output.getLicenseUrl().trim().matches("")) {
+                        playerModel.setLicenseUrl(get_video_details_output.getLicenseUrl());
+                    }
+                    if ( get_video_details_output.getVideoUrl().trim() != null && !get_video_details_output.getVideoUrl().isEmpty() && !get_video_details_output.getVideoUrl().equals("null") && !get_video_details_output.getVideoUrl().trim().matches("")) {
+                        playerModel.setMpdVideoUrl(get_video_details_output.getVideoUrl());
+
+                    }else {
+                        playerModel.setMpdVideoUrl(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
+                    }
+                }
+                else {
+                    if (get_video_details_output.getVideoUrl() != null || !get_video_details_output.getVideoUrl().matches("")) {
+                        playerModel.setVideoUrl(get_video_details_output.getVideoUrl());
+                        Log.v("BISHAL", "videourl===" + playerModel.getVideoUrl());
+                        playerModel.setThirdPartyPlayer(false);
+                    } else {
+                        //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
+                        playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+
+                    }
                 }
             } else {
                 if (get_video_details_output.getThirdparty_url() != null || !get_video_details_output.getThirdparty_url().matches("")) {
@@ -1660,7 +1703,7 @@ languagePreference = LanguagePreference.getLanguagePreference(this);
 //                            }
 //                            responseStr = "0";
 //                            Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA));
-//                            Toast.makeText(PPvPaymentInfoActivity.this, Util.getTextofLanguage(PPvPaymentInfoActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(PPvPaymentInfoActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //
 //                        }
 //
@@ -1854,45 +1897,82 @@ languagePreference = LanguagePreference.getLanguagePreference(this);
 
     @Override
     public void onValidateCouponCodePostExecuteCompleted(ValidateCouponCodeOutputModel validateCouponCodeOutputModel, int status, String message) {
-        if (message == null) {
-            message = "0";
+
+        try {
+            if (pDialog1.isShowing())
+                pDialog1.dismiss();
+        } catch (IllegalArgumentException ex) {
             isCouponCodeAdded = false;
             validCouponCode = "";
-            //couponCodeEditText.setText("");
         }
-        if ((message.trim().equals("0"))) {
-            chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + planPrice);
+
+        if (status >= 0) {
+            if (status == 432) {
+
+                if (validateCouponCodeOutputModel.getDiscount_type().equalsIgnoreCase("%")) {
+
+                    chargedPrice = planPrice - planPrice * (Float.parseFloat(validateCouponCodeOutputModel.getDiscount().trim()) / 100);
+
+                    if (chargedPrice < 0.0f) {
+                        chargedPrice = 0.0f;
+                    }
+                } else {
+
+                    chargedPrice = planPrice - Float.parseFloat(validateCouponCodeOutputModel.getDiscount().trim());
+
+                    if (chargedPrice < 0.0f) {
+                        chargedPrice = 0.0f;
+                    }
+                }
+
+                creditCardLayout.setVisibility(View.VISIBLE);
+
+                chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE,DEFAULT_CARD_WILL_CHARGE)+" " + currencySymbolStr + chargedPrice);
+                isCouponCodeAdded = true;
+                validCouponCode = couponCodeEditText.getText().toString().trim();
+                Toast.makeText(PPvPaymentInfoActivity.this,languagePreference.getTextofLanguage(DISCOUNT_ON_COUPON,DEFAULT_DISCOUNT_ON_COUPON), Toast.LENGTH_LONG).show();
+                if (chargedPrice <= 0.0f && isCouponCodeAdded == true) {
+                    creditCardLayout.setVisibility(View.GONE);
+
+                    //paywithCreditCardButton.setVisibility(View.GONE);
+                    withoutCreditCardLayout.setVisibility(View.VISIBLE);
+                    withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE,DEFAULT_CARD_WILL_CHARGE)+" : " + currencySymbolStr + chargedPrice);
+                }
+
+
+            }else{
+                isCouponCodeAdded = false;
+                validCouponCode = "";
+                chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE,DEFAULT_CARD_WILL_CHARGE)+" " + currencySymbolStr + planPrice);
+                //selectShowRadioButton.setText("Entire Show: " + currencySymbolStr + planPrice);
+                isCouponCodeAdded = false;
+                validCouponCode = "";
+                couponCodeEditText.setText("");
+
+                if (message.trim() != null && !message.trim().isEmpty() && !message.trim().equals("null") && !message.trim().matches("")) {
+                    Toast.makeText(PPvPaymentInfoActivity.this, message, Toast.LENGTH_LONG).show();
+
+                } else {
+                    Toast.makeText(PPvPaymentInfoActivity.this,languagePreference.getTextofLanguage(INVALID_COUPON,DEFAULT_INVALID_COUPON), Toast.LENGTH_LONG).show();
+
+                }
+            }}else{
+            isCouponCodeAdded = false;
+            validCouponCode = "";
+            chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE,DEFAULT_CARD_WILL_CHARGE)+" " + currencySymbolStr + planPrice);
             //selectShowRadioButton.setText("Entire Show: " + currencySymbolStr + planPrice);
             isCouponCodeAdded = false;
             validCouponCode = "";
             couponCodeEditText.setText("");
 
-            if (statusStr.trim() != null && !statusStr.trim().isEmpty() && !statusStr.trim().equals("null") && !statusStr.trim().matches("")) {
-                Toast.makeText(PPvPaymentInfoActivity.this, statusStr, Toast.LENGTH_LONG).show();
+            if (message.trim() != null && !message.trim().isEmpty() && !message.trim().equals("null") && !message.trim().matches("")) {
+                Toast.makeText(PPvPaymentInfoActivity.this, message, Toast.LENGTH_LONG).show();
 
             } else {
-                Toast.makeText(PPvPaymentInfoActivity.this, languagePreference.getTextofLanguage(INVALID_COUPON, DEFAULT_INVALID_COUPON), Toast.LENGTH_LONG).show();
+                Toast.makeText(PPvPaymentInfoActivity.this,languagePreference.getTextofLanguage(INVALID_COUPON,DEFAULT_INVALID_COUPON), Toast.LENGTH_LONG).show();
 
-            }
-
-
-        } else {
-            //selectShowRadioButton.setText("Entire Show: "+currencySymbolStr+planPrice);
-            creditCardLayout.setVisibility(View.VISIBLE);
-
-            chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + chargedPrice);
-            isCouponCodeAdded = true;
-            validCouponCode = couponCodeEditText.getText().toString().trim();
-            Toast.makeText(PPvPaymentInfoActivity.this, languagePreference.getTextofLanguage(DISCOUNT_ON_COUPON, DEFAULT_DISCOUNT_ON_COUPON), Toast.LENGTH_LONG).show();
-            if (chargedPrice <= 0.0f && isCouponCodeAdded == true) {
-                creditCardLayout.setVisibility(View.GONE);
-
-                //paywithCreditCardButton.setVisibility(View.GONE);
-                withoutCreditCardLayout.setVisibility(View.VISIBLE);
-                withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + chargedPrice);
             }
         }
-
     }
 
 

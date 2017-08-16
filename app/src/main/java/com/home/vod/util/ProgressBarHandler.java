@@ -41,6 +41,7 @@ public class ProgressBarHandler {
     }
 
     public void show() {
+        layout.removeView(bar);
         layout.addView(bar);
 
        // mProgressBar.setVisibility(View.VISIBLE);

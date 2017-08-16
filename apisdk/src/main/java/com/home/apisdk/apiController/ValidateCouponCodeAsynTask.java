@@ -3,6 +3,7 @@ package com.home.apisdk.apiController;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 
 import com.home.apisdk.APIUrlConstant;
@@ -16,6 +17,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -93,33 +95,18 @@ public class ValidateCouponCodeAsynTask extends AsyncTask<ValidateCouponCodeInpu
             }
 
 
-            if ((myJson.has("discount_type")) && myJson.optString("discount_type").trim() != null && !myJson.optString("discount_type").trim().isEmpty() && !myJson.optString("discount_type").trim().equals("null") && !myJson.optString("discount_type").trim().matches("")) {
+            if ((myJson.has("discount_type")) &&
+                    myJson.optString("discount_type").trim() != null &&
+                    !myJson.optString("discount_type").trim().isEmpty() &&
+                    !myJson.optString("discount_type").trim().equals("null") &&
+                    !myJson.optString("discount_type").trim().matches("")) {
+
                 String discountTypeStr = myJson.optString("discount_type").trim();
                 validateCouponCodeOutputModel.setDiscount_type(myJson.optString("discount_type").trim());
 
                 if ((myJson.has("discount")) && myJson.optString("discount").trim() != null && !myJson.optString("discount").trim().isEmpty() && !myJson.optString("discount").trim().equals("null") && !myJson.optString("discount").trim().matches("")) {
 
                     validateCouponCodeOutputModel.setDiscount(myJson.optString("discount").trim());
-                }
-
-                {
-
-                    if (discountTypeStr.equalsIgnoreCase("%")) {
-
-                        chargedPrice = planPrice - planPrice * (Float.parseFloat(myJson.getString("discount")) / 100);
-
-                        if (chargedPrice < 0.0f) {
-                            chargedPrice = 0.0f;
-                        }
-                    } else {
-
-                        chargedPrice = planPrice - Float.parseFloat(myJson.getString("discount").trim());
-
-                        if (chargedPrice < 0.0f) {
-                            chargedPrice = 0.0f;
-                        }
-                    }
-
                 }
             }
 
@@ -158,7 +145,7 @@ public class ValidateCouponCodeAsynTask extends AsyncTask<ValidateCouponCodeInpu
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onValidateCouponCodePostExecuteCompleted(validateCouponCodeOutputModel, status, responseStr);
+        listener.onValidateCouponCodePostExecuteCompleted(validateCouponCodeOutputModel, status, message);
 
     }
 

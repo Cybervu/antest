@@ -29,8 +29,8 @@
 
                 <ImageView
                     android:id="@+id/castImageView"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp" />
+                    android:layout_width="@dimen/cast_details_width"
+                    android:layout_height="@dimen/cast_details_height" />
 
 
                 <TextView
@@ -41,7 +41,7 @@
                     android:gravity="center"
                     android:text="tst data"
                     android:textColor="@color/videotextColor"
-                    android:textSize="17dp" />
+                    android:textSize="@dimen/cast_textsize" />
 
                 <TextView
                     android:id="@+id/castDescriptionTextView"
@@ -51,7 +51,7 @@
                     android:ellipsize="end"
                     android:gravity="center"
                     android:textColor="@color/videotextColor"
-                    android:textSize="14dp" />
+                    android:textSize="@dimen/cast_description_text" />
             </LinearLayout>
 
             <Button
@@ -67,12 +67,12 @@
                 android:stateListAnimator="@null"
                 android:textAllCaps="false"
                 android:textColor="@color/buttonTextColor"
-                android:textSize="16dp" />
+                android:textSize="@dimen/cast_btn_textsize" />
 
             <View
                 android:id="@+id/borderLineView"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="@dimen/border_line_height"
                 android:layout_marginTop="10dp"
                 android:background="@color/border_color"
                 android:paddingLeft="10dp"

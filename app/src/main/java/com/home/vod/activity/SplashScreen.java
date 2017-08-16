@@ -59,11 +59,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.apisdk.HeaderConstants.RATING;
 import static com.home.vod.preferences.LanguagePreference.*;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_GOOGLE_FCM_TOKEN;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
+import static com.muvi.player.utils.Util.HAS_FAVORITE;
 
 public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddress,
         CheckGeoBlockCountryAsynTask.CheckGeoBlockForCountry,
@@ -244,6 +246,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message) {
+
+        languagePreference.setLanguageSharedPrefernce(HAS_FAVORITE,"" + isRegistrationEnabledOutputModel.getHas_favourite());
+        languagePreference.setLanguageSharedPrefernce(RATING,"" + isRegistrationEnabledOutputModel.getRating());
 
         languagePreference.setLanguageSharedPrefernce(IS_RESTRICT_DEVICE, isRegistrationEnabledOutputModel.getIsRestrictDevice());
         languagePreference.setLanguageSharedPrefernce(IS_ONE_STEP_REGISTRATION, "" + isRegistrationEnabledOutputModel.getSignup_step());
@@ -466,7 +471,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         if (!languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN,DEFAULT_GOOGLE_FCM_TOKEN).equals("0")) {
             LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
-           
+
            jumpToNextScreen();
 
         } else {
@@ -474,13 +479,15 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             GoogleIdGeneraterTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
+
+                    LogUtil.showLog("MUVI", "google_id=" + languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
                     if (!languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN).equals("0")) {
                         GoogleIdGeneraterTimer.cancel();
                         GoogleIdGeneraterTimer.purge();
 
                          LogUtil.showLog("MUVI", "google_id=" + languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
                         jumpToNextScreen();
-                       
+
                     }
                 }
             }, 0, 1000);

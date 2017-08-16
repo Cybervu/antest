@@ -159,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
     String UniversalIsSubscribed = "";
     String deviceName = "";
     ProgressBarHandler pDialog;
-    
+
     LanguagePreference languagePreference;
     int countryPosition = 0;
     int langPosition = 0;
@@ -351,9 +351,10 @@ public class RegisterActivity extends AppCompatActivity implements RegistrationA
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
-        playerModel=new Player();
+        //playerModel=new Player();
 
-languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.this);
+        playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+        languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.this);
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
             mActionBarToolbar.setNavigationIcon(null);
@@ -703,6 +704,8 @@ languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.t
                 boolean isValidEmail = Util.isValidMail(regEmailStr);
                 if (isValidEmail) {
                     if (regPasswordStr.equals(regConfirmPasswordStr)) {
+
+
                         Registration_input registration_input = new Registration_input();
                         registration_input.setAuthToken(authTokenStr);
                         registration_input.setName(regNameStr);
@@ -898,14 +901,43 @@ languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.t
 
         if (statusCode == 200) {
             if (get_video_details_output.getThirdparty_url() == null || get_video_details_output.getThirdparty_url().matches("")) {
-                if (get_video_details_output.getVideoUrl() != null || !get_video_details_output.getVideoUrl().matches("")) {
-                    playerModel.setVideoUrl(get_video_details_output.getVideoUrl());
-                    Log.v("BISHAL", "videourl===" + playerModel.getVideoUrl());
-                    playerModel.setThirdPartyPlayer(false);
-                } else {
-                    //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
-                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
 
+
+                /**@bishal
+                 * for drm player below condition added
+                 * if studio_approved_url is there in api then set the videourl from this other wise goto 2nd one
+                 */
+
+                if (get_video_details_output.getStudio_approved_url() != null &&
+                        !get_video_details_output.getStudio_approved_url().isEmpty() &&
+                        !get_video_details_output.getStudio_approved_url().equals("null") &&
+                        !get_video_details_output.getStudio_approved_url().matches("")) {
+                    LogUtil.showLog("BISHAL","if called means  studioapproved");
+                    playerModel.setVideoUrl(get_video_details_output.getStudio_approved_url());
+                    LogUtil.showLog("BS","studipapprovedurl===="+playerModel.getVideoUrl());
+
+
+                    if ( get_video_details_output.getLicenseUrl().trim() != null && !get_video_details_output.getLicenseUrl().trim().isEmpty() && !get_video_details_output.getLicenseUrl().trim().equals("null") && !get_video_details_output.getLicenseUrl().trim().matches("")) {
+                        playerModel.setLicenseUrl(get_video_details_output.getLicenseUrl());
+                    }
+                    if ( get_video_details_output.getVideoUrl().trim() != null && !get_video_details_output.getVideoUrl().isEmpty() && !get_video_details_output.getVideoUrl().equals("null") && !get_video_details_output.getVideoUrl().trim().matches("")) {
+                        playerModel.setMpdVideoUrl(get_video_details_output.getVideoUrl());
+
+                    }else {
+                        playerModel.setMpdVideoUrl(languagePreference .getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
+                    }
+                }
+
+                else {
+                    if (get_video_details_output.getVideoUrl() != null || !get_video_details_output.getVideoUrl().matches("")) {
+                        playerModel.setVideoUrl(get_video_details_output.getVideoUrl());
+                        Log.v("BISHAL", "videourl===" + playerModel.getVideoUrl());
+                        playerModel.setThirdPartyPlayer(false);
+                    } else {
+                        //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
+                        playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+
+                    }
                 }
             } else {
                 if (get_video_details_output.getThirdparty_url() != null || !get_video_details_output.getThirdparty_url().matches("")) {
@@ -1201,7 +1233,7 @@ languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.t
                                 }
                             });
                     dlgAlert.create().show();
-                } else if (status == 429) {
+                } else if (status == 429 || status == 430) {
 
                     if (validateUserOutput.getValiduser_str() != null) {
                         try {
@@ -2289,6 +2321,7 @@ languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.t
             showPaymentIntent.putExtra("showName", Util.dataModel.getVideoTitle());
             showPaymentIntent.putExtra("isPPV", Util.dataModel.getIsPPV());
             showPaymentIntent.putExtra("isAPV", Util.dataModel.getIsAPV());
+            showPaymentIntent.putExtra("PlayerModel",playerModel);
             if (Util.dataModel.getIsAPV() == 1) {
                 showPaymentIntent.putExtra("isConverted", 0);
             } else {
@@ -2570,6 +2603,7 @@ languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.t
                     showPaymentIntent.putExtra("seriesNumber", Util.dataModel.getEpisode_series_no());
                     showPaymentIntent.putExtra("isPPV", Util.dataModel.getIsPPV());
                     showPaymentIntent.putExtra("isAPV", Util.dataModel.getIsAPV());
+                    showPaymentIntent.putExtra("PlayerModel",playerModel);
                     if (Util.dataModel.getIsAPV() == 1) {
                         showPaymentIntent.putExtra("isConverted", 0);
                     } else {

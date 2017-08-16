@@ -59,7 +59,9 @@ public class HeaderConstants {
     public static final String SEASON_ID="season_id";
     public static final String PROFILE_ID="profile_id";
     public static final String TOKEN="token";
-    public static final String COUPAN_CODE="coupon_code";
+    public static final String COUPAN_CODE="couponCode";
+    public static final String COUPON_CODE_WITHOUT_PAYMENT="coupon_code";
+
     public static final String IS_SAVE_THIS_CARD="is_save_this_card";
     public static final String IS_ADVANCE="is_advance";
     public static final String EMAIL_ID="email_id";

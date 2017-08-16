@@ -92,6 +92,7 @@ public class ViewContentRatingAsynTask extends AsyncTask<ViewContentRatingInputM
 
             }
 
+            Log.v("SUBHA","response == "+ responseStr);
             if (status > 0) {
 
                 if (status == 200) {
@@ -115,8 +116,8 @@ public class ViewContentRatingAsynTask extends AsyncTask<ViewContentRatingInputM
                                 rating.setDisplay_name(display_name);
 
                             }
-                            if ((jsonChildNode.has("poster_url")) && jsonChildNode.optString("poster_url").trim() != null && !jsonChildNode.optString("poster_url").trim().isEmpty() && !jsonChildNode.optString("poster_url").trim().equals("null") && !jsonChildNode.optString("poster_url").trim().matches("")) {
-                                rating.setRating(jsonChildNode.optString("poster_url"));
+                            if ((jsonChildNode.has("rating")) && jsonChildNode.optString("rating").trim() != null && !jsonChildNode.optString("rating").trim().isEmpty() && !jsonChildNode.optString("rating").trim().equals("null") && !jsonChildNode.optString("rating").trim().matches("")) {
+                                rating.setRating(jsonChildNode.optString("rating"));
 
                             }
                             if ((jsonChildNode.has("review")) && jsonChildNode.optString("review").trim() != null && !jsonChildNode.optString("review").trim().isEmpty() && !jsonChildNode.optString("review").trim().equals("null") && !jsonChildNode.optString("review").trim().matches("")) {

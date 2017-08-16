@@ -11,6 +11,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 
+import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
 import com.home.vod.R;
 import com.home.vod.model.ReviewsItem;
 
@@ -21,9 +22,9 @@ import java.util.ArrayList;
  */
 public class ReviewsAdapter extends BaseAdapter {
     private Context mContext;
-    private ArrayList<ReviewsItem> reviewsItems ;
+    private ArrayList<ViewContentRatingOutputModel.Rating> reviewsItems ;
 
-    public ReviewsAdapter(Context mContext, ArrayList<ReviewsItem> reviewsItems) {
+    public ReviewsAdapter(Context mContext, ArrayList<ViewContentRatingOutputModel.Rating> reviewsItems) {
         this.mContext = mContext;
         this.reviewsItems = reviewsItems;
     }
@@ -74,8 +75,8 @@ public class ReviewsAdapter extends BaseAdapter {
         Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.light_fonts));
         userReviewTextView.setTypeface(castDescriptionTypeface);
 
-        userNameTextView.setText(reviewsItems.get(position).getUserName());
-        userReviewTextView.setText(reviewsItems.get(position).getReviews());
+        userNameTextView.setText(reviewsItems.get(position).getDisplay_name());
+        userReviewTextView.setText(reviewsItems.get(position).getReview());
         rating.setRating(Float.parseFloat(reviewsItems.get(position).getRating()));
         rating.setFocusable(false);
 

@@ -31,6 +31,7 @@ import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.ReviewsAdapter;
 import com.home.vod.model.ReviewsItem;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.muvi.player.utils.Util;
 
@@ -55,17 +56,19 @@ import java.util.concurrent.TimeUnit;
 public class ReviewActivity extends AppCompatActivity implements ViewContentRatingAsynTask.ViewContentRatingListner, AddContentRatingAsynTask.AddContentRatingListner{
 
     Toolbar mActionBarToolbar;
-
+    ProgressBarHandler pDialog;
     ArrayList<ReviewsItem> reviewsItem = new ArrayList<ReviewsItem>();
     ReviewsAdapter reviewsAdapter;
     GridView reviewsGridView;
-    SharedPreferences pref;
+
+
 
     /* RelativeLayout noInternetLayout;
      RelativeLayout noDataLayout;
      TextView noDataTextView;
      TextView noInternetTextView;*/
     int isLogin = 0;
+    PreferenceManager preferenceManager;
 
     //  LinearLayout primary_layout;
     boolean isNetwork;
@@ -89,9 +92,8 @@ public class ReviewActivity extends AppCompatActivity implements ViewContentRati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
-        SharedPreferences isLoginPref = getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0); // 0 - for private mode
-
-        isLogin = isLoginPref.getInt(Util.IS_LOGIN_PREF_KEY, 0);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
+        isLogin = preferenceManager.getLoginFeatureFromPref();
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
@@ -102,8 +104,6 @@ public class ReviewActivity extends AppCompatActivity implements ViewContentRati
                 finish();
             }
         });
-
-        pref = getSharedPreferences(Util.LOGIN_PREF, 0);
 
         submitRatingLayout = (RelativeLayout)findViewById(R.id.submitRatingLayout);
         clickHereToLogin = (TextView) findViewById(R.id.clickHereToLogin);
@@ -149,7 +149,7 @@ public class ReviewActivity extends AppCompatActivity implements ViewContentRati
 
 
                 AddContentRatingInputModel addContentRatingInputModel = new AddContentRatingInputModel();
-                addContentRatingInputModel.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                addContentRatingInputModel.setUser_id(preferenceManager.getUseridFromPref());
                 addContentRatingInputModel.setLang_code(Util.getTextofLanguage(ReviewActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                 addContentRatingInputModel.setContent_id(getIntent().getStringExtra("muviId"));
                 addContentRatingInputModel.setAuthToken(Util.authTokenStr.trim());
@@ -228,13 +228,13 @@ public class ReviewActivity extends AppCompatActivity implements ViewContentRati
         viewContentRatingInputModel.setAuthToken(Util.authTokenStr);
         viewContentRatingInputModel.setContent_id(getIntent().getStringExtra("muviId"));
         viewContentRatingInputModel.setLang_code(Util.getTextofLanguage(ReviewActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-        viewContentRatingInputModel.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+        viewContentRatingInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
         ViewContentRatingAsynTask viewContentRatingAsynTask = new ViewContentRatingAsynTask(viewContentRatingInputModel, ReviewActivity.this, ReviewActivity.this);
         viewContentRatingAsynTask.executeOnExecutor(threadPoolExecutor);
 
-      /*  AsynGetReviewDetails asynGetReviewDetails = new AsynGetReviewDetails();
-        asynGetReviewDetails.executeOnExecutor(threadPoolExecutor);*/
+
+
 
     }
 
@@ -249,16 +249,18 @@ public class ReviewActivity extends AppCompatActivity implements ViewContentRati
 
 
 
-        if(isLogin == 1) {
-            if (pref != null) {
-                Log.v("SUBHA","FHFH");
-                String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
+        if(preferenceManager.getLoginFeatureFromPref() == 1) {
+            if (preferenceManager.getLoginFeatureFromPref() == 1) {
+
+                String loggedInStr = preferenceManager.getUseridFromPref();
                 if (loggedInStr == null) {
                     Log.v("SUBHA","loggedInStr");
 
                     clickHereToLogin.setVisibility(View.VISIBLE);
                     submitRatingLayout.setVisibility(View.GONE);
                 }else{
+
+
                     if (viewContentRatingOutputModel.getShowrating() == 0){
                         submitRatingLayout.setVisibility(View.GONE);
                     }else{
@@ -282,7 +284,8 @@ public class ReviewActivity extends AppCompatActivity implements ViewContentRati
 
         }
 
-        reviewsAdapter = new ReviewsAdapter(ReviewActivity.this,reviewsItem);
+        ;
+        reviewsAdapter = new ReviewsAdapter(ReviewActivity.this,viewContentRatingOutputModel.getRatingArray());
         reviewsGridView.setAdapter(reviewsAdapter);
 
     }
@@ -504,7 +507,8 @@ public class ReviewActivity extends AppCompatActivity implements ViewContentRati
 
     @Override
     public void onAddContentRatingPreExecuteStarted() {
-
+        pDialog = new ProgressBarHandler(ReviewActivity.this);
+        pDialog.show();
     }
 
     @Override

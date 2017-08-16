@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +65,6 @@ public class EpisodesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
 
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView episodeTitleTextView;
         public TextView episodeNameTextView;
@@ -88,6 +88,7 @@ public class EpisodesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
            // episodeNameTextView.setText(item.getEpisodeNumber());
 
             String imageId = item.getEpisodeThumbnailImageView();
+            Log.v("SUBHA","kjshdvuih");
 
 
             if(imageId.matches("") || imageId.matches(LanguagePreference.getLanguagePreference(context).getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){

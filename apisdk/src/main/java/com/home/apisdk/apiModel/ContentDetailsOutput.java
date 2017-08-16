@@ -26,9 +26,59 @@ String movieStreamUniqId = "";
     String comments;
     String epDetails;
     String name;
-    String contentTypesId;
     String permalink;
     String genre = "";
+    String rating = "";
+    String review = "";
+    String id = "";
+
+
+    public String[] getSeason() {
+        return season;
+    }
+
+    public void setSeason(String[] season) {
+        this.season = season;
+    }
+
+    String[] season;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+
+    public int getIs_favorite() {
+        return is_favorite;
+    }
+
+    public void setIs_favorite(int is_favorite) {
+        this.is_favorite = is_favorite;
+    }
+
+    int is_favorite = 0;
+
+
+    public String getReview() {
+        return review;
+    }
+
+    public void setReview(String review) {
+        this.review = review;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
 
     public String getIsEpisode() {
         return isEpisode;
@@ -61,6 +111,16 @@ String movieStreamUniqId = "";
 
     int isPpv;
     int isApv;
+
+    public void setContentTypesId(int contentTypesId) {
+        this.contentTypesId = contentTypesId;
+    }
+
+    public int getContentTypesId() {
+        return contentTypesId;
+    }
+
+    int contentTypesId;
     APVModel apvDetails;
     PPVModel ppvDetails;
     CurrencyModel currencyDetails;
@@ -270,13 +330,7 @@ String movieStreamUniqId = "";
         this.name = name;
     }
 
-    public String getContentTypesId() {
-        return contentTypesId;
-    }
 
-    public void setContentTypesId(String contentTypesId) {
-        this.contentTypesId = contentTypesId;
-    }
 
     public String getPermalink() {
         return permalink;
