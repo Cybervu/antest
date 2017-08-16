@@ -395,82 +395,95 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         *//************chromecast***********/
 
 
-        MenuItem item, item1, item2, item3, item4, item5, item6;
-        item = menu.findItem(R.id.action_filter);
-        item.setVisible(false);
+        MenuItem itemFillterMenu,
+                itemProfileMenu,
+                itemPurchaseMenu,
+                itemLogoutMenu,
+                itemLoginMenu,
+                itemRegisterMenu,
+                itemLanguageMenu,
+                itemFavMenu;
 
-        MenuItem item7 =  menu.findItem(R.id.menu_item_favorite);
+        itemFillterMenu = menu.findItem(R.id.action_filter);
+        itemFavMenu =  menu.findItem(R.id.menu_item_favorite);
+        itemLanguageMenu = menu.findItem(R.id.menu_item_language);
+        itemLoginMenu = menu.findItem(R.id.action_login);
+        itemRegisterMenu = menu.findItem(R.id.action_register);
+        itemProfileMenu = menu.findItem(R.id.menu_item_profile);
+        itemPurchaseMenu= menu.findItem(R.id.action_purchage);
+        itemLogoutMenu= menu.findItem(R.id.action_logout);
+
+        itemFillterMenu.setVisible(false);
+
+
 
         loggedInStr = preferenceManager.getLoginStatusFromPref();
         id = preferenceManager.getUseridFromPref();
         email=preferenceManager.getEmailIdFromPref();
 
-       // SharedPreferences language_list_pref = getSharedPreferences(LANGUAGE_LIST_PREF, 0);
-
-
-        (menu.findItem(R.id.menu_item_language)).setTitle(languagePreference.getTextofLanguage( LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE));
+        (itemLanguageMenu).setTitle(languagePreference.getTextofLanguage( LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE));
 
 
         if(preferenceManager.getLanguageListFromPref().equals("1"))
-            (menu.findItem(R.id.menu_item_language)).setVisible(false);
+            (itemLanguageMenu).setVisible(false);
 
         if(loggedInStr!=null){
-            item4= menu.findItem(R.id.action_login);
-            item4.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN,DEFAULT_LANGUAGE_POPUP_LOGIN));
-            item4.setVisible(false);
-            item5= menu.findItem(R.id.action_register);
-            item5.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER,DEFAULT_BTN_REGISTER));
-            item5.setVisible(false);
-          /*  item6= menu.findItem(R.id.menu_item_language);
+
+            itemLoginMenu.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN,DEFAULT_LANGUAGE_POPUP_LOGIN));
+            itemLoginMenu.setVisible(false);
+
+            itemRegisterMenu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER,DEFAULT_BTN_REGISTER));
+            itemRegisterMenu.setVisible(false);
+          /*  item6= itemLanguageMenu;
             item6.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE,DEFAULT_LANGUAGE_POPUP_LANGUAGE));
             item6.setVisible(true);*/
-            item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(languagePreference.getTextofLanguage(PROFILE,DEFAULT_PROFILE));
-            item1.setVisible(true);
+
+            itemProfileMenu.setTitle(languagePreference.getTextofLanguage(PROFILE,DEFAULT_PROFILE));
+            itemProfileMenu.setVisible(true);
 
             if ((languagePreference.getTextofLanguage(HAS_FAVORITE,DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
-                item7.setVisible(true);
+                itemFavMenu.setVisible(true);
             }else{
-                item7.setVisible(false);
+                itemFavMenu.setVisible(false);
 
             }
 
-            item2 = menu.findItem(R.id.action_purchage);
-            item2.setTitle(languagePreference.getTextofLanguage( PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
-            item2.setVisible(true);
 
-            item3 = menu.findItem(R.id.action_logout);
-            item3.setTitle(languagePreference.getTextofLanguage( LOGOUT, DEFAULT_LOGOUT));
-            item3.setVisible(true);
+            itemPurchaseMenu.setTitle(languagePreference.getTextofLanguage( PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
+            itemPurchaseMenu.setVisible(true);
+
+
+            itemLogoutMenu.setTitle(languagePreference.getTextofLanguage( LOGOUT, DEFAULT_LOGOUT));
+            itemLogoutMenu.setVisible(true);
 
         } else if (loggedInStr == null) {
-            item4 = menu.findItem(R.id.action_login);
-            item4.setTitle(languagePreference.getTextofLanguage( LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
+
+            itemLoginMenu.setTitle(languagePreference.getTextofLanguage( LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
 
 
-            item5 = menu.findItem(R.id.action_register);
-            item5.setTitle(languagePreference.getTextofLanguage( BTN_REGISTER, DEFAULT_BTN_REGISTER));
+
+            itemRegisterMenu.setTitle(languagePreference.getTextofLanguage( BTN_REGISTER, DEFAULT_BTN_REGISTER));
             if (isLogin == 1) {
-                item4.setVisible(true);
-                item5.setVisible(true);
+                itemLoginMenu.setVisible(true);
+                itemRegisterMenu.setVisible(true);
 
             } else {
-                item4.setVisible(false);
-                item5.setVisible(false);
+                itemLoginMenu.setVisible(false);
+                itemRegisterMenu.setVisible(false);
 
             }
-           /* item6= menu.findItem(R.id.menu_item_language);
+           /* item6= itemLanguageMenu;
             item6.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE,DEFAULT_LANGUAGE_POPUP_LANGUAGE));
             item6.setVisible(true);*/
-            item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(languagePreference.getTextofLanguage( PROFILE, DEFAULT_PROFILE));
-            item1.setVisible(false);
-            item2= menu.findItem(R.id.action_purchage);
-            item2.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY));
-            item2.setVisible(false);
-            item3= menu.findItem(R.id.action_logout);
-            item3.setTitle(languagePreference.getTextofLanguage(LOGOUT,DEFAULT_LOGOUT));
-            item3.setVisible(false);
+
+            itemProfileMenu.setTitle(languagePreference.getTextofLanguage( PROFILE, DEFAULT_PROFILE));
+            itemProfileMenu.setVisible(false);
+
+            itemPurchaseMenu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY));
+            itemPurchaseMenu.setVisible(false);
+
+            itemLogoutMenu.setTitle(languagePreference.getTextofLanguage(LOGOUT,DEFAULT_LOGOUT));
+            itemLogoutMenu.setVisible(false);
         }
         return true;
     }

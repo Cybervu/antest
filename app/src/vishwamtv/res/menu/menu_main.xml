@@ -18,12 +18,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:appcompat="http://schemas.android.com/tools">
 
-   <!-- <item
-        android:id="@+id/media_route_menu_item"
-        android:title="@string/media_route_menu_title"
-        app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
-        android:orderInCategory="102"
-        app:showAsAction="always" />-->
+    <!-- <item
+         android:id="@+id/media_route_menu_item"
+         android:title="@string/media_route_menu_title"
+         app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
+         android:orderInCategory="102"
+         app:showAsAction="always" />-->
     <item
         android:id="@+id/action_search"
         android:title="search"
@@ -45,10 +45,10 @@
         android:orderInCategory="105"
         app:showAsAction="always|never">
         <menu>
-        <item
-            android:id="@+id/action_login"
-            android:icon="@drawable/login"
-            android:title="Login"/>
+            <item
+                android:id="@+id/action_login"
+                android:icon="@drawable/login"
+                android:title="Login"/>
             <item
                 android:id="@+id/action_register"
                 android:icon="@drawable/register"
@@ -79,52 +79,52 @@
 
 
 
-   <!-- <item
-        android:title="fff"
-        android:id="@+id/ffaction_settings"
-        android:icon="@drawable/search"
-        android:orderInCategory="100"
-        appcompat:showAsAction="never">
-        <menu>
-            <item
-                android:id="@+id/ffaction_login"
-                android:icon="@drawable/login"
-                android:title="Login"/>
+    <!-- <item
+         android:title="fff"
+         android:id="@+id/ffaction_settings"
+         android:icon="@drawable/search"
+         android:orderInCategory="100"
+         appcompat:showAsAction="never">
+         <menu>
+             <item
+                 android:id="@+id/ffaction_login"
+                 android:icon="@drawable/login"
+                 android:title="Login"/>
 
-        </menu>
-    </item>-->
-   <!-- <item
-        android:title="Settings"
-        android:id="@+id/action_settings"
-        android:icon="@drawable/optionmanu"
-        android:orderInCategory="100"
-        appcompat:showAsAction="never">
-        <menu>
-            <item
-                android:id="@+id/action_login"
-                android:icon="@drawable/login"
-                android:title="Login"/>
-            <item
-                android:id="@+id/action_register"
-                android:icon="@drawable/register"
-                android:title="Register"/>
+         </menu>
+     </item>-->
+    <!-- <item
+         android:title="Settings"
+         android:id="@+id/action_settings"
+         android:icon="@drawable/optionmanu"
+         android:orderInCategory="100"
+         appcompat:showAsAction="never">
+         <menu>
+             <item
+                 android:id="@+id/action_login"
+                 android:icon="@drawable/login"
+                 android:title="Login"/>
+             <item
+                 android:id="@+id/action_register"
+                 android:icon="@drawable/register"
+                 android:title="Register"/>
 
-            <item
-                android:id="@+id/menu_item_language"
-                android:icon="@drawable/language"
-                android:title="Language"/>
-            <item
-                android:id="@+id/menu_item_profile"
-                android:icon="@drawable/register"
-                android:title="Profile"/>
-            <item
-                android:id="@+id/action_purchage"
-                android:icon="@drawable/purchase_history"
-                android:title="Purchase History"/>
-            <item
-                android:id="@+id/action_logout"
-                android:icon="@drawable/logout"
-                android:title="Logout"/>
-        </menu>
-    </item>-->
+             <item
+                 android:id="@+id/menu_item_language"
+                 android:icon="@drawable/language"
+                 android:title="Language"/>
+             <item
+                 android:id="@+id/menu_item_profile"
+                 android:icon="@drawable/register"
+                 android:title="Profile"/>
+             <item
+                 android:id="@+id/action_purchage"
+                 android:icon="@drawable/purchase_history"
+                 android:title="Purchase History"/>
+             <item
+                 android:id="@+id/action_logout"
+                 android:icon="@drawable/logout"
+                 android:title="Logout"/>
+         </menu>
+     </item>-->
 </menu>
