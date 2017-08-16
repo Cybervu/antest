@@ -67,12 +67,14 @@ import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
 import static com.muvi.player.utils.Util.HAS_FAVORITE;
 
-public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddress,
-        CheckGeoBlockCountryAsynTask.CheckGeoBlockForCountry,
-        GetPlanListAsynctask.GetStudioPlanLists,
-        IsRegistrationEnabledAsynTask.IsRegistrationenabled,
-        GetLanguageListAsynTask.GetLanguageList,
-        GetGenreListAsynctask.GenreList, GetUserProfileAsynctask.Get_UserProfile, GetTranslateLanguageAsync.GetTranslateLanguageInfoListner {
+public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddressListener,
+        CheckGeoBlockCountryAsynTask.CheckGeoBlockForCountryListener,
+        GetPlanListAsynctask.GetStudioPlanListsListener,
+        IsRegistrationEnabledAsynTask.IsRegistrationenabledListener,
+        GetLanguageListAsynTask.GetLanguageListListener,
+        GetGenreListAsynctask.GenreListListener,
+        GetUserProfileAsynctask.Get_UserProfileListener,
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener {
 
     private String[] genreArrToSend;
     private String[] genreValueArrayToSend;

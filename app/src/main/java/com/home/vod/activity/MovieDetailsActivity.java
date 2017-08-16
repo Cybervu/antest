@@ -200,10 +200,12 @@ import static com.muvi.player.utils.Util.DEFAULT_REVIEWS;
 import static com.muvi.player.utils.Util.HAS_FAVORITE;
 import static com.muvi.player.utils.Util.REVIEWS;
 
-public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsynctask.Logout,
-        GetValidateUserAsynTask.GetValidateUser, VideoDetailsAsynctask.VideoDetails, GetLanguageListAsynTask.GetLanguageList,
-        GetContentDetailsAsynTask.GetContentDetails ,AddToFavAsync.AddToFavListener,ViewContentRatingAsynTask.ViewContentRatingListner
-        ,DeleteFavAsync.DeleteFavListener,GetTranslateLanguageAsync.GetTranslateLanguageInfoListner{
+public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsynctask.LogoutListener,
+        GetValidateUserAsynTask.GetValidateUserListener, VideoDetailsAsynctask.VideoDetailsListener,
+        GetLanguageListAsynTask.GetLanguageListListener,
+        GetContentDetailsAsynTask.GetContentDetailsListener,
+        AddToFavAsync.AddToFavListener,ViewContentRatingAsynTask.ViewContentRatingListener
+        ,DeleteFavAsync.DeleteFavListener,GetTranslateLanguageAsync.GetTranslateLanguageInfoListener{
     public static ProgressBarHandler progressBarHandler;
     int  prevPosition = 0;
     PreferenceManager preferenceManager;

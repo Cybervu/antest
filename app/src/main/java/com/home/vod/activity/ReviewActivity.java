@@ -53,7 +53,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 
-public class ReviewActivity extends AppCompatActivity implements ViewContentRatingAsynTask.ViewContentRatingListner, AddContentRatingAsynTask.AddContentRatingListner{
+public class ReviewActivity extends AppCompatActivity implements
+        ViewContentRatingAsynTask.ViewContentRatingListener, AddContentRatingAsynTask.AddContentRatingListener{
 
     Toolbar mActionBarToolbar;
     ProgressBarHandler pDialog;

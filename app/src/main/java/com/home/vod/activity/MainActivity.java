@@ -118,7 +118,9 @@ import static com.muvi.player.utils.Util.HAS_FAVORITE;
 
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,
-        LogoutAsynctask.Logout, GetMenuListAsynctask.GetMenuList, GetLanguageListAsynTask.GetLanguageList,GetTranslateLanguageAsync.GetTranslateLanguageInfoListner {
+        LogoutAsynctask.LogoutListener, GetMenuListAsynctask.GetMenuListListener,
+        GetLanguageListAsynTask.GetLanguageListListener,
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener{
 
 
     public MainActivity() {

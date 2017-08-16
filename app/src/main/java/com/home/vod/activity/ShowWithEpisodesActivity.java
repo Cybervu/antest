@@ -236,9 +236,17 @@ import com.home.vod.util.Util;
 import javax.net.ssl.HttpsURLConnection;
 
 
-public class ShowWithEpisodesActivity extends AppCompatActivity implements GetTranslateLanguageAsync.GetTranslateLanguageInfoListner, LogoutAsynctask.Logout, GetLanguageListAsynTask.GetLanguageList,
-        GetContentDetailsAsynTask.GetContentDetails, GetEpisodeDeatailsAsynTask.GetEpisodeDetails, GetValidateUserAsynTask.GetValidateUser, VideoDetailsAsynctask.VideoDetails, AddToFavAsync.AddToFavListener,
-        DeleteFavAsync.DeleteFavListener, ViewContentRatingAsynTask.ViewContentRatingListner {
+public class ShowWithEpisodesActivity extends AppCompatActivity implements
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener,
+        LogoutAsynctask.LogoutListener, GetLanguageListAsynTask.GetLanguageListListener,
+        GetContentDetailsAsynTask.GetContentDetailsListener,
+        GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener,
+        GetValidateUserAsynTask.GetValidateUserListener,
+        VideoDetailsAsynctask.VideoDetailsListener,
+        AddToFavAsync.AddToFavListener,
+        DeleteFavAsync.DeleteFavListener,
+        ViewContentRatingAsynTask.ViewContentRatingListener {
+
     String movieDetailsStr = "";
     String priceForUnsubscribedStr, priceFosubscribedStr;
     PPVModel ppvmodel;

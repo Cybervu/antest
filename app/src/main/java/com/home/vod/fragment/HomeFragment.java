@@ -78,7 +78,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 /**
  * Created by Muvi on 11/24/2016.
  */
-public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVideosAsync {
+public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVideosAsyncListener {
 
 
     int videoHeight = 185;

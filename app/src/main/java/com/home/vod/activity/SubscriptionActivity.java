@@ -43,7 +43,7 @@ import static com.home.vod.preferences.LanguagePreference.SELECT_PLAN;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 
-public class SubscriptionActivity extends AppCompatActivity implements GetPlanListAsynctask.GetStudioPlanLists {
+public class SubscriptionActivity extends AppCompatActivity implements GetPlanListAsynctask.GetStudioPlanListsListener {
     RecyclerView subcription;
     ArrayList<PlanModel> movieList=new ArrayList<PlanModel>();
     Button activation_plan;

@@ -45,7 +45,8 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class PurchaseHistoryActivity extends AppCompatActivity implements PurchaseHistoryAsyntask.PurchaseHistory {
+public class PurchaseHistoryActivity extends AppCompatActivity implements
+        PurchaseHistoryAsyntask.PurchaseHistoryListener{
     Toolbar mActionBarToolbar;
     RecyclerView recyclerView;
     ArrayList<PurchaseHistoryModel> purchaseData = new ArrayList<PurchaseHistoryModel>();

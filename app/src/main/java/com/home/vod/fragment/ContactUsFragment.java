@@ -46,7 +46,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactUsFragment extends Fragment implements ContactUsAsynTask.ContactUs {
+public class ContactUsFragment extends Fragment implements ContactUsAsynTask.ContactUsListener {
     Context context;
     String regEmailStr, regNameStr,regMessageStr;
     EditText editEmailStr, editNameStr,editMessageStr;

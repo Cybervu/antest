@@ -75,8 +75,10 @@ import static com.home.vod.util.Constant.authTokenStr;
     }
 }*/
 
-public class TrailerActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener,GetVideoLogsAsynTask.GetVideoLogs,GetIpAddressAsynTask.IpAddress,
-        GetFFVideoLogDetailsAsync.GetFFVideoLogs,ResumeVideoLogDetailsAsync.ResumeVideoLogDetails{
+public class TrailerActivity extends AppCompatActivity implements
+        SensorOrientationChangeNotifier.Listener,
+        GetVideoLogsAsynTask.GetVideoLogsListener,GetIpAddressAsynTask.IpAddressListener,
+        GetFFVideoLogDetailsAsync.GetFFVideoLogsListener,ResumeVideoLogDetailsAsync.ResumeVideoLogDetailsListener{
    // int played_length = 0;
     int playerStartPosition = 0;
     ImageView subtitle_change_btn;

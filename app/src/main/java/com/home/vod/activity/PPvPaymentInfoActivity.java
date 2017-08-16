@@ -146,9 +146,12 @@ import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.USE_NEW_CARD;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class PPvPaymentInfoActivity extends ActionBarActivity implements VideoDetailsAsynctask.VideoDetails, ValidateCouponCodeAsynTask.ValidateCouponCode,
-        AuthUserPaymentInfoAsyntask.AuthUserPaymentInfo, WithouPaymentSubscriptionRegDetailsAsync.WithouPaymentSubscriptionRegDetails,
-        GetPPVPaymentAsync.GetPPVPayment,GetCardListForPPVAsynTask.GetCardListForPPV {
+public class PPvPaymentInfoActivity extends ActionBarActivity implements
+        VideoDetailsAsynctask.VideoDetailsListener,
+        ValidateCouponCodeAsynTask.ValidateCouponCodeLIstener,
+        AuthUserPaymentInfoAsyntask.AuthUserPaymentInfoListener,
+        WithouPaymentSubscriptionRegDetailsAsync.WithouPaymentSubscriptionRegDetailsListener,
+        GetPPVPaymentAsync.GetPPVPaymentListener,GetCardListForPPVAsynTask.GetCardListForPPVListener {
 
     public static ProgressBarHandler progressBarHandler;
     String filename = "";

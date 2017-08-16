@@ -93,8 +93,11 @@ import static com.home.vod.util.Constant.authTokenStr;
     }
 }*/
 
-public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener,GetVideoLogsAsynTask.GetVideoLogs,
-        GetIpAddressAsynTask.IpAddress,ResumeVideoLogDetailsAsync.ResumeVideoLogDetails,GetFFVideoLogDetailsAsync.GetFFVideoLogs{
+public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener,
+        GetVideoLogsAsynTask.GetVideoLogsListener,
+        GetIpAddressAsynTask.IpAddressListener,
+        ResumeVideoLogDetailsAsync.ResumeVideoLogDetailsListener,
+        GetFFVideoLogDetailsAsync.GetFFVideoLogsListener{
     int played_length = 0;
     int playerStartPosition = 0;
 

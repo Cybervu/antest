@@ -101,8 +101,9 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class FavoriteActivity extends AppCompatActivity implements GetLanguageListAsynTask.GetLanguageList,ViewFavouriteAsynTask.ViewFavouriteListener,
-        LogoutAsynctask.Logout, GetTranslateLanguageAsync.GetTranslateLanguageInfoListner,DeleteFavAsync.DeleteFavListener{
+public class FavoriteActivity extends AppCompatActivity implements GetLanguageListAsynTask.GetLanguageListListener,ViewFavouriteAsynTask.ViewFavouriteListener,
+        LogoutAsynctask.LogoutListener, GetTranslateLanguageAsync.GetTranslateLanguageInfoListener
+        ,DeleteFavAsync.DeleteFavListener{
     public static ProgressBarHandler progressBarHandler;
     String email, id;
     LanguageCustomAdapter languageCustomAdapter;

@@ -128,8 +128,9 @@ import com.twotoasters.jazzylistview.JazzyHelper;
 /**
  * Created by user on 28-06-2015.
  */
-public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask.VideoDetails, GetValidateUserAsynTask.GetValidateUser,
-        MyLibraryAsynTask.MyLibrary {
+public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask.VideoDetailsListener,
+        GetValidateUserAsynTask.GetValidateUserListener,
+        MyLibraryAsynTask.MyLibraryListener {
     ArrayList<String> url_maps;
     private ProgressBarHandler videoPDialog;
     private static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";

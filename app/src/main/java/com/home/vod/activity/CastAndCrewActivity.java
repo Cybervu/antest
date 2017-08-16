@@ -49,7 +49,7 @@ import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class CastAndCrewActivity extends AppCompatActivity implements GetCelibrityAsyntask.GetCelibrity {
+public class CastAndCrewActivity extends AppCompatActivity implements GetCelibrityAsyntask.GetCelibrityListener {
 
 
     Toolbar mActionBarToolbar;

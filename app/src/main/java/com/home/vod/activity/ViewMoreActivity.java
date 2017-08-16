@@ -123,8 +123,10 @@ import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.muvi.player.utils.Util.DEFAULT_HAS_FAVORITE;
 import static com.muvi.player.utils.Util.HAS_FAVORITE;
 
-public class ViewMoreActivity extends AppCompatActivity implements LogoutAsynctask.Logout, GetLanguageListAsynTask.GetLanguageList,
-        GetTranslateLanguageAsync.GetTranslateLanguageInfoListner, GetFeatureContentAsynTask.GetFeatureContent {
+public class ViewMoreActivity extends AppCompatActivity implements
+        LogoutAsynctask.LogoutListener, GetLanguageListAsynTask.GetLanguageListListener,
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener,
+        GetFeatureContentAsynTask.GetFeatureContentListener {
     public static ProgressBarHandler progressBarHandler;
     String email, id;
     LanguageCustomAdapter languageCustomAdapter;

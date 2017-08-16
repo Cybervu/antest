@@ -80,7 +80,8 @@ import static com.home.vod.preferences.LanguagePreference.UPDATE_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.UPDATE_PROFILE_ALERT;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class ProfileActivity extends AppCompatActivity implements UpadteUserProfileAsynctask.Update_UserProfile, GetUserProfileAsynctask.Get_UserProfile {
+public class ProfileActivity extends AppCompatActivity implements
+        UpadteUserProfileAsynctask.Update_UserProfileListener, GetUserProfileAsynctask.Get_UserProfileListener {
     SharedPreferences loginPref;
 
     ImageView bannerImageView;

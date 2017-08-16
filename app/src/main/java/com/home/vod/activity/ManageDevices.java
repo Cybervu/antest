@@ -37,7 +37,7 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.YOUR_DEVICE;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class ManageDevices extends AppCompatActivity implements LoadRegisteredDevicesAsync.LoadRegisteredDevices {
+public class ManageDevices extends AppCompatActivity implements LoadRegisteredDevicesAsync.LoadRegisteredDevicesListener {
     String userId = "";
     String emailId = "";
     TextView name_of_user;

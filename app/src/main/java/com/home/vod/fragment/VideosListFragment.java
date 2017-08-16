@@ -107,7 +107,7 @@ import com.twotoasters.jazzylistview.JazzyHelper;
 /**
  * Created by user on 28-06-2015.
  */
-public class VideosListFragment extends Fragment implements GetContentListAsynTask.GetContentList  {
+public class VideosListFragment extends Fragment implements GetContentListAsynTask.GetContentListListener  {
 
    /* *//***************chromecast**********************//*
     public enum PlaybackLocation {

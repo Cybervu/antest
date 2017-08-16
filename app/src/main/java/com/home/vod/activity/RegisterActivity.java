@@ -152,9 +152,14 @@ import static com.home.vod.preferences.LanguagePreference.TEXT_PASSWORD;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 
-public class RegisterActivity extends AppCompatActivity implements RegistrationAsynTask.RegistrationDetails, VideoDetailsAsynctask.VideoDetails,
-        GetValidateUserAsynTask.GetValidateUser, SocialAuthAsynTask.SocialAuth, LogoutAsynctask.Logout, CheckDeviceAsyncTask.CheckDevice,
-        CheckFbUserDetailsAsyn.CheckFbUserDetails{
+public class RegisterActivity extends AppCompatActivity implements
+        RegistrationAsynTask.RegistrationDetailsListener,
+        VideoDetailsAsynctask.VideoDetailsListener,
+        GetValidateUserAsynTask.GetValidateUserListener,
+        SocialAuthAsynTask.SocialAuthListener,
+        LogoutAsynctask.LogoutListener,
+        CheckDeviceAsyncTask.CheckDeviceListener,
+        CheckFbUserDetailsAsyn.CheckFbUserDetailsListener{
     String UniversalErrorMessage = "";
     String UniversalIsSubscribed = "";
     String deviceName = "";

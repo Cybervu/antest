@@ -34,7 +34,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUs {
+public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsListener {
     String about;
     // TextView textView;
     Context context;

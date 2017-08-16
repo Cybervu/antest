@@ -152,9 +152,12 @@ import static com.home.vod.preferences.LanguagePreference.TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class LoginActivity extends AppCompatActivity implements LoginAsynTask.LoinDetails, GetValidateUserAsynTask.GetValidateUser,
-        VideoDetailsAsynctask.VideoDetails, LogoutAsynctask.Logout, CheckDeviceAsyncTask.CheckDevice, GetSimultaneousLogoutAsync.SimultaneousLogoutAsync,
-        CheckFbUserDetailsAsyn.CheckFbUserDetails, SocialAuthAsynTask.SocialAuth {
+public class LoginActivity extends AppCompatActivity implements LoginAsynTask.LoinDetailsListener,
+        GetValidateUserAsynTask.GetValidateUserListener,
+        VideoDetailsAsynctask.VideoDetailsListener,
+        LogoutAsynctask.LogoutListener, CheckDeviceAsyncTask.CheckDeviceListener,
+        GetSimultaneousLogoutAsync.SimultaneousLogoutAsyncListener,
+        CheckFbUserDetailsAsyn.CheckFbUserDetailsListener, SocialAuthAsynTask.SocialAuthListener {
 
 
     /*subtitle-------------------------------------*/

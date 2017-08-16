@@ -93,8 +93,9 @@ import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
 import static com.home.vod.util.Constant.authTokenStr;
 
 
-public class TransactionDetailsActivity extends AppCompatActivity implements DeleteInvoicePdfAsynTask.DeleteInvoicePdf, PurchaseHistoryAsyntask.PurchaseHistory,
-        GetInvoicePdfAsynTask.GetInvoicePdf{
+public class TransactionDetailsActivity extends AppCompatActivity implements
+        DeleteInvoicePdfAsynTask.DeleteInvoicePdfListener, PurchaseHistoryAsyntask.PurchaseHistoryListener,
+        GetInvoicePdfAsynTask.GetInvoicePdfListener{
     Toolbar mActionBarToolbar;
     TextView transactionTitleTextView;
     LinearLayout transactionDateLayout, transactionOrderLayout, transactionAmountLayout, transactionInvoiceLayout,

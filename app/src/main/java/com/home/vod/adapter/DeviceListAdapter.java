@@ -57,7 +57,7 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTask.RemoveDeviceListner{
+public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTask.RemoveDeviceListener{
     private Context mContext;
     ArrayList<String> deviceName = new ArrayList<>();
     ArrayList<String> deviceInfo = new ArrayList<>();
@@ -154,7 +154,7 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
                         removeDeviceInputModel.setDevice(devie_id);
                         removeDeviceInputModel.setUser_id(preferenceManager.getUseridFromPref());
                         removeDeviceInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-                        RemoveDeviceAsynTask asynGetPlanid = new RemoveDeviceAsynTask(removeDeviceInputModel, (RemoveDeviceAsynTask.RemoveDeviceListner) mContext, mContext);
+                        RemoveDeviceAsynTask asynGetPlanid = new RemoveDeviceAsynTask(removeDeviceInputModel, (RemoveDeviceAsynTask.RemoveDeviceListener) mContext, mContext);
                         asynGetPlanid.executeOnExecutor(threadPoolExecutor);
 
                       /*  AsynDeleteDevices asynDeleteDevices = new AsynDeleteDevices();

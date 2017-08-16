@@ -102,7 +102,9 @@ import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 
 
-public class PaymentInfoActivity extends ActionBarActivity implements VideoDetailsAsynctask.VideoDetails, AuthUserPaymentInfoAsyntask.AuthUserPaymentInfo, RegisterUserPaymentAsyntask.RegisterUserPayment {
+public class PaymentInfoActivity extends ActionBarActivity implements VideoDetailsAsynctask.VideoDetailsListener,
+        AuthUserPaymentInfoAsyntask.AuthUserPaymentInfoListener,
+        RegisterUserPaymentAsyntask.RegisterUserPaymentListener {
     CardModel[] cardSavedArray;
 
     String filename = "";

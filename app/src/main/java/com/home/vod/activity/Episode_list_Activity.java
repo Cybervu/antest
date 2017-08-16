@@ -185,9 +185,9 @@ import static com.muvi.player.utils.Util.HAS_FAVORITE;
 /**
  * Created by Muvi on 2/6/2017.
  */
-public class Episode_list_Activity extends AppCompatActivity implements VideoDetailsAsynctask.VideoDetails, GetValidateUserAsynTask.GetValidateUser,
-        GetEpisodeDeatailsAsynTask.GetEpisodeDetails, GetLanguageListAsynTask.GetLanguageList, LogoutAsynctask.Logout,
-        GetTranslateLanguageAsync.GetTranslateLanguageInfoListner {
+public class Episode_list_Activity extends AppCompatActivity implements VideoDetailsAsynctask.VideoDetailsListener, GetValidateUserAsynTask.GetValidateUserListener,
+        GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener, GetLanguageListAsynTask.GetLanguageListListener, LogoutAsynctask.LogoutListener,
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener {
 
     String filename = "";
     static File mediaStorageDir;
