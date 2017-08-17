@@ -114,7 +114,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         noInternetLayout.setVisibility(View.GONE);
         geoBlockedLayout.setVisibility(View.GONE);
-        boolean isNetwork = NetworkStatus.getInstance().isConnected(this);
 
         if(NetworkStatus.getInstance().isConnected(this)){
             if (preferenceManager != null) {
