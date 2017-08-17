@@ -274,7 +274,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        LogUtil.showLog("Abhi", "Toolbar");
+        LogUtil.showLog("Abhishek", "Toolbar");
 
       /*  *//**** chromecast*************//*
 
