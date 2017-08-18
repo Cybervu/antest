@@ -1,1 +1,1 @@
-include ':app', ':muviplayersdk', ':monetization'
+include ':app', ':muviplayersdk'
