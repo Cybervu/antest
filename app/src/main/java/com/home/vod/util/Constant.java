@@ -14,7 +14,7 @@ public class Constant {
     public static final String CENSOR_RATING_INTENT_KEY = "CENSORRATING";
     public static final String CAST_INTENT_KEY = "CAST";
     public static final String SEASON_INTENT_KEY = "SEASON";
-    public static final String authTokenStr = "4298851905443517c9f161e6b0471969"; //monica studio
+    public static final String authTokenStr = "a010d1cef24104ca628a54e3246a8e43"; //monica studio
     public static final String VIDEO_TITLE_INTENT_KEY = "VIDEO TITLE";
 
 }

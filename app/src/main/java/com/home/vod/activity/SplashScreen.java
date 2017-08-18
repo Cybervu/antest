@@ -302,6 +302,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onGetGenreListPostExecuteCompleted(ArrayList<GenreListOutput> genreListOutput, int code, String status) {
+
         if (code > 0) {
             int lengthJsonArr = genreListOutput.size();
             if (lengthJsonArr > 0) {
@@ -534,7 +535,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onPostExecuteListner() {
 
-        HeaderConstants.user_Package_Name_At_Api = getPackageName();
+
         if(NetworkStatus.getInstance().isConnected(this)){
             if (preferenceManager != null) {
                 String countryCodeStr = preferenceManager.getCountryCodeFromPref();

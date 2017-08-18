@@ -72,7 +72,7 @@
     <dimen name="securitycode_width">100dp</dimen>
     <dimen name="securitycode_height">50dp</dimen>
     <dimen name="activation_text_size">16dp</dimen>
-    <dimen name="plainrow_text_size">15dp</dimen>
+    <dimen name="plainrow_text_size">15sp</dimen>
     <dimen name="plainrow_mrgin_top">25dp</dimen>
     <dimen name="preorderbtn_padding">14dp</dimen>
 
@@ -82,12 +82,12 @@
     <dimen name="cast_textsize">17dp</dimen>
     <dimen name="cast_btn_textsize">16dp</dimen>
     <dimen name="border_line_height">1dp</dimen>
-    <dimen name="review_text_size">18dp</dimen>
+    <dimen name="review_text_size">18sp</dimen>
     <dimen name="review_edittext_size">16dp</dimen>
     <dimen name="review_btn_width">90dp</dimen>
     <dimen name="review_btn_height">38dp</dimen>
     <dimen name="review_btn_textsize">14dp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
-    <dimen name="user_review_textsize">14dp</dimen>
+    <dimen name="user_review_textsize">14sp</dimen>
 
 </resources>

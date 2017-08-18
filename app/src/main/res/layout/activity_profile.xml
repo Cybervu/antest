@@ -134,12 +134,13 @@
                         android:layout_below="@+id/editNewPasswordStr"
                         android:layout_marginTop="12dp"
                         android:background="@drawable/button_radious"
-                        android:textAllCaps="false"
                         android:stateListAnimator="@null"
+                        android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="@dimen/login_text_size"
 
                         />
+
                     <Button
                         android:id="@+id/changePasswordButton"
                         android:layout_width="match_parent"
@@ -147,12 +148,13 @@
                         android:layout_below="@+id/editNewPasswordStr"
                         android:layout_marginTop="18dp"
                         android:background="@drawable/button_radious"
-                        android:textAllCaps="false"
                         android:stateListAnimator="@null"
+                        android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="@dimen/login_text_size"
 
                         />
+
                     <Button
                         android:id="@+id/manage_devices"
                         android:layout_width="match_parent"
@@ -160,14 +162,12 @@
                         android:layout_below="@+id/editNewPasswordStr"
                         android:layout_marginTop="18dp"
                         android:background="@drawable/button_radious"
-                        android:textAllCaps="false"
                         android:stateListAnimator="@null"
+                        android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="17dp"
 
                         />
-
-
 
 
                 </LinearLayout>
@@ -198,7 +198,7 @@
                             android:background="#ffffff"
                             android:padding="3dp"
                             android:scaleType="fitXY"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
 
                         <ImageView
                             android:id="@+id/edit"
@@ -210,10 +210,9 @@
                             android:layout_marginEnd="150dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginTop="165dp"
-                            android:visibility="visible"
                             android:padding="3dp"
                             android:scaleType="fitXY"
-                            />
+                            android:visibility="visible" />
                     </RelativeLayout>
 
                     <TextView
@@ -223,11 +222,11 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="10dp"
+                        android:text=""
                         android:textAllCaps="false"
                         android:textColor="@color/textColor"
                         android:textSize="@dimen/user_text_size"
-                        android:textStyle="bold"
-                        android:text=""/>
+                        android:textStyle="bold" />
 
 
                     <ImageView
