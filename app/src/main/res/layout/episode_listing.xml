@@ -3,25 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/appBackgroundColor"
-    >
-    <include layout="@layout/toolbar"
-        android:id="@+id/toolbar"/>
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
     <TextView
+        android:id="@+id/sectionTitle"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/episodesectiontitle_height"
-        android:id="@+id/sectionTitle"
         android:layout_below="@+id/toolbar"
-        android:textSize="@dimen/itemtitle_text_size"
         android:padding="6dp"
-        android:textStyle="bold"
-        android:textColor="@color/pageTitleColor"/>
+        android:textColor="@color/pageTitleColor"
+        android:textSize="@dimen/itemtitle_text_size"
+        android:textStyle="bold" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         android:layout_below="@id/sectionTitle">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/episodelist"
             android:layout_width="match_parent"
@@ -39,62 +43,65 @@
 
         <ProgressBar
             style="?android:attr/progressBarStyleInverse"
-            android:indeterminateDrawable="@drawable/progress_rawable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminateDuration="1000"
-            android:indeterminate="true"/>
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/progress_rawable"
+            android:indeterminateDuration="1000" />
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/noInternet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/appBackgroundColor"
-        android:visibility="gone"
         android:layout_below="@+id/toolbar"
-        android:padding="8dp">
+        android:background="@color/appBackgroundColor"
+        android:padding="8dp"
+        android:visibility="gone">
 
         <TextView
+            android:id="@+id/noInternetTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:gravity="center"
             android:maxLines="4"
-            android:id="@+id/noInternetTextView"
             android:singleLine="false"
-            android:layout_centerInParent="true"
             android:textColor="@color/noInternetColor"
             android:textSize="@dimen/itemtitle_text_size"
             android:textStyle="bold" />
 
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/noData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/appBackgroundColor"
-        android:visibility="gone"
         android:layout_below="@+id/toolbar"
-        android:padding="8dp">
+        android:background="@color/appBackgroundColor"
+        android:padding="8dp"
+        android:visibility="gone">
 
         <TextView
+            android:id="@+id/noDataTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:gravity="center"
             android:maxLines="4"
-            android:id="@+id/noDataTextView"
             android:singleLine="false"
-            android:layout_centerInParent="true"
             android:textColor="@color/noInternetColor"
             android:textSize="@dimen/itemtitle_text_size"
             android:textStyle="bold" />
 
 
     </RelativeLayout>
+
     <fragment
         android:id="@+id/cast_mini_controller"
+        class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"/>
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

@@ -72,4 +72,6 @@
 
  <color name="subtitle_list_textcolor">#808080</color>
  <color name="spinnerbackground">#e2e1e1</color>
+ <color name="cast_crew_textcolor">#000000</color>
+
 </resources>
