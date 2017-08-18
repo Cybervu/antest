@@ -25,7 +25,7 @@
             android:layout_margin="20dp"
             android:id="@+id/languagePopupTitle"
             android:textColor="@color/textColor"
-            android:textSize="19dp"
+            android:textSize="@dimen/languagepop_text_size"
             android:textStyle="bold" />
 
 
@@ -46,7 +46,7 @@
         <Button
             android:id="@+id/apply_btn"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/applybtn_height"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
@@ -54,7 +54,7 @@
             android:background="@drawable/button_radious"
             android:gravity="center_horizontal|center"
             android:textColor="@color/buttonTextColor"
-            android:textSize="16dp"
+            android:textSize="@dimen/applybtn_text_size"
             android:textStyle="bold" />
     </LinearLayout>
         <View

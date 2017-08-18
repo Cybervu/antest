@@ -30,6 +30,7 @@
     <color name="nav_drawer_lineColor">#000</color>
     <color name="nav_drawer_text_Color">#000000</color>
     <color name="button_background">#264177</color>
+    <color name="button_background_plan_textview">#264177</color>
     <color name="cancel_button_background">#DDD</color>
     <color name="pre_order_button_background">#fff</color>
     <color name="color_card_background">#000</color>
@@ -51,7 +52,7 @@
     <color name="movieTitleColor">#fff</color>
     <color name="videomovieTitleColor">#3f444a</color>
     <color name="resumePopupColor">#fff</color>
-    <color name="dividerColor">#264177</color>
+    <color name="dividerColor">#eee</color>
     <color name="playerColor">#000000</color>
     <color name="playPauseColor">#00000000</color>
     <color name="waterMarkTextColor">#80ffffff</color>

@@ -40,7 +40,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="Quarterly"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/buttonTextColor"
                     android:textSize="@dimen/itemtitle1_text_size" />
 
             </RelativeLayout>
@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:text="125 "
                     android:textSize="@dimen/purchasevalue_text_size"
-                    android:textColor="#930f18"
+                    android:textColor="@color/button_background_plan_textview"
                     android:id="@+id/planPurchaseValueTextView"/>
                 <TextView
                     android:layout_width="wrap_content"

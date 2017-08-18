@@ -21,16 +21,16 @@
 -->
     <ImageView
         android:id="@+id/itemImage"
-        android:layout_width="171dp"
-        android:layout_height="117dp"
+        android:layout_width="@dimen/listcard_width"
+        android:layout_height="@dimen/listcard_height"
         android:src="@drawable/logo"
         android:adjustViewBounds="true"
         android:layout_gravity="center"/>
 
     <ImageView
         android:id="@+id/movieImageOverlay"
-        android:layout_width="171dp"
-        android:layout_height="117dp"
+        android:layout_width="@dimen/listcard_width"
+        android:layout_height="@dimen/listcard_height"
         android:adjustViewBounds="true"
         android:layout_gravity="center"
         android:background="@drawable/content_list_overlay"
@@ -53,7 +53,7 @@
         android:ellipsize="end"
         android:maxLength="18"
         android:textColor="@color/contentTitleColor"
-        android:textSize="15sp" />
+        android:textSize="@dimen/itemtitle1_text_size" />
 
 
 </RelativeLayout>

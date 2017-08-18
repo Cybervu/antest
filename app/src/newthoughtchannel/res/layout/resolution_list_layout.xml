@@ -7,18 +7,18 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:layout_width="18dp"
+        android:layout_width="@dimen/resolution_list_img_width"
         android:src="@drawable/selected_resolution"
         android:id="@+id/selected_resolution"
         android:layout_marginLeft="10dp"
         android:layout_gravity="center"
-        android:layout_height="23dp" />
+        android:layout_height="@dimen/resolution_list_img_height" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:id="@+id/title"
-        android:textSize="20dp"
+        android:textSize="@dimen/resolution_list_img_textsize"
         android:text="wdeded"
         android:gravity="center_vertical"
         android:layout_marginLeft="13dp"

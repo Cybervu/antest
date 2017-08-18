@@ -90,7 +90,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="@dimen/fragmentlogoimg_height"
                 android:src="@drawable/logo"
                 android:layout_gravity="center"
                 android:layout_alignParentLeft="true"

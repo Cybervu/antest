@@ -8,9 +8,9 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="@dimen/subtitlelist_height"
         android:id="@+id/title"
-        android:textSize="20dp"
+        android:textSize="@dimen/subtitlelist_text_size"
         android:text="wdeded"
         android:gravity="center_vertical"
         android:layout_marginLeft="18dp"
