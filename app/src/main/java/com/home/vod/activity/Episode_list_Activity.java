@@ -199,6 +199,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     ArrayList<String> ResolutionUrl = new ArrayList<>();
 
     ProgressBarHandler loadEpisodedetailspDialog;
+    SharedPreferences pref;
     int previousTotal = 0;
     VideoDetailsAsynctask asynLoadVideoUrls;
     GetEpisodeDeatailsAsynTask asynEpisodeDetails;
@@ -1342,8 +1343,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         ResolutionFormat.clear();
 
 
-        //String loggedInStr = preferenceManager.getLoginStatusFromPref();
-        /*if (isLogin == 1) {
+        String loggedInStr = preferenceManager.getLoginStatusFromPref();
+        if (isLogin == 1) {
             if (preferenceManager.getUseridFromPref() != null) {
                 //String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
@@ -1393,21 +1394,20 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                             });
                         } else {
 
-                            if (Util.checkNetwork(Episode_list_Activity.this) == true) {
+                            if (NetworkStatus.getInstance().isConnected(this)) {
 
                                 ValidateUserInput validateUserInput = new ValidateUserInput();
-                                validateUserInput.setAuthToken(Util.authTokenStr);
+                                validateUserInput.setAuthToken(authTokenStr);
                                 validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                                 validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
                                 validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                                 validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
                                 validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                                asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, Episode_list_Activity.this, Episode_list_Activity.this);
+                                validateUserInput.setLanguageCode(languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));                                asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, Episode_list_Activity.this, Episode_list_Activity.this);
                                 asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 
                             } else {
-                                Util.showToast(Episode_list_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
+                                Toast.makeText(Episode_list_Activity.this, languagePreference.getTextofLanguage( NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 
                                 //  Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
                             }
@@ -1445,18 +1445,17 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
             } else {
-                Util.showToast(Episode_list_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
-
+                Toast.makeText(Episode_list_Activity.this, languagePreference.getTextofLanguage( NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 //Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
             }
         }
 
-*/
+
 
 
 
         //comment by bishal
-       if (isLogin == 1) {
+  /*      if (isLogin == 1) {
 
                 String loggedInStr = preferenceManager.getUseridFromPref();
 
@@ -1466,12 +1465,12 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     startActivity(i);
                     //showLoginDialog();
                 } else {
-                    if (NetworkStatus.getInstance().isConnected(this)) {
+                    if (Util.checkNetwork(Episode_list_Activity.this) == true) {
 
 
                         if (isFreeContent == 1) {
                             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                            getVideoDetailsInput.setAuthToken(authTokenStr);
+                            getVideoDetailsInput.setAuthToken(Util.authTokenStr);
                             getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                             getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                             getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -1480,24 +1479,26 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
                             ValidateUserInput validateUserInput = new ValidateUserInput();
-                            validateUserInput.setAuthToken(authTokenStr);
+                            validateUserInput.setAuthToken(Util.authTokenStr);
                             validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
                             validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                             validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
                             validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            validateUserInput.setLanguageCode(Util.getTextofLanguage(Episode_list_Activity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                             GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, this, this);
                             asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                         }
                     } else {
-                        Toast.makeText(Episode_list_Activity.this, languagePreference.getTextofLanguage( NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
                 }
 
         } else {
-            if (NetworkStatus.getInstance().isConnected(this)) {
+            if (Util.checkNetwork(Episode_list_Activity.this) == true) {
+                // MUVIlaxmi
+
                 GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                getVideoDetailsInput.setAuthToken(authTokenStr);
+                getVideoDetailsInput.setAuthToken(Util.authTokenStr);
                 getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -1506,9 +1507,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
             } else {
-                Toast.makeText(Episode_list_Activity.this, languagePreference.getTextofLanguage( NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
             }
-        }
+        }*/
 
 
     }

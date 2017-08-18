@@ -474,7 +474,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             } else {
                 itemLoginMenu.setVisible(false);
                 itemRegisterMenu.setVisible(false);
-
             }
            /* item6= itemLanguageMenu;
             item6.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE,DEFAULT_LANGUAGE_POPUP_LANGUAGE));
@@ -488,6 +487,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
             itemLogoutMenu.setTitle(languagePreference.getTextofLanguage(LOGOUT,DEFAULT_LOGOUT));
             itemLogoutMenu.setVisible(false);
+            itemFavMenu.setVisible(false);
         }
         return true;
     }
