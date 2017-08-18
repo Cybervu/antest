@@ -948,6 +948,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                 public void run() {
                                     registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     Util.check_for_subscription = 1;
+                                    registerActivity.putExtra("PlayerModel",playerModel);
                                     startActivity(registerActivity);
 
                                 }
@@ -1001,7 +1002,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                             public void run() {
                                 registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 Util.check_for_subscription = 1;
-
+                                registerActivity.putExtra("PlayerModel",playerModel);
                                 startActivity(registerActivity);
 
                             }
