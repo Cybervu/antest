@@ -70,6 +70,6 @@
  <color name="contactFormTitle">#333</color>
  <color name="btnmoretextcolor">#FFF</color>
 
-
+ <color name="subtitle_list_textcolor">#808080</color>
  <color name="spinnerbackground">#e2e1e1</color>
 </resources>

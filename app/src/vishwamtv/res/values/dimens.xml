@@ -166,13 +166,13 @@
     <dimen name="plainrowlayout_height">90dp</dimen>
     <dimen name="plainrowlayout_width">110dp</dimen>
     <dimen name="testview2_text_size">18sp</dimen>
-    <dimen name="plainrow_text_size">20dp</dimen>
-    <dimen name="purchasevalue_text_size">38dp</dimen>
+    <dimen name="plainrow_text_size">20sp</dimen>
+    <dimen name="purchasevalue_text_size">38sp</dimen>
     <dimen name="purchasemonth_text_size">16dp</dimen>
     <dimen name="plainmark_height">30dp</dimen>
     <dimen name="plainmark_width">30dp</dimen>
     <dimen name="subtitlelist_height">30dp</dimen>
-    <dimen name="subtitlelist_text_size">20dp</dimen>
+    <dimen name="subtitlelist_text_size">20sp</dimen>
     <dimen name="movieimg_width">108dp</dimen>
     <dimen name="movieimg_height">150dp</dimen>
     <dimen name="video280_width">170dp</dimen>
@@ -200,12 +200,33 @@
     <dimen name="cast_textsize">17dp</dimen>
     <dimen name="cast_btn_textsize">16dp</dimen>
     <dimen name="border_line_height">1dp</dimen>
-    <dimen name="review_text_size">18dp</dimen>
+    <dimen name="review_text_size">18sp</dimen>
     <dimen name="review_edittext_size">16dp</dimen>
     <dimen name="review_btn_width">90dp</dimen>
     <dimen name="review_btn_height">38dp</dimen>
     <dimen name="review_btn_textsize">14dp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
-    <dimen name="user_review_textsize">14dp</dimen>
+    <dimen name="user_review_textsize">14sp</dimen>
+
+    <dimen name="video_grid_img_width">24dp</dimen>
+    <dimen name="video_grid_img_height">24dp</dimen>
+    <dimen name="resolution_list_img_width">18dp</dimen>
+    <dimen name="resolution_list_img_height">23dp</dimen>
+    <dimen name="resolution_list_img_textsize">20sp</dimen>
+    <dimen name="close_album_img_width">24dp</dimen>
+    <dimen name="close_album_img_height">24dp</dimen>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </resources>
