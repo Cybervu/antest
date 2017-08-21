@@ -43,7 +43,9 @@
                         android:layout_centerVertical="true"
                         android:indeterminateDrawable="@drawable/large_progress_bar"
                         android:indeterminateDuration="1000"
-                        android:visibility="visible"></ProgressBar>
+                        android:visibility="visible">
+
+                    </ProgressBar>
 
 
                     <ImageButton
@@ -93,19 +95,25 @@
                             android:id="@+id/emailAddressTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/waterMarkTextColor"></TextView>
+                            android:textColor="@color/waterMarkTextColor">
+
+                        </TextView>
 
                         <TextView
                             android:id="@+id/ipAddressTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/waterMarkTextColor"></TextView>
+                            android:textColor="@color/waterMarkTextColor">
+
+                        </TextView>
 
                         <TextView
                             android:id="@+id/dateTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/waterMarkTextColor"></TextView>
+                            android:textColor="@color/waterMarkTextColor">
+
+                        </TextView>
 
                     </LinearLayout>
 
@@ -176,18 +184,18 @@
                     android:background="@drawable/ic_back" />
 
                 <LinearLayout
-                    android:layout_gravity="center_vertical|right"
                     android:layout_width="fill_parent"
-                    android:gravity="right"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:gravity="right">
 
                     <ImageView
                         android:id="@+id/subtitle_change_btn"
                         android:layout_width="@dimen/subtitle_width"
-                        android:layout_marginRight="20dp"
                         android:layout_height="@dimen/subtitle_height"
-                        android:src="@drawable/subtitle_image"
-                        android:background="@drawable/cc_button_radious"/>
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/cc_button_radious"
+                        android:src="@drawable/subtitle_image" />
 
                 </LinearLayout>
 
@@ -224,12 +232,12 @@
                     android:orientation="horizontal">
 
                     <ImageButton
-                        android:layout_marginLeft="10dp"
                         android:id="@+id/center_play_pause"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
                         android:background="@color/playPauseColor"
                         android:src="@drawable/ic_media_pause"
                         android:visibility="visible" />
@@ -270,8 +278,8 @@
                         android:layout_width="@dimen/compress_width"
                         android:layout_height="@dimen/compress_height"
                         android:layout_marginRight="7dp"
-                        android:src="@drawable/ic_media_fullscreen_stretch"
                         android:gravity="center"
+                        android:src="@drawable/ic_media_fullscreen_stretch"
                         android:visibility="visible" />
                 </LinearLayout>
 
@@ -293,8 +301,7 @@
                 android:layout_height="@dimen/downloadimg_height"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="8dp"
-                />
+                android:layout_marginTop="8dp" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -304,10 +311,10 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp"
                 android:indeterminate="false"
+                android:indeterminateDrawable="@drawable/progress_rawable"
+                android:indeterminateDuration="1000"
                 android:max="100"
                 android:progress="0"
-                android:indeterminateDuration="1000"
-                android:indeterminateDrawable="@drawable/progress_rawable"
                 android:secondaryProgress="100"
                 android:visibility="visible" />
 
@@ -324,7 +331,6 @@
                 android:textSize="@dimen/percentage_text_size"
                 android:visibility="gone" />
         </RelativeLayout>
-
 
 
         <LinearLayout
@@ -375,9 +381,9 @@
 
 
             <LinearLayout
+                android:id="@+id/durationratingLiearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/durationratingLiearLayout"
                 android:layout_alignEnd="@+id/bannerImageView"
                 android:layout_alignLeft="@+id/bannerImageView"
                 android:layout_alignRight="@+id/bannerImageView"
@@ -391,13 +397,13 @@
                     android:id="@+id/videoDurationTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
                     android:text=""
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/vdioduration_text_size"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/videoCensorRatingTextView"
@@ -410,8 +416,8 @@
                     android:paddingRight="4dp"
                     android:text=""
                     android:textColor="@color/videotextColor"
-                    android:visibility="gone"
-                    android:textSize="@dimen/vdioduration_text_size" />
+                    android:textSize="@dimen/vdioduration_text_size"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/videoCensorRatingTextView1"
@@ -422,7 +428,7 @@
                     android:text=""
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/vdioduration_text_size"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
 
                 <TextView
@@ -434,7 +440,7 @@
                     android:text=""
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/vdioduration_text_size"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </LinearLayout>
 

@@ -25,8 +25,6 @@
                 android:orientation="vertical">
 
 
-
-
                 <com.devbrackets.android.exomedia.ui.widget.EMVideoView
                     android:id="@+id/emVideoView"
                     android:layout_width="match_parent"
@@ -43,9 +41,11 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:indeterminateDuration="1000"
                         android:indeterminateDrawable="@drawable/large_progress_bar"
-                        android:visibility="visible"></ProgressBar>
+                        android:indeterminateDuration="1000"
+                        android:visibility="visible">
+
+                    </ProgressBar>
 
 
                     <ImageButton
@@ -95,19 +95,25 @@
                             android:id="@+id/emailAddressTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/waterMarkTextColor"></TextView>
+                            android:textColor="@color/waterMarkTextColor">
+
+                        </TextView>
 
                         <TextView
                             android:id="@+id/ipAddressTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/waterMarkTextColor"></TextView>
+                            android:textColor="@color/waterMarkTextColor">
+
+                        </TextView>
 
                         <TextView
                             android:id="@+id/dateTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/waterMarkTextColor"></TextView>
+                            android:textColor="@color/waterMarkTextColor">
+
+                        </TextView>
 
                     </LinearLayout>
 
@@ -115,31 +121,31 @@
                         android:id="@+id/current_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="wwwwwwwwww"
-                        android:textColor="@color/seekTimeTextColor"
-                        android:textSize="12dp"
-                        android:visibility="gone"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:layout_marginBottom="40dp" />
+                        android:layout_marginBottom="40dp"
+                        android:text="wwwwwwwwww"
+                        android:textColor="@color/seekTimeTextColor"
+                        android:textSize="12dp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/offLine_subtitleText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
                         android:layout_gravity="bottom|center_horizontal"
+                        android:layout_marginBottom="40dp"
                         android:ellipsize="middle"
                         android:gravity="center"
                         android:shadowColor="@color/subTitleTextColor"
                         android:shadowDx="3"
-                        android:textSize="20dp"
-                        android:text=""
                         android:shadowDy="3"
                         android:shadowRadius="1"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="40dp" />
+                        android:text=""
+                        android:textSize="@dimen/offlinesubtitle_text_size" />
                     <!-- <TextView
                          android:id="@+id/detais_text"
                          android:layout_width="wrap_content"
@@ -178,18 +184,17 @@
                     android:background="@drawable/ic_back" />
 
                 <LinearLayout
-                    android:layout_gravity="center_vertical|right"
                     android:layout_width="fill_parent"
-                    android:gravity="right"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:gravity="right">
 
                     <ImageView
                         android:id="@+id/subtitle_change_btn"
-                        android:layout_width="31dp"
+                        android:layout_width="@dimen/subtitle_width"
+                        android:layout_height="@dimen/subtitle_height"
                         android:layout_marginRight="20dp"
-                        android:layout_height="26dp"
-                        android:src="@drawable/subtitle_image"
-                        />
+                        android:src="@drawable/subtitle_image" />
 
                 </LinearLayout>
 
@@ -226,12 +231,12 @@
                     android:orientation="horizontal">
 
                     <ImageButton
-                        android:layout_marginLeft="10dp"
                         android:id="@+id/center_play_pause"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
                         android:background="@color/playPauseColor"
                         android:src="@drawable/ic_media_pause"
                         android:visibility="visible" />
@@ -269,11 +274,11 @@
 
                     <ImageView
                         android:id="@+id/compress_expand"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="@dimen/compress_width"
+                        android:layout_height="@dimen/compress_height"
                         android:layout_marginRight="7dp"
-                        android:src="@drawable/ic_media_fullscreen_stretch"
                         android:gravity="center"
+                        android:src="@drawable/ic_media_fullscreen_stretch"
                         android:visibility="visible" />
                 </LinearLayout>
 
@@ -282,93 +287,93 @@
         </RelativeLayout>
 
 
-
-
         <LinearLayout
             android:id="@+id/new_detailsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/bannerImageRelativeLayout"
+            android:layout_marginTop="10dp"
             android:background="@color/appBackgroundColor"
             android:orientation="vertical"
-            android:layout_marginTop="10dp"
             android:visibility="visible">
 
-           <!-- <com.release.muviclassic.utils.ExpandableTextView
-                android:id="@+id/videoStoryTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="7dp"
-                android:textColor="@color/details_story_color"
-                android:textSize="14dp" />-->
+            <!-- <com.release.muviclassic.utils.ExpandableTextView
+                 android:id="@+id/videoStoryTextView"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginBottom="5dp"
+                 android:layout_marginLeft="10dp"
+                 android:layout_marginRight="10dp"
+                 android:layout_marginTop="7dp"
+                 android:textColor="@color/details_story_color"
+                 android:textSize="14dp" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/videoTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text=""
-                android:textColor="@color/videomovieTitleColor"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-
-
-            <RelativeLayout
-                android:id="@+id/downloadRelativeLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textlinearlayout"
-
-                android:visibility="gone">
-
-                <ImageView
-                    android:id="@+id/downloadImageView"
-                    android:layout_width="30dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="8dp"
-                    android:visibility="visible"
-                    android:src="@drawable/download_black" />
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
-                    android:indeterminate="false"
-                    android:max="100"
-
-                    android:progress="0"
-                    android:progressDrawable="@drawable/style_circular"
-                    android:secondaryProgress="100" />
-
                 <TextView
-                    android:id="@+id/percentage"
+                    android:id="@+id/videoTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignEnd="@+id/progressBar"
-                    android:layout_alignRight="@+id/progressBar"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:text="0%"
-                    android:gravity="center"
-                    android:textColor="@color/dividerColor"
-                    android:textSize="12dp"
-                    android:visibility="gone" />
-            </RelativeLayout>
-        </LinearLayout>
+                    android:layout_marginLeft="10dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="@color/videomovieTitleColor"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+
+                <RelativeLayout
+                    android:id="@+id/downloadRelativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textlinearlayout"
+
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/downloadImageView"
+                        android:layout_width="@dimen/downloadimg_width"
+                        android:layout_height="@dimen/downloadimg_height"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/download_black"
+                        android:visibility="visible" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="@dimen/progressbar_width"
+                        android:layout_height="@dimen/progressbar_height"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"
+                        android:indeterminate="false"
+                        android:max="100"
+
+                        android:progress="0"
+                        android:progressDrawable="@drawable/style_circular"
+                        android:secondaryProgress="100" />
+
+                    <TextView
+                        android:id="@+id/percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignEnd="@+id/progressBar"
+                        android:layout_alignRight="@+id/progressBar"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center"
+                        android:text="0%"
+                        android:textColor="@color/dividerColor"
+                        android:textSize="@dimen/percentage_text_size"
+                        android:visibility="gone" />
+                </RelativeLayout>
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/GenreTextView"
                 android:layout_width="match_parent"
@@ -383,9 +388,9 @@
 
 
             <LinearLayout
+                android:id="@+id/durationratingLiearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/durationratingLiearLayout"
                 android:layout_alignEnd="@+id/bannerImageView"
                 android:layout_alignLeft="@+id/bannerImageView"
                 android:layout_alignRight="@+id/bannerImageView"
@@ -399,13 +404,13 @@
                     android:id="@+id/videoDurationTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
                     android:text=""
                     android:textColor="@color/videotextColor"
                     android:textSize="14dp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/videoCensorRatingTextView"
@@ -418,8 +423,8 @@
                     android:paddingRight="4dp"
                     android:text=""
                     android:textColor="@color/videotextColor"
-                    android:visibility="gone"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/videoCensorRatingTextView1"
@@ -430,7 +435,7 @@
                     android:text=""
                     android:textColor="@color/videotextColor"
                     android:textSize="14dp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
 
                 <TextView
@@ -442,23 +447,23 @@
                     android:text=""
                     android:textColor="@color/videotextColor"
                     android:textSize="14dp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </LinearLayout>
 
-           <!-- <com.release.cube.utils.ExpandableTextView
-                android:id="@+id/story"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/durationratingLiearLayout"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="8dp"
+            <!-- <com.release.cube.utils.ExpandableTextView
+                 android:id="@+id/story"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@+id/durationratingLiearLayout"
+                 android:layout_marginBottom="10dp"
+                 android:layout_marginLeft="12dp"
+                 android:layout_marginRight="10dp"
+                 android:layout_marginTop="8dp"
 
-                android:text=""
-                android:textColor="@color/videotextColor"
-                android:textSize="14dp" />-->
+                 android:text=""
+                 android:textColor="@color/videotextColor"
+                 android:textSize="14dp" />-->
 
 
             <RelativeLayout
@@ -468,8 +473,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="7dp"
-                >
+                android:layout_marginTop="7dp">
 
                 <TextView
                     android:id="@+id/videoStoryTextView"
@@ -480,20 +484,20 @@
                     android:layout_toLeftOf="@+id/storyViewMoreButton"
                     android:ellipsize="end"
                     android:textColor="@color/videotextColor"
-                    android:textSize="14dp"
-                    />
+                    android:textSize="14dp" />
+
                 <Button
                     android:id="@id/storyViewMoreButton"
-                    android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View More"
-                    android:visibility="gone"
-                    android:textAllCaps="false"
-                    android:textSize="14dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:background="@color/transparent"
+                    android:text="View More"
+                    android:textAllCaps="false"
                     android:textColor="@color/button_background"
-                    android:layout_centerVertical="true"/>
+                    android:textSize="14dp"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <TextView
