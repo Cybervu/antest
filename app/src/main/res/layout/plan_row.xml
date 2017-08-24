@@ -61,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="$ "
-                    android:textColor="#ddd"
+                    android:textColor="@color/pageTitleColor"
                     android:textSize="@dimen/plainrow_text_size"
                     android:paddingTop="15dp"
                     android:id="@+id/planPurchaseCurrenyTextView"/>
@@ -76,7 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="(3 months )"
-                    android:textColor="#ddd"
+                    android:textColor="@color/pageTitleColor"
                     android:textSize="@dimen/itemtitle1_text_size"
                     android:paddingTop="18dp"
                     android:id="@+id/planPurchaseMonthTextView"/>

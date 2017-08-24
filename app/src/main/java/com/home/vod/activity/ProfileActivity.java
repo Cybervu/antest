@@ -49,8 +49,10 @@ import java.util.concurrent.TimeUnit;
 
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CHANGE_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.CONFIRM_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CHANGE_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONFIRM_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MANAGE_DEVICE;
@@ -85,7 +87,7 @@ public class ProfileActivity extends AppCompatActivity implements
     SharedPreferences loginPref;
 
     ImageView bannerImageView;
-    EditText editOldPassword, editNewPassword, editProfileNameEditText;
+    EditText editConfirmPassword, editNewPassword, editProfileNameEditText;
     EditText emailAddressEditText;
     Button changePassword, update_profile, manage_devices;
 
@@ -124,7 +126,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         editNewPassword = (EditText) findViewById(R.id.editNewPassword);
-        editOldPassword = (EditText) findViewById(R.id.editOldPassword);
+        editConfirmPassword = (EditText) findViewById(R.id.editConfirmPassword);
         editProfileNameEditText = (EditText) findViewById(R.id.editProfileNameEditText);
         emailAddressEditText = (EditText) findViewById(R.id.emailAddressEditText);
         changePassword = (Button) findViewById(R.id.changePasswordButton);
@@ -136,7 +138,7 @@ public class ProfileActivity extends AppCompatActivity implements
             manage_devices.setVisibility(View.GONE);
         }
 
-        editOldPassword.setVisibility(View.GONE);
+        editConfirmPassword.setVisibility(View.GONE);
         editNewPassword.setVisibility(View.GONE);
         name_of_user = (TextView) findViewById(R.id.name_of_user);
 
@@ -148,8 +150,8 @@ public class ProfileActivity extends AppCompatActivity implements
         editProfileNameEditText.setTypeface(editProfileNameEditTextTypeface);
 
 
-        Typeface editOldPasswordTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        editOldPassword.setTypeface(editOldPasswordTypeface);
+        Typeface editConfirmPasswordTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+        editConfirmPassword.setTypeface(editConfirmPasswordTypeface);
 
 
         Typeface editNewPasswordTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
@@ -162,7 +164,7 @@ public class ProfileActivity extends AppCompatActivity implements
         manage_devices.setTypeface(changePasswordTypeface);
 
         editProfileNameEditText.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
-        editOldPassword.setHint(languagePreference.getTextofLanguage(OLD_PASSWORD, DEFAULT_OLD_PASSWORD));
+        editConfirmPassword.setHint(languagePreference.getTextofLanguage(CONFIRM_PASSWORD, DEFAULT_CONFIRM_PASSWORD));
         editNewPassword.setHint(languagePreference.getTextofLanguage(NEW_PASSWORD, DEFAULT_NEW_PASSWORD));
         changePassword.setText(languagePreference.getTextofLanguage(CHANGE_PASSWORD, DEFAULT_CHANGE_PASSWORD));
         update_profile.setText(languagePreference.getTextofLanguage(UPDATE_PROFILE, DEFAULT_UPDATE_PROFILE));
@@ -294,14 +296,14 @@ public class ProfileActivity extends AppCompatActivity implements
             public void onClick(View v) {
 
 
-                if (changePassword.isClickable() && editOldPassword.isShown() && editNewPassword.isShown()) {
+                if (changePassword.isClickable() && editConfirmPassword.isShown() && editNewPassword.isShown()) {
 
 
-                    if (editOldPassword.getText().toString().trim() != null && !(editOldPassword.getText().toString().trim().equalsIgnoreCase(""))) {
-                        if (Util.isConfirmPassword(editOldPassword.getText().toString(), editNewPassword.getText().toString()) == false) {
+                    if (editConfirmPassword.getText().toString().trim() != null && !(editConfirmPassword.getText().toString().trim().equalsIgnoreCase(""))) {
+                        if (Util.isConfirmPassword(editConfirmPassword.getText().toString(), editNewPassword.getText().toString()) == false) {
                             Toast.makeText(ProfileActivity.this, languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH, DEFAULT_PASSWORDS_DO_NOT_MATCH), Toast.LENGTH_LONG).show();
 
-                            editOldPassword.setText("");
+                            editConfirmPassword.setText("");
                             editNewPassword.setText("");
 
                             return;
@@ -309,19 +311,19 @@ public class ProfileActivity extends AppCompatActivity implements
                         } else {
                             if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
                                 UpdateProfile();
-                                editOldPassword.setText("");
+                                editConfirmPassword.setText("");
                                 editNewPassword.setText("");
-                                editOldPassword.setVisibility(View.GONE);
+                                editConfirmPassword.setVisibility(View.GONE);
                                 editNewPassword.setVisibility(View.GONE);
                             }
 
 
                         }
                     }
-                    if (editOldPassword.getText().toString().trim().equalsIgnoreCase("") || (editNewPassword.getText().toString().trim().equalsIgnoreCase(""))) {
-                        editOldPassword.setText("");
+                    if (editConfirmPassword.getText().toString().trim().equalsIgnoreCase("") || (editNewPassword.getText().toString().trim().equalsIgnoreCase(""))) {
+                        editConfirmPassword.setText("");
                         editNewPassword.setText("");
-                        editOldPassword.setVisibility(View.GONE);
+                        editConfirmPassword.setVisibility(View.GONE);
                         editNewPassword.setVisibility(View.GONE);
                         editProfileNameEditText.requestFocus();
                     }
@@ -332,9 +334,9 @@ public class ProfileActivity extends AppCompatActivity implements
                     editNewPassword.setText("");*/
                  /*   editOldPassword.setVisibility(View.GONE);
                     editNewPassword.setVisibility(View.GONE);*/
-                    editOldPassword.setVisibility(View.VISIBLE);
+                    editConfirmPassword.setVisibility(View.VISIBLE);
                     editNewPassword.setVisibility(View.VISIBLE);
-                    editOldPassword.requestFocus();
+                    editConfirmPassword.requestFocus();
 
                 }
 
@@ -356,7 +358,7 @@ public class ProfileActivity extends AppCompatActivity implements
                 if (editProfileNameEditText.getText().toString().matches("")) {
                     ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
 
-                } else if (!editOldPassword.getText().toString().matches(editNewPassword.getText().toString().trim())) {
+                } else if (!editConfirmPassword.getText().toString().matches(editNewPassword.getText().toString().trim())) {
                     ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH, DEFAULT_PASSWORDS_DO_NOT_MATCH));
 
                 } else {
@@ -457,17 +459,41 @@ public class ProfileActivity extends AppCompatActivity implements
 
         }
 
-        String confirmPasswordStr = editNewPassword.getText().toString().trim();
-        if (update_userProfile_output == null) {
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
+        if (code>0){
+            if (code==200){
+                String confirmPasswordStr =editNewPassword.getText().toString().trim();
+                name_of_user.setText(editProfileNameEditText.getText().toString().trim());
+                if (!confirmPasswordStr.trim().equalsIgnoreCase("") &&
+                        !confirmPasswordStr.isEmpty() &&
+                        !confirmPasswordStr.equalsIgnoreCase("null") &&
+                        !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) &&
+                        !confirmPasswordStr.matches("")) {
+                    preferenceManager.setPwdToPref(confirmPasswordStr);
                 }
-            } catch (IllegalArgumentException ex) {
-                code = 0;
+                if (update_userProfile_output!=null){
+
+                    String displayNameStr = update_userProfile_output.getName();
+                    preferenceManager.setDispNameToPref(displayNameStr);
+                }
+                Util.showToast(ProfileActivity.this,languagePreference.getTextofLanguage(PROFILE_UPDATED,DEFAULT_PROFILE_UPDATED));
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                if (name_of_user != null) {
+                    name_of_user.clearFocus();
+                    name_of_user.setCursorVisible(false);
+                }
+
+                if (editConfirmPassword != null) {
+                    editConfirmPassword.clearFocus();
+
+                }
+                if (editNewPassword != null) {
+                    editNewPassword.clearFocus();
+                }
+            }else {
 
             }
+        }
+        else {
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(languagePreference.getTextofLanguage(UPDATE_PROFILE_ALERT, DEFAULT_UPDATE_PROFILE_ALERT));
             dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
@@ -477,68 +503,14 @@ public class ProfileActivity extends AppCompatActivity implements
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
-                            editOldPassword.setText("");
+                            editConfirmPassword.setText("");
                             editNewPassword.setText("");
                         }
                     });
             dlgAlert.create().show();
         }
 
-        if (code > 0) {
 
-
-            if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")) {
-
-            }
-            name_of_user.setText(editProfileNameEditText.getText().toString().trim());
-
-
-            Toast.makeText(ProfileActivity.this, languagePreference.getTextofLanguage(PROFILE_UPDATED, DEFAULT_PROFILE_UPDATED), Toast.LENGTH_SHORT).show();
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-            if (name_of_user != null) {
-                name_of_user.clearFocus();
-                name_of_user.setCursorVisible(false);
-            }
-            if (editOldPassword != null) {
-                editOldPassword.clearFocus();
-
-            }
-            if (editNewPassword != null) {
-                editNewPassword.clearFocus();
-            }
-                   /* if (fullNameEditText != null) fullNameEditText.clearFocus();
-                    if (passwordEditText != null) passwordEditText.clearFocus();
-                    if (confirmPasswordEditText != null) confirmPasswordEditText.clearFocus();*/
-
-        } else {
-
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                code = 0;
-
-            }
-            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(languagePreference.getTextofLanguage(UPDATE_PROFILE_ALERT, DEFAULT_UPDATE_PROFILE_ALERT));
-            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
-            dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                            editOldPassword.setText("");
-                            editNewPassword.setText("");
-
-
-                        }
-                    });
-            dlgAlert.create().show();
-        }
     }
 
 //

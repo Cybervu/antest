@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.home.apisdk.*;
 import com.crashlytics.android.Crashlytics;
+import com.home.apisdk.apiController.SDKInitializer;
+import com.home.apisdk.apiController.SDKInitializer;
 import com.home.vod.util.LogUtil;
 
 import io.fabric.sdk.android.Fabric;
@@ -17,10 +19,15 @@ public class VodApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        LogUtil.showLog("MUVI PCKG NAME", SDKInitializer.user_Package_Name_At_Api+"::::"+getPackageName());
+        SDKInitializer.hashKey="nn";
+        SDKInitializer.user_Package_Name_At_Api=getPackageName();
+
         Fabric.with(this, new Crashlytics());
       //  HeaderConstants.user_Package_Name_At_Api = getPackageName();
       //  LogUtil.showLog("MUVI PCKG NAME", HeaderConstants.user_Package_Name_At_Api+"::::"+getPackageName());
         APIUrlConstant.BASE_URl=BuildConfig.SERVICE_BASE_PATH;
+        LogUtil.showLog("MUVI PCKG NAME", SDKInitializer.user_Package_Name_At_Api+"::::"+getPackageName());
 
     }
 }

@@ -15,8 +15,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.home.apisdk.HeaderConstants;
-import com.home.apisdk.SDKInitializer;
+
 import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
 import com.home.apisdk.apiController.GetGenreListAsynctask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
@@ -25,6 +24,8 @@ import com.home.apisdk.apiController.GetPlanListAsynctask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.GetUserProfileAsynctask;
 import com.home.apisdk.apiController.IsRegistrationEnabledAsynTask;
+import com.home.apisdk.apiController.SDKInitializer;
+import com.home.apisdk.apiController.SDKInitializer;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
 import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
 import com.home.apisdk.apiModel.GenreListInput;
@@ -60,8 +61,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import static com.home.apisdk.HeaderConstants.RATING;
+import static com.home.apisdk.apiController.HeaderConstants.RATING;
 import static com.home.vod.preferences.LanguagePreference.*;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_GOOGLE_FCM_TOKEN;
@@ -118,7 +118,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         geoBlockedLayout.setVisibility(View.GONE);
 
         if(NetworkStatus.getInstance().isConnected(this)){
-           new SDKInitializer().init(this,this,authTokenStr);
+            SDKInitializer.getInstance().init(this,this,authTokenStr);
         }else{
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
@@ -140,8 +140,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     protected void onPause() {
+
         // TODO Auto-generated method stub
         super.onPause();
+        LogUtil.showLog("BKS","packagenamesplash==="+ SDKInitializer.user_Package_Name_At_Api);
         finish();
         overridePendingTransition(0, 0);
     }
@@ -243,6 +245,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         languagePreference.setLanguageSharedPrefernce(IS_ONE_STEP_REGISTRATION, "" + isRegistrationEnabledOutputModel.getSignup_step());
         languagePreference.setLanguageSharedPrefernce(IS_MYLIBRARY, "" + isRegistrationEnabledOutputModel.getIsMylibrary());
         preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
+        Log.v("MUVI","Splash setLoginFeatureToPref ::"+isRegistrationEnabledOutputModel.getIs_login());
 
         LanguageListInputModel languageListInputModel = new LanguageListInputModel();
         languageListInputModel.setAuthToken(authTokenStr);
@@ -536,6 +539,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     public void onPostExecuteListner() {
 
 
+
         if(NetworkStatus.getInstance().isConnected(this)){
             if (preferenceManager != null) {
                 String countryCodeStr = preferenceManager.getCountryCodeFromPref();
@@ -558,4 +562,12 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }
 
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LogUtil.showLog("BKS","packagenamesplash==="+ SDKInitializer.user_Package_Name_At_Api);
+
+    }
+
 }

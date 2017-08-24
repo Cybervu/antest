@@ -444,8 +444,8 @@
 
             </LinearLayout>
 
-            <com.release.vishwamtv.utils.ExpandableTextView
-                android:id="@+id/story"
+            <TextView
+                android:id="@+id/videoStoryTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/durationratingLiearLayout"
@@ -453,7 +453,6 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="8dp"
-
                 android:text=""
                 android:textColor="@color/videotextColor"
                 android:textSize="@dimen/video_text_size" />

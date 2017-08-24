@@ -69,15 +69,15 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.MyViewHolder> 
          final PlanModel movie = moviesList.get(position);
 
 
-      if (movie.isSelected() == false){
+        if (movie.isSelected() == false){
 
-           holder.relativeplannamelayout.setBackgroundColor(Color.parseColor("#111111"));
-           holder.lineardetails.setBackgroundColor(Color.parseColor("#202020"));
+            holder.relativeplannamelayout.setBackgroundColor(context.getResources().getColor(R.color.textColor));
+            holder.lineardetails.setBackgroundColor(context.getResources().getColor(R.color.episodeBackgroundColor));
             holder.snap.setVisibility(View.INVISIBLE);
         }else{
-           holder.relativeplannamelayout.setBackgroundColor(Color.parseColor("#930f18"));
-           holder.lineardetails.setBackgroundColor(Color.parseColor("#b5b4b4"));
-           holder.snap.setVisibility(View.VISIBLE);
+            holder.relativeplannamelayout.setBackgroundColor(context.getResources().getColor(R.color.button_background));
+            holder.lineardetails.setBackgroundColor(context.getResources().getColor(R.color.episodeBackgroundColor));
+            holder.snap.setVisibility(View.VISIBLE);
 
         }
         /*if(position==0){
@@ -86,7 +86,7 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.MyViewHolder> 
         }*/
 
         holder.subcriptionmonth.setText("(" +movie.getPlanFrequencuStr()+" "+movie.getPlanRecurrenceStr() +")");
-        Log.v("SUBHA","name"+movie.getPlanRecurrenceStr());
+        Log.v("MUVI","name"+movie.getPlanRecurrenceStr());
         holder.planName.setText(movie.getPlanNameStr());
         holder.purchaseValue.setText(movie.getPurchaseValueStr());
         holder.planPurchaseCurrenyTextView.setText(movie.getPlanCurrencySymbolstr());

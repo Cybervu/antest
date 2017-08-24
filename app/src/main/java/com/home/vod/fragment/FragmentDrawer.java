@@ -130,15 +130,15 @@ public class FragmentDrawer extends Fragment {
                     for (int i = 0; i < titles.size(); i++) {
                         LogUtil.showLog("alok setUp ::",titles.get(i).getTitle());
                         if (titles.get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_LIBRARY,DEFAULT_MY_LIBRARY))) {
-                            LogUtil.showLog("SUBHA", "IS_MYLIBRARY =" + languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY));
-                            LogUtil.showLog("SUBHA", "loggedInStr value =" + loggedInStr);
+                            LogUtil.showLog("MUVI", "IS_MYLIBRARY =" + languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY));
+                            LogUtil.showLog("MUVI", "loggedInStr value =" + loggedInStr);
                             mylibrary_title_added = true;
 
                             if (languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
 
                             } else {
                                 titles.remove(i);
-                                LogUtil.showLog("SUBHA", "My lib removed");
+                                LogUtil.showLog("MUVI", "My lib removed");
                             }
                         }
                     }
@@ -152,7 +152,7 @@ public class FragmentDrawer extends Fragment {
                                     if (languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
                                         titles.add(i,new NavDrawerItem(languagePreference.getTextofLanguage( MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
                                         mylibrary_title_added = true;
-                                        LogUtil.showLog("SUBHA", "My lib added");
+                                        LogUtil.showLog("MUVI", "My lib added");
                                     }
                                 }
                             }

@@ -300,7 +300,7 @@
                     android:layout_marginTop="7dp"
                     >
 
-                    <TextView
+                    <com.home.vod.util.ExpandableTextView
                         android:id="@+id/videoStoryTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

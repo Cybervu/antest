@@ -1477,7 +1477,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 boolean isValidEmail = Util.isValidMail(regEmailStr);
                 if (isValidEmail == true) {
 
-                    Log.v("SUBHA","login valid");
+                    Log.v("MUVI","login valid");
                     Login_input login_input = new Login_input();
                     login_input.setAuthToken(authTokenStr);
                     login_input.setEmail(regEmailStr);
@@ -1640,7 +1640,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                    editor.commit();
 //
 //
-//                Log.v("MUVI","PlanId="+PlanId+" ,isSubscribedStr="+isSubscribedStr);
+//                Log.v("MUVI","planId="+planId+" ,isSubscribedStr="+isSubscribedStr);
 //
 //                    if (Util.checkNetwork(LoginActivity.this) == true) {
 //                        if (pDialog != null && pDialog.isShowing()) {
@@ -1675,7 +1675,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                                }
 //
 //                            } else {
-//                                if (PlanId.equals("1") && isSubscribedStr.equals("0")) {
+//                                if (planId.equals("1") && isSubscribedStr.equals("0")) {
 //                                    Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
 //                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 //                                    startActivity(intent);
@@ -2002,7 +2002,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                                        payment_for_single_part();
 //                                    }
 //                                }
-//                                else if(PlanId.equals("1") && Subscription_Str.equals("0"))
+//                                else if(planId.equals("1") && Subscription_Str.equals("0"))
 //                                {
 //                                    Intent intent = new Intent(LoginActivity.this,SubscriptionActivity.class);
 //                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -2042,7 +2042,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                        payment_for_single_part();
 //                    }
 //                }
-//                else if(PlanId.equals("1") && Subscription_Str.equals("0"))
+//                else if(planId.equals("1") && Subscription_Str.equals("0"))
 //                {
 //                    Intent intent = new Intent(LoginActivity.this,SubscriptionActivity.class);
 //                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -4728,7 +4728,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                            Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage( Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 //                        }
 //                    } else {
-//                        if (PlanId.equals("1") && UniversalIsSubscribed.equals("0")) {
+//                        if (planId.equals("1") && UniversalIsSubscribed.equals("0")) {
 //                            Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 //                            startActivity(intent);

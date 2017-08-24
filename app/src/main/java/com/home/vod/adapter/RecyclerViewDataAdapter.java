@@ -72,7 +72,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
     @Override
     public void onBindViewHolder(final ItemRowHolder itemRowHolder, final int i) {
 
-        Log.v("SUBHA","position of the item in adapter =============="+i);
+        Log.v("MUVI","position of the item in adapter =============="+i);
 
         if(i>=counter)
         {
