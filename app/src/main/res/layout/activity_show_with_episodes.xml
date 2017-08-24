@@ -61,8 +61,8 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
         android:layout_above="@+id/cast_mini_controller"
+        android:layout_below="@+id/toolbar"
         android:fillViewport="true">
 
         <RelativeLayout
@@ -78,8 +78,7 @@
                 android:id="@+id/detailsRelativeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/appBackgroundColor"
-                >
+                android:background="@color/appBackgroundColor">
 
 
                 <RelativeLayout
@@ -113,25 +112,24 @@
 
 
                     <RelativeLayout
+                        android:id="@+id/favorite"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/favorite"
-                        android:gravity="right"
-                        android:layout_alignTop="@+id/bannerImageView"
                         android:layout_alignRight="@+id/bannerImageView"
+                        android:layout_alignTop="@+id/bannerImageView"
                         android:layout_marginTop="20dp"
-                        >
+                        android:gravity="right">
 
                         <ImageView
                             android:id="@+id/favorite_view_episode"
-                            android:visibility="visible"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/favorite_unselected"
                             android:layout_marginRight="20dp"
-                            />
+                            android:src="@drawable/favorite_unselected"
+                            android:visibility="visible" />
 
                     </RelativeLayout>
+
                     <RelativeLayout
                         android:id="@+id/relativeOverlayLayout"
                         android:layout_width="wrap_content"
@@ -144,25 +142,24 @@
                         android:layout_marginBottom="10dp"
                         android:gravity="right"
                         android:orientation="horizontal"
+                        android:paddingBottom="10dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:paddingBottom="10dp"
                         android:paddingTop="10dp">
 
                         <Button
                             android:id="@+id/preOrderButton"
                             android:layout_width="90dp"
                             android:layout_height="38dp"
+                            android:layout_marginRight="6dp"
+                            android:layout_toLeftOf="@+id/viewTrailerButton"
                             android:background="@drawable/pre_order_button_radious"
                             android:padding="6dp"
-                            android:layout_toLeftOf="@+id/viewTrailerButton"
-                            android:textAllCaps="false"
                             android:stateListAnimator="@null"
+                            android:textAllCaps="false"
                             android:textColor="@color/preOrderButtonTextColor"
-                            android:textSize="14dp"
-                            android:layout_marginRight="6dp"
-                            android:visibility="gone"
-                            />
+                            android:textSize="14sp"
+                            android:visibility="gone" />
 
 
                         <Button
@@ -175,22 +172,20 @@
                             android:stateListAnimator="@null"
                             android:textAllCaps="false"
                             android:textColor="@color/buttonTextColor"
-                            android:textSize="14dp"
+                            android:textSize="14sp"
                             android:visibility="gone"
 
                             />
                     </RelativeLayout>
 
 
-
-
                     <LinearLayout
+                        android:id="@+id/durationcensorLinearlayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/bannerImageView"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:id="@+id/durationcensorLinearlayout"
                         android:layout_marginBottom="10dp"
                         android:orientation="horizontal">
 
@@ -200,9 +195,9 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/videoGenreTextView"
                             android:layout_marginLeft="10dp"
-                            android:textColor="@color/movieTitleColor"
                             android:text=""
-                            android:textSize="14dp" />
+                            android:textColor="@color/movieTitleColor"
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/videoCensorRatingTextView"
@@ -214,7 +209,7 @@
                             android:paddingLeft="4dp"
                             android:paddingRight="4dp"
                             android:textColor="@color/movieTitleColor"
-                            android:textSize="14dp"
+                            android:textSize="14sp"
                             android:visibility="gone" />
 
                         <TextView
@@ -224,7 +219,7 @@
                             android:layout_below="@+id/videoGenreTextView"
                             android:layout_marginLeft="5dp"
                             android:textColor="@color/movieTitleColor"
-                            android:textSize="14dp" />
+                            android:textSize="14sp" />
 
 
                         <TextView
@@ -234,7 +229,7 @@
                             android:layout_below="@+id/videoGenreTextView"
                             android:layout_marginLeft="10dp"
                             android:textColor="@color/movieTitleColor"
-                            android:textSize="14dp" />
+                            android:textSize="14sp" />
 
                     </LinearLayout>
 
@@ -242,37 +237,37 @@
                         android:id="@+id/playButton"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/play"
+                        android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:layout_centerHorizontal="true" />
+                        android:src="@drawable/play" />
 
                     <TextView
                         android:id="@+id/videoGenreTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_above="@+id/durationcensorLinearlayout"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
                         android:paddingLeft="10dp"
                         android:text=""
                         android:textColor="@color/movieTitleColor"
-                        android:textSize="14dp"
-                        android:layout_above="@+id/durationcensorLinearlayout"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/videoTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:maxLines="1"
+                        android:layout_above="@+id/videoGenreTextView"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toLeftOf="@+id/playButton"
                         android:ellipsize="end"
+                        android:maxLines="1"
                         android:text="efgrfudddffgufgyufyudyufgefewewfewfewddddiyf"
                         android:textColor="@color/movieTitleColor"
-                        android:textSize="15dp"
-                        android:layout_marginLeft="10dp"
-                        android:visibility="gone"
-                        android:layout_above="@+id/videoGenreTextView"
-                        android:layout_toLeftOf="@+id/playButton"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true" />
+                        android:textSize="15sp"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
 
@@ -289,28 +284,29 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <RatingBar
                             android:id="@+id/ratingBar"
+                            style="@style/customRatingBar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            style="@style/customRatingBar"
                             android:focusable="false"
                             android:visibility="visible" />
+
                         <TextView
+                            android:id="@+id/viewRatingTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=""
-                            android:gravity="center"
-                            android:id="@+id/viewRatingTextView"
-                            android:clickable="true"
-                            android:textColor="@color/pageTitleColor"
-                            android:textStyle="bold"
                             android:layout_alignParentRight="true"
-                            android:layout_marginRight="8dp"
                             android:layout_centerVertical="true"
-                            android:textSize="14dp"
-                            />
+                            android:layout_marginRight="8dp"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:text=""
+                            android:textColor="@color/pageTitleColor"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -320,8 +316,7 @@
                         android:layout_marginBottom="5dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_marginTop="7dp"
-                        >
+                        android:layout_marginTop="7dp">
 
                         <com.home.vod.util.ExpandableTextView
                             android:id="@+id/videoStoryTextView"
@@ -332,19 +327,19 @@
                             android:layout_toLeftOf="@+id/storyViewMoreButton"
                             android:ellipsize="end"
                             android:textColor="@color/videotextColor"
-                            android:textSize="14dp"
-                            />
+                            android:textSize="14sp" />
+
                         <Button
                             android:id="@id/storyViewMoreButton"
-                            android:layout_alignParentRight="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="View More"
-                            android:visibility="gone"
-                            android:textSize="14dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
                             android:background="@color/transparent"
+                            android:text="View More"
                             android:textColor="@color/button_background"
-                            android:layout_centerVertical="true"/>
+                            android:textSize="14sp"
+                            android:visibility="gone" />
                     </RelativeLayout>
 
 
@@ -368,7 +363,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="8dp"
                         android:textColor="@color/castCrewTitleTextColor"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -411,10 +406,10 @@
                     android:id="@+id/seasonSpinner"
                     android:layout_width="150dp"
                     android:layout_height="38dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="9dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/spinner_theme"
                     android:overlapAnchor="false"
                     android:paddingRight="0dip"
@@ -431,12 +426,12 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:stateListAnimator="@null"
                     android:layout_marginRight="10dp"
                     android:backgroundTint="@color/button_background"
+                    android:stateListAnimator="@null"
                     android:textAllCaps="false"
                     android:textColor="@color/buttonTextColor"
-                    android:textSize="14dp" />
+                    android:textSize="14sp" />
 
 
             </RelativeLayout>
@@ -453,11 +448,12 @@
         </RelativeLayout>
 
     </ScrollView>
+
     <fragment
         android:id="@+id/cast_mini_controller"
+        class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"/>
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>
 

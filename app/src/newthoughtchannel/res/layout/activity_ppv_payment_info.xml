@@ -38,7 +38,7 @@
                     <Button
                         android:id="@+id/scanButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
+                        android:layout_height="@dimen/scanbtn_height"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginRight="10dp"
@@ -47,7 +47,7 @@
                         android:text=""
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="14dp"
+                        android:textSize="@dimen/scanbtn_text_size"
                         android:visibility="gone" />
 
                     <TextView
@@ -60,7 +60,7 @@
                         android:singleLine="false"
                         android:text=""
                         android:textColor="@color/textColor"
-                        android:textSize="16dp" />
+                        android:textSize="@dimen/chargedetail_text_size" />
 
                     <!-- <RelativeLayout
                          android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                     <EditText
                         android:id="@+id/cardNumberEditText"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="@dimen/card_no_height"
                         android:layout_alignParentLeft="true"
                         android:layout_below="@+id/nameOnCardEditText"
                         android:layout_marginTop="10dp"
@@ -142,7 +142,7 @@
                             android:layout_marginTop="5dp"
                             android:text=""
                             android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                            android:textSize="30dp"
+                            android:textSize="@dimen/yearline_text_size"
                             android:textStyle="normal" />
                         <!--<RelativeLayout
                             android:layout_width="wrap_content"
@@ -195,7 +195,7 @@
                         android:button="@drawable/savecard_style"
                         android:text=""
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="16dp"
+                        android:textSize="@dimen/savecard_text_size"
                         android:visibility="visible" />
 
                     <Button
@@ -211,7 +211,7 @@
                         android:text=""
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="16dp"
+                        android:textSize="@dimen/paybtn_text_size"
 
 
                         />
@@ -219,7 +219,7 @@
                     <EditText
                         android:id="@+id/nameOnCardEditText"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="@dimen/nameoncard_height"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/creditCardSaveEditText"
@@ -245,7 +245,7 @@
                         android:layout_toRightOf="@+id/scanButton"
                         android:text=""
                         android:textColor="@color/pageTitleColor"
-                        android:textSize="22dp"
+                        android:textSize="@dimen/creditcarddetail_text_size"
                         android:textStyle="bold" />
                 </RelativeLayout>
 
@@ -296,7 +296,7 @@
                             android:layout_marginTop="10dp"
                             android:text=""
                             android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                            android:textSize="20dp" />
+                            android:textSize="@dimen/withoutpayment_text_size" />
 
                         <TextView
                             android:id="@+id/withoutPaymentChargeDetailsTextView"
@@ -308,7 +308,7 @@
                             android:singleLine="false"
                             android:text=""
                             android:textColor="@color/textColor"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/withoutpaymentcharge_text_size" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
@@ -325,7 +325,7 @@
                     android:stateListAnimator="@null"
                     android:text=""
                     android:textColor="@color/buttonTextColor"
-                    android:textSize="16dp" />
+                    android:textSize="16sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -354,7 +354,7 @@
                     android:layout_below="@+id/lineTextView"
                     android:layout_marginTop="14dp"
                     android:textColor="@color/textColor"
-                    android:textSize="16dp" />
+                    android:textSize="@dimen/showname_text_size" />
 
 
                 <LinearLayout
@@ -367,7 +367,7 @@
                     <EditText
                         android:id="@+id/couponCodeEditText"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
+                        android:layout_height="@dimen/coupancode_height"
                         android:layout_alignParentLeft="true"
                         android:layout_below="@+id/showNameWithPrice"
                         android:layout_weight="2"
@@ -385,7 +385,7 @@
                     <Button
                         android:id="@+id/addCouponButton"
                         android:layout_width="0dp"
-                        android:layout_height="44dp"
+                        android:layout_height="@dimen/coupanbtn_height"
                         android:layout_gravity="right"
                         android:layout_marginLeft="15dp"
                         android:layout_weight="1"
@@ -394,7 +394,7 @@
                         android:text=""
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="16dp"
+                        android:textSize="@dimen/coupanbtn_text_size"
 
                         />
                 </LinearLayout>
@@ -406,7 +406,7 @@
                     android:layout_alignParentTop="true"
                     android:text=""
                     android:textColor="@color/pageTitleColor"
-                    android:textSize="22dp"
+                    android:textSize="@dimen/purchase_text_size"
                     android:textStyle="bold" />
 
 
@@ -435,7 +435,7 @@
                     android:layout_alignParentTop="true"
                     android:text=""
                     android:textColor="@color/pageTitleColor"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/paymentOptionLine"
@@ -518,7 +518,7 @@
                         android:text=""
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
 
                         />
 
@@ -541,7 +541,7 @@
                         android:layout_marginLeft="15dp"
                         android:text=""
                         android:textColor="@color/castCrewTitleTextColor"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:visibility="invisible" />
 
                     <Button
@@ -554,7 +554,7 @@
                         android:text=""
                         android:textAllCaps="false"
                         android:textColor="#7f7f7f"
-                        android:textSize="17dp" />
+                        android:textSize="17sp" />
 
                 </LinearLayout>
             </LinearLayout>

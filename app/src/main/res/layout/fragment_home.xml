@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:custom="http://schemas.android.com/tools"
     android:background="@color/appBackgroundColor"
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/sliderRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/homefrag_height"
-        android:id="@+id/sliderRelativeLayout"
         android:background="@color/appBackgroundColor"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
 
         <com.daimajia.slider.library.SliderLayout
             android:id="@+id/sliderLayout"
             android:layout_width="match_parent"
+            android:layout_height="@dimen/slider_height"
             custom:auto_cycle="true"
             custom:indicator_visibility="visible"
-            custom:pager_animation_span="1100"
-            android:layout_height="@dimen/slider_height"/>
+            custom:pager_animation_span="1100" />
 
         <!-- <com.daimajia.slider.library.Indicators.PagerIndicator
              android:id="@+id/custom_indicator2"
@@ -48,13 +47,12 @@
              />-->
         <com.daimajia.slider.library.Indicators.PagerIndicator
             android:id="@+id/custom_indicator2"
+            style="@style/AndroidImageSlider_Corner_Oval_Orange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/AndroidImageSlider_Corner_Oval_Orange"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dp"
             android:layout_centerHorizontal="true"
-            />
+            android:layout_marginBottom="20dp" />
         <!--  <com.daimajia.slider.library.Indicators.PagerIndicator
               android:id="@+id/custom_indicator2"
               style="@style/AndroidImageSlider_Corner_Oval_Orange"
@@ -64,15 +62,13 @@
               />
   -->
         <TextView
+            android:id="@+id/lineTextView"
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:background="@color/border_color"
-            android:id="@+id/lineTextView"
             android:layout_below="@+id/sliderLayout"
-            />
+            android:background="@color/border_color" />
 
     </RelativeLayout>
-
 
 
     <android.support.v7.widget.RecyclerView
@@ -81,6 +77,7 @@
         android:layout_height="wrap_content"
         android:background="@color/transparent"
         android:scrollbars="none" />
+
     <RelativeLayout
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
@@ -90,52 +87,54 @@
 
         <ProgressBar
             style="?android:attr/progressBarStyleInverse"
-            android:indeterminateDrawable="@drawable/progress_rawable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminateDuration="1000"
-            android:indeterminate="true"/>
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/progress_rawable"
+            android:indeterminateDuration="1000" />
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/noInternet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/appBackgroundColor"
-        android:visibility="gone"
         android:layout_below="@+id/toolbar"
-        android:padding="8dp">
+        android:background="@color/appBackgroundColor"
+        android:padding="8dp"
+        android:visibility="gone">
 
         <TextView
+            android:id="@+id/noInternetTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:gravity="center"
             android:maxLines="4"
-            android:id="@+id/noInternetTextView"
             android:singleLine="false"
-            android:layout_centerInParent="true"
             android:textColor="@color/noInternetColor"
             android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/noData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/appBackgroundColor"
-        android:visibility="gone"
         android:layout_below="@+id/toolbar"
-        android:padding="8dp">
+        android:background="@color/appBackgroundColor"
+        android:padding="8dp"
+        android:visibility="gone">
 
         <TextView
+            android:id="@+id/noDataTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:gravity="center"
             android:maxLines="4"
-            android:id="@+id/noDataTextView"
             android:singleLine="false"
-            android:layout_centerInParent="true"
             android:textColor="@color/noInternetColor"
             android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />

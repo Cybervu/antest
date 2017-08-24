@@ -20,8 +20,8 @@
 
         <ImageView
             android:id="@+id/castImageView"
-            android:layout_width="80dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/cast_width_icon"
+            android:layout_height="@dimen/cast_height_icon"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
             android:src="@drawable/logo" />
@@ -42,7 +42,7 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:textColor="@color/videotextColor"
-                android:textSize="17dp" />
+                android:textSize="@dimen/cast_name_text" />
 
             <TextView
                 android:id="@+id/castDescriptionTextView"
@@ -53,7 +53,7 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:textColor="@color/videotextColor"
-                android:textSize="14dp" />
+                android:textSize="@dimen/cast_description_text" />
 
         </LinearLayout>
 

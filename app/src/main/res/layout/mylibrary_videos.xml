@@ -7,26 +7,28 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/sectionTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/sectionTitle"
 
-        android:textSize="@dimen/sectiontitle_text_size"
         android:padding="6dp"
-        android:textStyle="normal"
-        android:textColor="@color/pageTitleColor"/>
+        android:textColor="@color/pageTitleColor"
+        android:textSize="@dimen/sectiontitle_text_size"
+        android:textStyle="normal" />
 
 
     <GridView
         android:id="@+id/imagesGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/sectionTitle"
         android:layout_marginBottom="6dp"
         android:layout_marginTop="6dp"
-        android:layout_below="@id/sectionTitle"
         android:horizontalSpacing="6dp"
         android:paddingLeft="10dp"
-        android:verticalSpacing="6dp"></GridView>
+        android:verticalSpacing="6dp">
+
+    </GridView>
     <!--<com.twotoasters.jazzylistview.JazzyGridView
         android:id="@+id/imagesGridView"
         android:layout_width="match_parent"
@@ -137,6 +139,5 @@
 
 
     </RelativeLayout>
-
 
 </RelativeLayout>

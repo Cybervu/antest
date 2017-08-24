@@ -127,7 +127,7 @@
                         android:layout_marginBottom="40dp"
                         android:text="wwwwwwwwww"
                         android:textColor="@color/seekTimeTextColor"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         android:visibility="gone" />
 
                     <TextView
@@ -270,7 +270,7 @@
                         android:gravity="center"
                         android:text=""
                         android:textColor="@color/totalTimeTxtColor"
-                        android:textSize="12dp" />
+                        android:textSize="12sp" />
 
                     <ImageView
                         android:id="@+id/compress_expand"
@@ -322,7 +322,7 @@
                     android:maxLines="1"
                     android:text=""
                     android:textColor="@color/videomovieTitleColor"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
 
@@ -384,7 +384,7 @@
                 android:layout_marginTop="8dp"
                 android:text=""
                 android:textColor="@color/videotextColor"
-                android:textSize="14dp" />
+                android:textSize="@dimen/vdiogenere_text_size" />
 
 
             <LinearLayout
@@ -409,7 +409,7 @@
                     android:layout_marginTop="8dp"
                     android:text=""
                     android:textColor="@color/videotextColor"
-                    android:textSize="14dp"
+                    android:textSize="@dimen/vdioduration_text_size"
                     android:visibility="gone" />
 
                 <TextView
@@ -423,7 +423,7 @@
                     android:paddingRight="4dp"
                     android:text=""
                     android:textColor="@color/videotextColor"
-                    android:textSize="14dp"
+                    android:textSize="@dimen/vdioduration_text_size"
                     android:visibility="gone" />
 
                 <TextView
@@ -434,7 +434,7 @@
                     android:layout_marginTop="8dp"
                     android:text=""
                     android:textColor="@color/videotextColor"
-                    android:textSize="14dp"
+                    android:textSize="@dimen/vdioduration_text_size"
                     android:visibility="gone" />
 
 
@@ -446,7 +446,7 @@
                     android:layout_marginTop="8dp"
                     android:text=""
                     android:textColor="@color/videotextColor"
-                    android:textSize="14dp"
+                    android:textSize="@dimen/vdioduration_text_size"
                     android:visibility="gone" />
 
             </LinearLayout>
@@ -484,7 +484,7 @@
                     android:layout_toLeftOf="@+id/storyViewMoreButton"
                     android:ellipsize="end"
                     android:textColor="@color/videotextColor"
-                    android:textSize="14dp" />
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@id/storyViewMoreButton"
@@ -496,7 +496,7 @@
                     android:text="View More"
                     android:textAllCaps="false"
                     android:textColor="@color/button_background"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:visibility="gone" />
             </RelativeLayout>
 
@@ -508,7 +508,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="18dp"
                 android:textColor="@color/castCrewTitleTextColor"
-                android:textSize="15dp"
+                android:textSize="@dimen/vdiocast_text_size"
                 android:textStyle="bold" />
 
         </LinearLayout>

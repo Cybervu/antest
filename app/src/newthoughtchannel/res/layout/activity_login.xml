@@ -50,7 +50,7 @@
                 android:paddingTop="17dp"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:textSize="16dp"/>
+                android:textSize="16sp"/>
 
             <EditText
                 android:id="@+id/editPasswordStr"
@@ -65,7 +65,7 @@
                 android:paddingTop="17dp"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:textSize="16dp"
+                android:textSize="16sp"
 
                 />
 
@@ -86,7 +86,7 @@
                     android:textColor="@color/forgotPasswordTextViewColor"
                     android:gravity="center"
                     android:maxLines="4"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
 
                 <Button
                     android:id="@+id/loginButton"
@@ -94,7 +94,7 @@
                     android:layout_height="40dp"
                     android:background="@drawable/button_radious"
                     android:textColor="@color/buttonTextColor"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:gravity="center"
                     android:stateListAnimator="@null"
                     android:textAllCaps="false"
@@ -141,7 +141,7 @@
                     android:layout_margin="5dp"
                     android:gravity="center"
                     android:textColor="@color/fb_text_color"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
 
                     android:text="@string/fb_login_text" />
             </LinearLayout>
@@ -203,7 +203,7 @@
                     android:gravity="center"
                     android:text="new user "
                     android:textColor="@color/login_new_user_text_color"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     />
 
                 <TextView
@@ -217,7 +217,7 @@
                     android:singleLine="false"
                     android:text="sign up"
                     android:textColor="@color/sign_up_text_color"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
             </RelativeLayout>
 

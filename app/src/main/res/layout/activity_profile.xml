@@ -70,7 +70,7 @@
                         android:padding="17dp"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
-                        android:textSize="16dp" />
+                        android:textSize="16sp" />
 
                     <Spinner
 
@@ -92,7 +92,6 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/languageSpinner"
                         android:layout_marginTop="13dp"
-
                         android:popupBackground="#ffffff"
                         android:spinnerMode="dropdown"
                         android:theme="@style/ThemeOverlay.AppCompat.Light" />
@@ -109,7 +108,7 @@
                         android:padding="17dp"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:visibility="gone" />
 
                     <EditText
@@ -165,7 +164,7 @@
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="17dp"
+                        android:textSize="17sp"
 
                         />
 

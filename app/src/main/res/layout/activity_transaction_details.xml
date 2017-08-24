@@ -233,7 +233,7 @@
             android:text="DOWNLOAD"
             android:textAllCaps="false"
             android:textColor="@color/buttonTextColor"
-            android:textSize="17dp" />
+            android:textSize="17sp" />
     </LinearLayout>
 
     <RelativeLayout

@@ -23,7 +23,7 @@
                 android:layout_marginLeft="6dp"
                 android:text="Select Your Option"
                 android:textColor="@color/pageTitleColor"
-                android:textSize="18dp"
+                android:textSize="@dimen/selectopt_text_size"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -42,7 +42,7 @@
                 android:button="@drawable/radiobutton_style"
                 android:text="The martian  Complete season "
                 android:textColor="#afafaf"
-                android:textSize="15dp"
+                android:textSize="@dimen/radiobtn_text_size"
 
                 />
 
@@ -54,7 +54,7 @@
                 android:layout_alignParentRight="true"
                 android:text="$07.00"
                 android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                android:textSize="15dp" />
+                android:textSize="@dimen/radiobtn_text_size" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -72,7 +72,7 @@
                 android:button="@drawable/radiobutton_style"
                 android:text="The martian  Complete season "
                 android:textColor="#afafaf"
-                android:textSize="15dp"
+                android:textSize="@dimen/radiobtn_text_size"
 
                 />
 
@@ -84,7 +84,7 @@
                 android:layout_alignParentRight="true"
                 android:text="$07.00"
                 android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                android:textSize="15dp" />
+                android:textSize="@dimen/radiobtn_text_size" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -102,7 +102,7 @@
                 android:button="@drawable/radiobutton_style"
                 android:text="The martian  Complete season "
                 android:textColor="#afafaf"
-                android:textSize="15dp"
+                android:textSize="@dimen/radiobtn_text_size"
 
                 />
 
@@ -114,12 +114,12 @@
                 android:layout_alignParentRight="true"
                 android:text="$07.00"
                 android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                android:textSize="15dp" />
+                android:textSize="@dimen/radiobtn_text_size" />
         </RelativeLayout>
 
         <Button
             android:id="@+id/payNowButton"
-            android:layout_width="80dp"
+            android:layout_width="@dimen/paybtn_width"
             android:layout_height="40dp"
             android:layout_gravity="right"
             android:layout_marginBottom="20dp"
@@ -131,7 +131,7 @@
             android:text="Pay Now"
             android:textAllCaps="false"
             android:textColor="@color/buttonTextColor"
-            android:textSize="14dp" />
+            android:textSize="@dimen/paybtn1_text_size" />
 
         <View
             android:layout_width="match_parent"

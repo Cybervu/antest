@@ -20,8 +20,7 @@
             android:layout_height="@dimen/videogrid_height"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
-            android:src="@drawable/logo"
-            />
+            android:src="@drawable/logo" />
 
         <ImageView
             android:id="@+id/movieImageOverlay"
@@ -39,11 +38,12 @@
             android:id="@+id/movieTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_alignBaseline="@+id/movieImageOverlay"
+            android:layout_alignBottom="@+id/movieImageOverlay"
             android:layout_alignLeft="@+id/movieImageView"
             android:layout_alignRight="@+id/movieImageView"
-            android:layout_alignBottom="@+id/movieImageOverlay"
-            android:layout_alignBaseline="@+id/movieImageOverlay"
+            android:layout_gravity="left"
+            android:layout_marginBottom="6dp"
             android:clickable="false"
             android:ellipsize="end"
             android:focusable="false"
@@ -52,7 +52,6 @@
             android:maxLines="1"
             android:padding="2dp"
             android:text=""
-            android:layout_marginBottom="6dp"
 
             android:textColor="@color/contentTitleColor"
             android:textSize="@dimen/itemtitle1_text_size"
@@ -68,7 +67,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:visibility="gone"
         android:adjustViewBounds="true"
-        android:src="@drawable/close" />
+        android:src="@drawable/close"
+        android:visibility="gone" />
 </RelativeLayout>

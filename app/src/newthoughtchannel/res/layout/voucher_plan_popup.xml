@@ -24,7 +24,7 @@
                 android:layout_marginLeft="6dp"
                 android:text="Select Purchase Type"
                 android:textColor="@color/pageTitleColor"
-                android:textSize="19dp"
+                android:textSize="19sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -49,7 +49,7 @@
                 android:text="  Show"
 
                 android:textColor="@color/pageTitleColor"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
             <!--  android:button="@drawable/radiobutton_style"-->
 
             />
@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:text="  Season"
                 android:textColor="@color/pageTitleColor"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:text="  Episode"
                 android:textColor="@color/pageTitleColor"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -100,7 +100,7 @@
             android:text="Next"
             android:textAllCaps="false"
             android:textColor="@color/pageTitleColor"
-            android:textSize="17dp" />
+            android:textSize="17sp" />
 
         <View
             android:layout_width="match_parent"

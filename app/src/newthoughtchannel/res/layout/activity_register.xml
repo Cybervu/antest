@@ -49,7 +49,7 @@
                 android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜáíóúñÑñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜãÃÐðÊËÈıÍÎÏÌÓßÔÒÒõÕµþÞÚÛÙýÝ "
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/editEmailStr"
@@ -63,7 +63,7 @@
                 android:padding="17dp"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/editPasswordStr"
@@ -78,7 +78,7 @@
                 android:padding="17dp"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:textSize="16dp"
+                android:textSize="16sp"
 
 
                 />
@@ -96,7 +96,7 @@
                 android:padding="17dp"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:textSize="16dp"
+                android:textSize="16sp"
 
                 />
 
@@ -118,7 +118,7 @@
                     android:clickable="true"
                     android:text="By Clicking on Register,I agree togycatycsfxftwct"
                     android:textColor="@color/textColor"
-                    android:textSize="13dp" />
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/termsTextView"
@@ -130,7 +130,7 @@
                     android:singleLine="false"
                     android:maxLines="3"
                     android:textColor="@color/button_background"
-                    android:textSize="16dp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <Button
@@ -145,7 +145,7 @@
                 android:stateListAnimator="@null"
                 android:textAllCaps="false"
                 android:textColor="@color/buttonTextColor"
-                android:textSize="18dp" />
+                android:textSize="18sp" />
 
 
             <LinearLayout
@@ -178,7 +178,7 @@
                     android:text="@string/fb_registration_text"
                     android:textColor="@color/fb_text_color"
 
-                    android:textSize="16dp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <!--    <TextView android:text="Login With Facebook"
@@ -223,7 +223,7 @@
                     android:layout_marginRight="10dp"
                     android:text="already member"
                     android:textColor="@color/alreadyMemberTextColor"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
 
 
                 <TextView
@@ -237,7 +237,7 @@
                     android:singleLine="false"
                     android:text="Login"
                     android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
 

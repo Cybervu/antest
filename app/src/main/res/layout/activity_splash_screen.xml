@@ -1,65 +1,67 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/splash_screen"
-    android:orientation="vertical"
-    android:id="@+id/mainlayout">
-
+    android:orientation="vertical">
 
 
     <RelativeLayout
+        android:id="@+id/noInternet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/appBackgroundColor"
-        android:padding="8dp"
         android:layout_below="@+id/toolbar"
-        android:id="@+id/noInternet">
+        android:background="@color/appBackgroundColor"
+        android:padding="8dp">
+
         <ImageView
+            android:id="@+id/noInternetImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/logo"
-            android:id="@+id/noInternetImageView"
             android:layout_centerInParent="true"
-            />
+            android:src="@drawable/logo" />
+
         <TextView
+            android:id="@+id/noInternetTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/noInternetColor"
-            android:textStyle="bold"
-            android:singleLine="false"
-            android:maxLines="4"
-            android:id="@+id/noInternetTextView"
             android:layout_below="@+id/noInternetImageView"
             android:gravity="center"
-            android:textSize="@dimen/testview_text_size"/>
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
     </RelativeLayout>
+
     <RelativeLayout
+        android:id="@+id/geoBlocked"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/appBackgroundColor"
-        android:padding="8dp"
         android:layout_below="@+id/toolbar"
-        android:id="@+id/geoBlocked">
+        android:background="@color/appBackgroundColor"
+        android:padding="8dp">
+
         <ImageView
+            android:id="@+id/geoBlockedImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/logo"
-            android:id="@+id/geoBlockedImageView"
             android:layout_centerInParent="true"
-            />
+            android:src="@drawable/logo" />
+
         <TextView
+            android:id="@+id/geoBlockedTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/noInternetColor"
-            android:textStyle="bold"
-            android:singleLine="false"
-            android:maxLines="4"
-            android:id="@+id/geoBlockedTextView"
             android:layout_below="@+id/geoBlockedImageView"
-            android:gravity="center"
             android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:maxLines="4"
             android:paddingTop="5dp"
-            android:textSize="@dimen/testview_text_size"/>
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -50,7 +50,6 @@
             android:maxLines="4"
             android:id="@+id/no_internet_text"
             android:singleLine="false"
-
             android:textColor="@color/noInternetColor"
             android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />

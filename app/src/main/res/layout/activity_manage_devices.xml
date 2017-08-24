@@ -8,14 +8,15 @@
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
+
     <TextView
+        android:id="@+id/manage_device_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/videotitle_text_size"
-        android:id="@+id/manage_device_text"
         android:padding="8dp"
+        android:text="Your Devices"
         android:textColor="@color/pageTitleColor"
-        android:text="Your Devices"/>
+        android:textSize="@dimen/videotitle_text_size" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,12 +25,12 @@
         android:orientation="vertical">
 
         <ListView
-            android:padding="10dp"
             android:id="@+id/device_list"
             android:layout_width="match_parent"
+            android:layout_height="fill_parent"
             android:divider="#eee"
             android:dividerHeight="1dp"
-            android:layout_height="fill_parent">
+            android:padding="10dp">
 
         </ListView>
 

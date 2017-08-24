@@ -7,11 +7,11 @@
     tools:context="com.home.vod.activity.Subtitle_Resolution">
 
     <LinearLayout
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#60000000"
         android:gravity="bottom"
-        android:id="@+id/main_layout"
         android:orientation="vertical">
 
         <LinearLayout
@@ -56,10 +56,10 @@
                 android:padding="10dp">
 
                 <ImageView
-                    android:layout_marginLeft="7dp"
                     android:layout_width="@dimen/subtitle_resolution_width"
-                    android:layout_gravity="center"
                     android:layout_height="@dimen/subtitle_resolution_height"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="7dp"
                     android:src="@drawable/cc_icon" />
 
                 <TextView
