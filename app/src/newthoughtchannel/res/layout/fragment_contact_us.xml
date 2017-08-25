@@ -81,7 +81,7 @@
                 android:layout_marginBottom="22dp"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:textSize="16dp" />
+                android:textSize="@dimen/editbox_text_size" />
 
             <EditText
                 android:id="@+id/contact_msg"
@@ -98,7 +98,7 @@
                 android:layout_marginRight="10dp"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:textSize="16dp" />
+                android:textSize="@dimen/editbox_text_size" />
 
             <Button
                 android:id="@+id/submit_cont"
@@ -110,7 +110,7 @@
                 android:text=""
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:textSize="15dp"
+                android:textSize="@dimen/submitcontact_text_size"
                 android:textColor="@color/buttonTextColor" />
         </LinearLayout>
     </ScrollView>

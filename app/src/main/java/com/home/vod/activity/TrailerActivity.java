@@ -37,6 +37,8 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ExpandableTextView;
+import com.home.vod.util.FontUtls;
+import com.home.vod.util.ResizableCustomView;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
 
@@ -55,8 +57,10 @@ import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.util.Constant.authTokenStr;
 
 
@@ -82,6 +86,7 @@ public class TrailerActivity extends AppCompatActivity implements
    // int played_length = 0;
     int playerStartPosition = 0;
     ImageView subtitle_change_btn;
+    private static final int MAX_LINES = 2;
 
     Timer timer;
     private Handler threadHandler = new Handler();
@@ -141,7 +146,7 @@ public class TrailerActivity extends AppCompatActivity implements
 
     TextView videoTitle, GenreTextView, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView,
              videoCastCrewTitleTextView;
-    ExpandableTextView story;
+    TextView story;
     private EMVideoView emVideoView;
     int seek_label_pos = 0;
     int content_types_id = 0;
@@ -205,7 +210,7 @@ public class TrailerActivity extends AppCompatActivity implements
         videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
         Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
-        story = (ExpandableTextView) findViewById(R.id.story);
+        story = (TextView) findViewById(R.id.videoStoryTextView);
         Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         story.setTypeface(storyTypeface);
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
@@ -296,6 +301,8 @@ public class TrailerActivity extends AppCompatActivity implements
         {
             story.setText(Util.dataModel.getVideoStory());
             story.setVisibility(View.VISIBLE);
+            ResizableCustomView.doResizeTextView(TrailerActivity.this,story,MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE), true);
+
         } else {
             story.setVisibility(View.GONE);
         }
@@ -1826,10 +1833,17 @@ public class TrailerActivity extends AppCompatActivity implements
     }
 
     private void showSystemUI() {
+        if (Util.dataModel.getVideoStory().trim() != null && !Util.dataModel.getVideoStory().trim().matches("")){
+            story.setText(Util.dataModel.getVideoStory());
+            story.setVisibility(View.VISIBLE);
+            ResizableCustomView.doResizeTextView(TrailerActivity.this,story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
+
+        } else {
+            story.setVisibility(View.GONE);
+        }
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                        );
     }
 }

@@ -57,6 +57,8 @@
             android:id="@+id/geoBlockedTextView"
             android:layout_below="@+id/geoBlockedImageView"
             android:gravity="center"
+            android:layout_marginTop="5dp"
+            android:paddingTop="5dp"
             android:textSize="@dimen/testview_text_size"/>
     </RelativeLayout>
 

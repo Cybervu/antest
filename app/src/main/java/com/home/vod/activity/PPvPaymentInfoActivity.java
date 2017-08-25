@@ -260,7 +260,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         playerModel.setCensorRating(playerModel.getCensorRating());*/
 
         Log.v("BKS", "ppvpayment Activity Season Id =" +(Player) getIntent().getSerializableExtra("PlayerModel"));
-        Log.v("SUBHA", "ppvpatment Activity episode Id =" + Util.selected_episode_id);
+        Log.v("MUVI", "ppvpatment Activity episode Id =" + Util.selected_episode_id);
 
         videoPreview = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -2893,8 +2893,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 //                httppost.addHeader("episode_id", Util.selected_episode_id);
 //
 //
-//                Log.v("SUBHA", "season_id=====================" + Util.selected_season_id);
-//                Log.v("SUBHA", "episode_id=====================" + Util.selected_episode_id);
+//                Log.v("MUVI", "season_id=====================" + Util.selected_season_id);
+//                Log.v("MUVI", "episode_id=====================" + Util.selected_episode_id);
 //
 //                httppost.addHeader("currency_id", currencyIdStr.trim());
 //

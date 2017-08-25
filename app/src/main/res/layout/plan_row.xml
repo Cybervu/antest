@@ -40,7 +40,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="Quarterly"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/buttonTextColor"
                     android:textSize="@dimen/itemtitle1_text_size" />
 
             </RelativeLayout>
@@ -61,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="$ "
-                    android:textColor="#ddd"
+                    android:textColor="@color/pageTitleColor"
                     android:textSize="@dimen/plainrow_text_size"
                     android:paddingTop="15dp"
                     android:id="@+id/planPurchaseCurrenyTextView"/>
@@ -70,13 +70,13 @@
                     android:layout_height="wrap_content"
                     android:text="125 "
                     android:textSize="@dimen/purchasevalue_text_size"
-                    android:textColor="#930f18"
+                    android:textColor="@color/button_background_plan_textview"
                     android:id="@+id/planPurchaseValueTextView"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="(3 months )"
-                    android:textColor="#ddd"
+                    android:textColor="@color/pageTitleColor"
                     android:textSize="@dimen/itemtitle1_text_size"
                     android:paddingTop="18dp"
                     android:id="@+id/planPurchaseMonthTextView"/>

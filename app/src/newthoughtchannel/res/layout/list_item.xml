@@ -21,7 +21,7 @@
             custom:auto_cycle="true"
             custom:indicator_visibility="visible"
             custom:pager_animation_span="1100"
-            android:layout_height="230dp"/>
+            android:layout_height="@dimen/listitemlayout_height"/>
 
         <com.daimajia.slider.library.Indicators.PagerIndicator
             android:id="@+id/custom_indicator2"
@@ -69,7 +69,7 @@
             android:layout_toLeftOf="@+id/btnMore"
             android:text="Sample title"
             android:textColor="@color/videotextColor"
-            android:textSize="16dp"
+            android:textSize="@dimen/itemtitle_text_size"
             android:textAllCaps="true"
             />
 
@@ -84,7 +84,7 @@
             android:stateListAnimator="@null"
             android:background="@drawable/view_more_button_background"
             android:textAllCaps="false"
-            android:textSize="16dp"
+            android:textSize="@dimen/btnmore_text_size"
            android:text="vfewgafeqfgqeg"
            android:padding="10dp"
             android:minHeight="36dp"

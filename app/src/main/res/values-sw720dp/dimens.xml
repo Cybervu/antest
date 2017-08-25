@@ -40,7 +40,7 @@
     <dimen name="vdiocast_text_size">19dp</dimen>
     <dimen name="btnmore_width">120dp</dimen>
     <dimen name="btnmore_height">48dp</dimen>
-    <dimen name="btnmore_text_size">16dp</dimen>
+    <dimen name="btnmore_text_size">16sp</dimen>
     <dimen name="banerimg_height">300dp</dimen>
     <dimen name="vdiotitle1_text_size">19dp</dimen>
     <dimen name="homefrag_height">310dp</dimen>
