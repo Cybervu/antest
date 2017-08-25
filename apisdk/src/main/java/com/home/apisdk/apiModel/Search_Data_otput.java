@@ -22,7 +22,7 @@ public class Search_Data_otput {
     String permalink;
     String name;
     String display_name;
-    String content_type_id;
+    String content_type_id="";
     String full_movie;
     String story;
     String genre;

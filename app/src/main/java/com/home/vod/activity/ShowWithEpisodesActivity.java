@@ -211,6 +211,7 @@ import static com.muvi.player.utils.Util.DEFAULT_HAS_FAVORITE;
 import static com.muvi.player.utils.Util.DEFAULT_REVIEWS;
 import static com.muvi.player.utils.Util.HAS_FAVORITE;
 import static com.muvi.player.utils.Util.REVIEWS;
+import static com.muvi.player.utils.Util.subscriptionUrl;
 
 
 import com.home.vod.util.Util;
@@ -240,7 +241,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     int ratingAddedByUser = 1;
     LanguagePreference languagePreference;
 
-   // ProgressBarHandler pDialog;
+    // ProgressBarHandler pDialog;
     ProgressBarHandler pDialog;
     ///****rating****///
 
@@ -711,83 +712,83 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         }
     }
 
-  /*  @Override
-    public void onGetEpisodeDetailsPostExecuteCompleted(ArrayList<Episode_Details_output> episode_details_output, int status, int i, String message,String movieUniqueId) {
+    /*  @Override
+      public void onGetEpisodeDetailsPostExecuteCompleted(ArrayList<Episode_Details_output> episode_details_output, int status, int i, String message,String movieUniqueId) {
 
-        try {
-            if (pDialog != null && pDialog.isShowing()) {
-                pDialog.hide();
+          try {
+              if (pDialog != null && pDialog.isShowing()) {
+                  pDialog.hide();
 
-            }
-        }catch (IllegalArgumentException ex) {
+              }
+          }catch (IllegalArgumentException ex) {
 
-        }
+          }
 
-        for (int a = 0; a < episode_details_output.size(); a++) {
+          for (int a = 0; a < episode_details_output.size(); a++) {
 
-            String episodeNoStr = episode_details_output.get(a).getEpisode_number();
-            String episodeStoryStr = episode_details_output.get(a).getEpisode_story();
-            String episodeDateStr = episode_details_output.get(a).getEpisode_date();
-            String episodeImageStr = episode_details_output.get(a).getPoster_url();
-            String episodeTitleStr = episode_details_output.get(a).getEpisode_title();
-            String episodeSeriesNoStr = episode_details_output.get(a).getSeries_number();
-            String episodeMovieStreamUniqueIdStr=episode_details_output.get(a).getMovie_stream_uniq_id();
-            String episodeThirdParty=episode_details_output.get(a).getThirdparty_url();
-            int episodeContenTTypesId=episode_details_output.get(a).getContent_types_id();
-            String videodurationStr=episode_details_output.get(a).getVideo_duration();
+              String episodeNoStr = episode_details_output.get(a).getEpisode_number();
+              String episodeStoryStr = episode_details_output.get(a).getEpisode_story();
+              String episodeDateStr = episode_details_output.get(a).getEpisode_date();
+              String episodeImageStr = episode_details_output.get(a).getPoster_url();
+              String episodeTitleStr = episode_details_output.get(a).getEpisode_title();
+              String episodeSeriesNoStr = episode_details_output.get(a).getSeries_number();
+              String episodeMovieStreamUniqueIdStr=episode_details_output.get(a).getMovie_stream_uniq_id();
+              String episodeThirdParty=episode_details_output.get(a).getThirdparty_url();
+              int episodeContenTTypesId=episode_details_output.get(a).getContent_types_id();
+              String videodurationStr=episode_details_output.get(a).getVideo_duration();
 
 
-            itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr, movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, episodeContenTTypesId, videodurationStr));
+              itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr, movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, episodeContenTTypesId, videodurationStr));
 
-        }
+          }
 
-        LogUtil.showLog("MUVI", "episode show...");
+          LogUtil.showLog("MUVI", "episode show...");
 
-        String loggedInStr = preferenceManager.getUseridFromPref();
-        if (status == 200) {
-            LogUtil.showLog("MUVI", "episode show...1");
+          String loggedInStr = preferenceManager.getUseridFromPref();
+          if (status == 200) {
+              LogUtil.showLog("MUVI", "episode show...1");
 
-            LogUtil.showLog("MUVI", "itemdata==" + itemData);
-            if (itemData.size() <= 0) {
-                LogUtil.showLog("MUVI", "episode show...1");
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
+              LogUtil.showLog("MUVI", "itemdata==" + itemData);
+              if (itemData.size() <= 0) {
+                  LogUtil.showLog("MUVI", "episode show...1");
+                  if (pDialog != null && pDialog.isShowing()) {
+                      pDialog.hide();
 
-                }
+                  }
 
-                //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
-            } else {
+                  //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
+              } else {
 
-                LogUtil.showLog("MUVI", "itemData show...1" + itemData.size());
-                LogUtil.showLog("MUVI", "episode show... 2");
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
+                  LogUtil.showLog("MUVI", "itemData show...1" + itemData.size());
+                  LogUtil.showLog("MUVI", "episode show... 2");
+                  if (pDialog != null && pDialog.isShowing()) {
+                      pDialog.hide();
 
-                }
+                  }
 
-                LogUtil.showLog("MUVI", "data show...");
-                seasontiveLayout.setVisibility(View.VISIBLE);
-                seasontiveLayout.setLayoutManager(mLayoutManager);
-                seasontiveLayout.setItemAnimator(new DefaultItemAnimator());
-                EpisodesListAdapter mAdapter = new EpisodesListAdapter(ShowWithEpisodesActivity.this, R.layout.list_card_multipart, itemData, new EpisodesListAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(EpisodesListModel item) {
-                        clickItem(item);
+                  LogUtil.showLog("MUVI", "data show...");
+                  seasontiveLayout.setVisibility(View.VISIBLE);
+                  seasontiveLayout.setLayoutManager(mLayoutManager);
+                  seasontiveLayout.setItemAnimator(new DefaultItemAnimator());
+                  EpisodesListAdapter mAdapter = new EpisodesListAdapter(ShowWithEpisodesActivity.this, R.layout.list_card_multipart, itemData, new EpisodesListAdapter.OnItemClickListener() {
+                      @Override
+                      public void onItemClick(EpisodesListModel item) {
+                          clickItem(item);
 
-                    }
-                });
-                seasontiveLayout.setAdapter(mAdapter);
+                      }
+                  });
+                  seasontiveLayout.setAdapter(mAdapter);
 
-            }
-        }
+              }
+          }
 
-        if (loggedInStr != null && isFavorite == 1) {
+          if (loggedInStr != null && isFavorite == 1) {
 
-            favorite_view_episode.setImageResource(R.drawable.favorite_red);
-        }
-    }
+              favorite_view_episode.setImageResource(R.drawable.favorite_red);
+          }
+      }
 
-*/
+  */
     @Override
     public void onGetValidateUserPreExecuteStarted() {
         LogUtil.showLog("PINTU","validateuser pdlog show");
@@ -797,7 +798,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
     @Override
     public void onGetValidateUserPostExecuteCompleted(ValidateUserOutput validateUserOutput, int status, String message) {
-        String Subscription_Str = preferenceManager.getIsSubscribedFromPref();
+
+        String subscription_Str = validateUserOutput.getIsMemberSubscribed();
+        preferenceManager.setIsSubscribedToPref(subscription_Str);
         String validUserStr=validateUserOutput.getValiduser_str();
 
         try {
@@ -892,7 +895,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                         if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
                             if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
                                 ShowPpvPopUp();
-                            } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
+                            } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                                 Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(intent);
@@ -906,7 +909,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
                 ShowPpvPopUp();
-            } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
+            } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                 Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
@@ -951,24 +954,28 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         pDialog.show();
 
+
     }
 
     @Override
     public void onAddToFavPostExecuteCompleted(AddToFavOutputModel addToFavOutputModel, int status, String sucessMsg) {
 
+        if (status==200) {
 
-        //pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-        String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
-        favorite_view_episode.setImageResource(R.drawable.favorite_red);
-        isFavorite = 1;
+            //pref = getSharedPreferences(Util.LOGIN_PREF, 0);
+            ShowWithEpisodesActivity.this.sucessMsg = sucessMsg;
+            String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
-        showToast();
-        if (pDialog.isShowing() && pDialog != null) {
-            LogUtil.showLog("PINTU","addd fav pdlog hide");
-            pDialog.hide();
+            favorite_view_episode.setImageResource(R.drawable.favorite_red);
+            isFavorite = 1;
+
+            showToast();
+            if (pDialog.isShowing() && pDialog != null) {
+                LogUtil.showLog("PINTU", "addd fav pdlog hide");
+                pDialog.hide();
+            }
         }
-
 
     }
 
@@ -984,6 +991,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     @Override
     public void onDeleteFavPostExecuteCompleted(DeleteFavOutputModel deleteFavOutputModel, int status, String sucessMsg) {
 
+        ShowWithEpisodesActivity.this.sucessMsg = sucessMsg;
         favorite_view_episode.setImageResource(R.drawable.favorite_unselected);
         showToast();
         isFavorite = 0;
@@ -1018,7 +1026,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         if (status == 200) {
 
             String loggedInStr = preferenceManager.getLoginStatusFromPref();
-           // int logI
+            // int logI
             LogUtil.showLog("BISHAL", "review data" + reviews);
             LogUtil.showLog("BISHAL", "rating data" + rating);
 
@@ -1034,21 +1042,21 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             } else {
                 LogUtil.showLog("BISHAL", "rating ==== " + rating);
                 viewRatingTextView.setVisibility(View.VISIBLE);
-                    if (loggedInStr == null) {
+                if (loggedInStr == null) {
+                    viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, DEFAULT_ADD_A_REVIEW));
+                    LogUtil.showLog("BISHAL", "rating 0 ==== " + viewContentRatingOutputModel.getShowrating());
+                } else {
+                    if (viewContentRatingOutputModel.getShowrating() == 1) {
                         viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, DEFAULT_ADD_A_REVIEW));
-                        LogUtil.showLog("BISHAL", "rating 0 ==== " + viewContentRatingOutputModel.getShowrating());
+                        LogUtil.showLog("BISHAL", "rating 1 ==== " + viewContentRatingOutputModel.getShowrating());
                     } else {
-                        if (viewContentRatingOutputModel.getShowrating() == 1) {
-                            viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, DEFAULT_ADD_A_REVIEW));
-                            LogUtil.showLog("BISHAL", "rating 1 ==== " + viewContentRatingOutputModel.getShowrating());
-                        } else {
-                            LogUtil.showLog("BISHAL", "rating 2 ==== " + viewContentRatingOutputModel.getShowrating());
-                            viewRatingTextView.setText("reviews (" + reviews + ")");
-                            viewRatingTextView.setText(languagePreference.getTextofLanguage(REVIEWS, DEFAULT_REVIEWS) + " (" + reviews + ") ");
-
-                        }
+                        LogUtil.showLog("BISHAL", "rating 2 ==== " + viewContentRatingOutputModel.getShowrating());
+                        viewRatingTextView.setText("reviews (" + reviews + ")");
+                        viewRatingTextView.setText(languagePreference.getTextofLanguage(REVIEWS, DEFAULT_REVIEWS) + " (" + reviews + ") ");
 
                     }
+
+                }
 
             }
 
@@ -1841,9 +1849,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 if (isLogin == 1) {
-                    if (preferenceManager != null) {
                         String loggedInStr = preferenceManager.getLoginStatusFromPref();
-
                         if (loggedInStr == null) {
                             final Intent registerActivity = new Intent(ShowWithEpisodesActivity.this, RegisterActivity.class);
                             runOnUiThread(new Runnable() {
@@ -1888,20 +1894,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                                 Toast.makeText(ShowWithEpisodesActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                             }
                         }
-                    } else {
 
-                        final Intent registerActivity = new Intent(ShowWithEpisodesActivity.this, RegisterActivity.class);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                Util.check_for_subscription = 1;
-                                registerActivity.putExtra("PlayerModel",playerModel);
-                                startActivity(registerActivity);
-
-
-                            }
-                        });
-                    }
                 } else {
                     if (NetworkStatus.getInstance().isConnected(ShowWithEpisodesActivity.this)) {
                         // MUVIlaxmi
@@ -1992,6 +1985,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
                 contentDetailsInput.setAuthToken(authTokenStr);
                 contentDetailsInput.setPermalink(permalinkStr);
+                contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
+                contentDetailsInput.setLanguage(preferenceManager.getLanguageListFromPref());
+
+
 
                 asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
                 asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
@@ -2196,78 +2194,26 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         LogUtil.showLog("MUVI", "content typesid = " + contentTypesId);
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
         if (isLogin == 1) {
-            if (preferenceManager.getUseridFromPref() != null) {
-                //String loggedInStr = preferenceManager.getLoginStatusFromPref();
+            if (loggedInStr != null) {
+                if (NetworkStatus.getInstance().isConnected(this)) {
 
-                if (loggedInStr == null) {
-                    final Intent register = new Intent(ShowWithEpisodesActivity.this, RegisterActivity.class);
+                    ValidateUserInput validateUserInput = new ValidateUserInput();
+                    validateUserInput.setAuthToken(authTokenStr);
+                    validateUserInput.setUserId(preferenceManager.getUseridFromPref());
+                    validateUserInput.setMuviUniqueId(movieUniqueId.trim());
+                    validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
+                    validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
+                    validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
+                    validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
+                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            Util.check_for_subscription = 1;
-                            register.putExtra("PlayerModel",playerModel);
-                            startActivity(register);
-
-
-                        }
-                    });
-                    //showLoginDialog();
                 } else {
-                    //String loggedinDateStr = pref.getString("date", null);
-                    String loggedinDateStr =preferenceManager.getLoginDateFromPref();
-                    if (loggedinDateStr != null) {
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                        Date loggedInDate = null;
-                        try {
-                            loggedInDate = formatter.parse(loggedinDateStr);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        Date today = new Date();
-                        long differenceInDays = (int) Util.calculateDays(loggedInDate, today) + 1;
-                        if (differenceInDays >= 7) {
-                            SharedPreferences.Editor editor = pref.edit();
-                            editor.clear();
-                            editor.commit();
+                    Util.showToast(ShowWithEpisodesActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
 
-                            final Intent register = new Intent(ShowWithEpisodesActivity.this, RegisterActivity.class);
-
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    Util.check_for_subscription = 1;
-                                    register.putExtra("PlayerModel",playerModel);
-                                    startActivity(register);
-
-
-                                }
-                            });
-                        } else {
-
-                            if (NetworkStatus.getInstance().isConnected(this)) {
-
-                                ValidateUserInput validateUserInput = new ValidateUserInput();
-                                validateUserInput.setAuthToken(authTokenStr);
-                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                                validateUserInput.setMuviUniqueId(movieUniqueId.trim());
-                                validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                                validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                                validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
-                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-
-                            } else {
-                                Util.showToast(ShowWithEpisodesActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
-
-                                //  Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
-                            }
-
-
-                        }
-                    }
+                    //  Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
                 }
+
             } else {
 
                 final Intent register = new Intent(ShowWithEpisodesActivity.this, RegisterActivity.class);

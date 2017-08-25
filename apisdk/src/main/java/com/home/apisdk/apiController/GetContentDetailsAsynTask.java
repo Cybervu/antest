@@ -115,6 +115,8 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
             httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.contentDetailsInput.getAuthToken());
             httppost.addHeader(HeaderConstants.PERMALINK, this.contentDetailsInput.getPermalink());
             httppost.addHeader(HeaderConstants.USER_ID, this.contentDetailsInput.getUser_id());
+            httppost.addHeader("country", this.contentDetailsInput.getCountry());
+            httppost.addHeader("lang_code",this.contentDetailsInput.getLanguage());
 
             // Execute HTTP Post Request
             try {
