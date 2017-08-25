@@ -477,6 +477,21 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     @Override
     public void onSearchDataPostExecuteCompleted(ArrayList<Search_Data_otput> contentListOutputArray, int status, int totalItems, String message) {
 
+        String videoGenreStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String videoName = "";
+        String videoImageStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String videoPermalinkStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String videoTypeStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String videoUrlStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String isEpisodeStr = "";
+        String movieUniqueIdStr = "";
+        String movieStreamUniqueIdStr = "";
+        int isConverted = 0;
+        int isAPV = 0;
+        int isPPV = 0;
+        String movieThirdPartyUrl = "";
+
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
@@ -485,45 +500,66 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         }catch (IllegalArgumentException ex) {
 
         }
-            if (contentListOutputArray.size() <= 0) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        noDataLayout.setVisibility(View.VISIBLE);
-                        noInternetConnectionLayout.setVisibility(View.GONE);
-                        gridView.setVisibility(View.GONE);
-                        footerView.setVisibility(View.GONE);
-                    }
-                });
 
-            } else {
+        if (status>0){
+            if (status==200){
+                gridView.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                noDataLayout.setVisibility(View.GONE);
+
+                if (contentListOutputArray.size()> 0) {
+
+                    gridView.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    noDataLayout.setVisibility(View.GONE);
+
 
                 for (int i=0;i<contentListOutputArray.size();i++) {
 
 
-                gridView.setVisibility(View.VISIBLE);
+                    videoImageStr = contentListOutputArray.get(i).getPoster_url();
+                    videoName = contentListOutputArray.get(i).getName();
+                    videoTypeIdStr = contentListOutputArray.get(i).getContent_types_id();
+                    videoGenreStr = contentListOutputArray.get(i).getGenre();
+                    videoPermalinkStr = contentListOutputArray.get(i).getPermalink();
+                    isEpisodeStr = contentListOutputArray.get(i).getIs_episode();
+                    isConverted = contentListOutputArray.get(i).getIs_converted();
+                    isPPV = contentListOutputArray.get(i).getIs_ppv();
+                    isAPV = contentListOutputArray.get(i).getIs_advance();
+                    itemData.add(new GridItem(videoImageStr, videoName, "", videoTypeIdStr, videoGenreStr, "", videoPermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+                }
+
+                    videoImageStrToHeight = videoImageStr;
+
+
+                    AsynLOADUI loadui = new AsynLOADUI();
+                    loadui.executeOnExecutor(threadPoolExecutor);
+
+                }else {
+
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    gridView.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
+
+                }
+            }else {
+
+                noDataLayout.setVisibility(View.VISIBLE);
                 noInternetConnectionLayout.setVisibility(View.GONE);
-                noDataLayout.setVisibility(View.GONE);
-                videoWidth = 312;
-                videoHeight = 560;
-
-                    String videoImageStr=contentListOutputArray.get(i).getPoster_url();
-                    String videoName=contentListOutputArray.get(i).getName();
-                    String videoTypeIdStr=contentListOutputArray.get(i).getContent_type_id();
-                    String videoGenreStr=contentListOutputArray.get(i).getGenre();
-                    String videoPermalinkStr=contentListOutputArray.get(i).getPermalink();
-                    String isEpisodeStr=contentListOutputArray.get(i).getIs_episode();
-                    int isConverted=contentListOutputArray.get(i).getIs_converted();
-                    int isPPV=contentListOutputArray.get(i).getIs_ppv();
-                    int isAPV=contentListOutputArray.get(i).getIs_advance();
-                    itemData.add(new GridItem(videoImageStr, videoName, "", videoTypeIdStr, videoGenreStr, "", videoPermalinkStr,isEpisodeStr,"","",isConverted,isPPV,isAPV));
-
-                AsynLOADUI loadui = new AsynLOADUI();
-                loadui.executeOnExecutor(threadPoolExecutor);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
 
             }
+        }else {
+
+            noDataLayout.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
 
         }
+
     }
     //load searched videos
 //    private class AsynLoadSearchVideos extends AsyncTask<Void, Void, Void> {

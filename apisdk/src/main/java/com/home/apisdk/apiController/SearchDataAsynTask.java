@@ -151,7 +151,12 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
                             Search_Data_otput content = new Search_Data_otput();
 
                             if ((jsonChildNode.has("genre")) && jsonChildNode.optString("genre").trim() != null && !jsonChildNode.optString("genre").trim().isEmpty() && !jsonChildNode.optString("genre").trim().equals("null") && !jsonChildNode.optString("genre").trim().matches("")) {
-                                content.setGenre(jsonChildNode.optString("genre"));
+                               String movieTypeStr = jsonChildNode.optString("genre");
+                                movieTypeStr = movieTypeStr.replaceAll("\\[", "");
+                                movieTypeStr = movieTypeStr.replaceAll("\\]","");
+                                movieTypeStr = movieTypeStr.replaceAll(","," , ");
+                                movieTypeStr = movieTypeStr.replaceAll("\"", "");
+                                content.setGenre(movieTypeStr);
 
                             }
                             if ((jsonChildNode.has("name")) && jsonChildNode.optString("name").trim() != null && !jsonChildNode.optString("name").trim().isEmpty() && !jsonChildNode.optString("name").trim().equals("null") && !jsonChildNode.optString("name").trim().matches("")) {
