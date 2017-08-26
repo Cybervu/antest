@@ -35,10 +35,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TRY_AGAIN;
+import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
@@ -50,9 +52,10 @@ public class PurchaseHistoryActivity extends AppCompatActivity implements
     Toolbar mActionBarToolbar;
     RecyclerView recyclerView;
     ArrayList<PurchaseHistoryModel> purchaseData = new ArrayList<PurchaseHistoryModel>();
-    RelativeLayout noInternet;
     LinearLayout primary_layout;
     Button tryAgainButton;
+    RelativeLayout noInternet;
+    RelativeLayout noData;
     boolean isNetwork;
     ProgressBarHandler pDialog;
     int corePoolSize = 60;
@@ -65,7 +68,7 @@ LanguagePreference languagePreference;
     private String Currency_symbol = "";
     private String currency_code  = "";
     String user_id = "";
-    TextView purchaseHistoryTitleTextView,no_internet_text;
+    TextView purchaseHistoryTitleTextView,no_internet_text,noDataTextView;
     PreferenceManager preferenceManager;
     PurchaseHistoryModel purchaseHistoryModel;
     ArrayList<String> Id_Purchase_History;
@@ -79,6 +82,8 @@ LanguagePreference languagePreference;
         languagePreference = LanguagePreference.getLanguagePreference(PurchaseHistoryActivity.this);
         noInternet = (RelativeLayout)findViewById(R.id.noInternet);
         primary_layout = (LinearLayout)findViewById(R.id.primary_layout);
+        noData = (RelativeLayout)findViewById(R.id.noData);
+        noDataTextView = (TextView)  findViewById(R.id.noDataTextView);
         tryAgainButton = (Button)  findViewById(R.id.tryAgainButton);
         no_internet_text = (TextView)  findViewById(R.id.no_internet_text);
         recyclerView = (RecyclerView) findViewById(R.id.purchase_history_recyclerview);
@@ -181,11 +186,40 @@ LanguagePreference languagePreference;
 
     @Override
     public void onPurchaseHistoryPostExecuteCompleted(ArrayList<PurchaseHistoryOutputModel> purchaseHistoryOutputModel, int status) {
+        try{
+            if(pDialog.isShowing())
+                pDialog.hide();
+        }
+        catch(IllegalArgumentException ex)
+        {
+        }
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
-        PurchaseHistoryAdapter purchaseHistoryAdapter = new PurchaseHistoryAdapter(PurchaseHistoryActivity.this,purchaseData);
-        recyclerView.setAdapter(purchaseHistoryAdapter);
+        if (status>0){
+            if (status==200){
+                if(purchaseData.size()>0){
+
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                recyclerView.setLayoutManager(layoutManager);
+                PurchaseHistoryAdapter purchaseHistoryAdapter = new PurchaseHistoryAdapter(PurchaseHistoryActivity.this,purchaseData);
+                recyclerView.setAdapter(purchaseHistoryAdapter);
+
+            }else {
+                    primary_layout.setVisibility(View.GONE);
+
+                    noData.setVisibility(View.VISIBLE);
+                    noDataTextView.setText(languagePreference.getTextofLanguage(NO,DEFAULT_NO) + "  "+ languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY) );
+
+
+                }
+            }
+
+        }else {
+            primary_layout.setVisibility(View.GONE);
+            noInternet.setVisibility(View.VISIBLE);
+
+        }
+
+
     }
 
     //Asyntask for getDetails of the csat and crew members.

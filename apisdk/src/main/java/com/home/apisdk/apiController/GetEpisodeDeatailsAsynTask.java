@@ -564,10 +564,10 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
 
                             }
 
-                            /*if ((jsonChildNode.has("content_types_id")) && jsonChildNode.optString("content_types_id").trim() != null && !jsonChildNode.optString("content_types_id").trim().isEmpty() && !jsonChildNode.optString("episode_title").trim().equals("null") && !jsonChildNode.optString("content_types_id").trim().matches("")) {
+                            if ((jsonChildNode.has("content_types_id")) && jsonChildNode.optString("content_types_id").trim() != null && !jsonChildNode.optString("content_types_id").trim().isEmpty() && !jsonChildNode.optString("episode_title").trim().equals("null") && !jsonChildNode.optString("content_types_id").trim().matches("")) {
                                 // String episode_title=jsonChildNode.optString("episode_title");
                                 episode.setContent_types_id(jsonChildNode.optInt("content_types_id"));
-                            }*/
+                            }
                             if ((jsonChildNode.has("movie_stream_uniq_id")) && jsonChildNode.optString("movie_stream_uniq_id").trim() != null && !jsonChildNode.optString("movie_stream_uniq_id").trim().isEmpty() && !jsonChildNode.optString("movie_stream_uniq_id").trim().equals("null") && !jsonChildNode.optString("movie_stream_uniq_id").trim().matches("")) {
                                 // String episode_title=jsonChildNode.optString("episode_title");
                                 episode.setMovie_stream_uniq_id(jsonChildNode.optString("movie_stream_uniq_id"));

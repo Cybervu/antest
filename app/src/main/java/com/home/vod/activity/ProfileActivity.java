@@ -144,8 +144,8 @@ public class ProfileActivity extends AppCompatActivity implements
 
         country_spinner = (Spinner) findViewById(R.id.countrySpinner);
         language_spinner = (Spinner) findViewById(R.id.languageSpinner);
-
-
+        country_spinner.setVisibility(View.GONE);
+        language_spinner.setVisibility(View.GONE);
         Typeface editProfileNameEditTextTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         editProfileNameEditText.setTypeface(editProfileNameEditTextTypeface);
 

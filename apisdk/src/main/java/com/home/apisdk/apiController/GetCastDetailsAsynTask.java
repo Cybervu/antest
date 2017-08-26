@@ -155,7 +155,7 @@ public class GetCastDetailsAsynTask extends AsyncTask<GetCastDetailsInput, Void,
                     getCastDetailsOutputModel.setCastImage(myJson.getString("cast_image"));
                 }
                 JSONArray jsonMainNode = myJson.getJSONArray("movieList");
-
+                castDetailsArrayList = new ArrayList<>();
                 int lengthJsonArr = jsonMainNode.length();
                 for (int i = 0; i < lengthJsonArr; i++) {
                     JSONObject jsonChildNode;
@@ -202,10 +202,11 @@ public class GetCastDetailsAsynTask extends AsyncTask<GetCastDetailsInput, Void,
                         }
                         castDetailsArrayList.add(castDetails);
                     } catch (Exception e) {
-                        status = 0;
+                        /*status = 0;
                         totalItems = 0;
-                        message = "";
+                        message = "";*/
                     }
+
                 }
 
                 getCastDetailsOutputModel.setCastdetails(castDetailsArrayList);

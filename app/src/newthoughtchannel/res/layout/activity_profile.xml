@@ -90,7 +90,6 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/languageSpinner"
                         android:layout_marginTop="15dp"
-
                         android:popupBackground="#ffffff"
                         android:spinnerMode="dropdown"
                         android:theme="@style/ThemeOverlay.AppCompat.Light" />

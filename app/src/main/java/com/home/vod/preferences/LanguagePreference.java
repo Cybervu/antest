@@ -16,6 +16,8 @@ public class LanguagePreference {
     /**
      *  Language Constant default Key
      */
+    public static String DEFAULT_TERMS = "terms";
+    public static String DEFAULT_AGREE_TERMS = "By Clicking on Register,I agree to";
     public static final String DEFAULT_TO_LOGIN = "to login.";
     public static final String TO_LOGIN = "TO_LOGIN";
     public static final String DEFAULT_CLICK_HERE = "Click here";

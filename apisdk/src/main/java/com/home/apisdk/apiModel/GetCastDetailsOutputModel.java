@@ -8,9 +8,9 @@ import java.util.ArrayList;
 public class GetCastDetailsOutputModel {
 
 
-    String name;
-    String summary;
-    String castImage;
+    String name="";
+    String summary="";
+    String castImage="";
     ArrayList<CastDetails> castdetails = new ArrayList<>();
 
 
@@ -52,11 +52,11 @@ public class GetCastDetailsOutputModel {
 
 
     public class CastDetails{
-        String genre;
-        String name;
-        String posterUrl;
-        String permalink;
-        String contentTypesId;
+        String genre="";
+        String name="";
+        String posterUrl="";
+        String permalink="";
+        String contentTypesId="";
         int isConverted;
         int isAdvance;
         int isPPV;
