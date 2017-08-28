@@ -1,5 +1,6 @@
 package com.home.vod.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +15,8 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
@@ -638,4 +641,56 @@ public class Util {
          languagePreference.setLanguageSharedPrefernce( SELECTED_LANGUAGE_CODE, default_Language);
 
    }
+
+
+    public static void getDPI(Context _context) {
+
+        int density = _context.getResources().getDisplayMetrics().densityDpi;
+        float density1 = _context.getResources().getDisplayMetrics().density;
+
+        Activity act = (Activity) _context;
+        Display display = act.getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float dpHeight = outMetrics.heightPixels / density1;
+        float dpWidth = outMetrics.widthPixels / density1;
+        Log.d("Login", "height-" + dpHeight + ",Width:-" + dpWidth);
+        switch (density) {
+            case DisplayMetrics.DENSITY_LOW: {
+                Log.d("Login", "LDPI height-" + dpHeight + ",Width:-" + dpWidth);
+            }
+            break;
+            case DisplayMetrics.DENSITY_MEDIUM: {
+                Log.d("Login", "MDPI height-" + dpHeight + ",Width:-" + dpWidth);
+
+            }
+            break;
+            case DisplayMetrics.DENSITY_HIGH: {
+                Log.d("Login", "HDPI height-" + dpHeight + ",Width:-" + dpWidth);
+
+            }
+            break;
+            case DisplayMetrics.DENSITY_XHIGH: {
+                Log.d("Login", "XHDPI height-" + dpHeight + ",Width:-" + dpWidth);
+
+            }
+            break;
+            case DisplayMetrics.DENSITY_XXHIGH: {
+                Log.d("Login", "XXHDPI height-" + dpHeight + ",Width:-" + dpWidth);
+
+            }
+            break;
+            case DisplayMetrics.DENSITY_XXXHIGH: {
+                Log.d("Login", "XXXHDPI height-" + dpHeight + ",Width:-" + dpWidth);
+
+            }
+            break;
+            case DisplayMetrics.DENSITY_TV: {
+                Log.d("Login", "TVDPI height-" + dpHeight + ",Width:-" + dpWidth);
+
+            }
+            break;
+        }
+    }
 }

@@ -61,6 +61,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
 import static com.home.apisdk.apiController.HeaderConstants.RATING;
 import static com.home.vod.preferences.LanguagePreference.*;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -76,7 +77,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         GetLanguageListAsynTask.GetLanguageListListener,
         GetGenreListAsynctask.GenreListListener,
         GetUserProfileAsynctask.Get_UserProfileListener,
-        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener,SDKInitializer.SDKInitializerListner{
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, SDKInitializer.SDKInitializerListner {
 
     private String[] genreArrToSend;
     private String[] genreValueArrayToSend;
@@ -84,23 +85,23 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private RelativeLayout geoBlockedLayout;
     private String default_Language = "";
     private ArrayList<LanguageModel> languageModels = new ArrayList<>();
-    private TextView noInternetTextView,geoTextView;
+    private TextView noInternetTextView, geoTextView;
     private ArrayList<String> genreArrayList = new ArrayList<String>();
     private ArrayList<String> genreValueArrayList = new ArrayList<String>();
-    private String user_Id = "", email_Id = "",isSubscribed = "0";
+    private String user_Id = "", email_Id = "", isSubscribed = "0";
 
     //============================Added For FCM===========================//
     Timer GoogleIdGeneraterTimer;
 
     /*Asynctask on background thread*/
     String ipAddressStr;
-    private Executor threadPoolExecutor ;
+    private Executor threadPoolExecutor;
     private PreferenceManager preferenceManager;
     private LanguagePreference languagePreference;
 
 
-    private void _init(){
-
+    private void _init() {
+        Util.getDPI(this);
         Util.printMD5Key(this);
         threadPoolExecutor = new AppThreadPoolExecuter().getThreadPoolExecutor();
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -112,14 +113,14 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
         geoTextView = (TextView) findViewById(R.id.geoBlockedTextView);
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
-        geoTextView.setText(languagePreference.getTextofLanguage(GEO_BLOCKED_ALERT,DEFAULT_GEO_BLOCKED_ALERT));
+        geoTextView.setText(languagePreference.getTextofLanguage(GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT));
 
         noInternetLayout.setVisibility(View.GONE);
         geoBlockedLayout.setVisibility(View.GONE);
 
-        if(NetworkStatus.getInstance().isConnected(this)){
-            SDKInitializer.getInstance().init(this,this,authTokenStr);
-        }else{
+        if (NetworkStatus.getInstance().isConnected(this)) {
+            SDKInitializer.getInstance().init(this, this, authTokenStr);
+        } else {
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
         }
@@ -143,7 +144,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         // TODO Auto-generated method stub
         super.onPause();
-        LogUtil.showLog("BKS","packagenamesplash==="+ SDKInitializer.user_Package_Name_At_Api);
+        LogUtil.showLog("BKS", "packagenamesplash===" + SDKInitializer.user_Package_Name_At_Api);
         finish();
         overridePendingTransition(0, 0);
     }
@@ -195,7 +196,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 preferenceManager.setCountryCodeToPref(checkGeoBlockOutputModel.getCountrycode().trim());
                 SubscriptionPlanInputModel planListInput = new SubscriptionPlanInputModel();
                 planListInput.setAuthToken(authTokenStr);
-                planListInput.setLang(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+                planListInput.setLang(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                 GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, SplashScreen.this, SplashScreen.this);
                 asynGetPlanid.executeOnExecutor(threadPoolExecutor);
 
@@ -238,14 +239,14 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message) {
 
-        languagePreference.setLanguageSharedPrefernce(HAS_FAVORITE,"" + isRegistrationEnabledOutputModel.getHas_favourite());
-        languagePreference.setLanguageSharedPrefernce(RATING,"" + isRegistrationEnabledOutputModel.getRating());
+        languagePreference.setLanguageSharedPrefernce(HAS_FAVORITE, "" + isRegistrationEnabledOutputModel.getHas_favourite());
+        languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
 
         languagePreference.setLanguageSharedPrefernce(IS_RESTRICT_DEVICE, isRegistrationEnabledOutputModel.getIsRestrictDevice());
         languagePreference.setLanguageSharedPrefernce(IS_ONE_STEP_REGISTRATION, "" + isRegistrationEnabledOutputModel.getSignup_step());
         languagePreference.setLanguageSharedPrefernce(IS_MYLIBRARY, "" + isRegistrationEnabledOutputModel.getIsMylibrary());
         preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
-        Log.v("MUVI","Splash setLoginFeatureToPref ::"+isRegistrationEnabledOutputModel.getIs_login());
+        Log.v("MUVI", "Splash setLoginFeatureToPref ::" + isRegistrationEnabledOutputModel.getIs_login());
 
         LanguageListInputModel languageListInputModel = new LanguageListInputModel();
         languageListInputModel.setAuthToken(authTokenStr);
@@ -309,7 +310,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         if (code > 0) {
             int lengthJsonArr = genreListOutput.size();
             if (lengthJsonArr > 0) {
-                genreArrayList.add(0, languagePreference.getTextofLanguage(FILTER_BY,DEFAULT_FILTER_BY));
+                genreArrayList.add(0, languagePreference.getTextofLanguage(FILTER_BY, DEFAULT_FILTER_BY));
                 genreValueArrayList.add(0, "");
 
             }
@@ -443,7 +444,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
 
             try {
-                Util.parseLanguage(languagePreference,jsonResponse,default_Language);
+                Util.parseLanguage(languagePreference, jsonResponse, default_Language);
             } catch (JSONException e) {
                 e.printStackTrace();
                 noInternetLayout.setVisibility(View.GONE);
@@ -462,10 +463,10 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     public void Call_One_Step_Procedure() {
 
-        if (!languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN,DEFAULT_GOOGLE_FCM_TOKEN).equals("0")) {
+        if (!languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN).equals("0")) {
             LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
 
-           jumpToNextScreen();
+            jumpToNextScreen();
 
         } else {
             GoogleIdGeneraterTimer = new Timer();
@@ -478,7 +479,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                         GoogleIdGeneraterTimer.cancel();
                         GoogleIdGeneraterTimer.purge();
 
-                         LogUtil.showLog("MUVI", "google_id=" + languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
+                        LogUtil.showLog("MUVI", "google_id=" + languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
                         jumpToNextScreen();
 
                     }
@@ -493,7 +494,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     /**
      * Jump to next screen by checking condition.
      */
-    private void jumpToNextScreen(){
+    private void jumpToNextScreen() {
         Intent mIntent;
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
@@ -539,8 +540,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     public void onPostExecuteListner() {
 
 
-
-        if(NetworkStatus.getInstance().isConnected(this)){
+        if (NetworkStatus.getInstance().isConnected(this)) {
             if (preferenceManager != null) {
                 String countryCodeStr = preferenceManager.getCountryCodeFromPref();
 
@@ -556,7 +556,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
             }
-        }else{
+        } else {
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
         }
@@ -566,7 +566,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     protected void onStop() {
         super.onStop();
-        LogUtil.showLog("BKS","packagenamesplash==="+ SDKInitializer.user_Package_Name_At_Api);
+        LogUtil.showLog("BKS", "packagenamesplash===" + SDKInitializer.user_Package_Name_At_Api);
 
     }
 

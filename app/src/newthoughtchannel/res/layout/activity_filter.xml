@@ -3,23 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/appBackgroundColor"
-    >
+    android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/demoListView"
-            android:gravity = "center"
-            android:layout_below="@+id/toolbar"
-            android:layout_marginBottom="70dp"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/demoListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginBottom="@dimen/filter_marginBottom"
+        android:gravity="center"
 
-            />
-
+        />
 
 
     <RelativeLayout
@@ -27,27 +25,29 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true">
+
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/resetButton"
-            android:gravity="center"
-            android:background="@color/button_background"
-            android:textColor="@color/buttonTextColor"
-            android:text="Reset"/>
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/applyButton"
-            android:layout_toRightOf="@+id/resetButton"
-            android:layout_marginLeft="50dp"
             android:background="@color/button_background"
-            android:textColor="@color/buttonTextColor"
-            android:text="Apply"/>
+            android:gravity="center"
+            android:text="Reset"
+            android:textColor="@color/buttonTextColor" />
+
+        <Button
+            android:id="@+id/applyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/filter_marginLeft"
+            android:layout_toRightOf="@+id/resetButton"
+            android:background="@color/button_background"
+            android:text="Apply"
+            android:textColor="@color/buttonTextColor" />
     </RelativeLayout>
 
 
-    </RelativeLayout>
+</RelativeLayout>
 
 
 

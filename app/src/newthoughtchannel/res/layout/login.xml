@@ -14,8 +14,8 @@
 
     <ImageView
         android:id="@+id/registerImageView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/offlinebtn_width"
+        android:layout_height="@dimen/offlinebtn_height"
         android:layout_below="@+id/toolbar"
 
         android:layout_centerHorizontal="true"
@@ -34,20 +34,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp">
+            android:paddingLeft="@dimen/layout_padding_left"
+            android:paddingRight="@dimen/layout_padding_left">
 
 
             <Button
                 android:id="@+id/loginWithFacebookButton"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="20dp"
+                android:layout_height="@dimen/offlinebtn_height"
+                android:layout_marginTop="@dimen/payment_relative_margin"
                 android:background="@color/com_facebook_button_background_color"
                 android:stateListAnimator="@null"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="@dimen/activation_text_size"
                 android:visibility="visible"
 
                 />
@@ -58,22 +58,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginBottom="@dimen/login_button_margin"
+                android:layout_marginTop="@dimen/login_button_margin"
                 android:visibility="gone" />
 
             <Button
                 android:id="@+id/loginWith"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/offlinebtn_height"
                 android:layout_below="@+id/loginWithFacebookButton"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/payment_relative_margin"
                 android:background="@color/button_background"
                 android:stateListAnimator="@null"
                 android:text="login"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="@dimen/activation_text_size"
                 android:visibility="visible"
 
                 />

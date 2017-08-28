@@ -2,12 +2,12 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/listViewLayout"
-    android:layout_width="102dp"
+    android:layout_width="@dimen/listViewLayout_height"
     android:layout_height="wrap_content"
     android:background="@drawable/grid_color_selector"
     android:clickable="false"
     android:focusable="false"
-    android:padding="4dp">
+    android:padding="@dimen/videoCensorRatingTextView_padding">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -50,7 +50,7 @@
             android:focusableInTouchMode="false"
             android:gravity="left"
             android:maxLines="1"
-            android:padding="2dp"
+            android:padding="@dimen/itemTitle_padding"
             android:text=""
             android:textColor="@color/contentTitleColor"
             android:textSize="@dimen/itemtitle1_text_size"

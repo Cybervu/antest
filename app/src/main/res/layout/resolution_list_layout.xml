@@ -4,21 +4,21 @@
     android:layout_height="wrap_content"
     android:background="#fff"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:padding="@dimen/Login_drawing_padding">
 
     <ImageView
         android:id="@+id/selected_resolution"
         android:layout_width="@dimen/resolution_list_img_width"
         android:layout_height="@dimen/resolution_list_img_height"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="@dimen/ppv_margin"
         android:src="@drawable/selected_resolution" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginLeft="13dp"
+        android:layout_height="@dimen/resolution_list_img_height"
+        android:layout_marginLeft="@dimen/resolution_list_margin"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:text="wdeded"

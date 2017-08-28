@@ -19,7 +19,7 @@
         android:gravity="center"
         android:textSize="@dimen/review_text_size"
         android:textColor="@color/pageTitleColor"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/ppv_margin"
         android:text="Click here"/>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
         android:layout_below="@+id/clickHereToLogin"
         android:orientation="vertical"
         android:visibility="visible"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/login_btn_margin_top"
         android:id="@+id/submitRatingLayout">
 
         <TextView
@@ -38,14 +38,14 @@
             android:padding="6dp"
             android:text="Submit Your Rating"
             android:textStyle="bold"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="@dimen/ppv_margin"
 
             android:textColor="@color/textColor"/>
         <RatingBar
             android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/ppv_margin"
             android:layout_below="@+id/sectionTitle"
             android:layout_alignLeft="@+id/sectionTitle"
             style="@style/customRatingBar"
@@ -58,14 +58,14 @@
             android:hint="Add Your Review \n (Optional)"
             android:inputType="textMultiLine"
             android:imeOptions="actionDone"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
+            android:paddingBottom="@dimen/Login_drawing_padding"
+            android:paddingTop="@dimen/Login_drawing_padding"
             android:layout_alignLeft="@+id/sectionTitle"
-            android:layout_marginBottom="25dp"
-            android:layout_marginTop="28dp"
-            android:paddingLeft="6dp"
-            android:paddingRight="6dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginBottom="@dimen/payment_margin_btn_top"
+            android:layout_marginTop="@dimen/review_edit_text_margin"
+            android:paddingLeft="@dimen/payment_spinner_padding"
+            android:paddingRight="@dimen/payment_spinner_padding"
+            android:layout_marginRight="@dimen/ppv_margin"
             android:layout_below="@+id/ratingBar"
             android:textColor="@color/textColor"
             android:textColorHint="@color/hint_color"
@@ -76,10 +76,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="@dimen/ppv_margin"
             android:layout_below="@+id/reviewEditText"
             android:background="@drawable/view_more_button_background"
-            android:padding="6dp"
+            android:padding="@dimen/payment_spinner_padding"
             android:textAllCaps="false"
             android:text="Submit "
             android:textColor="@color/buttonTextColor"
@@ -92,7 +92,7 @@
             android:layout_height="@dimen/border_line_height"
             android:background="@color/com_facebook_likeboxcountview_border_color"
             android:layout_below="@+id/submitReviewButton"
-            android:layout_margin="20dp"
+            android:layout_margin="@dimen/payment_relative_margin"
             />
     </RelativeLayout>
 
@@ -102,7 +102,7 @@
         android:layout_height="wrap_content"
 
         android:layout_below="@id/submitRatingLayout"
-        android:layout_marginTop="14dp">
+        android:layout_marginTop="@dimen/payment_textview_showname_margin">
         <GridView
             android:id="@+id/reviewsList"
             android:layout_width="match_parent"
@@ -134,7 +134,7 @@
         android:background="@color/appBackgroundColor"
         android:visibility="gone"
         android:layout_below="@+id/toolbar"
-        android:padding="8dp">
+        android:padding="@dimen/manage_device_padding">
 
         <TextView
             android:layout_width="match_parent"
@@ -157,7 +157,7 @@
         android:background="@color/appBackgroundColor"
         android:visibility="gone"
         android:layout_below="@+id/toolbar"
-        android:padding="8dp">
+        android:padding="@dimen/manage_device_padding">
 
         <TextView
             android:layout_width="match_parent"

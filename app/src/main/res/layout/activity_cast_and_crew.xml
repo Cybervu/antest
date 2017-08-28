@@ -23,8 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/toolbar"
-            android:layout_margin="10dp"
-            android:padding="10dp"
+            android:layout_margin="@dimen/ppv_margin"
+            android:padding="@dimen/Login_drawing_padding"
             android:textColor="@color/castCrewTitleTextColor"
             android:textSize="@dimen/castcrew_text"
             android:textStyle="bold" />
@@ -44,7 +44,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:background="@color/appBackgroundColor"
-        android:padding="8dp"
+        android:padding="@dimen/main_padding"
         android:visibility="gone">
 
         <TextView
@@ -68,7 +68,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:background="@color/appBackgroundColor"
-        android:padding="8dp"
+        android:padding="@dimen/main_padding"
         android:visibility="gone">
 
         <TextView

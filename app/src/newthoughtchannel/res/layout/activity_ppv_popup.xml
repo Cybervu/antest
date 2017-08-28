@@ -8,19 +8,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/ppv_margin"
         android:gravity="center"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp">
+            android:paddingLeft="@dimen/Login_drawing_padding">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
+                android:layout_marginLeft="@dimen/payment_spinner_padding"
                 android:text="Select Your Option"
                 android:textColor="@color/pageTitleColor"
                 android:textSize="@dimen/selectopt_text_size"
@@ -31,9 +31,9 @@
             android:id="@+id/completeSeasonRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginLeft="@dimen/forgotlayout_margin"
+            android:layout_marginRight="@dimen/forgotlayout_margin"
+            android:layout_marginTop="@dimen/forgotlayout_margin">
 
             <RadioButton
                 android:id="@+id/completeRadioButton"
@@ -61,9 +61,9 @@
             android:id="@+id/seasonRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginLeft="@dimen/forgotlayout_margin"
+            android:layout_marginRight="@dimen/forgotlayout_margin"
+            android:layout_marginTop="@dimen/forgotlayout_margin">
 
             <RadioButton
                 android:id="@+id/seasonRadioButton"
@@ -91,9 +91,9 @@
             android:id="@+id/episodeRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginLeft="@dimen/forgotlayout_margin"
+            android:layout_marginRight="@dimen/forgotlayout_margin"
+            android:layout_marginTop="@dimen/forgotlayout_margin">
 
             <RadioButton
                 android:id="@+id/episodeRadioButton"
@@ -120,11 +120,11 @@
         <Button
             android:id="@+id/payNowButton"
             android:layout_width="@dimen/paybtn_width"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/login_butn_height"
             android:layout_gravity="right"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="@dimen/relative_margin_top"
+            android:layout_marginRight="@dimen/relative_margin_top"
+            android:layout_marginTop="@dimen/forgotlayout_margin"
             android:background="@drawable/button_radious"
             android:gravity="center"
             android:stateListAnimator="@null"
@@ -135,7 +135,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="@dimen/pop_up_view_height"
             android:background="@color/alreadyHaveALoginButtonTextColor" />
     </LinearLayout>
 </LinearLayout>

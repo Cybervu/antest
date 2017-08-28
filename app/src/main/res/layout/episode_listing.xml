@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/episodesectiontitle_height"
         android:layout_below="@+id/toolbar"
-        android:padding="6dp"
+        android:padding="@dimen/payment_spinner_padding"
         android:textColor="@color/pageTitleColor"
         android:textSize="@dimen/itemtitle_text_size"
         android:textStyle="bold" />
@@ -56,7 +56,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:background="@color/appBackgroundColor"
-        android:padding="8dp"
+        android:padding="@dimen/manage_device_padding"
         android:visibility="gone">
 
         <TextView
@@ -80,7 +80,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:background="@color/appBackgroundColor"
-        android:padding="8dp"
+        android:padding="@dimen/manage_device_padding"
         android:visibility="gone">
 
         <TextView

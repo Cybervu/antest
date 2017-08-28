@@ -9,10 +9,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
         android:layout_centerInParent="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginBottom="@dimen/my_download_margin"
+        android:layout_marginLeft="@dimen/ppv_margin"
+        android:layout_marginRight="@dimen/ppv_margin"
+        android:layout_marginTop="@dimen/my_download_margin"
         android:background="@color/transparent"
         android:orientation="horizontal">
 
@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="@dimen/main_padding">
 
             <TextView
                 android:id="@+id/userNameTextView"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/sectionTitle"
                 android:layout_below="@+id/sectionTitle"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/ppv_margin"
                 android:clickable="false"
                 android:focusable="false"
                 android:visibility="visible" />
@@ -53,7 +53,7 @@
                 android:id="@+id/userreviewTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/textColor_margin"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
@@ -64,7 +64,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/border_line_height"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/ppv_margin"
                 android:background="@color/com_facebook_likeboxcountview_border_color" />
         </LinearLayout>
 

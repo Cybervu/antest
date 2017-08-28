@@ -52,7 +52,7 @@
     <color name="movieTitleColor">#fff</color>
     <color name="videomovieTitleColor">#3f444a</color>
     <color name="resumePopupColor">#fff</color>
-    <color name="dividerColor">#eee</color>
+    <color name="dividerColor">#264177</color>
     <color name="playerColor">#000000</color>
     <color name="playPauseColor">#00000000</color>
     <color name="waterMarkTextColor">#80ffffff</color>

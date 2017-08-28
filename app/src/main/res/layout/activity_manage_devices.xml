@@ -13,7 +13,7 @@
         android:id="@+id/manage_device_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:padding="@dimen/manage_device_padding"
         android:text="Your Devices"
         android:textColor="@color/pageTitleColor"
         android:textSize="@dimen/videotitle_text_size" />
@@ -29,8 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:divider="#eee"
-            android:dividerHeight="1dp"
-            android:padding="10dp">
+            android:dividerHeight="@dimen/divider_height"
+            android:padding="@dimen/Login_drawing_padding">
 
         </ListView>
 

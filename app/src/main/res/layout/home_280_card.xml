@@ -7,7 +7,7 @@
     android:background="@drawable/grid_color_selector"
     android:clickable="false"
     android:focusable="false"
-    android:padding="4dp">
+    android:padding="@dimen/videoCensorRatingTextView_padding">
 
     <RelativeLayout
         android:layout_width="@dimen/home_layout_width"
@@ -54,7 +54,7 @@
             android:focusableInTouchMode="false"
             android:gravity="left"
             android:maxLines="1"
-            android:padding="2dp"
+            android:padding="@dimen/loginImageViewMarging_top_padding"
             android:text=""
             android:textColor="@color/contentTitleColor"
             android:textSize="@dimen/itemtitle1_text_size"

@@ -11,12 +11,12 @@
         android:id="@+id/popupLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="@dimen/textColor_margin"
+        android:layout_marginRight="@dimen/textColor_margin"
         android:background="@drawable/resume_popup_radious"
 
         android:orientation="vertical"
-        android:padding="7dp">
+        android:padding="@dimen/popupLayout_padding">
 
         <TextView
             android:id="@+id/resumeTitleTextView"
@@ -31,15 +31,15 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_margin="8dp"
+            android:layout_height="@dimen/voucher_pop_up_height"
+            android:layout_margin="@dimen/textColor_margin"
             android:background="@color/dividerColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginRight="@dimen/textColor_margin"
+            android:layout_marginTop="@dimen/textColor_margin"
             android:gravity="right"
             android:orientation="horizontal">
 
@@ -47,9 +47,9 @@
                 android:id="@+id/yesButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="@dimen/videoStoryTextView_margin"
                 android:background="@drawable/play_button_radious"
-                android:padding="6dp"
+                android:padding="@dimen/payment_spinner_padding"
                 android:stateListAnimator="@null"
                 android:textAllCaps="false"
                 android:textColor="@color/buttonTextColor"
@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/cancel_button_radious"
-                android:padding="6dp"
+                android:padding="@dimen/payment_spinner_padding"
                 android:stateListAnimator="@null"
                 android:textAllCaps="false"
                 android:textColor="@color/cancel_button_text_color"

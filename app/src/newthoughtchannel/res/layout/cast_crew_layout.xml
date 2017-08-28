@@ -10,11 +10,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
         android:layout_centerInParent="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginLeft="@dimen/ppv_margin"
+        android:layout_marginRight="@dimen/ppv_margin"
+        android:layout_marginTop="@dimen/my_download_margin"
         android:background="@color/episodeBackgroundColor"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="@dimen/my_download_margin"
         android:orientation="horizontal"
         >
 
@@ -32,7 +32,7 @@
             android:gravity="center_vertical"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="@dimen/manage_device_padding">
 
             <TextView
                 android:id="@+id/castNameTextView"
@@ -48,7 +48,7 @@
                 android:id="@+id/castDescriptionTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/textColor_margin"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:gravity="center_vertical"

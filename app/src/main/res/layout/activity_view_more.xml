@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:padding="6dp"
+        android:padding="@dimen/payment_spinner_padding"
         android:textColor="@color/pageTitleColor"
         android:textSize="@dimen/itemtitle_text_size"
         android:textStyle="normal" />
@@ -27,12 +27,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/sectionTitle"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="6dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:layout_marginTop="6dp"
-        android:horizontalSpacing="6dp"
-        android:verticalSpacing="6dp"
+        android:layout_marginBottom="@dimen/pre_order_button_margin"
+        android:layout_marginLeft="@dimen/pre_order_button_margin"
+        android:layout_marginRight="@dimen/pre_order_button_margin"
+        android:layout_marginTop="@dimen/pre_order_button_margin"
+        android:horizontalSpacing="@dimen/pre_order_button_margin"
+        android:verticalSpacing="@dimen/pre_order_button_margin"
 
         />
     <!--<com.twotoasters.jazzylistview.JazzyGridView
@@ -69,7 +69,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:background="@color/appBackgroundColor"
-        android:padding="8dp"
+        android:padding="@dimen/main_padding"
         android:visibility="gone">
 
         <TextView
@@ -93,7 +93,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:background="@color/appBackgroundColor"
-        android:padding="8dp"
+        android:padding="@dimen/main_padding"
         android:visibility="gone">
 
         <TextView
@@ -105,7 +105,7 @@
             android:maxLines="4"
             android:singleLine="false"
             android:textColor="@color/noInternetColor"
-            android:textSize="36sp"
+            android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
 

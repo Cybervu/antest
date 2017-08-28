@@ -26,11 +26,13 @@
     <dimen name="email_text_size">16sp</dimen>
     <dimen name="forgot_text_size">16sp</dimen>
     <dimen name="pass_text_size">16sp</dimen>
+    <dimen name="purchasevalue_text_size">45sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>
-    <dimen name="submit_text_size">12sp</dimen>
-    <dimen name="listitemlayout_height">200dp</dimen>
+    <dimen name="submit_text_size">16sp</dimen>
+    <dimen name="listitemlayout_height">330dp</dimen>
     <dimen name="slider_height">210dp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
+    <dimen name="banner_image_height">300dp</dimen>
     <dimen name="submit_height_size">45sp</dimen>
     <dimen name="left_padding">10dp</dimen>
     <dimen name="right_padding">10dp</dimen>
@@ -59,7 +61,7 @@
     <dimen name="layout_padding_right">25dp</dimen>
     <dimen name="register_edittext_padding">17dp</dimen>
     <dimen name="register_margin_top">40dp</dimen>
-    <dimen name="login_butn_width">80dp</dimen>
+    <dimen name="login_butn_width">100dp</dimen>
     <dimen name="login_butn_height">40dp</dimen>
     <dimen name="fragment_text_size">20sp</dimen>
     <dimen name="cast_width_icon">80dp</dimen>

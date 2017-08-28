@@ -40,7 +40,7 @@
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="@dimen/left_padding"
                     android:layout_marginRight="@dimen/right_padding"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/ppv_margin"
                     android:gravity="center"
                     android:padding="@dimen/login_padding">
 
@@ -50,10 +50,10 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/editNameStr"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="12dp"
-                        android:drawablePadding="10dp"
-                        android:paddingBottom="17dp"
-                        android:paddingTop="17dp"
+                        android:layout_marginTop="@dimen/login_maring_top"
+                        android:drawablePadding="@dimen/Login_drawing_padding"
+                        android:paddingBottom="@dimen/login_padding_bottom"
+                        android:paddingTop="@dimen/login_padding_bottom"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
                         android:textSize="@dimen/email_text_size" />
@@ -64,11 +64,11 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/editEmailStr"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="12dp"
-                        android:drawablePadding="10dp"
+                        android:layout_marginTop="@dimen/login_maring_top"
+                        android:drawablePadding="@dimen/Login_drawing_padding"
                         android:inputType="textPassword"
-                        android:paddingBottom="17dp"
-                        android:paddingTop="17dp"
+                        android:paddingBottom="@dimen/login_padding_bottom"
+                        android:paddingTop="@dimen/login_padding_bottom"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
                         android:textSize="@dimen/pass_text_size"
@@ -83,7 +83,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/editPasswordStr"
-                        android:layout_marginTop="18dp"
+                        android:layout_marginTop="@dimen/relative_margin_top"
                         android:orientation="horizontal">
 
                         <TextView
@@ -121,20 +121,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/alreadyLoginLinearLayout"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="@dimen/login_linear_margin_top"
                         android:background="@drawable/fbbg"
                         android:clickable="true"
                         android:gravity="center_horizontal"
 
                         android:orientation="horizontal"
-                        android:padding="6dp">
+                        android:padding="@dimen/login_linear_padding">
 
                         <ImageView
                             android:id="@+id/fbIcon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginRight="15dp"
+                            android:layout_marginRight="@dimen/login_imageview_linear"
                             android:src="@drawable/fb_icon" />
 
                         <TextView
@@ -142,7 +142,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_margin="5dp"
+                            android:layout_margin="@dimen/linear_text_margin"
                             android:gravity="center"
                             android:text="@string/fb_login_text"
                             android:textColor="@color/fb_text_color"
@@ -170,8 +170,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="30dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="@dimen/login_facebook_margin"
+                        android:layout_marginTop="@dimen/login_facebook_margin"
                         android:visibility="gone" />
                     <!--  <Button
                           android:id="@+id/loginWithFacebookButton"
@@ -198,8 +198,8 @@
                         <TextView
                             android:id="@+id/loginNewUser"
                             android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="20dp"
+                            android:layout_height="@dimen/offlinebtn_height"
+                            android:layout_marginTop="@dimen/login_new_user_margin_top"
                             android:clickable="true"
                             android:gravity="center"
                             android:textColor="@color/login_new_user_text_color"
@@ -210,9 +210,9 @@
                         <TextView
                             android:id="@+id/signUpTextView"
                             android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginTop="20dp"
+                            android:layout_height="@dimen/offlinebtn_height"
+                            android:layout_marginLeft="@dimen/login_maring_top"
+                            android:layout_marginTop="@dimen/view_margin_top"
                             android:clickable="true"
                             android:gravity="center"
                             android:textColor="@color/sign_up_text_color"

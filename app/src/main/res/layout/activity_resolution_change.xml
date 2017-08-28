@@ -23,7 +23,7 @@
             android:background="@color/appBackgroundColor"
             android:divider="#A9A9A9"
             android:dividerHeight="0dip"
-            android:paddingBottom="20dp" />
+            android:paddingBottom="@dimen/transactionDownloadButton_padding" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="@dimen/ppv_margin"
         android:textColor="@color/pageTitleColor"
         android:textSize="@dimen/fragment_text_size"
         android:textStyle="normal" />
@@ -29,15 +29,15 @@
             android:layout_width="@dimen/fragmentimgview_width"
             android:layout_height="@dimen/fragmentimgview_height"
             android:layout_centerInParent="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/payment_relative_margin"
             android:src="@drawable/logo" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="@dimen/voucher_pop_up_height"
             android:layout_below="@id/imageView"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="@dimen/name_user_margin_bottom"
+            android:layout_marginTop="@dimen/payment_relative_margin"
             android:background="@color/textColor" />
 
 

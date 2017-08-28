@@ -16,7 +16,7 @@
         <RelativeLayout
             android:id="@+id/player_layout"
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:layout_height="@dimen/playerlayout_height">
 
             <LinearLayout
                 android:id="@+id/secondary_ll"
@@ -86,9 +86,9 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginBottom="103dp"
+                        android:layout_marginBottom="@dimen/video_player_margin_bottom"
                         android:orientation="vertical"
-                        android:paddingRight="10dp"
+                        android:paddingRight="@dimen/Login_drawing_padding"
                         android:visibility="visible">
 
                         <TextView
@@ -124,10 +124,10 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="@dimen/current_time_margin_bottom"
                         android:text="wwwwwwwwww"
                         android:textColor="@color/seekTimeTextColor"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/totaltme_text_size"
                         android:visibility="gone" />
 
                     <TextView
@@ -137,7 +137,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:layout_gravity="bottom|center_horizontal"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="@dimen/current_time_margin_bottom"
                         android:ellipsize="middle"
                         android:gravity="center"
                         android:shadowColor="@color/subTitleTextColor"
@@ -172,15 +172,15 @@
                 android:gravity="center_vertical"
                 android:minHeight="?attr/actionBarSize"
                 android:orientation="horizontal"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
+                android:paddingBottom="@dimen/name_user_margin_bottom"
+                android:paddingTop="@dimen/name_user_margin_bottom"
                 android:visibility="gone">
 
                 <ImageButton
                     android:id="@+id/back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="@dimen/profile_spinner_margin"
                     android:background="@drawable/ic_back" />
 
                 <LinearLayout
@@ -193,7 +193,7 @@
                         android:id="@+id/subtitle_change_btn"
                         android:layout_width="@dimen/subtitle_width"
                         android:layout_height="@dimen/subtitle_height"
-                        android:layout_marginRight="20dp"
+                        android:layout_marginRight="@dimen/payment_relative_margin"
                         android:src="@drawable/subtitle_image" />
 
                 </LinearLayout>
@@ -224,8 +224,8 @@
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="@dimen/my_download_margin"
+                    android:layout_marginTop="@dimen/my_download_margin"
                     android:background="@color/playPauseColor"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -236,7 +236,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/ppv_margin"
                         android:background="@color/playPauseColor"
                         android:src="@drawable/ic_media_pause"
                         android:visibility="visible" />
@@ -255,7 +255,7 @@
 
                     <SeekBar
                         android:id="@+id/progress"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/seekbar_progress_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="10"
@@ -266,17 +266,17 @@
                         android:id="@+id/total_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="@dimen/ppv_margin"
                         android:gravity="center"
                         android:text=""
                         android:textColor="@color/totalTimeTxtColor"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/totaltme_text_size" />
 
                     <ImageView
                         android:id="@+id/compress_expand"
                         android:layout_width="@dimen/compress_width"
                         android:layout_height="@dimen/compress_height"
-                        android:layout_marginRight="7dp"
+                        android:layout_marginRight="@dimen/compress_expand_margin"
                         android:gravity="center"
                         android:src="@drawable/ic_media_fullscreen_stretch"
                         android:visibility="visible" />
@@ -292,7 +292,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/bannerImageRelativeLayout"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/ppv_margin"
             android:background="@color/appBackgroundColor"
             android:orientation="vertical"
             android:visibility="visible">
@@ -317,12 +317,12 @@
                     android:id="@+id/videoTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="@dimen/ppv_margin"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text=""
                     android:textColor="@color/videomovieTitleColor"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/forgot_text_size"
                     android:textStyle="bold" />
 
 
@@ -331,7 +331,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textlinearlayout"
-
                     android:visibility="gone">
 
                     <ImageView
@@ -339,8 +338,8 @@
                         android:layout_width="@dimen/downloadimg_width"
                         android:layout_height="@dimen/downloadimg_height"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginRight="@dimen/payment_relative_margin"
+                        android:layout_marginTop="@dimen/textColor_margin"
                         android:src="@drawable/download_black"
                         android:visibility="visible" />
 
@@ -365,7 +364,7 @@
                         android:layout_alignEnd="@+id/progressBar"
                         android:layout_alignRight="@+id/progressBar"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="@dimen/ppv_margin"
                         android:gravity="center"
                         android:text="0%"
                         android:textColor="@color/dividerColor"
@@ -379,9 +378,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/videoTitle"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="@dimen/ppv_margin"
+                android:layout_marginRight="@dimen/ppv_margin"
+                android:layout_marginTop="@dimen/textColor_margin"
                 android:text=""
                 android:textColor="@color/videotextColor"
                 android:textSize="@dimen/vdiogenere_text_size" />
@@ -398,15 +397,15 @@
                 android:layout_below="@+id/videoGenreTextView"
 
                 android:orientation="horizontal"
-                android:paddingBottom="10dp">
+                android:paddingBottom="@dimen/Login_drawing_padding">
 
                 <TextView
                     android:id="@+id/videoDurationTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="@dimen/ppv_margin"
+                    android:layout_marginRight="@dimen/textColor_margin"
+                    android:layout_marginTop="@dimen/textColor_margin"
                     android:text=""
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/vdioduration_text_size"
@@ -416,11 +415,11 @@
                     android:id="@+id/videoCensorRatingTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="@dimen/videoCensorRatingTextView_margin"
+                    android:layout_marginTop="@dimen/textColor_margin"
                     android:background="@drawable/button_bg_orange"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
+                    android:paddingLeft="@dimen/videoCensorRatingTextView_padding"
+                    android:paddingRight="@dimen/videoCensorRatingTextView_padding"
                     android:text=""
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/vdioduration_text_size"
@@ -430,8 +429,8 @@
                     android:id="@+id/videoCensorRatingTextView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="@dimen/my_download_margin"
+                    android:layout_marginTop="@dimen/textColor_margin"
                     android:text=""
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/vdioduration_text_size"
@@ -442,8 +441,8 @@
                     android:id="@+id/videoReleaseDateTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="@dimen/ppv_margin"
+                    android:layout_marginTop="@dimen/textColor_margin"
                     android:text=""
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/vdioduration_text_size"
@@ -470,21 +469,21 @@
                 android:id="@+id/viewStoryLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="7dp">
+                android:layout_marginBottom="@dimen/my_download_margin"
+                android:layout_marginLeft="@dimen/ppv_margin"
+                android:layout_marginRight="@dimen/ppv_margin"
+                android:layout_marginTop="@dimen/compress_expand_margin">
 
                 <TextView
                     android:id="@+id/videoStoryTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="16dp"
+                    android:layout_marginRight="@dimen/login_btn_margin_top"
                     android:layout_toLeftOf="@+id/storyViewMoreButton"
                     android:ellipsize="end"
                     android:textColor="@color/videotextColor"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/cast_description_text" />
 
                 <Button
                     android:id="@id/storyViewMoreButton"
@@ -496,7 +495,7 @@
                     android:text="View More"
                     android:textAllCaps="false"
                     android:textColor="@color/button_background"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/cast_description_text"
                     android:visibility="gone" />
             </RelativeLayout>
 
@@ -505,8 +504,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="18dp"
+                android:layout_marginLeft="@dimen/ppv_margin"
+                android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
                 android:textColor="@color/castCrewTitleTextColor"
                 android:textSize="@dimen/vdiocast_text_size"
                 android:textStyle="bold" />

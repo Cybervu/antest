@@ -5,20 +5,20 @@
     android:layout_height="wrap_content"
     android:background="@drawable/button_radious"
     android:orientation="vertical"
-    android:paddingBottom="3dp">
+    android:paddingBottom="@dimen/voucher_pop_up_padding">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/appBackgroundColor"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="@dimen/Login_drawing_padding">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="@dimen/loginImageViewMarging_top"
             android:orientation="horizontal">
 
             <TextView
@@ -26,8 +26,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/logouttext_height"
                 android:gravity="center"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingLeft="@dimen/Login_drawing_padding"
+                android:paddingRight="@dimen/Login_drawing_padding"
                 android:text="You have crossed your maximum login limit.Please logout all the devices ."
                 android:textColor="@color/pageTitleColor"
                 android:textSize="@dimen/logout_text_size"
@@ -41,15 +41,15 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
-            android:paddingBottom="15dp"
-            android:paddingTop="5dp">
+            android:paddingBottom="@dimen/videoGenreTextView_padding"
+            android:paddingTop="@dimen/login_new_user_padding">
 
             <Button
                 android:id="@+id/ok"
                 android:layout_width="@dimen/okbtn_width"
                 android:layout_height="@dimen/okbtn_height"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="@dimen/textColor_margin"
+                android:layout_marginRight="@dimen/ppv_margin"
                 android:background="@drawable/button_radious"
                 android:text="Ok"
                 android:textAllCaps="false"
@@ -62,7 +62,7 @@
                 android:layout_width="@dimen/okbtn_width"
                 android:layout_height="@dimen/okbtn_height"
                 android:layout_gravity="right"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="@dimen/ppv_margin"
                 android:background="@drawable/button_radious"
                 android:text="Cancel"
                 android:textAllCaps="false"

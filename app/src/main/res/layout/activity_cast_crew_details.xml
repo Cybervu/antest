@@ -37,7 +37,7 @@
                     android:id="@+id/castNameTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/ppv_margin"
                     android:gravity="center"
                     android:text="tst data"
                     android:textColor="@color/videotextColor"
@@ -47,7 +47,7 @@
                     android:id="@+id/castDescriptionTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/ppv_margin"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:textColor="@color/videotextColor"
@@ -61,9 +61,9 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="right"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/ppv_margin"
                 android:background="@drawable/view_more_button_background"
-                android:minHeight="36dp"
+                android:minHeight="@dimen/btnMore_min_height"
                 android:stateListAnimator="@null"
                 android:textAllCaps="false"
                 android:textColor="@color/buttonTextColor"
@@ -73,10 +73,10 @@
                 android:id="@+id/borderLineView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/border_line_height"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/ppv_margin"
                 android:background="@color/border_color"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingLeft="@dimen/Login_drawing_padding"
+                android:paddingRight="@dimen/Login_drawing_padding"
 
                 />
 
@@ -85,10 +85,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginLeft="7dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="@dimen/compress_expand_margin"
+                android:layout_marginTop="@dimen/ppv_margin"
                 android:clipToPadding="false"
-                android:padding="10dp"
+                android:padding="@dimen/Login_drawing_padding"
 
                 />
 
