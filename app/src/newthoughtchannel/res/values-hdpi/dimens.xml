@@ -72,7 +72,7 @@
     <dimen name="btnmore_text_size">16sp</dimen>
     <dimen name="card_expiry_width">60dp</dimen>
     <dimen name="card_expiry_height">40dp</dimen>
-    <dimen name="banner_image_height">300dp</dimen>
+    <dimen name="banner_image_height">200dp</dimen>
     <dimen name="securitycode_width">100dp</dimen>
     <dimen name="securitycode_height">40dp</dimen>
     <dimen name="card_expiryyear_width">80dp</dimen>
