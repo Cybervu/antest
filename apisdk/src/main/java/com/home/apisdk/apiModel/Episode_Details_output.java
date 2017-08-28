@@ -125,7 +125,15 @@ public class Episode_Details_output {
     String id,movie_stream_uniq_id="",full_movie="",episode_number="",video_resolution="",episode_title="",series_number="",episode_date="",
             episode_story="",video_url="",thirdparty_url="",rolltype="",roll_after="",video_duration="",ikäraja="",embeddedUrl="",poster_url="",movieUrlForTv="";
 
+        public int getContent_types_id() {
+            return content_types_id;
+        }
 
+        public void setContent_types_id(int content_types_id) {
+            this.content_types_id = content_types_id;
+        }
+
+        int content_types_id;
 
     public String getId() {
         return id;

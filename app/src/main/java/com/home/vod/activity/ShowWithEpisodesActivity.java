@@ -657,7 +657,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
         if (status == 200) {
-
+            itemData = new ArrayList<EpisodesListModel>();
 
             Util.currencyModel = episode_details_output.getCurrencyDetails();
             Util.apvModel = episode_details_output.getApvDetails();
@@ -672,11 +672,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 String episodeSeriesNoStr =  episode_details_output.getEpisodeArray().get(a).getSeries_number();
                 String episodeMovieStreamUniqueIdStr= episode_details_output.getEpisodeArray().get(a).getMovie_stream_uniq_id();
                 String episodeThirdParty= episode_details_output.getEpisodeArray().get(a).getThirdparty_url();
-                // int episodeContenTTypesId=episodeArray.get(a).getContent_types_id();
+                 //int episodeContenTTypesId=episodeArray.get(a).getContent_types_id();
                 String videodurationStr= episode_details_output.getEpisodeArray().get(a).getVideo_duration();
 
 
-                itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr, movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, videodurationStr));
+               itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr, movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, videodurationStr));
 
             }
             LogUtil.showLog("MUVI", "episode show...1");
@@ -1440,7 +1440,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     int isSubscribedDataStr = 0;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-    ArrayList<EpisodesListModel> itemData = new ArrayList<EpisodesListModel>();
+    ArrayList<EpisodesListModel> itemData;
     String movieNameStr;
     // TextView seasonTitleTextView;
     String episodeVideoUrlStr;

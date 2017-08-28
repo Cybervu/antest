@@ -1,13 +1,16 @@
 package com.home.vod.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -56,7 +59,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
     TextView castCrewTitleTextView;
     RecyclerView castCrewListRecyclerView;
 
-    ArrayList<GetCastCrewItem> castCrewItems = new ArrayList<GetCastCrewItem>();
+    ArrayList<GetCastCrewItem> castCrewItems=new ArrayList<GetCastCrewItem>();
     CastCrewAdapter castCrewAdapter;
     GridView cast_crew_crid;
 
@@ -121,6 +124,21 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         castCrewAdapter = new CastCrewAdapter(CastAndCrewActivity.this, castCrewItems);
         cast_crew_crid.setAdapter(castCrewAdapter);
         GetCsatCrewDetails();
+        cast_crew_crid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                GetCastCrewItem item = castCrewItems.get(position);
+                Intent castCrewIntent = new Intent(CastAndCrewActivity.this,CastCrewDetailsActivity.class);
+                castCrewIntent.putExtra("castPermalink",item.getCastPermalink());
+                Log.v("SUBHA", "PERMALINK_INTENT_KEY" + item.getCastPermalink());
+
+                castCrewIntent.putExtra("castName",item.getCastPermalink());
+                castCrewIntent.putExtra("castSummary",item.getCelebritySummary());
+                castCrewIntent.putExtra("castImage",item.getCastImage());
+
+                startActivity(castCrewIntent);
+            }
+        });
 
 
     }
@@ -159,10 +177,12 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         } catch (IllegalArgumentException ex) {
         }
         if (status == 200) {
-
+            //castCrewItems = new ArrayList<GetCastCrewItem>();
             for (int i = 0; i < celibrityOutputModel.size(); i++) {
-                GetCastCrewItem movie = new GetCastCrewItem(celibrityOutputModel.get(i).getName(),
-                        celibrityOutputModel.get(i).getCast_type(), celibrityOutputModel.get(i).getCelebrity_image());
+                GetCastCrewItem   movie = new GetCastCrewItem(celibrityOutputModel.get(i).getName(),celibrityOutputModel.get(i).getCast_type()
+                        ,celibrityOutputModel.get(i).getCelebrity_image()
+                        ,celibrityOutputModel.get(i).getPermalink(),celibrityOutputModel.get(i).getSummary());
+
                 castCrewItems.add(movie);
             }
             noDataLayout.setVisibility(View.GONE);
