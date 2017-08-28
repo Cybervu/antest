@@ -165,7 +165,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     TextView noInternetTextView;
     //Set Context
     int isLogin = 0;
-PreferenceManager preferenceManager;
+    PreferenceManager preferenceManager;
     //Adapter for GridView
     private FavoriteAdapter customGridAdapter;
     boolean a=false;
@@ -413,7 +413,7 @@ PreferenceManager preferenceManager;
                             // default data
 
                             ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
-                            viewFavouriteInputModel.setAuthToken(Util.authTokenStr);
+                            viewFavouriteInputModel.setAuthToken(authTokenStr);
                             viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
                             asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,FavoriteActivity.this,FavoriteActivity.this);
@@ -471,7 +471,7 @@ PreferenceManager preferenceManager;
 
         Log.v("MUVI","favorite calling");
         ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
-        viewFavouriteInputModel.setAuthToken(Util.authTokenStr);
+        viewFavouriteInputModel.setAuthToken(authTokenStr);
         viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
         asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,FavoriteActivity.this,FavoriteActivity.this);
@@ -605,16 +605,12 @@ PreferenceManager preferenceManager;
 
             String movieName = viewFavouriteOutputModelArray.get(i).getTitle();
             String contentTypesId = viewFavouriteOutputModelArray.get(i).getContentTypesId();
-//            String movieGenreStr = viewFavouriteOutputModelArray.get(i).get();
             movieImageStr = viewFavouriteOutputModelArray.get(i).getPoster();
             String moviePermalinkStr = viewFavouriteOutputModelArray.get(i).getPermalink();
-            String isEpisodeStr = viewFavouriteOutputModelArray.get(i).getIsEpisodeStr();
-//            int isConverted = viewFavouriteOutputModelArray.get(i).getIsConverted();
-//            int isPPV = viewFavouriteOutputModelArray.get(i).getIsPPV();
-//            int isAPV = viewFavouriteOutputModelArray.get(i).getIsAPV();
-
-            itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, "", "", moviePermalinkStr, isEpisodeStr, "", "", 0, 0, 0));
-         Log.v("MUVI","item data =="+ itemData);
+            isEpisodeStr = viewFavouriteOutputModelArray.get(i).getIsEpisodeStr();
+            movieUniqueId = viewFavouriteOutputModelArray.get(i).getMovieId();
+            itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, "", "", moviePermalinkStr,isEpisodeStr,movieUniqueId,"",0,0,0));
+            Log.v("MUVI","item data =="+ itemData);
 
         }
         if (itemData.size() <= 0) {
@@ -686,22 +682,26 @@ PreferenceManager preferenceManager;
 
     @Override
     public void onDeleteFavPostExecuteCompleted(DeleteFavOutputModel deleteFavOutputModel, int status, String sucessMsg) {
-        showToast();
-        if(pDialog.isShowing()&& pDialog!=null)
-        {
+
+        if (pDialog.isShowing() && pDialog != null) {
             pDialog.hide();
         }
-        Log.v("ANU","REMOVED");
-        itemData.remove(index);
-        gridView.invalidateViews();
-        customGridAdapter.notifyDataSetChanged();
-        gridView.setAdapter(customGridAdapter);
+        if (status==200) {
 
-        Intent Sintent = new Intent("ITEM_STATUS");
-        Sintent.putExtra("movie_uniq_id", movieUniqueId);
+            FavoriteActivity.this.sucessMsg=sucessMsg;
+            showToast();
 
-        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(Sintent);
+            Log.v("ANU", "REMOVED");
+            itemData.remove(index);
+            gridView.invalidateViews();
+            customGridAdapter.notifyDataSetChanged();
+            gridView.setAdapter(customGridAdapter);
 
+            Intent Sintent = new Intent("ITEM_STATUS");
+            Sintent.putExtra("movie_uniq_id", movieUniqueId);
+
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(Sintent);
+        }
     }
 
 
@@ -1147,7 +1147,7 @@ PreferenceManager preferenceManager;
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
 
-      //  languageCustomAdapter = new LanguageCustomAdapter(FavoriteActivity.this, Util.languageModel);
+        //  languageCustomAdapter = new LanguageCustomAdapter(FavoriteActivity.this, Util.languageModel);
         // Util.languageModel.get(0).setSelected(true);
       /*  if (Util.languageModel.get(i).getLanguageId().equalsIgnoreCase(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE))) {
             prevPosition = i;
@@ -1304,7 +1304,7 @@ PreferenceManager preferenceManager;
         movieUniqueId = gridItem.getMovieUniqueId();
 
         DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
-        deleteFavInputModel.setAuthTokenStr(Util.authTokenStr);
+        deleteFavInputModel.setAuthTokenStr(authTokenStr);
         deleteFavInputModel.setIsEpisode(isEpisodeStr);
         deleteFavInputModel.setMovieUniqueId(movieUniqueId);
         deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());

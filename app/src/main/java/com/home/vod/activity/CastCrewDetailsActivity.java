@@ -29,10 +29,12 @@ import com.home.apisdk.apiModel.GetCastDetailsInput;
 import com.home.apisdk.apiModel.GetCastDetailsOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.FilmographyAdapter;
+import com.home.vod.model.GetCastCrewItem;
 import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
+import com.home.vod.util.ResizableCustomView;
 import com.home.vod.util.Util;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -81,7 +83,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
     Button btnmore;
     String castpermalinkStr = "";
     RecyclerView filmographyRecyclerView;
-     int itemsInServer = 0;
+    int itemsInServer = 0;
     int  videoHeight = 185;
     int  videoWidth = 256;
     String videoImageStrToHeight;
@@ -135,7 +137,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
         filmographyRecyclerView = (RecyclerView) findViewById(R.id.filmographyRecyclerView);
         castImageView = (ImageView) findViewById(R.id.castImageView);
         // Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
-       // castNameTextView.setTypeface(videoGenreTextViewTypeface);
+        // castNameTextView.setTypeface(videoGenreTextViewTypeface);
         castDescriptionTextView = (TextView) findViewById(R.id.castDescriptionTextView);
         btnmore= (Button) findViewById(R.id.btnMore);
 
@@ -226,10 +228,10 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
 
 
         //Typeface castDescriptionTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
-       // castDescriptionTextView.setTypeface(castDescriptionTextViewTypeface);
+        // castDescriptionTextView.setTypeface(castDescriptionTextViewTypeface);
         // makeTextViewResizable(videoStoryTextView,3,movieDetailsStr,true);
-       // castDescriptionTextView.setText("Hello");
-       // ResizableCustomView.doResizeTextView(CastCrewDetailsActivity.this, castDescriptionTextView, 2, Util.getTextofLanguage(CastCrewDetailsActivity.this, Util.VIEW_MORE, Util.DEFAULT_VIEW_MORE), true);
+        // castDescriptionTextView.setText("Hello");
+        // ResizableCustomView.doResizeTextView(CastCrewDetailsActivity.this, castDescriptionTextView, 2, Util.getTextofLanguage(CastCrewDetailsActivity.this, Util.VIEW_MORE, Util.DEFAULT_VIEW_MORE), true);
         GetCastCrewDetails();
 
 
@@ -249,8 +251,8 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
         getCastDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
         getCastDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
 
-         GetCastDetailsAsynTask getCastDetailsAsynTask = new GetCastDetailsAsynTask(getCastDetailsInput, CastCrewDetailsActivity.this, CastCrewDetailsActivity.this);
-         getCastDetailsAsynTask.executeOnExecutor(threadPoolExecutor);
+        GetCastDetailsAsynTask getCastDetailsAsynTask = new GetCastDetailsAsynTask(getCastDetailsInput, CastCrewDetailsActivity.this, CastCrewDetailsActivity.this);
+        getCastDetailsAsynTask.executeOnExecutor(threadPoolExecutor);
 
        /* AsynLoadCastCrewDetails asynLoadCastCrewDetails = new AsynLoadCastCrewDetails();
         asynLoadCastCrewDetails.executeOnExecutor(threadPoolExecutor);*/
@@ -259,14 +261,239 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
 
     @Override
     public void onGetCastDetailsPreExecuteStarted() {
-
+        pDialog = new ProgressBarHandler(CastCrewDetailsActivity.this);
+        pDialog.show();
     }
 
     @Override
     public void onGetCastDetailsPostExecuteCompleted(GetCastDetailsOutputModel getCastDetailsOutputModelArray, int status,int totalItems, String message) {
+        String movieGenreStr = "";
+        /*String movieName = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String movieImageStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String moviePermalinkStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);*/
+        String movieName = "";
+        String movieImageStr = "";
+        String moviePermalinkStr ="";
+        String videoTypeIdStr = "";
+        String isEpisodeStr = "";
+
+        int isAPV = 0;
+        int isPPV = 0;
+        int isConverted = 0;
+
+        if (status > 0) {
+            if (status == 200) {
+                for (int i = 0; i < getCastDetailsOutputModelArray.getCastdetails().size(); i++) {
+                    movieImageStr=getCastDetailsOutputModelArray.getCastdetails().get(i).getPosterUrl();
+                    movieName=getCastDetailsOutputModelArray.getCastdetails().get(i).getName();
+                    videoTypeIdStr=getCastDetailsOutputModelArray.getCastdetails().get(i).getContentTypesId();
+                    movieGenreStr=getCastDetailsOutputModelArray.getCastdetails().get(i).getGenre();
+                    moviePermalinkStr=getCastDetailsOutputModelArray.getCastdetails().get(i).getPermalink();
+                    isEpisodeStr=getCastDetailsOutputModelArray.getCastdetails().get(i).getIsEpisode();
+                    isConverted=getCastDetailsOutputModelArray.getCastdetails().get(i).getIsConverted();
+                    isPPV=getCastDetailsOutputModelArray.getCastdetails().get(i).getIsPPV();
+                    isAPV=getCastDetailsOutputModelArray.getCastdetails().get(i).getIsAdvance();
+
+                    filmogrpahyItems.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+/*
+                    filmogrpahyItems.add(new GridItem(getCastDetailsOutputModelArray.getCastdetails().get(i).getPosterUrl()
+                            , getCastDetailsOutputModelArray.getCastdetails().get(i).getName()
+                            , "",
+                            getCastDetailsOutputModelArray.getCastdetails().get(i).getContentTypesId(),
+                            getCastDetailsOutputModelArray.getCastdetails().get(i).getGenre(),
+                            "",
+                            getCastDetailsOutputModelArray.getCastdetails().get(i).getPermalink(),
+                            getCastDetailsOutputModelArray.getCastdetails().get(i).getIsEpisode(),
+                            "", "",
+                            getCastDetailsOutputModelArray.getCastdetails().get(i).getIsConverted(),
+                            getCastDetailsOutputModelArray.getCastdetails().get(i).getIsPPV(),
+                            getCastDetailsOutputModelArray.getCastdetails().get(i).getIsAdvance()));*/
+
+                }
 
 
-        if (totalItems > 4){
+                if (totalItems > 4) {
+                    btnmore.setVisibility(View.VISIBLE);
+                }
+                if (getCastDetailsOutputModelArray.getCastImage().trim().matches("")) {
+                    castImageView.setImageResource(R.drawable.logo);
+                } else {
+
+                    ImageLoader imageLoader = ImageLoader.getInstance();
+                    imageLoader.init(ImageLoaderConfiguration.createDefault(CastCrewDetailsActivity.this));
+
+                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
+                            .cacheOnDisc(true).resetViewBeforeLoading(true)
+                            .showImageForEmptyUri(R.drawable.logo)
+                            .showImageOnFail(R.drawable.logo)
+                            .showImageOnLoading(R.drawable.logo).build();
+                    imageLoader.displayImage(getCastDetailsOutputModelArray.getCastImage(), castImageView, options);
+
+                }
+
+                if (filmogrpahyItems.size() <= 0) {
+
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                    if (castNameStr.matches("")) {
+                        castNameTextView.setVisibility(View.GONE);
+                    } else {
+                        Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+                        castNameTextView.setTypeface(videoGenreTextViewTypeface);
+                        castNameTextView.setText(getCastDetailsOutputModelArray.getName());
+                        castNameTextView.setVisibility(View.VISIBLE);
+
+                    }
+                    if (castSummaryStr.matches("")) {
+                        castDescriptionTextView.setVisibility(View.GONE);
+                    } else {
+                        Typeface castDescriptionTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                        castDescriptionTextView.setTypeface(castDescriptionTextViewTypeface);
+                        castDescriptionTextView.setText(getCastDetailsOutputModelArray.getSummary());
+                        ResizableCustomView.doResizeTextView(CastCrewDetailsActivity.this, castDescriptionTextView, 2, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
+                    }
+                } else {
+                    if (castNameStr.matches("")) {
+                        castNameTextView.setVisibility(View.GONE);
+                    } else {
+                        Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+                        castNameTextView.setTypeface(videoGenreTextViewTypeface);
+                        castNameTextView.setText(getCastDetailsOutputModelArray.getName());
+                        castNameTextView.setVisibility(View.VISIBLE);
+
+                    }
+                    if (castSummaryStr.matches("")) {
+                        castDescriptionTextView.setVisibility(View.GONE);
+                    } else {
+                        Typeface castDescriptionTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                        castDescriptionTextView.setTypeface(castDescriptionTextViewTypeface);
+                        castDescriptionTextView.setText(getCastDetailsOutputModelArray.getSummary());
+                        ResizableCustomView.doResizeTextView(CastCrewDetailsActivity.this, castDescriptionTextView, 2, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
+
+                    }
+
+                    videoImageStrToHeight = movieImageStr;
+                    Picasso.with(CastCrewDetailsActivity.this).load(videoImageStrToHeight
+                    ).into(new Target() {
+
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            videoWidth = bitmap.getWidth();
+                            videoHeight = bitmap.getHeight();
+                            loadUI = new AsynLOADUI();
+                            loadUI.executeOnExecutor(threadPoolExecutor);
+                        }
+
+                        @Override
+                        public void onBitmapFailed(final Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(final Drawable placeHolderDrawable) {
+
+                        }
+                    });
+
+                }
+
+              /*  if (filmogrpahyItems.size() <= 0) {
+
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                    if (getCastDetailsOutputModelArray.getName().matches("")) {
+                        castNameTextView.setVisibility(View.GONE);
+                    } else {
+                        Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+                        castNameTextView.setTypeface(videoGenreTextViewTypeface);
+                        castNameTextView.setText(getCastDetailsOutputModelArray.getName());
+                        castNameTextView.setVisibility(View.VISIBLE);
+
+                    }
+                    if (getCastDetailsOutputModelArray.getSummary().matches("")) {
+                        castDescriptionTextView.setVisibility(View.GONE);
+                    } else {
+                        Typeface castDescriptionTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                        castDescriptionTextView.setTypeface(castDescriptionTextViewTypeface);
+                        castDescriptionTextView.setText(getCastDetailsOutputModelArray.getSummary());
+                    }
+                } else {
+                    if (getCastDetailsOutputModelArray.getName().matches("")) {
+                        castNameTextView.setVisibility(View.GONE);
+                    } else {
+                        Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+                        castNameTextView.setTypeface(videoGenreTextViewTypeface);
+                        castNameTextView.setText(getCastDetailsOutputModelArray.getName());
+                        castNameTextView.setVisibility(View.VISIBLE);
+
+                    }
+                    if (getCastDetailsOutputModelArray.getSummary().matches("")) {
+                        castDescriptionTextView.setVisibility(View.GONE);
+                    } else {
+                        Typeface castDescriptionTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                        castDescriptionTextView.setTypeface(castDescriptionTextViewTypeface);
+                        castDescriptionTextView.setText(getCastDetailsOutputModelArray.getSummary());
+                    }
+
+
+                    for (int i = 0; i < getCastDetailsOutputModelArray.getCastdetails().size(); i++) {
+                        videoImageStrToHeight = getCastDetailsOutputModelArray.getCastdetails().get(i).getPosterUrl();
+                        Picasso.with(CastCrewDetailsActivity.this).load(videoImageStrToHeight
+                        ).into(new Target() {
+
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                videoWidth = bitmap.getWidth();
+                                videoHeight = bitmap.getHeight();
+                                loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);
+                            }
+
+                            @Override
+                            public void onBitmapFailed(final Drawable errorDrawable) {
+
+                            }
+
+                            @Override
+                            public void onPrepareLoad(final Drawable placeHolderDrawable) {
+
+                            }
+                        });
+
+                    }
+                }*/
+            }
+        } else {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+            if (castNameStr.matches("")) {
+                castNameTextView.setVisibility(View.GONE);
+            } else {
+                Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+                castNameTextView.setTypeface(videoGenreTextViewTypeface);
+                castNameTextView.setText(castNameStr);
+                castNameTextView.setVisibility(View.VISIBLE);
+
+            }
+            if (castSummaryStr.matches("")) {
+                castDescriptionTextView.setVisibility(View.GONE);
+            } else {
+                Typeface castDescriptionTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                castDescriptionTextView.setTypeface(castDescriptionTextViewTypeface);
+                castDescriptionTextView.setText(castSummaryStr);
+                ResizableCustomView.doResizeTextView(CastCrewDetailsActivity.this, castDescriptionTextView, 2, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
+            }
+
+        }
+
+     /*   if (totalItems > 4){
             btnmore.setVisibility(View.VISIBLE);
         }
         if(getCastDetailsOutputModelArray.getCastImage().trim().matches(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){
@@ -351,7 +578,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
 
                 }
             }
-        }
+        }*/
     }
 
   /*  //Load Films Videos
@@ -676,7 +903,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
             }
 
             filmographyRecyclerView.setLayoutManager(new LinearLayoutManager(CastCrewDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
-          //  filmographyRecyclerView.setItemAnimator(new DefaultItemAnimator());
+            //  filmographyRecyclerView.setItemAnimator(new DefaultItemAnimator());
             ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(CastCrewDetailsActivity.this, R.dimen.recy_margin);
             filmographyRecyclerView.addItemDecoration(itemDecoration);
             if (pDialog != null && pDialog.isShowing()) {

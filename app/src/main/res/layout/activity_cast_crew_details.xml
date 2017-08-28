@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/ppv_margin"
                     android:gravity="center"
-                    android:text="tst data"
+                    android:text=""
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/cast_textsize" />
 
