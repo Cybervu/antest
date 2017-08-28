@@ -637,9 +637,9 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
 
                     } else {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
+                        if (videoPDialog != null && videoPDialog.isShowing()) {
+                            videoPDialog.hide();
+                            videoPDialog = null;
                         }
                         if (videoPDialog != null && videoPDialog.isShowing()) {
                             videoPDialog.hide();
@@ -1292,7 +1292,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 footerView.setVisibility(View.GONE);
             } else {
                 // show loader for first time
-                videoPDialog.hide();
+                if (videoPDialog != null && videoPDialog.isShowing()) {
+                    videoPDialog.hide();
+                    videoPDialog = null;
+                }
                 footerView.setVisibility(View.VISIBLE);
 
             }
@@ -1302,16 +1305,117 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     @Override
     public void onGetContentListPostExecuteCompleted(ArrayList<ContentListOutput> contentListOutputArray, int status, int totalItems, String message) {
 
-          try {
+
+        if (status>0){
+            if (status==200){
+                String movieImageStr="";
+
+                for (int i = 0; i < contentListOutputArray.size(); i++) {
+
+                    String movieName = contentListOutputArray.get(i).getName();
+                    String contentTypesId = contentListOutputArray.get(i).getContentTypesId();
+                    String movieGenreStr = contentListOutputArray.get(i).getGenre();
+                    movieImageStr = contentListOutputArray.get(i).getPosterUrl();
+                    String moviePermalinkStr = contentListOutputArray.get(i).getPermalink();
+                    String isEpisodeStr = contentListOutputArray.get(i).getIsEpisodeStr();
+                    int isConverted = contentListOutputArray.get(i).getIsConverted();
+                    int isPPV = contentListOutputArray.get(i).getIsPPV();
+                    int isAPV = contentListOutputArray.get(i).getIsAPV();
+
+                    itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+                }
+                if (itemData.size() <= 0) {
+
+                    try {
+                        if (videoPDialog != null && videoPDialog.isShowing()) {
+                            videoPDialog.hide();
+                            videoPDialog = null;
+                        }
+                    } catch (IllegalArgumentException ex) {
+
+                        noDataLayout.setVisibility(View.VISIBLE);
+                        noInternetConnectionLayout.setVisibility(View.GONE);
+                        gridView.setVisibility(View.GONE);
+                        footerView.setVisibility(View.GONE);
+                    }
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    gridView.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
+                } else {
+                    footerView.setVisibility(View.GONE);
+                    gridView.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    noDataLayout.setVisibility(View.GONE);
+                    videoImageStrToHeight = movieImageStr;
+                    if (firstTime == true) {
+                        Picasso.with(context).load(videoImageStrToHeight
+                        ).error(R.drawable.no_image).into(new Target() {
+
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                videoWidth = bitmap.getWidth();
+                                videoHeight = bitmap.getHeight();
+                                loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);
+                            }
+
+                            //
+                            @Override
+                            public void onBitmapFailed(final Drawable errorDrawable) {
+                                Log.v("MUVI", "videoImageStrToHeight = " + videoImageStrToHeight);
+                                videoImageStrToHeight = "https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png";
+                                videoWidth = errorDrawable.getIntrinsicWidth();
+                                videoHeight = errorDrawable.getIntrinsicHeight();
+                                loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);
+
+                            }
+
+                            @Override
+                            public void onPrepareLoad(final Drawable placeHolderDrawable) {
+
+                            }
+                        });
+
+                    } else {
+                        loadUI = new AsynLOADUI();
+                        loadUI.executeOnExecutor(threadPoolExecutor);
+                    }
+                }
+            }
+        }else {
+
+            try {
+                if (videoPDialog != null && videoPDialog.isShowing()) {
+                    videoPDialog.hide();
+                    videoPDialog = null;
+                }
+            } catch (IllegalArgumentException ex) {
+
+                noDataLayout.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
+            }
+            noDataLayout.setVisibility(View.VISIBLE);
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            gridView.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
+        }
+
+
+
+          /*try {
             if (videoPDialog != null && videoPDialog.isShowing()) {
                 videoPDialog.hide();
                 videoPDialog = null;
             }
         }catch (IllegalArgumentException ex) {
 
-        }
+        }*/
 
-        String movieImageStr="";
+      /*  String movieImageStr="";
 
         for (int i = 0; i < contentListOutputArray.size(); i++) {
 
@@ -1385,7 +1489,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                     loadUI = new AsynLOADUI();
                     loadUI.executeOnExecutor(threadPoolExecutor);
                 }
-            }
+            }*/
     }
 
 
