@@ -112,7 +112,7 @@ public class ProfileActivity extends AppCompatActivity implements
     Spinner country_spinner, language_spinner;
     ArrayAdapter<String> Language_arrayAdapter, Country_arrayAdapter;
 
-    String Selected_Language, Selected_Country = "0", Selected_Language_Id, Selected_Country_Id;
+    String Selected_Language, Selected_Country = "0", Selected_Language_Id="", Selected_Country_Id="";
     PreferenceManager preferenceManager;
     List<String> Country_List, Country_Code_List, Language_List, Language_Code_List;
 
