@@ -15,15 +15,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="10dp">
+        android:paddingLeft="@dimen/Login_drawing_padding">
 
         <TextView
             android:id="@+id/transactionTitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginBottom="@dimen/loginImageViewMarging_top"
+            android:layout_marginLeft="@dimen/my_download_margin"
+            android:layout_marginTop="@dimen/loginImageViewMarging_top"
             android:text="Transaction Details"
             android:textColor="@color/pageTitleColor"
             android:textSize="@dimen/transcationdetail_text_size"
@@ -34,7 +34,7 @@
             android:id="@+id/transactionDateLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="@dimen/my_download_margin"
             android:orientation="horizontal"
             android:weightSum="2">
 
@@ -63,8 +63,8 @@
             android:id="@+id/transactionOrderLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_margin="@dimen/my_download_margin"
+            android:layout_marginTop="@dimen/my_download_margin"
             android:orientation="horizontal"
             android:weightSum="2">
 
@@ -96,8 +96,8 @@
             android:id="@+id/transactionAmountLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_margin="@dimen/my_download_margin"
+            android:layout_marginTop="@dimen/my_download_margin"
             android:orientation="horizontal"
             android:weightSum="2">
 
@@ -128,8 +128,8 @@
             android:id="@+id/transactionInvoiceLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_margin="@dimen/my_download_margin"
+            android:layout_marginTop="@dimen/my_download_margin"
             android:orientation="horizontal"
             android:weightSum="2">
 
@@ -160,8 +160,8 @@
             android:id="@+id/transactionStatusLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_margin="@dimen/my_download_margin"
+            android:layout_marginTop="@dimen/my_download_margin"
             android:orientation="horizontal"
             android:weightSum="2">
 
@@ -193,8 +193,8 @@
             android:id="@+id/transactionPLanNameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_margin="@dimen/my_download_margin"
+            android:layout_marginTop="@dimen/my_download_margin"
             android:orientation="horizontal"
             android:weightSum="2">
 
@@ -225,15 +225,15 @@
             android:layout_width="@dimen/transcationbtn_width"
             android:layout_height="@dimen/transcationbtn_height"
             android:layout_gravity="center"
-            android:layout_margin="15dp"
+            android:layout_margin="@dimen/loginImageViewMarging_top"
             android:background="@drawable/button_radious"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:paddingLeft="@dimen/transactionDownloadButton_padding"
+            android:paddingRight="@dimen/transactionDownloadButton_padding"
             android:stateListAnimator="@null"
             android:text="DOWNLOAD"
             android:textAllCaps="false"
             android:textColor="@color/buttonTextColor"
-            android:textSize="17dp" />
+            android:textSize="@dimen/login_text_size" />
     </LinearLayout>
 
     <RelativeLayout
@@ -241,7 +241,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/appBackgroundColor"
-        android:padding="8dp"
+        android:padding="@dimen/manage_device_padding"
         android:visibility="gone">
 
         <TextView
@@ -254,7 +254,7 @@
             android:singleLine="false"
             android:text="No Internet Connection / No Data"
             android:textColor="@color/noInternetColor"
-            android:textSize="36sp"
+            android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
         <Button
@@ -263,7 +263,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@color/button_background"
-            android:padding="8dp"
+            android:padding="@dimen/manage_device_padding"
             android:text="Try again !"
             android:textColor="@color/buttonTextColor"
             android:textSize="@dimen/tryagainbtn_text_size" />

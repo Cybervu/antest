@@ -2,6 +2,7 @@ package com.home.vod.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.home.apisdk.apiController.ContactUsAsynTask;
 import com.home.apisdk.apiModel.ContactUsInputModel;
 import com.home.apisdk.apiModel.ContactUsOutputModel;
 import com.home.vod.R;
+import com.home.vod.activity.MainActivity;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
@@ -71,8 +74,39 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         // Inflate the layout for this fragment
        /* getActionBar().setTitle(getArguments().getString(""));
         setHasOptionsMenu(true);*/
+
+
+
         View v = inflater.inflate(R.layout.fragment_contact_us, container, false);
         context = getActivity();
+
+        v.setFocusableInTouchMode(true);
+        v.requestFocus();
+        v.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+                        final Intent startIntent = new Intent(getActivity(), MainActivity.class);
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                getActivity().startActivity(startIntent);
+
+                                getActivity().finish();
+
+                            }
+                        });
+                    }
+                }
+                return false;
+            }
+        });
+
+
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
         TextView categoryTitle = (TextView) v.findViewById(R.id.categoryTitle);
@@ -83,7 +117,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         contactFormTitle = (TextView) v.findViewById(R.id.contactFormTitle);
         Typeface contactFormTitleTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
         contactFormTitle.setTypeface(contactFormTitleTypeface);
-        contactFormTitle.setHint(languagePreference.getTextofLanguage(FILL_FORM_BELOW, DEFAULT_FILL_FORM_BELOW));
+        contactFormTitle.setText(languagePreference.getTextofLanguage(FILL_FORM_BELOW, DEFAULT_FILL_FORM_BELOW));
 
         editEmailStr=(EditText) v.findViewById(R.id.contact_email) ;
         Typeface editEmailStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));

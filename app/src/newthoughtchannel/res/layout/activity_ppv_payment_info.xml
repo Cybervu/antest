@@ -15,8 +15,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="16dp"
-            android:paddingTop="16dp"
+            android:paddingBottom="@dimen/login_linear_margin_top"
+            android:paddingTop="@dimen/login_linear_margin_top"
 
             >
 
@@ -26,28 +26,28 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/paymentOptionLinearLayout"
-                android:layout_marginTop="0dp"
+                android:layout_marginTop="@dimen/payment_margin_top"
                 android:visibility="gone">
 
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp">
+                    android:padding="@dimen/Login_drawing_padding">
 
                     <Button
                         android:id="@+id/scanButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
+                        android:layout_height="@dimen/scanbtn_height"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="@dimen/ppv_margin"
                         android:background="@drawable/button_bg_orange"
                         android:stateListAnimator="@null"
                         android:text=""
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="14dp"
+                        android:textSize="@dimen/scanbtn_text_size"
                         android:visibility="gone" />
 
                     <TextView
@@ -55,12 +55,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/creditCardDetailsTitleTextView"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="@dimen/ppv_margin"
                         android:maxLines="4"
                         android:singleLine="false"
                         android:text=""
                         android:textColor="@color/textColor"
-                        android:textSize="16dp" />
+                        android:textSize="@dimen/chargedetail_text_size" />
 
                     <!-- <RelativeLayout
                          android:layout_width="match_parent"
@@ -76,10 +76,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/chargeDetailsTextView"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="@dimen/ppv_margin"
                         android:overlapAnchor="false"
-                        android:paddingLeft="6dp"
-                        android:paddingRight="6dp"
+                        android:paddingLeft="@dimen/payment_spinner_padding"
+                        android:paddingRight="@dimen/payment_spinner_padding"
                         android:popupBackground="#e1e1e1"
                         android:spinnerMode="dropdown"
                         android:stateListAnimator="@null"
@@ -91,18 +91,18 @@
                     <EditText
                         android:id="@+id/cardNumberEditText"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="@dimen/card_no_height"
                         android:layout_alignParentLeft="true"
                         android:layout_below="@+id/nameOnCardEditText"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="@dimen/ppv_margin"
                         android:ems="10"
                         android:hint="Card Number"
                         android:imeOptions="actionNext"
                         android:inputType="number"
-                        android:paddingBottom="6dp"
+                        android:paddingBottom="@dimen/payment_spinner_padding"
                         android:paddingLeft="12dp"
-                        android:paddingRight="6dp"
-                        android:paddingTop="6dp"
+                        android:paddingRight="@dimen/payment_spinner_padding"
+                        android:paddingTop="@dimen/payment_spinner_padding"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color" />
 
@@ -121,11 +121,11 @@
                         <Spinner
                             android:id="@+id/cardExpiryMonthEditText"
                             style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                            android:layout_width="80dp"
-                            android:layout_height="50dp"
+                            android:layout_width="@dimen/card_expiry_width"
+                            android:layout_height="@dimen/card_expiry_height"
                             android:overlapAnchor="false"
-                            android:paddingLeft="6dp"
-                            android:paddingRight="6dp"
+                            android:paddingLeft="@dimen/payment_spinner_padding"
+                            android:paddingRight="@dimen/payment_spinner_padding"
                             android:popupBackground="#e1e1e1"
                             android:spinnerMode="dropdown"
                             android:textColorHint="@color/hint_color"
@@ -138,11 +138,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="6dp"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginLeft="@dimen/payment_spinner_padding"
+                            android:layout_marginTop="@dimen/linear_text_margin"
                             android:text=""
                             android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                            android:textSize="30dp"
+                            android:textSize="@dimen/yearline_text_size"
                             android:textStyle="normal" />
                         <!--<RelativeLayout
                             android:layout_width="wrap_content"
@@ -157,14 +157,14 @@
                         <Spinner
                             android:id="@+id/cardExpiryYearEditText"
                             style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                            android:layout_width="100dp"
-                            android:layout_height="50dp"
+                            android:layout_width="@dimen/card_expiryyear_width"
+                            android:layout_height="@dimen/card_expiryyear_height"
                             android:layout_alignTop="@+id/securityCodeEditText"
                             android:layout_toEndOf="@+id/yearLineTextView"
                             android:layout_toRightOf="@+id/yearLineTextView"
                             android:overlapAnchor="false"
-                            android:paddingLeft="6dp"
-                            android:paddingRight="6dp"
+                            android:paddingLeft="@dimen/payment_spinner_padding"
+                            android:paddingRight="@dimen/payment_spinner_padding"
                             android:popupBackground="#e1e1e1"
                             android:spinnerMode="dropdown"
                             android:textColorHint="@color/hint_color"
@@ -173,14 +173,14 @@
 
                         <EditText
                             android:id="@+id/securityCodeEditText"
-                            android:layout_width="100dp"
-                            android:layout_height="50dp"
-                            android:layout_marginLeft="90dp"
+                            android:layout_width="@dimen/card_expiryyear_width"
+                            android:layout_height="@dimen/card_expiryyear_height"
+                            android:layout_marginLeft="@dimen/security_code_edit_margin"
                             android:hint="CVV"
                             android:imeOptions="actionGo"
                             android:inputType="number"
-                            android:paddingLeft="12dp"
-                            android:paddingRight="6dp"
+                            android:paddingLeft="@dimen/payment_spinner_padding_left"
+                            android:paddingRight="@dimen/payment_spinner_padding"
                             android:textColor="@color/editTextColor"
                             android:textColorHint="@color/hint_color" />
 
@@ -191,27 +191,27 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/cardExpiryDetailsLayout"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="@dimen/ppv_margin"
                         android:button="@drawable/savecard_style"
                         android:text=""
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="16dp"
+                        android:textSize="@dimen/savecard_text_size"
                         android:visibility="visible" />
 
                     <Button
                         android:id="@+id/payNowButton"
                         android:layout_width="match_parent"
-                        android:layout_height="44dp"
+                        android:layout_height="@dimen/paybtn_height"
                         android:layout_below="@+id/saveCardCheckbox"
-                        android:layout_marginLeft="35dp"
-                        android:layout_marginRight="35dp"
-                        android:layout_marginTop="25dp"
+                        android:layout_marginLeft="@dimen/payment_margin_btn"
+                        android:layout_marginRight="@dimen/payment_margin_btn"
+                        android:layout_marginTop="@dimen/payment_margin_btn_top"
                         android:background="@drawable/button_radious"
                         android:stateListAnimator="@null"
                         android:text=""
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="16dp"
+                        android:textSize="@dimen/paybtn_text_size"
 
 
                         />
@@ -219,19 +219,19 @@
                     <EditText
                         android:id="@+id/nameOnCardEditText"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="@dimen/nameoncard_height"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/creditCardSaveEditText"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="@dimen/payment_spinner_padding_left"
                         android:ems="10"
                         android:hint="Name on Card"
                         android:imeOptions="actionNext"
                         android:inputType="textPersonName"
-                        android:paddingBottom="6dp"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="6dp"
-                        android:paddingTop="6dp"
+                        android:paddingBottom="@dimen/payment_spinner_padding"
+                        android:paddingLeft="@dimen/payment_spinner_padding_left"
+                        android:paddingRight="@dimen/payment_spinner_padding"
+                        android:paddingTop="@dimen/payment_spinner_padding"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color" />
 
@@ -240,12 +240,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="38dp"
+                        android:layout_marginTop="@dimen/payment_margin_textview_top"
                         android:layout_toEndOf="@+id/scanButton"
                         android:layout_toRightOf="@+id/scanButton"
                         android:text=""
                         android:textColor="@color/pageTitleColor"
-                        android:textSize="22dp"
+                        android:textSize="@dimen/creditcarddetail_text_size"
                         android:textStyle="bold" />
                 </RelativeLayout>
 
@@ -270,7 +270,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/personalDetailsCardView"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/payment_relative_margin"
                 android:background="@color/appBackgroundColor"
                 android:visibility="gone">
 
@@ -278,14 +278,14 @@
                     android:id="@+id/withoutPaymentCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_margin="@dimen/linear_text_margin"
                     app:cardBackgroundColor="@color/appBackgroundColor">
 
                     <RelativeLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/appBackgroundColor"
-                        android:padding="10dp">
+                        android:padding="@dimen/Login_drawing_padding">
 
                         <TextView
                             android:id="@+id/withoutPaymentTitleTextView"
@@ -293,22 +293,22 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="@dimen/ppv_margin"
                             android:text=""
                             android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                            android:textSize="20dp" />
+                            android:textSize="@dimen/withoutpayment_text_size" />
 
                         <TextView
                             android:id="@+id/withoutPaymentChargeDetailsTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/withoutPaymentTitleTextView"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="@dimen/ppv_margin"
                             android:maxLines="4"
                             android:singleLine="false"
                             android:text=""
                             android:textColor="@color/textColor"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/withoutpaymentcharge_text_size" />
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
@@ -316,16 +316,16 @@
                 <Button
                     android:id="@+id/nextButton"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/progressbar_height"
                     android:layout_below="@+id/withoutPaymentCardView"
-                    android:layout_marginLeft="35dp"
-                    android:layout_marginRight="35dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="@dimen/payment_margin_btn"
+                    android:layout_marginRight="@dimen/payment_margin_btn"
+                    android:layout_marginTop="@dimen/payment_spinner_padding_left"
                     android:background="@drawable/button_bg_orange"
                     android:stateListAnimator="@null"
                     android:text=""
                     android:textColor="@color/buttonTextColor"
-                    android:textSize="16dp" />
+                    android:textSize="@dimen/nextbtn_text_size" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -335,14 +335,14 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:padding="10dp"
+                android:padding="@dimen/Login_drawing_padding"
                 android:visibility="visible">
 
 
                 <TextView
                     android:id="@+id/lineTextView"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/payment_margin_top"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@+id/purchaseTextView"
                     android:background="@color/alreadyHaveALoginButtonTextColor" />
@@ -352,9 +352,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/lineTextView"
-                    android:layout_marginTop="14dp"
+                    android:layout_marginTop="@dimen/ppv_margin_show_name_with_price"
                     android:textColor="@color/textColor"
-                    android:textSize="16dp" />
+                    android:textSize="@dimen/showname_text_size" />
 
 
                 <LinearLayout
@@ -366,8 +366,8 @@
 
                     <EditText
                         android:id="@+id/couponCodeEditText"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
+                        android:layout_width="@dimen/payment_margin_top"
+                        android:layout_height="@dimen/coupancode_height"
                         android:layout_alignParentLeft="true"
                         android:layout_below="@+id/showNameWithPrice"
                         android:layout_weight="2"
@@ -375,26 +375,26 @@
                         android:hint="Enter Coupon Code"
                         android:imeOptions="actionGo"
                         android:inputType="text"
-                        android:paddingBottom="6dp"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="6dp"
-                        android:paddingTop="6dp"
+                        android:paddingBottom="@dimen/payment_spinner_padding"
+                        android:paddingLeft="@dimen/payment_spinner_padding_left"
+                        android:paddingRight="@dimen/payment_spinner_padding"
+                        android:paddingTop="@dimen/payment_spinner_padding"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color" />
 
                     <Button
                         android:id="@+id/addCouponButton"
                         android:layout_width="0dp"
-                        android:layout_height="44dp"
+                        android:layout_height="@dimen/coupanbtn_height"
                         android:layout_gravity="right"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="@dimen/loginImageViewMarging_top"
                         android:layout_weight="1"
                         android:background="@drawable/button_radious"
                         android:stateListAnimator="@null"
                         android:text=""
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="16dp"
+                        android:textSize="@dimen/coupanbtn_text_size"
 
                         />
                 </LinearLayout>
@@ -406,7 +406,7 @@
                     android:layout_alignParentTop="true"
                     android:text=""
                     android:textColor="@color/pageTitleColor"
-                    android:textSize="22dp"
+                    android:textSize="@dimen/purchase_text_size"
                     android:textStyle="bold" />
 
 
@@ -419,9 +419,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/personalDetailsCardView"
                 android:layout_below="@+id/personalDetailsCardView"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="@dimen/payment_textview_showname_margin"
                 android:orientation="vertical"
-                android:padding="10dp"
+                android:padding="@dimen/Login_drawing_padding"
                 android:visibility="gone">
 
 
@@ -429,13 +429,12 @@
                     android:id="@+id/paymentOptionsTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:text=""
                     android:textColor="@color/pageTitleColor"
-                    android:textSize="20dp" />
+                    android:textSize="@dimen/paymentOptionsTitle_textsize" />
 
                 <TextView
                     android:id="@+id/paymentOptionLine"
@@ -443,7 +442,7 @@
                     android:layout_height="1dp"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@+id/purchaseTextView"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="@dimen/payment_spinner_padding"
                     android:background="@color/alreadyHaveALoginButtonTextColor" />
 
                 <RadioGroup
@@ -451,7 +450,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/paymentOptionsTitle"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="@dimen/ppv_margin">
 
                     <RadioButton
                         android:id="@+id/payWithCreditCardRadioButton"
@@ -486,39 +485,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:paddingLeft="@dimen/Login_drawing_padding"
+                    android:paddingRight="@dimen/Login_drawing_padding">
 
                     <EditText
                         android:id="@+id/voucher_code"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
+                        android:layout_width="@dimen/payment_margin_top"
+                        android:layout_height="@dimen/voucher_code_height"
                         android:layout_alignParentLeft="true"
                         android:layout_weight="2"
                         android:ems="10"
                         android:hint="Enter Voucher Code"
                         android:imeOptions="actionGo"
                         android:inputType="text"
-                        android:paddingBottom="6dp"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="6dp"
-                        android:paddingTop="6dp"
+                        android:paddingBottom="@dimen/payment_spinner_padding"
+                        android:paddingLeft="@dimen/payment_spinner_padding_left"
+                        android:paddingRight="@dimen/payment_spinner_padding"
+                        android:paddingTop="@dimen/payment_spinner_padding"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color" />
 
                     <Button
                         android:id="@+id/apply"
-                        android:layout_width="0dp"
-                        android:layout_height="44dp"
+                        android:layout_width="@dimen/payment_margin_top"
+                        android:layout_height="@dimen/ppv_apply_btn_height"
                         android:layout_gravity="right"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="@dimen/loginImageViewMarging_top"
                         android:layout_weight="1"
                         android:background="@drawable/button_radious"
                         android:stateListAnimator="@null"
                         android:text=""
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="16dp"
+                        android:textSize="@dimen/coupanbtn_text_size"
 
                         />
 
@@ -528,33 +527,33 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="5dp">
+                    android:paddingBottom="@dimen/login_new_user_padding"
+                    android:paddingLeft="@dimen/Login_drawing_padding"
+                    android:paddingRight="@dimen/Login_drawing_padding"
+                    android:paddingTop="@dimen/login_new_user_padding">
 
                     <TextView
                         android:id="@+id/voucher_success"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginBottom="@dimen/loginImageViewMarging_top"
+                        android:layout_marginLeft="@dimen/loginImageViewMarging_top"
                         android:text=""
                         android:textColor="@color/castCrewTitleTextColor"
-                        android:textSize="16dp"
+                        android:textSize="@dimen/coupanbtn_text_size"
                         android:visibility="invisible" />
 
                     <Button
                         android:id="@+id/watch_now"
                         android:layout_width="wrap_content"
-                        android:layout_height="45dp"
+                        android:layout_height="@dimen/payment_watch_now_height"
                         android:layout_gravity="right"
                         android:background="@drawable/voucher_inactive_button"
                         android:stateListAnimator="@null"
                         android:text=""
                         android:textAllCaps="false"
                         android:textColor="#7f7f7f"
-                        android:textSize="17dp" />
+                        android:textSize="@dimen/cast_name_text" />
 
                 </LinearLayout>
             </LinearLayout>

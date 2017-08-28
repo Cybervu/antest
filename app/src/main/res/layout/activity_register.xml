@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
-                        android:drawablePadding="10dp"
+                        android:drawablePadding="@dimen/Login_drawing_padding"
                         android:padding="@dimen/register_edittext_padding"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
@@ -60,8 +60,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/editNameStr"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="12dp"
-                        android:drawablePadding="10dp"
+                        android:layout_marginTop="@dimen/login_maring_top"
+                        android:drawablePadding="@dimen/Login_drawing_padding"
                         android:padding="@dimen/register_edittext_padding"
 
                         android:textColor="@color/editTextColor"
@@ -74,9 +74,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/editEmailStr"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="12dp"
-
-                        android:drawablePadding="10dp"
+                        android:layout_marginTop="@dimen/login_maring_top"
+                        android:drawablePadding="@dimen/Login_drawing_padding"
                         android:inputType="textPassword"
                         android:padding="@dimen/register_edittext_padding"
                         android:textColor="@color/editTextColor"
@@ -92,8 +91,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/editPasswordStr"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="12dp"
-                        android:drawablePadding="10dp"
+                        android:layout_marginTop="@dimen/login_maring_top"
+                        android:drawablePadding="@dimen/Login_drawing_padding"
                         android:inputType="textPassword"
                         android:padding="@dimen/register_edittext_padding"
                         android:textColor="@color/editTextColor"
@@ -108,7 +107,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/editConfirmPasswordStr"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="@dimen/login_imageview_linear"
                         android:popupBackground="#ffffff"
                         android:spinnerMode="dropdown"
                         android:theme="@style/ThemeOverlay.AppCompat.Light"
@@ -122,7 +121,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/languageSpinner"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="@dimen/login_imageview_linear"
                         android:popupBackground="#ffffff"
                         android:spinnerMode="dropdown"
                         android:theme="@style/ThemeOverlay.AppCompat.Light" />
@@ -141,7 +140,7 @@
                             android:id="@+id/alreadyMemberText"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/alreadymember_height"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="@dimen/payment_relative_margin"
                             android:gravity="center"
                             android:textColor="@color/alreadyMemberTextColor"
                             android:textSize="@dimen/alreadymember_text_size" />
@@ -150,8 +149,8 @@
                             android:id="@+id/alreadyHaveALoginButton"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/alreadymember_height"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="@dimen/ppv_margin"
+                            android:layout_marginTop="@dimen/payment_relative_margin"
                             android:clickable="true"
                             android:gravity="center"
                             android:textColor="@color/alreadyHaveALoginButtonTextColor"
@@ -167,7 +166,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/countrySpinner"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="@dimen/register_btn_margin_top"
                         android:background="@drawable/button_radious"
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
@@ -179,20 +178,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/registerButton"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="@dimen/login_btn_margin_top"
                         android:background="@drawable/fbbg"
                         android:clickable="true"
                         android:gravity="center_horizontal"
-
                         android:orientation="horizontal"
-                        android:padding="6dp">
+                        android:padding="@dimen/payment_spinner_padding">
 
                         <ImageView
                             android:id="@+id/fbIcon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginRight="15dp"
+                            android:layout_marginRight="@dimen/loginImageViewMarging_top"
                             android:src="@drawable/fb_icon" />
 
                         <TextView
@@ -200,7 +198,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_margin="5dp"
+                            android:layout_margin="@dimen/my_download_margin"
                             android:gravity="center"
                             android:text="@string/fb_registration_text"
                             android:textColor="@color/fb_text_color"
@@ -228,8 +226,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="30dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="@dimen/login_facebook_margin"
+                        android:layout_marginTop="@dimen/login_facebook_margin"
                         android:visibility="gone" />
                 </RelativeLayout>
 

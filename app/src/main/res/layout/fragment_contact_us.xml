@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/appBackgroundColor"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
     <ScrollView
@@ -17,37 +16,37 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            android:layout_marginLeft="@dimen/ppv_margin"
+            android:layout_marginRight="@dimen/ppv_margin"
+            android:orientation="vertical">
 
 
             <TextView
+                android:id="@+id/categoryTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/categoryTitle"
                 android:layout_below="@+id/toolbar"
-                android:textSize="@dimen/sectiontitle_text_size"
-                android:layout_marginTop="15dp"
-                android:paddingTop="10dp"
+                android:layout_marginBottom="@dimen/categoryTitle_margin"
+                android:layout_marginLeft="@dimen/loginImageViewMarging_top"
+                android:layout_marginTop="@dimen/loginImageViewMarging_top"
 
-                android:paddingBottom="10dp"
-                android:layout_marginBottom="29dp"
+                android:paddingBottom="@dimen/Login_drawing_padding"
+                android:paddingTop="@dimen/Login_drawing_padding"
                 android:text=""
-                android:textStyle="normal"
-                android:layout_marginLeft="15dp"
-                android:textColor="@color/pageTitleColor"/>
+                android:textColor="@color/pageTitleColor"
+                android:textSize="@dimen/sectiontitle_text_size"
+                android:textStyle="normal" />
 
             <TextView
+                android:id="@+id/contactFormTitle"
                 android:layout_width="@dimen/fragmenttextview_width"
                 android:layout_height="wrap_content"
-                android:id="@+id/contactFormTitle"
-                android:paddingLeft="5dp"
+                android:layout_marginBottom="@dimen/categoryTitle_margin"
+                android:layout_marginLeft="@dimen/ppv_margin"
+                android:paddingBottom="@dimen/Login_drawing_padding"
+                android:paddingLeft="@dimen/login_new_user_padding"
+                android:paddingTop="@dimen/login_new_user_padding"
                 android:text=""
-                android:layout_marginLeft="10dp"
-                android:paddingBottom="10dp"
-                android:paddingTop="5dp"
-                android:layout_marginBottom="29dp"
                 android:textColor="@color/contactFormTitle"
                 android:textSize="@dimen/contactformtitle_text_size" />
 
@@ -55,63 +54,63 @@
                 android:id="@+id/contact_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/contact_name_margin"
+                android:layout_marginLeft="@dimen/ppv_margin"
+                android:layout_marginRight="@dimen/ppv_margin"
                 android:hint=""
-                android:inputType="textPersonName"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:layout_marginBottom="22dp"
                 android:imeOptions="actionDone"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:inputType="textPersonName"
+                android:paddingBottom="@dimen/Login_drawing_padding"
+                android:paddingTop="@dimen/Login_drawing_padding"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:textSize="@dimen/editbox_text_size" />
+                android:textSize="@dimen/edit_text_size" />
 
             <EditText
                 android:id="@+id/contact_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/contact_name_margin"
+                android:layout_marginLeft="@dimen/ppv_margin"
+                android:layout_marginRight="@dimen/ppv_margin"
                 android:hint=""
-                android:inputType="textEmailAddress"
                 android:imeOptions="actionDone"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="22dp"
+                android:inputType="textEmailAddress"
+                android:paddingBottom="@dimen/Login_drawing_padding"
+                android:paddingTop="@dimen/Login_drawing_padding"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:textSize="@dimen/editbox_text_size" />
+                android:textSize="@dimen/edit_text_size" />
 
             <EditText
                 android:id="@+id/contact_msg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/payment_margin_btn_top"
+                android:layout_marginLeft="@dimen/ppv_margin"
+                android:layout_marginRight="@dimen/ppv_margin"
+                android:layout_marginTop="@dimen/review_edit_text_margin"
                 android:hint=""
-                android:inputType="textMultiLine"
                 android:imeOptions="actionDone"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:layout_marginBottom="25dp"
-                android:layout_marginTop="28dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:inputType="textMultiLine"
+                android:paddingBottom="@dimen/Login_drawing_padding"
+                android:paddingTop="@dimen/Login_drawing_padding"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:textSize="@dimen/editbox_text_size" />
+                android:textSize="@dimen/edit_text_size" />
 
             <Button
                 android:id="@+id/submit_cont"
-                android:layout_width="120dp"
-                android:layout_height="45dp"
+                android:layout_width="@dimen/submitcontact_width"
+                android:layout_height="@dimen/submitcontact_height"
                 android:layout_gravity="end"
-                android:layout_marginTop="25dp"
+                android:layout_marginLeft="@dimen/ppv_margin"
+                android:layout_marginRight="@dimen/ppv_margin"
+                android:layout_marginTop="@dimen/payment_margin_btn_top"
                 android:background="@drawable/button_radious"
                 android:text=""
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textSize="@dimen/submitcontact_text_size"
-                android:textColor="@color/buttonTextColor" />
+                android:textColor="@color/buttonTextColor"
+                android:textSize="@dimen/submitcontact_text_size" />
         </LinearLayout>
     </ScrollView>
 

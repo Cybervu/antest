@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/grid_color_selector"
     android:clickable="false"
-    android:padding="4dp"
+    android:padding="@dimen/videoCensorRatingTextView_padding"
     android:focusable="false">
 
     <RelativeLayout
@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/itemImage"
-            android:layout_width="108dp"
-            android:layout_height="154dp"
+            android:layout_width="@dimen/list_singlecard_img_width"
+            android:layout_height="@dimen/list_singlecard_img_height"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
             android:src="@drawable/logo"
@@ -26,8 +26,8 @@
 
         <ImageView
             android:id="@+id/movieImageOverlay"
-            android:layout_width="108dp"
-            android:layout_height="154dp"
+            android:layout_width="@dimen/list_singlecard_img_width"
+            android:layout_height="@dimen/list_singlecard_img_height"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
@@ -38,7 +38,7 @@
 
         <TextView
             android:id="@+id/itemTitle"
-            android:layout_width="98dp"
+            android:layout_width="@dimen/itemTitle_widht"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:background="@color/transparent"
@@ -49,9 +49,9 @@
             android:gravity="left"
             android:maxLines="1"
             android:text=""
-            android:padding="2dp"
+            android:padding="@dimen/itemTitle_padding"
             android:textColor="@color/contentTitleColor"
-            android:textSize="16sp"
+            android:textSize="@dimen/itemtitle1_text_size"
             android:textStyle="bold"
             android:layout_alignBottom="@+id/itemImage"
             android:layout_alignLeft="@+id/movieImageOverlay"

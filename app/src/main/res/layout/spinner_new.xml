@@ -3,9 +3,8 @@
     android:id="@+id/cardTextView"
     android:layout_width="fill_parent"
     android:layout_height="@dimen/spinner_new_height"
-    android:text="vbuivheiuv"
-    android:paddingLeft="10dp"
-    android:textSize="@dimen/itemtitle_text_size"
     android:gravity="center_vertical"
+    android:paddingLeft="@dimen/Login_drawing_padding"
+    android:text="vbuivheiuv"
     android:textColor="@color/hint_color"
-    />
+    android:textSize="@dimen/itemtitle_text_size" />

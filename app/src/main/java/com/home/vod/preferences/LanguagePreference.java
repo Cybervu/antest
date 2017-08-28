@@ -16,18 +16,12 @@ public class LanguagePreference {
     /**
      *  Language Constant default Key
      */
-    public static String DEFAULT_TERMS = "terms";
-    public static String DEFAULT_AGREE_TERMS = "By Clicking on Register,I agree to";
-    public static final String DEFAULT_TO_LOGIN = "to login.";
     public static final String TO_LOGIN = "TO_LOGIN";
-    public static final String DEFAULT_CLICK_HERE = "Click here";
     public static final String CLICK_HERE = "CLICK_HERE";
     public static final String SUBMIT_YOUR_RATING_TITLE = "SUBMIT_YOUR_RATING_TITLE";
     public static final String VIEW_LESS = "VIEW_LESS";
     public static final String IS_MYLIBRARY = "IS_MYLIBRARY";
-    public static final String DEFAULT_IS_MYLIBRARY = "0";
     public static final String IS_RESTRICT_DEVICE = "IS_RESTRICT_DEVICE";
-    public static final String DEFAULT_IS_RESTRICT_DEVICE = "0";
     public static final String IS_ONE_STEP_REGISTRATION = "IS_ONE_STEP_REGISTRATION";
     public static final String SELECTED_LANGUAGE_CODE = "SELECTED_LANGUAGE_CODE";
     public static final String SEARCH_PLACEHOLDER = "SEARCH_PLACEHOLDER";
@@ -46,10 +40,7 @@ public class LanguagePreference {
     public static final String LOGIN = "LOGIN";
     public static final String CONFIRM_PASSWORD = "CONFIRM_PASSWORD";
     public static final String UPDATE_PROFILE = "UPDATE_PROFILE";
-    public static final String DEFAULT_UPDATE_PROFILE = "Update Profile";
-    public static final String DEFAULT_APP_ON = "On";
     public static final String APP_ON = "APP_ON";
-    public static final String DEFAULT_APP_SELECT_LANGUAGE = "Select Language";
     public static final String APP_SELECT_LANGUAGE = "APP_SELECT_LANGUAGE";
     public static final String RESUME_MESSAGE = "RESUME_MESSAGE";
     public static final String PROFILE = "PROFILE";
@@ -141,7 +132,7 @@ public class LanguagePreference {
     public static final String COUPON_CANCELLED = "COUPON_CANCELLED";
     public static final String COUPON_ALERT = "COUPON_ALERT";
     public static final String DETAILS_NOT_FOUND_ALERT = "DETAILS_NOT_FOUND_ALERT";
-    public static final String DEFAULT_DETAILS_NOT_FOUND_ALERT = "Failed to find details.";
+
 
     public static final String UNPAID = "UNPAID";
     public static final String ERROR_IN_PAYMENT_VALIDATION = "ERROR_IN_PAYMENT_VALIDATION";
@@ -159,7 +150,6 @@ public class LanguagePreference {
     public static final String TEXT_EMIAL = "TEXT_EMIAL";
     public static final String TEXT_PASSWORD = "TEXT_PASSWORD";
     public static final String MY_FAVOURITE = "MY_FAVOURITE";
-    public static final String DEFAULT_MY_FAVOURITE = "My Favourite";
     public static final String TRANSACTION_DETAILS_ORDER_ID = "TRANSACTION_DETAILS_ORDER_ID";
     public static final String PAY_BY_PAYPAL = "PAY_BY_PAYPAL";
     public static final String BTN_PAYNOW = "BTN_PAYNOW";
@@ -175,7 +165,6 @@ public class LanguagePreference {
     public static final String SIGN_OUT_ALERT = "SIGN_OUT_ALERT";
 
     public static final String GOOGLE_FCM_TOKEN = "GOOGLE_FCM_TOKEN";
-    public static final String DEFAULT_GOOGLE_FCM_TOKEN = "0";
     public static final String ENTER_REGISTER_FIELDS_DATA = "ENTER_REGISTER_FIELDS_DATA";
 
     public static final String MY_LIBRARY = "MY_LIBRARY";
@@ -258,6 +247,19 @@ public class LanguagePreference {
     public static final String DEFAULT_ERROR_IN_SUBSCRIPTION = "Error in Subscription";
     public static final String DEFAULT_PURCHASE_SUCCESS_ALERT = "You have successfully purchased the content.";
     public static final String DEFAULT_COUPON_CODE_HINT = "Enter Coupon Code";
+
+    public static String DEFAULT_TERMS = "terms";
+    public static String DEFAULT_AGREE_TERMS = "By Clicking on Register,I agree to";
+    public static final String DEFAULT_TO_LOGIN = "to login.";
+    public static final String DEFAULT_CLICK_HERE = "Click here";
+    public static final String DEFAULT_IS_MYLIBRARY = "0";
+    public static final String DEFAULT_IS_RESTRICT_DEVICE = "0";
+    public static final String DEFAULT_UPDATE_PROFILE = "Update Profile";
+    public static final String DEFAULT_APP_ON = "On";
+    public static final String DEFAULT_APP_SELECT_LANGUAGE = "Select Language";
+    public static final String DEFAULT_DETAILS_NOT_FOUND_ALERT = "Failed to find details.";
+    public static final String DEFAULT_MY_FAVOURITE = "My Favourite";
+    public static final String DEFAULT_GOOGLE_FCM_TOKEN = "0";
 
     //ADD LATER FOR PURCHASE AND TRANSACTION DETAILS
 

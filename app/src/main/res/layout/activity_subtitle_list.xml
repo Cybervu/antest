@@ -23,7 +23,7 @@
             android:background="@color/subtitleListColor"
             android:divider="#A9A9A9"
             android:dividerHeight="0dip"
-            android:paddingBottom="18dp" />
+            android:paddingBottom="@dimen/editEmailStr_padding" />
     </LinearLayout>
 
 </RelativeLayout>

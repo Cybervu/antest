@@ -3,27 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#fff"
-    android:padding="10dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="@dimen/Login_drawing_padding">
 
     <ImageView
-        android:layout_width="@dimen/resolution_list_img_width"
-        android:src="@drawable/selected_resolution"
         android:id="@+id/selected_resolution"
-        android:layout_marginLeft="10dp"
+        android:layout_width="@dimen/resolution_list_img_width"
+        android:layout_height="@dimen/resolution_list_img_height"
         android:layout_gravity="center"
-        android:layout_height="@dimen/resolution_list_img_height" />
+        android:layout_marginLeft="@dimen/ppv_margin"
+        android:src="@drawable/selected_resolution" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
         android:id="@+id/title"
-        android:textSize="@dimen/resolution_list_img_textsize"
-        android:text="wdeded"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/resolution_list_img_height"
+        android:layout_marginLeft="@dimen/resolution_list_margin"
         android:gravity="center_vertical"
-        android:layout_marginLeft="13dp"
+        android:orientation="vertical"
+        android:text="wdeded"
         android:textColor="#808080"
-        android:orientation="vertical" />
+        android:textSize="@dimen/resolution_list_img_textsize" />
 
 
 </LinearLayout>

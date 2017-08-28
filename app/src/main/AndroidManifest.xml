@@ -134,6 +134,9 @@
             android:name=".activity.CastAndCrewActivity"
             android:label=""
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.FilterActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
 
 
         <activity

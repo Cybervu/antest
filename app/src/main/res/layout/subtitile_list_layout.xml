@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#fff"
-    android:padding="10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/Login_drawing_padding">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/subtitlelist_height"
-        android:layout_marginLeft="18dp"
+        android:layout_marginLeft="@dimen/confirm_passwrd_margin_top"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:text="wdeded"
