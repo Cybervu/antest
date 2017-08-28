@@ -28,6 +28,9 @@ import com.home.vod.util.Util;
 
 import java.util.ArrayList;
 
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 
@@ -41,8 +44,9 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
     String image;
     int vertical = 0;
     boolean loaded = false;
-    int counter=0;
+    //int counter=0;
     LanguagePreference languagePreference;
+    int banner[] = {R.drawable.banner1};
 
   /*  int banner[] = {R.drawable.banner1,R.drawable.banner2,R.drawable.banner3};
     int bannerL[] = {R.drawable.banner1_l,R.drawable.banner2_l,R.drawable.banner3_l};*/
@@ -59,14 +63,23 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
     }
-   /* public void swapItems(){
-        loaded = true;
-    }*/
+    /* public void swapItems(){
+         loaded = true;
+     }*/
     @Override
     public ItemRowHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, null);
-        ItemRowHolder mh = new ItemRowHolder(v);
-        return mh;
+        float density = mContext.getResources().getDisplayMetrics().density;
+        Log.v("SUBHA","density === "+ density);
+        if(density >= 1.5 && density <= 3.0){
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_small, null);
+            ItemRowHolder mh = new ItemRowHolder(v);
+            return mh;
+
+        }else {
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, null);
+            ItemRowHolder mh = new ItemRowHolder(v);
+            return mh;
+        }
     }
 
     @Override
@@ -74,125 +87,81 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
 
         Log.v("MUVI","position of the item in adapter =============="+i);
 
-        if(i>=counter)
+       /* if(i>=counter)
         {
-            counter = i;
-            final String sectionName = dataList.get(i).getHeaderTitle();
-            final String sectionId = dataList.get(i).getHeaderPermalink();
+            counter = i;*/
+        final String sectionName = dataList.get(i).getHeaderTitle();
+        final String sectionId = dataList.get(i).getHeaderPermalink();
 
-            singleSectionItems = dataList.get(i).getAllItemsInSection();
-            pemalink=dataList.get(i).getHeaderPermalink();
-            for (int j = 0; j > bannerUrls.size(); j++) {
-                image = bannerUrls.get(j);
-            }
-            Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
-            itemRowHolder.itemTitle.setTypeface(castDescriptionTypeface);
-            itemRowHolder.itemTitle.setText(sectionName);
-            SectionListDataAdapter itemListDataAdapter = null;
+        singleSectionItems = dataList.get(i).getAllItemsInSection();
+        pemalink=dataList.get(i).getHeaderPermalink();
+        for (int j = 0; j > bannerUrls.size(); j++) {
+            image = bannerUrls.get(j);
+        }
+        Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
+        itemRowHolder.itemTitle.setTypeface(castDescriptionTypeface);
+        itemRowHolder.itemTitle.setText(sectionName);
+        SectionListDataAdapter itemListDataAdapter = null;
 //            if (MainActivity.vertical == 1) {
 
-            if (Util.image_orentiation.get(i) == 1) {
-                    itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);
-                    itemRowHolder.recycler_view_list.setHasFixedSize(true);
-                    itemRowHolder.recycler_view_list.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-                    itemRowHolder.recycler_view_list.setAdapter(itemListDataAdapter);
 
-                itemRowHolder.btnMore.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-
-                        Context context = v.getContext();
-                        Intent i = new Intent(context, ViewMoreActivity.class);
-                        i.putExtra("SectionId", sectionId);
-                        i.putExtra("sectionName", sectionName);
-                        context.startActivity(i);
-                    }
-                });
-
-                if (i == 0){
-                    itemRowHolder.mDemoSliderLayout.setVisibility(View.VISIBLE);
-                }else{
-                    itemRowHolder.mDemoSliderLayout.setVisibility(View.GONE);
-
-
-                }
-                if (singleSectionItems.size() <= 0) {
-                    itemRowHolder.itemTitle.setVisibility(View.GONE);
-                    itemRowHolder.btnMore.setVisibility(View.GONE);
-                }else{
-                    itemRowHolder.btnMore.setVisibility(View.VISIBLE);
-
-                }
-
-
-            }else {
-
-                   itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.home_280_card);
-                    itemRowHolder.recycler_view_list.setHasFixedSize(true);
-                    itemRowHolder.recycler_view_list.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-                    itemRowHolder.recycler_view_list.setAdapter(itemListDataAdapter);
-
-                itemRowHolder.btnMore.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-
-                        Context context = v.getContext();
-                        Intent i = new Intent(context, ViewMoreActivity.class);
-                        i.putExtra("SectionId", sectionId);
-                        i.putExtra("sectionName", sectionName);
-                        context.startActivity(i);
-                    }
-                });
-
-
-                if (i == 0) {
-                    itemRowHolder.mDemoSliderLayout.setVisibility(View.VISIBLE);
-                } else {
-
-                    itemRowHolder.mDemoSliderLayout.setVisibility(View.GONE);
-
-                }
-                if (singleSectionItems.size() <= 0) {
-                    itemRowHolder.itemTitle.setVisibility(View.GONE);
-                    itemRowHolder.btnMore.setVisibility(View.GONE);
-                }else{
-                    itemRowHolder.btnMore.setVisibility(View.VISIBLE);
-
-                }
-
+        if (Util.image_orentiation.get(i) == 1) {
+            float density = mContext.getResources().getDisplayMetrics().density;
+            if (density >= 3.5 && density <= 4.0) {
+                itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);
+            }else  if (density <= 1.5) {
+                itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card_small);
+            }else{
+                itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card_nexus);
             }
+            //  itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);
 
-       /* if ((mContext.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
-            if (singleSectionItems.size() >= 5) {
-                itemRowHolder.btnMore.setVisibility(View.VISIBLE);
-            } else {
-                itemRowHolder.btnMore.setVisibility(View.GONE);
-            }
-        }
-        else if ((mContext.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
-            if (singleSectionItems.size() >= 2) {
-                itemRowHolder.btnMore.setVisibility(View.VISIBLE);
-            } else {
-                itemRowHolder.btnMore.setVisibility(View.GONE);
-            }
-        }
-        else if ((mContext.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
-            if (singleSectionItems.size() >= 2) {
-                itemRowHolder.btnMore.setVisibility(View.VISIBLE);
-            } else {
-                itemRowHolder.btnMore.setVisibility(View.GONE);
-            }
         }else{
-            if (singleSectionItems.size() >= 5) {
-                itemRowHolder.btnMore.setVisibility(View.VISIBLE);
-            } else {
-                itemRowHolder.btnMore.setVisibility(View.GONE);
+            itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.home_280_card);
+
+        }
+
+        itemRowHolder.recycler_view_list.setHasFixedSize(true);
+        itemRowHolder.recycler_view_list.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+        itemRowHolder.recycler_view_list.setAdapter(itemListDataAdapter);
+
+        itemRowHolder.btnMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Context context = v.getContext();
+                Intent i = new Intent(context, ViewMoreActivity.class);
+                i.putExtra("SectionId", sectionId);
+                i.putExtra("sectionName", sectionName);
+                context.startActivity(i);
             }
+        });
+
+        if (i == 0){
+            itemRowHolder.mDemoSliderLayout.setVisibility(View.VISIBLE);
+        }else{
+            itemRowHolder.mDemoSliderLayout.setVisibility(View.GONE);
+
         }
-*/
+        Log.v("SUBHA","hggf"+singleSectionItems.size());
+        //  itemRowHolder.btnMore.setVisibility(View.VISIBLE);
+
+        if (singleSectionItems.size() <= 0) {
+            itemRowHolder.itemTitle.setVisibility(View.GONE);
+            itemRowHolder.btnMore.setVisibility(View.GONE);
+            // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
+        } else  if (singleSectionItems.size() == 1) {
+            itemRowHolder.btnMore.setVisibility(View.GONE);
+            // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
+
+        }else{
+            itemRowHolder.btnMore.setVisibility(View.VISIBLE);
+            // itemRowHolder.recycler_view_list.setVisibility(View.VISIBLE);
+
+
         }
+        // }
 
 
     }
@@ -205,6 +174,70 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
     public int getItemViewType(int position) {
         return position;
     }
+
+    /**
+     * Method to load dynamic urls to slider.
+     * @param mDemoSlider
+     * @param view
+     * @param onSliderClickListener
+     */
+    private void loadDynamicBanners(SliderLayout mDemoSlider,View view,BaseSliderView.OnSliderClickListener onSliderClickListener){
+        if(bannerUrls.size()>=0) {
+            for (int i = 0; i < bannerUrls.size(); i++) {
+
+                DefaultSliderView textSliderView = new DefaultSliderView(view.getContext());
+
+                textSliderView
+                        .description("")
+                        .image(bannerUrls.get(i))
+                        .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                        .setOnSliderClickListener(onSliderClickListener);
+                mDemoSlider.addSlider(textSliderView);
+
+            }
+        }
+    }
+
+
+    /**
+     * Method to load static urls to slider.
+     * @param mDemoSlider
+     * @param view
+     * @param onSliderClickListener
+     */
+    private void loadStaticBanners(SliderLayout mDemoSlider,View view,BaseSliderView.OnSliderClickListener onSliderClickListener){
+        if (((mContext.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE)
+                || ((mContext.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+            for (int j = 0; j < banner.length; j++) {
+                DefaultSliderView textSliderView = new DefaultSliderView(view.getContext());
+                textSliderView
+                        .description("")
+                        .image(banner[j])
+                        .setScaleType(BaseSliderView.ScaleType.Fit)
+                        .setOnSliderClickListener(onSliderClickListener);
+                textSliderView.bundle(new Bundle());
+                textSliderView.getBundle()
+                        .putString("extra", "");
+
+                mDemoSlider.addSlider(textSliderView);
+            }
+        }else{
+            for (int j = 0; j < banner.length; j++) {
+                DefaultSliderView textSliderView = new DefaultSliderView(view.getContext());
+                textSliderView
+                        .description("")
+                        .image(banner[j])
+                        .setScaleType(BaseSliderView.ScaleType.Fit)
+                        .setOnSliderClickListener(onSliderClickListener);
+                textSliderView.bundle(new Bundle());
+                textSliderView.getBundle()
+                        .putString("extra", "");
+
+                mDemoSlider.addSlider(textSliderView);
+            }
+        }
+    }
+
 
 
 
@@ -231,77 +264,15 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
             mDemoSliderLayout = (RelativeLayout) view.findViewById(R.id.sliderRelativeLayout);
 
 
-            if(bannerUrls.size()>=0 && firstTime == false){
+            if(!firstTime){
                 firstTime = true;
-                  for (int i = 0; i < bannerUrls.size(); i++) {
 
+               // loadDynamicBanners(mDemoSlider,view,this);
 
-                      // initialize a SliderLayout
-               /* if (((mContext.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((mContext.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                    for (int j = 0; j < bannerL.length ;j ++) {
-                        DefaultSliderView textSliderView = new DefaultSliderView(view.getContext());
-                        textSliderView
-                                .description("")
-                                .image(bannerL[j])
-                                .setScaleType(BaseSliderView.ScaleType.Fit)
-                                .setOnSliderClickListener(this);
-                        textSliderView.bundle(new Bundle());
-                        textSliderView.getBundle()
-                                .putString("extra", "");
+                loadStaticBanners(mDemoSlider,view,this);
 
-                        mDemoSlider.addSlider(textSliderView);
-                    }
-                }else{
-                    for (int j = 0; j < banner.length;j ++) {
-                        DefaultSliderView textSliderView = new DefaultSliderView(view.getContext());
-                        textSliderView
-                                .description("")
-                                .image(banner[j])
-                                .setScaleType(BaseSliderView.ScaleType.Fit)
-                                .setOnSliderClickListener(this);
-                        textSliderView.bundle(new Bundle());
-                        textSliderView.getBundle()
-                                .putString("extra", "");
-
-                        mDemoSlider.addSlider(textSliderView);
-                    }
-                }
-*/
-                      DefaultSliderView textSliderView = new DefaultSliderView(view.getContext());
-
-                      textSliderView
-                              .description("")
-                              .image(bannerUrls.get(i))
-                              .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                              .setOnSliderClickListener(this);
-                      mDemoSlider.addSlider(textSliderView);
-
-                  }
-                //add your extra information
-                /*    textSliderView.bundle(new Bundle());
-                    textSliderView.getBundle()
-                            .putString("extra", "");
-                    mDemoSlider.addSlider(textSliderView);*/
-                // }
-            }else{
-                DefaultSliderView textSliderView = new DefaultSliderView(view.getContext());
-                // initialize a SliderLayout
-                //  String image=bannerUrls.get(i)
-
-                textSliderView
-                        .description("")
-                        .image("https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png")
-                        .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                        .setOnSliderClickListener(this);
-
-
-                //add your extra information
-                textSliderView.bundle(new Bundle());
-                textSliderView.getBundle()
-                        .putString("extra", "");
-
-                mDemoSlider.addSlider(textSliderView);
             }
+
             mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
             mDemoSlider.setCustomAnimation(new DescriptionAnimation());
             mDemoSlider.setDuration(10000);
