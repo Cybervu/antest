@@ -38,6 +38,8 @@ android {
 
     productFlavors {
 
+        /*Structuring Default flavour with dimension*/
+
         defaultFlavor {
             dimension 'vendor'
             applicationId 'com.release.muvisdk'
@@ -46,19 +48,19 @@ android {
             versionCode 1
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"e8ae05a2ef3fd0c6688952c8f7557823\""
         }
-
         defaultFlavor_staging_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.idogic.com/rest/\""
-
         }
-
         defaultFlavor_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
-
         }
+
+
+        /*Structuring vishwamtv flavour with dimension*/
 
         vishwamtv {
             dimension 'vendor'
@@ -68,20 +70,18 @@ android {
             versionCode 1
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"e8ae05a2ef3fd0c6688952c8f7557823\""
         }
-
         vishwamtv_staging_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
-
         }
-
         vishwamtv_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
-
         }
 
+        /*Structuring newthoughtchannel flavour with dimension*/
 
         newthoughtchannel {
             dimension 'vendor'
@@ -91,20 +91,38 @@ android {
             versionCode 1
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
         }
-
         newthoughtchannel_staging_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
-
         }
-
         newthoughtchannel_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
-
         }
 
+        /*Structuring aatto flavour with dimension*/
+
+        aatto {
+            dimension 'vendor'
+            minSdkVersion 15
+            applicationId 'com.release.aatto'
+            targetSdkVersion 25
+            testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField "String", "AUTH_TOKEN", "\"4298851905443517c9f161e6b0471969\""
+        }
+
+        aatto_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        aatto_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
     }
 }
 
@@ -119,6 +137,8 @@ android.variantFilter { variant ->
 /**
  * Filtered defaultFlavor variant.
  */
+    /*Avoid defaultFlavor to vishwamtv combination for both debug & release mode.*/
+
     if (vendor.equals('defaultFlavor') && environment.equals('vishwamtv_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -132,6 +152,9 @@ android.variantFilter { variant ->
     if (vendor.equals('defaultFlavor') && environment.equals('vishwamtv_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+
+    /*Avoid defaultFlavor to newthoughtchannel combination for both debug & release mode.*/
+
     if (vendor.equals('defaultFlavor') && environment.equals('newthoughtchannel_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -142,6 +165,21 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     if (vendor.equals('defaultFlavor') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid defaultFlavor to aatto combination for both debug & release mode.*/
+
+    if (vendor.equals('defaultFlavor') && environment.equals('aatto_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('aatto_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('aatto_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('aatto_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
 
@@ -171,6 +209,18 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     if (vendor.equals('vishwamtv') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('aatto_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('aatto_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('aatto_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('aatto_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
 
@@ -203,6 +253,60 @@ android.variantFilter { variant ->
     if (vendor.equals('newthoughtchannel') && environment.equals('vishwamtv_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+    if (vendor.equals('newthoughtchannel') && environment.equals('aatto_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('aatto_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('aatto_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('aatto_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+
+    /**
+     * Filtered aattoo variant.
+     */
+    if (vendor.equals('aatto') && environment.equals('defaultFlavor_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('defaultFlavor_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('aatto') && environment.equals('defaultFlavor_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('defaultFlavor_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('vishwamtv_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('vishwamtv_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('vishwamtv_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('vishwamtv_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('newthoughtchannel_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('newthoughtchannel_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('newthoughtchannel_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
 }
 
 
@@ -215,18 +319,23 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile files('libs/universal-image-loader-1.9.4.jar')
+    //compile files('libs/YouTubeAndroidPlayerApi.jar')
+
+    // compile 'com.github.Muvidevelopers:APISDK:v1.02'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true;
+    }
+    compile project(path: ':muviplayersdk')
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
-    compile files('libs/universal-image-loader-1.9.4.jar')
     compile 'com.pkmmte.view:circularimageview:1.1'
     compile 'com.squareup.picasso:picasso:2.5.0'
     compile 'io.card:android-sdk:5.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
-    compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.devbrackets.android:exomedia:3.0.1'
-    //compile files('libs/YouTubeAndroidPlayerApi.jar')
-    compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.google.android.gms:play-services-cast-framework:9.4.0'
     compile 'com.googlecode.android-query:android-query:0.25.9'
