@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="wasabi">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../muviplayersdk/libs/wasabi.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

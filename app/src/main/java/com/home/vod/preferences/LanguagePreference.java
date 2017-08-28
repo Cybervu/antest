@@ -16,8 +16,12 @@ public class LanguagePreference {
     /**
      *  Language Constant default Key
      */
-
-
+    public static final String DEFAULT_TO_LOGIN = "to login.";
+    public static final String TO_LOGIN = "TO_LOGIN";
+    public static final String DEFAULT_CLICK_HERE = "Click here";
+    public static final String CLICK_HERE = "CLICK_HERE";
+    public static final String SUBMIT_YOUR_RATING_TITLE = "SUBMIT_YOUR_RATING_TITLE";
+    public static final String VIEW_LESS = "VIEW_LESS";
     public static final String IS_MYLIBRARY = "IS_MYLIBRARY";
     public static final String DEFAULT_IS_MYLIBRARY = "0";
     public static final String IS_RESTRICT_DEVICE = "IS_RESTRICT_DEVICE";
@@ -59,6 +63,7 @@ public class LanguagePreference {
     public static final String PLAN_NAME = "PLAN_NAME";
     public static final String SEASON = "SEASON";
     public static final String SELECT_PLAN = "SELECT_PLAN";
+    public static final String SKIP_BUTTON_TITLE = "SKIP_BUTTON_TITLE";
     public static final String PURCHASE = "PURCHASE";
     public static final String CREDIT_CARD_DETAILS = "CREDIT_CARD_DETAILS";
     public static final String CARD_WILL_CHARGE = "CARD_WILL_CHARGE";
@@ -194,6 +199,14 @@ public class LanguagePreference {
     public static final String DEFAULT_IS_ONE_STEP_REGISTRATION = "0";
 
     //ADD LATER FOR PURCHASE AND TRANSACTION DETAILS
+    public static final String DEFAULT_NEED_LOGIN_TO_REVIEW = "You need to login to add your review.";
+    public static final String NEED_LOGIN_TO_REVIEW = "NEED_LOGIN_TO_REVIEW";
+    public static final String DEFAULT_ENTER_REVIEW_HERE = "Enter your Review here...max 50 characters";
+    public static final String ENTER_REVIEW_HERE = "ENTER_REVIEW_HERE";
+    public static final String DEFAULT_BTN_POST_REVIEW = "Post Review";
+    public static final String BTN_POST_REVIEW = "BTN_POST_REVIEW";
+    public static final String DEFAULT_VIEW_LESS = "View Less";
+    public static final String DEFAULT_SUBMIT_YOUR_RATING_TITLE = "Submit Your Rating";
     public static final String PLAN_ID = "PLAN_ID";
     public static final String DEFAULT_PLAN_ID = "0";
     public static final String NO_PDF = "NO_PDF";
@@ -233,6 +246,7 @@ public class LanguagePreference {
     public static final String DEFAULT_CREDIT_CARD_DETAILS = "Credit Card Details";
     public static final String DEFAULT_BUTTON_PAY_NOW = "Pay Now";
     public static final String DEFAULT_SELECT_PLAN = "Select Your Plan";
+    public static final String DEFAULT_SKIP_BUTTON_TITLE = "Skip";
     public static final String DEFAULT_CONTINUE_BUTTON = "Continue";
     public static final String DEFAULT_USE_NEW_CARD = "Use New Card";
     public static final String DEFAULT_DISCOUNT_ON_COUPON = "Awesome, You just saved";

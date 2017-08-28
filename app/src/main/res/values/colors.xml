@@ -2,7 +2,7 @@
 <resources>
 
  <color name="appBackgroundColor">#fff</color>
- <color name="textColor">#eee</color>
+ <color name="textColor">#111111</color>
  <color name="videotextColor">#000000</color>
  <color name="loginTextViewColor">#b70000</color>
  <color name="buttonTextColor">#fff</color>
@@ -22,7 +22,7 @@
  <color name="transparent">@android:color/transparent</color>
  <color name="castCrewTitleTextColor">#669900</color>
  <color name="subtitleListColor">#fff</color>
- <color name="episodeBackgroundColor">#f5f4f4</color>
+ <color name="episodeBackgroundColor">#b5b4b4</color>
  <color name="preOrderButtonTextColor">#DDD</color>
  <color name="spinnerDropDownListColor">#000</color>
  <color name="leftMenuBackground">#fff</color>
@@ -33,7 +33,7 @@
  <color name="filterTextColor">#5c6873</color>
  <color name="nav_drawer_lineColor">#000</color>
  <color name="nav_drawer_text_Color">#000000</color>
- <color name="button_background">#b70000</color>
+ <color name="button_background">#930f18</color>
  <color name="button_background_plan_textview">#930f18</color>
  <color name="cancel_button_background">#DDD</color>
  <color name="pre_order_button_background">#fff</color>

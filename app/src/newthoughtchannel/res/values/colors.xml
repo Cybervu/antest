@@ -19,6 +19,7 @@
     <color name="castCrewTitleTextColor">#264177</color>
     <color name="subtitleListColor">#fff</color>
     <color name="episodeBackgroundColor">#f5f4f4</color>
+    <color name="pageTitleColor">#3f444a</color>
     <color name="preOrderButtonTextColor">#DDD</color>
     <color name="spinnerDropDownListColor">#000</color>
     <color name="leftMenuBackground">#fff</color>
@@ -46,7 +47,6 @@
     <color name="white">#ffffff</color>
     <color name="loader_color">#5d6c7e</color>
     <color name="hint_background">#264177</color>
-    <color name="pageTitleColor">#3f444a</color>
     <color name="noInternetColor">#5c6873</color>
     <color name="editTextColor">#5c6873</color>
     <color name="movieTitleColor">#fff</color>

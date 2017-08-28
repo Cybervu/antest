@@ -2,16 +2,12 @@ package com.home.vod.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -36,7 +32,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -84,15 +79,10 @@ import com.home.vod.preferences.PreferenceManager;
 import com.androidquery.AQuery;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
-import com.google.android.gms.cast.MediaTrack;
-import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManagerListener;
-import com.google.android.gms.cast.framework.media.RemoteMediaClient;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
-import com.home.vod.R;
 import com.home.vod.util.ExpandableTextView;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -106,23 +96,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -130,7 +110,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -142,14 +121,12 @@ import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
-import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADVANCE_PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
@@ -166,7 +143,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTO
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_SLOW_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
@@ -186,7 +162,6 @@ import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
-import static com.home.vod.preferences.LanguagePreference.SLOW_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.YES;
@@ -961,7 +936,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                                 if (playerModel.getIsFreeContent() == 1) {
 
-                                    Log.v("SUBHA","video details");
+                                    Log.v("MUVI","video details");
                                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                                     getVideoDetailsInput.setAuthToken(authTokenStr);
                                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
@@ -974,7 +949,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                 } else {
 
 
-                                    Log.v("SUBHA","validate user details");
+                                    Log.v("MUVI","validate user details");
 
                                     ValidateUserInput validateUserInput = new ValidateUserInput();
                                     validateUserInput.setAuthToken(authTokenStr);
@@ -1014,7 +989,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
                         // MUVIlaxmi
 
-                        Log.v("SUBHA","VV");
+                        Log.v("MUVI","VV");
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                         getVideoDetailsInput.setAuthToken(authTokenStr);
                         getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
@@ -1151,7 +1126,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     }
                 } else {
                     if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
-                        // subhalaxmi
+                        // MUVIlaxmi
 
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                         getVideoDetailsInput.setAuthToken(authTokenStr);
@@ -1513,7 +1488,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                     e.printStackTrace();
                 }
-                Log.v("SUBHA","response data = "+ responseStr);
+                Log.v("MUVI","response data = "+ responseStr);
                 if(responseStr!=null){
                     JSONObject myJson = new JSONObject(responseStr);
                     status = Integer.parseInt(myJson.optString("code"));
@@ -1646,7 +1621,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         status = 0;
                     }
 
-                    if (PlanId.equals("1") && Subscription_Str.equals("0")) {
+                    if (planId.equals("1") && Subscription_Str.equals("0")) {
                         Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
@@ -1673,7 +1648,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 } else if (status == 429 || status == 430 || status == 428) {
 
 
-                    Log.v("SUBHA", "430");
+                    Log.v("MUVI", "430");
                     if (validUserStr != null) {
                         try {
                             if (pDialog != null && pDialog.isShowing()) {
@@ -1701,11 +1676,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                             if ((userMessage.trim().equalsIgnoreCase("Unpaid")) || (userMessage.trim().matches("Unpaid")) || (userMessage.trim().equals("Unpaid"))) {
                                 if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-                                    Log.v("SUBHA", "430 ppv");
+                                    Log.v("MUVI", "430 ppv");
                                     // Go to ppv Payment
                                     payment_for_single_part();
-                                } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
-                                    Log.v("SUBHA", "430 subscription");
+                                } else if (planId.equals("1") && Subscription_Str.equals("0")) {
+                                    Log.v("MUVI", "430 subscription");
                                     Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     startActivity(intent);
@@ -1721,7 +1696,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
                     // Go to ppv Payment
                     payment_for_single_part();
-                } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
+                } else if (planId.equals("1") && Subscription_Str.equals("0")) {
                     Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
@@ -3335,9 +3310,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         asynGetReviewDetails.executeOnExecutor(threadPoolExecutor);
 
 
-        Log.v("SUBHA2","user id"+ preferenceManager.getUseridFromPref());
-        Log.v("SUBHA2","Movie  id"+ movieIdStr.trim());
-        Log.v("SUBHA2","View Content Rating Call");
+        Log.v("MUVI2","user id"+ preferenceManager.getUseridFromPref());
+        Log.v("MUVI2","Movie  id"+ movieIdStr.trim());
+        Log.v("MUVI2","View Content Rating Call");
 
     }
     //Asyntask for getDetails of the csat and crew members.
@@ -3370,7 +3345,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("SUBHA","responseStr AsynGetReviewDetails"+responseStr);
+                    Log.v("MUVI","responseStr AsynGetReviewDetails"+responseStr);
 
 
                 } catch (Exception e){
@@ -3385,7 +3360,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     msg = myJson.optString("msg");
                     if ((myJson.has("showrating")) && myJson.optString("showrating").trim() != null && !myJson.optString("showrating").trim().isEmpty() && !myJson.optString("showrating").trim().equals("null") && !myJson.optString("showrating").trim().matches("")) {
                         ratingAddedByUser = Integer.parseInt(myJson.optString("showrating"));
-                        Log.v("SUBHA","HFFH"+ratingAddedByUser);
+                        Log.v("MUVI","HFFH"+ratingAddedByUser);
                     }
 
                 }
@@ -3481,7 +3456,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             loadMovieDetailspDialog = new ProgressBarHandler(MovieDetailsActivity.this);
             loadMovieDetailspDialog.show();
-            Log.v("SUBHA","onPreExecute");
+            Log.v("MUVI","onPreExecute");
 
 
         }
@@ -3561,7 +3536,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         if (status > 0) {
 
             if (status == 427) {
-                Log.v("SUBHA","validate post execute 11" + status);
+                Log.v("MUVI","validate post execute 11" + status);
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
@@ -3590,7 +3565,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 dlgAlert.create().show();
             } else if (status == 429 || status == 430) {
 
-                Log.v("SUBHA","validate post execute" + status);
+                Log.v("MUVI","validate post execute" + status);
 
                 if (validUserStr != null) {
 
@@ -3605,7 +3580,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                     if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
                         if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
-                            Log.v("SUBHA","VV VV VV");
+                            Log.v("MUVI","VV VV VV");
 
                             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                             getVideoDetailsInput.setAuthToken(authTokenStr);
@@ -3624,7 +3599,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                             if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
                                 // Go to ppv Payment
 
-                                Log.v("SUBHA","unpaid msg");
+                                Log.v("MUVI","unpaid msg");
                                 payment_for_single_part();
                             } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
                                 Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
@@ -3632,7 +3607,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                 startActivity(intent);
                             } else {
                                 // Go to ppv Payment
-                                Log.v("SUBHA","unpaid msg");
+                                Log.v("MUVI","unpaid msg");
                                 payment_for_single_part();
                             }
                         }
@@ -3664,7 +3639,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             } else {
                 if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
 
-                    Log.v("SUBHA","VV vv vv vvvv");
+                    Log.v("MUVI","VV vv vv vvvv");
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
@@ -3997,15 +3972,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             Util.apvModel = contentDetailsOutput.getApvDetails();
             Util.ppvModel = contentDetailsOutput.getPpvDetails();
 
-            Log.v("SUBHA","rattting === "+ rating);
-            Log.v("SUBHA","reviewwww === "+ reviews);
+            Log.v("MUVI","rattting === "+ rating);
+            Log.v("MUVI","reviewwww === "+ reviews);
 
 
             //  castValue = contentDetailsOutput.getCastStr();
 
-//        Log.v("SUBHA2","cast value" +castValue);
+//        Log.v("MUVI2","cast value" +castValue);
 
-            Log.v("SUBHA","movieUniqueId====== "+movieUniqueId);
+            Log.v("MUVI","movieUniqueId====== "+movieUniqueId);
 
             /***favorite *****/
 
@@ -4167,7 +4142,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             noDataLayout.setVisibility(View.VISIBLE);
         }
 
-        Log.v("SUBHA","call review details");
+        Log.v("MUVI","call review details");
         GetReviewDetails();
 
 
@@ -4197,8 +4172,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         if(status==200) {
 
             String loggedInStr = preferenceManager.getUseridFromPref();
-            Log.v("SUBHA","review data"+ reviews);
-            Log.v("SUBHA","rating data"+ rating);
+            Log.v("MUVI","review data"+ reviews);
+            Log.v("MUVI","rating data"+ rating);
 
             if (reviews.equalsIgnoreCase("0")) {
                 viewRatingTextView.setVisibility(View.GONE);
@@ -4210,20 +4185,20 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             if (rating.equalsIgnoreCase("0")) {
                 ratingBar.setVisibility(View.GONE);
             } else {
-                Log.v("SUBHA","rating ==== "+ rating);
+                Log.v("MUVI","rating ==== "+ rating);
                 viewRatingTextView.setVisibility(View.VISIBLE);
 
                 if (preferenceManager.getLoginFeatureFromPref() == 1) {
 
                     if (loggedInStr == null) {
                         viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, DEFAULT_ADD_A_REVIEW));
-                        Log.v("SUBHA","rating 0 ==== "+ viewContentRatingOutputModel.getShowrating());
+                        Log.v("MUVI","rating 0 ==== "+ viewContentRatingOutputModel.getShowrating());
                     } else {
                         if (viewContentRatingOutputModel.getShowrating() == 1) {
                             viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, DEFAULT_ADD_A_REVIEW));
-                            Log.v("SUBHA","rating 1 ==== "+ viewContentRatingOutputModel.getShowrating());
+                            Log.v("MUVI","rating 1 ==== "+ viewContentRatingOutputModel.getShowrating());
                         } else {
-                            Log.v("SUBHA","rating 2 ==== "+ viewContentRatingOutputModel.getShowrating());
+                            Log.v("MUVI","rating 2 ==== "+ viewContentRatingOutputModel.getShowrating());
                             viewRatingTextView.setText("reviews (" + reviews + ")");
                             viewRatingTextView.setText(languagePreference.getTextofLanguage(REVIEWS, DEFAULT_REVIEWS) + " (" + reviews + ") ");
 

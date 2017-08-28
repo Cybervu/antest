@@ -59,7 +59,6 @@ import com.home.vod.R;
 import com.home.vod.adapter.FavoriteAdapter;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.model.GridItem;
-import com.home.vod.model.LanguageModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
@@ -67,17 +66,6 @@ import com.muvi.player.utils.Util;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -252,7 +240,7 @@ PreferenceManager preferenceManager;
         noDataLayout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
 
-        //subhalaxmi
+        //MUVIlaxmi
         gridView.setVisibility(View.VISIBLE);
       /*  ArrayList<GridItem> tempData = new ArrayList<GridItem>();
 
@@ -481,7 +469,7 @@ PreferenceManager preferenceManager;
         scrolling = false;
 
 
-        Log.v("SUBHA","favorite calling");
+        Log.v("MUVI","favorite calling");
         ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
         viewFavouriteInputModel.setAuthToken(Util.authTokenStr);
         viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
@@ -489,8 +477,8 @@ PreferenceManager preferenceManager;
         asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,FavoriteActivity.this,FavoriteActivity.this);
         asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
 
-        Log.v("SUBHA","authtokenn = "+Util.authTokenStr);
-        Log.v("SUBHA","user id = "+preferenceManager.getUseridFromPref());
+        Log.v("MUVI","authtokenn = "+Util.authTokenStr);
+        Log.v("MUVI","user id = "+preferenceManager.getUseridFromPref());
 
 
 
@@ -600,7 +588,7 @@ PreferenceManager preferenceManager;
     @Override
     public void onViewFavouritePostExecuteCompleted(ArrayList<ViewFavouriteOutputModel> viewFavouriteOutputModelArray, int status, int totalItems, String message) {
 
-        Log.v("SUBHA","item data =="+ itemData);
+        Log.v("MUVI","item data =="+ itemData);
 
         try {
             if (pDialog != null && pDialog.isShowing()) {
@@ -626,7 +614,7 @@ PreferenceManager preferenceManager;
 //            int isAPV = viewFavouriteOutputModelArray.get(i).getIsAPV();
 
             itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, "", "", moviePermalinkStr, isEpisodeStr, "", "", 0, 0, 0));
-         Log.v("SUBHA","item data =="+ itemData);
+         Log.v("MUVI","item data =="+ itemData);
 
         }
         if (itemData.size() <= 0) {

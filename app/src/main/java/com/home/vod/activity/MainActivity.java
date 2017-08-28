@@ -36,6 +36,7 @@ import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetMenuListAsynctask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.LogoutAsynctask;
+import com.home.apisdk.apiController.SDKInitializer;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
@@ -85,7 +86,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
@@ -101,7 +101,6 @@ import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAG
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
@@ -264,6 +263,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        LogUtil.showLog("BKS","packagenameMAINactivity1==="+ SDKInitializer.user_Package_Name_At_Api);
         if (menuList != null && menuList.size() > 0) {
             menuList.clear();
         }
@@ -857,6 +857,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onGetMenuListPostExecuteCompleted(ArrayList<MenuListOutput> menuListOutputList, ArrayList<MenuListOutput> footermenuListOutputList, int status, String message) {
+        LogUtil.showLog("BKS","packagenameMAINactivity==="+ SDKInitializer.user_Package_Name_At_Api);
 
         LogUtil.showLog("Alok", "onGetMenuListPostExecuteCompleted");
         if (status == 0) {

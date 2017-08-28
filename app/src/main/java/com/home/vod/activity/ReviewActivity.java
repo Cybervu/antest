@@ -2,11 +2,8 @@ package com.home.vod.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,19 +28,12 @@ import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.ReviewsAdapter;
 import com.home.vod.model.ReviewsItem;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
-import com.muvi.player.utils.Util;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.home.vod.util.Util;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
@@ -51,6 +41,29 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import static com.home.vod.preferences.LanguagePreference.BTN_POST_REVIEW;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.CLICK_HERE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_POST_REVIEW;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CLICK_HERE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REVIEW_HERE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEED_LOGIN_TO_REVIEW;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SLOW_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SUBMIT_YOUR_RATING_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TO_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.ENTER_REVIEW_HERE;
+import static com.home.vod.preferences.LanguagePreference.FAILURE;
+import static com.home.vod.preferences.LanguagePreference.NEED_LOGIN_TO_REVIEW;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SLOW_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SUBMIT_YOUR_RATING_TITLE;
+import static com.home.vod.preferences.LanguagePreference.TO_LOGIN;
+import static com.home.vod.util.Constant.authTokenStr;
+
 
 
 public class ReviewActivity extends AppCompatActivity implements
@@ -70,7 +83,7 @@ public class ReviewActivity extends AppCompatActivity implements
      TextView noInternetTextView;*/
     int isLogin = 0;
     PreferenceManager preferenceManager;
-
+    LanguagePreference languagePreference;
     //  LinearLayout primary_layout;
     boolean isNetwork;
     int showRating = 0;
@@ -94,6 +107,7 @@ public class ReviewActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
+        languagePreference = LanguagePreference.getLanguagePreference(this);
         isLogin = preferenceManager.getLoginFeatureFromPref();
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -115,11 +129,11 @@ public class ReviewActivity extends AppCompatActivity implements
         Typeface typeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
         submitButton.setTypeface(typeface);
         submitTitleTextView.setTypeface(typeface);
-        submitTitleTextView.setText(Util.getTextofLanguage(ReviewActivity.this, Util.SUBMIT_YOUR_RATING_TITLE, Util.DEFAULT_SUBMIT_YOUR_RATING_TITLE));
-        submitButton.setText(Util.getTextofLanguage(ReviewActivity.this, Util.BTN_POST_REVIEW, Util.DEFAULT_BTN_POST_REVIEW));
+        submitTitleTextView.setText(languagePreference.getTextofLanguage(SUBMIT_YOUR_RATING_TITLE,DEFAULT_SUBMIT_YOUR_RATING_TITLE));
+        submitButton.setText(languagePreference.getTextofLanguage(BTN_POST_REVIEW,DEFAULT_BTN_POST_REVIEW));
 
-        submitReviewTextView.setHint(Util.getTextofLanguage(ReviewActivity.this, Util.ENTER_REVIEW_HERE, Util.DEFAULT_ENTER_REVIEW_HERE));
-        String clickHereStr = Util.getTextofLanguage(ReviewActivity.this, Util.NEED_LOGIN_TO_REVIEW, Util.DEFAULT_NEED_LOGIN_TO_REVIEW) + " " + Util.getTextofLanguage(ReviewActivity.this, Util.CLICK_HERE, Util.DEFAULT_CLICK_HERE) + " "+ Util.getTextofLanguage(ReviewActivity.this, Util.TO_LOGIN, Util.DEFAULT_TO_LOGIN);
+        submitReviewTextView.setHint(languagePreference.getTextofLanguage(ENTER_REVIEW_HERE,DEFAULT_ENTER_REVIEW_HERE));
+        String clickHereStr = languagePreference.getTextofLanguage(NEED_LOGIN_TO_REVIEW,DEFAULT_NEED_LOGIN_TO_REVIEW) + " " + languagePreference.getTextofLanguage(CLICK_HERE,DEFAULT_CLICK_HERE) + " "+ languagePreference.getTextofLanguage(TO_LOGIN,DEFAULT_TO_LOGIN);
 
         SpannableString mySpannableString = new SpannableString(clickHereStr);
         mySpannableString.setSpan(new UnderlineSpan(), 0, mySpannableString.length(), 0);
@@ -151,9 +165,9 @@ public class ReviewActivity extends AppCompatActivity implements
 
                 AddContentRatingInputModel addContentRatingInputModel = new AddContentRatingInputModel();
                 addContentRatingInputModel.setUser_id(preferenceManager.getUseridFromPref());
-                addContentRatingInputModel.setLang_code(Util.getTextofLanguage(ReviewActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                addContentRatingInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
                 addContentRatingInputModel.setContent_id(getIntent().getStringExtra("muviId"));
-                addContentRatingInputModel.setAuthToken(Util.authTokenStr.trim());
+                addContentRatingInputModel.setAuthToken(authTokenStr.trim());
                 addContentRatingInputModel.setRating(ratingStr);
                 addContentRatingInputModel.setReview(reviewMessage);
 
@@ -167,7 +181,7 @@ public class ReviewActivity extends AppCompatActivity implements
 
         //  primary_layout = (LinearLayout)findViewById(R.id.primary_layout);
         reviewsGridView = (GridView) findViewById(R.id.reviewsList);
-        isNetwork = Util.checkNetwork(ReviewActivity.this);
+        isNetwork = NetworkStatus.getInstance().isConnected(this);
         reviewsGridView.setNumColumns(1);
 
 
@@ -193,27 +207,27 @@ public class ReviewActivity extends AppCompatActivity implements
         super.onResume();
         /*if(isLogin == 1) {
             if (pref != null) {
-                Log.v("SUBHA","FHFH");
+                Log.v("MUVI","FHFH");
                 String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
                 if (loggedInStr == null) {
-                    Log.v("SUBHA","loggedInStr");
+                    Log.v("MUVI","loggedInStr");
 
                     clickHereToLogin.setVisibility(View.VISIBLE);
                     submitRatingLayout.setVisibility(View.GONE);
                 }else{
-                    Log.v("SUBHA","loggedInStr1");
+                    Log.v("MUVI","loggedInStr1");
 
                     clickHereToLogin.setVisibility(View.GONE);
                     submitRatingLayout.setVisibility(View.VISIBLE);
                 }
             }else{
-                Log.v("SUBHA","loggedInStr2");
+                Log.v("MUVI","loggedInStr2");
 
                 clickHereToLogin.setVisibility(View.VISIBLE);
                 submitRatingLayout.setVisibility(View.GONE);
             }
         }else{
-            Log.v("SUBHA","loggedInStr3");
+            Log.v("MUVI","loggedInStr3");
 
             clickHereToLogin.setVisibility(View.GONE);
             submitRatingLayout.setVisibility(View.GONE);
@@ -224,15 +238,19 @@ public class ReviewActivity extends AppCompatActivity implements
 
     public void GetReviewDetails()
     {
+        if(isNetwork) {
+            String muviid = getIntent().getStringExtra("muviId");
+            ViewContentRatingInputModel viewContentRatingInputModel = new ViewContentRatingInputModel();
+            viewContentRatingInputModel.setAuthToken(authTokenStr);
+            viewContentRatingInputModel.setContent_id(muviid);
+            viewContentRatingInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            viewContentRatingInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
-        ViewContentRatingInputModel viewContentRatingInputModel = new ViewContentRatingInputModel();
-        viewContentRatingInputModel.setAuthToken(Util.authTokenStr);
-        viewContentRatingInputModel.setContent_id(getIntent().getStringExtra("muviId"));
-        viewContentRatingInputModel.setLang_code(Util.getTextofLanguage(ReviewActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-        viewContentRatingInputModel.setUser_id(preferenceManager.getUseridFromPref());
-
-        ViewContentRatingAsynTask viewContentRatingAsynTask = new ViewContentRatingAsynTask(viewContentRatingInputModel, ReviewActivity.this, ReviewActivity.this);
-        viewContentRatingAsynTask.executeOnExecutor(threadPoolExecutor);
+            ViewContentRatingAsynTask viewContentRatingAsynTask = new ViewContentRatingAsynTask(viewContentRatingInputModel, ReviewActivity.this, ReviewActivity.this);
+            viewContentRatingAsynTask.executeOnExecutor(threadPoolExecutor);
+        }else{
+            Util.showToast(ReviewActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION));
+        }
 
 
 
@@ -241,21 +259,64 @@ public class ReviewActivity extends AppCompatActivity implements
 
     @Override
     public void onViewContentRatingPreExecuteStarted() {
-
+        pDialog = new ProgressBarHandler(ReviewActivity.this);
+        pDialog.show();
     }
 
     @Override
     public void onViewContentRatingPostExecuteCompleted(ViewContentRatingOutputModel viewContentRatingOutputModel, int status, String message) {
 
+        try{
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
 
+        }
+        catch(IllegalArgumentException ex) {
+        }
 
+        if (status>0){
+            if (status==200){
 
-        if(preferenceManager.getLoginFeatureFromPref() == 1) {
+                LogUtil.showLog("MUVI", "Review activity login featrure ::"+preferenceManager.getLoginFeatureFromPref());
+                    if (preferenceManager.getLoginFeatureFromPref() == 1) {
+
+                        String loggedInStr = preferenceManager.getLoginStatusFromPref();
+                        if (loggedInStr == null) {
+                            Log.v("MUVI","loggedInStr");
+
+                            clickHereToLogin.setVisibility(View.VISIBLE);
+                            submitRatingLayout.setVisibility(View.GONE);
+                        }else{
+                            if (viewContentRatingOutputModel.getShowrating() == 0){
+                                submitRatingLayout.setVisibility(View.GONE);
+                            }else{
+                                submitRatingLayout.setVisibility(View.VISIBLE);
+
+                            }
+                            clickHereToLogin.setVisibility(View.GONE);
+                            // submitRatingLayout.setVisibility(View.VISIBLE);
+                        }
+                    }else{
+                        Log.v("MUVI","loggedInStr2");
+
+                        clickHereToLogin.setVisibility(View.VISIBLE);
+                        submitRatingLayout.setVisibility(View.GONE);
+                    }
+                }
+                reviewsAdapter = new ReviewsAdapter(ReviewActivity.this,viewContentRatingOutputModel.getRatingArray());
+                reviewsGridView.setAdapter(reviewsAdapter);
+
+        }else {
+
+        }
+        /*if(preferenceManager.getLoginFeatureFromPref() == 1) {
             if (preferenceManager.getLoginFeatureFromPref() == 1) {
 
                 String loggedInStr = preferenceManager.getUseridFromPref();
                 if (loggedInStr == null) {
-                    Log.v("SUBHA","loggedInStr");
+                    Log.v("MUVI","loggedInStr");
 
                     clickHereToLogin.setVisibility(View.VISIBLE);
                     submitRatingLayout.setVisibility(View.GONE);
@@ -272,13 +333,13 @@ public class ReviewActivity extends AppCompatActivity implements
                     // submitRatingLayout.setVisibility(View.VISIBLE);
                 }
             }else{
-                Log.v("SUBHA","loggedInStr2");
+                Log.v("MUVI","loggedInStr2");
 
                 clickHereToLogin.setVisibility(View.VISIBLE);
                 submitRatingLayout.setVisibility(View.GONE);
             }
         }else{
-            Log.v("SUBHA","loggedInStr3");
+            Log.v("MUVI","loggedInStr3");
 
             clickHereToLogin.setVisibility(View.GONE);
             submitRatingLayout.setVisibility(View.GONE);
@@ -287,7 +348,7 @@ public class ReviewActivity extends AppCompatActivity implements
 
         ;
         reviewsAdapter = new ReviewsAdapter(ReviewActivity.this,viewContentRatingOutputModel.getRatingArray());
-        reviewsGridView.setAdapter(reviewsAdapter);
+        reviewsGridView.setAdapter(reviewsAdapter);*/
 
     }
     //Asyntask for getDetails of the csat and crew members.
@@ -319,15 +380,15 @@ public class ReviewActivity extends AppCompatActivity implements
 
                     }
                 }
-                httppost.addHeader("lang_code", Util.getTextofLanguage(ReviewActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
                 // Execute HTTP Post Request
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("SUBHA","RESPO"+responseStr);
-                    Log.v("SUBHA","RESPO"+getIntent().getStringExtra("muviId"));
+                    Log.v("MUVI","RESPO"+responseStr);
+                    Log.v("MUVI","RESPO"+getIntent().getStringExtra("muviId"));
 
 
                 } catch (Exception e){
@@ -342,7 +403,7 @@ public class ReviewActivity extends AppCompatActivity implements
                     msg = myJson.optString("msg");
                     if ((myJson.has("showrating")) && myJson.optString("showrating").trim() != null && !myJson.optString("showrating").trim().isEmpty() && !myJson.optString("showrating").trim().equals("null") && !myJson.optString("showrating").trim().matches("")) {
                         showRating = Integer.parseInt(myJson.optString("showrating"));
-                        Log.v("SUBHA","HFFH"+showRating);
+                        Log.v("MUVI","HFFH"+showRating);
                     }
 
                 }
@@ -384,7 +445,7 @@ public class ReviewActivity extends AppCompatActivity implements
                     }
                     if ((myJson.has("showrating")) && myJson.optString("showrating").trim() != null && !myJson.optString("showrating").trim().isEmpty() && !myJson.optString("showrating").trim().equals("null") && !myJson.optString("showrating").trim().matches("")) {
                         showRating = Integer.parseInt(myJson.optString("showrating"));
-                        Log.v("SUBHA","HFFH"+showRating);
+                        Log.v("MUVI","HFFH"+showRating);
                     }
 
                 }else{
@@ -443,10 +504,10 @@ public class ReviewActivity extends AppCompatActivity implements
             }else{
                 if(isLogin == 1) {
                     if (pref != null) {
-                        Log.v("SUBHA","FHFH");
+                        Log.v("MUVI","FHFH");
                         String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
                         if (loggedInStr == null) {
-                            Log.v("SUBHA","loggedInStr");
+                            Log.v("MUVI","loggedInStr");
 
                             clickHereToLogin.setVisibility(View.VISIBLE);
                             submitRatingLayout.setVisibility(View.GONE);
@@ -461,13 +522,13 @@ public class ReviewActivity extends AppCompatActivity implements
                             // submitRatingLayout.setVisibility(View.VISIBLE);
                         }
                     }else{
-                        Log.v("SUBHA","loggedInStr2");
+                        Log.v("MUVI","loggedInStr2");
 
                         clickHereToLogin.setVisibility(View.VISIBLE);
                         submitRatingLayout.setVisibility(View.GONE);
                     }
                 }else{
-                    Log.v("SUBHA","loggedInStr3");
+                    Log.v("MUVI","loggedInStr3");
 
                     clickHereToLogin.setVisibility(View.GONE);
                     submitRatingLayout.setVisibility(View.GONE);
@@ -492,11 +553,11 @@ public class ReviewActivity extends AppCompatActivity implements
 
     public void ShowDialog(String msg) {
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ReviewActivity.this);
-        dlgAlert.setTitle(Util.getTextofLanguage(ReviewActivity.this,Util.FAILURE,Util.DEFAULT_FAILURE));
+        dlgAlert.setTitle(languagePreference.getTextofLanguage(FAILURE,DEFAULT_FAILURE));
         dlgAlert.setMessage(msg);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(ReviewActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
         dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(ReviewActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -546,7 +607,7 @@ public class ReviewActivity extends AppCompatActivity implements
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
                 httppost.addHeader("content_id",getIntent().getStringExtra("muviId"));
-                httppost.addHeader("lang_code",Util.getTextofLanguage(ReviewActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("lang_code",languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                 httppost.addHeader("user_id",pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
 
                 httppost.addHeader("rating",ratingStr);
@@ -557,8 +618,8 @@ public class ReviewActivity extends AppCompatActivity implements
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("SUBHA","RESPO"+responseStr);
-                    Log.v("SUBHA","RESPO"+getIntent().getStringExtra("muviId"));
+                    Log.v("MUVI","RESPO"+responseStr);
+                    Log.v("MUVI","RESPO"+getIntent().getStringExtra("muviId"));
 
 
                 } catch (Exception e){
