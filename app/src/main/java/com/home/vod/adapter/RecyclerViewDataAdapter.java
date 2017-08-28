@@ -46,7 +46,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
     boolean loaded = false;
     //int counter=0;
     LanguagePreference languagePreference;
-    int banner[] = {R.drawable.banner1};
+    int banner[] = {R.drawable.logo};
 
   /*  int banner[] = {R.drawable.banner1,R.drawable.banner2,R.drawable.banner3};
     int bannerL[] = {R.drawable.banner1_l,R.drawable.banner2_l,R.drawable.banner3_l};*/
