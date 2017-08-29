@@ -8,9 +8,9 @@
             android:useLevel="true"
             android:thicknessRatio="20.0" >
             <gradient
-                android:centerColor="#999999"
-                android:endColor="#999999"
-                android:startColor="#999999"
+                android:centerColor="@color/style_circular_color"
+                android:endColor="@color/style_circular_color"
+                android:startColor="@color/style_circular_color"
                 android:type="sweep" />
         </shape>
     </item>
@@ -32,9 +32,9 @@
                     android:toDegrees="360" />
 
                 <gradient
-                    android:centerColor="#ff0400"
-                    android:endColor="#ff0400"
-                    android:startColor="#ff0400"
+                    android:centerColor="@color/style_circular_color_2"
+                    android:endColor="@color/style_circular_color_2"
+                    android:startColor="@color/style_circular_color_2"
                     android:type="sweep" />
             </shape>
         </rotate>

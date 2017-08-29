@@ -6,9 +6,9 @@
     <gradient
         android:angle="45"
         android:centerX="35%"
-        android:centerColor="#c3c3c3"
-        android:startColor="#c3c3c3"
-        android:endColor="#c3c3c3"
+        android:centerColor="@color/voucher_inactive_button"
+        android:startColor="@color/voucher_inactive_button"
+        android:endColor="@color/voucher_inactive_button"
         android:type="linear"
         />
     <padding
@@ -19,6 +19,6 @@
         />
     <stroke
         android:width="2dp"
-        android:color="#c3c3c3"
+        android:color="@color/voucher_inactive_button"
         />
 </shape>
