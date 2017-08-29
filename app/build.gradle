@@ -37,9 +37,7 @@ android {
 
 
     productFlavors {
-
         /*Structuring Default flavour with dimension*/
-
         defaultFlavor {
             dimension 'vendor'
             applicationId 'com.release.muvisdk'
@@ -58,10 +56,7 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
-
-
         /*Structuring vishwamtv flavour with dimension*/
-
         vishwamtv {
             dimension 'vendor'
             applicationId 'com.release.vishwamtv'
@@ -80,9 +75,7 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
-
         /*Structuring newthoughtchannel flavour with dimension*/
-
         newthoughtchannel {
             dimension 'vendor'
             applicationId "com.release.newthoughtchannel"
@@ -101,9 +94,7 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
-
         /*Structuring aatto flavour with dimension*/
-
         aatto {
             dimension 'vendor'
             minSdkVersion 15
@@ -114,7 +105,6 @@ android {
             versionName '1.0'
             buildConfigField "String", "AUTH_TOKEN", "\"4298851905443517c9f161e6b0471969\""
         }
-
         aatto_staging_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
@@ -123,6 +113,7 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
+
     }
 }
 
