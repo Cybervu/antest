@@ -8,7 +8,7 @@ package com.home.apisdk.apiModel;
 public class ResumeVideoLogDetailsInput {
 
     String authToken;
-    String user_id;
+    String user_id="";
     String ip_address;
     String movie_id;
     String episode_id;

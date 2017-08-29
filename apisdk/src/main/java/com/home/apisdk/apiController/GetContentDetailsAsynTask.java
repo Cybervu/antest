@@ -329,7 +329,11 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                     if (mainJson.has("cast_detail") && mainJson.has("cast_detail") != false && mainJson.getString("cast_detail").trim() != null && !mainJson.getString("cast_detail").trim().isEmpty() && !mainJson.getString("cast_detail").trim().equals("null") && !mainJson.getString("cast_detail").trim().equals("false")) {
                         contentDetailsOutput.setCastStr(true);
 
+                    } else {
+                        contentDetailsOutput.setCastStr(false);
+
                     }
+
                     if (contentDetailsOutput.getIsPpv() == 1) {
                         JSONObject ppvJson = null;
                         if ((myJson.has("ppv_pricing"))) {

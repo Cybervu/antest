@@ -229,7 +229,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     RelativeLayout viewStoryLayout;
 
     //Add By Bibhu Later.
-    ExpandableTextView videoStoryTextView;
+    TextView videoStoryTextView;
     Button storyViewMoreButton;
 
     boolean isExpanded = false;
@@ -731,7 +731,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         viewStoryLayout = (RelativeLayout)findViewById(R.id.viewStoryLayout);
 
-        videoStoryTextView = (ExpandableTextView) findViewById(R.id.videoStoryTextView);
+        videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         storyViewMoreButton = (Button) findViewById(R.id.storyViewMoreButton);
 
 

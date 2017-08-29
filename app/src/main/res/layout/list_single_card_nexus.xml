@@ -2,12 +2,12 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/listViewLayout"
-    android:layout_width="@dimen/list_single_card_small_width"
+    android:layout_width="108dp"
     android:layout_height="wrap_content"
     android:background="@drawable/grid_color_selector"
     android:clickable="false"
-    android:focusable="false"
-    android:padding="@dimen/videoCensorRatingTextView_padding">
+    android:padding="@dimen/videoCensorRatingTextView_padding"
+    android:focusable="false">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -21,7 +21,8 @@
             android:layout_height="@dimen/list_singlecard_img_height"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo"
+            />
 
         <ImageView
             android:id="@+id/movieImageOverlay"
@@ -37,11 +38,8 @@
 
         <TextView
             android:id="@+id/itemTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/itemTitle_widht"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/itemImage"
-            android:layout_alignLeft="@+id/movieImageOverlay"
-            android:layout_alignRight="@+id/movieImageOverlay"
             android:layout_gravity="left"
             android:background="@color/transparent"
             android:clickable="false"
@@ -50,13 +48,14 @@
             android:focusableInTouchMode="false"
             android:gravity="left"
             android:maxLines="1"
-            android:padding="@dimen/itemTitle_padding"
             android:text=""
+            android:padding="@dimen/itemTitle_padding"
             android:textColor="@color/contentTitleColor"
             android:textSize="@dimen/itemtitle1_text_size"
             android:textStyle="bold"
-
-            />
+            android:layout_alignBottom="@+id/itemImage"
+            android:layout_alignLeft="@+id/movieImageOverlay"
+            android:layout_alignRight="@+id/movieImageOverlay" />
 
     </RelativeLayout>
 </RelativeLayout>

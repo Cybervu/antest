@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
@@ -134,6 +135,11 @@ public class RegisterUIHandler {
 
             }
         });
+    }
+
+
+
+    public void setTermsTextView(LanguagePreference languagePreference) {
     }
 
 }

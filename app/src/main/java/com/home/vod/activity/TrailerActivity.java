@@ -163,6 +163,7 @@ public class TrailerActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         content_types_id = Util.dataModel.getContentTypesId();
        // played_length = Util.dataModel.getPlayPos() * 1000;
@@ -175,11 +176,16 @@ public class TrailerActivity extends AppCompatActivity implements
         movieId = Util.dataModel.getMovieUniqueId();
         episodeId = Util.dataModel.getEpisode_id();
 
-        preferenceManager = PreferenceManager.getPreferenceManager(this);
         if (preferenceManager != null) {
             emailIdStr = preferenceManager.getEmailIdFromPref();
             userIdStr = preferenceManager.getUseridFromPref();
             Log.v("BKS","userid trailer=="+userIdStr);
+            if (emailIdStr==null){
+                emailIdStr = "";
+            }
+            if (userIdStr==null){
+                userIdStr = "";
+            }
 
         } else {
             emailIdStr = "";
