@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +20,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +33,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.androidquery.AQuery;
+import com.google.android.gms.cast.MediaInfo;
+import com.google.android.gms.cast.framework.CastButtonFactory;
+import com.google.android.gms.cast.framework.CastContext;
+import com.google.android.gms.cast.framework.CastSession;
+import com.google.android.gms.cast.framework.CastState;
+import com.google.android.gms.cast.framework.CastStateListener;
+import com.google.android.gms.cast.framework.IntroductoryOverlay;
+import com.google.android.gms.cast.framework.SessionManagerListener;
+import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.apiController.GetImageForDownloadAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetMenuListAsynctask;
@@ -44,6 +56,7 @@ import com.home.apisdk.apiModel.MenuListInput;
 import com.home.apisdk.apiModel.MenuListOutput;
 import com.home.vod.R;
 import com.home.vod.adapter.LanguageCustomAdapter;
+import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.fragment.AboutUsFragment;
 import com.home.vod.fragment.ContactUsFragment;
 import com.home.vod.fragment.FragmentDrawer;
@@ -68,6 +81,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -119,7 +134,7 @@ import static com.muvi.player.utils.Util.HAS_FAVORITE;
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,
         LogoutAsynctask.LogoutListener, GetMenuListAsynctask.GetMenuListListener,
         GetLanguageListAsynTask.GetLanguageListListener,
-        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener{
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener {
 
 
     public MainActivity() {
@@ -127,22 +142,17 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     LanguagePreference languagePreference;
 
-   /* *//*** chromecast**************//*
+    //*** chromecast**************//*
 
     public enum PlaybackLocation {
         LOCAL,
         REMOTE
     }
 
-    *//**
-     * List of various states that we can be in
-     *//*
+
     public enum PlaybackState {
         PLAYING, PAUSED, BUFFERING, IDLE
     }
-
-
-
 
 
     private Timer mControllersTimer;
@@ -208,11 +218,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
     }
 
+    /*** chromecast**************/
 
-    */
-    /*** chromecast**************//*
-
-*/
 
     public static int vertical = 0;
     private String lang_code = "";
@@ -238,7 +245,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
     private RelativeLayout noInternetLayout;
-    public static String internetSpeed ="0";
+    public static String internetSpeed = "0";
     Fragment fragment = null;
     private ProgressBarHandler pDialog = null;
     String loggedInStr, loginHistoryIdStr, email, id;
@@ -254,7 +261,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     AlertDialog alert;
     String Previous_Selected_Language = "";
     TextView noInternetTextView;
-   // SharedPreferences isLoginPref;
+    // SharedPreferences isLoginPref;
     public static ProgressBarHandler progressBarHandler;
     PreferenceManager preferenceManager;
 
@@ -263,7 +270,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LogUtil.showLog("BKS","packagenameMAINactivity1==="+ SDKInitializer.user_Package_Name_At_Api);
+        LogUtil.showLog("BKS", "packagenameMAINactivity1===" + SDKInitializer.user_Package_Name_At_Api);
         if (menuList != null && menuList.size() > 0) {
             menuList.clear();
         }
@@ -276,7 +283,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         LogUtil.showLog("Abhishek", "Toolbar");
 
-      /*  *//**** chromecast*************//*
+        //**** chromecast*************//*
 
         mCastStateListener = new CastStateListener() {
             @Override
@@ -292,7 +299,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
 
 
-
         // int startPosition = getInt("startPosition", 0);
         // mVideoView.setVideoURI(Uri.parse(item.getContentId()));
 
@@ -300,8 +306,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
 
-        *//**** chromecast*************//*
-*/
+        //**** chromecast*************//*
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         isLogin = preferenceManager.getLoginFeatureFromPref();
@@ -319,7 +324,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         noInternetLayout = (RelativeLayout) findViewById(R.id.noInternet);
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
-        noInternetTextView.setText(languagePreference.getTextofLanguage( NO_INTERNET_NO_DATA, DEFAULT_NO_INTERNET_NO_DATA));
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_NO_DATA, DEFAULT_NO_INTERNET_NO_DATA));
         noInternetLayout.setVisibility(View.GONE);
 
 
@@ -334,7 +339,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 menuListInput.setCountry("IN");
             }
             menuListInput.setCountry(countryCodeStr);
-            menuListInput.setLang_code(languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            menuListInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynLoadMenuItems = new GetMenuListAsynctask(menuListInput, MainActivity.this, this);
             asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
 
@@ -383,20 +388,13 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_main, menu);
-      /*  *//************chromecast***********//*
+        //************chromecast***********//*
+
         mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
                 R.id.media_route_menu_item);
         showIntroductoryOverlay();
-      *//*  MenuInflater inflater = getMenuInflater();
-        *//**//*
 
-
-
-        inflater.inflate(R.menu.menu_main, menu);
-
-        mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
-        showIntroductoryOverlay();*//*
-        *//************chromecast***********/
+        //************chromecast***********/
 
 
         MenuItem itemFillterMenu,
@@ -409,64 +407,62 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 itemFavMenu;
 
         itemFillterMenu = menu.findItem(R.id.action_filter);
-        itemFavMenu =  menu.findItem(R.id.menu_item_favorite);
+        itemFavMenu = menu.findItem(R.id.menu_item_favorite);
         itemLanguageMenu = menu.findItem(R.id.menu_item_language);
         itemLoginMenu = menu.findItem(R.id.action_login);
         itemRegisterMenu = menu.findItem(R.id.action_register);
         itemProfileMenu = menu.findItem(R.id.menu_item_profile);
-        itemPurchaseMenu= menu.findItem(R.id.action_purchage);
-        itemLogoutMenu= menu.findItem(R.id.action_logout);
+        itemPurchaseMenu = menu.findItem(R.id.action_purchage);
+        itemLogoutMenu = menu.findItem(R.id.action_logout);
 
         itemFillterMenu.setVisible(false);
 
 
-
         loggedInStr = preferenceManager.getLoginStatusFromPref();
         id = preferenceManager.getUseridFromPref();
-        email=preferenceManager.getEmailIdFromPref();
+        email = preferenceManager.getEmailIdFromPref();
 
-        (itemLanguageMenu).setTitle(languagePreference.getTextofLanguage( LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE));
+        (itemLanguageMenu).setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE));
 
 
-        if(preferenceManager.getLanguageListFromPref().equals("1"))
+        if (preferenceManager.getLanguageListFromPref().equals("1"))
             (itemLanguageMenu).setVisible(false);
 
-        if(loggedInStr!=null){
+        if (loggedInStr != null) {
 
-            itemLoginMenu.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN,DEFAULT_LANGUAGE_POPUP_LOGIN));
+            itemLoginMenu.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
             itemLoginMenu.setVisible(false);
 
-            itemRegisterMenu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER,DEFAULT_BTN_REGISTER));
+            itemRegisterMenu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
             itemRegisterMenu.setVisible(false);
           /*  item6= itemLanguageMenu;
             item6.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE,DEFAULT_LANGUAGE_POPUP_LANGUAGE));
             item6.setVisible(true);*/
 
-            itemProfileMenu.setTitle(languagePreference.getTextofLanguage(PROFILE,DEFAULT_PROFILE));
+            itemProfileMenu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
             itemProfileMenu.setVisible(true);
 
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE,DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
+            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
                 itemFavMenu.setVisible(true);
-            }else{
+            } else {
                 itemFavMenu.setVisible(false);
 
             }
 
 
-            itemPurchaseMenu.setTitle(languagePreference.getTextofLanguage( PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
+            itemPurchaseMenu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
             itemPurchaseMenu.setVisible(true);
 
 
-            itemLogoutMenu.setTitle(languagePreference.getTextofLanguage( LOGOUT, DEFAULT_LOGOUT));
+            itemLogoutMenu.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
             itemLogoutMenu.setVisible(true);
 
         } else if (loggedInStr == null) {
 
-            itemLoginMenu.setTitle(languagePreference.getTextofLanguage( LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
+            itemLoginMenu.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
 
 
-
-            itemRegisterMenu.setTitle(languagePreference.getTextofLanguage( BTN_REGISTER, DEFAULT_BTN_REGISTER));
+            itemRegisterMenu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
             if (isLogin == 1) {
                 itemLoginMenu.setVisible(true);
                 itemRegisterMenu.setVisible(true);
@@ -479,13 +475,13 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             item6.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE,DEFAULT_LANGUAGE_POPUP_LANGUAGE));
             item6.setVisible(true);*/
 
-            itemProfileMenu.setTitle(languagePreference.getTextofLanguage( PROFILE, DEFAULT_PROFILE));
+            itemProfileMenu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
             itemProfileMenu.setVisible(false);
 
-            itemPurchaseMenu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY));
+            itemPurchaseMenu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
             itemPurchaseMenu.setVisible(false);
 
-            itemLogoutMenu.setTitle(languagePreference.getTextofLanguage(LOGOUT,DEFAULT_LOGOUT));
+            itemLogoutMenu.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
             itemLogoutMenu.setVisible(false);
             itemFavMenu.setVisible(false);
         }
@@ -531,8 +527,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             case R.id.menu_item_language:
 
                 // Not implemented here
-                Default_Language = languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
-                Previous_Selected_Language = languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
+                Default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
+                Previous_Selected_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
 
                 if (languageModel != null && languageModel.size() > 0) {
 
@@ -549,24 +545,24 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             case R.id.menu_item_profile:
 
                 Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
-                profileIntent.putExtra("EMAIL",email);
-                profileIntent.putExtra("LOGID",id);
+                profileIntent.putExtra("EMAIL", email);
+                profileIntent.putExtra("LOGID", id);
                 startActivity(profileIntent);
                 // Not implemented here
                 return false;
             case R.id.action_purchage:
 
-               Intent purchaseintent = new Intent(MainActivity.this, PurchaseHistoryActivity.class);
+                Intent purchaseintent = new Intent(MainActivity.this, PurchaseHistoryActivity.class);
                 startActivity(purchaseintent);
                 // Not implemented here
                 return false;
             case R.id.action_logout:
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(languagePreference.getTextofLanguage( SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
                 dlgAlert.setTitle("");
 
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
                         // Do nothing but close the dialog
@@ -577,8 +573,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                         LogUtil.showLog("Abhi", authTokenStr);
                         String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
                         logoutInput.setLogin_history_id(loginHistoryIdStr);
-                        logoutInput.setLang_code(languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                        LogUtil.showLog("Abhi", languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        LogUtil.showLog("Abhi", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MainActivity.this, MainActivity.this);
                         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -587,7 +583,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                     }
                 });
 
-                dlgAlert.setNegativeButton(languagePreference.getTextofLanguage( NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
+                dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -624,8 +620,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         return false;
     }
-/*
-    *//*************chromecast*****************//*
+
+    //*************chromecast*****************//*
     @Override
     public void onResume() {
         super.onResume();
@@ -636,12 +632,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             mCastSession = CastContext.getSharedInstance(this).getSessionManager()
                     .getCurrentCastSession();
         }
-        removeFocusFromViews();
+//        if (mCastSession == null) {
+//            mCastSession = CastContext.getSharedInstance(this).getSessionManager()
+//                    .getCurrentCastSession();
+//        }
+//        removeFocusFromViews();
+
         invalidateOptionsMenu();
     }
 
-
-    */
 
     /*************chromecast*****************/
 
@@ -783,18 +782,18 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     public void onLogoutPostExecuteCompleted(int code, String status, String message) {
         if (code != 200) {
-            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
         }
         if (code == 0) {
-            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
         }
         if (code > 0) {
             if (code == 200) {
-               preferenceManager.clearLoginPref();
+                preferenceManager.clearLoginPref();
 
-                if ((languagePreference.getTextofLanguage( IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
+                if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
                     final Intent startIntent = new Intent(MainActivity.this, SplashScreen.class);
                     runOnUiThread(new Runnable() {
@@ -802,7 +801,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(startIntent);
-                            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
 
                             finish();
 
@@ -815,7 +814,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(startIntent);
-                            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
 
                             finish();
 
@@ -825,7 +824,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
             } else {
-                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
             }
         }
@@ -857,7 +856,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onGetMenuListPostExecuteCompleted(ArrayList<MenuListOutput> menuListOutputList, ArrayList<MenuListOutput> footermenuListOutputList, int status, String message) {
-        LogUtil.showLog("BKS","packagenameMAINactivity==="+ SDKInitializer.user_Package_Name_At_Api);
+        LogUtil.showLog("BKS", "packagenameMAINactivity===" + SDKInitializer.user_Package_Name_At_Api);
 
         LogUtil.showLog("Alok", "onGetMenuListPostExecuteCompleted");
         if (status == 0) {
@@ -867,7 +866,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
         } else {
-            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage( HOME, DEFAULT_HOME), "-101", true, "-101"));
+            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME), "-101", true, "-101"));
             for (MenuListOutput menuListOutput : menuListOutputList) {
                 LogUtil.showLog("Alok", "menuListOutputList ::" + menuListOutput.getPermalink());
                 if (menuListOutput.getLink_type() != null && !menuListOutput.getLink_type().equalsIgnoreCase("") && menuListOutput.getLink_type().equalsIgnoreCase("0")) {
@@ -875,7 +874,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 }
             }
 
-            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage( MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
+            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
             LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
 
             for (MenuListOutput menuListOutput : footermenuListOutputList) {
@@ -1802,14 +1801,14 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         View convertView = (View) inflater.inflate(R.layout.language_pop_up, null);
         TextView titleTextView = (TextView) convertView.findViewById(R.id.languagePopupTitle);
-        titleTextView.setText(languagePreference.getTextofLanguage( APP_SELECT_LANGUAGE, DEFAULT_APP_SELECT_LANGUAGE));
+        titleTextView.setText(languagePreference.getTextofLanguage(APP_SELECT_LANGUAGE, DEFAULT_APP_SELECT_LANGUAGE));
 
         alertDialog.setView(convertView);
         alertDialog.setTitle("");
 
         RecyclerView recyclerView = (RecyclerView) convertView.findViewById(R.id.language_recycler_view);
         Button apply = (Button) convertView.findViewById(R.id.apply_btn);
-        apply.setText(languagePreference.getTextofLanguage( BUTTON_APPLY, DEFAULT_BUTTON_APPLY));
+        apply.setText(languagePreference.getTextofLanguage(BUTTON_APPLY, DEFAULT_BUTTON_APPLY));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -1886,10 +1885,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 if (!Previous_Selected_Language.equals(Default_Language)) {
 
 
-                    LanguageListInputModel languageListInputModel=new LanguageListInputModel();
+                    LanguageListInputModel languageListInputModel = new LanguageListInputModel();
                     languageListInputModel.setLangCode(Default_Language);
                     languageListInputModel.setAuthToken(authTokenStr);
-                    GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel,MainActivity.this,MainActivity.this);
+                    GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel, MainActivity.this, MainActivity.this);
                     asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
                 }
 
@@ -2125,14 +2124,13 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
             try {
 
-                Util.parseLanguage(languagePreference,jsonResponse,Default_Language);
+                Util.parseLanguage(languagePreference, jsonResponse, Default_Language);
 
                 languageCustomAdapter.notifyDataSetChanged();
 
-                Intent intent = new Intent(MainActivity.this,MainActivity.class);
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
-
 
 
             } catch (JSONException e) {
@@ -2661,7 +2659,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     private DecimalFormat mDecimalFormater;
 
-   /* *//**** chromecast*************//*
+
+   //**** chromecast*************//*
 
     @Override
     public boolean dispatchKeyEvent(@NonNull KeyEvent event) {
@@ -2759,7 +2758,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 mCastSession = castSession;
 
                 if (null != mSelectedMedia) {
-                   *//* if (mCastSession != null && mCastSession.isConnected()) {
+                   /* if (mCastSession != null && mCastSession.isConnected()) {
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -2769,10 +2768,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                             }
                         });
 
-                    }*//*
+                    }*/
                     if (mPlaybackState == PlaybackState.PLAYING) {
-                       *//* mVideoView.pause();
-                        loadRemoteMedia(mSeekbar.getProgress(), true);*//*
+                       /* mVideoView.pause();
+                        loadRemoteMedia(mSeekbar.getProgress(), true);*/
                         return;
                     } else {
 
@@ -2785,9 +2784,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             }
 
             private void onApplicationDisconnected() {
-               *//* if (mCastSession != null && mCastSession.isConnected()) {
+               /* if (mCastSession != null && mCastSession.isConnected()) {
                     watchMovieButton.setText(getResources().getString(R.string.movie_details_watch_video_button_title));
-                }*//*
+                }*/
                 //watchMovieButton.setText(getResources().getString(R.string.movie_details_watch_video_button_title));
                 updatePlaybackLocation(PlaybackLocation.LOCAL);
                 mPlaybackState = PlaybackState.IDLE;
@@ -2851,7 +2850,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
     }
 
-   *//* private void setCoverArtStatus(String url) {
+   /* private void setCoverArtStatus(String url) {
         if (url != null) {
             mAquery.id(mCoverArt).image(url);
             mCoverArt.setVisibility(View.VISIBLE);
@@ -2860,12 +2859,12 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             mCoverArt.setVisibility(View.GONE);
             mVideoView.setVisibility(View.VISIBLE);
         }
-    }*//*
+    }*/
 
     private void stopTrickplayTimer() {
-     *//*   if (mSeekbarTimer != null) {
+     /*   if (mSeekbarTimer != null) {
             mSeekbarTimer.cancel();
-        }*//*
+        }*/
     }
 
 
@@ -2890,7 +2889,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private void updateControllersVisibility(boolean show) {
         if (show) {
             getSupportActionBar().show();
-           // mControllers.setVisibility(View.VISIBLE);
+            // mControllers.setVisibility(View.VISIBLE);
         } else {
             if (!Util.isOrientationPortrait(this)) {
                 getSupportActionBar().hide();
@@ -2907,15 +2906,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 @Override
                 public void run() {
                     // updateControllersVisibility(false);
-                  //  mControllersVisible = false;
+                    //  mControllersVisible = false;
                 }
             });
 
         }
     }
-    */
 
     /**** chromecast*************/
+
 
     public void removeFocusFromViews() {
         View view = this.getCurrentFocus();

@@ -20,7 +20,7 @@
     <dimen name="forgot_logo_width">120dp</dimen>
     <dimen name="filter_marginLeft">50dp</dimen>
     <dimen name="forgot_logo_height">120dp</dimen>
-    <dimen name="email_text_size">13sp</dimen>
+    <dimen name="email_text_size">14sp</dimen>
     <dimen name="contactformtitle_text_size">15sp</dimen>
     <dimen name="pass_text_size">13sp</dimen>
     <dimen name="forgot_text_size">13sp</dimen>
@@ -66,7 +66,7 @@
     <dimen name="paybtn_height">35dp</dimen>
     <dimen name="editbox_text_size">16sp</dimen>
     <dimen name="itemtitle_text_size">17sp</dimen>
-    <dimen name="itemtitle1_text_size">18sp</dimen>
+    <dimen name="itemtitle1_text_size">16sp</dimen>
     <dimen name="homelogo_height">80dp</dimen>
     <dimen name="homelogo_width">150dp</dimen>
     <dimen name="btnmore_text_size">16sp</dimen>
@@ -81,7 +81,7 @@
     <dimen name="purchasevalue_text_size">31sp</dimen>
     <dimen name="plainrow_text_size">10sp</dimen>
     <dimen name="plainrow_mrgin_top">20dp</dimen>
-    <dimen name="paymentOptionsTitle_textsize">18sp</dimen>
+    <dimen name="paymentOptionsTitle_textsize">20sp</dimen>
     <dimen name="preorderbtn_padding">10dp</dimen>
 
 

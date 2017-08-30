@@ -5,12 +5,14 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,9 +25,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidquery.AQuery;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -36,6 +40,12 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.cast.MediaInfo;
+import com.google.android.gms.cast.framework.CastContext;
+import com.google.android.gms.cast.framework.CastSession;
+import com.google.android.gms.cast.framework.SessionManagerListener;
+import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.home.apisdk.apiController.CheckDeviceAsyncTask;
 import com.home.apisdk.apiController.CheckFbUserDetailsAsyn;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
@@ -58,6 +68,7 @@ import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.R;
 import com.home.vod.RegisterUIHandler;
+import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
@@ -191,12 +202,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
         /*subtitle-------------------------------------*/
 
-/*
-
-    */
-/*chromecast-------------------------------------*//*
-
-
+/*chromecast-------------------------------------*/
 
 
     public enum PlaybackLocation {
@@ -204,17 +210,16 @@ public class RegisterActivity extends AppCompatActivity implements
         REMOTE
     }
 
-    */
-/**
- * List of various states that we can be in
- *//*
+    /**
+     * List of various states that we can be in
+     */
 
     public enum PlaybackState {
         PLAYING, PAUSED, BUFFERING, IDLE
     }
 
-    private PlaybackLocation mLocation;
-    private PlaybackState mPlaybackState;
+    private LoginActivity.PlaybackLocation mLocation;
+    private LoginActivity.PlaybackState mPlaybackState;
     private final float mAspectRatio = 72f / 128;
     private AQuery mAquery;
     private MediaInfo mSelectedMedia;
@@ -224,7 +229,6 @@ public class RegisterActivity extends AppCompatActivity implements
     private SessionManagerListener<CastSession> mSessionManagerListener =
             new MySessionManagerListener();
     private CastSession mCastSession;
-
 
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
@@ -275,35 +279,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
     MediaInfo mediaInfo;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        */
-/****fb********//*
-
-        AppEventsLogger.activateApp(this);
-
-        if (mCastSession == null) {
-            mCastSession = CastContext.getSharedInstance(this).getSessionManager()
-                    .getCurrentCastSession();
-        }
-
-
-
-        mCastContext.getSessionManager().addSessionManagerListener(
-                mSessionManagerListener, CastSession.class);
-
-        */
-    /***************chromecast**********************//*
-
-
-    }
-    */
-/*chromecast-------------------------------------*//*
-
-
-*/
+    /*chromecast-------------------------------------*/
 
 
     RegistrationAsynTask asyncReg;
@@ -324,6 +300,24 @@ public class RegisterActivity extends AppCompatActivity implements
     Toolbar mActionBarToolbar;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        /***************chromecast**********************/
+        if (mCastSession == null) {
+            mCastSession = CastContext.getSharedInstance(this).getSessionManager()
+                    .getCurrentCastSession();
+        }
+
+
+        mCastContext.getSessionManager().addSessionManagerListener(
+                mSessionManagerListener, CastSession.class);
+
+        /***************chromecast**********************/
+
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -486,7 +480,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
         /************fb************/
 /*
-         *//*chromecast-------------------------------------*//*
+            /*chromecast-------------------------------------*/
 
         mAquery = new AQuery(this);
 
@@ -499,7 +493,7 @@ public class RegisterActivity extends AppCompatActivity implements
         boolean shouldStartPlayback = false;
         int startPosition = 0;
 
-         *//*   MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+         /*   MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
 
             movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, movieName.getText().toString());
             movieMetadata.putString(MediaMetadata.KEY_TITLE,  movieName.getText().toString());
@@ -520,10 +514,10 @@ public class RegisterActivity extends AppCompatActivity implements
                     .setStreamDuration(15 * 1000)
                     .setCustomData(jsonObj)
                     .build();
-            mSelectedMedia = mediaInfo;*//*
+            mSelectedMedia = mediaInfo;*/
 
         // see what we need to play and where
-           *//* Bundle bundle = getIntent().getExtras();
+           /* Bundle bundle = getIntent().getExtras();
             if (bundle != null) {
                 mSelectedMedia = getIntent().getParcelableExtra("media");
                 //setupActionBar();
@@ -553,14 +547,14 @@ public class RegisterActivity extends AppCompatActivity implements
                     mPlaybackState = PlaybackState.IDLE;
                     updatePlayButton(mPlaybackState);
                 }
-            }*//*
+            }*/
 
 
         if (shouldStartPlayback) {
             // this will be the case only if we are coming from the
             // CastControllerActivity by disconnecting from a device
-            mPlaybackState = PlaybackState.PLAYING;
-            updatePlaybackLocation(PlaybackLocation.LOCAL);
+            mPlaybackState = LoginActivity.PlaybackState.PLAYING;
+            updatePlaybackLocation(LoginActivity.PlaybackLocation.LOCAL);
             updatePlayButton(mPlaybackState);
             if (startPosition > 0) {
                 // mVideoView.seekTo(startPosition);
@@ -572,17 +566,18 @@ public class RegisterActivity extends AppCompatActivity implements
             // and show the album art.
             if (mCastSession != null && mCastSession.isConnected()) {
                 //watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
-                updatePlaybackLocation(PlaybackLocation.REMOTE);
+                updatePlaybackLocation(LoginActivity.PlaybackLocation.REMOTE);
             } else {
                 //watchMovieButton.setText(getResources().getString(R.string.movie_details_watch_video_button_title));
 
-                updatePlaybackLocation(PlaybackLocation.LOCAL);
+                updatePlaybackLocation(LoginActivity.PlaybackLocation.LOCAL);
             }
-            mPlaybackState = PlaybackState.IDLE;
+            mPlaybackState = LoginActivity.PlaybackState.IDLE;
             updatePlayButton(mPlaybackState);
         }
-*//***************chromecast**********************/
+/***************chromecast**********************/
     }
+
 
     public void registerButtonClicked() {
 
@@ -2540,15 +2535,16 @@ public class RegisterActivity extends AppCompatActivity implements
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-    }/*
-    *//*****************chromecvast*-------------------------------------*//*
+    }
+
+    /*****************chromecast*-------------------------------------*/
 
     private void updateMetadata(boolean visible) {
         Point displaySize;
         if (!visible) {
-            *//*mDescriptionView.setVisibility(View.GONE);
+            /*mDescriptionView.setVisibility(View.GONE);
             mTitleView.setVisibility(View.GONE);
-            mAuthorView.setVisibility(View.GONE);*//*
+            mAuthorView.setVisibility(View.GONE);*/
             displaySize = Util.getDisplaySize(this);
             RelativeLayout.LayoutParams lp = new
                     RelativeLayout.LayoutParams(displaySize.x,
@@ -2558,13 +2554,13 @@ public class RegisterActivity extends AppCompatActivity implements
             //mVideoView.invalidate();
         } else {
             //MediaMetadata mm = mSelectedMedia.getMetadata();
-          *//*  mDescriptionView.setText(mSelectedMedia.getCustomData().optString(
+          /*  mDescriptionView.setText(mSelectedMedia.getCustomData().optString(
                     VideoProvider.KEY_DESCRIPTION));
             //mTitleView.setText(mm.getString(MediaMetadata.KEY_TITLE));
             //mAuthorView.setText(mm.getString(MediaMetadata.KEY_SUBTITLE));
             mDescriptionView.setVisibility(View.VISIBLE);
             mTitleView.setVisibility(View.VISIBLE);
-            mAuthorView.setVisibility(View.VISIBLE);*//*
+            mAuthorView.setVisibility(View.VISIBLE);*/
             displaySize = Util.getDisplaySize(this);
             RelativeLayout.LayoutParams lp = new
                     RelativeLayout.LayoutParams(displaySize.x,
@@ -2574,7 +2570,6 @@ public class RegisterActivity extends AppCompatActivity implements
             //mVideoView.invalidate();
         }
     }
-
 
 
     private void setupCastListener() {
@@ -2623,16 +2618,16 @@ public class RegisterActivity extends AppCompatActivity implements
 
             private void onApplicationConnected(CastSession castSession) {
                 mCastSession = castSession;
-                mLocation = PlaybackLocation.REMOTE;
+                mLocation = LoginActivity.PlaybackLocation.REMOTE;
                 if (null != mSelectedMedia) {
 
-                    if (mPlaybackState ==PlaybackState.PLAYING) {
-                       *//* mVideoView.pause();
-                        loadRemoteMedia(mSeekbar.getProgress(), true);*//*
+                    if (mPlaybackState == LoginActivity.PlaybackState.PLAYING) {
+                       /* mVideoView.pause();
+                        loadRemoteMedia(mSeekbar.getProgress(), true);*/
                         return;
                     } else {
-                        mPlaybackState = PlaybackState.IDLE;
-                        updatePlaybackLocation(PlaybackLocation.REMOTE);
+                        mPlaybackState = LoginActivity.PlaybackState.IDLE;
+                        updatePlaybackLocation(LoginActivity.PlaybackLocation.REMOTE);
                     }
                 }
                 updatePlayButton(mPlaybackState);
@@ -2640,22 +2635,22 @@ public class RegisterActivity extends AppCompatActivity implements
             }
 
             private void onApplicationDisconnected() {
-*//*
+/*
                     mPlayCircle.setVisibility(View.GONE);
-*//*
+*/
 
-                updatePlaybackLocation(PlaybackLocation.LOCAL);
-                mPlaybackState = PlaybackState.IDLE;
-                mLocation = PlaybackLocation.LOCAL;
+                updatePlaybackLocation(LoginActivity.PlaybackLocation.LOCAL);
+                mPlaybackState = LoginActivity.PlaybackState.IDLE;
+                mLocation = LoginActivity.PlaybackLocation.LOCAL;
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
             }
         };
     }
 
-    private void updatePlayButton(PlaybackState state) {
-           *//* boolean isConnected = (mCastSession != null)
-                    && (mCastSession.isConnected() || mCastSession.isConnecting());*//*
+    private void updatePlayButton(LoginActivity.PlaybackState state) {
+           /* boolean isConnected = (mCastSession != null)
+                    && (mCastSession.isConnected() || mCastSession.isConnecting());*/
         //mControllers.setVisibility(isConnected ? View.GONE : View.VISIBLE);
 
         switch (state) {
@@ -2667,19 +2662,19 @@ public class RegisterActivity extends AppCompatActivity implements
 
                 break;
             case IDLE:
-                if (mLocation == PlaybackLocation.LOCAL){
-                   *//* if (isAPV == 1) {
+                if (mLocation == LoginActivity.PlaybackLocation.LOCAL) {
+                   /* if (isAPV == 1) {
                         watchMovieButton.setText(getResources().getString(R.string.advance_purchase_str));
                     }else {
                         watchMovieButton.setText(getResources().getString(R.string.movie_details_watch_video_button_title));
-                    }*//*
+                    }*/
 
-                }else{
-                   *//* if (isAPV == 1) {
+                } else {
+                   /* if (isAPV == 1) {
                         watchMovieButton.setText(getResources().getString(R.string.advance_purchase_str));
                     }else {
                         watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
-                    }*//*
+                    }*/
                 }
                 //mCon
                 // trollers.setVisibility(View.GONE);
@@ -2688,8 +2683,8 @@ public class RegisterActivity extends AppCompatActivity implements
                 break;
             case PAUSED:
                 //mLoading.setVisibility(View.INVISIBLE);
-              *//*  mPlayPause.setVisibility(View.VISIBLE);
-                mPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_play_dark));*//*
+              /*  mPlayPause.setVisibility(View.VISIBLE);
+                mPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_play_dark));*/
 
                 break;
             case BUFFERING:
@@ -2701,11 +2696,11 @@ public class RegisterActivity extends AppCompatActivity implements
         }
     }
 
-    private void updatePlaybackLocation(PlaybackLocation location) {
+    private void updatePlaybackLocation(LoginActivity.PlaybackLocation location) {
         mLocation = location;
-        if (location == PlaybackLocation.LOCAL) {
-            if (mPlaybackState == PlaybackState.PLAYING
-                    || mPlaybackState == PlaybackState.BUFFERING) {
+        if (location == LoginActivity.PlaybackLocation.LOCAL) {
+            if (mPlaybackState == LoginActivity.PlaybackState.PLAYING
+                    || mPlaybackState == LoginActivity.PlaybackState.BUFFERING) {
                 //setCoverArtStatus(null);
                 //startControllersTimer();
             } else {
@@ -2730,12 +2725,12 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
 
-                      *//* mVideoView.start();
+                      /* mVideoView.start();
                         Log.d(TAG, "Playing locally...");
                         mPlaybackState = PlaybackState.PLAYING;
                         startControllersTimer();
                         restartTrickplayTimer();
-                        updatePlaybackLocation(PlaybackLocation.LOCAL);*//*
+                        updatePlaybackLocation(PlaybackLocation.LOCAL);*/
                         break;
 
                     case REMOTE:
@@ -2749,9 +2744,9 @@ public class RegisterActivity extends AppCompatActivity implements
                 break;
 
             case PLAYING:
-                mPlaybackState = PlaybackState.PAUSED;
+                mPlaybackState = LoginActivity.PlaybackState.PAUSED;
 
-              //  mVideoView.pause();
+                //  mVideoView.pause();
                 break;
 
             case IDLE:
@@ -2760,12 +2755,12 @@ public class RegisterActivity extends AppCompatActivity implements
                         //watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
 
                         // mPlayCircle.setVisibility(View.GONE);
-                       *//* mVideoView.setVideoURI(Uri.parse(mSelectedMedia.getContentId()));
+                       /* mVideoView.setVideoURI(Uri.parse(mSelectedMedia.getContentId()));
                         mVideoView.seekTo(0);
                         mVideoView.start();
                         mPlaybackState = PlaybackState.PLAYING;
                         restartTrickplayTimer();
-                        updatePlaybackLocation(PlaybackLocation.LOCAL);*//*
+                        updatePlaybackLocation(PlaybackLocation.LOCAL);*/
                         break;
                     case REMOTE:
                         // mPlayCircle.setVisibility(View.VISIBLE);
@@ -2775,9 +2770,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
                             // Utils.showQueuePopup(this, mPlayCircle, mSelectedMedia);
-                        }
-                        else
-                        {
+                        } else {
                         }
                         break;
                     default:
@@ -2806,8 +2799,10 @@ public class RegisterActivity extends AppCompatActivity implements
 
                 Intent intent = new Intent(RegisterActivity.this, ExpandedControlsActivity.class);
                 startActivity(intent);
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 remoteMediaClient.removeListener(this);
-            }
+                finish();            }
 
             @Override
             public void onMetadataUpdated() {
@@ -2825,10 +2820,19 @@ public class RegisterActivity extends AppCompatActivity implements
             public void onSendingRemoteMediaRequest() {
             }
         });
+        remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {
+            @Override
+            public void onResult(@NonNull RemoteMediaClient.MediaChannelResult mediaChannelResult) {
+                if (!mediaChannelResult.getStatus().isSuccess()) {
+                    Log.v("SUBHA", "Failed with status code:" +
+                            mediaChannelResult.getStatus().getStatusCode());
+                }
+            }
+        });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
     }
 
-    *//***************chromecast**********************/
+    /***************chromecast**********************/
 
 
     /***********Subtitle********/
