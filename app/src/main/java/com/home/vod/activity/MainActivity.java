@@ -1798,9 +1798,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     public void ShowLanguagePopup() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
-        LayoutInflater inflater = (LayoutInflater) getSystemService(MainActivity.this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        View convertView = (View) inflater.inflate(R.layout.language_pop_up, null);
+        View convertView = inflater.inflate(R.layout.language_pop_up, null);
         TextView titleTextView = (TextView) convertView.findViewById(R.id.languagePopupTitle);
         titleTextView.setText(languagePreference.getTextofLanguage( APP_SELECT_LANGUAGE, DEFAULT_APP_SELECT_LANGUAGE));
 

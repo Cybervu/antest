@@ -1131,9 +1131,9 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     public void ShowLanguagePopup() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(FavoriteActivity.this, R.style.MyAlertDialogStyle);
-        LayoutInflater inflater = (LayoutInflater) getSystemService(FavoriteActivity.this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        View convertView = (View) inflater.inflate(R.layout.language_pop_up, null);
+        View convertView = inflater.inflate(R.layout.language_pop_up, null);
         TextView titleTextView = (TextView) convertView.findViewById(R.id.languagePopupTitle);
         titleTextView.setText(Util.getTextofLanguage(FavoriteActivity.this, Util.APP_SELECT_LANGUAGE, Util.DEFAULT_APP_SELECT_LANGUAGE));
 

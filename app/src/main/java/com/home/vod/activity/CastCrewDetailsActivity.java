@@ -36,9 +36,6 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
 import com.home.vod.util.Util;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -320,7 +317,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                     castImageView.setImageResource(R.drawable.logo);
                 } else {
 
-                    ImageLoader imageLoader = ImageLoader.getInstance();
+                   /* ImageLoader imageLoader = ImageLoader.getInstance();
                     imageLoader.init(ImageLoaderConfiguration.createDefault(CastCrewDetailsActivity.this));
 
                     DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
@@ -328,7 +325,13 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                             .showImageForEmptyUri(R.drawable.logo)
                             .showImageOnFail(R.drawable.logo)
                             .showImageOnLoading(R.drawable.logo).build();
-                    imageLoader.displayImage(getCastDetailsOutputModelArray.getCastImage(), castImageView, options);
+                    imageLoader.displayImage(getCastDetailsOutputModelArray.getCastImage(), castImageView, options);*/
+
+                    Picasso.with(CastCrewDetailsActivity.this)
+                            .load(getCastDetailsOutputModelArray.getCastImage())
+                            .error(R.drawable.logo)
+                            .placeholder(R.drawable.logo)
+                            .into(castImageView);
 
                 }
 

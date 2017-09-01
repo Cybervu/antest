@@ -114,9 +114,7 @@ import com.muvi.player.activity.ExoPlayerActivity;
 import com.muvi.player.activity.Player;
 import com.muvi.player.activity.ThirdPartyPlayer;
 import com.muvi.player.activity.YouTubeAPIActivity;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -215,6 +213,7 @@ import static com.muvi.player.utils.Util.subscriptionUrl;
 
 
 import com.home.vod.util.Util;
+import com.squareup.picasso.Picasso;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -585,7 +584,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 }else {
 
 
-                    ImageLoader imageLoader = ImageLoader.getInstance();
+                    /*ImageLoader imageLoader = ImageLoader.getInstance();
                     imageLoader.init(ImageLoaderConfiguration.createDefault(ShowWithEpisodesActivity.this));
 
                     DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
@@ -593,14 +592,20 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                             .showImageForEmptyUri(R.drawable.logo)
                             .showImageOnFail(R.drawable.logo)
                             .showImageOnLoading(R.drawable.logo).build();
-                    imageLoader.displayImage(posterImageId, moviePoster, options);
+                    imageLoader.displayImage(posterImageId, moviePoster, options);*/
+
+                    Picasso.with(ShowWithEpisodesActivity.this)
+                            .load(posterImageId)
+                            .error(R.drawable.logo)
+                            .placeholder(R.drawable.logo)
+                            .into(moviePoster);
 
                 }
 
             } else {
 
 
-                ImageLoader imageLoader = ImageLoader.getInstance();
+                /*ImageLoader imageLoader = ImageLoader.getInstance();
                 imageLoader.init(ImageLoaderConfiguration.createDefault(ShowWithEpisodesActivity.this));
 
                 DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
@@ -608,7 +613,15 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                         .showImageForEmptyUri(R.drawable.logo)
                         .showImageOnFail(R.drawable.logo)
                         .showImageOnLoading(R.drawable.logo).build();
-                imageLoader.displayImage(bannerImageId.trim(), moviePoster, options);
+                imageLoader.displayImage(bannerImageId.trim(), moviePoster, options);*/
+
+                Picasso.with(ShowWithEpisodesActivity.this)
+                        .load(bannerImageId.trim())
+                        .error(R.drawable.logo)
+                        .placeholder(R.drawable.logo)
+                        .into(moviePoster);
+
+
 
 
             }
@@ -2676,9 +2689,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             }
 
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(ShowWithEpisodesActivity.this, R.style.MyAlertDialogStyle);
-            LayoutInflater inflater = (LayoutInflater) ShowWithEpisodesActivity.this.getSystemService(ShowWithEpisodesActivity.this.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) ShowWithEpisodesActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-            View convertView = (View) inflater.inflate(R.layout.activity_ppv_popup, null);
+            View convertView = inflater.inflate(R.layout.activity_ppv_popup, null);
             alertDialog.setView(convertView);
             alertDialog.setTitle("");
 
@@ -3212,9 +3225,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     public void ShowLanguagePopup() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(ShowWithEpisodesActivity.this, R.style.MyAlertDialogStyle);
-        LayoutInflater inflater = (LayoutInflater) getSystemService(ShowWithEpisodesActivity.this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        View convertView = (View) inflater.inflate(R.layout.language_pop_up, null);
+        View convertView = inflater.inflate(R.layout.language_pop_up, null);
         TextView titleTextView = (TextView) convertView.findViewById(R.id.languagePopupTitle);
         titleTextView.setText(languagePreference.getTextofLanguage(APP_SELECT_LANGUAGE, DEFAULT_APP_SELECT_LANGUAGE));
 

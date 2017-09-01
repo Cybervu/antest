@@ -91,7 +91,7 @@ enum ContentTypes1 {
             "video/mp2t");
     String mediaSourceParamsContentType = null;
 
-    private ContentTypes1(String mediaSourceParamsContentType) {
+    ContentTypes1(String mediaSourceParamsContentType) {
         this.mediaSourceParamsContentType = mediaSourceParamsContentType;
     }
 
@@ -354,7 +354,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         }, 2000, 2000);
 
         //===============This is used for subtitle ================================//
-        playerModel.DefaultSubtitle = "Off";
+        Player.DefaultSubtitle = "Off";
 
         if (playerModel.getSubTitleName() != null) {
             SubTitleName = playerModel.getSubTitleName();
@@ -381,7 +381,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);*/
 
-                playerModel.call_finish_at_onUserLeaveHint = false;
+                Player.call_finish_at_onUserLeaveHint = false;
                 Intent intent = new Intent(ExoPlayerActivity.this, Subtitle_Resolution.class);
                 intent.putExtra("ResolutionFormat", ResolutionFormat);
                 intent.putExtra("ResolutionUrl", ResolutionUrl);
@@ -399,7 +399,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         //===============================This is used for Resolution Change ===================================//
 
 
-        playerModel.VideoResolution = "Auto";
+        Player.VideoResolution = "Auto";
 
         if (playerModel.getResolutionFormat()  != null) {
             ResolutionFormat = playerModel.getResolutionFormat() ;
@@ -512,7 +512,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         if (censor_layout) {
 
-            ((LinearLayout) findViewById(R.id.durationratingLiearLayout)).setVisibility(View.GONE);
+            findViewById(R.id.durationratingLiearLayout).setVisibility(View.GONE);
         }
         if (playerModel.getVideoStory().trim() != null && !playerModel.getVideoStory().trim().matches(""))
 
@@ -535,11 +535,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         videoCastCrewTitleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (playerModel.checkNetwork(ExoPlayerActivity.this)) {
+                if (Player.checkNetwork(ExoPlayerActivity.this)) {
                     //Will Add Some Data to send
-                    playerModel.call_finish_at_onUserLeaveHint = false;
-                    playerModel.hide_pause = true;
-                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                    Player.call_finish_at_onUserLeaveHint = false;
+                    Player.hide_pause = true;
+                    findViewById(R.id.progress_view).setVisibility(View.GONE);
                     latest_center_play_pause.setVisibility(View.VISIBLE);
 
                     if (emVideoView.isPlaying()) {
@@ -584,7 +584,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         screenWidth = display.getWidth();
         screenHeight = display.getHeight();
 
-        playerModel.player_description = true;
+        Player.player_description = true;
 
         LinearLayout.LayoutParams params1 = null;
 
@@ -665,7 +665,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         emVideoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (((ProgressBar) findViewById(R.id.progress_view)).getVisibility() == View.VISIBLE) {
+                if (findViewById(R.id.progress_view).getVisibility() == View.VISIBLE) {
                     primary_ll.setVisibility(View.VISIBLE);
                     center_play_pause.setVisibility(View.GONE);
                     latest_center_play_pause.setVisibility(View.GONE);
@@ -726,13 +726,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                         }
                     });
-                    playerModel.player_description = false;
-                    playerModel.landscape = true;
+                    Player.player_description = false;
+                    Player.landscape = true;
                     hideSystemUI();
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 } else {
 
-                    playerModel.player_description = true;
+                    Player.player_description = true;
                     LinearLayout.LayoutParams params1 = null;
                     if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
                         if (ExoPlayerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -775,8 +775,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onClick(View view) {
 
-                if (playerModel.hide_pause) {
-                    playerModel.hide_pause = false;
+                if (Player.hide_pause) {
+                    Player.hide_pause = false;
                     Start_Timer();
                 }
 
@@ -836,8 +836,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                             startTimer();
 
                             if (played_length > 0) {
-                                playerModel.call_finish_at_onUserLeaveHint = false;
-                                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                                Player.call_finish_at_onUserLeaveHint = false;
+                                findViewById(R.id.progress_view).setVisibility(View.GONE);
                                 Intent resumeIntent = new Intent(ExoPlayerActivity.this, ResumePopupActivity.class);
                                 startActivityForResult(resumeIntent, 1001);
                             } else {
@@ -1504,7 +1504,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         videoBufferLogId = myJson.optString("log_id");
                         videoBufferLogUniqueId = myJson.optString("log_unique_id");
                         Location = myJson.optString("location");
-                        ;
                     } else {
                         videoBufferLogId = "0";
                         videoBufferLogUniqueId = "0";
@@ -1642,7 +1641,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     private int millisecondsToString(int milliseconds) {
         // int seconds = (int) (milliseconds / 1000) % 60 ;
-        int seconds = (int) (milliseconds / 1000);
+        int seconds = milliseconds / 1000;
         return seconds;
     }
 
@@ -1652,7 +1651,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         if (orientation == 90) {
 
-            playerModel.player_description = false;
+            Player.player_description = false;
             isLandScape = false;
 
             compressed = false;
@@ -1671,7 +1670,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
             //current_time.setVisibility(View.GONE);
         } else if (orientation == 270) {
-            playerModel.player_description = false;
+            Player.player_description = false;
             isLandScape = true;
 
             compressed = false;
@@ -1694,7 +1693,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             // Do some landscape stuff
         } else if (orientation == 180) {
 
-            playerModel.player_description = true;
+            Player.player_description = true;
 
             LinearLayout.LayoutParams params1 = null;
             if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
@@ -1728,7 +1727,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         } else if (orientation == 0) {
 
-            playerModel.player_description = true;
+            Player.player_description = true;
             LinearLayout.LayoutParams params1 = null;
             if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
                 if (ExoPlayerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -1776,7 +1775,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 // Execute HTTP Post Request
                 try {
-                    URL myurl = new URL(playerModel.loadIPUrl);
+                    URL myurl = new URL(Player.loadIPUrl);
                     HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
                     InputStream ins = con.getInputStream();
                     InputStreamReader isr = new InputStreamReader(ins);
@@ -1866,7 +1865,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
                 //====start this condition for check the cuurent time AND THAT SEEKBAR SIMULTINOUSLY RUN====
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
 
                 primary_ll.setVisibility(View.GONE);
                 last_ll.setVisibility(View.GONE);
@@ -1902,7 +1901,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
                 previous_matching_time = current_matching_time;
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                findViewById(R.id.progress_view).setVisibility(View.GONE);
             }
 
         }
@@ -2088,9 +2087,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         }
 
 
-        if (playerModel.call_finish_at_onUserLeaveHint) {
+        if (Player.call_finish_at_onUserLeaveHint) {
 
-            playerModel.call_finish_at_onUserLeaveHint = true;
+            Player.call_finish_at_onUserLeaveHint = true;
 
             mHandler.removeCallbacks(updateTimeTask);
             if (emVideoView != null) {
@@ -2370,7 +2369,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (resultCode == RESULT_OK) {
             if (requestCode == 1001) {
 
-                playerModel.call_finish_at_onUserLeaveHint = false;
+                Player.call_finish_at_onUserLeaveHint = false;
 
                 if (data.getStringExtra("yes").equals("1002")) {
 
@@ -2445,7 +2444,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         }
 
                         change_resolution = true;
-                        ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                        findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                         emVideoView.setVideoURI(Uri.parse(ResolutionUrl.get(Integer.parseInt(data.getStringExtra("position")))));
 
                     }
@@ -2457,7 +2456,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     @Override
     public void onDestroy() {
         super.onDestroy();
-        playerModel.hide_pause = false;
+        Player.hide_pause = false;
 
         if (MovableTimer != null)
             MovableTimer.cancel();

@@ -28,7 +28,6 @@ import com.home.vod.activity.MainActivity;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
-import com.nostra13.universalimageloader.utils.L;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_SUBMIT;

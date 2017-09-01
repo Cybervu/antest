@@ -137,20 +137,13 @@ public class Util {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
-        if (isConnected==false){
-            return false;
-        }
-        return true;
+        return isConnected != false;
     }
 
 
     //Array Contains a string
     public static boolean containsString(String[] list, String str) {
-        if(Arrays.asList(list).contains(str))
-        {
-            return true;
-        }
-        return false;
+        return Arrays.asList(list).contains(str);
     }
 
 
@@ -215,11 +208,7 @@ public class Util {
         Pattern pattern = Pattern.compile(password, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(confirmPassword);
 
-        if (!matcher.matches()) {
-            // do your Toast("passwords are not matching");
-            return false;
-        }
-        return true;
+        return matcher.matches();
     }
     public static boolean containsIgnoreCase(List<Integer> list, int soughtFor) {
         for (Integer current : list) {

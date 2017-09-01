@@ -2251,9 +2251,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Episode_list_Activity.this, R.style.MyAlertDialogStyle);
-        LayoutInflater inflater = (LayoutInflater) Episode_list_Activity.this.getSystemService(Episode_list_Activity.this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) Episode_list_Activity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        View convertView = (View) inflater.inflate(R.layout.activity_ppv_popup, null);
+        View convertView = inflater.inflate(R.layout.activity_ppv_popup, null);
         alertDialog.setView(convertView);
         alertDialog.setTitle("");
 
@@ -2716,9 +2716,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     public void ShowLanguagePopup() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(Episode_list_Activity.this, R.style.MyAlertDialogStyle);
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Episode_list_Activity.this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        View convertView = (View) inflater.inflate(R.layout.language_pop_up, null);
+        View convertView = inflater.inflate(R.layout.language_pop_up, null);
         TextView titleTextView = (TextView) convertView.findViewById(R.id.languagePopupTitle);
         titleTextView.setText(languagePreference.getTextofLanguage(APP_SELECT_LANGUAGE, DEFAULT_APP_SELECT_LANGUAGE));
 

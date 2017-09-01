@@ -32,10 +32,7 @@ public class Player implements Serializable{
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
-        if (isConnected==false){
-            return false;
-        }
-        return true;
+        return isConnected != false;
     }
 
 
