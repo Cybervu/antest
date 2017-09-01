@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -40,12 +41,24 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
+import com.androidquery.AQuery;
 import com.daimajia.slider.library.SliderLayout;
+import com.google.android.gms.cast.MediaInfo;
+import com.google.android.gms.cast.framework.CastContext;
+import com.google.android.gms.cast.framework.CastSession;
+import com.google.android.gms.cast.framework.CastStateListener;
+import com.google.android.gms.cast.framework.IntroductoryOverlay;
+import com.google.android.gms.cast.framework.SessionManagerListener;
+import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
 import com.home.apisdk.apiController.MyLibraryAsynTask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
@@ -63,6 +76,7 @@ import com.home.vod.activity.MyLibraryPlayer;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.adapter.GenreFilterAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
+import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.GridItem;
 import com.home.vod.network.NetworkStatus;
@@ -82,6 +96,8 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -131,6 +147,104 @@ import com.twotoasters.jazzylistview.JazzyHelper;
 public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask.VideoDetailsListener,
         GetValidateUserAsynTask.GetValidateUserListener,
         MyLibraryAsynTask.MyLibraryListener {
+
+    /***************chromecast**********************/
+    public enum PlaybackLocation {
+        LOCAL,
+        REMOTE
+    }
+
+    public enum PlaybackState {
+        PLAYING, PAUSED, BUFFERING, IDLE
+    }
+
+
+
+    private VideoView mVideoView;
+    private TextView mTitleView;
+    private TextView mDescriptionView;
+    private TextView mStartText;
+    private TextView mEndText;
+    private SeekBar mSeekbar;
+    private ImageView mPlayPause;
+    private ProgressBar mLoading;
+    private View mControllers;
+    private View mContainer;
+    private ImageView mCoverArt;
+    private Timer mSeekbarTimer;
+    private Timer mControllersTimer;
+    private PlaybackLocation mLocation;
+    private PlaybackState mPlaybackState;
+    private final Handler mHandler = new Handler();
+    private final float mAspectRatio = 72f / 128;
+    private AQuery mAquery;
+    private MediaInfo mSelectedMedia;
+    private boolean mControllersVisible;
+    private int mDuration;
+    private TextView mAuthorView;
+    private ImageButton mPlayCircle;
+
+
+    private CastContext mCastContext;
+    private SessionManagerListener<CastSession> mSessionManagerListener =
+            new MySessionManagerListener();
+    private CastSession mCastSession;
+    private MenuItem mediaRouteMenuItem;
+    private IntroductoryOverlay mIntroductoryOverlay;
+    private CastStateListener mCastStateListener;
+
+    private class MySessionManagerListener implements SessionManagerListener<CastSession> {
+
+        @Override
+        public void onSessionEnded(CastSession session, int error) {
+            if (session == mCastSession) {
+                mCastSession = null;
+            }
+            //invalidateOptionsMenu();
+        }
+
+        @Override
+        public void onSessionResumed(CastSession session, boolean wasSuspended) {
+            mCastSession = session;
+            //invalidateOptionsMenu();
+        }
+
+        @Override
+        public void onSessionStarted(CastSession session, String sessionId) {
+            mCastSession = session;
+            //invalidateOptionsMenu();
+        }
+
+        @Override
+        public void onSessionStarting(CastSession session) {
+        }
+
+        @Override
+        public void onSessionStartFailed(CastSession session, int error) {
+        }
+
+        @Override
+        public void onSessionEnding(CastSession session) {
+        }
+
+        @Override
+        public void onSessionResuming(CastSession session, String sessionId) {
+        }
+
+        @Override
+        public void onSessionResumeFailed(CastSession session, int error) {
+        }
+
+        @Override
+        public void onSessionSuspended(CastSession session, int reason) {
+        }
+    }
+
+
+
+    MediaInfo mediaInfo;
+    /***************chromecast**********************/
+
     ArrayList<String> url_maps;
     private ProgressBarHandler videoPDialog;
     private static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";
@@ -2654,6 +2768,249 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
         }
     }
+    /***************chromecast**********************/
 
+    private void showIntroductoryOverlay() {
+
+
+        if (mIntroductoryOverlay != null) {
+            mIntroductoryOverlay.remove();
+        }
+
+
+        if ((mediaRouteMenuItem != null) && mediaRouteMenuItem.isVisible()) {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    /*mIntroductoryOverlay =
+                            new IntroductoryOverlay.Builder(
+                            getActivity(), mediaRouteMenuItem)
+                            .setTitleText(getActivity().getString(R.string.introducing_cast))
+                            .setOverlayColor(R.color.primary)
+                            .setSingleTime()
+                            .setOnOverlayDismissedListener(
+                                    new IntroductoryOverlay.OnOverlayDismissedListener() {
+                                        @Override
+                                        public void onOverlayDismissed() {
+                                            mIntroductoryOverlay = null;
+                                        }
+                                    })
+                            .build();
+
+
+                    mIntroductoryOverlay.show();*/
+                }
+            });
+        }
+    }
+
+    private void setupCastListener() {
+        mSessionManagerListener = new SessionManagerListener<CastSession>() {
+
+            @Override
+            public void onSessionEnded(CastSession session, int error) {
+                onApplicationDisconnected();
+            }
+
+            @Override
+            public void onSessionResumed(CastSession session, boolean wasSuspended) {
+                onApplicationConnected(session);
+            }
+
+            @Override
+            public void onSessionResumeFailed(CastSession session, int error) {
+                onApplicationDisconnected();
+            }
+
+            @Override
+            public void onSessionStarted(CastSession session, String sessionId) {
+                onApplicationConnected(session);
+            }
+
+            @Override
+            public void onSessionStartFailed(CastSession session, int error) {
+                onApplicationDisconnected();
+            }
+
+            @Override
+            public void onSessionStarting(CastSession session) {
+
+            }
+
+            @Override
+            public void onSessionEnding(CastSession session) {
+
+            }
+
+            @Override
+            public void onSessionResuming(CastSession session, String sessionId) {
+
+            }
+
+            @Override
+            public void onSessionSuspended(CastSession session, int reason) {
+
+            }
+
+            private void onApplicationConnected(CastSession castSession) {
+                mCastSession = castSession;
+
+                if (null != mSelectedMedia) {
+                   /* if (mCastSession != null && mCastSession.isConnected()) {
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
+                            }
+                        });
+
+                    }*/
+                    if (mPlaybackState == PlaybackState.PLAYING) {
+                        mVideoView.pause();
+                        loadRemoteMedia(mSeekbar.getProgress(), true);
+                        return;
+                    } else {
+
+                        mPlaybackState = PlaybackState.IDLE;
+                        updatePlaybackLocation(PlaybackLocation.REMOTE);
+                    }
+                }
+                //   updatePlayButton(mPlaybackState);
+                //invalidateOptionsMenu();
+            }
+
+            private void onApplicationDisconnected() {
+               /* if (mCastSession != null && mCastSession.isConnected()) {
+                    watchMovieButton.setText(getResources().getString(R.string.movie_details_watch_video_button_title));
+                }*/
+                //watchMovieButton.setText(getResources().getString(R.string.movie_details_watch_video_button_title));
+                updatePlaybackLocation(PlaybackLocation.LOCAL);
+                mPlaybackState = PlaybackState.IDLE;
+                mLocation = PlaybackLocation.LOCAL;
+
+                //invalidateOptionsMenu();
+            }
+        };
+    }
+
+    private void updatePlaybackLocation(PlaybackLocation location) {
+        mLocation = location;
+        if (location == PlaybackLocation.LOCAL) {
+            if (mPlaybackState == PlaybackState.PLAYING
+                    || mPlaybackState == PlaybackState.BUFFERING) {
+                //setCoverArtStatus(null);
+                startControllersTimer();
+            } else {
+                stopControllersTimer();
+                //setCoverArtStatus(MediaUtils.getImageUrl(mSelectedMedia, 0));
+            }
+        } else {
+            stopControllersTimer();
+            //setCoverArtStatus(MediaUtils.getImageUrl(mSelectedMedia, 0));
+            updateControllersVisibility(false);
+        }
+    }
+
+    private void loadRemoteMedia(int position, boolean autoPlay) {
+        if (mCastSession == null) {
+            return;
+        }
+        final RemoteMediaClient remoteMediaClient = mCastSession.getRemoteMediaClient();
+        if (remoteMediaClient == null) {
+            return;
+        }
+        remoteMediaClient.addListener(new RemoteMediaClient.Listener() {
+            @Override
+            public void onStatusUpdated() {
+                Intent intent = new Intent(context, ExpandedControlsActivity.class);
+                startActivity(intent);
+                remoteMediaClient.removeListener(this);
+            }
+
+            @Override
+            public void onMetadataUpdated() {
+            }
+
+            @Override
+            public void onQueueStatusUpdated() {
+            }
+
+            @Override
+            public void onPreloadStatusUpdated() {
+            }
+
+            @Override
+            public void onSendingRemoteMediaRequest() {
+            }
+        });
+        remoteMediaClient.load(mSelectedMedia, autoPlay, position);
+    }
+
+   /* private void setCoverArtStatus(String url) {
+        if (url != null) {
+            mAquery.id(mCoverArt).image(url);
+            mCoverArt.setVisibility(View.VISIBLE);
+            mVideoView.setVisibility(View.INVISIBLE);
+        } else {
+            mCoverArt.setVisibility(View.GONE);
+            mVideoView.setVisibility(View.VISIBLE);
+        }
+    }*/
+
+    private void stopTrickplayTimer() {
+        //Log.d(TAG, "Stopped TrickPlay Timer");
+        if (mSeekbarTimer != null) {
+            mSeekbarTimer.cancel();
+        }
+    }
+
+
+    private void stopControllersTimer() {
+        if (mControllersTimer != null) {
+            mControllersTimer.cancel();
+        }
+    }
+
+    private void startControllersTimer() {
+        if (mControllersTimer != null) {
+            mControllersTimer.cancel();
+        }
+        if (mLocation == PlaybackLocation.REMOTE) {
+            return;
+        }
+        mControllersTimer = new Timer();
+        mControllersTimer.schedule(new HideControllersTask(), 5000);
+    }
+
+    // should be called from the main thread
+    private void updateControllersVisibility(boolean show) {
+        if (show) {
+            //getSupportActionBar().show();
+            mControllers.setVisibility(View.VISIBLE);
+        } else {
+            if (!Util.isOrientationPortrait(context)) {
+                //getSupportActionBar().hide();
+            }
+            //  mControllers.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private class HideControllersTask extends TimerTask {
+
+        @Override
+        public void run() {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    // updateControllersVisibility(false);
+                    mControllersVisible = false;
+                }
+            });
+
+        }
+    }
+/***************chromecast**********************/
 
 }

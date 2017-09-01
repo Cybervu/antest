@@ -161,13 +161,13 @@ public class GetGenreListAsynctask extends AsyncTask<GenreListInput, Void, Void>
         super.onPreExecute();
         listener.onGetGenreListPreExecuteStarted();
         code = 0;
-        if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api())) {
+        if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
             this.cancel(true);
             status = "Package Name Not Matched";
             listener.onGetGenreListPostExecuteCompleted(genreListOutput, code, status);
             return;
         }
-        if (SDKInitializer.getHashKey().equals("")) {
+        if (SDKInitializer.getHashKey(context).equals("")) {
             this.cancel(true);
             status = "Please Initialize The SDK";
             listener.onGetGenreListPostExecuteCompleted(genreListOutput, code, status);

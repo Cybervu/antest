@@ -175,13 +175,13 @@ public class GetUserProfileAsynctask extends AsyncTask<Get_UserProfile_Input, Vo
         super.onPreExecute();
         listener.onGet_UserProfilePreExecuteStarted();
         code = 0;
-        if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api())) {
+        if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGet_UserProfilePostExecuteCompleted(get_userProfile_output, code, message, status);
             return;
         }
-        if (SDKInitializer.getHashKey().equals("")) {
+        if (SDKInitializer.getHashKey(context).equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onGet_UserProfilePostExecuteCompleted(get_userProfile_output, code, message, status);

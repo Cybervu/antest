@@ -147,13 +147,13 @@ public class LogoutAsynctask extends AsyncTask<LogoutInput, Void, Void> {
         listener.onLogoutPreExecuteStarted();
         code = 0;
         status = "";
-        if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api())) {
+        if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onLogoutPostExecuteCompleted(code, status, message);
             return;
         }
-        if (SDKInitializer.getHashKey().equals("")) {
+        if (SDKInitializer.getHashKey(context).equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onLogoutPostExecuteCompleted(code, status, message);

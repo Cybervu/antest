@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -42,6 +43,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.cast.framework.CastButtonFactory;
+import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.home.apisdk.apiController.AddToFavAsync;
 import com.home.apisdk.apiController.DeleteFavAsync;
 import com.home.apisdk.apiController.GetContentDetailsAsynTask;
@@ -72,6 +76,7 @@ import com.home.vod.R;
 import com.home.apisdk.apiModel.ViewContentRatingInputModel;
 import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
 import com.home.vod.adapter.LanguageCustomAdapter;
+import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
@@ -319,16 +324,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
         }
         // **************chromecast*********************//
-       /* if (mCastSession == null) {
+
+        if (mCastSession == null) {
             mCastSession = CastContext.getSharedInstance(this).getSessionManager()
                     .getCurrentCastSession();
         }
-*/
 
 
-      /*  mCastContext.getSessionManager().addSessionManagerListener(
+
+        mCastContext.getSessionManager().addSessionManagerListener(
                 mSessionManagerListener, CastSession.class);
-*/
+
         //**************chromecast*********************//
         invalidateOptionsMenu();
 
@@ -339,7 +345,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         inflater.inflate(R.menu.menu_main, menu);
         /***************chromecast**********************/
 
-//        CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
+        CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
         /***************chromecast**********************/
 
         MenuItem item,item1,item2,item3,item4,item5,item6;
@@ -590,6 +596,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
 
     }
+    /*chromecast-------------------------------------*/
 
     View view;
 
@@ -668,6 +675,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     MediaInfo mediaInfo;
 
     /*chromecast-------------------------------------*/
+
     RelativeLayout relativeOverlayLayout;
     private BroadcastReceiver DELETE_ACTION = new BroadcastReceiver() {
         @Override
@@ -693,7 +701,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(DELETE_ACTION, new IntentFilter("ITEM_STATUS"));
 
-        playerModel=new Player();
+        playerModel = new Player();
         get_video_details_output = new Get_Video_Details_Output();
         languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -711,11 +719,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
         playButton = (ImageView) findViewById(R.id.playButton);
         watchTrailerButton = (Button) findViewById(R.id.viewTrailerButton);
-        preorderButton= (Button) findViewById(R.id.preOrderButton);
+        preorderButton = (Button) findViewById(R.id.preOrderButton);
         favorite_view = (ImageView) findViewById(R.id.favorite_view);
-        Typeface submitButtonTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        Typeface submitButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         watchTrailerButton.setTypeface(submitButtonTypeface);
-        Typeface preorderButtonTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        Typeface preorderButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         preorderButton.setTypeface(preorderButtonTypeface);
         preorderButton.setVisibility(View.GONE);
 
@@ -727,12 +735,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
         videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-        viewStoryLayout = (RelativeLayout)findViewById(R.id.viewStoryLayout);
+        viewStoryLayout = (RelativeLayout) findViewById(R.id.viewStoryLayout);
 
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         storyViewMoreButton = (Button) findViewById(R.id.storyViewMoreButton);
-
-
 
 
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
@@ -750,15 +756,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             }
         });
         viewRatingTextView = (TextView) findViewById(R.id.viewRatingTextView);
-       // loggedInStr = preferenceManager.getLoginStatusFromPref();
+        // loggedInStr = preferenceManager.getLoginStatusFromPref();
         //pref = getSharedPreferences(Util.LOGIN_PREF, 0);
 
-        relativeOverlayLayout = (RelativeLayout)findViewById(R.id.relativeOverlayLayout);
+        relativeOverlayLayout = (RelativeLayout) findViewById(R.id.relativeOverlayLayout);
 
-        noInternetConnectionLayout = (RelativeLayout)findViewById(R.id.noInternet);
-        noDataLayout = (RelativeLayout)findViewById(R.id.noData);
-        noInternetTextView =(TextView)findViewById(R.id.noInternetTextView);
-        noDataTextView =(TextView)findViewById(R.id.noDataTextView);
+        noInternetConnectionLayout = (RelativeLayout) findViewById(R.id.noInternet);
+        noDataLayout = (RelativeLayout) findViewById(R.id.noData);
+        noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
+        noDataTextView = (TextView) findViewById(R.id.noDataTextView);
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
         noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT, DEFAULT_NO_CONTENT));
 
@@ -783,8 +789,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         viewRatingTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent reviewIntent = new Intent(MovieDetailsActivity.this,ReviewActivity.class);
-                reviewIntent.putExtra("muviId",movieIdStr);
+                Intent reviewIntent = new Intent(MovieDetailsActivity.this, ReviewActivity.class);
+                reviewIntent.putExtra("muviId", movieIdStr);
                 startActivityForResult(reviewIntent, 30060);
             }
         });
@@ -799,13 +805,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             public void onClick(View v) {
 
                 String loggedInStr = "";
-                if (preferenceManager.getLoginFeatureFromPref()== 1) {
-                     loggedInStr = preferenceManager.getUseridFromPref();
+                if (preferenceManager.getLoginFeatureFromPref() == 1) {
+                    loggedInStr = preferenceManager.getUseridFromPref();
                 }
 
-                if (loggedInStr != null){
-                    if (isFavorite==1){
-                        Log.v("goofy","Item deleted");
+                if (loggedInStr != null) {
+                    if (isFavorite == 1) {
+                        Log.v("goofy", "Item deleted");
 
                         DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
                         deleteFavInputModel.setAuthTokenStr(authTokenStr);
@@ -813,11 +819,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         deleteFavInputModel.setMovieUniqueId(movieUniqueId);
                         deleteFavInputModel.setIsEpisode(isEpisode);
 
-                        DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, MovieDetailsActivity.this,MovieDetailsActivity.this);
+                        DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
                         deleteFavAsync.executeOnExecutor(threadPoolExecutor);
 
 
-                    }else{
+                    } else {
 
                         AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
                         addToFavInputModel.setAuthToken(authTokenStr);
@@ -825,13 +831,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
                         addToFavInputModel.setIsEpisodeStr(isEpisode);
 
-                        asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, MovieDetailsActivity.this,MovieDetailsActivity.this);
+                        asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
                         asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
 
                     }
-                }
-                else {
-                    Util.favorite_clicked=true;
+                } else {
+                    Util.favorite_clicked = true;
                     final Intent registerActivity = new Intent(MovieDetailsActivity.this, RegisterActivity.class);
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -853,8 +858,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             public void onClick(View v) {
 
 
-
-
                 //playermodel set data
 // *****************set data into playermdel for play in exoplayer************
 
@@ -862,7 +865,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 playerModel.setMovieUniqueId(movieUniqueId);
                 playerModel.setUserId(preferenceManager.getUseridFromPref());
                 playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
-                playerModel.setAuthTokenStr( authTokenStr.trim());
+                playerModel.setAuthTokenStr(authTokenStr.trim());
                 playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH);
                 playerModel.setEpisode_id("0");
                 playerModel.setIsFreeContent(isFreeContent);
@@ -873,14 +876,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 playerModel.setVideoReleaseDate(videoReleaseDateTextView.getText().toString());
                 playerModel.setCensorRating(censorRatingStr);
 
-                Log.v("BKS","stramid="+playerModel.getStreamUniqueId());
-                Log.v("BKS","movieID="+playerModel.getMovieUniqueId());
-                Log.v("BKS","userid="+preferenceManager.getUseridFromPref());
-                Log.v("BKS","emailid="+playerModel.getEmailId());
-
-
-
-
+                Log.v("BKS", "stramid=" + playerModel.getStreamUniqueId());
+                Log.v("BKS", "movieID=" + playerModel.getMovieUniqueId());
+                Log.v("BKS", "userid=" + preferenceManager.getUseridFromPref());
+                Log.v("BKS", "emailid=" + playerModel.getEmailId());
 
 
                 DataModel dbModel = new DataModel();
@@ -910,7 +909,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 ResolutionUrl.clear();
                 ResolutionFormat.clear();
 
-                if(preferenceManager.getLoginFeatureFromPref() == 1) {
+                if (preferenceManager.getLoginFeatureFromPref() == 1) {
                     if (preferenceManager != null) {
                         String loggedInStr = preferenceManager.getUseridFromPref();
 
@@ -921,7 +920,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                 public void run() {
                                     registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     Util.check_for_subscription = 1;
-                                    registerActivity.putExtra("PlayerModel",playerModel);
+                                    registerActivity.putExtra("PlayerModel", playerModel);
                                     startActivity(registerActivity);
 
                                 }
@@ -934,7 +933,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                                 if (playerModel.getIsFreeContent() == 1) {
 
-                                    Log.v("MUVI","video details");
+                                    Log.v("MUVI", "video details");
                                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                                     getVideoDetailsInput.setAuthToken(authTokenStr);
                                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
@@ -943,11 +942,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                                     asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                    Log.v("BKS","contentid"+getVideoDetailsInput.getContent_uniq_id());
+                                    Log.v("BKS", "contentid" + getVideoDetailsInput.getContent_uniq_id());
                                 } else {
 
 
-                                    Log.v("MUVI","validate user details");
+                                    Log.v("MUVI", "validate user details");
 
                                     ValidateUserInput validateUserInput = new ValidateUserInput();
                                     validateUserInput.setAuthToken(authTokenStr);
@@ -959,7 +958,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                     validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                                     validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
                                     validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                    validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+                                    validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                                     asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                                     asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                                 }
@@ -975,7 +974,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                             public void run() {
                                 registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 Util.check_for_subscription = 1;
-                                registerActivity.putExtra("PlayerModel",playerModel);
+                                registerActivity.putExtra("PlayerModel", playerModel);
                                 startActivity(registerActivity);
 
                             }
@@ -987,7 +986,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
                         // MUVIlaxmi
 
-                        Log.v("MUVI","VV");
+                        Log.v("MUVI", "VV");
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                         getVideoDetailsInput.setAuthToken(authTokenStr);
                         getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
@@ -998,12 +997,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
                     } else {
-                        Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage( NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                        Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
                 }
-
-
-
 
 
             }
@@ -1094,11 +1090,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                         validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                                         validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
                                         validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                        validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+                                        validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                                         asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                                         asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                                     } else {
-                                        Util.showToast(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
+                                        Util.showToast(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
 
                                         // Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                                     }
@@ -1136,7 +1132,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
                     } else {
-                        Util.showToast(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
+                        Util.showToast(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
 
                         //Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
@@ -1188,7 +1184,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     dlgAlert.create().show();*/
                     return;
 
-                } else if ((movieTrailerUrlStr.matches("")) || (movieTrailerUrlStr.matches(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA)))) {
+                } else if ((movieTrailerUrlStr.matches("")) || (movieTrailerUrlStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA)))) {
                     Util.showNoDataAlert(MovieDetailsActivity.this);
                    /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this);
                     dlgAlert.setMessage(languagePreference.getTextofLanguage( Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
@@ -1233,7 +1229,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                             mSelectedMedia = mediaInfo;
                             // Util.showQueuePopup(MovieDetailsActivity.this, view, mediaInfo);
 
-                           // togglePlayback();
+                            togglePlayback();
 
                         } else {
                             final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, TrailerActivity.class);
@@ -1246,8 +1242,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                 }
                             });
                         }
-                    }
-                    else {
+                    } else {
                         if (movieTrailerUrlStr.contains("://www.youtube") || movieTrailerUrlStr.contains("://www.youtu.be")) {
                             if (movieTrailerUrlStr.contains("live_stream?channel")) {
                                 final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ThirdPartyPlayer.class);
@@ -1293,13 +1288,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             public void onClick(View v) {
 
 
-
                 //Will Add Some Data to send
                 final Intent registerActivity = new Intent(MovieDetailsActivity.this, CastAndCrewActivity.class);
                 runOnUiThread(new Runnable() {
                     public void run() {
 
-                        registerActivity.putExtra("cast_movie_id",movieUniqueId);
+                        registerActivity.putExtra("cast_movie_id", movieUniqueId);
                         registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(registerActivity);
 
@@ -1331,11 +1325,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 contentDetailsInput.setAuthToken(authTokenStr);
                 contentDetailsInput.setPermalink(permalinkStr);
 
-                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput,MovieDetailsActivity.this,MovieDetailsActivity.this);
+                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                 asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
 
             } else {
-                Util.showToast(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION));
+                Util.showToast(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
 
                 // Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 finish();
@@ -1343,11 +1337,104 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
 
 
+     /*chromecast-------------------------------------*/
+
+        mAquery = new AQuery(this);
+
+        // setupControlsCallbacks();
+        setupCastListener();
+        mCastContext = CastContext.getSharedInstance(this);
+        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
+        mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
+
+        boolean shouldStartPlayback = false;
+        int startPosition = 0;
+
+         /*   MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+
+            movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, movieName.getText().toString());
+            movieMetadata.putString(MediaMetadata.KEY_TITLE,  movieName.getText().toString());
+            movieMetadata.addImage(new WebImage(Uri.parse(posterImageId.trim())));
+            movieMetadata.addImage(new WebImage(Uri.parse(posterImageId.trim())));
+            JSONObject jsonObj = null;
+            try {
+                jsonObj = new JSONObject();
+                jsonObj.put("description", movieName.getText().toString());
+            } catch (JSONException e) {
+                Log.e(TAG, "Failed to add description to the json object", e);
+            }
+
+            mediaInfo = new MediaInfo.Builder(castVideoUrl.trim())
+                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                    .setContentType("videos/mp4")
+                    .setMetadata(movieMetadata)
+                    .setStreamDuration(15 * 1000)
+                    .setCustomData(jsonObj)
+                    .build();
+            mSelectedMedia = mediaInfo;*/
+
+        // see what we need to play and where
+           /* Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                mSelectedMedia = getIntent().getParcelableExtra("media");
+                //setupActionBar();
+                boolean shouldStartPlayback = bundle.getBoolean("shouldStart");
+                int startPosition = bundle.getInt("startPosition", 0);
+                // mVideoView.setVideoURI(Uri.parse(mSelectedMedia.getContentId()));
+               // Log.d(TAG, "Setting url of the VideoView to: " + mSelectedMedia.getContentId());
+                if (shouldStartPlayback) {
+                    // this will be the case only if we are coming from the
+                    // CastControllerActivity by disconnecting from a device
+                    mPlaybackState = PlaybackState.PLAYING;
+                    updatePlaybackLocation(PlaybackLocation.LOCAL);
+                    updatePlayButton(mPlaybackState);
+                    if (startPosition > 0) {
+                        // mVideoView.seekTo(startPosition);
+                    }
+                    // mVideoView.start();
+                    //startControllersTimer();
+                } else {
+                    // we should load the video but pause it
+                    // and show the album art.
+                    if (mCastSession != null && mCastSession.isConnected()) {
+                        updatePlaybackLocation(PlaybackLocation.REMOTE);
+                    } else {
+                        updatePlaybackLocation(PlaybackLocation.LOCAL);
+                    }
+                    mPlaybackState = PlaybackState.IDLE;
+                    updatePlayButton(mPlaybackState);
+                }
+            }*/
 
 
+        if (shouldStartPlayback) {
+            // this will be the case only if we are coming from the
+            // CastControllerActivity by disconnecting from a device
+            mPlaybackState = PlaybackState.PLAYING;
+            updatePlaybackLocation(PlaybackLocation.LOCAL);
+            updatePlayButton(mPlaybackState);
+            if (startPosition > 0) {
+                // mVideoView.seekTo(startPosition);
+            }
+            // mVideoView.start();
+            //startControllersTimer();
+        } else {
+            // we should load the video but pause it
+            // and show the album art.
+            if (mCastSession != null && mCastSession.isConnected()) {
+                //watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
+                updatePlaybackLocation(PlaybackLocation.REMOTE);
+            } else {
+                //watchMovieButton.setText(getResources().getString(R.string.movie_details_watch_video_button_title));
+
+                updatePlaybackLocation(PlaybackLocation.LOCAL);
+            }
+            mPlaybackState = PlaybackState.IDLE;
+            updatePlayButton(mPlaybackState);
+        }
+/***************chromecast**********************/
 
     }
-
 
     /******* Subtitle*****/
 
@@ -2555,6 +2642,305 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
     }
 */
+
+
+    /*****************
+     * chromecast*-------------------------------------
+     */
+
+    private void updateMetadata(boolean visible) {
+        Point displaySize;
+        if (!visible) {
+            /*mDescriptionView.setVisibility(View.GONE);
+            mTitleView.setVisibility(View.GONE);
+            mAuthorView.setVisibility(View.GONE);*/
+            displaySize = Util.getDisplaySize(this);
+            RelativeLayout.LayoutParams lp = new
+                    RelativeLayout.LayoutParams(displaySize.x,
+                    displaySize.y + getSupportActionBar().getHeight());
+            lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+            // mVideoView.setLayoutParams(lp);
+            //mVideoView.invalidate();
+        } else {
+            //MediaMetadata mm = mSelectedMedia.getMetadata();
+          /*  mDescriptionView.setText(mSelectedMedia.getCustomData().optString(
+                    VideoProvider.KEY_DESCRIPTION));
+            //mTitleView.setText(mm.getString(MediaMetadata.KEY_TITLE));
+            //mAuthorView.setText(mm.getString(MediaMetadata.KEY_SUBTITLE));
+            mDescriptionView.setVisibility(View.VISIBLE);
+            mTitleView.setVisibility(View.VISIBLE);
+            mAuthorView.setVisibility(View.VISIBLE);*/
+            displaySize = Util.getDisplaySize(this);
+            RelativeLayout.LayoutParams lp = new
+                    RelativeLayout.LayoutParams(displaySize.x,
+                    (int) (displaySize.x * mAspectRatio));
+            lp.addRule(RelativeLayout.BELOW, R.id.toolbar);
+            // mVideoView.setLayoutParams(lp);
+            //mVideoView.invalidate();
+        }
+    }
+
+
+    private void setupCastListener() {
+        mSessionManagerListener = new SessionManagerListener<CastSession>() {
+
+            @Override
+            public void onSessionEnded(CastSession session, int error) {
+                onApplicationDisconnected();
+            }
+
+            @Override
+            public void onSessionResumed(CastSession session, boolean wasSuspended) {
+                onApplicationConnected(session);
+            }
+
+            @Override
+            public void onSessionResumeFailed(CastSession session, int error) {
+                onApplicationDisconnected();
+            }
+
+            @Override
+            public void onSessionStarted(CastSession session, String sessionId) {
+                onApplicationConnected(session);
+            }
+
+            @Override
+            public void onSessionStartFailed(CastSession session, int error) {
+                onApplicationDisconnected();
+            }
+
+            @Override
+            public void onSessionStarting(CastSession session) {
+            }
+
+            @Override
+            public void onSessionEnding(CastSession session) {
+            }
+
+            @Override
+            public void onSessionResuming(CastSession session, String sessionId) {
+            }
+
+            @Override
+            public void onSessionSuspended(CastSession session, int reason) {
+            }
+
+            private void onApplicationConnected(CastSession castSession) {
+                mCastSession = castSession;
+                mLocation = PlaybackLocation.REMOTE;
+                if (null != mSelectedMedia) {
+
+                    if (mPlaybackState == PlaybackState.PLAYING) {
+                       /* mVideoView.pause();
+                        loadRemoteMedia(mSeekbar.getProgress(), true);*/
+                        return;
+                    } else {
+                        mPlaybackState = PlaybackState.IDLE;
+                        updatePlaybackLocation(PlaybackLocation.REMOTE);
+                    }
+                }
+                updatePlayButton(mPlaybackState);
+                invalidateOptionsMenu();
+            }
+
+            private void onApplicationDisconnected() {
+/*
+                    mPlayCircle.setVisibility(View.GONE);
+*/
+
+                updatePlaybackLocation(PlaybackLocation.LOCAL);
+                mPlaybackState = PlaybackState.IDLE;
+                mLocation = PlaybackLocation.LOCAL;
+                updatePlayButton(mPlaybackState);
+                invalidateOptionsMenu();
+            }
+        };
+    }
+
+    private void updatePlayButton(PlaybackState state) {
+           /* boolean isConnected = (mCastSession != null)
+                    && (mCastSession.isConnected() || mCastSession.isConnecting());*/
+        //mControllers.setVisibility(isConnected ? View.GONE : View.VISIBLE);
+
+        switch (state) {
+            case PLAYING:
+
+                //mLoading.setVisibility(View.INVISIBLE);
+                // mPlayPause.setVisibility(View.VISIBLE);
+                //mPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_pause_dark));
+
+                break;
+            case IDLE:
+                if (mLocation == PlaybackLocation.LOCAL) {
+                   /* if (isAPV == 1) {
+                        watchMovieButton.setText(getResources().getString(R.string.advance_purchase_str));
+                    }else {
+                        watchMovieButton.setText(getResources().getString(R.string.movie_details_watch_video_button_title));
+                    }*/
+
+                } else {
+                   /* if (isAPV == 1) {
+                        watchMovieButton.setText(getResources().getString(R.string.advance_purchase_str));
+                    }else {
+                        watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
+                    }*/
+                }
+                //mCon
+                // trollers.setVisibility(View.GONE);
+                // mCoverArt.setVisibility(View.VISIBLE);
+                // mVideoView.setVisibility(View.INVISIBLE);
+                break;
+            case PAUSED:
+                //mLoading.setVisibility(View.INVISIBLE);
+              /*  mPlayPause.setVisibility(View.VISIBLE);
+                mPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_av_play_dark));*/
+
+                break;
+            case BUFFERING:
+                //mPlayPause.setVisibility(View.INVISIBLE);
+                //mLoading.setVisibility(View.VISIBLE);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void updatePlaybackLocation(PlaybackLocation location) {
+        mLocation = location;
+        if (location == PlaybackLocation.LOCAL) {
+            if (mPlaybackState == PlaybackState.PLAYING
+                    || mPlaybackState == PlaybackState.BUFFERING) {
+                //setCoverArtStatus(null);
+                //startControllersTimer();
+            } else {
+                //stopControllersTimer();
+
+                //setCoverArtStatus(MediaUtils.getImageUrl(mSelectedMedia, 0));
+            }
+        } else {
+            //stopControllersTimer();
+            // setCoverArtStatus(MediaUtils.getImageUrl(mSelectedMedia, 0));
+            //updateControllersVisibility(false);
+        }
+    }
+
+
+    private void togglePlayback() {
+        //stopControllersTimer();
+        switch (mPlaybackState) {
+            case PAUSED:
+                switch (mLocation) {
+                    case LOCAL:
+
+
+
+                      /* mVideoView.start();
+                        Log.d(TAG, "Playing locally...");
+                        mPlaybackState = PlaybackState.PLAYING;
+                        startControllersTimer();
+                        restartTrickplayTimer();
+                        updatePlaybackLocation(PlaybackLocation.LOCAL);*/
+                        break;
+
+                    case REMOTE:
+
+                        loadRemoteMedia(0, true);
+
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
+            case PLAYING:
+                mPlaybackState = PlaybackState.PAUSED;
+
+                //  mVideoView.pause();
+                break;
+
+            case IDLE:
+                switch (mLocation) {
+                    case LOCAL:
+                        //watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
+
+                        // mPlayCircle.setVisibility(View.GONE);
+                       /* mVideoView.setVideoURI(Uri.parse(mSelectedMedia.getContentId()));
+                        mVideoView.seekTo(0);
+                        mVideoView.start();
+                        mPlaybackState = PlaybackState.PLAYING;
+                        restartTrickplayTimer();
+                        updatePlaybackLocation(PlaybackLocation.LOCAL);*/
+                        break;
+                    case REMOTE:
+                        // mPlayCircle.setVisibility(View.VISIBLE);
+                        if (mCastSession != null && mCastSession.isConnected()) {
+                            // watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
+                            loadRemoteMedia(0, true);
+
+
+                            // Utils.showQueuePopup(this, mPlayCircle, mSelectedMedia);
+                        } else {
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+        updatePlayButton(mPlaybackState);
+    }
+
+    private void loadRemoteMedia(int position, boolean autoPlay) {
+
+        if (mCastSession == null) {
+            return;
+        }
+        final RemoteMediaClient remoteMediaClient = mCastSession.getRemoteMediaClient();
+        if (remoteMediaClient == null) {
+            return;
+        }
+        remoteMediaClient.addListener(new RemoteMediaClient.Listener() {
+
+            @Override
+            public void onStatusUpdated() {
+
+                Intent intent = new Intent(MovieDetailsActivity.this, ExpandedControlsActivity.class);
+                startActivity(intent);
+                remoteMediaClient.removeListener(this);
+            }
+
+            @Override
+            public void onMetadataUpdated() {
+            }
+
+            @Override
+            public void onQueueStatusUpdated() {
+            }
+
+            @Override
+            public void onPreloadStatusUpdated() {
+            }
+
+            @Override
+            public void onSendingRemoteMediaRequest() {
+            }
+        });
+        remoteMediaClient.setActiveMediaTracks(new long[1]).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {
+            @Override
+            public void onResult(@NonNull RemoteMediaClient.MediaChannelResult mediaChannelResult) {
+                if (!mediaChannelResult.getStatus().isSuccess()) {
+                    Log.v("SUBHA", "Failed with status code:" +
+                            mediaChannelResult.getStatus().getStatusCode());
+                }
+            }
+        });
+        remoteMediaClient.load(mSelectedMedia, autoPlay, position);
+    }
+
+    /***************chromecast**********************/
+
 
     /***********Subtitle********/
 

@@ -101,6 +101,10 @@ public class HeaderConstants {
      */
     public static final String COUNTRY = "country";
     /**
+     * Constant For Package Name Header used in API Call
+     */
+    public static final String PACKAGE_NAME="package_name";
+    /**
      * Constant for Order By Header used in API Call
      */
     public static final String ORDER_BY = "orderby";

@@ -58,6 +58,7 @@ import android.widget.VideoView;
 import com.androidquery.AQuery;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
+import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.CastStateListener;
@@ -1736,7 +1737,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                             //  This Code Is Added For Video Log By Bibhu..
 
                             jsonObj.put("authToken",authTokenStr.trim());
-                            jsonObj.put("user_id", pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+                            jsonObj.put("user_id",preferenceManager.getUseridFromPref());
                             jsonObj.put("ip_address", ipAddressStr.trim());
                             jsonObj.put("movie_id", movieUniqueId);
                             jsonObj.put("episode_id", "");
@@ -2015,11 +2016,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             }
         }
 
-
+/***************chromecast**********************/
 
         mAquery = new AQuery(this);
 
-        // setupControlsCallbacks();
+        //setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
         mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
@@ -2998,7 +2999,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         /***************chromecast**********************/
 
-//        CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
+      CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
         /***************chromecast**********************/
 
 

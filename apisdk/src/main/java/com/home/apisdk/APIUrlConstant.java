@@ -4,6 +4,8 @@
 
 package com.home.apisdk;
 
+import java.util.Date;
+
 /**
  * Created by MUVI on 1/18/2017.
  * Class contains all the APIs end points
@@ -256,6 +258,9 @@ public class APIUrlConstant {
      * endpoint to get Check If User Is Logged In Details API
      */
     public static final String CheckIfUserLoggedIn = "CheckIfUserLoggedIn";
+
+
+
 
 
     public static String getRemoveDevice() {
