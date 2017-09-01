@@ -467,6 +467,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 startActivity(favoriteIntent);
                 // Not implemented here
                 return false;
+            case R.id.action_mydownload:
+
+                Intent mydownload = new Intent(MovieDetailsActivity.this, MyDownloads.class);
+                startActivity(mydownload);
+                // Not implemented here
+                return false;
             case R.id.menu_item_language:
 
                 // Not implemented here
@@ -877,6 +883,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 playerModel.setVideoDuration(videoDurationTextView.getText().toString());
                 playerModel.setVideoReleaseDate(videoReleaseDateTextView.getText().toString());
                 playerModel.setCensorRating(censorRatingStr);
+                playerModel.setContentTypesId(contentTypesId);
+                playerModel.setPosterImageId(posterImageId);
 
                 Log.v("BKS", "stramid=" + playerModel.getStreamUniqueId());
                 Log.v("BKS", "movieID=" + playerModel.getMovieUniqueId());
@@ -4156,6 +4164,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             playerModel.setFakeSubTitlePath(get_video_details_output.getFakeSubTitlePath());
             playerModel.setVideoResolution(get_video_details_output.getVideoResolution());
             FakeSubTitlePath = get_video_details_output.getFakeSubTitlePath();
+            playerModel.setSubTitleLanguage(get_video_details_output.getSubTitleLanguage());
+            playerModel.setOfflineUrl(get_video_details_output.getOfflineUrl());
+            playerModel.setOfflineLanguage(get_video_details_output.getOfflineLanguage());
 
 
 
@@ -4354,6 +4365,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             reviews = contentDetailsOutput.getReview();
             rating = contentDetailsOutput.getRating();
             movieIdStr = contentDetailsOutput.getId();
+            posterImageId=contentDetailsOutput.getPoster();
+            contentTypesId=contentDetailsOutput.getContentTypesId();
             Util.currencyModel = contentDetailsOutput.getCurrencyDetails();
             Util.apvModel = contentDetailsOutput.getApvDetails();
             Util.ppvModel = contentDetailsOutput.getPpvDetails();

@@ -1,18 +1,28 @@
 
 package com.muvi.player.activity;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.DownloadManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.TrafficStats;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
@@ -20,6 +30,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,11 +47,15 @@ import com.intertrust.wasabi.ErrorCodeException;
 import com.intertrust.wasabi.Runtime;
 import com.intertrust.wasabi.media.PlaylistProxy;
 import com.intertrust.wasabi.media.PlaylistProxyListener;
+import com.muvi.player.model.ContactModel1;
+import com.muvi.player.model.SubtitleModel;
 import com.muvi.player.subtitle_support.Caption;
 import com.muvi.player.subtitle_support.FormatSRT;
 import com.muvi.player.subtitle_support.FormatSRT_WithoutCaption;
 import com.muvi.player.subtitle_support.TimedTextObject;
+import com.muvi.player.utils.DBHelper;
 import com.muvi.player.utils.ExpandableTextView;
+import com.muvi.player.utils.ProgressBarHandler;
 import com.muvi.player.utils.SensorOrientationChangeNotifier;
 import com.muvi.player.utils.Util;
 
@@ -53,16 +68,22 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -107,6 +128,42 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     Player playerModel;
     int played_length = 0;
     int playerStartPosition = 0;
+    String restrict_stream_id = "0";
+    /***** offline *****/
+    DownloadManager downloadManager;
+    RelativeLayout download_layout;
+    public boolean downloading;
+    //Handler mHandler;
+    static String filename, path;
+    ArrayList<ContactModel1> dmanager;
+    ContactModel1 audio, audio_1;
+    DBHelper dbHelper;
+    public Handler exoplayerdownloadhandler;
+    public long enqueue;
+    ImageView download;
+    ProgressBar Progress;
+    TextView percentg;
+    private static final int REQUEST_STORAGE = 1;
+    File mediaStorageDir, mediaStorageDir1;
+
+    String mlvfile = "";
+    String token = "";
+    String fname;
+    String fileExtenstion;
+    int lenghtOfFile;
+    int lengthfile;
+    /***** offline *****/
+
+
+    // This is changed for the new requirement of Offline Viewing.
+
+    ArrayList<String> List_Of_FileSize = new ArrayList<>();
+    ArrayList<String> List_Of_DownloadFile_Url = new ArrayList<>();
+
+    ProgressBarHandler pDialog_for_gettig_filesize;
+    AlertDialog alert;
+    int selected_download_format = 0;
+
 
     Timer timer;
     private Handler threadHandler = new Handler();
@@ -235,13 +292,118 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         ipAddressTextView = (TextView) findViewById(R.id.emailAddressTextView);
         emailAddressTextView = (TextView) findViewById(R.id.ipAddressTextView);
         dateTextView = (TextView) findViewById(R.id.dateTextView);
-        playerModel = new Player();
+        //playerModel = new Player();
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
       /*  playerModel.getVideoTitleColor();
         Log.v("BISHAL", "colorExo=" + playerModel.getVideoTitleColor());*/
     /*    playerModel.getStoryColor();
         playerModel.getVideoReleaseDateColor();
         playerModel.getCensorRatingColor();*/
+        Log.v("BKS","exo -stream unique id==="+playerModel.getStreamUniqueId());
+        /********* Offline********/
+
+        if (playerModel.getUserId() != null && !playerModel.getUserId().trim().matches("")) {
+            userIdStr = playerModel.getUserId();
+        }
+        if (playerModel.getEmailId() != null && !playerModel.getEmailId().trim().matches("")) {
+            emailIdStr = playerModel.getEmailId();
+        }
+
+        downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        exoplayerdownloadhandler = new Handler();
+        dbHelper = new DBHelper(ExoPlayerActivity.this);
+        dbHelper.getWritableDatabase();
+        audio_1 = dbHelper.getContact(playerModel.getStreamUniqueId()+ emailIdStr);
+
+
+        if (audio_1 != null) {
+            if (audio_1.getUSERNAME().trim().equals(emailIdStr.trim())) {
+                checkDownLoadStatusFromDownloadManager1(audio_1);
+            }
+        }
+
+        download = (ImageView) findViewById(R.id.downloadImageView);
+        Progress = (ProgressBar) findViewById(R.id.progressBar);
+        percentg = (TextView) findViewById(R.id.percentage);
+
+
+        //Check for offline content // Added By sanjay
+
+        download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
+        if (playerModel.getContentTypesId() != 4) {
+            download_layout.setVisibility(View.VISIBLE);
+        }
+
+
+        download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                new DownloadFileFromURL().execute(playerModel.getVideoUrl());
+
+                if (playerModel.getOfflineUrl().size() > 0) {
+                    Download_SubTitle(playerModel.getOfflineUrl().get(0));
+                }
+
+            }
+        });
+
+
+        percentg.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ExoPlayerActivity.this, R.style.MyAlertDialogStyle);
+                                            dlgAlert.setTitle(Util.getTextofLanguage(ExoPlayerActivity.this, Util.STOP_SAVING_THIS_VIDEO, Util.DEFAULT_STOP_SAVING_THIS_VIDEO));
+                                            dlgAlert.setMessage(Util.getTextofLanguage(ExoPlayerActivity.this, Util.YOUR_VIDEO_WONT_BE_SAVED, Util.DEFAULT_YOUR_VIDEO_WONT_BE_SAVED));
+                                            dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_KEEP, Util.DEFAULT_BTN_KEEP), null);
+                                            dlgAlert.setCancelable(false);
+                                            dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_KEEP, Util.DEFAULT_BTN_KEEP),
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            dialog.cancel();
+
+                                                        }
+                                                    });
+                                            dlgAlert.setNegativeButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_DISCARD, Util.DEFAULT_BTN_DISCARD), null);
+                                            dlgAlert.setCancelable(false);
+                                            dlgAlert.setNegativeButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_DISCARD, Util.DEFAULT_BTN_DISCARD),
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            dialog.cancel();
+                                                            downloading = false;
+                                                            audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
+
+                                                            if (audio != null) {
+                                                                downloadManager.remove(audio.getDOWNLOADID());
+                                                                dbHelper.deleteRecord(audio);
+                                                            }
+
+
+                                                            exoplayerdownloadhandler.post(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    Progress.setProgress((int) 0);
+                                                                    percentg.setVisibility(View.GONE);
+                                                                    download.setVisibility(View.VISIBLE);
+                                                                }
+                                                            });
+
+                                                            Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ExoPlayerActivity.this, Util.DOWNLOAD_CANCELLED, Util.DEFAULT_DOWNLOAD_CANCELLED), Toast.LENGTH_SHORT).show();
+
+                                                        }
+                                                    });
+
+                                            dlgAlert.create().show();
+
+                                        }
+                                    }
+        );
+
+        /*****Offline*****/
+
+
+
 
 
        isLiveStream = playerModel.isLiveStream();
@@ -301,12 +463,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         episodeId = playerModel.getEpisode_id();
         Log.v("BISHAL", "Url=" + playerModel.getVideoUrl());
 
-        if (playerModel.getUserId() != null && !playerModel.getUserId().trim().matches("")) {
-            userIdStr = playerModel.getUserId();
-        }
-        if (playerModel.getEmailId() != null && !playerModel.getEmailId().trim().matches("")) {
-            emailIdStr = playerModel.getEmailId();
-        }
+
 
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
         subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
@@ -2086,6 +2243,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             stoptimertask();
             timer = null;
         }
+        if (Util.getTextofLanguage(ExoPlayerActivity.this, Util.IS_STREAMING_RESTRICTION, Util.DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1") && Util.call_finish_at_onUserLeaveHint) {
+
+
+            AsyncResumeVideoLogDetails_HomeClicked asyncResumeVideoLogDetails_homeClicked = new AsyncResumeVideoLogDetails_HomeClicked();
+            asyncResumeVideoLogDetails_homeClicked.executeOnExecutor(threadPoolExecutor);
+        }
 
 
         if (playerModel.call_finish_at_onUserLeaveHint) {
@@ -2755,4 +2918,438 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     }
 
 
+    // Added For Offline Viewing//
+
+
+    public void checkDownLoadStatusFromDownloadManager1(final ContactModel1 model) {
+
+
+        if (model.getDOWNLOADID() != 0) {
+            new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+
+                    downloading = true;
+                    int bytes_downloaded = 0;
+                    int bytes_total = 0;
+                    downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                    while (downloading) {
+
+                        DownloadManager.Query q = new DownloadManager.Query();
+                        q.setFilterById(model.getDOWNLOADID()); //filter by id which you have receieved when reqesting download from download manager
+                        Cursor cursor = downloadManager.query(q);
+
+
+                        if (cursor != null && cursor.getCount() > 0) {
+                            if (cursor.moveToFirst()) {
+                                int columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
+                                int status = cursor.getInt(columnIndex);
+                                if (status == DownloadManager.STATUS_SUCCESSFUL) {
+
+                                    model.setDSTATUS(1);
+                                    dbHelper.updateRecord(model);
+
+                                } else if (status == DownloadManager.STATUS_FAILED) {
+                                    // 1. process for download fail.
+                                    model.setDSTATUS(0);
+
+                                } else if ((status == DownloadManager.STATUS_PAUSED) ||
+                                        (status == DownloadManager.STATUS_RUNNING)) {
+                                    model.setDSTATUS(2);
+
+                                } else if (status == DownloadManager.STATUS_PENDING) {
+                                    //Not handling now
+                                }
+                                int sizeIndex = cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES);
+                                int downloadedIndex = cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
+                                long size = cursor.getInt(sizeIndex);
+                                long downloaded = cursor.getInt(downloadedIndex);
+                                double progress = 0.0;
+                                if (size != -1) progress = downloaded * 100.0 / size;
+                                // At this point you have the progress as a percentage.
+                                model.setProgress((int) progress);
+                            }
+                        }
+
+
+                        runOnUiThread(new Runnable() {
+                            //
+                            @Override
+                            public void run() {
+
+                                download.setVisibility(View.GONE);
+                                percentg.setVisibility(View.VISIBLE);
+                                Progress.setProgress(0);
+
+                                Progress.setProgress((int) model.getProgress());
+                                percentg.setText(model.getProgress() + "%");
+
+                                if (model.getProgress() == 100) {
+                                    download_layout.setVisibility(View.GONE);
+                                }
+
+                            }
+                        });
+                        cursor.close();
+                    }
+                }
+            }).start();
+        }
+    }
+
+
+    public void Download_SubTitle(String Url) {
+        new DownloadFileFromURL_Offline().execute(Url);
+    }
+
+    class DownloadFileFromURL_Offline extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+
+
+            try {
+                URL url = new URL(f_url[0]);
+                String str = f_url[0];
+                filename = str.substring(str.lastIndexOf("/") + 1);
+                URLConnection conection = url.openConnection();
+                conection.connect();
+                int lenghtOfFile = conection.getContentLength();
+
+                // download the file
+                InputStream input = new BufferedInputStream(url.openStream(), 8192);
+                File root = Environment.getExternalStorageDirectory();
+                mediaStorageDir1 = new File(root + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/SubTitleList_Offline_WithoutDRM/", "");
+
+                if (!mediaStorageDir1.exists()) {
+                    if (!mediaStorageDir1.mkdirs()) {
+                        Log.d("App", "failed to create directory");
+                    }
+                }
+
+
+                SubtitleModel subtitleModel = new SubtitleModel();
+                subtitleModel.setUID(playerModel.getStreamUniqueId() + emailIdStr);
+                subtitleModel.setLanguage(playerModel.getOfflineLanguage().get(0));
+                String filename = mediaStorageDir1.getAbsolutePath() + "/" + System.currentTimeMillis() + ".vtt";
+                subtitleModel.setPath(filename);
+
+                Log.v("BIBHU3", "SubTitleName============" + filename);
+
+                long rowId = dbHelper.insertRecordSubtittel(subtitleModel);
+                Log.v("BIBHU3", "rowId============" + rowId + "sub id ::" + subtitleModel.getUID());
+
+                playerModel.getOfflineLanguage().remove(0);
+
+
+                OutputStream output = new FileOutputStream(filename);
+
+                byte data[] = new byte[1024];
+                long total = 0;
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+                    output.write(data, 0, count);
+                }
+                output.flush();
+                output.close();
+                input.close();
+
+            } catch (Exception e) {
+                Log.v("BIBHU3", "error===========" + e.getMessage());
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+
+            return null;
+        }
+
+        protected void onProgressUpdate(String... progress) {
+        }
+
+        @Override
+        protected void onPostExecute(String file_url) {
+
+            playerModel.getOfflineUrl().remove(0);
+            if (playerModel.getOfflineUrl().size() > 0) {
+                Download_SubTitle(playerModel.getOfflineUrl().get(0).trim());
+            }
+
+        }
+    }
+
+
+
+
+    /*****offline *****/
+
+
+    class DownloadFileFromURL extends AsyncTask<String, String, String> {
+
+        ProgressBarHandler pDialog;
+        String responseStr;
+
+        @Override
+        protected void onPreExecute() {
+            pDialog = new ProgressBarHandler(ExoPlayerActivity.this);
+            pDialog.show();
+
+        }
+
+        /**
+         * Downloading file in background thread
+         */
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+
+            try {
+                DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
+                Calendar d = Calendar.getInstance();
+                URL url = new URL(f_url[0]);
+                Log.v("SUBHA", "ha ho" + url);
+                String str = f_url[0];
+
+                URLConnection conection = url.openConnection();
+                conection.connect();
+
+                lenghtOfFile = conection.getContentLength();
+                lengthfile = lenghtOfFile / 1024 / 1024;
+                Log.v("SUBHA4", "" + lengthfile);
+
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String file_url) {
+
+            try {
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                }
+
+                String lengh = String.valueOf(lengthfile);
+
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ExoPlayerActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setTitle(Util.getTextofLanguage(ExoPlayerActivity.this, Util.WANT_TO_DOWNLOAD, Util.DEFAULT_WANT_TO_DOWNLOAD));
+                dlgAlert.setMessage(playerModel.getVideoTitle() + " " + "(" + lengh + "MB)");
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.DOWNLOAD_BUTTON_TITLE, Util.DEFAULT_DOWNLOAD_BUTTON_TITLE), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.DOWNLOAD_BUTTON_TITLE, Util.DEFAULT_DOWNLOAD_BUTTON_TITLE),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                downloading = true;
+
+                                int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+                                if (currentApiVersion >= Build.VERSION_CODES.M) {
+                                    requestStoragePermission();
+                                } else {
+                                    downloadFile(true);
+                                }
+
+                            }
+                        });
+                dlgAlert.setNegativeButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.CANCEL_BUTTON, Util.DEFAULT_CANCEL_BUTTON), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setNegativeButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.CANCEL_BUTTON, Util.DEFAULT_CANCEL_BUTTON),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+                            }
+                        });
+                dlgAlert.create().show();
+
+            } catch (IllegalArgumentException ex) {
+                Toast.makeText(ExoPlayerActivity.this, Util.getTextofLanguage(ExoPlayerActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
+    private void requestStoragePermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE);
+        } else {
+            downloadFile(true);
+        }
+    }
+
+
+    private void downloadFile(boolean singlefile) {
+        DownloadManager.Request request;
+        if (singlefile) {
+            selected_download_format = 0;
+            request = new DownloadManager.Request(Uri.parse(playerModel.getVideoUrl()));
+        } else {
+            request = new DownloadManager.Request(Uri.parse(ResolutionUrl.get(selected_download_format + 1)));
+            selected_download_format = 0;
+        }
+
+        request.setTitle(playerModel.getVideoTitle());
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        //Get download file name
+        fileExtenstion = MimeTypeMap.getFileExtensionFromUrl(playerModel.getVideoUrl());
+
+        String timestamp = System.currentTimeMillis() + ".exo";
+        //Save file to destination folder
+        request.setDestinationInExternalPublicDir("Android/data/" + getApplicationContext().getPackageName().trim() + "/WITHOUT_DRM", timestamp);
+        enqueue = downloadManager.enqueue(request);
+
+        download.setVisibility(View.GONE);
+        percentg.setVisibility(View.VISIBLE);
+        Progress.setProgress(0);
+
+        ContactModel1 contactModel1 = new ContactModel1();
+        contactModel1.setMUVIID(playerModel.getVideoTitle());
+        contactModel1.setDOWNLOADID((int) enqueue);
+        contactModel1.setProgress(0);
+        contactModel1.setUSERNAME(emailIdStr);
+        contactModel1.setUniqueId(playerModel.getStreamUniqueId() + emailIdStr);
+        contactModel1.setDSTATUS(2);
+
+        contactModel1.setPoster(playerModel.getPosterImageId().trim());
+        contactModel1.setToken(fileExtenstion);
+        contactModel1.setPath(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/WITHOUT_DRM/" + timestamp);
+        contactModel1.setContentid(String.valueOf(playerModel.getContentTypesId()));
+        contactModel1.setGenere(playerModel.getVideoGenre().trim());
+        contactModel1.setMuviid(playerModel.getStreamUniqueId().trim());
+        contactModel1.setDuration(playerModel.getVideoDuration().trim());
+        dbHelper.insertRecord(contactModel1);
+
+        audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
+        if (audio != null) {
+            if (audio.getUSERNAME().trim().equals(emailIdStr.trim())) {
+                checkDownLoadStatusFromDownloadManager1(audio);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_STORAGE) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                downloadFile(true);
+            } else {
+                Toast.makeText(this, Util.getTextofLanguage(ExoPlayerActivity.this, Util.DOWNLOAD_INTERRUPTED, Util.DEFAULT_DOWNLOAD_INTERRUPTED), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private class AsyncResumeVideoLogDetails_HomeClicked extends AsyncTask<Void, Void, Void> {
+        //  ProgressDialog pDialog;
+        String responseStr;
+        int statusCode = 0;
+        String watchSt = "halfplay";
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost(urlRouteList);
+                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("user_id", userIdStr.trim());
+                httppost.addHeader("ip_address", ipAddressStr.trim());
+                httppost.addHeader("movie_id", movieId.trim());
+                httppost.addHeader("episode_id", episodeId.trim());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (current_matching_time >= emVideoView.getDuration()) {
+                            watchSt = "complete";
+                        }
+
+                    }
+
+                });
+                httppost.addHeader("played_length", String.valueOf(playerPosition));
+                httppost.addHeader("watch_status", watchSt);
+
+
+                if (Util.getTextofLanguage(ExoPlayerActivity.this, Util.IS_STREAMING_RESTRICTION, Util.DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                    Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
+
+                    httppost.addHeader("is_streaming_restriction", "1");
+                    httppost.addHeader("restrict_stream_id", restrict_stream_id);
+                    httppost.addHeader("is_active_stream_closed", "1");
+                }
+
+
+                httppost.addHeader("device_type", "2");
+                httppost.addHeader("log_id", videoLogId);
+
+
+                // Execute HTTP Post Request
+                try {
+                    HttpResponse response = httpclient.execute(httppost);
+                    responseStr = EntityUtils.toString(response.getEntity());
+                    Log.v("BIBHU", "responseStr of responseStr============" + responseStr);
+
+
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            videoLogId = "0";
+
+                        }
+
+                    });
+
+                } catch (IOException e) {
+                    videoLogId = "0";
+
+                    e.printStackTrace();
+                }
+                if (responseStr != null) {
+                    JSONObject myJson = new JSONObject(responseStr);
+                    statusCode = Integer.parseInt(myJson.optString("code"));
+                    if (statusCode == 200) {
+                        videoLogId = myJson.optString("log_id");
+                        restrict_stream_id = myJson.optString("restrict_stream_id");
+                        Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
+                    } else {
+                        videoLogId = "0";
+                    }
+
+                }
+
+            } catch (Exception e) {
+                videoLogId = "0";
+
+            }
+
+            return null;
+        }
+
+
+        protected void onPostExecute(Void result) {
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+    }
 }

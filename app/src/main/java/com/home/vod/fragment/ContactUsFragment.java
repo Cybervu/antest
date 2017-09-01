@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.home.vod.R;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.nostra13.universalimageloader.utils.L;
 
@@ -60,6 +62,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
     ContactUsAsynTask asynContactUs;
     boolean validate = true;
     LanguagePreference languagePreference;
+    ProgressBarHandler pDialog;
 
 
 
@@ -143,7 +146,8 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
             @Override
             public void onClick(View v) {
 //                Toast.makeText(getActivity(), "Submitted successfully", Toast.LENGTH_SHORT).show();
-
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                 SubmmitClicked();
 
             }
@@ -313,6 +317,8 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
 
     @Override
     public void onContactUsPreExecuteStarted() {
+        pDialog = new ProgressBarHandler(context);
+        pDialog.show();
 
     }
 
@@ -320,19 +326,15 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
     public void onContactUsPostExecuteCompleted(ContactUsOutputModel contactUsOutputModel, int code, String message, String status) {
 
         Toast.makeText(getActivity(), contactUsOutputModel.getSuccess_msg(), Toast.LENGTH_SHORT).show();
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
 
-//        try {
-//            if (pDialog != null && pDialog.isShowing()) {
-//                pDialog.hide();
-//                pDialog = null;
-//            }
-//        } catch (IllegalArgumentException ex) {
-//            status = 0;
-//
-//        }
-//        if (status == 0) {
-//
-//        }
+        }
+
         editMessageStr.setText("");
         editNameStr.setText("");
         editEmailStr.setText("");

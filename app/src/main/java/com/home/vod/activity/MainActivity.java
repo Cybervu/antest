@@ -101,6 +101,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
@@ -116,6 +117,7 @@ import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAG
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
@@ -404,8 +406,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 itemLoginMenu,
                 itemRegisterMenu,
                 itemLanguageMenu,
+                itemDownload,
                 itemFavMenu;
 
+        itemDownload = menu.findItem(R.id.action_mydownload);
         itemFillterMenu = menu.findItem(R.id.action_filter);
         itemFavMenu = menu.findItem(R.id.menu_item_favorite);
         itemLanguageMenu = menu.findItem(R.id.menu_item_language);
@@ -430,6 +434,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         if (loggedInStr != null) {
 
+            itemDownload.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD));
+            itemDownload.setVisible(true);
             itemLoginMenu.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
             itemLoginMenu.setVisible(false);
 
@@ -458,7 +464,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             itemLogoutMenu.setVisible(true);
 
         } else if (loggedInStr == null) {
-
+            itemDownload.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD));
+            itemDownload.setVisible(false);
             itemLoginMenu.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
 
 
@@ -522,6 +529,12 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //                favoriteIntent.putExtra("LOGID",id);
                 favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(favoriteIntent);
+                // Not implemented here
+                return false;
+            case R.id.action_mydownload:
+
+                Intent mydownload = new Intent(MainActivity.this, MyDownloads.class);
+                startActivity(mydownload);
                 // Not implemented here
                 return false;
             case R.id.menu_item_language:
