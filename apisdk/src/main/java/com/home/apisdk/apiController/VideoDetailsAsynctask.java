@@ -39,6 +39,9 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
     private ArrayList<String> SubTitlePath = new ArrayList<>();
     private ArrayList<String> FakeSubTitlePath = new ArrayList<>();
     private ArrayList<String> ResolutionFormat = new ArrayList<>();
+    private ArrayList<String> offline_url= new ArrayList<>();
+    private ArrayList<String> offline_language= new ArrayList<>();
+    private ArrayList<String> SubTitleLanguage= new ArrayList<>();
     private ArrayList<String> ResolutionUrl = new ArrayList<>();
     private String PACKAGE_NAME;
     private String message;
@@ -161,6 +164,7 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                     get_video_details_output.setThirdparty_url(myJson.optString("thirdparty_url"));
                     get_video_details_output.setStudio_approved_url(myJson.optString("studio_approved_url"));
                     get_video_details_output.setLicenseUrl(myJson.optString("licenseUrl"));
+                    get_video_details_output.setIs_offline(myJson.optString("is_offline"));
 
                 } catch (Exception e) {
                     code = 0;
@@ -172,12 +176,18 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                         for (int i = 0; i < SubtitleJosnArray.length(); i++) {
                             SubTitleName.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
                             FakeSubTitlePath.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
+                            SubTitleLanguage.add(SubtitleJosnArray.getJSONObject(i).optString("code").trim());
+                            offline_url.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
+                            offline_language.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
 
 
                         }
 
                         get_video_details_output.setSubTitleName(SubTitleName);
                         get_video_details_output.setFakeSubTitlePath(FakeSubTitlePath);
+                        get_video_details_output.setSubTitleLanguage(SubTitleLanguage);
+                        get_video_details_output.setOfflineUrl(offline_url);
+                        get_video_details_output.setOfflineLanguage(offline_language);
                     }
                 }
 

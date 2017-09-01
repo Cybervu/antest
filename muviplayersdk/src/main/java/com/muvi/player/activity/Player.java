@@ -70,7 +70,24 @@ public class Player implements Serializable{
     String Episode_id;
     int isFreeContent;
     String videoResolution;
-    String licenseUrl,mpdVideoUrl;
+    String licenseUrl,mpdVideoUrl,isOffline;
+    int ContentTypesId = 1;
+
+    public int getContentTypesId() {
+        return ContentTypesId;
+    }
+
+    public void setContentTypesId(int contentTypesId) {
+        ContentTypesId = contentTypesId;
+    }
+
+    public String getIsOffline() {
+        return isOffline;
+    }
+
+    public void setIsOffline(String isOffline) {
+        this.isOffline = isOffline;
+    }
 
     public String getMpdVideoUrl() {
         return mpdVideoUrl;
@@ -158,6 +175,35 @@ public class Player implements Serializable{
     ArrayList<String> FakeSubTitlePath = new ArrayList<>();
     ArrayList<String> ResolutionFormat = new ArrayList<>();
     ArrayList<String> ResolutionUrl = new ArrayList<>();
+    ArrayList<String> offlineUrl = new ArrayList<>();
+    ArrayList<String> offlineLanguage = new ArrayList<>();
+
+    public ArrayList<String> getOfflineUrl() {
+        return offlineUrl;
+    }
+
+    public void setOfflineUrl(ArrayList<String> offlineUrl) {
+        this.offlineUrl = offlineUrl;
+    }
+
+    public ArrayList<String> getOfflineLanguage() {
+        return offlineLanguage;
+    }
+
+    public void setOfflineLanguage(ArrayList<String> offlineLanguage) {
+        this.offlineLanguage = offlineLanguage;
+    }
+
+    public ArrayList<String> getSubTitleLanguage() {
+        return SubTitleLanguage;
+    }
+
+    public void setSubTitleLanguage(ArrayList<String> subTitleLanguage) {
+        SubTitleLanguage = subTitleLanguage;
+    }
+
+    ArrayList<String> SubTitleLanguage = new ArrayList<>();
+
 
     public ArrayList<String> getFakeSubTitlePath() {
         return FakeSubTitlePath;

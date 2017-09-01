@@ -361,6 +361,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             playerModel.setFakeSubTitlePath(get_video_details_output.getFakeSubTitlePath());
             playerModel.setVideoResolution(get_video_details_output.getVideoResolution());
             FakeSubTitlePath = get_video_details_output.getFakeSubTitlePath();
+            playerModel.setSubTitleLanguage(get_video_details_output.getSubTitleLanguage());
+            playerModel.setOfflineUrl(get_video_details_output.getOfflineUrl());
+            playerModel.setOfflineLanguage(get_video_details_output.getOfflineLanguage());
 
 
             if (playerModel.getVideoUrl() == null ||

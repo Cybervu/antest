@@ -13,6 +13,15 @@ public class Get_Video_Details_Output {
     String emed_url;
     ArrayList<String> SubTitleName = new ArrayList<>();
     String studio_approved_url,licenseUrl;
+    String is_offline;
+
+    public String getIs_offline() {
+        return is_offline;
+    }
+
+    public void setIs_offline(String is_offline) {
+        this.is_offline = is_offline;
+    }
 
     public String getStudio_approved_url() {
         return studio_approved_url;
@@ -74,6 +83,33 @@ public class Get_Video_Details_Output {
     ArrayList<String> FakeSubTitlePath = new ArrayList<>();
     ArrayList<String> ResolutionFormat = new ArrayList<>();
     ArrayList<String> ResolutionUrl = new ArrayList<>();
+    ArrayList<String> offlineUrl = new ArrayList<>();
+    ArrayList<String> offlineLanguage = new ArrayList<>();
+    ArrayList<String> SubTitleLanguage = new ArrayList<>();
+
+    public ArrayList<String> getOfflineUrl() {
+        return offlineUrl;
+    }
+
+    public void setOfflineUrl(ArrayList<String> offlineUrl) {
+        this.offlineUrl = offlineUrl;
+    }
+
+    public ArrayList<String> getOfflineLanguage() {
+        return offlineLanguage;
+    }
+
+    public void setOfflineLanguage(ArrayList<String> offlineLanguage) {
+        this.offlineLanguage = offlineLanguage;
+    }
+
+    public ArrayList<String> getSubTitleLanguage() {
+        return SubTitleLanguage;
+    }
+
+    public void setSubTitleLanguage(ArrayList<String> subTitleLanguage) {
+        SubTitleLanguage = subTitleLanguage;
+    }
 
     public String getThirdparty_url() {
         return thirdparty_url;

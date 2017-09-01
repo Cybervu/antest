@@ -1194,6 +1194,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             playerModel.setFakeSubTitlePath(get_video_details_output.getFakeSubTitlePath());
             playerModel.setVideoResolution(get_video_details_output.getVideoResolution());
             FakeSubTitlePath = get_video_details_output.getFakeSubTitlePath();
+            playerModel.setSubTitleLanguage(get_video_details_output.getSubTitleLanguage());
+            playerModel.setOfflineUrl(get_video_details_output.getOfflineUrl());
+            playerModel.setOfflineLanguage(get_video_details_output.getOfflineLanguage());
 
 
             if (playerModel.getVideoUrl() == null ||
@@ -2204,6 +2207,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         playerModel.setVideoDuration(item.getEpisodeDuration());
         playerModel.setVideoReleaseDate("");
         playerModel.setCensorRating(censorRatingStr);
+        playerModel.setContentTypesId(contentTypesId);
+        playerModel.setPosterImageId(posterImageId);
 
         LogUtil.showLog("MUVI", "content typesid = " + contentTypesId);
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
@@ -3104,6 +3109,12 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 Intent loginIntent = new Intent(ShowWithEpisodesActivity.this, LoginActivity.class);
                 Util.check_for_subscription = 0;
                 startActivity(loginIntent);
+                // Not implemented here
+                return false;
+            case R.id.action_mydownload:
+
+                Intent mydownload = new Intent(ShowWithEpisodesActivity.this, MyDownloads.class);
+                startActivity(mydownload);
                 // Not implemented here
                 return false;
             case R.id.action_register:

@@ -16,6 +16,12 @@ public class LanguagePreference {
     /**
      *  Language Constant default Key
      */
+    public static String DEFAULT_DELETE_BTN = "Delete";
+    public static String DELETE_BTN = "DELETE_BTN";
+    public static String DEFAULT_WANT_TO_DELETE = "Want to Delete";
+    public static String WANT_TO_DELETE = "WANT_TO_DELETE";
+    public static String MY_DOWNLOAD = "MY_DOWNLOAD";
+    public static String DEFAULT_MY_DOWNLOAD = "My Download";
     public static final String TO_LOGIN = "TO_LOGIN";
     public static final String CLICK_HERE = "CLICK_HERE";
     public static final String SUBMIT_YOUR_RATING_TITLE = "SUBMIT_YOUR_RATING_TITLE";

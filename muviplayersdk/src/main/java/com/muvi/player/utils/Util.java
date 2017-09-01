@@ -28,6 +28,24 @@ public class Util {
     private static final int PRELOAD_TIME_S = 20;
     public static final String IS_CAST_CONNECTED_INTENT_KEY = "IS_CAST_CONNECTED_INTENT_KEY";
 
+
+    public static String STOP_SAVING_THIS_VIDEO = "STOP_SAVING_THIS_VIDEO";
+    public static String DEFAULT_STOP_SAVING_THIS_VIDEO = "Stop saving this video";
+    public static String YOUR_VIDEO_WONT_BE_SAVED = "YOUR_VIDEO_WONT_BE_SAVED";
+    public static String DEFAULT_YOUR_VIDEO_WONT_BE_SAVED = "Your video can not be saved";
+    public static String BTN_KEEP = "BTN_KEEP";
+    public static String DEFAULT_BTN_KEEP = "Keep";
+    public static String BTN_DISCARD = "BTN_DISCARD";
+    public static String DEFAULT_BTN_DISCARD = "Discard";
+    public static String WANT_TO_DOWNLOAD = "WANT_TO_DOWNLOAD";
+    public static String DEFAULT_WANT_TO_DOWNLOAD = "Want to Download";
+    public static String IS_STREAMING_RESTRICTION = "IS_STREAMING_RESTRICTION";
+    public static String DEFAULT_IS_IS_STREAMING_RESTRICTION = "0";
+    public static String DOWNLOAD_CANCELLED = "DOWNLOAD_CANCELLED";
+    public static String DEFAULT_DOWNLOAD_CANCELLED = "Download Cancelled";
+
+
+
     public static final String PERMALINK_INTENT_KEY = "PERMALINK_INTENT_KEY";
     public static final String GENRE_INTENT_KEY = "GENRE";
     public static final String STORY_INTENT_KEY = "STORY";
@@ -127,7 +145,8 @@ public class Util {
     //   public static final String authTokenStr = "e8ae05a2ef3fd0c6688952c8f7557823"; //vishwam.tv
 //    public static final String authTokenStr = "4d4fe07c6d8c8317ab45e6b1a2dff08a"; //monica studio
   // public static final String authTokenStr = "4298851905443517c9f161e6b0471969"; //classic demo
-    public static final String authTokenStr = "a010d1cef24104ca628a54e3246a8e43";
+    //public static final String authTokenStr = "a010d1cef24104ca628a54e3246a8e43";
+    public static final String authTokenStr = "6a9c6e9bfeee69e63d4bab668c01dc0a";//cube
 
     public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
 
