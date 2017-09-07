@@ -83,6 +83,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
         } else {
             holder = (ViewHolder) row.getTag();
         }
+      try {
 
         GridItem item = data.get(position);
         holder.title.setText(item.getTitle());
@@ -110,7 +111,11 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
             imageLoader.displayImage(imageId, imageAware,options);*/
         }
 
+      }
+      catch (IndexOutOfBoundsException e){
+          e.printStackTrace();
 
+      }
 
         return row;
     }

@@ -1112,6 +1112,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
 
         if (statusCode == 200) {
+            playerModel.setIsOffline(get_video_details_output.getIs_offline());
             if (get_video_details_output.getThirdparty_url() == null || get_video_details_output.getThirdparty_url().matches("")) {
 
                 /**@bishal
@@ -2180,7 +2181,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         //edit by bishal
         //set the required data in playermodel
-
         playerModel.setStreamUniqueId(item.getEpisodeStreamUniqueId());
         playerModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
         playerModel.setUserId(preferenceManager.getUseridFromPref());
@@ -3909,10 +3909,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 }
                 Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                playVideoIntent.putExtra("SubTitleName", SubTitleName);
+                /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);
+                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                playVideoIntent.putExtra("PlayerModel", playerModel);
                 startActivity(playVideoIntent);
             }
         }

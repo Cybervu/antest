@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 public class Player implements Serializable{
 
-
     boolean isLiveStream = false;
     boolean isLandScape = false;
 
@@ -73,7 +72,7 @@ public class Player implements Serializable{
     String Episode_id;
     int isFreeContent;
     String videoResolution;
-    String licenseUrl,mpdVideoUrl,isOffline;
+    String licenseUrl,mpdVideoUrl,isOffline="";
     int ContentTypesId = 1;
 
     public int getContentTypesId() {

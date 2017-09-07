@@ -679,8 +679,8 @@ public class RegisterActivity extends AppCompatActivity implements
 
             } else if (status == 200) {
 
-                // Take appropiate step here.
-
+                // Take appropiate step here
+               // playerModel.setEmailId(registration_output.getEmail());
 
                 isSubscribedStr=registration_output.getIsSubscribed();
                 preferenceManager.setLogInStatusToPref("1");
@@ -706,7 +706,7 @@ public class RegisterActivity extends AppCompatActivity implements
                     checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
                     checkDeviceInput.setDevice_type("1");
                     checkDeviceInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                    checkDeviceInput.setDevice_info(deviceName + "," + languagePreference.getTextofLanguage(ANDROID_VERSION, DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
+                    checkDeviceInput.setDevice_info(deviceName + ",Android " + Build.VERSION.RELEASE);
                     CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
                     asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                 } else {
@@ -787,8 +787,9 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
         if (statusCode == 200) {
-            if (get_video_details_output.getThirdparty_url() == null || get_video_details_output.getThirdparty_url().matches("")) {
 
+            if (get_video_details_output.getThirdparty_url() == null || get_video_details_output.getThirdparty_url().matches("")) {
+                playerModel.setIsOffline(get_video_details_output.getIs_offline());
 
                 /**@bishal
                  * for drm player below condition added

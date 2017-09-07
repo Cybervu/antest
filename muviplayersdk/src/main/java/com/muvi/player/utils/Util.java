@@ -8,7 +8,7 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 
 
-import com.example.muviplayersdk.R;
+
 import com.muvi.player.model.DataModel;
 import com.muvi.player.model.LanguageModel;
 
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -107,7 +108,7 @@ public class Util {
     public static final String ViewFavorite = "ViewFavourite";
     public static final String AddtoFavlist = "AddtoFavlist";
     public static final String DeleteFavList = "DeleteFavList";
-
+    public static final String morlineBB = "getMarlinBBOffline";
     //==========Added For FCM===============//
 
     public static final String CheckIfUserLoggedIn = "CheckIfUserLoggedIn";
@@ -146,7 +147,8 @@ public class Util {
 //    public static final String authTokenStr = "4d4fe07c6d8c8317ab45e6b1a2dff08a"; //monica studio
   // public static final String authTokenStr = "4298851905443517c9f161e6b0471969"; //classic demo
     //public static final String authTokenStr = "a010d1cef24104ca628a54e3246a8e43";
-    public static final String authTokenStr = "6a9c6e9bfeee69e63d4bab668c01dc0a";//cube
+    //public static final String authTokenStr = "6a9c6e9bfeee69e63d4bab668c01dc0a";//cube
+    public static final String authTokenStr = "25e74a5c88d19c4b57c8138bf47abdf7";
 
     public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
 
@@ -161,6 +163,8 @@ public class Util {
         }
         return true;
     }
+
+    public static Timer timer = new Timer();
 
 
     //Array Contains a string
@@ -399,6 +403,10 @@ public class Util {
 
     public static String CANCEL_BUTTON = "CANCEL_BUTTON";
     public static String CONTINUE_BUTTON = "CONTINUE_BUTTON";
+    public static String SAVE = "SAVE";
+    public static String DEFAULT_SAVE = "Save";
+    public static String SAVE_OFFLINE_VIDEO = "SAVE_OFFLINE_VIDEO";
+    public static String DEFAULT_SAVE_OFFLINE_VIDEO = "Save Offline Video";
 
 
     public static String ADD_TO_FAV = "ADD_TO_FAV";

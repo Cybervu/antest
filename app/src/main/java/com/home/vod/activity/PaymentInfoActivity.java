@@ -640,6 +640,7 @@ LanguagePreference languagePreference;
 
 
         if (statusCode == 200) {
+            playerModel.setIsOffline(get_video_details_output.getIs_offline());
             if (get_video_details_output.getThirdparty_url() == null || get_video_details_output.getThirdparty_url().matches("")) {
                 if (get_video_details_output.getVideoUrl() != null || !get_video_details_output.getVideoUrl().matches("")) {
                     playerModel.setVideoUrl(get_video_details_output.getVideoUrl());

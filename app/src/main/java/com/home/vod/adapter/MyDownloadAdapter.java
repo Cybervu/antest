@@ -52,6 +52,8 @@ public class MyDownloadAdapter extends BaseAdapter {
     DownloadManager downloadManager;
     //Downloadlistdb downloadlistdb;
     public MyDownloadAdapter(MyDownloads activity, int simple_dropdown_item_1line, ArrayList<ContactModel1> downloadModel) {
+
+        Log.v("MUVI","DOWNLOAD MODEL=="+downloadModel.get(0).toString());
         this.activity = activity;
         this.downloadModel = downloadModel;
         dbHelper = new DBHelper(activity);

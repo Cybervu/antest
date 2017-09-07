@@ -298,6 +298,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                  * for drm player below condition added
                  * if studio_approved_url is there in api then set the videourl from this other wise goto 2nd one
                  */
+                playerModel.setIsOffline(get_video_details_output.getIs_offline());
 
                 if (get_video_details_output.getStudio_approved_url() != null &&
                         !get_video_details_output.getStudio_approved_url().isEmpty() &&
@@ -1016,7 +1017,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         languagePreference = LanguagePreference.getLanguagePreference(this);
         isLogin = preferenceManager.getLoginFeatureFromPref();
         playerModel = new Player();
-
        /* mCastStateListener = new CastStateListener() {
             @Override
             public void onCastStateChanged(int newState) {

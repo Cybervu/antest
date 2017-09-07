@@ -209,8 +209,9 @@ public class MyDownloads extends AppCompatActivity {
                                 public void run() {
 
                                     Intent in=new Intent(MyDownloads.this,MarlinBroadbandExample.class);
-                                    Log.v("SUBHA", "PATH" + pathh);
-
+                                    Log.v("BKS", "PATH==" + pathh);
+                                    Log.v("BKS", "Title==" + titles);
+                                    Log.v("BKS", "TOK=" + tok);
 
                                     in.putExtra("SubTitleName", SubTitleName);
                                     in.putExtra("SubTitlePath", SubTitlePath);

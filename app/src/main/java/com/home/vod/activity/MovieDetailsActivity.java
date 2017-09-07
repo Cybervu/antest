@@ -3031,10 +3031,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 }
                 Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                playVideoIntent.putExtra("SubTitleName", SubTitleName);
+               /* playVideoIntent.putExtra("SubTitleName", SubTitleName);
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                 playVideoIntent.putExtra("ResolutionFormat",ResolutionFormat);
-                playVideoIntent.putExtra("ResolutionUrl",ResolutionUrl);
+                playVideoIntent.putExtra("ResolutionUrl",ResolutionUrl);*/
+                playVideoIntent.putExtra("PlayerModel",playerModel);
                 startActivity(playVideoIntent);
             }
         }
@@ -4090,6 +4091,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
 
         if (code == 200) {
+            playerModel.setIsOffline(get_video_details_output.getIs_offline());
             if (get_video_details_output.getThirdparty_url() == null || get_video_details_output.getThirdparty_url().matches("")) {
 
                 /**@bishal
