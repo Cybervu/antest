@@ -2237,9 +2237,9 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-            LayoutInflater inflater = (LayoutInflater) RegisterActivity.this.getSystemService(RegisterActivity.this.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) RegisterActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-            View convertView = (View) inflater.inflate(R.layout.activity_ppv_popup, null);
+            View convertView = inflater.inflate(R.layout.activity_ppv_popup, null);
             alertDialog.setView(convertView);
             alertDialog.setTitle("");
 

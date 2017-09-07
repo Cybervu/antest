@@ -574,7 +574,7 @@ LanguagePreference languagePreference;
         emVideoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (((ProgressBar) findViewById(R.id.progress_view)).getVisibility() == View.VISIBLE) {
+                if (findViewById(R.id.progress_view).getVisibility() == View.VISIBLE) {
                     primary_ll.setVisibility(View.VISIBLE);
                     center_play_pause.setVisibility(View.GONE);
                     latest_center_play_pause.setVisibility(View.GONE);
@@ -794,7 +794,7 @@ LanguagePreference languagePreference;
 
                             if (played_length > 0) {
                                 Util.call_finish_at_onUserLeaveHint = false;
-                                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                                findViewById(R.id.progress_view).setVisibility(View.GONE);
                                 Intent resumeIntent = new Intent(MyLibraryPlayer.this, MyLibraryResumePopupActivity.class);
                                 startActivityForResult(resumeIntent, 1001);
                             } else {
@@ -1180,7 +1180,7 @@ LanguagePreference languagePreference;
 
     private int millisecondsToString(int milliseconds) {
         // int seconds = (int) (milliseconds / 1000) % 60 ;
-        int seconds = (int) (milliseconds / 1000);
+        int seconds = milliseconds / 1000;
 
         return seconds;
     }
@@ -1331,7 +1331,7 @@ LanguagePreference languagePreference;
 
 
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                 center_play_pause.setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.GONE);
                 previous_matching_time = current_matching_time;
@@ -1360,7 +1360,7 @@ LanguagePreference languagePreference;
 
 
                 previous_matching_time = current_matching_time;
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                findViewById(R.id.progress_view).setVisibility(View.GONE);
             }
 
         }
@@ -1944,7 +1944,7 @@ LanguagePreference languagePreference;
                         }
 
                         change_resolution = true;
-                        ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                        findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                         emVideoView.setVideoURI(Uri.parse(ResolutionUrl.get(Integer.parseInt(data.getStringExtra("position")))));
 
                     }

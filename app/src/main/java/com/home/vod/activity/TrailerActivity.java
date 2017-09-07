@@ -299,7 +299,7 @@ public class TrailerActivity extends AppCompatActivity implements
 
         if(censor_layout) {
 
-            ((LinearLayout) findViewById(R.id.durationratingLiearLayout)).setVisibility(View.GONE);
+            findViewById(R.id.durationratingLiearLayout).setVisibility(View.GONE);
         }
 
         if (Util.dataModel.getVideoStory().trim() != null && !Util.dataModel.getVideoStory().trim().matches(""))
@@ -329,7 +329,7 @@ public class TrailerActivity extends AppCompatActivity implements
                     //Will Add Some Data to send
                     Util.call_finish_at_onUserLeaveHint = false;
                     Util.hide_pause = true;
-                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                    findViewById(R.id.progress_view).setVisibility(View.GONE);
                     latest_center_play_pause.setVisibility(View.VISIBLE);
 
                     if (emVideoView.isPlaying()) {
@@ -484,7 +484,7 @@ public class TrailerActivity extends AppCompatActivity implements
         emVideoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (((ProgressBar) findViewById(R.id.progress_view)).getVisibility() == View.VISIBLE) {
+                if (findViewById(R.id.progress_view).getVisibility() == View.VISIBLE) {
                     primary_ll.setVisibility(View.VISIBLE);
                     center_play_pause.setVisibility(View.GONE);
                     latest_center_play_pause.setVisibility(View.GONE);
@@ -1067,7 +1067,7 @@ public class TrailerActivity extends AppCompatActivity implements
 
     private int millisecondsToString(int milliseconds) {
         // int seconds = (int) (milliseconds / 1000) % 60 ;
-        int seconds = (int) (milliseconds / 1000);
+        int seconds = milliseconds / 1000;
 
         return seconds;
     }
@@ -1293,7 +1293,7 @@ public class TrailerActivity extends AppCompatActivity implements
 
 
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                 center_play_pause.setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.GONE);
                 previous_matching_time = current_matching_time;
@@ -1322,7 +1322,7 @@ public class TrailerActivity extends AppCompatActivity implements
 
 
                 previous_matching_time = current_matching_time;
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                findViewById(R.id.progress_view).setVisibility(View.GONE);
             }
 
         }

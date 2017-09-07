@@ -204,7 +204,6 @@ LanguagePreference languagePreference;
     ArrayAdapter<Integer> cardExpiryYearSpinnerAdapter;
     ArrayAdapter<Integer> cardExpiryMonthSpinnerAdapter;
     CardSpinnerAdapter creditCardSaveSpinnerAdapter;
-    ;
     List<Integer> yearArray = new ArrayList<Integer>(21);
     List<Integer> monthsIdArray = new ArrayList<Integer>(12);
     /*Asynctask on background thread*/

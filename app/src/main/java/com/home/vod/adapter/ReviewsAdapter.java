@@ -63,7 +63,7 @@ public class ReviewsAdapter extends BaseAdapter {
 
 
         } else {
-            grid = (View) convertView;
+            grid = convertView;
 
         }
         TextView userNameTextView = (TextView) grid.findViewById(R.id.userNameTextView);

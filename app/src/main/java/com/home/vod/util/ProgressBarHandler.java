@@ -47,12 +47,7 @@ public class ProgressBarHandler {
        // mProgressBar.setVisibility(View.VISIBLE);
     }
     public boolean isShowing() {
-        if(layout.indexOfChild(bar) == -1){
-            return false;
-        }else{
-            return true;
-
-        }
+        return layout.indexOfChild(bar) != -1;
 
         // mProgressBar.setVisibility(View.VISIBLE);
     }

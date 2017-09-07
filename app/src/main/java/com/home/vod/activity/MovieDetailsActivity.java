@@ -96,9 +96,7 @@ import com.muvi.player.activity.ExoPlayerActivity;
 import com.muvi.player.activity.Player;
 import com.muvi.player.activity.ThirdPartyPlayer;
 import com.muvi.player.activity.YouTubeAPIActivity;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.squareup.picasso.Picasso;
 
 
 import org.json.JSONException;
@@ -215,7 +213,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     PPVModel ppvmodel ;
     APVModel advmodel ;
     CurrencyModel currencymodel ;
-    ImageView playButton,favorite_view;;
+    ImageView playButton,favorite_view;
     String PlanId = "";
     ImageButton offlineImageButton;
     Button watchTrailerButton;
@@ -2307,9 +2305,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MovieDetailsActivity.this,R.style.MyAlertDialogStyle);
-        LayoutInflater inflater = (LayoutInflater)getSystemService(MovieDetailsActivity.this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        View convertView = (View) inflater.inflate(R.layout.language_pop_up, null);
+        View convertView = inflater.inflate(R.layout.language_pop_up, null);
         TextView titleTextView = (TextView) convertView.findViewById(R.id.languagePopupTitle);
         titleTextView.setText(languagePreference.getTextofLanguage(APP_SELECT_LANGUAGE,DEFAULT_APP_SELECT_LANGUAGE));
 
@@ -4510,7 +4508,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 } else {
 
 
-                    ImageLoader imageLoader = ImageLoader.getInstance();
+                   /* ImageLoader imageLoader = ImageLoader.getInstance();
                     imageLoader.init(ImageLoaderConfiguration.createDefault(MovieDetailsActivity.this));
 
                     DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
@@ -4519,13 +4517,19 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                             .showImageOnFail(R.drawable.logo)
                             .showImageOnLoading(R.drawable.logo).build();
                     imageLoader.displayImage(contentDetailsOutput.getPoster(), moviePoster, options);
+*/
+                    Picasso.with(MovieDetailsActivity.this)
+                            .load(contentDetailsOutput.getPoster().trim())
+                            .error(R.drawable.logo)
+                            .placeholder(R.drawable.logo)
+                            .into(moviePoster);
 
                 }
 
             } else {
 
 
-                ImageLoader imageLoader = ImageLoader.getInstance();
+                /*ImageLoader imageLoader = ImageLoader.getInstance();
                 imageLoader.init(ImageLoaderConfiguration.createDefault(MovieDetailsActivity.this));
 
                 DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
@@ -4534,6 +4538,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         .showImageOnFail(R.drawable.logo)
                         .showImageOnLoading(R.drawable.logo).build();
                 imageLoader.displayImage(contentDetailsOutput.getPoster().trim(), moviePoster, options);
+*/
+                Picasso.with(MovieDetailsActivity.this)
+                        .load(contentDetailsOutput.getPoster().trim())
+                        .error(R.drawable.logo)
+                        .placeholder(R.drawable.logo)
+                        .into(moviePoster);
 
 
             }

@@ -90,6 +90,13 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private ArrayList<String> genreValueArrayList = new ArrayList<String>();
     private String user_Id = "", email_Id = "", isSubscribed = "0";
 
+    private boolean isPlanlistAsyncComleted = false;
+    private boolean isRegEnableAsyncComleted = false;
+    private boolean isLanguagelistAsyncComleted = false;
+    private boolean isTranslateAsyncComleted = false;
+    private boolean isGenreAsyncComleted = false;
+    private boolean isProfileAsyncComleted = false;
+
     //============================Added For FCM===========================//
     Timer GoogleIdGeneraterTimer;
 
@@ -325,6 +332,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onGetGenreListPostExecuteCompleted(ArrayList<GenreListOutput> genreListOutput, int code, String status) {
 
+        isGenreAsyncComleted = true;
         if (code > 0) {
             int lengthJsonArr = genreListOutput.size();
             if (lengthJsonArr > 0) {
@@ -559,7 +567,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
 
         if (NetworkStatus.getInstance().isConnected(this)) {
-            if (preferenceManager != null) {
+            /*if (preferenceManager != null) {
                 String countryCodeStr = preferenceManager.getCountryCodeFromPref();
 
                 if (countryCodeStr == null) {
@@ -573,7 +581,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
                 asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
-            }
+            }*/
+            GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+            asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
         } else {
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);

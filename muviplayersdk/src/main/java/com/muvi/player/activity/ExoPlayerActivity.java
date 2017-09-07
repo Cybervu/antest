@@ -129,7 +129,7 @@ enum ContentTypes1 {
             "video/mp2t");
     String mediaSourceParamsContentType = null;
 
-    private ContentTypes1(String mediaSourceParamsContentType) {
+    ContentTypes1(String mediaSourceParamsContentType) {
         this.mediaSourceParamsContentType = mediaSourceParamsContentType;
     }
 
@@ -540,6 +540,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             //===============This is used for subtitle ================================//
             playerModel.DefaultSubtitle = "Off";
+
 
             if (playerModel.getSubTitleName() != null) {
                 SubTitleName = playerModel.getSubTitleName();
@@ -1745,7 +1746,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         videoBufferLogId = myJson.optString("log_id");
                         videoBufferLogUniqueId = myJson.optString("log_unique_id");
                         Location = myJson.optString("location");
-                        ;
                     } else {
                         videoBufferLogId = "0";
                         videoBufferLogUniqueId = "0";
@@ -1883,7 +1883,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     private int millisecondsToString(int milliseconds) {
         // int seconds = (int) (milliseconds / 1000) % 60 ;
-        int seconds = (int) (milliseconds / 1000);
+        int seconds = milliseconds / 1000;
         return seconds;
     }
 
@@ -1893,7 +1893,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         if (orientation == 90) {
 
-            playerModel.player_description = false;
+            Player.player_description = false;
             isLandScape = false;
 
             compressed = false;
@@ -1912,7 +1912,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
             //current_time.setVisibility(View.GONE);
         } else if (orientation == 270) {
-            playerModel.player_description = false;
+            Player.player_description = false;
             isLandScape = true;
 
             compressed = false;
@@ -1935,7 +1935,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             // Do some landscape stuff
         } else if (orientation == 180) {
 
-            playerModel.player_description = true;
+            Player.player_description = true;
 
             LinearLayout.LayoutParams params1 = null;
             if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
@@ -1969,7 +1969,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         } else if (orientation == 0) {
 
-            playerModel.player_description = true;
+            Player.player_description = true;
             LinearLayout.LayoutParams params1 = null;
             if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
                 if (ExoPlayerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -2017,7 +2017,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 // Execute HTTP Post Request
                 try {
-                    URL myurl = new URL(playerModel.loadIPUrl);
+                    URL myurl = new URL(Player.loadIPUrl);
                     HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
                     InputStream ins = con.getInputStream();
                     InputStreamReader isr = new InputStreamReader(ins);
@@ -2107,7 +2107,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
                 //====start this condition for check the cuurent time AND THAT SEEKBAR SIMULTINOUSLY RUN====
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
 
                 primary_ll.setVisibility(View.GONE);
                 last_ll.setVisibility(View.GONE);
@@ -2143,7 +2143,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
                 previous_matching_time = current_matching_time;
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                findViewById(R.id.progress_view).setVisibility(View.GONE);
             }
 
         }
@@ -2336,9 +2336,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         }
 
 
-        if (playerModel.call_finish_at_onUserLeaveHint) {
+        if (Player.call_finish_at_onUserLeaveHint) {
 
-            playerModel.call_finish_at_onUserLeaveHint = true;
+            Player.call_finish_at_onUserLeaveHint = true;
 
             mHandler.removeCallbacks(updateTimeTask);
             if (emVideoView != null) {
@@ -2619,7 +2619,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (resultCode == RESULT_OK) {
             if (requestCode == 1001) {
 
-                playerModel.call_finish_at_onUserLeaveHint = false;
+                Player.call_finish_at_onUserLeaveHint = false;
 
                 if (data.getStringExtra("yes").equals("1002")) {
 
@@ -2697,7 +2697,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         }
 
                         change_resolution = true;
-                        ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                        findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                         emVideoView.setVideoURI(Uri.parse(ResolutionUrl.get(Integer.parseInt(data.getStringExtra("position")))));
 
                     }
@@ -2709,7 +2709,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     @Override
     public void onDestroy() {
         super.onDestroy();
-        playerModel.hide_pause = false;
+        Player.hide_pause = false;
 
         if (MovableTimer != null)
             MovableTimer.cancel();
