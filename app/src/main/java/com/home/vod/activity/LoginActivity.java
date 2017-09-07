@@ -200,7 +200,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             // SharedPreferences.Editor editor = pref.edit();
 
             if (status == 200) {
-
+                //playerModel.setEmailId(login_output.getEmail());
 
                 preferenceManager.setLogInStatusToPref("1");
                 preferenceManager.setUserIdToPref(login_output.getId());
