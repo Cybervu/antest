@@ -59,7 +59,7 @@ public class CastCrewAdapter extends BaseAdapter {
 
 
         } else {
-            grid = (View) convertView;
+            grid = convertView;
 
         }
         ImageView imageView = (ImageView)grid.findViewById(R.id.castImageView);

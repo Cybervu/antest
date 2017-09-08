@@ -216,7 +216,7 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
 
                 // Execute HTTP Post Request
                 try {
-                    URL myurl = new URL(playerModel.loadIPUrl);
+                    URL myurl = new URL(Player.loadIPUrl);
                     HttpsURLConnection con = (HttpsURLConnection)myurl.openConnection();
                     InputStream ins = con.getInputStream();
                     InputStreamReader isr = new InputStreamReader(ins);

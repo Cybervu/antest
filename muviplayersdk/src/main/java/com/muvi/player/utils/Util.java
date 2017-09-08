@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -107,7 +108,7 @@ public class Util {
     public static final String ViewFavorite = "ViewFavourite";
     public static final String AddtoFavlist = "AddtoFavlist";
     public static final String DeleteFavList = "DeleteFavList";
-
+    public static final String morlineBB = "getMarlinBBOffline";
     //==========Added For FCM===============//
 
     public static final String CheckIfUserLoggedIn = "CheckIfUserLoggedIn";
@@ -163,14 +164,12 @@ public class Util {
         return true;
     }
 
+    public static Timer timer = new Timer();
+
 
     //Array Contains a string
     public static boolean containsString(String[] list, String str) {
-        if(Arrays.asList(list).contains(str))
-        {
-            return true;
-        }
-        return false;
+        return Arrays.asList(list).contains(str);
     }
 
 
@@ -235,11 +234,7 @@ public class Util {
         Pattern pattern = Pattern.compile(password, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(confirmPassword);
 
-        if (!matcher.matches()) {
-            // do your Toast("passwords are not matching");
-            return false;
-        }
-        return true;
+        return matcher.matches();
     }
     public static boolean containsIgnoreCase(List<Integer> list, int soughtFor) {
         for (Integer current : list) {
@@ -400,6 +395,10 @@ public class Util {
 
     public static String CANCEL_BUTTON = "CANCEL_BUTTON";
     public static String CONTINUE_BUTTON = "CONTINUE_BUTTON";
+    public static String SAVE = "SAVE";
+    public static String DEFAULT_SAVE = "Save";
+    public static String SAVE_OFFLINE_VIDEO = "SAVE_OFFLINE_VIDEO";
+    public static String DEFAULT_SAVE_OFFLINE_VIDEO = "Save Offline Video";
 
 
     public static String ADD_TO_FAV = "ADD_TO_FAV";

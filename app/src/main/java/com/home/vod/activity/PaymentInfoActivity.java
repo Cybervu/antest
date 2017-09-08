@@ -52,6 +52,8 @@ import com.home.vod.util.Util;
 import com.muvi.player.activity.AdPlayerActivity;
 import com.muvi.player.activity.ExoPlayerActivity;
 import com.muvi.player.activity.Player;
+import com.muvi.player.activity.ThirdPartyPlayer;
+import com.muvi.player.activity.YouTubeAPIActivity;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -202,7 +204,6 @@ LanguagePreference languagePreference;
     ArrayAdapter<Integer> cardExpiryYearSpinnerAdapter;
     ArrayAdapter<Integer> cardExpiryMonthSpinnerAdapter;
     CardSpinnerAdapter creditCardSaveSpinnerAdapter;
-    ;
     List<Integer> yearArray = new ArrayList<Integer>(21);
     List<Integer> monthsIdArray = new ArrayList<Integer>(12);
     /*Asynctask on background thread*/
@@ -638,6 +639,7 @@ LanguagePreference languagePreference;
 
 
         if (statusCode == 200) {
+            playerModel.setIsOffline(_video_details_output.getIs_offline());
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
                 if (_video_details_output.getVideoUrl() != null || !_video_details_output.getVideoUrl().matches("")) {
                     playerModel.setVideoUrl(_video_details_output.getVideoUrl());

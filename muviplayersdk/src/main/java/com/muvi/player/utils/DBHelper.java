@@ -41,6 +41,17 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_LANGUAGE = "LANGUAGE";
     public static final String COLUMN_PATH = "PATH";
 
+    // This code is done for bandwidth log of download contnet separately.......
+
+    public static final String DOWNLOAD_CONTENT_INFO = "DOWNLOAD_CONTENT_INFO";
+
+    private static final String DOWNLOAD_CONTENT_INFO_TABLE = "CREATE TABLE IF NOT EXISTS " + DOWNLOAD_CONTENT_INFO
+            + " (download_contnet_id TEXT,log_id TEXT,authtoken TEXT,email TEXT,ipaddress TEXT,"+ "movie_id TEXT,"+"episode_id TEXT,"
+            + "device_type TEXT," +"download_status TEXT," + "server_sending_final_status TEXT)";
+
+    //................................. END ......................................//
+
+
 
     private static final String CREATE_SOL =
             "CREATE TABLE " + TABLE_NAME + " (" + COLUMN_ID +
@@ -81,11 +92,13 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_SOL);
         db.execSQL(CREATE_SOL_SUBTITLE_LUIMERE);
+        db.execSQL(DOWNLOAD_CONTENT_INFO_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DOWNLOAD_CONTENT_INFO_TABLE);
         onCreate(db);
     }
 

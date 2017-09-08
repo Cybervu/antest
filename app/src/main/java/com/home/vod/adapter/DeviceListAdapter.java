@@ -110,7 +110,7 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.device_list_adapter, null);
         } else {
-            view = (View) convertView;
+            view = convertView;
         }
 
         TextView device_name = (TextView) view.findViewById(R.id.device_name);
@@ -193,7 +193,7 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
                             Intent intent = new Intent(mContext,ManageDevices.class);
-                            ((Activity)mContext).startActivity(intent);
+                            mContext.startActivity(intent);
                             ((Activity)mContext).finish();
                         }
                     });

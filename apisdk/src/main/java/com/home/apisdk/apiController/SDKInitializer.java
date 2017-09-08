@@ -47,7 +47,7 @@ public class SDKInitializer {
 
     public static String getUser_Package_Name_At_Api(Context context) {
         sdkInitializerPreference = SDKInitializerPreference.getSdkInitializerPreference(context);
-        commondate();
+        //commondate();
         return sdkInitializerPreference.getPackage_nameFromPreference();
     }
 
@@ -217,3 +217,5 @@ public class SDKInitializer {
     }
 
 }
+
+

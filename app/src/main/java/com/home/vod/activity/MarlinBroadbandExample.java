@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.MediaRouteButton;
 import android.support.v7.app.NotificationCompat;
 import android.text.Html;
 import android.util.Log;
@@ -32,19 +34,15 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.intertrust.wasabi.Runtime;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import com.home.vod.R;
+import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.SensorOrientationChangeNotifier;
-import com.muvi.player.activity.ResumePopupActivity;
-import com.muvi.player.activity.SubtitleList;
-import com.muvi.player.subtitle_support.Caption;
-import com.muvi.player.subtitle_support.FormatSRT;
-import com.muvi.player.subtitle_support.FormatSRT_WithoutCaption;
-import com.muvi.player.subtitle_support.TimedTextObject;
-import com.muvi.player.utils.Util;
+import com.home.vod.util.Util;
+
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -66,6 +64,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -74,13 +73,27 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.intertrust.wasabi.ErrorCodeException;
+import com.intertrust.wasabi.media.PlaylistProxy;
+import com.intertrust.wasabi.media.PlaylistProxyListener;
+import com.muvi.player.activity.ResumePopupActivity;
+import com.muvi.player.activity.SubtitleList;
+import com.muvi.player.subtitle_support.Caption;
+import com.muvi.player.subtitle_support.FormatSRT;
+import com.muvi.player.subtitle_support.FormatSRT_WithoutCaption;
+import com.muvi.player.subtitle_support.TimedTextObject;
+import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import javax.net.ssl.HttpsURLConnection;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 
-/*
+
 enum ContentTypes {
 	DASH("application/dash+xml"), HLS("application/vnd.apple.mpegurl"), PDCF(
 			"video/mp4"), M4F("video/mp4"), DCF("application/vnd.oma.drm.dcf"), BBTS(
@@ -94,10 +107,11 @@ enum ContentTypes {
 	public String getMediaSourceParamsContentType() {
 		return mediaSourceParamsContentType;
 	}
-}*/
+}
 
-public class MarlinBroadbandExample extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener {
+public class MarlinBroadbandExample extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener, PlaylistProxyListener {
 	private static long tot=0;
+	PlaylistProxy playerProxy;
 	int played_length = 0;
 	int playerStartPosition = 0;
 	boolean censor_layout = true;
@@ -116,13 +130,15 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	int lengthfile;
 	int seekBarProgress = 0;
 	int id = 188;
-	AsyncVideoLogDetails asyncVideoLogDetails;
-	AsyncFFVideoLogDetails asyncFFVideoLogDetails;
+	/*AsyncVideoLogDetails asyncVideoLogDetails;
+	AsyncFFVideoLogDetails asyncFFVideoLogDetails;*/
 	ImageView download;
 	private static ProgressBar Progress;
 	TextView percentg;
 	Timer timerr;
 	AsynGetIpAddress asynGetIpAddress;
+	LanguagePreference languagePreference;
+	PreferenceManager preferenceManager;
 
 	ImageButton back, center_play_pause;
 	ImageView compress_expand;
@@ -167,7 +183,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 	TextView videoTitle, GenreTextView, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView,
 			videoCastCrewTitleTextView;
-	TextView videoStoryTextView;
+	TextView story;
 
 	private EMVideoView emVideoView;
 	int seek_label_pos = 0;
@@ -197,8 +213,6 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	TextView subtitleText;
 	public Handler subtitleDisplayHandler;
 	ImageView subtitle_change_btn;
-	LanguagePreference languagePreference;
-	PreferenceManager preferenceManager;
 
 	ArrayList<String> SubTitleName = new ArrayList<>();
 	ArrayList<String> SubTitlePath = new ArrayList<>();
@@ -214,9 +228,11 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_video_player);
-
 		languagePreference = LanguagePreference.getLanguagePreference(this);
 		preferenceManager = PreferenceManager.getPreferenceManager(this);
+		/*MediaRouteButton mediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
+		mediaRouteButton.setVisibility(View.INVISIBLE);*/
+
 		contid = getIntent().getStringExtra("contid").trim();
 		muviid = getIntent().getStringExtra("muvid").trim();
 		//movieid = getIntent().getStringExtra("url").trim();
@@ -248,9 +264,6 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			userIdStr = "";
 		}
 
-		path = getIntent().getStringExtra("FILE").trim();
-		title = getIntent().getStringExtra("Title").trim();
-
 
 		emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
 		subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
@@ -275,11 +288,10 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
 		Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
-		videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
-		Typeface videoStoryTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-		videoStoryTextView.setTypeface(videoStoryTextViewTypeface);
+	/*	story = (TextView) findViewById(R.id.story);
+		Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+		story.setTypeface(storyTypeface);*/
 		videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
-
 		Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
 		//videoCastCrewTitleTextView.setText(Util.getTextofLanguage(MarlinBroadbandExample.this, Util.CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
@@ -452,7 +464,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		videoCastCrewTitleTextView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (Util.checkNetwork(MarlinBroadbandExample.this)) {
+				if (NetworkStatus.getInstance().isConnected(MarlinBroadbandExample.this)) {
 					//Will Add Some Data to send
 					Util.call_finish_at_onUserLeaveHint = false;
 					Util.hide_pause = true;
@@ -486,7 +498,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 					startActivity(detailsIntent);
 				} else {
-					Toast.makeText(getApplicationContext(), Util.getTextofLanguage(MarlinBroadbandExample.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION,DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 				}
 			}
 		});
@@ -824,8 +836,8 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 							subsFetchTask.execute();
 						}
 						else {
-							asyncVideoLogDetails = new AsyncVideoLogDetails();
-							asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+							/*asyncVideoLogDetails = new AsyncVideoLogDetails();
+							asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);*/
 						}
 
 						emVideoView.start();
@@ -857,8 +869,8 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 								subsFetchTask.execute();
 							}
 							else {
-								asyncVideoLogDetails = new AsyncVideoLogDetails();
-								asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+								/*asyncVideoLogDetails = new AsyncVideoLogDetails();
+								asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);*/
 							}
 
 
@@ -892,8 +904,159 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		});
 
 
+//commented by me
+		//  emVideoView.setVideoURI(Uri.parse(Util.dataModel.getVideoUrl()));
+		try {
+            /*
+             * Initialize the Wasabi Runtime (necessary only once for each
+			 * instantiation of the application)
+			 *
+			 * ** Note: Set Runtime Properties as needed for your environment
+			 */
+			Runtime.initialize(getDir("wasabi", MODE_PRIVATE).getAbsolutePath());
+			/*
+			 * Personalize the application (acquire DRM keys). This is only
+			 * necessary once each time the application is freshly installed
+			 *
+			 * ** Note: personalize() is a blocking call and may take long
+			 * enough to complete to trigger ANR (Application Not Responding)
+			 * errors. In a production application this should be called in a
+			 * background thread.
+			 */
+			if (!Runtime.isPersonalized())
+				Runtime.personalize();
 
-		  emVideoView.setVideoURI(Uri.parse(path));
+		} catch (NullPointerException e) {
+			//onBackPressed();
+			backCalled();
+			return;
+		} catch (ErrorCodeException e) {
+			// Consult WasabiErrors.txt for resolution of the error codes
+			//onBackPressed();
+			backCalled();
+			return;
+		}
+
+
+
+
+		path = getIntent().getStringExtra("FILE").trim();
+		//Toast.makeText(getApplicationContext(),path+"\n"+token,Toast.LENGTH_LONG).show();
+		token = getIntent().getStringExtra("TOK").trim();
+		//movieid = getIntent().getStringExtra("url").trim();
+		title = getIntent().getStringExtra("Title").trim();
+		//genre = getIntent().getStringExtra("GENRE").trim();
+
+		//Toast.makeText(getApplicationContext(),token,Toast.LENGTH_LONG).show();
+
+		//String licenseAcquisitionToken = getActionTokenFromAssets("license_action_token.xml");
+		//String licenseAcquisitionToken = getActionTokenFromStorage("/storage/emulated/0/Download/DRM/token.xml");
+		//String licenseAcquisitionToken = getActionTokenFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/DRM"+"/token.xml");
+		Log.v("SUBHA", "path" + token);
+		String licenseAcquisitionToken = getActionTokenFromStorage(token);
+		if (licenseAcquisitionToken == null) {
+			Log.e(TAG,
+					"Could not find action token in the assets directory - exiting");
+
+
+
+		}
+		//long start = System.currentTimeMillis();
+//		Log.v("SUBHA", licenseAcquisitionToken);
+		com.intertrust.wasabi.jni.Runtime.processServiceToken(licenseAcquisitionToken);
+//		Log.i(TAG,
+//				"License successfully acquired in (ms): "
+//						+ (System.currentTimeMillis() - start));
+//
+//			/*
+//			 * create a playlist proxy and start it
+//			 */
+
+
+
+
+		try {
+			EnumSet<PlaylistProxy.Flags> flags = EnumSet.noneOf(PlaylistProxy.Flags.class);
+			playerProxy = new PlaylistProxy(flags, this, new Handler());
+			playerProxy.start();
+		} catch (ErrorCodeException e) {
+			// Consult WasabiErrors.txt for resolution of the error codes
+			//  onBackPressed();
+			//backCalled();
+			//return;
+		}
+
+
+
+        	/*
+		 * create a playlist proxy url and pass it to the native player
+		 */
+		try {
+			/*
+			 * Note that the MediaSourceType must be adapted to the stream type
+			 * (DASH or HLS). Similarly,
+			 * the MediaSourceParams need to be set according to the media type
+			 * if MediaSourceType is SINGLE_FILE
+			 */
+			String dash_url = path;
+			ContentTypes contentType = ContentTypes.DASH;
+			PlaylistProxy.MediaSourceParams params = new PlaylistProxy.MediaSourceParams();
+			params.sourceContentType = contentType
+					.getMediaSourceParamsContentType();
+			/*
+			 * if the content has separate audio tracks (eg languages) you may
+			 * select one using MediaSourceParams, eg params.language="es";
+			 */
+			String contentTypeValue = contentType.toString();
+
+//            String url = playerProxy.makeUrl("https://wv.service.expressplay.com/hms/wv/rights/?b=AwAAABSMKdcAAABgouNV64glqHNDKDM8raD8zQq2Rt5f06c8JJx77YJrgQ-vHOzLm-bJqVY1Ybmn3YpTRZqg2RwjIuGvQTHMR_Hn_XvjFceLVEXgpS8LxV-xyXBF4UmK9523zEjsT6wO5bw0NJdo84QbkyvAZoWmGZUIYkvvjCw", PlaylistProxy.MediaSourceType.valueOf((contentTypeValue == "MP4" || contentTypeValue == "HLS" || contentTypeValue == "DASH") ? contentTypeValue : "SINGLE_FILE"), params);
+//            emVideoView.setVideoURI(Uri.parse(url));
+
+			try {
+				if (path.contains("WITHDRM")){
+					String proxy_url = playerProxy.makeUrl(dash_url, PlaylistProxy.MediaSourceType.SINGLE_FILE, new PlaylistProxy.MediaSourceParams());
+					emVideoView.setVideoURI(Uri.parse(proxy_url));
+					Log.v("BKS","emvideoview videouro=i====="+emVideoView.getVideoUri());
+					emVideoView.start();
+				}
+				/*String proxy_url = playerProxy.makeUrl(dash_url, PlaylistProxy.MediaSourceType.SINGLE_FILE, new PlaylistProxy.MediaSourceParams());
+				emVideoView.setVideoURI(Uri.parse(proxy_url));
+				Log.v("BKS","emvideoview videouro=i====="+emVideoView.getVideoUri());
+				emVideoView.start();*/
+				else{
+					emVideoView.setVideoURI(Uri.parse(path));
+				}
+
+			} catch (Exception e) {
+				// Consult WasabiErrors.txt for resolution of the error codes
+				Log.e(TAG, "playback error: " + e.getLocalizedMessage());
+				e.printStackTrace();
+
+			}
+
+
+
+		} catch (IllegalArgumentException e) {
+			// onBackPressed();
+			backCalled();
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// onBackPressed();
+			backCalled();
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			//  onBackPressed();
+			backCalled();
+			e.printStackTrace();
+		}
+
+
+
+
+
+
+
+
 
 
 //		receiver = new BroadcastReceiver() {
@@ -923,7 +1086,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 //			}
 //		};
 
-//		registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
+		registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
 
 
 	}
@@ -953,7 +1116,27 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		return token;
 	}
 
-	private class AsyncVideoLogDetails extends AsyncTask<Void, Void, Void> {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	@Override
+	public void onErrorNotification(int i, String s) {
+
+	}
+
+	/*private class AsyncVideoLogDetails extends AsyncTask<Void, Void, Void> {
 		//  ProgressDialog pDialog;
 		String responseStr;
 		int statusCode = 0;
@@ -1019,12 +1202,12 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 
 		protected void onPostExecute(Void result) {
-         /*   try {
+         *//*   try {
                 if (pDialog.isShowing())
                     pDialog.dismiss();
             } catch (IllegalArgumentException ex) {
                 videoLogId = "0";
-            }*/
+            }*//*
 			if (responseStr == null) {
 				videoLogId = "0";
 
@@ -1041,7 +1224,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		}
 
 
-	}
+	}*/
 
 
 	public void startTimer() {
@@ -1080,13 +1263,13 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 								int duration = emVideoView.getDuration() / 1000;
 								if (currentPositionStr > 0 && currentPositionStr == duration) {
-									asyncFFVideoLogDetails = new AsyncFFVideoLogDetails();
+									//asyncFFVideoLogDetails = new AsyncFFVideoLogDetails();
 									watchStatus = "complete";
-									asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+									//asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 								} else {
-									asyncFFVideoLogDetails = new AsyncFFVideoLogDetails();
+									//asyncFFVideoLogDetails = new AsyncFFVideoLogDetails();
 									watchStatus = "halfplay";
-									asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+									//asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 								}
 
 							} else if (isFastForward == false && currentPositionStr >= millisecondsToString(playerPreviousPosition)) {
@@ -1095,13 +1278,13 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 								int duration = emVideoView.getDuration() / 1000;
 								if (currentPositionStr > 0 && currentPositionStr == duration) {
-									asyncVideoLogDetails = new AsyncVideoLogDetails();
+									//asyncVideoLogDetails = new AsyncVideoLogDetails();
 									watchStatus = "complete";
-									asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+									//asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 								} else if (currentPositionStr > 0 && currentPositionStr % 60 == 0) {
-									asyncVideoLogDetails = new AsyncVideoLogDetails();
+									//asyncVideoLogDetails = new AsyncVideoLogDetails();
 									watchStatus = "halfplay";
-									asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+									//asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
 								}
 							}
@@ -1113,7 +1296,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		};
 	}
 
-	private class AsyncFFVideoLogDetails extends AsyncTask<Void, Void, Void> {
+/*	private class AsyncFFVideoLogDetails extends AsyncTask<Void, Void, Void> {
 		String responseStr;
 		int statusCode = 0;
 
@@ -1194,7 +1377,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		}
 
 
-	}
+	}*/
 
 	private int millisecondsToString(int milliseconds) {
 		// int seconds = (int) (milliseconds / 1000) % 60 ;
@@ -1349,7 +1532,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 				// Execute HTTP Post Request
 				try {
-					URL myurl = new URL(Util.loadIPUrl);
+					URL myurl = new URL("https://api.ipify.org/?format=json");
 					HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
 					InputStream ins = con.getInputStream();
 					InputStreamReader isr = new InputStreamReader(ins);
@@ -1498,12 +1681,12 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		if (asynGetIpAddress != null) {
 			asynGetIpAddress.cancel(true);
 		}
-		if (asyncVideoLogDetails != null) {
+		/*if (asyncVideoLogDetails != null) {
 			asyncVideoLogDetails.cancel(true);
 		}
 		if (asyncFFVideoLogDetails != null) {
 			asyncFFVideoLogDetails.cancel(true);
-		}
+		}*/
 		if (progressView != null && progressView.isShown()) {
 			progressView = null;
 		}
@@ -1514,8 +1697,8 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 		if (video_completed == false) {
 
-			AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
-			asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+			/*AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+			asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);*/
 			return;
 		}
 		mHandler.removeCallbacks(updateTimeTask);
@@ -1531,12 +1714,12 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		if (asynGetIpAddress != null) {
 			asynGetIpAddress.cancel(true);
 		}
-		if (asyncVideoLogDetails != null) {
+		/*if (asyncVideoLogDetails != null) {
 			asyncVideoLogDetails.cancel(true);
 		}
 		if (asyncFFVideoLogDetails != null) {
 			asyncFFVideoLogDetails.cancel(true);
-		}
+		}*/
 		if (progressView != null && progressView.isShown()) {
 			progressView = null;
 		}
@@ -1544,8 +1727,8 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			stoptimertask();
 			timer = null;
 		}
-		AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
-		asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+		/*AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+		asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);*/
 		return;
       /*  if (video_completed == false){
 
@@ -1598,12 +1781,12 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		if (asynGetIpAddress != null) {
 			asynGetIpAddress.cancel(true);
 		}
-		if (asyncVideoLogDetails != null) {
+		/*if (asyncVideoLogDetails != null) {
 			asyncVideoLogDetails.cancel(true);
 		}
 		if (asyncFFVideoLogDetails != null) {
 			asyncFFVideoLogDetails.cancel(true);
-		}
+		}*/
 		if (progressView != null && progressView.isShown()) {
 			progressView = null;
 		}
@@ -1773,7 +1956,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 */
 
 
-	private class AsyncResumeVideoLogDetails extends AsyncTask<Void, Void, Void> {
+	/*private class AsyncResumeVideoLogDetails extends AsyncTask<Void, Void, Void> {
 		//  ProgressDialog pDialog;
 		String responseStr;
 		int statusCode = 0;
@@ -1804,7 +1987,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				});
 				httppost.addHeader("played_length", String.valueOf(playerPosition));
 				httppost.addHeader("watch_status", watchSt);
-              /*  runOnUiThread(new Runnable() {
+              *//*  runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (current_matching_time >= emVideoView.getDuration()) {
@@ -1817,7 +2000,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
                     }
 
-                });*/
+                });*//*
 
 				httppost.addHeader("device_type", "2");
 				httppost.addHeader("log_id", videoLogId);
@@ -1865,12 +2048,12 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 
 		protected void onPostExecute(Void result) {
-         /*   try {
+         *//*   try {
                 if (pDialog.isShowing())
                     pDialog.dismiss();
             } catch (IllegalArgumentException ex) {
                 videoLogId = "0";
-            }*/
+            }*//*
 			if (responseStr == null) {
 				videoLogId = "0";
 
@@ -1894,16 +2077,16 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		}
 
 
-	}
+	}*/
 
 	public void ShowResumeDialog(String Title, String msg) {
-		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MarlinBroadbandExample.this, R.style.MyAlertDialogStyle);
+		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MarlinBroadbandExample.this,R.style.MyAlertDialogStyle);
 
 		dlgAlert.setMessage(msg);
 		dlgAlert.setTitle(Title);
-		dlgAlert.setPositiveButton(Util.getTextofLanguage(MarlinBroadbandExample.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+		dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
 		dlgAlert.setCancelable(false);
-		dlgAlert.setPositiveButton(Util.getTextofLanguage(MarlinBroadbandExample.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+		dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.cancel();
@@ -1924,7 +2107,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				if (data.getStringExtra("yes").equals("1002")) {
 
 					watchStatus = "halfplay";
-					playerPosition = Util.dataModel.getPlayPos();
+					//playerPosition = Util.dataModel.getPlayPos();
 					emVideoView.start();
 					emVideoView.seekTo(played_length);
 					seekBar.setProgress(played_length);
@@ -1947,8 +2130,8 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					subsFetchTask.execute();
 				}
 				else {
-					asyncVideoLogDetails = new AsyncVideoLogDetails();
-					asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+					/*asyncVideoLogDetails = new AsyncVideoLogDetails();
+					asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);*/
 				}
 
 			}
@@ -2078,8 +2261,8 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 //                Toast.makeText(getApplicationContext(), "subtitles loaded!!",Toast.LENGTH_SHORT).show();
 			}
 
-			asyncVideoLogDetails = new AsyncVideoLogDetails();
-			asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+			/*asyncVideoLogDetails = new AsyncVideoLogDetails();
+			asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);*/
 
 			super.onPostExecute(result);
 		}

@@ -10,8 +10,10 @@
     <color name="hint_color">#999</color>
     <color name="hint_background">#662D91</color>
     <color name="appBackgroundColor">#fff</color>
+    <color name="appBackgroundColor1">#000</color>
     <color name="textColor">#5c6873</color>
     <color name="videotextColor">#000000</color>
+    <color name="buttonBackgroundColor">#2acb99</color>
     <color name="loginTextViewColor">#662D91</color>
     <color name="buttonTextColor">#fff</color>
     <color name="forgotPasswordTextViewColor">#662D91</color>

@@ -64,9 +64,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             />
-        <activity android:name=".activity.MarlinBroadbandExample"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden"/>
 
         <activity android:name=".activity.MyDownloads"
             android:screenOrientation="portrait"
@@ -81,6 +78,11 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:windowSoftInputMode="stateHidden" />
+
+        <service
+            android:name="com.muvi.player.activity.DataConsumptionService"
+            android:enabled="true"
+            android:exported="true"></service>
         <activity
             android:name="com.muvi.player.activity.Subtitle_Resolution"
             android:configChanges="screenSize|orientation"
@@ -144,6 +146,10 @@
         <activity android:name=".activity.FilterActivity"
             android:label=""
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MarlinBroadbandExample"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden" />
 
 
         <activity

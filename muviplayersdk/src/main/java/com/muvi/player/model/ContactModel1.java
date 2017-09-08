@@ -5,6 +5,42 @@ public class ContactModel1 {
 
     private String ID;
     private String poster;
+    private String censor_rating;
+    public boolean cast_crew;
+    private String release_date;
+    private String story;
+
+    public String getCensor_rating() {
+        return censor_rating;
+    }
+
+    public void setCensor_rating(String censor_rating) {
+        this.censor_rating = censor_rating;
+    }
+
+    public boolean isCast_crew() {
+        return cast_crew;
+    }
+
+    public void setCast_crew(boolean cast_crew) {
+        this.cast_crew = cast_crew;
+    }
+
+    public String getRelease_date() {
+        return release_date;
+    }
+
+    public void setRelease_date(String release_date) {
+        this.release_date = release_date;
+    }
+
+    public String getStory() {
+        return story;
+    }
+
+    public void setStory(String story) {
+        this.story = story;
+    }
 
     public String getPoster() {
         return poster;
@@ -136,7 +172,13 @@ public class ContactModel1 {
 
 
 
-
+    @Override
+    public String toString() {
+        return "ID : "+ID+",poster: "+poster+",token:"+token+",path:"+path+",contentid:"+contentid+",genere:"+genere+"," +
+                ",duration:"+duration+",censor_rating:"+censor_rating+",cast_crew:"+cast_crew+",release_date:"+release_date+","+
+                ",story:"+story+",MUVIID"+MUVIID+",USERNAME:"+USERNAME+",UniqueId:"+UniqueId+",DOWNLOADID:"+DOWNLOADID+","+
+                ",DSTATUS:"+DSTATUS+",progress"+progress;
+    }
 
 
 

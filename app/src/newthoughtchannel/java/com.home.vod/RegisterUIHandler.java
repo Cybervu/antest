@@ -24,7 +24,6 @@ import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TERMS;
 import static com.home.vod.preferences.LanguagePreference.TERMS;
-import static xdroid.core.Global.getResources;
 
 /**
  * Created by BISHAL on 21-08-2017.

@@ -111,8 +111,8 @@ public class FormatASS implements TimedTextFileFormat {
 							tto.warnings+="Format: (format definition) expected at line "+line+" for the styles section\n\n";
 							while (!line.startsWith("Format:")){
 								lineCounter++;
-								line=br.readLine().trim();;
-							}
+								line=br.readLine().trim();
+                            }
 						}
 						// we recover the format's fields
 						styleFormat = line.split(":")[1].trim().split(",");

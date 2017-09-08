@@ -17,9 +17,9 @@ public final class NetworkStatus {
 	private static NetworkStatus instance = new NetworkStatus();
 
 	private NetworkStatus() {
-	};
+	}
 
-	public static NetworkStatus getInstance() {
+    public static NetworkStatus getInstance() {
 		return instance;
 	}
 

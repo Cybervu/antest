@@ -260,7 +260,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         playerModel.setVideoReleaseDate(playerModel.getVideoReleaseDate());
         playerModel.setCensorRating(playerModel.getCensorRating());*/
 
-        Log.v("BKS", "ppvpayment Activity Season Id =" +(Player) getIntent().getSerializableExtra("PlayerModel"));
+        Log.v("BKS", "ppvpayment Activity Season Id =" + getIntent().getSerializableExtra("PlayerModel"));
         Log.v("MUVI", "ppvpatment Activity episode Id =" + Util.selected_episode_id);
 
         videoPreview = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
@@ -1084,9 +1084,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                     cardExpiryMonthSpinner.setSelection(0);
                     cardExpiryYearSpinner.setSelection(0);
                     expiryMonthStr = monthsIdArray.get(0);
-                    ;
                     expiryYearStr = yearArray.get(0);
-                    ;
 
                     Toast.makeText(PPvPaymentInfoActivity.this, languagePreference.getTextofLanguage(COUPON_CANCELLED, DEFAULT_COUPON_CANCELLED), Toast.LENGTH_LONG).show();
 
@@ -1138,6 +1136,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         }
 
         if (statusCode == 200) {
+            playerModel.setIsOffline(_video_details_output.getIs_offline());
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
 

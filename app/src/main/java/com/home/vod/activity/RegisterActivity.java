@@ -681,8 +681,8 @@ public class RegisterActivity extends AppCompatActivity implements
 
             } else if (status == 200) {
 
-                // Take appropiate step here.
-
+                // Take appropiate step here
+               // playerModel.setEmailId(registration_output.getEmail());
 
                 isSubscribedStr=registration_output.getIsSubscribed();
                 preferenceManager.setLogInStatusToPref("1");
@@ -708,7 +708,7 @@ public class RegisterActivity extends AppCompatActivity implements
                     checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
                     checkDeviceInput.setDevice_type("1");
                     checkDeviceInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                    checkDeviceInput.setDevice_info(deviceName + "," + languagePreference.getTextofLanguage(ANDROID_VERSION, DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
+                    checkDeviceInput.setDevice_info(deviceName + ",Android " + Build.VERSION.RELEASE);
                     CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
                     asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                 } else {
@@ -789,7 +789,9 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
         if (statusCode == 200) {
+
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
+                playerModel.setIsOffline(_video_details_output.getIs_offline());
 
 
                 /**@bishal
@@ -2268,9 +2270,9 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-            LayoutInflater inflater = (LayoutInflater) RegisterActivity.this.getSystemService(RegisterActivity.this.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) RegisterActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-            View convertView = (View) inflater.inflate(R.layout.activity_ppv_popup, null);
+            View convertView = inflater.inflate(R.layout.activity_ppv_popup, null);
             alertDialog.setView(convertView);
             alertDialog.setTitle("");
 
@@ -3105,10 +3107,11 @@ public class RegisterActivity extends AppCompatActivity implements
 
                 }
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                playVideoIntent.putExtra("SubTitleName", SubTitleName);
+              /*  playVideoIntent.putExtra("SubTitleName", SubTitleName);
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-                playVideoIntent.putExtra("ResolutionFormat",ResolutionFormat);
-                playVideoIntent.putExtra("ResolutionUrl",ResolutionUrl);
+                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
+                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                playVideoIntent.putExtra("PlayerModel",playerModel);
                 startActivity(playVideoIntent);
                 removeFocusFromViews();
                 finish();

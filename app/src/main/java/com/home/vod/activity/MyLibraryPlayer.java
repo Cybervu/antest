@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -30,6 +31,16 @@ import android.widget.Toast;
 
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.google.ads.interactivemedia.v3.api.AdDisplayContainer;
+import com.google.ads.interactivemedia.v3.api.AdErrorEvent;
+import com.google.ads.interactivemedia.v3.api.AdEvent;
+import com.google.ads.interactivemedia.v3.api.AdsLoader;
+import com.google.ads.interactivemedia.v3.api.AdsManager;
+import com.google.ads.interactivemedia.v3.api.AdsManagerLoadedEvent;
+import com.google.ads.interactivemedia.v3.api.AdsRequest;
+import com.google.ads.interactivemedia.v3.api.ImaSdkFactory;
+import com.google.ads.interactivemedia.v3.api.player.ContentProgressProvider;
+import com.google.ads.interactivemedia.v3.api.player.VideoProgressUpdate;
 import com.home.apisdk.apiController.GetFFVideoLogDetailsAsync;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetVideoLogsAsynTask;
@@ -47,9 +58,11 @@ import com.home.vod.subtitle_support.FormatSRT_WithoutCaption;
 import com.home.vod.subtitle_support.TimedTextObject;
 import com.home.vod.util.ExpandableTextView;
 import com.home.vod.util.LogUtil;
+import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
 import com.muvi.player.activity.AdPlayerActivity;
+import com.muvi.player.activity.Player;
 import com.muvi.player.activity.Subtitle_Resolution;
 
 import java.io.BufferedReader;
@@ -79,6 +92,8 @@ import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.util.Constant.authTokenStr;
 
 
@@ -87,11 +102,9 @@ import static com.home.vod.util.Constant.authTokenStr;
             "video/mp4"), M4F("video/mp4"), DCF("application/vnd.oma.drm.dcf"), BBTS(
             "video/mp2t");
     String mediaSourceParamsContentType = null;
-
     private ContentTypes1(String mediaSourceParamsContentType) {
         this.mediaSourceParamsContentType = mediaSourceParamsContentType;
     }
-
     public String getMediaSourceParamsContentType() {
         return mediaSourceParamsContentType;
     }
@@ -101,20 +114,23 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         GetVideoLogsAsynTask.GetVideoLogsListener,
         GetIpAddressAsynTask.IpAddressListener,
         ResumeVideoLogDetailsAsync.ResumeVideoLogDetailsListener,
-        GetFFVideoLogDetailsAsync.GetFFVideoLogsListener {
+        GetFFVideoLogDetailsAsync.GetFFVideoLogsListener, AdEvent.AdEventListener, AdErrorEvent.AdErrorListener {
     int played_length = 0;
     int playerStartPosition = 0;
+    String adDetails[];
 
     Timer timer;
     private Handler threadHandler = new Handler();
     String videoLogId = "0";
     String watchStatus = "start";
+    ProgressBarHandler mDialog;
     int playerPosition = 0;
     public boolean isFastForward = false;
     public int playerPreviousPosition = 0;
     TimerTask timerTask;
     String watchSt = "halfplay";
     String emailIdStr = "";
+    Player playerModel;
     String userIdStr = "";
     String movieId = "";
     String episodeId = "0";
@@ -146,7 +162,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     int player_layout_height, player_layout_width;
     int screenWidth, screenHeight;
     ImageButton latest_center_play_pause;
-    String adDetails[];
 
 
     String resolution = "BEST";
@@ -202,12 +217,35 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     @Override
     protected void onResume() {
         super.onResume();
+        if (mAdsManager != null && mIsAdDisplayed) {
+            mAdsManager.resume();
+        } else {
+            Util.call_finish_at_onUserLeaveHint = true;
+            emVideoView.start();
+        }
         SensorOrientationChangeNotifier.getInstance(MyLibraryPlayer.this).addListener(this);
-
 
         // Added For FCM
         // Call Api to Check User's Login Status;
     }
+
+    // private SampleVideoPlayer mVideoPlayer;
+
+    // The container for the ad's UI.
+    private ViewGroup mAdUiContainer;
+
+    // Factory class for creating SDK objects.
+    private ImaSdkFactory mSdkFactory;
+
+    // The AdsLoader instance exposes the requestAds method.
+    private AdsLoader mAdsLoader;
+
+    // AdsManager exposes methods to control ad playback and listen to ad events.
+    private AdsManager mAdsManager;
+
+    // Whether an ad is displayed.
+    private boolean mIsAdDisplayed;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,6 +260,27 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             backCalled();
             //onBackPressed();
         }
+        mAdUiContainer = (ViewGroup) findViewById(R.id.videoPlayerWithAdPlayback);
+
+        // setContentView(layout);
+        mSdkFactory = ImaSdkFactory.getInstance();
+        mAdsLoader = mSdkFactory.createAdsLoader(this);
+        // Add listeners for when ads are loaded and for errors.
+        mAdsLoader.addAdErrorListener(this);
+        mAdsLoader.addAdsLoadedListener(new AdsLoader.AdsLoadedListener() {
+            @Override
+            public void onAdsManagerLoaded(AdsManagerLoadedEvent adsManagerLoadedEvent) {
+                // Ads were successfully loaded, so get the AdsManager instance. AdsManager has
+                // events for ad playback and errors.
+                mAdsManager = adsManagerLoadedEvent.getAdsManager();
+
+                // Attach event and error event listeners.
+                mAdsManager.addAdErrorListener(MyLibraryPlayer.this);
+                mAdsManager.addAdEventListener(MyLibraryPlayer.this);
+                mAdsManager.init();
+            }
+        });
+
         movieId = Util.dataModel.getMovieUniqueId();
         episodeId = Util.dataModel.getEpisode_id();
 
@@ -270,7 +329,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
         videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
-        adDetails = Util.dataModel.getAdDetails().split(",");
+
 
         MovableTimer = new Timer();
         MovableTimer.schedule(new TimerTask() {
@@ -336,15 +395,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         } else {
             resolutionFormat.clear();
         }
-
         if (getIntent().getStringArrayListExtra("resolutionUrl") != null) {
             resolutionUrl = getIntent().getStringArrayListExtra("resolutionUrl");
         } else {
             resolutionUrl.clear();
         }
-
         if(resolutionUrl.size()<1)
-
         {
             // Add your code
             Log.v("MUVI","resolution image Invisible called");
@@ -357,6 +413,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 */
         Util.VideoResolution = "Auto";
         Util.DefaultSubtitle = "Off";
+
+        if (Util.dataModel.getMidRoll() == 1) {
+
+            adDetails = Util.dataModel.getAdDetails().split(",");
+
+        }
 
         if (getIntent().getStringArrayListExtra("resolutionFormat") != null) {
             ResolutionFormat = getIntent().getStringArrayListExtra("resolutionFormat");
@@ -407,22 +469,17 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
    /*     emVideoView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-
                 try{
-
                   *//*  resolutionFormat.clear();
                     resolutionUrl.clear();
-
                     String url1 = "https://r2---sn-p5qs7n7s.googlevideo.com/videoplayback?ms=au&clen=9643006&mv=m&mt=1490847859&expire=1490869548&ei=zIjcWNiIB4--1gK12J2wDg&requiressl=yes&ipbits=0&mn=sn-p5qs7n7s&mm=31&id=o-AOBNENDOg3dWResPJrDOrzcdkVLJzIAYZWhQU5ZbrB4w&itag=17&key=yt6&ip=159.253.144.86&dur=965.578&lmt=1476270027971356&upn=CmLw7ROk5F8&mime=video%2F3gpp&sparams=clen%2Cdur%2Cei%2Cgir%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Crequiressl%2Csource%2Cupn%2Cexpire&initcwndbps=3532500&gir=yes&source=youtube&pl=24&signature=D4A534C89E9CF57FCA86E4F48F551DAE17C35A42.1BED6199D2C1CBC51FE759376BA25E3CA16B6592&title=8+Future+Trucks+%26+Buses+YOU+MUST+SEE.mp4";
                     String url2 = "https://r2---sn-p5qs7n7s.googlevideo.com/videoplayback?ms=au&ei=zIjcWNiIB4--1gK12J2wDg&mv=m&mt=1490847859&expire=1490869548&requiressl=yes&ipbits=0&mn=sn-p5qs7n7s&mm=31&id=o-AOBNENDOg3dWResPJrDOrzcdkVLJzIAYZWhQU5ZbrB4w&itag=22&key=yt6&ip=159.253.144.86&dur=965.508&lmt=1476447036908539&upn=CmLw7ROk5F8&mime=video%2Fmp4&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cupn%2Cexpire&initcwndbps=3532500&ratebypass=yes&source=youtube&pl=24&signature=03EA48DAB77BB926A74DE6071C1166B96E95D247.62FF4140E2C639E6E4F5EE1CDEEE174B37C65739&title=8+Future+Trucks+%26+Buses+YOU+MUST+SEE.mp4";
                     resolutionFormat.add("144p");
                     resolutionFormat.add("720p");
                     resolutionFormat.add("Auto");
-
                     resolutionUrl.add(url1);
                     resolutionUrl.add(url2);
                     resolutionUrl.add(url1);*//*
-
                     Util.call_finish_at_onUserLeaveHint = false;
                     Intent intent = new Intent(MyLibraryPlayer.this,Subtitle_Resolution.class);
                     intent.putExtra("resolutionFormat",resolutionFormat);
@@ -430,15 +487,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     intent.putExtra("subTitleName",subTitleName);
                     intent.putExtra("subTitlePath",subTitlePath);
                     startActivityForResult(intent,3333);
-
-
                 *//*    Util.call_finish_at_onUserLeaveHint = false;
                     Intent intent = new Intent(MyLibraryPlayer.this,ResolutionChangeActivity.class);
                     intent.putExtra("resolutionFormat",resolutionFormat);
                     intent.putExtra("resolutionUrl",resolutionUrl);
                     startActivityForResult(intent,3333);*//*
                 }catch (Exception e){Log.v("MUVI","Exception of subtitle change click ="+e.toString());}
-
                 return false;
             }
         });*/
@@ -567,7 +621,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         emVideoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (((ProgressBar) findViewById(R.id.progress_view)).getVisibility() == View.VISIBLE) {
+                if (findViewById(R.id.progress_view).getVisibility() == View.VISIBLE) {
                     primary_ll.setVisibility(View.VISIBLE);
                     center_play_pause.setVisibility(View.GONE);
                     latest_center_play_pause.setVisibility(View.GONE);
@@ -708,6 +762,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     emVideoView.start();
                     emVideoView.seekTo(seekBarProgress);
                     seekBar.setProgress(emVideoView.getCurrentPosition());
+                    requestAds(Util.dataModel.getChannel_id());
 
                     if (is_paused) {
                         is_paused = false;
@@ -765,19 +820,21 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                             }
 
                             emVideoView.start();
+                            requestAds(Util.dataModel.getChannel_id());
                             updateProgressBar();
                         } else {
                             startTimer();
 
                             if (played_length > 0) {
                                 Util.call_finish_at_onUserLeaveHint = false;
-                                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                                findViewById(R.id.progress_view).setVisibility(View.GONE);
                                 Intent resumeIntent = new Intent(MyLibraryPlayer.this, MyLibraryResumePopupActivity.class);
                                 startActivityForResult(resumeIntent, 1001);
                             } else {
 
 
                                 emVideoView.start();
+                                requestAds(Util.dataModel.getChannel_id());
                                 seekBar.setProgress(emVideoView.getCurrentPosition());
                                 updateProgressBar();
 
@@ -1155,7 +1212,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
     private int millisecondsToString(int milliseconds) {
         // int seconds = (int) (milliseconds / 1000) % 60 ;
-        int seconds = (int) (milliseconds / 1000);
+        int seconds = milliseconds / 1000;
 
         return seconds;
     }
@@ -1307,7 +1364,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
 
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                 center_play_pause.setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.GONE);
                 previous_matching_time = current_matching_time;
@@ -1336,7 +1393,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
 
                 previous_matching_time = current_matching_time;
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                findViewById(R.id.progress_view).setVisibility(View.GONE);
                 if (Util.dataModel.getMidRoll() == 1) {
                     if (adDetails != null && adDetails.length > 0) {
                         for (int i = 0; i < adDetails.length; i++) {
@@ -1359,18 +1416,22 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                     }
                                     Intent adIntent = new Intent(MyLibraryPlayer.this, AdPlayerActivity.class);
                                     adIntent.putExtra("fromAd", "fromAd");
+                                    adIntent.putExtra("PlayerModel", playerModel);
                                     startActivity(adIntent);
 
+                                } else {
+                                    Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                                 }
-
                                 break;
                             }
                         }
                     }
                 }
             }
+
         }
     };
+
 
     public void Calcute_Currenttime_With_TotalTime() {
         TotalTime = String.format("%02d:%02d:%02d",
@@ -1483,7 +1544,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
         return;
       /*  if (video_completed == false){
-
             AsyncResumeVideoLogDetails  asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
             asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
             return;
@@ -1712,7 +1772,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             if (Util.dataModel.getPostRoll() == 1) {
                 Intent adIntent = new Intent(MyLibraryPlayer.this, AdPlayerActivity.class);
                 adIntent.putExtra("fromAd", "fromAd");
+                adIntent.putExtra("PlayerModel", playerModel);
                 startActivity(adIntent);
+
                 finish();
                 overridePendingTransition(0, 0);
             }
@@ -1952,7 +2014,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                         }
 
                         change_resolution = true;
-                        ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                        findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                         emVideoView.setVideoURI(Uri.parse(ResolutionUrl.get(Integer.parseInt(data.getStringExtra("position")))));
 
                     }
@@ -2102,6 +2164,13 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             if (subsFetchTask != null)
                 subsFetchTask.cancel(true);
         }*/
+
+        if (mAdsManager != null && mIsAdDisplayed) {
+            mAdsManager.pause();
+        } else {
+            Util.call_finish_at_onUserLeaveHint = false;
+            emVideoView.pause();
+        }
         super.onPause();
     }
 
@@ -2257,4 +2326,143 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
 
     // This API is called for cecking the Login status
+
+    /**
+     * Request video ads from the given VAST ad tag.
+     *
+     * @param adTagUrl URL of the ad's VAST XML
+     */
+    private void requestAds(String adTagUrl) {
+        AdDisplayContainer adDisplayContainer = mSdkFactory.createAdDisplayContainer();
+        adDisplayContainer.setAdContainer(mAdUiContainer);
+
+        // Create the ads request.
+        AdsRequest request = mSdkFactory.createAdsRequest();
+        request.setAdTagUrl(adTagUrl);
+        request.setAdDisplayContainer(adDisplayContainer);
+        request.setContentProgressProvider(new ContentProgressProvider() {
+            @Override
+            public VideoProgressUpdate getContentProgress() {
+                if (mIsAdDisplayed || emVideoView == null || emVideoView.getDuration() <= 0) {
+                    return VideoProgressUpdate.VIDEO_TIME_NOT_READY;
+                }
+                Log.v("SUBHA", "emVideoView.getCurrentPosition()" + emVideoView.getCurrentPosition());
+                Log.v("SUBHA", "emVideoView.getDuration()" + emVideoView.getDuration());
+
+               /* if (emVideoView.getCurrentPosition() >= emVideoView.getDuration()){
+                    return new VideoProgressUpdate(emVideoView.getCurrentPosition(),
+                            emVideoView.getDuration());
+                }
+*/
+                return new VideoProgressUpdate(emVideoView.getCurrentPosition(),
+                        emVideoView.getDuration());
+            }
+        });
+       /* if (mAdsManager !=null){
+            Log.v("SUBHA","ddT"+mAdsManager.getAdCuePoints());
+
+        }*/
+        Log.v("SUBHA", "ddT");
+
+        // Request the ad. After the ad is loaded, onAdsManagerLoaded() will be called.
+        mAdsLoader.requestAds(request);
+    }
+
+    @Override
+    public void onAdEvent(AdEvent adEvent) {
+        Log.v("SUBHA", "Event: " + adEvent.getType());
+
+        // These are the suggested event types to handle. For full list of all ad event
+        // types, see the documentation for AdEvent.AdEventType.
+        switch (adEvent.getType()) {
+            case LOADED:
+                onClick1();
+             /*   if (pDialog == null){
+                    pDialog = new ProgressDialog(ExoPlayerActivity.this);
+                    pDialog.setMessage("loading");
+                    pDialog.show();
+                }*/
+
+                // AdEventType.LOADED will be fired when ads are ready to be played.
+                // AdsManager.start() begins ad playback. This method is ignored for VMAP or
+                // ad rules playlists, as the SDK will automatically start executing the
+                // playlist.
+                mAdsManager.start();
+                break;
+
+            case STARTED:
+             /*   if (pDialog != null){
+                    Log.v("SUBHA","DISMISS");
+                    pDialog.dismiss();
+                }*/
+                //  progressView.setVisibility(View.VISIBLE);
+                Util.call_finish_at_onUserLeaveHint = false;
+                onClick1();
+             /*   final ProgressDialog finalPDialog = pDialog;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(finalPDialog !=null && finalPDialog.isShowing()) {
+                            Log.v("SUBHA","DISMISS");
+
+                            finalPDialog.dismiss();
+
+                        }
+                    }
+                });*/
+
+
+                break;
+
+            case CONTENT_PAUSE_REQUESTED:
+                // AdEventType.CONTENT_PAUSE_REQUESTED is fired immediately before a video
+                // ad is played.
+                mIsAdDisplayed = true;
+                Util.call_finish_at_onUserLeaveHint = false;
+
+                emVideoView.pause();
+                //  mVideoPlayer.pause();
+                break;
+            case CONTENT_RESUME_REQUESTED:
+                // AdEventType.CONTENT_RESUME_REQUESTED is fired when the ad is completed
+                // and you should start playing your content.
+                mIsAdDisplayed = false;
+                if (video_completed == true) {
+                    backCalled();
+                }
+
+                Util.call_finish_at_onUserLeaveHint = true;
+                emVideoView.start();
+                break;
+            case ALL_ADS_COMPLETED:
+                if (mAdsManager != null) {
+                    mAdsManager.destroy();
+                    mAdsManager = null;
+                }
+                if (video_completed == true) {
+                    backCalled();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onAdError(AdErrorEvent adErrorEvent) {
+        Log.e("subha", "Ad Error: " + adErrorEvent.getError().getMessage());
+        Util.call_finish_at_onUserLeaveHint = true;
+        emVideoView.start();
+    }
+
+    public void onClick1() {
+        if (mDialog == null) {
+            mDialog = new ProgressBarHandler(MyLibraryPlayer.this);
+            mDialog.show();
+        } else {
+            mDialog.hide();
+
+        }
+
+    }
 }

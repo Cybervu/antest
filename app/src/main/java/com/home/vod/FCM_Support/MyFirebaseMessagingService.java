@@ -91,7 +91,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if (preferenceManager != null) {
                 if(loggedInStr.trim().equals(user_id.trim())){
 
-                    preferenceManager.clearLoginPref();;
+                    preferenceManager.clearLoginPref();
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

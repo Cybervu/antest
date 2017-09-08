@@ -196,7 +196,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             // SharedPreferences.Editor editor = pref.edit();
 
             if (status == 200) {
-
+                //playerModel.setEmailId(login_output.getEmail());
 
                 preferenceManager.setLogInStatusToPref("1");
                 preferenceManager.setUserIdToPref(login_output.getId());
@@ -4064,9 +4064,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         {
 
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
-            LayoutInflater inflater = (LayoutInflater) LoginActivity.this.getSystemService(LoginActivity.this.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) LoginActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-            View convertView = (View) inflater.inflate(R.layout.logout_popup, null);
+            View convertView = inflater.inflate(R.layout.logout_popup, null);
             alertDialog.setView(convertView);
             alertDialog.setTitle("");
 
@@ -4244,9 +4244,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
-        LayoutInflater inflater = (LayoutInflater) LoginActivity.this.getSystemService(LoginActivity.this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) LoginActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        View convertView = (View) inflater.inflate(R.layout.activity_ppv_popup, null);
+        View convertView = inflater.inflate(R.layout.activity_ppv_popup, null);
         alertDialog.setView(convertView);
         alertDialog.setTitle("");
 
