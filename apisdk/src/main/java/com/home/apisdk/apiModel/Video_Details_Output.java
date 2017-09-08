@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by MUVI on 1/20/2017.
  */
 
-public class Get_Video_Details_Output {
+public class Video_Details_Output {
 
     String videoResolution;
     String videoUrl;
@@ -14,7 +14,120 @@ public class Get_Video_Details_Output {
     ArrayList<String> SubTitleName = new ArrayList<>();
     String studio_approved_url,licenseUrl;
     String is_offline;
+    String channel_id;
+    int midRoll;
 
+    public int getMidRoll() {
+        return midRoll;
+    }
+
+    public void setMidRoll(int midRoll) {
+        this.midRoll = midRoll;
+    }
+
+    public int getPostRoll() {
+        return postRoll;
+    }
+
+    public void setPostRoll(int postRoll) {
+        this.postRoll = postRoll;
+    }
+
+    public int getPreRoll() {
+        return preRoll;
+    }
+
+    public void setPreRoll(int preRoll) {
+        this.preRoll = preRoll;
+    }
+
+    int postRoll;
+    int preRoll;
+
+    public int getAdNetworkId() {
+        return adNetworkId;
+    }
+
+    public void setAdNetworkId(int adNetworkId) {
+        this.adNetworkId = adNetworkId;
+    }
+
+    int adNetworkId = 1;
+    String no_streaming_device;
+
+    public String getNo_streaming_device() {
+        return no_streaming_device;
+    }
+
+    public void setNo_streaming_device(String no_streaming_device) {
+        this.no_streaming_device = no_streaming_device;
+    }
+
+    public String getNo_of_views() {
+        return no_of_views;
+    }
+
+    public void setNo_of_views(String no_of_views) {
+        this.no_of_views = no_of_views;
+    }
+
+    public String getTrailerThirdpartyUrl() {
+        return trailerThirdpartyUrl;
+    }
+
+    public void setTrailerThirdpartyUrl(String trailerThirdpartyUrl) {
+        this.trailerThirdpartyUrl = trailerThirdpartyUrl;
+    }
+
+    public String getEmbedTrailerUrl() {
+        return embedTrailerUrl;
+    }
+
+    public void setEmbedTrailerUrl(String embedTrailerUrl) {
+        this.embedTrailerUrl = embedTrailerUrl;
+    }
+
+    public String getTrailerUrl() {
+        return trailerUrl;
+    }
+
+    public void setTrailerUrl(String trailerUrl) {
+        this.trailerUrl = trailerUrl;
+    }
+
+    String no_of_views;
+    String trailerThirdpartyUrl;
+    String embedTrailerUrl;
+    String trailerUrl;
+
+    public String getChannel_id() {
+        return channel_id;
+    }
+
+    public void setChannel_id(String channel_id) {
+        this.channel_id = channel_id;
+    }
+
+
+    public String getAdDetails() {
+        return adDetails;
+    }
+
+    public void setAdDetails(String adDetails) {
+        this.adDetails = adDetails;
+    }
+
+    public String getStreaming_restriction() {
+        return streaming_restriction;
+    }
+
+    public void setStreaming_restriction(String streaming_restriction) {
+        this.streaming_restriction = streaming_restriction;
+    }
+
+
+    String adDetails="";
+    String streaming_restriction;
     public String getIs_offline() {
         return is_offline;
     }

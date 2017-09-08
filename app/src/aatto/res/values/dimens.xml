@@ -91,7 +91,7 @@
     <dimen name="cast_height_icon">100dp</dimen>
     <dimen name="cast_name_text">17sp</dimen>
     <dimen name="cast_description_text">14sp</dimen>
-    <dimen name="forgot_logo_width">150dp</dimen>
+    <dimen name="forgot_logo_width">100dp</dimen>
     <dimen name="forgot_logo_height">150dp</dimen>
     <dimen name="email_text_size">16sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>
@@ -101,6 +101,7 @@
     <dimen name="submit_height_size">45dp</dimen>
     <dimen name="pass_text_size">16sp</dimen>
     <dimen name="forgot_text_size">15sp</dimen>
+    <dimen name="submit_text_size">18sp</dimen>
     <dimen name="login_butn_width">100dp</dimen>
     <dimen name="login_butn_height">40dp</dimen>
     <dimen name="fb_text_size">16sp</dimen>
@@ -244,6 +245,7 @@
     <dimen name="videogrid_land_height">106dp</dimen>
     <dimen name="testview_text_size">36sp</dimen>
     <dimen name="testview1_text_size">15sp</dimen>
+    <dimen name="forgotlayout_margin">10dp</dimen>
     <dimen name="alreadymember_height">40dp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
     <dimen name="video_text_size">14sp</dimen>

@@ -235,6 +235,16 @@
             android:windowSoftInputMode="stateHidden" />
 
         <activity
+            android:name="com.muvi.player.activity.AdPlayerActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.muvi.player.activity.MyActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".activity.MyLibraryResumePopupActivity"
             android:configChanges="screenSize|orientation"
             android:label=""

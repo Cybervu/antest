@@ -58,7 +58,7 @@ import com.home.apisdk.apiModel.CheckDeviceInput;
 import com.home.apisdk.apiModel.CheckDeviceOutput;
 import com.home.apisdk.apiModel.CheckFbUserDetailsInput;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
-import com.home.apisdk.apiModel.Get_Video_Details_Output;
+import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.apisdk.apiModel.LogoutInput;
 import com.home.apisdk.apiModel.Registration_input;
 import com.home.apisdk.apiModel.Registration_output;
@@ -75,7 +75,9 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
+import com.muvi.player.activity.AdPlayerActivity;
 import com.muvi.player.activity.ExoPlayerActivity;
+import com.muvi.player.activity.MyActivity;
 import com.muvi.player.activity.Player;
 
 
@@ -778,16 +780,16 @@ public class RegisterActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onVideoDetailsPostExecuteCompleted(Get_Video_Details_Output get_video_details_output, int statusCode, String stus, String message) {
-        // get_video_details_output.setThirdparty_url("https://www.youtube.com/watch?v=fqU2FzATTPY&spfreload=10");
-        // get_video_details_output.setThirdparty_url("https://player.vimeo.com/video/192417650?color=00ff00&badge=0");
+    public void onVideoDetailsPostExecuteCompleted(Video_Details_Output _video_details_output, int statusCode, String stus, String message) {
+        // _video_details_output.setThirdparty_url("https://www.youtube.com/watch?v=fqU2FzATTPY&spfreload=10");
+        // _video_details_output.setThirdparty_url("https://player.vimeo.com/video/192417650?color=00ff00&badge=0");
 
      /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
         then set thirdpartyurl true here and assign the url to videourl*/
 
 
         if (statusCode == 200) {
-            if (get_video_details_output.getThirdparty_url() == null || get_video_details_output.getThirdparty_url().matches("")) {
+            if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
 
                 /**@bishal
@@ -795,20 +797,20 @@ public class RegisterActivity extends AppCompatActivity implements
                  * if studio_approved_url is there in api then set the videourl from this other wise goto 2nd one
                  */
 
-                if (get_video_details_output.getStudio_approved_url() != null &&
-                        !get_video_details_output.getStudio_approved_url().isEmpty() &&
-                        !get_video_details_output.getStudio_approved_url().equals("null") &&
-                        !get_video_details_output.getStudio_approved_url().matches("")) {
+                if (_video_details_output.getStudio_approved_url() != null &&
+                        !_video_details_output.getStudio_approved_url().isEmpty() &&
+                        !_video_details_output.getStudio_approved_url().equals("null") &&
+                        !_video_details_output.getStudio_approved_url().matches("")) {
                     LogUtil.showLog("BISHAL","if called means  studioapproved");
-                    playerModel.setVideoUrl(get_video_details_output.getStudio_approved_url());
+                    playerModel.setVideoUrl(_video_details_output.getStudio_approved_url());
                     LogUtil.showLog("BS","studipapprovedurl===="+playerModel.getVideoUrl());
 
 
-                    if ( get_video_details_output.getLicenseUrl().trim() != null && !get_video_details_output.getLicenseUrl().trim().isEmpty() && !get_video_details_output.getLicenseUrl().trim().equals("null") && !get_video_details_output.getLicenseUrl().trim().matches("")) {
-                        playerModel.setLicenseUrl(get_video_details_output.getLicenseUrl());
+                    if ( _video_details_output.getLicenseUrl().trim() != null && !_video_details_output.getLicenseUrl().trim().isEmpty() && !_video_details_output.getLicenseUrl().trim().equals("null") && !_video_details_output.getLicenseUrl().trim().matches("")) {
+                        playerModel.setLicenseUrl(_video_details_output.getLicenseUrl());
                     }
-                    if ( get_video_details_output.getVideoUrl().trim() != null && !get_video_details_output.getVideoUrl().isEmpty() && !get_video_details_output.getVideoUrl().equals("null") && !get_video_details_output.getVideoUrl().trim().matches("")) {
-                        playerModel.setMpdVideoUrl(get_video_details_output.getVideoUrl());
+                    if ( _video_details_output.getVideoUrl().trim() != null && !_video_details_output.getVideoUrl().isEmpty() && !_video_details_output.getVideoUrl().equals("null") && !_video_details_output.getVideoUrl().trim().matches("")) {
+                        playerModel.setMpdVideoUrl(_video_details_output.getVideoUrl());
 
                     }else {
                         playerModel.setMpdVideoUrl(languagePreference .getTextofLanguage(NO_DATA,DEFAULT_NO_DATA));
@@ -816,8 +818,8 @@ public class RegisterActivity extends AppCompatActivity implements
                 }
 
                 else {
-                    if (get_video_details_output.getVideoUrl() != null || !get_video_details_output.getVideoUrl().matches("")) {
-                        playerModel.setVideoUrl(get_video_details_output.getVideoUrl());
+                    if (_video_details_output.getVideoUrl() != null || !_video_details_output.getVideoUrl().matches("")) {
+                        playerModel.setVideoUrl(_video_details_output.getVideoUrl());
                         Log.v("BISHAL", "videourl===" + playerModel.getVideoUrl());
                         playerModel.setThirdPartyPlayer(false);
                     } else {
@@ -827,8 +829,8 @@ public class RegisterActivity extends AppCompatActivity implements
                     }
                 }
             } else {
-                if (get_video_details_output.getThirdparty_url() != null || !get_video_details_output.getThirdparty_url().matches("")) {
-                    playerModel.setVideoUrl(get_video_details_output.getThirdparty_url());
+                if (_video_details_output.getThirdparty_url() != null || !_video_details_output.getThirdparty_url().matches("")) {
+                    playerModel.setVideoUrl(_video_details_output.getThirdparty_url());
                     playerModel.setThirdPartyPlayer(true);
 
                 } else {
@@ -838,30 +840,43 @@ public class RegisterActivity extends AppCompatActivity implements
                 }
             }
 
-            Util.dataModel.setVideoResolution(get_video_details_output.getVideoResolution());
+            Util.dataModel.setVideoResolution(_video_details_output.getVideoResolution());
 
-            playerModel.setVideoResolution(get_video_details_output.getVideoResolution());
-            if(get_video_details_output.getPlayed_length()!=null && !get_video_details_output.getPlayed_length().equals(""))
-                playerModel.setPlayPos((Util.isDouble(get_video_details_output.getPlayed_length())));
+            playerModel.setVideoResolution(_video_details_output.getVideoResolution());
+            if(_video_details_output.getPlayed_length()!=null && !_video_details_output.getPlayed_length().equals(""))
+                playerModel.setPlayPos((Util.isDouble(_video_details_output.getPlayed_length())));
 
 
 
 
             //dependency for datamodel
-            Util.dataModel.setVideoUrl(get_video_details_output.getVideoUrl());
-            Util.dataModel.setVideoResolution(get_video_details_output.getVideoResolution());
-            Util.dataModel.setThirdPartyUrl(get_video_details_output.getThirdparty_url());
+            Util.dataModel.setVideoUrl(_video_details_output.getVideoUrl());
+            Util.dataModel.setVideoResolution(_video_details_output.getVideoResolution());
+            Util.dataModel.setThirdPartyUrl(_video_details_output.getThirdparty_url());
+            Util.dataModel.setAdNetworkId(_video_details_output.getAdNetworkId());
+            Util.dataModel.setChannel_id(_video_details_output.getChannel_id());
+            Util.dataModel.setPreRoll(_video_details_output.getPreRoll());
+            Util.dataModel.setPostRoll(_video_details_output.getPostRoll());
+            Util.dataModel.setMidRoll(_video_details_output.getMidRoll());
+            Util.dataModel.setAdDetails(_video_details_output.getAdDetails());
+
 
 
 
             //player model set
-            playerModel.setSubTitleName(get_video_details_output.getSubTitleName());
-            playerModel.setSubTitlePath(get_video_details_output.getSubTitlePath());
-            playerModel.setResolutionFormat(get_video_details_output.getResolutionFormat());
-            playerModel.setResolutionUrl(get_video_details_output.getResolutionUrl());
-            playerModel.setFakeSubTitlePath(get_video_details_output.getFakeSubTitlePath());
-            playerModel.setVideoResolution(get_video_details_output.getVideoResolution());
-            FakeSubTitlePath = get_video_details_output.getFakeSubTitlePath();
+            playerModel.setAdDetails(_video_details_output.getAdDetails());
+            playerModel.setMidRoll(_video_details_output.getMidRoll());
+            playerModel.setPostRoll(_video_details_output.getPostRoll());
+            playerModel.setChannel_id(_video_details_output.getChannel_id());
+            playerModel.setAdNetworkId(_video_details_output.getAdNetworkId());
+            playerModel.setPreRoll(_video_details_output.getPreRoll());
+            playerModel.setSubTitleName(_video_details_output.getSubTitleName());
+            playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
+            playerModel.setResolutionFormat(_video_details_output.getResolutionFormat());
+            playerModel.setResolutionUrl(_video_details_output.getResolutionUrl());
+            playerModel.setFakeSubTitlePath(_video_details_output.getFakeSubTitlePath());
+            playerModel.setVideoResolution(_video_details_output.getVideoResolution());
+            FakeSubTitlePath = _video_details_output.getFakeSubTitlePath();
 
 
 
@@ -900,14 +915,31 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
                 // condition for checking if the response has third party url or not.
-                if (get_video_details_output.getThirdparty_url()==null ||
-                        get_video_details_output.getThirdparty_url().matches("")
+                if (_video_details_output.getThirdparty_url()==null ||
+                        _video_details_output.getThirdparty_url().matches("")
                         ) {
 
 
                     playerModel.setThirdPartyPlayer(false);
 
-                    final Intent playVideoIntent = new Intent(RegisterActivity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent;
+                    if (Util.dataModel.getAdNetworkId() == 3){
+                        Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+
+                        playVideoIntent = new Intent(RegisterActivity.this, MyActivity.class);
+
+                    }
+                    else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1){
+                        if (Util.dataModel.getPlayPos() <= 0) {
+                            playVideoIntent = new Intent(RegisterActivity.this, AdPlayerActivity.class);
+                        }else{
+                            playVideoIntent = new Intent(RegisterActivity.this, ExoPlayerActivity.class);
+
+                        }
+                    }else{
+                        playVideoIntent = new Intent(RegisterActivity.this, ExoPlayerActivity.class);
+
+                    }
                     runOnUiThread(new Runnable() {
                         public void run() {
                             if (FakeSubTitlePath.size() > 0) {
@@ -3046,6 +3078,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
         @Override
         protected void onPostExecute(String file_url) {
+
             FakeSubTitlePath.remove(0);
             if (FakeSubTitlePath.size() > 0) {
                 Download_SubTitle(FakeSubTitlePath.get(0).trim());
@@ -3053,13 +3086,29 @@ public class RegisterActivity extends AppCompatActivity implements
                 if (progressBarHandler != null && progressBarHandler.isShowing()) {
                     progressBarHandler.hide();
                 }
-                Intent playVideoIntent = new Intent(RegisterActivity.this, ExoPlayerActivity.class);
+                final Intent playVideoIntent;
+                if (Util.dataModel.getAdNetworkId() == 3){
+                    Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+
+                    playVideoIntent = new Intent(RegisterActivity.this, MyActivity.class);
+
+                }
+                else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1){
+                    if (Util.dataModel.getPlayPos() <= 0) {
+                        playVideoIntent = new Intent(RegisterActivity.this, AdPlayerActivity.class);
+                    }else{
+                        playVideoIntent = new Intent(RegisterActivity.this, ExoPlayerActivity.class);
+
+                    }
+                }else{
+                    playVideoIntent = new Intent(RegisterActivity.this, ExoPlayerActivity.class);
+
+                }
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-              /*  playVideoIntent.putExtra("SubTitleName", SubTitleName);
+                playVideoIntent.putExtra("SubTitleName", SubTitleName);
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
-                playVideoIntent.putExtra("PlayerModel",playerModel);
+                playVideoIntent.putExtra("ResolutionFormat",ResolutionFormat);
+                playVideoIntent.putExtra("ResolutionUrl",ResolutionUrl);
                 startActivity(playVideoIntent);
                 removeFocusFromViews();
                 finish();

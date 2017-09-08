@@ -15,13 +15,13 @@
     <dimen name="titletxt">17dp</dimen>
     <dimen name="indicatorheight">330dp</dimen>
 
-    <dimen name="forgot_logo_width">200dp</dimen>
+    <dimen name="forgot_logo_width">40dp</dimen>
     <dimen name="forgot_logo_height">200dp</dimen>
     <dimen name="email_text_size">18sp</dimen>
     <dimen name="edit_text_size">18sp</dimen>
     <dimen name="login_text_size">20sp</dimen>
-    <dimen name="submit_text_size">14sp</dimen>
-    <dimen name="pass_text_size">18sp</dimen>
+    <dimen name="submit_text_size">21sp</dimen>
+    <dimen name="pass_text_size">20sp</dimen>
     <dimen name="forgot_text_size">18sp</dimen>
     <dimen name="login_butn_width">160dp</dimen>
     <dimen name="login_butn_height">60dp</dimen>

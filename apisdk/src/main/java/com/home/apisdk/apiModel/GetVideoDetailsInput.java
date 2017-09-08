@@ -11,6 +11,7 @@ public class GetVideoDetailsInput {
     String authToken;
     String content_uniq_id;
     String stream_uniq_id;
+
     public String getLanguage() {
         return language;
     }

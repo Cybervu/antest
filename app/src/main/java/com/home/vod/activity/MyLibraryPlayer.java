@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,6 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
@@ -36,6 +38,7 @@ import com.home.apisdk.apiModel.FFVideoLogDetailsInput;
 import com.home.apisdk.apiModel.ResumeVideoLogDetailsInput;
 import com.home.apisdk.apiModel.VideoLogsInputModel;
 import com.home.vod.R;
+import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.subtitle_support.Caption;
@@ -46,6 +49,7 @@ import com.home.vod.util.ExpandableTextView;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
+import com.muvi.player.activity.AdPlayerActivity;
 import com.muvi.player.activity.Subtitle_Resolution;
 
 import java.io.BufferedReader;
@@ -97,7 +101,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         GetVideoLogsAsynTask.GetVideoLogsListener,
         GetIpAddressAsynTask.IpAddressListener,
         ResumeVideoLogDetailsAsync.ResumeVideoLogDetailsListener,
-        GetFFVideoLogDetailsAsync.GetFFVideoLogsListener{
+        GetFFVideoLogDetailsAsync.GetFFVideoLogsListener {
     int played_length = 0;
     int playerStartPosition = 0;
 
@@ -137,11 +141,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     boolean center_pause_paly_timer_is_running = false;
     RelativeLayout player_layout;
 
-LanguagePreference languagePreference;
+    LanguagePreference languagePreference;
     boolean compressed = true;
     int player_layout_height, player_layout_width;
     int screenWidth, screenHeight;
     ImageButton latest_center_play_pause;
+    String adDetails[];
 
 
     String resolution = "BEST";
@@ -228,7 +233,8 @@ LanguagePreference languagePreference;
         if (emailIdStr == null) {
             emailIdStr = "";
 
-        } if (userIdStr == null) {
+        }
+        if (userIdStr == null) {
             userIdStr = "";
 
         }
@@ -243,7 +249,7 @@ LanguagePreference languagePreference;
         Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoTitle.setTypeface(videoTitleface);
         GenreTextView = (TextView) findViewById(R.id.GenreTextView);
-        Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         GenreTextView.setTypeface(GenreTextViewface);
         videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
         Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
@@ -264,7 +270,7 @@ LanguagePreference languagePreference;
         Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
         videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
-
+        adDetails = Util.dataModel.getAdDetails().split(",");
 
         MovableTimer = new Timer();
         MovableTimer.schedule(new TimerTask() {
@@ -272,7 +278,7 @@ LanguagePreference languagePreference;
             public void run() {
                 MoveWaterMark();
             }
-        },1000,1000);
+        }, 1000, 1000);
 
         //Call For Subtitle Loading // Added By MUVI
 
@@ -309,12 +315,12 @@ LanguagePreference languagePreference;
 
 
                 Util.call_finish_at_onUserLeaveHint = false;
-                Intent intent = new Intent(MyLibraryPlayer.this,Subtitle_Resolution.class);
-                intent.putExtra("resolutionFormat",ResolutionFormat);
-                intent.putExtra("resolutionUrl",ResolutionUrl);
-                intent.putExtra("subTitleName",SubTitleName);
-                intent.putExtra("subTitlePath",SubTitlePath);
-                startActivityForResult(intent,3333);
+                Intent intent = new Intent(MyLibraryPlayer.this, Subtitle_Resolution.class);
+                intent.putExtra("resolutionFormat", ResolutionFormat);
+                intent.putExtra("resolutionUrl", ResolutionUrl);
+                intent.putExtra("subTitleName", SubTitleName);
+                intent.putExtra("subTitlePath", SubTitlePath);
+                startActivityForResult(intent, 3333);
 
 
             }
@@ -365,47 +371,36 @@ LanguagePreference languagePreference;
             ResolutionUrl.clear();
         }
 
-        if(ResolutionUrl.size()<1)
+        if (ResolutionUrl.size() < 1)
 
         {
             // Add your code
-            LogUtil.showLog("MUVI","resolution image Invisible called");
-        }
-        else
-        {
+            LogUtil.showLog("MUVI", "resolution image Invisible called");
+        } else {
             ResolutionUrl.add(Util.dataModel.getVideoUrl().trim());
             ResolutionFormat.add("Auto");
         }
 
-        if(ResolutionFormat.size()>0)
-        {
+        if (ResolutionFormat.size() > 0) {
             Collections.reverse(ResolutionFormat);
-            for(int m=0;m<ResolutionFormat.size();m++)
-            {
-                LogUtil.showLog("MUVI","RESOLUTION FORMAT======"+ResolutionFormat.get(m));
+            for (int m = 0; m < ResolutionFormat.size(); m++) {
+                LogUtil.showLog("MUVI", "RESOLUTION FORMAT======" + ResolutionFormat.get(m));
             }
         }
-        if(ResolutionUrl.size()>0)
-        {
+        if (ResolutionUrl.size() > 0) {
             Collections.reverse(ResolutionUrl);
-            for(int n=0;n<ResolutionUrl.size();n++)
-            {
-                LogUtil.showLog("MUVI","RESOLUTION URL======"+ResolutionUrl.get(n));
+            for (int n = 0; n < ResolutionUrl.size(); n++) {
+                LogUtil.showLog("MUVI", "RESOLUTION URL======" + ResolutionUrl.get(n));
             }
         }
-
-
-
 
 
         //=========================End=================================//
 
 
-
-        if((SubTitlePath.size()<1) && (ResolutionUrl.size()<1))
-        {
+        if ((SubTitlePath.size() < 1) && (ResolutionUrl.size() < 1)) {
             subtitle_change_btn.setVisibility(View.INVISIBLE);
-            LogUtil.showLog("MUVI","CC Invisible called");
+            LogUtil.showLog("MUVI", "CC Invisible called");
         }
 
 
@@ -449,8 +444,6 @@ LanguagePreference languagePreference;
         });*/
 
         //=============================== End Resolution Change ===================================//
-
-
 
 
         player_layout = (RelativeLayout) findViewById(R.id.player_layout);
@@ -597,8 +590,7 @@ LanguagePreference languagePreference;
 
                         primary_ll.setVisibility(View.VISIBLE);
 
-                        if(SubTitlePath.size()>0 || ResolutionUrl.size()>0)
-                        {
+                        if (SubTitlePath.size() > 0 || ResolutionUrl.size() > 0) {
                             subtitle_change_btn.setVisibility(View.VISIBLE);
                         }
 
@@ -640,27 +632,19 @@ LanguagePreference languagePreference;
                 } else {
 
                     LinearLayout.LayoutParams params1 = null;
-                    if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
-                        if(MyLibraryPlayer.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-                        {
-                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*45)/100);
+                    if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+                        if (MyLibraryPlayer.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 45) / 100);
 
+                        } else {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 45) / 100);
                         }
-                        else
-                        {
-                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*45)/100);
-                        }
-                    }
-                    else
-                    {
-                        if(MyLibraryPlayer.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-                        {
-                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+                    } else {
+                        if (MyLibraryPlayer.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
 
-                        }
-                        else
-                        {
-                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+                        } else {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
                         }
                     }
                     player_layout.setLayoutParams(params1);
@@ -715,30 +699,25 @@ LanguagePreference languagePreference;
             @Override
             public void onPrepared() {
 
-                LogUtil.showLog("MUVI","This is the first calling point");
-                LogUtil.showLog("MUVI","Played Length ="+Util.dataModel.getPlayPos());
+                LogUtil.showLog("MUVI", "This is the first calling point");
+                LogUtil.showLog("MUVI", "Played Length =" + Util.dataModel.getPlayPos());
 
-                if(change_resolution)
-                {
+                if (change_resolution) {
 
                     change_resolution = false;
                     emVideoView.start();
                     emVideoView.seekTo(seekBarProgress);
                     seekBar.setProgress(emVideoView.getCurrentPosition());
 
-                    if(is_paused)
-                    {
+                    if (is_paused) {
                         is_paused = false;
                         emVideoView.pause();
                         progressView.setVisibility(View.GONE);
-                    }
-                    else {
+                    } else {
                         updateProgressBar();
                     }
 
-                }
-                else
-                {
+                } else {
 
                     // have to delete
 
@@ -765,15 +744,13 @@ LanguagePreference languagePreference;
                         if (content_types_id == 4) {
 
 
-                            if(SubTitlePath.size()>0)
-                            {
+                            if (SubTitlePath.size() > 0) {
                                 CheckSubTitleParsingType("1");
                                 subtitleDisplayHandler = new Handler();
                                 subsFetchTask = new SubtitleProcessingTask("1");
                                 subsFetchTask.execute();
-                            }
-                            else {
-                                VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                            } else {
+                                VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                                 videoLogsInputModel.setAuthToken(authTokenStr);
                                 videoLogsInputModel.setUserId(userIdStr.trim());
                                 videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -783,7 +760,7 @@ LanguagePreference languagePreference;
                                 videoLogsInputModel.setWatchStatus(watchStatus);
                                 videoLogsInputModel.setDeviceType("2");
                                 videoLogsInputModel.setVideoLogId(videoLogId);
-                                asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, MyLibraryPlayer.this,MyLibraryPlayer.this);
+                                asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, MyLibraryPlayer.this, MyLibraryPlayer.this);
                                 asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                             }
 
@@ -804,15 +781,13 @@ LanguagePreference languagePreference;
                                 seekBar.setProgress(emVideoView.getCurrentPosition());
                                 updateProgressBar();
 
-                                if(SubTitlePath.size()>0)
-                                {
+                                if (SubTitlePath.size() > 0) {
                                     CheckSubTitleParsingType("1");
                                     subtitleDisplayHandler = new Handler();
                                     subsFetchTask = new SubtitleProcessingTask("1");
                                     subsFetchTask.execute();
-                                }
-                                else {
-                                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                                } else {
+                                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                                     videoLogsInputModel.setAuthToken(authTokenStr);
                                     videoLogsInputModel.setUserId(userIdStr.trim());
                                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -822,7 +797,7 @@ LanguagePreference languagePreference;
                                     videoLogsInputModel.setWatchStatus(watchStatus);
                                     videoLogsInputModel.setDeviceType("2");
                                     videoLogsInputModel.setVideoLogId(videoLogId);
-                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,MyLibraryPlayer.this,MyLibraryPlayer.this);
+                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, MyLibraryPlayer.this, MyLibraryPlayer.this);
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
 
@@ -997,7 +972,7 @@ LanguagePreference languagePreference;
 
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
-                                    FFVideoLogDetailsInput ffVideoLogDetailsInput= new FFVideoLogDetailsInput();
+                                    FFVideoLogDetailsInput ffVideoLogDetailsInput = new FFVideoLogDetailsInput();
                                     ffVideoLogDetailsInput.setAuthToken(authTokenStr);
                                     ffVideoLogDetailsInput.setUser_id(userIdStr);
                                     ffVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
@@ -1007,11 +982,11 @@ LanguagePreference languagePreference;
                                     ffVideoLogDetailsInput.setWatch_status(watchStatus);
                                     ffVideoLogDetailsInput.setDevice_type("2");
                                     ffVideoLogDetailsInput.setLog_id(videoLogId);
-                                    asyncFFVideoLogDetails = new GetFFVideoLogDetailsAsync(ffVideoLogDetailsInput,MyLibraryPlayer.this,MyLibraryPlayer.this);
+                                    asyncFFVideoLogDetails = new GetFFVideoLogDetailsAsync(ffVideoLogDetailsInput, MyLibraryPlayer.this, MyLibraryPlayer.this);
                                     watchStatus = "complete";
                                     asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else {
-                                    FFVideoLogDetailsInput ffVideoLogDetailsInput= new FFVideoLogDetailsInput();
+                                    FFVideoLogDetailsInput ffVideoLogDetailsInput = new FFVideoLogDetailsInput();
                                     ffVideoLogDetailsInput.setAuthToken(authTokenStr);
                                     ffVideoLogDetailsInput.setUser_id(userIdStr);
                                     ffVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
@@ -1021,7 +996,7 @@ LanguagePreference languagePreference;
                                     ffVideoLogDetailsInput.setWatch_status(watchStatus);
                                     ffVideoLogDetailsInput.setDevice_type("2");
                                     ffVideoLogDetailsInput.setLog_id(videoLogId);
-                                    asyncFFVideoLogDetails = new GetFFVideoLogDetailsAsync(ffVideoLogDetailsInput,MyLibraryPlayer.this,MyLibraryPlayer.this);
+                                    asyncFFVideoLogDetails = new GetFFVideoLogDetailsAsync(ffVideoLogDetailsInput, MyLibraryPlayer.this, MyLibraryPlayer.this);
                                     watchStatus = "halfplay";
                                     asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
@@ -1032,7 +1007,7 @@ LanguagePreference languagePreference;
 
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
-                                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                                     videoLogsInputModel.setAuthToken(authTokenStr);
                                     videoLogsInputModel.setUserId(userIdStr.trim());
                                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -1042,11 +1017,11 @@ LanguagePreference languagePreference;
                                     videoLogsInputModel.setWatchStatus(watchStatus);
                                     videoLogsInputModel.setDeviceType("2");
                                     videoLogsInputModel.setVideoLogId(videoLogId);
-                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,MyLibraryPlayer.this,MyLibraryPlayer.this);
+                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, MyLibraryPlayer.this, MyLibraryPlayer.this);
                                     watchStatus = "complete";
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else if (currentPositionStr > 0 && currentPositionStr % 60 == 0) {
-                                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                                     videoLogsInputModel.setAuthToken(authTokenStr);
                                     videoLogsInputModel.setUserId(userIdStr.trim());
                                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -1056,7 +1031,7 @@ LanguagePreference languagePreference;
                                     videoLogsInputModel.setWatchStatus(watchStatus);
                                     videoLogsInputModel.setDeviceType("2");
                                     videoLogsInputModel.setVideoLogId(videoLogId);
-                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,MyLibraryPlayer.this,MyLibraryPlayer.this);
+                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, MyLibraryPlayer.this, MyLibraryPlayer.this);
                                     watchStatus = "halfplay";
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -1322,9 +1297,10 @@ LanguagePreference languagePreference;
             mHandler.postDelayed(this, 1000);
 
             if (content_types_id != 4) {
-                try{
+                try {
                     seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
             }
 
             current_matching_time = emVideoView.getCurrentPosition();
@@ -1361,8 +1337,38 @@ LanguagePreference languagePreference;
 
                 previous_matching_time = current_matching_time;
                 ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
-            }
+                if (Util.dataModel.getMidRoll() == 1) {
+                    if (adDetails != null && adDetails.length > 0) {
+                        for (int i = 0; i < adDetails.length; i++) {
+                            Log.v("SUBHA", "SEC" + (int) (TimeUnit.MILLISECONDS.toSeconds(emVideoView.getCurrentPosition())));
+                            Log.v("SUBHA", "Integer.parseInt(adDetails[i])" + Integer.parseInt(adDetails[i]));
 
+                            if ((int) (TimeUnit.MILLISECONDS.toSeconds(emVideoView.getCurrentPosition())) > 0 && ((int) (TimeUnit.MILLISECONDS.toSeconds(emVideoView.getCurrentPosition())) == Integer.parseInt(adDetails[i]))) {
+                                if (NetworkStatus.getInstance().isConnected(MyLibraryPlayer.this)) {
+                                    //Will Add Some Data to send
+                                    Util.call_finish_at_onUserLeaveHint = false;
+                                    Util.hide_pause = true;
+                                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                                    latest_center_play_pause.setVisibility(View.VISIBLE);
+
+                                    if (emVideoView.isPlaying()) {
+                                        emVideoView.pause();
+                                        latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
+                                        center_play_pause.setImageResource(R.drawable.ic_media_play);
+                                        mHandler.removeCallbacks(updateTimeTask);
+                                    }
+                                    Intent adIntent = new Intent(MyLibraryPlayer.this, AdPlayerActivity.class);
+                                    adIntent.putExtra("fromAd", "fromAd");
+                                    startActivity(adIntent);
+
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
     };
 
@@ -1407,7 +1413,7 @@ LanguagePreference languagePreference;
 
         if (video_completed == false) {
 
-            ResumeVideoLogDetailsInput resumeVideoLogDetailsInput=new ResumeVideoLogDetailsInput();
+            ResumeVideoLogDetailsInput resumeVideoLogDetailsInput = new ResumeVideoLogDetailsInput();
             resumeVideoLogDetailsInput.setAuthToken(authTokenStr);
             resumeVideoLogDetailsInput.setUser_id(userIdStr.trim());
             resumeVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
@@ -1425,7 +1431,7 @@ LanguagePreference languagePreference;
             });
             resumeVideoLogDetailsInput.setPlayed_length(String.valueOf(playerPosition));
             resumeVideoLogDetailsInput.setWatch_status(watchSt);
-            ResumeVideoLogDetailsAsync asyncResumeVideoLogDetails = new ResumeVideoLogDetailsAsync(resumeVideoLogDetailsInput,this,this);
+            ResumeVideoLogDetailsAsync asyncResumeVideoLogDetails = new ResumeVideoLogDetailsAsync(resumeVideoLogDetailsInput, this, this);
             asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
             return;
         }
@@ -1455,7 +1461,7 @@ LanguagePreference languagePreference;
             stoptimertask();
             timer = null;
         }
-        ResumeVideoLogDetailsInput resumeVideoLogDetailsInput=new ResumeVideoLogDetailsInput();
+        ResumeVideoLogDetailsInput resumeVideoLogDetailsInput = new ResumeVideoLogDetailsInput();
         resumeVideoLogDetailsInput.setAuthToken(authTokenStr);
         resumeVideoLogDetailsInput.setUser_id(userIdStr.trim());
         resumeVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
@@ -1473,7 +1479,7 @@ LanguagePreference languagePreference;
         });
         resumeVideoLogDetailsInput.setPlayed_length(String.valueOf(playerPosition));
         resumeVideoLogDetailsInput.setWatch_status(watchSt);
-        ResumeVideoLogDetailsAsync asyncResumeVideoLogDetails = new ResumeVideoLogDetailsAsync(resumeVideoLogDetailsInput,this,this);
+        ResumeVideoLogDetailsAsync asyncResumeVideoLogDetails = new ResumeVideoLogDetailsAsync(resumeVideoLogDetailsInput, this, this);
         asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
         return;
       /*  if (video_completed == false){
@@ -1542,9 +1548,7 @@ LanguagePreference languagePreference;
         }
 
 
-
-
-        if(Util.call_finish_at_onUserLeaveHint) {
+        if (Util.call_finish_at_onUserLeaveHint) {
 
             Util.call_finish_at_onUserLeaveHint = true;
 
@@ -1678,19 +1682,19 @@ LanguagePreference languagePreference;
         }, 0, 100);
     }
 
-   /* @Override
-    public boolean onKeyDown(int keyCode, KeyEvent objEvent) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Log.v("MUVI","FHFHFHCALLED");
-            return true;
-        }
-        return super.onKeyUp(keyCode, objEvent);
+    /* @Override
+     public boolean onKeyDown(int keyCode, KeyEvent objEvent) {
+         if (keyCode == KeyEvent.KEYCODE_BACK) {
+             Log.v("MUVI","FHFHFHCALLED");
+             return true;
+         }
+         return super.onKeyUp(keyCode, objEvent);
+     }
+ */
+    @Override
+    public void onGetResumeVideoLogDetailsPreExecuteStarted() {
+        stoptimertask();
     }
-*/
-   @Override
-   public void onGetResumeVideoLogDetailsPreExecuteStarted() {
-       stoptimertask();
-   }
 
     @Override
     public void onGetResumeVideoLogDetailsPostExecuteCompleted(int status, String message, String videoLogId) {
@@ -1702,6 +1706,16 @@ LanguagePreference languagePreference;
         mHandler.removeCallbacks(updateTimeTask);
         if (emVideoView != null) {
             emVideoView.release();
+        }
+        if (video_completed == true) {
+            Log.v("SUBHA", "CALLED");
+            if (Util.dataModel.getPostRoll() == 1) {
+                Intent adIntent = new Intent(MyLibraryPlayer.this, AdPlayerActivity.class);
+                adIntent.putExtra("fromAd", "fromAd");
+                startActivity(adIntent);
+                finish();
+                overridePendingTransition(0, 0);
+            }
         }
         finish();
         overridePendingTransition(0, 0);
@@ -1872,17 +1886,15 @@ LanguagePreference languagePreference;
                 }
 
 
-                if(SubTitlePath.size()>0)
-                {
+                if (SubTitlePath.size() > 0) {
 
                     CheckSubTitleParsingType("1");
 
                     subtitleDisplayHandler = new Handler();
                     subsFetchTask = new SubtitleProcessingTask("1");
                     subsFetchTask.execute();
-                }
-                else {
-                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                } else {
+                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                     videoLogsInputModel.setAuthToken(authTokenStr);
                     videoLogsInputModel.setUserId(userIdStr.trim());
                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -1892,13 +1904,12 @@ LanguagePreference languagePreference;
                     videoLogsInputModel.setWatchStatus(watchStatus);
                     videoLogsInputModel.setDeviceType("2");
                     videoLogsInputModel.setVideoLogId(videoLogId);
-                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,this,this);
+                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, this, this);
                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                 }
 
             }
-            if(requestCode == 3333)
-            {
+            if (requestCode == 3333) {
                 // This is for Subtitle feature
 
                 if (data.getStringExtra("type").equals("subtitle")) {
@@ -1906,24 +1917,22 @@ LanguagePreference languagePreference;
 //                    Toast.makeText(getApplicationContext(),"subtitle == "+data.getStringExtra("position"),Toast.LENGTH_SHORT).show();
                     if (!data.getStringExtra("position").equals("nothing")) {
 
-                        if(data.getStringExtra("position").equals("0"))
-                        {
+                        if (data.getStringExtra("position").equals("0")) {
                             // Stop Showing Subtitle
-                            if(subtitleDisplayHandler!=null)
+                            if (subtitleDisplayHandler != null)
                                 subtitleDisplayHandler.removeCallbacks(subtitleProcessesor);
                             subtitleText.setText("");
-                        }
-                        else
-                        {
-                            try{
+                        } else {
+                            try {
 
                                 CheckSubTitleParsingType(data.getStringExtra("position"));
 
                                 subtitleDisplayHandler = new Handler();
                                 subsFetchTask = new SubtitleProcessingTask(data.getStringExtra("position"));
                                 subsFetchTask.execute();
-                            }catch (Exception e){
-                                LogUtil.showLog("MUVI","Exception of subtitle change process ="+e.toString());}
+                            } catch (Exception e) {
+                                LogUtil.showLog("MUVI", "Exception of subtitle change process =" + e.toString());
+                            }
 
                         }
 
@@ -1938,8 +1947,7 @@ LanguagePreference languagePreference;
                     mHandler.removeCallbacks(updateTimeTask);
                     if (!data.getStringExtra("position").equals("nothing")) {
 
-                        if (!emVideoView.isPlaying())
-                        {
+                        if (!emVideoView.isPlaying()) {
                             is_paused = true;
                         }
 
@@ -1958,7 +1966,7 @@ LanguagePreference languagePreference;
         super.onDestroy();
         Util.hide_pause = false;
 
-        if(MovableTimer!=null)
+        if (MovableTimer != null)
             MovableTimer.cancel();
     }
 
@@ -1967,19 +1975,19 @@ LanguagePreference languagePreference;
     public class SubtitleProcessingTask extends AsyncTask<Void, Void, Void> {
 
 
-
         String Subtitle_Path = "";
+
         public SubtitleProcessingTask(String path) {
 //            Log.v("MUVI","subTitlePath size ==="+subTitlePath.size());
 //             Subtitle_Path = Environment.getExternalStorageDirectory().toString()+"/"+"sub.vtt";
-            Subtitle_Path = SubTitlePath.get((Integer.parseInt(path)-1));
+            Subtitle_Path = SubTitlePath.get((Integer.parseInt(path) - 1));
         }
 
         @Override
         protected void onPreExecute() {
 //            subtitleText.setText("Loading subtitles..");
             super.onPreExecute();
-            LogUtil.showLog("MUVI","subTitlePath size at pre execute==="+SubTitlePath.size());
+            LogUtil.showLog("MUVI", "subTitlePath size at pre execute===" + SubTitlePath.size());
         }
 
         @Override
@@ -1987,10 +1995,10 @@ LanguagePreference languagePreference;
             // int count;
             try {
 
-                LogUtil.showLog("MUVI","Subtitle_Path ========"+Subtitle_Path);
+                LogUtil.showLog("MUVI", "Subtitle_Path ========" + Subtitle_Path);
 
 				/*
-				 * if you want to download file from Internet, use commented
+                 * if you want to download file from Internet, use commented
 				 * code.
 				 */
                 // URL url = new URL(
@@ -2014,25 +2022,21 @@ LanguagePreference languagePreference;
 //                String path = Environment.getExternalStorageDirectory().toString()+"/sub.vtt";
 //                File myFile = new File(path);
                 File myFile = new File(Subtitle_Path);
-                InputStream fIn = new FileInputStream( String.valueOf( myFile ) );
+                InputStream fIn = new FileInputStream(String.valueOf(myFile));
 
 
               /* InputStream stream = getResources().openRawResource(
                         R.raw.subtitle);*/
 
-                if(callWithoutCaption)
-                {
-                    LogUtil.showLog("MUVI","Without Caption Called");
+                if (callWithoutCaption) {
+                    LogUtil.showLog("MUVI", "Without Caption Called");
                     FormatSRT_WithoutCaption formatSRT = new FormatSRT_WithoutCaption();
                     srt = formatSRT.parseFile("sample", fIn);
-                }
-                else
-                {
-                    LogUtil.showLog("MUVI","With Caption Called");
+                } else {
+                    LogUtil.showLog("MUVI", "With Caption Called");
                     FormatSRT formatSRT = new FormatSRT();
                     srt = formatSRT.parseFile("sample", fIn);
                 }
-
 
 
             } catch (Exception e) {
@@ -2050,7 +2054,7 @@ LanguagePreference languagePreference;
 //                Toast.makeText(getApplicationContext(), "subtitles loaded!!",Toast.LENGTH_SHORT).show();
             }
 
-            VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+            VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
             videoLogsInputModel.setAuthToken(authTokenStr);
             videoLogsInputModel.setUserId(userIdStr.trim());
             videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -2060,7 +2064,7 @@ LanguagePreference languagePreference;
             videoLogsInputModel.setWatchStatus(watchStatus);
             videoLogsInputModel.setDeviceType("2");
             videoLogsInputModel.setVideoLogId(videoLogId);
-            asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,MyLibraryPlayer.this,MyLibraryPlayer.this);
+            asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, MyLibraryPlayer.this, MyLibraryPlayer.this);
             asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
             super.onPostExecute(result);
@@ -2122,15 +2126,14 @@ LanguagePreference languagePreference;
         }
     };
 
-    public void CheckSubTitleParsingType(String path)
-    {
+    public void CheckSubTitleParsingType(String path) {
 
-        String Subtitle_Path = SubTitlePath.get((Integer.parseInt(path)-1));
+        String Subtitle_Path = SubTitlePath.get((Integer.parseInt(path) - 1));
 
 //        String Subtitle_Path = Environment.getExternalStorageDirectory().toString()+"/"+"sub.vtt";
 
-        LogUtil.showLog("MUVI","Subtitle_Path at CheckSubTitleParsingType = "+Subtitle_Path);
-        LogUtil.showLog("MUVI","Subtitle_Path at CheckSubTitleParsingType size = "+SubTitlePath.size());
+        LogUtil.showLog("MUVI", "Subtitle_Path at CheckSubTitleParsingType = " + Subtitle_Path);
+        LogUtil.showLog("MUVI", "Subtitle_Path at CheckSubTitleParsingType size = " + SubTitlePath.size());
 
         callWithoutCaption = true;
 
@@ -2139,9 +2142,9 @@ LanguagePreference languagePreference;
         InputStream stream = null;
         InputStreamReader in = null;
         try {
-            stream = new FileInputStream( String.valueOf( myFile ));
-            in= new InputStreamReader(stream);
-            test_br =  new BufferedReader(in);
+            stream = new FileInputStream(String.valueOf(myFile));
+            in = new InputStreamReader(stream);
+            test_br = new BufferedReader(in);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -2157,26 +2160,22 @@ LanguagePreference languagePreference;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        while(testinglinecounter<6)
-        {
-            try
-            {
-                LogUtil.showLog("MUVI","Testing Liane at Mainactivity = "+TestingLine.toString());
+        while (testinglinecounter < 6) {
+            try {
+                LogUtil.showLog("MUVI", "Testing Liane at Mainactivity = " + TestingLine.toString());
 
-                if(Integer.parseInt(TestingLine.toString().trim())==captionNumber)
-                {
+                if (Integer.parseInt(TestingLine.toString().trim()) == captionNumber) {
                     callWithoutCaption = false;
                     testinglinecounter = 6;
                 }
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 try {
                     TestingLine = test_br.readLine();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
                 testinglinecounter++;
-                LogUtil.showLog("MUVI","Total no of line at Mainactivity = "+testinglinecounter);
+                LogUtil.showLog("MUVI", "Total no of line at Mainactivity = " + testinglinecounter);
             }
         }
     }
@@ -2184,11 +2183,10 @@ LanguagePreference languagePreference;
 
     // This is added for the movable water mark //
 
-    public void MoveWaterMark()
-    {
+    public void MoveWaterMark() {
         Rect rectf = new Rect();
         emVideoView.getLocalVisibleRect(rectf);
-        int mainLayout_width = rectf.width()-50;
+        int mainLayout_width = rectf.width() - 50;
         int mainLayout_height = rectf.height() - 120;
 
 
@@ -2201,34 +2199,32 @@ LanguagePreference languagePreference;
 
         boolean show = true;
 
-        while (show)
-        {
+        while (show) {
 
             Random r = new Random();
-            final int xLeft =r.nextInt(mainLayout_width - 10) + 10;
+            final int xLeft = r.nextInt(mainLayout_width - 10) + 10;
 
             final int min = 10;
             final int max = mainLayout_height;
-            final int yUp =  new Random().nextInt((max - min) + 1) + min;
+            final int yUp = new Random().nextInt((max - min) + 1) + min;
 
 
-            LogUtil.showLog("MUVI" ,"=========================================="+"\n");
+            LogUtil.showLog("MUVI", "==========================================" + "\n");
 
-            LogUtil.showLog("MUVI" ,"mainLayout_width  ==="+mainLayout_width);
-            LogUtil.showLog("MUVI" ,"mainLayout_height  ==="+mainLayout_height);
+            LogUtil.showLog("MUVI", "mainLayout_width  ===" + mainLayout_width);
+            LogUtil.showLog("MUVI", "mainLayout_height  ===" + mainLayout_height);
 
-            LogUtil.showLog("MUVI" ,"childLayout_width  ==="+childLayout_width);
-            LogUtil.showLog("MUVI" ,"childLayout_height  ==="+childLayout_height);
+            LogUtil.showLog("MUVI", "childLayout_width  ===" + childLayout_width);
+            LogUtil.showLog("MUVI", "childLayout_height  ===" + childLayout_height);
 
 
-            LogUtil.showLog("MUVI" ,"xLeft  ==="+xLeft);
-            LogUtil.showLog("MUVI" ,"yUp  ==="+yUp);
+            LogUtil.showLog("MUVI", "xLeft  ===" + xLeft);
+            LogUtil.showLog("MUVI", "yUp  ===" + yUp);
 
-            LogUtil.showLog("MUVI" ,"width addition  ==="+(childLayout_width+xLeft));
-            LogUtil.showLog("MUVI" ,"height addition   ==="+(childLayout_height+yUp));
+            LogUtil.showLog("MUVI", "width addition  ===" + (childLayout_width + xLeft));
+            LogUtil.showLog("MUVI", "height addition   ===" + (childLayout_height + yUp));
 
-            if((mainLayout_width>(childLayout_width+xLeft)) && (mainLayout_height>(childLayout_height+yUp)))
-            {
+            if ((mainLayout_width > (childLayout_width + xLeft)) && (mainLayout_height > (childLayout_height + yUp))) {
                 show = false;
             }
 
