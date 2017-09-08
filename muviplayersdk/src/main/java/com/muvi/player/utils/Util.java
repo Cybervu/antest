@@ -8,7 +8,7 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 
 
-
+import com.example.muviplayersdk.R;
 import com.muvi.player.model.DataModel;
 import com.muvi.player.model.LanguageModel;
 
@@ -147,10 +147,10 @@ public class Util {
 //    public static final String authTokenStr = "4d4fe07c6d8c8317ab45e6b1a2dff08a"; //monica studio
   // public static final String authTokenStr = "4298851905443517c9f161e6b0471969"; //classic demo
     //public static final String authTokenStr = "a010d1cef24104ca628a54e3246a8e43";
-    //public static final String authTokenStr = "6a9c6e9bfeee69e63d4bab668c01dc0a";//cube
-    public static final String authTokenStr = "25e74a5c88d19c4b57c8138bf47abdf7";
+    public static final String authTokenStr = "25e74a5c88d19c4b57c8138bf47abdf7";//mymob
 
     public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
+    public static  boolean Call_API_For_Close_Streming = false;
 
     public static boolean checkNetwork(Context context){
         ConnectivityManager cm =
@@ -158,7 +158,10 @@ public class Util {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
-        return isConnected != false;
+        if (isConnected==false){
+            return false;
+        }
+        return true;
     }
 
     public static Timer timer = new Timer();

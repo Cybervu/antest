@@ -63,7 +63,7 @@ import com.home.apisdk.apiController.GetValidateUserAsynTask;
 import com.home.apisdk.apiController.MyLibraryAsynTask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
-import com.home.apisdk.apiModel.Get_Video_Details_Output;
+import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.apisdk.apiModel.MyLibraryInputModel;
 import com.home.apisdk.apiModel.MyLibraryOutputModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
@@ -84,6 +84,9 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
+import com.muvi.player.activity.AdPlayerActivity;
+import com.muvi.player.activity.ExoPlayerActivity;
+import com.muvi.player.activity.Player;
 import com.muvi.player.activity.ThirdPartyPlayer;
 import com.muvi.player.activity.YouTubeAPIActivity;
 
@@ -161,6 +164,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
 
     private VideoView mVideoView;
+    Player playerModel;
     private TextView mTitleView;
     private TextView mDescriptionView;
     private TextView mStartText;
@@ -663,7 +667,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     }
 
     @Override
-    public void onVideoDetailsPostExecuteCompleted(Get_Video_Details_Output get_video_details_output, int code, String status, String message) {
+    public void onVideoDetailsPostExecuteCompleted(Video_Details_Output _video_details_output, int code, String status, String message) {
+
         if (status == null) {
             status = "0";
             Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA));
@@ -747,8 +752,40 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 } catch (IllegalArgumentException ex) {
                     Util.dataModel.setVideoUrl(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA));
                 }
+
+                Util.dataModel.setAdNetworkId(_video_details_output.getAdNetworkId());
+                Util.dataModel.setChannel_id(_video_details_output.getChannel_id());
+                Util.dataModel.setPreRoll(_video_details_output.getPreRoll());
+                Util.dataModel.setPostRoll(_video_details_output.getPostRoll());
+                Util.dataModel.setMidRoll(_video_details_output.getMidRoll());
+                Util.dataModel.setAdDetails(_video_details_output.getAdDetails());
+
+                playerModel.setAdDetails(_video_details_output.getAdDetails());
+                playerModel.setMidRoll(_video_details_output.getMidRoll());
+                playerModel.setPostRoll(_video_details_output.getPostRoll());
+                playerModel.setChannel_id(_video_details_output.getChannel_id());
+                playerModel.setAdNetworkId(_video_details_output.getAdNetworkId());
+                playerModel.setPreRoll(_video_details_output.getPreRoll());
+
                 if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA))) {
-                    final Intent playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);
+                    final Intent playVideoIntent;
+                    if (Util.dataModel.getAdNetworkId() == 3){
+                        Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+
+                        playVideoIntent = new Intent(getActivity(), ExoPlayerActivity.class);
+
+                    }
+                    else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1){
+                        if (Util.dataModel.getPlayPos() <= 0) {
+                            playVideoIntent = new Intent(getActivity(), AdPlayerActivity.class);
+                        }else{
+                            playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);
+
+                        }
+                    }else{
+                        playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);
+
+                    }
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
 
@@ -775,6 +812,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 playVideoIntent.putExtra("SubTitleName", SubTitleName);
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
+                                playVideoIntent.putExtra("PlayerModel", playerModel);
                                 context.startActivity(playVideoIntent);
                             }
 
@@ -2288,7 +2326,26 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 if (progressBarHandler != null && progressBarHandler.isShowing()) {
                     progressBarHandler.hide();
                 }
-                Intent playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);
+                Intent playVideoIntent;
+
+                if (Util.dataModel.getAdNetworkId() == 3){
+                    Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+
+                    playVideoIntent = new Intent(getActivity(), ExoPlayerActivity.class);
+
+                }
+                else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1){
+                    if (Util.dataModel.getPlayPos() <= 0) {
+                        playVideoIntent = new Intent(getActivity(), AdPlayerActivity.class);
+                    }else{
+                        playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);
+
+                    }
+                }else{
+                    playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);
+
+                }
+               // Intent playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 playVideoIntent.putExtra("SubTitleName", SubTitleName);
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);

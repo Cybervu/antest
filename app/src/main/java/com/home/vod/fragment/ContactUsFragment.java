@@ -14,7 +14,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -145,8 +144,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
             @Override
             public void onClick(View v) {
 //                Toast.makeText(getActivity(), "Submitted successfully", Toast.LENGTH_SHORT).show();
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
                 SubmmitClicked();
 
             }

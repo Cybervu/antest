@@ -14,9 +14,11 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,9 +27,20 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.google.ads.interactivemedia.v3.api.AdDisplayContainer;
+import com.google.ads.interactivemedia.v3.api.AdErrorEvent;
+import com.google.ads.interactivemedia.v3.api.AdEvent;
+import com.google.ads.interactivemedia.v3.api.AdsLoader;
+import com.google.ads.interactivemedia.v3.api.AdsManager;
+import com.google.ads.interactivemedia.v3.api.AdsManagerLoadedEvent;
+import com.google.ads.interactivemedia.v3.api.AdsRequest;
+import com.google.ads.interactivemedia.v3.api.ImaSdkFactory;
+import com.google.ads.interactivemedia.v3.api.player.ContentProgressProvider;
+import com.google.ads.interactivemedia.v3.api.player.VideoProgressUpdate;
 import com.home.apisdk.apiController.GetFFVideoLogDetailsAsync;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetVideoLogsAsynTask;
@@ -36,6 +49,7 @@ import com.home.apisdk.apiModel.FFVideoLogDetailsInput;
 import com.home.apisdk.apiModel.ResumeVideoLogDetailsInput;
 import com.home.apisdk.apiModel.VideoLogsInputModel;
 import com.home.vod.R;
+import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.subtitle_support.Caption;
@@ -44,8 +58,11 @@ import com.home.vod.subtitle_support.FormatSRT_WithoutCaption;
 import com.home.vod.subtitle_support.TimedTextObject;
 import com.home.vod.util.ExpandableTextView;
 import com.home.vod.util.LogUtil;
+import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
+import com.muvi.player.activity.AdPlayerActivity;
+import com.muvi.player.activity.Player;
 import com.muvi.player.activity.Subtitle_Resolution;
 
 import java.io.BufferedReader;
@@ -75,6 +92,8 @@ import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.util.Constant.authTokenStr;
 
 
@@ -83,11 +102,9 @@ import static com.home.vod.util.Constant.authTokenStr;
             "video/mp4"), M4F("video/mp4"), DCF("application/vnd.oma.drm.dcf"), BBTS(
             "video/mp2t");
     String mediaSourceParamsContentType = null;
-
     private ContentTypes1(String mediaSourceParamsContentType) {
         this.mediaSourceParamsContentType = mediaSourceParamsContentType;
     }
-
     public String getMediaSourceParamsContentType() {
         return mediaSourceParamsContentType;
     }
@@ -97,20 +114,23 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         GetVideoLogsAsynTask.GetVideoLogsListener,
         GetIpAddressAsynTask.IpAddressListener,
         ResumeVideoLogDetailsAsync.ResumeVideoLogDetailsListener,
-        GetFFVideoLogDetailsAsync.GetFFVideoLogsListener{
+        GetFFVideoLogDetailsAsync.GetFFVideoLogsListener, AdEvent.AdEventListener, AdErrorEvent.AdErrorListener {
     int played_length = 0;
     int playerStartPosition = 0;
+    String adDetails[];
 
     Timer timer;
     private Handler threadHandler = new Handler();
     String videoLogId = "0";
     String watchStatus = "start";
+    ProgressBarHandler mDialog;
     int playerPosition = 0;
     public boolean isFastForward = false;
     public int playerPreviousPosition = 0;
     TimerTask timerTask;
     String watchSt = "halfplay";
     String emailIdStr = "";
+    Player playerModel;
     String userIdStr = "";
     String movieId = "";
     String episodeId = "0";
@@ -137,7 +157,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     boolean center_pause_paly_timer_is_running = false;
     RelativeLayout player_layout;
 
-LanguagePreference languagePreference;
+    LanguagePreference languagePreference;
     boolean compressed = true;
     int player_layout_height, player_layout_width;
     int screenWidth, screenHeight;
@@ -197,12 +217,35 @@ LanguagePreference languagePreference;
     @Override
     protected void onResume() {
         super.onResume();
+        if (mAdsManager != null && mIsAdDisplayed) {
+            mAdsManager.resume();
+        } else {
+            Util.call_finish_at_onUserLeaveHint = true;
+            emVideoView.start();
+        }
         SensorOrientationChangeNotifier.getInstance(MyLibraryPlayer.this).addListener(this);
-
 
         // Added For FCM
         // Call Api to Check User's Login Status;
     }
+
+    // private SampleVideoPlayer mVideoPlayer;
+
+    // The container for the ad's UI.
+    private ViewGroup mAdUiContainer;
+
+    // Factory class for creating SDK objects.
+    private ImaSdkFactory mSdkFactory;
+
+    // The AdsLoader instance exposes the requestAds method.
+    private AdsLoader mAdsLoader;
+
+    // AdsManager exposes methods to control ad playback and listen to ad events.
+    private AdsManager mAdsManager;
+
+    // Whether an ad is displayed.
+    private boolean mIsAdDisplayed;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,6 +260,27 @@ LanguagePreference languagePreference;
             backCalled();
             //onBackPressed();
         }
+        mAdUiContainer = (ViewGroup) findViewById(R.id.videoPlayerWithAdPlayback);
+
+        // setContentView(layout);
+        mSdkFactory = ImaSdkFactory.getInstance();
+        mAdsLoader = mSdkFactory.createAdsLoader(this);
+        // Add listeners for when ads are loaded and for errors.
+        mAdsLoader.addAdErrorListener(this);
+        mAdsLoader.addAdsLoadedListener(new AdsLoader.AdsLoadedListener() {
+            @Override
+            public void onAdsManagerLoaded(AdsManagerLoadedEvent adsManagerLoadedEvent) {
+                // Ads were successfully loaded, so get the AdsManager instance. AdsManager has
+                // events for ad playback and errors.
+                mAdsManager = adsManagerLoadedEvent.getAdsManager();
+
+                // Attach event and error event listeners.
+                mAdsManager.addAdErrorListener(MyLibraryPlayer.this);
+                mAdsManager.addAdEventListener(MyLibraryPlayer.this);
+                mAdsManager.init();
+            }
+        });
+
         movieId = Util.dataModel.getMovieUniqueId();
         episodeId = Util.dataModel.getEpisode_id();
 
@@ -228,7 +292,8 @@ LanguagePreference languagePreference;
         if (emailIdStr == null) {
             emailIdStr = "";
 
-        } if (userIdStr == null) {
+        }
+        if (userIdStr == null) {
             userIdStr = "";
 
         }
@@ -243,7 +308,7 @@ LanguagePreference languagePreference;
         Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         videoTitle.setTypeface(videoTitleface);
         GenreTextView = (TextView) findViewById(R.id.GenreTextView);
-        Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         GenreTextView.setTypeface(GenreTextViewface);
         videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
         Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
@@ -272,7 +337,7 @@ LanguagePreference languagePreference;
             public void run() {
                 MoveWaterMark();
             }
-        },1000,1000);
+        }, 1000, 1000);
 
         //Call For Subtitle Loading // Added By MUVI
 
@@ -309,12 +374,12 @@ LanguagePreference languagePreference;
 
 
                 Util.call_finish_at_onUserLeaveHint = false;
-                Intent intent = new Intent(MyLibraryPlayer.this,Subtitle_Resolution.class);
-                intent.putExtra("resolutionFormat",ResolutionFormat);
-                intent.putExtra("resolutionUrl",ResolutionUrl);
-                intent.putExtra("subTitleName",SubTitleName);
-                intent.putExtra("subTitlePath",SubTitlePath);
-                startActivityForResult(intent,3333);
+                Intent intent = new Intent(MyLibraryPlayer.this, Subtitle_Resolution.class);
+                intent.putExtra("resolutionFormat", ResolutionFormat);
+                intent.putExtra("resolutionUrl", ResolutionUrl);
+                intent.putExtra("subTitleName", SubTitleName);
+                intent.putExtra("subTitlePath", SubTitlePath);
+                startActivityForResult(intent, 3333);
 
 
             }
@@ -330,15 +395,12 @@ LanguagePreference languagePreference;
         } else {
             resolutionFormat.clear();
         }
-
         if (getIntent().getStringArrayListExtra("resolutionUrl") != null) {
             resolutionUrl = getIntent().getStringArrayListExtra("resolutionUrl");
         } else {
             resolutionUrl.clear();
         }
-
         if(resolutionUrl.size()<1)
-
         {
             // Add your code
             Log.v("MUVI","resolution image Invisible called");
@@ -351,6 +413,12 @@ LanguagePreference languagePreference;
 */
         Util.VideoResolution = "Auto";
         Util.DefaultSubtitle = "Off";
+
+        if (Util.dataModel.getMidRoll() == 1) {
+
+            adDetails = Util.dataModel.getAdDetails().split(",");
+
+        }
 
         if (getIntent().getStringArrayListExtra("resolutionFormat") != null) {
             ResolutionFormat = getIntent().getStringArrayListExtra("resolutionFormat");
@@ -365,69 +433,53 @@ LanguagePreference languagePreference;
             ResolutionUrl.clear();
         }
 
-        if(ResolutionUrl.size()<1)
+        if (ResolutionUrl.size() < 1)
 
         {
             // Add your code
-            LogUtil.showLog("MUVI","resolution image Invisible called");
-        }
-        else
-        {
+            LogUtil.showLog("MUVI", "resolution image Invisible called");
+        } else {
             ResolutionUrl.add(Util.dataModel.getVideoUrl().trim());
             ResolutionFormat.add("Auto");
         }
 
-        if(ResolutionFormat.size()>0)
-        {
+        if (ResolutionFormat.size() > 0) {
             Collections.reverse(ResolutionFormat);
-            for(int m=0;m<ResolutionFormat.size();m++)
-            {
-                LogUtil.showLog("MUVI","RESOLUTION FORMAT======"+ResolutionFormat.get(m));
+            for (int m = 0; m < ResolutionFormat.size(); m++) {
+                LogUtil.showLog("MUVI", "RESOLUTION FORMAT======" + ResolutionFormat.get(m));
             }
         }
-        if(ResolutionUrl.size()>0)
-        {
+        if (ResolutionUrl.size() > 0) {
             Collections.reverse(ResolutionUrl);
-            for(int n=0;n<ResolutionUrl.size();n++)
-            {
-                LogUtil.showLog("MUVI","RESOLUTION URL======"+ResolutionUrl.get(n));
+            for (int n = 0; n < ResolutionUrl.size(); n++) {
+                LogUtil.showLog("MUVI", "RESOLUTION URL======" + ResolutionUrl.get(n));
             }
         }
-
-
-
 
 
         //=========================End=================================//
 
 
-
-        if((SubTitlePath.size()<1) && (ResolutionUrl.size()<1))
-        {
+        if ((SubTitlePath.size() < 1) && (ResolutionUrl.size() < 1)) {
             subtitle_change_btn.setVisibility(View.INVISIBLE);
-            LogUtil.showLog("MUVI","CC Invisible called");
+            LogUtil.showLog("MUVI", "CC Invisible called");
         }
 
 
    /*     emVideoView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-
                 try{
-
                   *//*  resolutionFormat.clear();
                     resolutionUrl.clear();
-
                     String url1 = "https://r2---sn-p5qs7n7s.googlevideo.com/videoplayback?ms=au&clen=9643006&mv=m&mt=1490847859&expire=1490869548&ei=zIjcWNiIB4--1gK12J2wDg&requiressl=yes&ipbits=0&mn=sn-p5qs7n7s&mm=31&id=o-AOBNENDOg3dWResPJrDOrzcdkVLJzIAYZWhQU5ZbrB4w&itag=17&key=yt6&ip=159.253.144.86&dur=965.578&lmt=1476270027971356&upn=CmLw7ROk5F8&mime=video%2F3gpp&sparams=clen%2Cdur%2Cei%2Cgir%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Crequiressl%2Csource%2Cupn%2Cexpire&initcwndbps=3532500&gir=yes&source=youtube&pl=24&signature=D4A534C89E9CF57FCA86E4F48F551DAE17C35A42.1BED6199D2C1CBC51FE759376BA25E3CA16B6592&title=8+Future+Trucks+%26+Buses+YOU+MUST+SEE.mp4";
                     String url2 = "https://r2---sn-p5qs7n7s.googlevideo.com/videoplayback?ms=au&ei=zIjcWNiIB4--1gK12J2wDg&mv=m&mt=1490847859&expire=1490869548&requiressl=yes&ipbits=0&mn=sn-p5qs7n7s&mm=31&id=o-AOBNENDOg3dWResPJrDOrzcdkVLJzIAYZWhQU5ZbrB4w&itag=22&key=yt6&ip=159.253.144.86&dur=965.508&lmt=1476447036908539&upn=CmLw7ROk5F8&mime=video%2Fmp4&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cupn%2Cexpire&initcwndbps=3532500&ratebypass=yes&source=youtube&pl=24&signature=03EA48DAB77BB926A74DE6071C1166B96E95D247.62FF4140E2C639E6E4F5EE1CDEEE174B37C65739&title=8+Future+Trucks+%26+Buses+YOU+MUST+SEE.mp4";
                     resolutionFormat.add("144p");
                     resolutionFormat.add("720p");
                     resolutionFormat.add("Auto");
-
                     resolutionUrl.add(url1);
                     resolutionUrl.add(url2);
                     resolutionUrl.add(url1);*//*
-
                     Util.call_finish_at_onUserLeaveHint = false;
                     Intent intent = new Intent(MyLibraryPlayer.this,Subtitle_Resolution.class);
                     intent.putExtra("resolutionFormat",resolutionFormat);
@@ -435,22 +487,17 @@ LanguagePreference languagePreference;
                     intent.putExtra("subTitleName",subTitleName);
                     intent.putExtra("subTitlePath",subTitlePath);
                     startActivityForResult(intent,3333);
-
-
                 *//*    Util.call_finish_at_onUserLeaveHint = false;
                     Intent intent = new Intent(MyLibraryPlayer.this,ResolutionChangeActivity.class);
                     intent.putExtra("resolutionFormat",resolutionFormat);
                     intent.putExtra("resolutionUrl",resolutionUrl);
                     startActivityForResult(intent,3333);*//*
                 }catch (Exception e){Log.v("MUVI","Exception of subtitle change click ="+e.toString());}
-
                 return false;
             }
         });*/
 
         //=============================== End Resolution Change ===================================//
-
-
 
 
         player_layout = (RelativeLayout) findViewById(R.id.player_layout);
@@ -597,8 +644,7 @@ LanguagePreference languagePreference;
 
                         primary_ll.setVisibility(View.VISIBLE);
 
-                        if(SubTitlePath.size()>0 || ResolutionUrl.size()>0)
-                        {
+                        if (SubTitlePath.size() > 0 || ResolutionUrl.size() > 0) {
                             subtitle_change_btn.setVisibility(View.VISIBLE);
                         }
 
@@ -640,27 +686,19 @@ LanguagePreference languagePreference;
                 } else {
 
                     LinearLayout.LayoutParams params1 = null;
-                    if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
-                        if(MyLibraryPlayer.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-                        {
-                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*45)/100);
+                    if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+                        if (MyLibraryPlayer.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 45) / 100);
 
+                        } else {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 45) / 100);
                         }
-                        else
-                        {
-                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*45)/100);
-                        }
-                    }
-                    else
-                    {
-                        if(MyLibraryPlayer.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-                        {
-                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+                    } else {
+                        if (MyLibraryPlayer.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
 
-                        }
-                        else
-                        {
-                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+                        } else {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
                         }
                     }
                     player_layout.setLayoutParams(params1);
@@ -715,30 +753,26 @@ LanguagePreference languagePreference;
             @Override
             public void onPrepared() {
 
-                LogUtil.showLog("MUVI","This is the first calling point");
-                LogUtil.showLog("MUVI","Played Length ="+Util.dataModel.getPlayPos());
+                LogUtil.showLog("MUVI", "This is the first calling point");
+                LogUtil.showLog("MUVI", "Played Length =" + Util.dataModel.getPlayPos());
 
-                if(change_resolution)
-                {
+                if (change_resolution) {
 
                     change_resolution = false;
                     emVideoView.start();
                     emVideoView.seekTo(seekBarProgress);
                     seekBar.setProgress(emVideoView.getCurrentPosition());
+                    requestAds(Util.dataModel.getChannel_id());
 
-                    if(is_paused)
-                    {
+                    if (is_paused) {
                         is_paused = false;
                         emVideoView.pause();
                         progressView.setVisibility(View.GONE);
-                    }
-                    else {
+                    } else {
                         updateProgressBar();
                     }
 
-                }
-                else
-                {
+                } else {
 
                     // have to delete
 
@@ -765,15 +799,13 @@ LanguagePreference languagePreference;
                         if (content_types_id == 4) {
 
 
-                            if(SubTitlePath.size()>0)
-                            {
+                            if (SubTitlePath.size() > 0) {
                                 CheckSubTitleParsingType("1");
                                 subtitleDisplayHandler = new Handler();
                                 subsFetchTask = new SubtitleProcessingTask("1");
                                 subsFetchTask.execute();
-                            }
-                            else {
-                                VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                            } else {
+                                VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                                 videoLogsInputModel.setAuthToken(authTokenStr);
                                 videoLogsInputModel.setUserId(userIdStr.trim());
                                 videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -783,11 +815,12 @@ LanguagePreference languagePreference;
                                 videoLogsInputModel.setWatchStatus(watchStatus);
                                 videoLogsInputModel.setDeviceType("2");
                                 videoLogsInputModel.setVideoLogId(videoLogId);
-                                asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, MyLibraryPlayer.this,MyLibraryPlayer.this);
+                                asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, MyLibraryPlayer.this, MyLibraryPlayer.this);
                                 asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                             }
 
                             emVideoView.start();
+                            requestAds(Util.dataModel.getChannel_id());
                             updateProgressBar();
                         } else {
                             startTimer();
@@ -801,18 +834,17 @@ LanguagePreference languagePreference;
 
 
                                 emVideoView.start();
+                                requestAds(Util.dataModel.getChannel_id());
                                 seekBar.setProgress(emVideoView.getCurrentPosition());
                                 updateProgressBar();
 
-                                if(SubTitlePath.size()>0)
-                                {
+                                if (SubTitlePath.size() > 0) {
                                     CheckSubTitleParsingType("1");
                                     subtitleDisplayHandler = new Handler();
                                     subsFetchTask = new SubtitleProcessingTask("1");
                                     subsFetchTask.execute();
-                                }
-                                else {
-                                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                                } else {
+                                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                                     videoLogsInputModel.setAuthToken(authTokenStr);
                                     videoLogsInputModel.setUserId(userIdStr.trim());
                                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -822,7 +854,7 @@ LanguagePreference languagePreference;
                                     videoLogsInputModel.setWatchStatus(watchStatus);
                                     videoLogsInputModel.setDeviceType("2");
                                     videoLogsInputModel.setVideoLogId(videoLogId);
-                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,MyLibraryPlayer.this,MyLibraryPlayer.this);
+                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, MyLibraryPlayer.this, MyLibraryPlayer.this);
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
 
@@ -997,7 +1029,7 @@ LanguagePreference languagePreference;
 
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
-                                    FFVideoLogDetailsInput ffVideoLogDetailsInput= new FFVideoLogDetailsInput();
+                                    FFVideoLogDetailsInput ffVideoLogDetailsInput = new FFVideoLogDetailsInput();
                                     ffVideoLogDetailsInput.setAuthToken(authTokenStr);
                                     ffVideoLogDetailsInput.setUser_id(userIdStr);
                                     ffVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
@@ -1007,11 +1039,11 @@ LanguagePreference languagePreference;
                                     ffVideoLogDetailsInput.setWatch_status(watchStatus);
                                     ffVideoLogDetailsInput.setDevice_type("2");
                                     ffVideoLogDetailsInput.setLog_id(videoLogId);
-                                    asyncFFVideoLogDetails = new GetFFVideoLogDetailsAsync(ffVideoLogDetailsInput,MyLibraryPlayer.this,MyLibraryPlayer.this);
+                                    asyncFFVideoLogDetails = new GetFFVideoLogDetailsAsync(ffVideoLogDetailsInput, MyLibraryPlayer.this, MyLibraryPlayer.this);
                                     watchStatus = "complete";
                                     asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else {
-                                    FFVideoLogDetailsInput ffVideoLogDetailsInput= new FFVideoLogDetailsInput();
+                                    FFVideoLogDetailsInput ffVideoLogDetailsInput = new FFVideoLogDetailsInput();
                                     ffVideoLogDetailsInput.setAuthToken(authTokenStr);
                                     ffVideoLogDetailsInput.setUser_id(userIdStr);
                                     ffVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
@@ -1021,7 +1053,7 @@ LanguagePreference languagePreference;
                                     ffVideoLogDetailsInput.setWatch_status(watchStatus);
                                     ffVideoLogDetailsInput.setDevice_type("2");
                                     ffVideoLogDetailsInput.setLog_id(videoLogId);
-                                    asyncFFVideoLogDetails = new GetFFVideoLogDetailsAsync(ffVideoLogDetailsInput,MyLibraryPlayer.this,MyLibraryPlayer.this);
+                                    asyncFFVideoLogDetails = new GetFFVideoLogDetailsAsync(ffVideoLogDetailsInput, MyLibraryPlayer.this, MyLibraryPlayer.this);
                                     watchStatus = "halfplay";
                                     asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
@@ -1032,7 +1064,7 @@ LanguagePreference languagePreference;
 
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
-                                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                                     videoLogsInputModel.setAuthToken(authTokenStr);
                                     videoLogsInputModel.setUserId(userIdStr.trim());
                                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -1042,11 +1074,11 @@ LanguagePreference languagePreference;
                                     videoLogsInputModel.setWatchStatus(watchStatus);
                                     videoLogsInputModel.setDeviceType("2");
                                     videoLogsInputModel.setVideoLogId(videoLogId);
-                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,MyLibraryPlayer.this,MyLibraryPlayer.this);
+                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, MyLibraryPlayer.this, MyLibraryPlayer.this);
                                     watchStatus = "complete";
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else if (currentPositionStr > 0 && currentPositionStr % 60 == 0) {
-                                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                                     videoLogsInputModel.setAuthToken(authTokenStr);
                                     videoLogsInputModel.setUserId(userIdStr.trim());
                                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -1056,7 +1088,7 @@ LanguagePreference languagePreference;
                                     videoLogsInputModel.setWatchStatus(watchStatus);
                                     videoLogsInputModel.setDeviceType("2");
                                     videoLogsInputModel.setVideoLogId(videoLogId);
-                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,MyLibraryPlayer.this,MyLibraryPlayer.this);
+                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, MyLibraryPlayer.this, MyLibraryPlayer.this);
                                     watchStatus = "halfplay";
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -1322,9 +1354,10 @@ LanguagePreference languagePreference;
             mHandler.postDelayed(this, 1000);
 
             if (content_types_id != 4) {
-                try{
+                try {
                     seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
             }
 
             current_matching_time = emVideoView.getCurrentPosition();
@@ -1361,10 +1394,44 @@ LanguagePreference languagePreference;
 
                 previous_matching_time = current_matching_time;
                 findViewById(R.id.progress_view).setVisibility(View.GONE);
+                if (Util.dataModel.getMidRoll() == 1) {
+                    if (adDetails != null && adDetails.length > 0) {
+                        for (int i = 0; i < adDetails.length; i++) {
+                            Log.v("SUBHA", "SEC" + (int) (TimeUnit.MILLISECONDS.toSeconds(emVideoView.getCurrentPosition())));
+                            Log.v("SUBHA", "Integer.parseInt(adDetails[i])" + Integer.parseInt(adDetails[i]));
+
+                            if ((int) (TimeUnit.MILLISECONDS.toSeconds(emVideoView.getCurrentPosition())) > 0 && ((int) (TimeUnit.MILLISECONDS.toSeconds(emVideoView.getCurrentPosition())) == Integer.parseInt(adDetails[i]))) {
+                                if (NetworkStatus.getInstance().isConnected(MyLibraryPlayer.this)) {
+                                    //Will Add Some Data to send
+                                    Util.call_finish_at_onUserLeaveHint = false;
+                                    Util.hide_pause = true;
+                                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                                    latest_center_play_pause.setVisibility(View.VISIBLE);
+
+                                    if (emVideoView.isPlaying()) {
+                                        emVideoView.pause();
+                                        latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
+                                        center_play_pause.setImageResource(R.drawable.ic_media_play);
+                                        mHandler.removeCallbacks(updateTimeTask);
+                                    }
+                                    Intent adIntent = new Intent(MyLibraryPlayer.this, AdPlayerActivity.class);
+                                    adIntent.putExtra("fromAd", "fromAd");
+                                    adIntent.putExtra("PlayerModel", playerModel);
+                                    startActivity(adIntent);
+
+                                } else {
+                                    Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
         }
     };
+
 
     public void Calcute_Currenttime_With_TotalTime() {
         TotalTime = String.format("%02d:%02d:%02d",
@@ -1407,7 +1474,7 @@ LanguagePreference languagePreference;
 
         if (video_completed == false) {
 
-            ResumeVideoLogDetailsInput resumeVideoLogDetailsInput=new ResumeVideoLogDetailsInput();
+            ResumeVideoLogDetailsInput resumeVideoLogDetailsInput = new ResumeVideoLogDetailsInput();
             resumeVideoLogDetailsInput.setAuthToken(authTokenStr);
             resumeVideoLogDetailsInput.setUser_id(userIdStr.trim());
             resumeVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
@@ -1425,7 +1492,7 @@ LanguagePreference languagePreference;
             });
             resumeVideoLogDetailsInput.setPlayed_length(String.valueOf(playerPosition));
             resumeVideoLogDetailsInput.setWatch_status(watchSt);
-            ResumeVideoLogDetailsAsync asyncResumeVideoLogDetails = new ResumeVideoLogDetailsAsync(resumeVideoLogDetailsInput,this,this);
+            ResumeVideoLogDetailsAsync asyncResumeVideoLogDetails = new ResumeVideoLogDetailsAsync(resumeVideoLogDetailsInput, this, this);
             asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
             return;
         }
@@ -1455,7 +1522,7 @@ LanguagePreference languagePreference;
             stoptimertask();
             timer = null;
         }
-        ResumeVideoLogDetailsInput resumeVideoLogDetailsInput=new ResumeVideoLogDetailsInput();
+        ResumeVideoLogDetailsInput resumeVideoLogDetailsInput = new ResumeVideoLogDetailsInput();
         resumeVideoLogDetailsInput.setAuthToken(authTokenStr);
         resumeVideoLogDetailsInput.setUser_id(userIdStr.trim());
         resumeVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
@@ -1473,11 +1540,10 @@ LanguagePreference languagePreference;
         });
         resumeVideoLogDetailsInput.setPlayed_length(String.valueOf(playerPosition));
         resumeVideoLogDetailsInput.setWatch_status(watchSt);
-        ResumeVideoLogDetailsAsync asyncResumeVideoLogDetails = new ResumeVideoLogDetailsAsync(resumeVideoLogDetailsInput,this,this);
+        ResumeVideoLogDetailsAsync asyncResumeVideoLogDetails = new ResumeVideoLogDetailsAsync(resumeVideoLogDetailsInput, this, this);
         asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
         return;
       /*  if (video_completed == false){
-
             AsyncResumeVideoLogDetails  asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
             asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
             return;
@@ -1542,9 +1608,7 @@ LanguagePreference languagePreference;
         }
 
 
-
-
-        if(Util.call_finish_at_onUserLeaveHint) {
+        if (Util.call_finish_at_onUserLeaveHint) {
 
             Util.call_finish_at_onUserLeaveHint = true;
 
@@ -1678,19 +1742,19 @@ LanguagePreference languagePreference;
         }, 0, 100);
     }
 
-   /* @Override
-    public boolean onKeyDown(int keyCode, KeyEvent objEvent) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Log.v("MUVI","FHFHFHCALLED");
-            return true;
-        }
-        return super.onKeyUp(keyCode, objEvent);
+    /* @Override
+     public boolean onKeyDown(int keyCode, KeyEvent objEvent) {
+         if (keyCode == KeyEvent.KEYCODE_BACK) {
+             Log.v("MUVI","FHFHFHCALLED");
+             return true;
+         }
+         return super.onKeyUp(keyCode, objEvent);
+     }
+ */
+    @Override
+    public void onGetResumeVideoLogDetailsPreExecuteStarted() {
+        stoptimertask();
     }
-*/
-   @Override
-   public void onGetResumeVideoLogDetailsPreExecuteStarted() {
-       stoptimertask();
-   }
 
     @Override
     public void onGetResumeVideoLogDetailsPostExecuteCompleted(int status, String message, String videoLogId) {
@@ -1702,6 +1766,18 @@ LanguagePreference languagePreference;
         mHandler.removeCallbacks(updateTimeTask);
         if (emVideoView != null) {
             emVideoView.release();
+        }
+        if (video_completed == true) {
+            Log.v("SUBHA", "CALLED");
+            if (Util.dataModel.getPostRoll() == 1) {
+                Intent adIntent = new Intent(MyLibraryPlayer.this, AdPlayerActivity.class);
+                adIntent.putExtra("fromAd", "fromAd");
+                adIntent.putExtra("PlayerModel", playerModel);
+                startActivity(adIntent);
+
+                finish();
+                overridePendingTransition(0, 0);
+            }
         }
         finish();
         overridePendingTransition(0, 0);
@@ -1872,17 +1948,15 @@ LanguagePreference languagePreference;
                 }
 
 
-                if(SubTitlePath.size()>0)
-                {
+                if (SubTitlePath.size() > 0) {
 
                     CheckSubTitleParsingType("1");
 
                     subtitleDisplayHandler = new Handler();
                     subsFetchTask = new SubtitleProcessingTask("1");
                     subsFetchTask.execute();
-                }
-                else {
-                    VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+                } else {
+                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
                     videoLogsInputModel.setAuthToken(authTokenStr);
                     videoLogsInputModel.setUserId(userIdStr.trim());
                     videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -1892,13 +1966,12 @@ LanguagePreference languagePreference;
                     videoLogsInputModel.setWatchStatus(watchStatus);
                     videoLogsInputModel.setDeviceType("2");
                     videoLogsInputModel.setVideoLogId(videoLogId);
-                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,this,this);
+                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, this, this);
                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                 }
 
             }
-            if(requestCode == 3333)
-            {
+            if (requestCode == 3333) {
                 // This is for Subtitle feature
 
                 if (data.getStringExtra("type").equals("subtitle")) {
@@ -1906,24 +1979,22 @@ LanguagePreference languagePreference;
 //                    Toast.makeText(getApplicationContext(),"subtitle == "+data.getStringExtra("position"),Toast.LENGTH_SHORT).show();
                     if (!data.getStringExtra("position").equals("nothing")) {
 
-                        if(data.getStringExtra("position").equals("0"))
-                        {
+                        if (data.getStringExtra("position").equals("0")) {
                             // Stop Showing Subtitle
-                            if(subtitleDisplayHandler!=null)
+                            if (subtitleDisplayHandler != null)
                                 subtitleDisplayHandler.removeCallbacks(subtitleProcessesor);
                             subtitleText.setText("");
-                        }
-                        else
-                        {
-                            try{
+                        } else {
+                            try {
 
                                 CheckSubTitleParsingType(data.getStringExtra("position"));
 
                                 subtitleDisplayHandler = new Handler();
                                 subsFetchTask = new SubtitleProcessingTask(data.getStringExtra("position"));
                                 subsFetchTask.execute();
-                            }catch (Exception e){
-                                LogUtil.showLog("MUVI","Exception of subtitle change process ="+e.toString());}
+                            } catch (Exception e) {
+                                LogUtil.showLog("MUVI", "Exception of subtitle change process =" + e.toString());
+                            }
 
                         }
 
@@ -1938,8 +2009,7 @@ LanguagePreference languagePreference;
                     mHandler.removeCallbacks(updateTimeTask);
                     if (!data.getStringExtra("position").equals("nothing")) {
 
-                        if (!emVideoView.isPlaying())
-                        {
+                        if (!emVideoView.isPlaying()) {
                             is_paused = true;
                         }
 
@@ -1958,7 +2028,7 @@ LanguagePreference languagePreference;
         super.onDestroy();
         Util.hide_pause = false;
 
-        if(MovableTimer!=null)
+        if (MovableTimer != null)
             MovableTimer.cancel();
     }
 
@@ -1967,19 +2037,19 @@ LanguagePreference languagePreference;
     public class SubtitleProcessingTask extends AsyncTask<Void, Void, Void> {
 
 
-
         String Subtitle_Path = "";
+
         public SubtitleProcessingTask(String path) {
 //            Log.v("MUVI","subTitlePath size ==="+subTitlePath.size());
 //             Subtitle_Path = Environment.getExternalStorageDirectory().toString()+"/"+"sub.vtt";
-            Subtitle_Path = SubTitlePath.get((Integer.parseInt(path)-1));
+            Subtitle_Path = SubTitlePath.get((Integer.parseInt(path) - 1));
         }
 
         @Override
         protected void onPreExecute() {
 //            subtitleText.setText("Loading subtitles..");
             super.onPreExecute();
-            LogUtil.showLog("MUVI","subTitlePath size at pre execute==="+SubTitlePath.size());
+            LogUtil.showLog("MUVI", "subTitlePath size at pre execute===" + SubTitlePath.size());
         }
 
         @Override
@@ -1987,10 +2057,10 @@ LanguagePreference languagePreference;
             // int count;
             try {
 
-                LogUtil.showLog("MUVI","Subtitle_Path ========"+Subtitle_Path);
+                LogUtil.showLog("MUVI", "Subtitle_Path ========" + Subtitle_Path);
 
 				/*
-				 * if you want to download file from Internet, use commented
+                 * if you want to download file from Internet, use commented
 				 * code.
 				 */
                 // URL url = new URL(
@@ -2014,25 +2084,21 @@ LanguagePreference languagePreference;
 //                String path = Environment.getExternalStorageDirectory().toString()+"/sub.vtt";
 //                File myFile = new File(path);
                 File myFile = new File(Subtitle_Path);
-                InputStream fIn = new FileInputStream( String.valueOf( myFile ) );
+                InputStream fIn = new FileInputStream(String.valueOf(myFile));
 
 
               /* InputStream stream = getResources().openRawResource(
                         R.raw.subtitle);*/
 
-                if(callWithoutCaption)
-                {
-                    LogUtil.showLog("MUVI","Without Caption Called");
+                if (callWithoutCaption) {
+                    LogUtil.showLog("MUVI", "Without Caption Called");
                     FormatSRT_WithoutCaption formatSRT = new FormatSRT_WithoutCaption();
                     srt = formatSRT.parseFile("sample", fIn);
-                }
-                else
-                {
-                    LogUtil.showLog("MUVI","With Caption Called");
+                } else {
+                    LogUtil.showLog("MUVI", "With Caption Called");
                     FormatSRT formatSRT = new FormatSRT();
                     srt = formatSRT.parseFile("sample", fIn);
                 }
-
 
 
             } catch (Exception e) {
@@ -2050,7 +2116,7 @@ LanguagePreference languagePreference;
 //                Toast.makeText(getApplicationContext(), "subtitles loaded!!",Toast.LENGTH_SHORT).show();
             }
 
-            VideoLogsInputModel videoLogsInputModel=new VideoLogsInputModel();
+            VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
             videoLogsInputModel.setAuthToken(authTokenStr);
             videoLogsInputModel.setUserId(userIdStr.trim());
             videoLogsInputModel.setIpAddress(ipAddressStr.trim());
@@ -2060,7 +2126,7 @@ LanguagePreference languagePreference;
             videoLogsInputModel.setWatchStatus(watchStatus);
             videoLogsInputModel.setDeviceType("2");
             videoLogsInputModel.setVideoLogId(videoLogId);
-            asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,MyLibraryPlayer.this,MyLibraryPlayer.this);
+            asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, MyLibraryPlayer.this, MyLibraryPlayer.this);
             asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
             super.onPostExecute(result);
@@ -2098,6 +2164,13 @@ LanguagePreference languagePreference;
             if (subsFetchTask != null)
                 subsFetchTask.cancel(true);
         }*/
+
+        if (mAdsManager != null && mIsAdDisplayed) {
+            mAdsManager.pause();
+        } else {
+            Util.call_finish_at_onUserLeaveHint = false;
+            emVideoView.pause();
+        }
         super.onPause();
     }
 
@@ -2122,15 +2195,14 @@ LanguagePreference languagePreference;
         }
     };
 
-    public void CheckSubTitleParsingType(String path)
-    {
+    public void CheckSubTitleParsingType(String path) {
 
-        String Subtitle_Path = SubTitlePath.get((Integer.parseInt(path)-1));
+        String Subtitle_Path = SubTitlePath.get((Integer.parseInt(path) - 1));
 
 //        String Subtitle_Path = Environment.getExternalStorageDirectory().toString()+"/"+"sub.vtt";
 
-        LogUtil.showLog("MUVI","Subtitle_Path at CheckSubTitleParsingType = "+Subtitle_Path);
-        LogUtil.showLog("MUVI","Subtitle_Path at CheckSubTitleParsingType size = "+SubTitlePath.size());
+        LogUtil.showLog("MUVI", "Subtitle_Path at CheckSubTitleParsingType = " + Subtitle_Path);
+        LogUtil.showLog("MUVI", "Subtitle_Path at CheckSubTitleParsingType size = " + SubTitlePath.size());
 
         callWithoutCaption = true;
 
@@ -2139,9 +2211,9 @@ LanguagePreference languagePreference;
         InputStream stream = null;
         InputStreamReader in = null;
         try {
-            stream = new FileInputStream( String.valueOf( myFile ));
-            in= new InputStreamReader(stream);
-            test_br =  new BufferedReader(in);
+            stream = new FileInputStream(String.valueOf(myFile));
+            in = new InputStreamReader(stream);
+            test_br = new BufferedReader(in);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -2157,26 +2229,22 @@ LanguagePreference languagePreference;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        while(testinglinecounter<6)
-        {
-            try
-            {
-                LogUtil.showLog("MUVI","Testing Liane at Mainactivity = "+TestingLine.toString());
+        while (testinglinecounter < 6) {
+            try {
+                LogUtil.showLog("MUVI", "Testing Liane at Mainactivity = " + TestingLine.toString());
 
-                if(Integer.parseInt(TestingLine.toString().trim())==captionNumber)
-                {
+                if (Integer.parseInt(TestingLine.toString().trim()) == captionNumber) {
                     callWithoutCaption = false;
                     testinglinecounter = 6;
                 }
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 try {
                     TestingLine = test_br.readLine();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
                 testinglinecounter++;
-                LogUtil.showLog("MUVI","Total no of line at Mainactivity = "+testinglinecounter);
+                LogUtil.showLog("MUVI", "Total no of line at Mainactivity = " + testinglinecounter);
             }
         }
     }
@@ -2184,11 +2252,10 @@ LanguagePreference languagePreference;
 
     // This is added for the movable water mark //
 
-    public void MoveWaterMark()
-    {
+    public void MoveWaterMark() {
         Rect rectf = new Rect();
         emVideoView.getLocalVisibleRect(rectf);
-        int mainLayout_width = rectf.width()-50;
+        int mainLayout_width = rectf.width() - 50;
         int mainLayout_height = rectf.height() - 120;
 
 
@@ -2201,34 +2268,32 @@ LanguagePreference languagePreference;
 
         boolean show = true;
 
-        while (show)
-        {
+        while (show) {
 
             Random r = new Random();
-            final int xLeft =r.nextInt(mainLayout_width - 10) + 10;
+            final int xLeft = r.nextInt(mainLayout_width - 10) + 10;
 
             final int min = 10;
             final int max = mainLayout_height;
-            final int yUp =  new Random().nextInt((max - min) + 1) + min;
+            final int yUp = new Random().nextInt((max - min) + 1) + min;
 
 
-            LogUtil.showLog("MUVI" ,"=========================================="+"\n");
+            LogUtil.showLog("MUVI", "==========================================" + "\n");
 
-            LogUtil.showLog("MUVI" ,"mainLayout_width  ==="+mainLayout_width);
-            LogUtil.showLog("MUVI" ,"mainLayout_height  ==="+mainLayout_height);
+            LogUtil.showLog("MUVI", "mainLayout_width  ===" + mainLayout_width);
+            LogUtil.showLog("MUVI", "mainLayout_height  ===" + mainLayout_height);
 
-            LogUtil.showLog("MUVI" ,"childLayout_width  ==="+childLayout_width);
-            LogUtil.showLog("MUVI" ,"childLayout_height  ==="+childLayout_height);
+            LogUtil.showLog("MUVI", "childLayout_width  ===" + childLayout_width);
+            LogUtil.showLog("MUVI", "childLayout_height  ===" + childLayout_height);
 
 
-            LogUtil.showLog("MUVI" ,"xLeft  ==="+xLeft);
-            LogUtil.showLog("MUVI" ,"yUp  ==="+yUp);
+            LogUtil.showLog("MUVI", "xLeft  ===" + xLeft);
+            LogUtil.showLog("MUVI", "yUp  ===" + yUp);
 
-            LogUtil.showLog("MUVI" ,"width addition  ==="+(childLayout_width+xLeft));
-            LogUtil.showLog("MUVI" ,"height addition   ==="+(childLayout_height+yUp));
+            LogUtil.showLog("MUVI", "width addition  ===" + (childLayout_width + xLeft));
+            LogUtil.showLog("MUVI", "height addition   ===" + (childLayout_height + yUp));
 
-            if((mainLayout_width>(childLayout_width+xLeft)) && (mainLayout_height>(childLayout_height+yUp)))
-            {
+            if ((mainLayout_width > (childLayout_width + xLeft)) && (mainLayout_height > (childLayout_height + yUp))) {
                 show = false;
             }
 
@@ -2261,4 +2326,143 @@ LanguagePreference languagePreference;
 
 
     // This API is called for cecking the Login status
+
+    /**
+     * Request video ads from the given VAST ad tag.
+     *
+     * @param adTagUrl URL of the ad's VAST XML
+     */
+    private void requestAds(String adTagUrl) {
+        AdDisplayContainer adDisplayContainer = mSdkFactory.createAdDisplayContainer();
+        adDisplayContainer.setAdContainer(mAdUiContainer);
+
+        // Create the ads request.
+        AdsRequest request = mSdkFactory.createAdsRequest();
+        request.setAdTagUrl(adTagUrl);
+        request.setAdDisplayContainer(adDisplayContainer);
+        request.setContentProgressProvider(new ContentProgressProvider() {
+            @Override
+            public VideoProgressUpdate getContentProgress() {
+                if (mIsAdDisplayed || emVideoView == null || emVideoView.getDuration() <= 0) {
+                    return VideoProgressUpdate.VIDEO_TIME_NOT_READY;
+                }
+                Log.v("SUBHA", "emVideoView.getCurrentPosition()" + emVideoView.getCurrentPosition());
+                Log.v("SUBHA", "emVideoView.getDuration()" + emVideoView.getDuration());
+
+               /* if (emVideoView.getCurrentPosition() >= emVideoView.getDuration()){
+                    return new VideoProgressUpdate(emVideoView.getCurrentPosition(),
+                            emVideoView.getDuration());
+                }
+*/
+                return new VideoProgressUpdate(emVideoView.getCurrentPosition(),
+                        emVideoView.getDuration());
+            }
+        });
+       /* if (mAdsManager !=null){
+            Log.v("SUBHA","ddT"+mAdsManager.getAdCuePoints());
+
+        }*/
+        Log.v("SUBHA", "ddT");
+
+        // Request the ad. After the ad is loaded, onAdsManagerLoaded() will be called.
+        mAdsLoader.requestAds(request);
+    }
+
+    @Override
+    public void onAdEvent(AdEvent adEvent) {
+        Log.v("SUBHA", "Event: " + adEvent.getType());
+
+        // These are the suggested event types to handle. For full list of all ad event
+        // types, see the documentation for AdEvent.AdEventType.
+        switch (adEvent.getType()) {
+            case LOADED:
+                onClick1();
+             /*   if (pDialog == null){
+                    pDialog = new ProgressDialog(ExoPlayerActivity.this);
+                    pDialog.setMessage("loading");
+                    pDialog.show();
+                }*/
+
+                // AdEventType.LOADED will be fired when ads are ready to be played.
+                // AdsManager.start() begins ad playback. This method is ignored for VMAP or
+                // ad rules playlists, as the SDK will automatically start executing the
+                // playlist.
+                mAdsManager.start();
+                break;
+
+            case STARTED:
+             /*   if (pDialog != null){
+                    Log.v("SUBHA","DISMISS");
+                    pDialog.dismiss();
+                }*/
+                //  progressView.setVisibility(View.VISIBLE);
+                Util.call_finish_at_onUserLeaveHint = false;
+                onClick1();
+             /*   final ProgressDialog finalPDialog = pDialog;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(finalPDialog !=null && finalPDialog.isShowing()) {
+                            Log.v("SUBHA","DISMISS");
+
+                            finalPDialog.dismiss();
+
+                        }
+                    }
+                });*/
+
+
+                break;
+
+            case CONTENT_PAUSE_REQUESTED:
+                // AdEventType.CONTENT_PAUSE_REQUESTED is fired immediately before a video
+                // ad is played.
+                mIsAdDisplayed = true;
+                Util.call_finish_at_onUserLeaveHint = false;
+
+                emVideoView.pause();
+                //  mVideoPlayer.pause();
+                break;
+            case CONTENT_RESUME_REQUESTED:
+                // AdEventType.CONTENT_RESUME_REQUESTED is fired when the ad is completed
+                // and you should start playing your content.
+                mIsAdDisplayed = false;
+                if (video_completed == true) {
+                    backCalled();
+                }
+
+                Util.call_finish_at_onUserLeaveHint = true;
+                emVideoView.start();
+                break;
+            case ALL_ADS_COMPLETED:
+                if (mAdsManager != null) {
+                    mAdsManager.destroy();
+                    mAdsManager = null;
+                }
+                if (video_completed == true) {
+                    backCalled();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onAdError(AdErrorEvent adErrorEvent) {
+        Log.e("subha", "Ad Error: " + adErrorEvent.getError().getMessage());
+        Util.call_finish_at_onUserLeaveHint = true;
+        emVideoView.start();
+    }
+
+    public void onClick1() {
+        if (mDialog == null) {
+            mDialog = new ProgressBarHandler(MyLibraryPlayer.this);
+            mDialog.show();
+        } else {
+            mDialog.hide();
+
+        }
+
+    }
 }

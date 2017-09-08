@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
-import com.home.apisdk.apiModel.Get_Video_Details_Output;
+import com.home.apisdk.apiModel.Video_Details_Output;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -39,9 +39,11 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
     private ArrayList<String> SubTitlePath = new ArrayList<>();
     private ArrayList<String> FakeSubTitlePath = new ArrayList<>();
     private ArrayList<String> ResolutionFormat = new ArrayList<>();
-    private ArrayList<String> offline_url= new ArrayList<>();
-    private ArrayList<String> offline_language= new ArrayList<>();
-    private ArrayList<String> SubTitleLanguage= new ArrayList<>();
+    private ArrayList<String> adchannel = new ArrayList<>();
+    private ArrayList<String> adnetworkid = new ArrayList<>();
+    private ArrayList<String> offline_url = new ArrayList<>();
+    private ArrayList<String> offline_language = new ArrayList<>();
+    private ArrayList<String> SubTitleLanguage = new ArrayList<>();
     private ArrayList<String> ResolutionUrl = new ArrayList<>();
     private String PACKAGE_NAME;
     private String message;
@@ -50,7 +52,7 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
     private JSONArray SubtitleJosnArray = null;
     private JSONArray ResolutionJosnArray = null;
     private int code;
-    private Get_Video_Details_Output get_video_details_output;
+    private Video_Details_Output _video_details_output;
     private VideoDetailsListener listener;
     private Context context;
 
@@ -72,13 +74,13 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
          * This method will be invoked after controller complete execution.
          * This method to handle post-execution work.
          *
-         * @param get_video_details_output A Model Class which contain responses. To get that responses we need to call the respective getter methods.
+         * @param _video_details_output A Model Class which contain responses. To get that responses we need to call the respective getter methods.
          * @param code                     Response Code from the server
          * @param status                   For Getting The Status
          * @param message                  On Success Message
          */
 
-        void onVideoDetailsPostExecuteCompleted(Get_Video_Details_Output get_video_details_output, int code, String status, String message);
+        void onVideoDetailsPostExecuteCompleted(Video_Details_Output _video_details_output, int code, String status, String message);
     }
 
     /**
@@ -144,6 +146,7 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
             }
             JSONArray SubtitleJosnArray = null;
             JSONArray ResolutionJosnArray = null;
+            JSONArray JasonAdNetwok = null;
             JSONObject myJson = null;
             if (responseStr != null) {
                 myJson = new JSONObject(responseStr);
@@ -156,15 +159,22 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
 
             if (code == 200) {
                 try {
-                    get_video_details_output = new Get_Video_Details_Output();
-                    get_video_details_output.setVideoResolution(myJson.optString("videoResolution"));
-                    get_video_details_output.setVideoUrl(myJson.optString("videoUrl"));
-                    get_video_details_output.setEmed_url(myJson.optString("emed_url"));
-                    get_video_details_output.setPlayed_length(myJson.optString("played_length"));
-                    get_video_details_output.setThirdparty_url(myJson.optString("thirdparty_url"));
-                    get_video_details_output.setStudio_approved_url(myJson.optString("studio_approved_url"));
-                    get_video_details_output.setLicenseUrl(myJson.optString("licenseUrl"));
-                    get_video_details_output.setIs_offline(myJson.optString("is_offline"));
+                    _video_details_output = new Video_Details_Output();
+                    _video_details_output.setVideoResolution(myJson.optString("videoResolution"));
+                    _video_details_output.setVideoUrl(myJson.optString("videoUrl"));
+                    _video_details_output.setEmed_url(myJson.optString("emed_url"));
+                    _video_details_output.setPlayed_length(myJson.optString("played_length"));
+                    _video_details_output.setThirdparty_url(myJson.optString("thirdparty_url"));
+                    _video_details_output.setStudio_approved_url(myJson.optString("studio_approved_url"));
+                    _video_details_output.setLicenseUrl(myJson.optString("licenseUrl"));
+                    _video_details_output.setIs_offline(myJson.optString("is_offline"));
+                    _video_details_output.setStreaming_restriction(myJson.optString("streaming_restriction"));
+                    _video_details_output.setEmbedTrailerUrl(myJson.optString("embedTrailerUrl"));
+                    _video_details_output.setEmed_url(myJson.optString("emed_url"));
+                    _video_details_output.setNo_streaming_device(myJson.optString("no_streaming_device"));
+                    _video_details_output.setNo_of_views(myJson.optString("no_of_views"));
+                    _video_details_output.setTrailerUrl(myJson.optString("trailerUrl"));
+
 
                 } catch (Exception e) {
                     code = 0;
@@ -183,11 +193,11 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
 
                         }
 
-                        get_video_details_output.setSubTitleName(SubTitleName);
-                        get_video_details_output.setFakeSubTitlePath(FakeSubTitlePath);
-                        get_video_details_output.setSubTitleLanguage(SubTitleLanguage);
-                        get_video_details_output.setOfflineUrl(offline_url);
-                        get_video_details_output.setOfflineLanguage(offline_language);
+                        _video_details_output.setSubTitleName(SubTitleName);
+                        _video_details_output.setFakeSubTitlePath(FakeSubTitlePath);
+                        _video_details_output.setSubTitleLanguage(SubTitleLanguage);
+                        _video_details_output.setOfflineUrl(offline_url);
+                        _video_details_output.setOfflineLanguage(offline_language);
                     }
                 }
 
@@ -208,12 +218,41 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                             Log.v("MUVISDK", "Resolution url =" + ResolutionJosnArray.getJSONObject(i).optString("url").trim());
                         }
 
-                        get_video_details_output.setResolutionFormat(ResolutionFormat);
-                        get_video_details_output.setResolutionUrl(ResolutionUrl);
+                        _video_details_output.setResolutionFormat(ResolutionFormat);
+                        _video_details_output.setResolutionUrl(ResolutionUrl);
                     }
 
                 }
 
+                if (myJson.has("adsDetails")) {
+                    JSONObject adJosnDetails = myJson.getJSONObject("adsDetails");
+                    JSONArray adJosnArray = null;
+                    if (adJosnDetails.has("adNetwork")) {
+                        adJosnArray = adJosnDetails.optJSONArray("adNetwork");
+                        if (adJosnArray != null) {
+                            if (adJosnArray.length() > 0) {
+                                for (int i = 0; i < adJosnArray.length(); i++) {
+                                    if(adJosnArray.getJSONObject(i).has("channel_id"))
+                                    _video_details_output.setChannel_id(adJosnArray.getJSONObject(i).optString("channel_id").trim());
+                                    if(adJosnArray.getJSONObject(i).has("ad_network_id"))
+                                    _video_details_output.setAdNetworkId(adJosnArray.getJSONObject(i).optInt("ad_network_id"));
+                                }
+
+                            }
+                        }
+                    }
+
+                    if (adJosnDetails.has("adsTime")) {
+                        JSONObject adTimeJosnDetails = adJosnDetails.getJSONObject("adsTime");
+                            _video_details_output.setMidRoll(Integer.parseInt(adTimeJosnDetails.optString("mid")));
+                            _video_details_output.setPreRoll(Integer.parseInt(adTimeJosnDetails.optString("start")));
+                            _video_details_output.setPostRoll(Integer.parseInt(adTimeJosnDetails.optString("end")));
+
+                            if (_video_details_output.getMidRoll()==1) {
+                                _video_details_output.setAdDetails(adTimeJosnDetails.optString("midroll_values"));
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             code = 0;
@@ -233,18 +272,18 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
         if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
             this.cancel(true);
             message = "Packge Name Not Matched";
-            listener.onVideoDetailsPostExecuteCompleted(get_video_details_output, code, status, message);
+            listener.onVideoDetailsPostExecuteCompleted(_video_details_output, code, status, message);
             return;
         }
         if (SDKInitializer.getHashKey(context).equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
-            listener.onVideoDetailsPostExecuteCompleted(get_video_details_output, code, status, message);
+            listener.onVideoDetailsPostExecuteCompleted(_video_details_output, code, status, message);
         }
     }
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onVideoDetailsPostExecuteCompleted(get_video_details_output, code, status, message);
+        listener.onVideoDetailsPostExecuteCompleted(_video_details_output, code, status, message);
     }
 }

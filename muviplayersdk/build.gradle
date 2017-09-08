@@ -48,6 +48,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile files('libs/wasabi.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')
+    compile ('com.spotxchange:spotx-sdk-android:3.1.+') {
+        transitive = false
+    }
+    compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.6.0'
 }
 task copyJniLibs(type: Copy) {
     from 'libs/armeabi'

@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
     android:background="@color/appBackgroundColor"
-
     android:orientation="vertical">
 
     <include android:id="@+id/toolbar"
@@ -26,18 +25,18 @@
             android:orientation="vertical"
             android:padding="10dp"
             android:background="@color/appBackgroundColor"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginLeft="@dimen/layout_padding_left"
+            android:layout_marginRight="@dimen/layout_padding_right"
             >
 
             <ImageView
                 android:id="@+id/loginImageView"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="@dimen/fragmentimgview_width"
+                android:layout_height="@dimen/fragmentimgview_height"
                 android:layout_gravity="center"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/loginImageViewMarging_top"
                 android:background="@drawable/logo"
-                android:paddingTop="10dp" />
+                android:paddingTop="@dimen/Login_drawing_padding" />
 
             <EditText
                 android:id="@+id/editEmailStr"
@@ -45,13 +44,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editNameStr"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="12dp"
-                android:drawablePadding="10dp"
-                android:paddingBottom="17dp"
-                android:paddingTop="17dp"
+                android:layout_marginTop="@dimen/login_maring_top"
+                android:drawablePadding="@dimen/Login_drawing_padding"
+                android:paddingBottom="@dimen/login_padding_bottom"
+                android:paddingTop="@dimen/login_padding_bottom"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:textSize="16dp"/>
+                android:textSize="@dimen/email_text_size"/>
 
             <EditText
                 android:id="@+id/editPasswordStr"
@@ -59,14 +58,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editEmailStr"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="12dp"
-                android:drawablePadding="10dp"
+                android:layout_marginTop="@dimen/login_maring_top"
+                android:drawablePadding="@dimen/Login_drawing_padding"
                 android:inputType="textPassword"
-                android:paddingBottom="17dp"
-                android:paddingTop="17dp"
+                android:paddingBottom="@dimen/login_padding_bottom"
+                android:paddingTop="@dimen/login_padding_bottom"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:textSize="16dp"
+                android:textSize="@dimen/pass_text_size"
 
                 />
 
@@ -77,17 +76,17 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editPasswordStr"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/relative_margin_top"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/forgotPasswordTextView"
-                    android:layout_width="100dp"
+                    android:layout_width="@dimen/forgot_logo_width"
                     android:layout_height="wrap_content"
                     android:textColor="@color/forgotPasswordTextViewColor"
                     android:gravity="center"
                     android:maxLines="4"
-                    android:textSize="15dp" />
+                    android:textSize="@dimen/forgot_text_size" />
 
                 <Button
                     android:id="@+id/loginButton"
@@ -95,12 +94,12 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/view_more_button_background"
                     android:textColor="@color/buttonTextColor"
-                    android:textSize="16dp"
+                    android:textSize="@dimen/submit_text_size"
                     android:gravity="center"
                     android:stateListAnimator="@null"
                     android:textAllCaps="false"
                     android:ellipsize="end"
-                    android:padding="10dp"
+                    android:padding="@dimen/Login_drawing_padding"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true" />
 
@@ -119,8 +118,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/fbbg"
                 android:clickable="true"
-                android:padding="6dp"
-                android:layout_marginTop="16dp"
+                android:padding="@dimen/login_linear_padding"
+                android:layout_marginTop="@dimen/login_linear_margin_top"
                 android:gravity="center_horizontal"
 
                 android:layout_below="@+id/alreadyLoginLinearLayout"
@@ -131,7 +130,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="@dimen/login_imageview_linear"
                     android:src="@drawable/fb_icon" />
 
                 <TextView
@@ -139,10 +138,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_margin="5dp"
+                    android:layout_margin="@dimen/linear_text_margin"
                     android:gravity="center"
                     android:textColor="@color/fb_text_color"
-                    android:textSize="16dp"
+                    android:textSize="@dimen/fb_text_size"
 
                     android:text="@string/fb_login_text" />
             </LinearLayout>
@@ -168,8 +167,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="30dp" />
+                android:layout_marginTop="@dimen/login_facebook_margin"
+                android:layout_marginBottom="@dimen/login_facebook_margin" />
             <!--  <Button
                   android:id="@+id/loginWithFacebookButton"
                   android:layout_width="match_parent"
@@ -189,22 +188,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editConfirmPasswordStr"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/login_new_user_margin_top"
                 android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:paddingBottom="5dp">
+                android:paddingBottom="@dimen/login_new_user_padding">
 
                 <TextView
                     android:id="@+id/loginNewUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="@dimen/linear_text_margin"
                     android:clickable="true"
                     android:gravity="center"
                     android:text="new user "
                     android:textColor="@color/login_new_user_text_color"
-                    android:textSize="15dp"
+                    android:textSize="@dimen/signup_textsize"
                     />
 
                 <TextView
@@ -218,7 +217,7 @@
                     android:singleLine="false"
                     android:text="sign up"
                     android:textColor="@color/sign_up_text_color"
-                    android:textSize="15dp"
+                    android:textSize="@dimen/signup_textsize"
                     android:textStyle="bold" />
             </RelativeLayout>
 

@@ -72,6 +72,65 @@ public class Player implements Serializable{
     String licenseUrl,mpdVideoUrl,isOffline="";
     int ContentTypesId = 1;
 
+    public int getAdNetworkId() {
+        return adNetworkId;
+    }
+
+    public void setAdNetworkId(int adNetworkId) {
+        this.adNetworkId = adNetworkId;
+    }
+
+    int adNetworkId = 1;
+    String channel_id;
+
+
+    public String getChannel_id() {
+        return channel_id;
+    }
+
+    public void setChannel_id(String channel_id) {
+        this.channel_id = channel_id;
+    }
+
+    public String getAdDetails() {
+        return adDetails;
+    }
+
+    public void setAdDetails(String adDetails) {
+        this.adDetails = adDetails;
+    }
+
+    String adDetails="";
+
+    int midRoll = 0;
+
+    public int getMidRoll() {
+        return midRoll;
+    }
+
+    public void setMidRoll(int midRoll) {
+        this.midRoll = midRoll;
+    }
+
+    public int getPostRoll() {
+        return postRoll;
+    }
+
+    public void setPostRoll(int postRoll) {
+        this.postRoll = postRoll;
+    }
+
+    public int getPreRoll() {
+        return preRoll;
+    }
+
+    public void setPreRoll(int preRoll) {
+        this.preRoll = preRoll;
+    }
+
+    int postRoll = 0;
+    int preRoll = 0;
+
     public int getContentTypesId() {
         return ContentTypesId;
     }
