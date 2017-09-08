@@ -69,6 +69,9 @@ import static com.home.vod.util.Util.DEFAULT_GOOGLE_FCM_TOKEN;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
 import static com.muvi.player.utils.Util.HAS_FAVORITE;
+import static com.muvi.player.utils.Util.IS_CHROMECAST;
+import static com.muvi.player.utils.Util.IS_OFFLINE;
+import static com.muvi.player.utils.Util.IS_STREAMING_RESTRICTION;
 
 public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddressListener,
         CheckGeoBlockCountryAsynTask.CheckGeoBlockForCountryListener,
@@ -247,10 +250,17 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         languagePreference.setLanguageSharedPrefernce(HAS_FAVORITE, "" + isRegistrationEnabledOutputModel.getHas_favourite());
         languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
 
-        languagePreference.setLanguageSharedPrefernce(IS_RESTRICT_DEVICE, isRegistrationEnabledOutputModel.getIsRestrictDevice());
+        languagePreference.setLanguageSharedPrefernce(IS_RESTRICT_DEVICE, ""+isRegistrationEnabledOutputModel.getIsRestrictDevice());
         languagePreference.setLanguageSharedPrefernce(IS_ONE_STEP_REGISTRATION, "" + isRegistrationEnabledOutputModel.getSignup_step());
         languagePreference.setLanguageSharedPrefernce(IS_MYLIBRARY, "" + isRegistrationEnabledOutputModel.getIsMylibrary());
+
+        languagePreference.setLanguageSharedPrefernce(IS_STREAMING_RESTRICTION, "" + isRegistrationEnabledOutputModel.getIs_streaming_restriction());
+        languagePreference.setLanguageSharedPrefernce(IS_OFFLINE, "" + isRegistrationEnabledOutputModel.getIs_offline());
+        languagePreference.setLanguageSharedPrefernce(IS_CHROMECAST, "" + isRegistrationEnabledOutputModel.getChromecast());
+
+
         preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
+        
         Log.v("MUVI", "Splash setLoginFeatureToPref ::" + isRegistrationEnabledOutputModel.getIs_login());
 
         LanguageListInputModel languageListInputModel = new LanguageListInputModel();

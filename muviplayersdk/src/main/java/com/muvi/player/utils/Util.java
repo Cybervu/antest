@@ -40,8 +40,6 @@ public class Util {
     public static String DEFAULT_BTN_DISCARD = "Discard";
     public static String WANT_TO_DOWNLOAD = "WANT_TO_DOWNLOAD";
     public static String DEFAULT_WANT_TO_DOWNLOAD = "Want to Download";
-    public static String IS_STREAMING_RESTRICTION = "IS_STREAMING_RESTRICTION";
-    public static String DEFAULT_IS_IS_STREAMING_RESTRICTION = "0";
     public static String DOWNLOAD_CANCELLED = "DOWNLOAD_CANCELLED";
     public static String DEFAULT_DOWNLOAD_CANCELLED = "Download Cancelled";
 
@@ -453,6 +451,15 @@ public class Util {
 
     public static String HAS_FAVORITE = "HAS_FAVORITE";
     public static String DEFAULT_HAS_FAVORITE = "0";
+
+    public static String IS_OFFLINE = "IS_OFFLINE";
+    public static String DEFAULT_IS_OFFLINE = "0";
+
+    public static String IS_CHROMECAST = "IS_CHROMECAST";
+    public static String DEFAULT_IS_CHROMECAST = "0";
+
+    public static String IS_STREAMING_RESTRICTION = "IS_STREAMING_RESTRICTION";
+    public static String DEFAULT_IS_IS_STREAMING_RESTRICTION = "0";
 
 
 // ======================= Constants For The Language Default Key =========================//

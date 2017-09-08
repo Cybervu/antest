@@ -146,13 +146,27 @@ public class IsRegistrationEnabledAsynTask extends AsyncTask<IsRegistrationEnabl
                     isRegistrationEnabledOutputModel.setHas_favourite(Integer.parseInt(myJson.optString("has_favourite")));
                 }
                 if ((myJson.has("isRating")) && myJson.optString("isRating").trim() != null && !myJson.optString("isRating").trim().isEmpty() && !myJson.optString("isRating").trim().equals("null") && !myJson.optString("isRating").trim().matches("")) {
-                    isRegistrationEnabledOutputModel.setHas_favourite(Integer.parseInt(myJson.optString("isRating")));
+                    isRegistrationEnabledOutputModel.setRating(Integer.parseInt(myJson.optString("isRating")));
                 }
 
                 if ((myJson.has("isRestrictDevice")) && myJson.optString("isRestrictDevice").trim() != null && !myJson.optString("isRestrictDevice").trim().isEmpty()
                         && !myJson.optString("isRestrictDevice").trim().equals("null") && !myJson.optString("isRestrictDevice").trim().matches("")) {
-                    isRegistrationEnabledOutputModel.setIsRestrictDevice(myJson.optString("isRestrictDevice"));
+                    isRegistrationEnabledOutputModel.setIsRestrictDevice(Integer.parseInt(myJson.optString("isRestrictDevice")));
                 }
+
+                if ((myJson.has("chromecast")) && myJson.optString("chromecast").trim() != null && !myJson.optString("chromecast").trim().isEmpty()
+                        && !myJson.optString("chromecast").trim().equals("null") && !myJson.optString("chromecast").trim().matches("")) {
+                    isRegistrationEnabledOutputModel.setChromecast(Integer.parseInt(myJson.optString("chromecast")));
+                }
+                if ((myJson.has("is_streaming_restriction")) && myJson.optString("is_streaming_restriction").trim() != null && !myJson.optString("is_streaming_restriction").trim().isEmpty()
+                        && !myJson.optString("is_streaming_restriction").trim().equals("null") && !myJson.optString("is_streaming_restriction").trim().matches("")) {
+                    isRegistrationEnabledOutputModel.setIs_streaming_restriction(Integer.parseInt(myJson.optString("is_streaming_restriction")));;
+                }
+                if ((myJson.has("is_offline")) && myJson.optString("is_offline").trim() != null && !myJson.optString("is_offline").trim().isEmpty()
+                        && !myJson.optString("is_offline").trim().equals("null") && !myJson.optString("is_offline").trim().matches("")) {
+                    isRegistrationEnabledOutputModel.setIs_offline(Integer.parseInt(myJson.optString("is_offline")));
+                }
+
 
 
             } else {
