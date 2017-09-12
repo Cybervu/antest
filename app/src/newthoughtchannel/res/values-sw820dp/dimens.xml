@@ -23,6 +23,7 @@
     <dimen name="edit_text_size">16sp</dimen>
     <dimen name="login_text_size">17sp</dimen>
     <dimen name="submit_text_size">16sp</dimen>
+    <dimen name="itemtitle1_text_size">14sp</dimen>
     <dimen name="submit_width_size">170dp</dimen>
     <dimen name="submit_height_size">45dp</dimen>
     <dimen name="pass_text_size">16sp</dimen>

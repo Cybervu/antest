@@ -14,14 +14,11 @@
         android:id="@+id/imagesGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/pre_order_button_margin"
-        android:layout_marginLeft="@dimen/pre_order_button_margin"
-        android:layout_marginRight="@dimen/pre_order_button_margin"
-        android:layout_marginTop="@dimen/pre_order_button_margin"
         android:horizontalSpacing="@dimen/pre_order_button_margin"
-        android:verticalSpacing="@dimen/pre_order_button_margin" />
+        android:verticalSpacing="@dimen/pre_order_button_margin"
+        android:layout_below="@+id/toolbar"
+        android:layout_centerHorizontal="true" />
 
 
     <RelativeLayout

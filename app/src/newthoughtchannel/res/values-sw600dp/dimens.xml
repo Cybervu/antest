@@ -22,7 +22,7 @@
     <dimen name="btnmore_text_size">16sp</dimen>
     <dimen name="forgot_logo_width">200dp</dimen>
     <dimen name="forgot_logo_height">200dp</dimen>
-    <dimen name="email_text_size">20sp</dimen>
+    <dimen name="email_text_size">14sp</dimen>
     <dimen name="edit_text_size">18sp</dimen>
     <dimen name="login_text_size">20sp</dimen>
     <dimen name="submit_text_size">14sp</dimen>
@@ -99,12 +99,12 @@
     <dimen name="plainrowlayout_width">130dp</dimen>
     <dimen name="purchasevalue_text_size">60sp</dimen>
     <dimen name="purchasemonth_text_size">18sp</dimen>
-    <dimen name="movieimg_width">102dp</dimen>
-    <dimen name="movieimg_height">146dp</dimen>
+    <dimen name="movieimg_width">140dp</dimen>
+    <dimen name="movieimg_height">200dp</dimen>
     <dimen name="video280_width">185dp</dimen>
     <dimen name="video280_height">103dp</dimen>
     <dimen name="listitemlayout_height">325dp</dimen>
-    <dimen name="itemtitle_text_size">22sp</dimen>
+    <dimen name="itemtitle_text_size">21sp</dimen>
     <dimen name="left_padding">10dp</dimen>
     <dimen name="right_padding">10dp</dimen>
     <dimen name="login_padding">10dp</dimen>
@@ -119,7 +119,7 @@
     <dimen name="register_margin_top">40dp</dimen>
     <dimen name="cast_width_icon">150dp</dimen>
     <dimen name="cast_height_icon">130dp</dimen>
-    <dimen name="itemtitle1_text_size">22sp</dimen>
+    <dimen name="itemtitle1_text_size">16sp</dimen>
     <dimen name="homelogo_height">87dp</dimen>
     <dimen name="homelogo_width">185dp</dimen>
     <dimen name="plainrow_mrgin_top">20dp</dimen>
