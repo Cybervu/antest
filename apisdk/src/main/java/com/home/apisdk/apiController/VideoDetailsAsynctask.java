@@ -174,6 +174,7 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                     _video_details_output.setNo_streaming_device(myJson.optString("no_streaming_device"));
                     _video_details_output.setNo_of_views(myJson.optString("no_of_views"));
                     _video_details_output.setTrailerUrl(myJson.optString("trailerUrl"));
+                    _video_details_output.setDownload_status(myJson.optString("download_status"));
 
 
                 } catch (Exception e) {

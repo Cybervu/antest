@@ -121,6 +121,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSC
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
@@ -128,6 +129,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CO
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_VIDEO_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
@@ -369,6 +371,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         //for search for each activity
         setHasOptionsMenu(true);
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
+        playerModel = new Player();
+        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
         genreListData = (RecyclerView) rootView.findViewById(R.id.demoListView);
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);
@@ -668,6 +672,48 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
     @Override
     public void onVideoDetailsPostExecuteCompleted(Video_Details_Output _video_details_output, int code, String status, String message) {
+
+        boolean play_video = true;
+
+        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+
+            if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
+
+                play_video = false;
+            }
+            else
+            {
+                play_video = true;
+            }
+        }
+        else
+        {
+            play_video = true;
+        }
+        if (!play_video) {
+
+            try {
+                if (pDialog.isShowing())
+                    pDialog.hide();
+            } catch (IllegalArgumentException ex) {
+            }
+
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(context, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(message);
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+
+                        }
+                    });
+            dlgAlert.create().show();
+
+            return;
+        }
 
         if (status == null) {
             status = "0";

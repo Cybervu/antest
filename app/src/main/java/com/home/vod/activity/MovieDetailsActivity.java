@@ -131,6 +131,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
@@ -150,6 +151,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
@@ -210,10 +212,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     AddToFavAsync asynFavoriteAdd;
     Toolbar mActionBarToolbar;
     ImageView moviePoster;
-    PPVModel ppvmodel ;
-    APVModel advmodel ;
-    CurrencyModel currencymodel ;
-    ImageView playButton,favorite_view;
+    PPVModel ppvmodel;
+    APVModel advmodel;
+    CurrencyModel currencymodel;
+    ImageView playButton, favorite_view;
     String PlanId = "";
     ImageButton offlineImageButton;
     Button watchTrailerButton;
@@ -692,6 +694,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         setContentView(R.layout.details_layout);
         playerModel = new Player();
+        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
 
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(DELETE_ACTION, new IntentFilter("ITEM_STATUS"));
 
@@ -2277,8 +2280,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
     public void ShowLanguagePopup() {
 
-        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MovieDetailsActivity.this,R.style.MyAlertDialogStyle);
-        LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
         View convertView = inflater.inflate(R.layout.language_pop_up, null);
         TextView titleTextView = (TextView) convertView.findViewById(R.id.languagePopupTitle);
@@ -3002,19 +3005,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 /***ad **/
                 final Intent playVideoIntent;
-                if (Util.dataModel.getAdNetworkId() == 3){
+                if (Util.dataModel.getAdNetworkId() == 3) {
                     playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
 
-                }
-                else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1){
+                } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                     if (Util.dataModel.getPlayPos() <= 0) {
                         playVideoIntent = new Intent(MovieDetailsActivity.this, AdPlayerActivity.class);
-                    }else{
+                    } else {
                         playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
 
                     }
-                }
-                else {
+                } else {
                     playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
 
                 }
@@ -3025,7 +3026,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                 playVideoIntent.putExtra("ResolutionFormat",ResolutionFormat);
                 playVideoIntent.putExtra("ResolutionUrl",ResolutionUrl);*/
-                playVideoIntent.putExtra("PlayerModel",playerModel);
+                playVideoIntent.putExtra("PlayerModel", playerModel);
                 startActivity(playVideoIntent);
             }
         }
@@ -4064,6 +4065,47 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
      /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
         then set thirdpartyurl true here and assign the url to videourl*/
+        boolean play_video = true;
+
+        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+
+            if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
+
+                play_video = false;
+            }
+            else
+            {
+                play_video = true;
+            }
+        }
+        else
+        {
+            play_video = true;
+        }
+        if (!play_video) {
+
+            try {
+                if (pDialog.isShowing())
+                    pDialog.hide();
+            } catch (IllegalArgumentException ex) {
+            }
+
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(message);
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+
+                        }
+                    });
+            dlgAlert.create().show();
+
+            return;
+        }
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();

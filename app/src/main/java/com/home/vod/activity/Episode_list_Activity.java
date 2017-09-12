@@ -122,6 +122,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EPISODE_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
@@ -141,6 +142,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.EPISODE_TITLE;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
@@ -287,6 +289,48 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
      /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
         then set thirdpartyurl true here and assign the url to videourl*/
+        boolean play_video = true;
+
+        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+
+            if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
+
+                play_video = false;
+            }
+            else
+            {
+                play_video = true;
+            }
+        }
+        else
+        {
+            play_video = true;
+        }
+        if (!play_video) {
+
+            try {
+                if (pDialog.isShowing())
+                    pDialog.hide();
+            } catch (IllegalArgumentException ex) {
+            }
+
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(message);
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+
+                        }
+                    });
+            dlgAlert.create().show();
+
+            return;
+        }
+
 
 
         if (statusCode == 200) {
@@ -375,7 +419,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             playerModel.setSubTitleLanguage(_video_details_output.getSubTitleLanguage());
             playerModel.setOfflineUrl(_video_details_output.getOfflineUrl());
             playerModel.setOfflineLanguage(_video_details_output.getOfflineLanguage());
-
 
             if (playerModel.getVideoUrl() == null ||
                     playerModel.getVideoUrl().matches("")) {
@@ -1042,6 +1085,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         languagePreference = LanguagePreference.getLanguagePreference(this);
         isLogin = preferenceManager.getLoginFeatureFromPref();
         playerModel = new Player();
+        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
        /* mCastStateListener = new CastStateListener() {
             @Override
             public void onCastStateChanged(int newState) {

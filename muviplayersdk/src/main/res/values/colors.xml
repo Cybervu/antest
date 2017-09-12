@@ -15,6 +15,7 @@
     <color name="videotextColor">#000000</color>
     <color name="buttonBackgroundColor">#2acb99</color>
     <color name="loginTextViewColor">#662D91</color>
+    <color name="resumeTitleTextColor">#ffffff</color>
     <color name="buttonTextColor">#fff</color>
     <color name="forgotPasswordTextViewColor">#662D91</color>
     <color name="fb_text_color">#fff</color>

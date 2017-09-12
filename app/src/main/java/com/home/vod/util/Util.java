@@ -686,4 +686,9 @@ public class Util {
             break;
         }
     }
+
+
+    public static boolean getStreamingRestriction(LanguagePreference languagePreference){
+       return languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION,DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1");
+    }
 }

@@ -249,7 +249,7 @@ public class APIUrlConstant {
     /**
      * endpoint to get Video Logs Details API
      */
-    public static String VIDEO_LOGS_URL = "videoLogs";
+    public static String VIDEO_LOGS_URL = "VideoLogNew";
     /**
      * endpoint to get Remove Device Details API
      */

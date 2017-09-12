@@ -154,7 +154,7 @@ enum ContentTypes1 {
 //========================DRM code end===============================
 
 public class ExoPlayerActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener, PlaylistProxyListener, AdEvent.AdEventListener, AdErrorEvent.AdErrorListener {
-    private static boolean isDrm=false;
+    private static boolean isDrm = false;
     PlaylistProxy playerProxy;
     Player playerModel;
     int player_start_time = 0;
@@ -163,6 +163,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     int played_length = 0;
     int playerStartPosition = 0;
     String restrict_stream_id = "0";
+    String log_temp_id = "0";
     /***** offline *****/
     DownloadManager downloadManager;
     ProgressBarHandler mDialog;
@@ -354,7 +355,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-        Log.v("MUVI","app name=="+getApplicationName(getApplicationContext()));
+        Log.v("MUVI", "app name==" + getApplicationName(getApplicationContext()));
 
         PreviousUsedDataByApp(true);
         PreviousUsedData_By_DownloadContent = DataUsedByDownloadContent();
@@ -396,132 +397,132 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
         //to check the videourl is drm or non drm
 
-        if(playerModel.getVideoUrl().contains(".mpd")){
-            isDrm=true;
-        }else {
-            isDrm=false;
+        if (playerModel.getVideoUrl().contains(".mpd")) {
+            isDrm = true;
+        } else {
+            isDrm = false;
         }
 
-            if (playerModel != null && playerModel.getUserId() != null && !playerModel.getUserId().trim().matches("")) {
-                userIdStr = playerModel.getUserId();
-            }
-            if (playerModel != null && playerModel.getEmailId() != null && !playerModel.getEmailId().trim().matches("")) {
-                emailIdStr = playerModel.getEmailId();
-            }
+        if (playerModel != null && playerModel.getUserId() != null && !playerModel.getUserId().trim().matches("")) {
+            userIdStr = playerModel.getUserId();
+        }
+        if (playerModel != null && playerModel.getEmailId() != null && !playerModel.getEmailId().trim().matches("")) {
+            emailIdStr = playerModel.getEmailId();
+        }
         // This is changed for the new requirement of Offline Viewing.
         startService(new Intent(this, DataConsumptionService.class));
         registerReceiver(SelectedUrl, new IntentFilter("UrlPosition"));
 
-            downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-            exoplayerdownloadhandler = new Handler();
-            dbHelper = new DBHelper(ExoPlayerActivity.this);
-            dbHelper.getWritableDatabase();
-            audio_1 = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
+        downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        exoplayerdownloadhandler = new Handler();
+        dbHelper = new DBHelper(ExoPlayerActivity.this);
+        dbHelper.getWritableDatabase();
+        audio_1 = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
 
 
-            if (audio_1 != null) {
-                if (audio_1.getUSERNAME().trim().equals(emailIdStr.trim())) {
-                    checkDownLoadStatusFromDownloadManager1(audio_1);
-                }
+        if (audio_1 != null) {
+            if (audio_1.getUSERNAME().trim().equals(emailIdStr.trim())) {
+                checkDownLoadStatusFromDownloadManager1(audio_1);
             }
+        }
 
-            download = (ImageView) findViewById(R.id.downloadImageView);
-            Progress = (ProgressBar) findViewById(R.id.progressBar);
-            percentg = (TextView) findViewById(R.id.percentage);
-
-
-            //Check for offline content // Added By sanjay
-
-            download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
-            if (playerModel.getContentTypesId() != 4 && playerModel.getIsOffline().equals("1")) {
-                download_layout.setVisibility(View.VISIBLE);
-            }
-            // if (playerModel.getContentTypesId() != 4 && playerModel.getIsOffline().equals("1"))
+        download = (ImageView) findViewById(R.id.downloadImageView);
+        Progress = (ProgressBar) findViewById(R.id.progressBar);
+        percentg = (TextView) findViewById(R.id.percentage);
 
 
-            download.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    List_Of_Resolution_Format.clear();
-                    List_Of_FileSize.clear();
-                    List_Of_Resolution_Url.clear();
-                    List_Of_Resolution_Url_Used_For_Download.clear();
+        //Check for offline content // Added By sanjay
+
+        download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
+        if (playerModel.getContentTypesId() != 4 && playerModel.getIsOffline().equals("1")) {
+            download_layout.setVisibility(View.VISIBLE);
+        }
+        // if (playerModel.getContentTypesId() != 4 && playerModel.getIsOffline().equals("1"))
 
 
-                    asynWithdrm = new AsynWithdrm();
-                    asynWithdrm.executeOnExecutor(threadPoolExecutor);
+        download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List_Of_Resolution_Format.clear();
+                List_Of_FileSize.clear();
+                List_Of_Resolution_Url.clear();
+                List_Of_Resolution_Url_Used_For_Download.clear();
 
-                    // new DownloadFileFromURL().execute(playerModel.getVideoUrl());
 
-                    if (playerModel.getOfflineUrl().size() > 0) {
-                        Download_SubTitle(playerModel.getOfflineUrl().get(0));
-                    }
+                asynWithdrm = new AsynWithdrm();
+                asynWithdrm.executeOnExecutor(threadPoolExecutor);
 
+                // new DownloadFileFromURL().execute(playerModel.getVideoUrl());
+
+                if (playerModel.getOfflineUrl().size() > 0) {
+                    Download_SubTitle(playerModel.getOfflineUrl().get(0));
                 }
-            });
+
+            }
+        });
 
 
-            percentg.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ExoPlayerActivity.this, R.style.MyAlertDialogStyle);
-                                                dlgAlert.setTitle(Util.getTextofLanguage(ExoPlayerActivity.this, Util.STOP_SAVING_THIS_VIDEO, Util.DEFAULT_STOP_SAVING_THIS_VIDEO));
-                                                dlgAlert.setMessage(Util.getTextofLanguage(ExoPlayerActivity.this, Util.YOUR_VIDEO_WONT_BE_SAVED, Util.DEFAULT_YOUR_VIDEO_WONT_BE_SAVED));
-                                                dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_KEEP, Util.DEFAULT_BTN_KEEP), null);
-                                                dlgAlert.setCancelable(false);
-                                                dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_KEEP, Util.DEFAULT_BTN_KEEP),
-                                                        new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int id) {
-                                                                dialog.cancel();
+        percentg.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ExoPlayerActivity.this, R.style.MyAlertDialogStyle);
+                                            dlgAlert.setTitle(Util.getTextofLanguage(ExoPlayerActivity.this, Util.STOP_SAVING_THIS_VIDEO, Util.DEFAULT_STOP_SAVING_THIS_VIDEO));
+                                            dlgAlert.setMessage(Util.getTextofLanguage(ExoPlayerActivity.this, Util.YOUR_VIDEO_WONT_BE_SAVED, Util.DEFAULT_YOUR_VIDEO_WONT_BE_SAVED));
+                                            dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_KEEP, Util.DEFAULT_BTN_KEEP), null);
+                                            dlgAlert.setCancelable(false);
+                                            dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_KEEP, Util.DEFAULT_BTN_KEEP),
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            dialog.cancel();
+
+                                                        }
+                                                    });
+                                            dlgAlert.setNegativeButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_DISCARD, Util.DEFAULT_BTN_DISCARD), null);
+                                            dlgAlert.setCancelable(false);
+                                            dlgAlert.setNegativeButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_DISCARD, Util.DEFAULT_BTN_DISCARD),
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            dialog.cancel();
+                                                            downloading = false;
+                                                            audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
+
+                                                            if (audio != null) {
+                                                                String k = String.valueOf(audio.getDOWNLOADID());
+                                                                downloadManager.remove(audio.getDOWNLOADID());
+                                                                dbHelper.deleteRecord(audio);
+
+                                                                SQLiteDatabase DB = ExoPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
+                                                                String query = "DELETE FROM " + DBHelper.DOWNLOAD_CONTENT_INFO + " WHERE download_contnet_id = '" + enqueue + "'";
+                                                                DB.execSQL(query);
 
                                                             }
-                                                        });
-                                                dlgAlert.setNegativeButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_DISCARD, Util.DEFAULT_BTN_DISCARD), null);
-                                                dlgAlert.setCancelable(false);
-                                                dlgAlert.setNegativeButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_DISCARD, Util.DEFAULT_BTN_DISCARD),
-                                                        new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int id) {
-                                                                dialog.cancel();
-                                                                downloading = false;
-                                                                audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
 
-                                                                if (audio != null) {
-                                                                    String k = String.valueOf(audio.getDOWNLOADID());
-                                                                    downloadManager.remove(audio.getDOWNLOADID());
-                                                                    dbHelper.deleteRecord(audio);
 
-                                                                    SQLiteDatabase DB = ExoPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-                                                                    String query = "DELETE FROM " + DBHelper.DOWNLOAD_CONTENT_INFO+ " WHERE download_contnet_id = '"+enqueue+"'";
-                                                                    DB.execSQL(query);
-
+                                                            exoplayerdownloadhandler.post(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    Progress.setProgress((int) 0);
+                                                                    percentg.setVisibility(View.GONE);
+                                                                    download.setVisibility(View.VISIBLE);
                                                                 }
+                                                            });
 
+                                                            Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ExoPlayerActivity.this, Util.DOWNLOAD_CANCELLED, Util.DEFAULT_DOWNLOAD_CANCELLED), Toast.LENGTH_SHORT).show();
 
-                                                                exoplayerdownloadhandler.post(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        Progress.setProgress((int) 0);
-                                                                        percentg.setVisibility(View.GONE);
-                                                                        download.setVisibility(View.VISIBLE);
-                                                                    }
-                                                                });
+                                                        }
+                                                    });
 
-                                                                Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ExoPlayerActivity.this, Util.DOWNLOAD_CANCELLED, Util.DEFAULT_DOWNLOAD_CANCELLED), Toast.LENGTH_SHORT).show();
+                                            dlgAlert.create().show();
 
-                                                            }
-                                                        });
-
-                                                dlgAlert.create().show();
-
-                                            }
                                         }
-            );
+                                    }
+        );
 
-            /*****Offline*****/
+        /*****Offline*****/
 
 
-        if(playerModel.getContentTypesId()==4){
-            isLiveStream=true;
+        if (playerModel.getContentTypesId() == 4) {
+            isLiveStream = true;
         }
         played_length = playerModel.getPlayPos() * 1000;
         Log.v("BKS", "exo video url===" + playerModel.getVideoUrl());
@@ -532,29 +533,29 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 Log.v("BKS", "enter thirdparty condition==");
 
 
-                    if (playerModel.getVideoUrl().contains("://www.youtube") || playerModel.getVideoUrl().contains("://www.youtu.be")) {
-                        if (playerModel.getVideoUrl().contains("live_stream?channel")) {
-                            final Intent playVideoIntent = new Intent(ExoPlayerActivity.this, ThirdPartyPlayer.class);
-                            playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            playVideoIntent.putExtra("PlayerModel", playerModel);
-                            startActivity(playVideoIntent);
-                            finish();
-                            return;
-                        } else {
-                            final Intent playVideoIntent = new Intent(ExoPlayerActivity.this, YouTubeAPIActivity.class);
-                            playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            playVideoIntent.putExtra("PlayerModel", playerModel);
-                            startActivity(playVideoIntent);
-                            finish();
-                            return;
-                        }
-                    } else {
+                if (playerModel.getVideoUrl().contains("://www.youtube") || playerModel.getVideoUrl().contains("://www.youtu.be")) {
+                    if (playerModel.getVideoUrl().contains("live_stream?channel")) {
                         final Intent playVideoIntent = new Intent(ExoPlayerActivity.this, ThirdPartyPlayer.class);
                         playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         playVideoIntent.putExtra("PlayerModel", playerModel);
                         startActivity(playVideoIntent);
                         finish();
                         return;
+                    } else {
+                        final Intent playVideoIntent = new Intent(ExoPlayerActivity.this, YouTubeAPIActivity.class);
+                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        playVideoIntent.putExtra("PlayerModel", playerModel);
+                        startActivity(playVideoIntent);
+                        finish();
+                        return;
+                    }
+                } else {
+                    final Intent playVideoIntent = new Intent(ExoPlayerActivity.this, ThirdPartyPlayer.class);
+                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    playVideoIntent.putExtra("PlayerModel", playerModel);
+                    startActivity(playVideoIntent);
+                    finish();
+                    return;
 
                 }
             } else {
@@ -562,54 +563,54 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 backCalled();
             }
 
-                //onBackPressed();
-            }
+            //onBackPressed();
+        }
 
-            movieId = playerModel.getMovieUniqueId();
-            Log.v("BISHAL", "MovieId==" + movieId);
-            episodeId = playerModel.getEpisode_id();
-            Log.v("BISHAL", "Url=" + playerModel.getVideoUrl());
-
-
-            emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
-            subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
-            subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
+        movieId = playerModel.getMovieUniqueId();
+        Log.v("BISHAL", "MovieId==" + movieId);
+        episodeId = playerModel.getEpisode_id();
+        Log.v("BISHAL", "Url=" + playerModel.getVideoUrl());
 
 
-            latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
-            videoTitle = (TextView) findViewById(R.id.videoTitle);
-            Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-            videoTitle.setTypeface(videoTitleface);
-            GenreTextView = (TextView) findViewById(R.id.GenreTextView);
-            Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-            GenreTextView.setTypeface(GenreTextViewface);
-            videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
-            Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-            videoDurationTextView.setTypeface(videoDurationTextViewface);
-            videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
-            Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-            videoCensorRatingTextView.setTypeface(videoCensorRatingTextViewface);
-            videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
-            Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-            videoCensorRatingTextView1.setTypeface(videoCensorRatingTextView1face);
-            videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
-            Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-            videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
-            story = (ExpandableTextView) findViewById(R.id.story);
-            Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-            story.setTypeface(storyTypeface);
-            videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
-            Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-            videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
+        emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
+        subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
+        subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
 
-            MovableTimer = new Timer();
-            MovableTimer.schedule(new TimerTask() {
 
-                @Override
-                public void run() {
+        latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
+        videoTitle = (TextView) findViewById(R.id.videoTitle);
+        Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+        videoTitle.setTypeface(videoTitleface);
+        GenreTextView = (TextView) findViewById(R.id.GenreTextView);
+        Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+        GenreTextView.setTypeface(GenreTextViewface);
+        videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
+        Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+        videoDurationTextView.setTypeface(videoDurationTextViewface);
+        videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
+        Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+        videoCensorRatingTextView.setTypeface(videoCensorRatingTextViewface);
+        videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
+        Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+        videoCensorRatingTextView1.setTypeface(videoCensorRatingTextView1face);
+        videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
+        Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+        videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
+        story = (ExpandableTextView) findViewById(R.id.story);
+        Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+        story.setTypeface(storyTypeface);
+        videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
+        Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
+        videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
+
+        MovableTimer = new Timer();
+        MovableTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
 //               MoveWaterMark();
-                }
-            }, 2000, 2000);
+            }
+        }, 2000, 2000);
 
         //===============This is used for subtitle ================================//
         playerModel.DefaultSubtitle = "Off";
@@ -626,21 +627,21 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         /**ad **/
 
 
-            if (playerModel.getSubTitleName() != null) {
-                SubTitleName = playerModel.getSubTitleName();
-            } else {
-                SubTitleName.clear();
-            }
+        if (playerModel.getSubTitleName() != null) {
+            SubTitleName = playerModel.getSubTitleName();
+        } else {
+            SubTitleName.clear();
+        }
 
-            if (playerModel.getSubTitlePath() != null) {
-                SubTitlePath = playerModel.getSubTitlePath();
-            } else {
-                SubTitlePath.clear();
-            }
+        if (playerModel.getSubTitlePath() != null) {
+            SubTitlePath = playerModel.getSubTitlePath();
+        } else {
+            SubTitlePath.clear();
+        }
 
-            subtitle_change_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        subtitle_change_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 /*
                 View decorView = getWindow().getDecorView();
                 decorView.setSystemUiVisibility(
@@ -651,180 +652,180 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);*/
 
+                playerModel.call_finish_at_onUserLeaveHint = false;
+                Intent intent = new Intent(ExoPlayerActivity.this, Subtitle_Resolution.class);
+                intent.putExtra("ResolutionFormat", ResolutionFormat);
+                intent.putExtra("ResolutionUrl", ResolutionUrl);
+                intent.putExtra("SubTitleName", SubTitleName);
+                intent.putExtra("SubTitlePath", SubTitlePath);
+                startActivityForResult(intent, 3333);
+
+
+            }
+        });
+
+        //=========================End=================================//
+
+
+        //===============================This is used for Resolution Change ===================================//
+
+
+        playerModel.VideoResolution = "Auto";
+
+        if (playerModel.getResolutionFormat() != null && !isDrm) {
+            ResolutionFormat = playerModel.getResolutionFormat();
+        } else {
+            ResolutionFormat.clear();
+
+        }
+
+        if (playerModel.getResolutionUrl() != null && !isDrm) {
+            ResolutionUrl = playerModel.getResolutionUrl();
+        } else {
+            ResolutionUrl.clear();
+        }
+
+        if (ResolutionUrl.size() < 1)
+
+        {
+            Log.v("MUVI", "resolution image Invisible called");
+        } else {
+            ResolutionUrl.add(playerModel.getVideoUrl().trim());
+            ResolutionFormat.add("Auto");
+        }
+
+        if (ResolutionFormat.size() > 0) {
+            Collections.reverse(ResolutionFormat);
+            for (int m = 0; m < ResolutionFormat.size(); m++) {
+                Log.v("BIBHU", "RESOLUTION FORMAT======" + ResolutionFormat.get(m));
+            }
+        }
+        if (ResolutionUrl.size() > 0) {
+            Collections.reverse(ResolutionUrl);
+            for (int n = 0; n < ResolutionUrl.size(); n++) {
+                Log.v("BIBHU", "RESOLUTION URL======" + ResolutionUrl.get(n));
+            }
+        }
+
+        //=========================End=================================//
+
+
+        if ((SubTitlePath.size() < 1) && (ResolutionUrl.size() < 1)) {
+            subtitle_change_btn.setVisibility(View.INVISIBLE);
+            Log.v("MUVI", "subtitle_image button Invisible called");
+        }
+
+        //=============================== End Resolution Change ===================================//
+
+        if (playerModel.getVideoTitle().trim() != null && !playerModel.getVideoTitle().trim().matches("")) {
+            videoTitle.setText(playerModel.getVideoTitle().trim());
+            videoTitle.setVisibility(View.VISIBLE);
+        } else {
+            videoTitle.setVisibility(View.GONE);
+        }
+
+        if (playerModel.getVideoGenre().trim() != null && !playerModel.getVideoGenre().trim().matches(""))
+
+        {
+            GenreTextView.setText(playerModel.getVideoGenre().trim());
+            GenreTextView.setVisibility(View.VISIBLE);
+        } else {
+            GenreTextView.setVisibility(View.GONE);
+        }
+
+
+        if (playerModel.getVideoDuration().trim() != null && !playerModel.getVideoDuration().trim().matches(""))
+
+        {
+            videoDurationTextView.setText(playerModel.getVideoDuration().trim());
+            videoDurationTextView.setVisibility(View.VISIBLE);
+            censor_layout = false;
+        } else {
+            videoDurationTextView.setVisibility(View.GONE);
+        }
+        if (playerModel.getCensorRating().trim() != null && !playerModel.getCensorRating().trim().matches("")) {
+            if ((playerModel.getCensorRating().trim()).contains("_")) {
+                String Data[] = (playerModel.getCensorRating().trim()).split("-");
+                videoCensorRatingTextView.setVisibility(View.VISIBLE);
+                videoCensorRatingTextView1.setVisibility(View.VISIBLE);
+                videoCensorRatingTextView.setText(Data[0]);
+                videoCensorRatingTextView1.setText(Data[1]);
+                censor_layout = false;
+            } else {
+                censor_layout = false;
+                videoCensorRatingTextView.setVisibility(View.VISIBLE);
+                videoCensorRatingTextView1.setVisibility(View.GONE);
+                videoCensorRatingTextView.setText(playerModel.getCensorRating().trim());
+                // videoCensorRatingTextView.setTextColor(playerModel.getCensorRatingColor());
+            }
+        } else {
+
+            videoCensorRatingTextView.setVisibility(View.GONE);
+            videoCensorRatingTextView1.setVisibility(View.GONE);
+        }
+        if (playerModel.getCensorRating().trim() != null && playerModel.getCensorRating().trim().equalsIgnoreCase("No_DATA")) {
+            videoCensorRatingTextView.setVisibility(View.GONE);
+            videoCensorRatingTextView1.setVisibility(View.GONE);
+        }
+
+        if (playerModel.getVideoReleaseDate().trim() != null && !playerModel.getVideoReleaseDate().trim().matches(""))
+
+        {
+            videoReleaseDateTextView.setText(playerModel.getVideoReleaseDate().trim());
+            videoReleaseDateTextView.setVisibility(View.VISIBLE);
+            censor_layout = false;
+        } else {
+            videoReleaseDateTextView.setVisibility(View.GONE);
+        }
+
+        if (censor_layout) {
+
+            ((LinearLayout) findViewById(R.id.durationratingLiearLayout)).setVisibility(View.GONE);
+        }
+        if (playerModel.getVideoStory().trim() != null && !playerModel.getVideoStory().trim().matches(""))
+
+        {
+            story.setText(playerModel.getVideoStory());
+            story.setVisibility(View.VISIBLE);
+        } else {
+            story.setVisibility(View.GONE);
+        }
+
+        if (playerModel.isCastCrew() == true)
+
+        {
+            videoCastCrewTitleTextView.setVisibility(View.VISIBLE);
+        } else {
+            videoCastCrewTitleTextView.setVisibility(View.GONE);
+        }
+
+        videoCastCrewTitleTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (playerModel.checkNetwork(ExoPlayerActivity.this)) {
+                    //Will Add Some Data to send
                     playerModel.call_finish_at_onUserLeaveHint = false;
-                    Intent intent = new Intent(ExoPlayerActivity.this, Subtitle_Resolution.class);
-                    intent.putExtra("ResolutionFormat", ResolutionFormat);
-                    intent.putExtra("ResolutionUrl", ResolutionUrl);
-                    intent.putExtra("SubTitleName", SubTitleName);
-                    intent.putExtra("SubTitlePath", SubTitlePath);
-                    startActivityForResult(intent, 3333);
+                    playerModel.hide_pause = true;
+                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                    latest_center_play_pause.setVisibility(View.VISIBLE);
 
-
-                }
-            });
-
-            //=========================End=================================//
-
-
-            //===============================This is used for Resolution Change ===================================//
-
-
-            playerModel.VideoResolution = "Auto";
-
-            if (playerModel.getResolutionFormat() != null && !isDrm) {
-                ResolutionFormat = playerModel.getResolutionFormat();
-            } else {
-                ResolutionFormat.clear();
-
-            }
-
-            if (playerModel.getResolutionUrl() != null && !isDrm) {
-                ResolutionUrl = playerModel.getResolutionUrl();
-            } else {
-                ResolutionUrl.clear();
-            }
-
-            if (ResolutionUrl.size() < 1)
-
-            {
-                Log.v("MUVI", "resolution image Invisible called");
-            } else {
-                ResolutionUrl.add(playerModel.getVideoUrl().trim());
-                ResolutionFormat.add("Auto");
-            }
-
-            if (ResolutionFormat.size() > 0) {
-                Collections.reverse(ResolutionFormat);
-                for (int m = 0; m < ResolutionFormat.size(); m++) {
-                    Log.v("BIBHU", "RESOLUTION FORMAT======" + ResolutionFormat.get(m));
-                }
-            }
-            if (ResolutionUrl.size() > 0) {
-                Collections.reverse(ResolutionUrl);
-                for (int n = 0; n < ResolutionUrl.size(); n++) {
-                    Log.v("BIBHU", "RESOLUTION URL======" + ResolutionUrl.get(n));
-                }
-            }
-
-            //=========================End=================================//
-
-
-            if ((SubTitlePath.size() < 1) && (ResolutionUrl.size() < 1)) {
-                subtitle_change_btn.setVisibility(View.INVISIBLE);
-                Log.v("MUVI", "subtitle_image button Invisible called");
-            }
-
-            //=============================== End Resolution Change ===================================//
-
-            if (playerModel.getVideoTitle().trim() != null && !playerModel.getVideoTitle().trim().matches("")) {
-                videoTitle.setText(playerModel.getVideoTitle().trim());
-                videoTitle.setVisibility(View.VISIBLE);
-            } else {
-                videoTitle.setVisibility(View.GONE);
-            }
-
-            if (playerModel.getVideoGenre().trim() != null && !playerModel.getVideoGenre().trim().matches(""))
-
-            {
-                GenreTextView.setText(playerModel.getVideoGenre().trim());
-                GenreTextView.setVisibility(View.VISIBLE);
-            } else {
-                GenreTextView.setVisibility(View.GONE);
-            }
-
-
-            if (playerModel.getVideoDuration().trim() != null && !playerModel.getVideoDuration().trim().matches(""))
-
-            {
-                videoDurationTextView.setText(playerModel.getVideoDuration().trim());
-                videoDurationTextView.setVisibility(View.VISIBLE);
-                censor_layout = false;
-            } else {
-                videoDurationTextView.setVisibility(View.GONE);
-            }
-            if (playerModel.getCensorRating().trim() != null && !playerModel.getCensorRating().trim().matches("")) {
-                if ((playerModel.getCensorRating().trim()).contains("_")) {
-                    String Data[] = (playerModel.getCensorRating().trim()).split("-");
-                    videoCensorRatingTextView.setVisibility(View.VISIBLE);
-                    videoCensorRatingTextView1.setVisibility(View.VISIBLE);
-                    videoCensorRatingTextView.setText(Data[0]);
-                    videoCensorRatingTextView1.setText(Data[1]);
-                    censor_layout = false;
-                } else {
-                    censor_layout = false;
-                    videoCensorRatingTextView.setVisibility(View.VISIBLE);
-                    videoCensorRatingTextView1.setVisibility(View.GONE);
-                    videoCensorRatingTextView.setText(playerModel.getCensorRating().trim());
-                    // videoCensorRatingTextView.setTextColor(playerModel.getCensorRatingColor());
-                }
-            } else {
-
-                videoCensorRatingTextView.setVisibility(View.GONE);
-                videoCensorRatingTextView1.setVisibility(View.GONE);
-            }
-            if (playerModel.getCensorRating().trim() != null && playerModel.getCensorRating().trim().equalsIgnoreCase("No_DATA")) {
-                videoCensorRatingTextView.setVisibility(View.GONE);
-                videoCensorRatingTextView1.setVisibility(View.GONE);
-            }
-
-            if (playerModel.getVideoReleaseDate().trim() != null && !playerModel.getVideoReleaseDate().trim().matches(""))
-
-            {
-                videoReleaseDateTextView.setText(playerModel.getVideoReleaseDate().trim());
-                videoReleaseDateTextView.setVisibility(View.VISIBLE);
-                censor_layout = false;
-            } else {
-                videoReleaseDateTextView.setVisibility(View.GONE);
-            }
-
-            if (censor_layout) {
-
-                ((LinearLayout) findViewById(R.id.durationratingLiearLayout)).setVisibility(View.GONE);
-            }
-            if (playerModel.getVideoStory().trim() != null && !playerModel.getVideoStory().trim().matches(""))
-
-            {
-                story.setText(playerModel.getVideoStory());
-                story.setVisibility(View.VISIBLE);
-            } else {
-                story.setVisibility(View.GONE);
-            }
-
-            if (playerModel.isCastCrew() == true)
-
-            {
-                videoCastCrewTitleTextView.setVisibility(View.VISIBLE);
-            } else {
-                videoCastCrewTitleTextView.setVisibility(View.GONE);
-            }
-
-            videoCastCrewTitleTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (playerModel.checkNetwork(ExoPlayerActivity.this)) {
-                        //Will Add Some Data to send
-                        playerModel.call_finish_at_onUserLeaveHint = false;
-                        playerModel.hide_pause = true;
-                        ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
-                        latest_center_play_pause.setVisibility(View.VISIBLE);
-
-                        if (emVideoView.isPlaying()) {
-                            emVideoView.pause();
-                            latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
-                            center_play_pause.setImageResource(R.drawable.ic_media_play);
-                            mHandler.removeCallbacks(updateTimeTask);
-                        }
-
-
-                        final Intent detailsIntent = new Intent(ExoPlayerActivity.this, CastAndCrewActivity.class);
-                        detailsIntent.putExtra("cast_movie_id", movieId.trim());
-                        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(detailsIntent);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "NO_INTERNET_CONNECTION", Toast.LENGTH_LONG).show();
+                    if (emVideoView.isPlaying()) {
+                        emVideoView.pause();
+                        latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
+                        center_play_pause.setImageResource(R.drawable.ic_media_play);
+                        mHandler.removeCallbacks(updateTimeTask);
                     }
+
+
+                    final Intent detailsIntent = new Intent(ExoPlayerActivity.this, CastAndCrewActivity.class);
+                    detailsIntent.putExtra("cast_movie_id", movieId.trim());
+                    detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(detailsIntent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "NO_INTERNET_CONNECTION", Toast.LENGTH_LONG).show();
                 }
-            });
+            }
+        });
 
 
 
@@ -833,43 +834,43 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         emailAddressTextView.setTypeface(Tf);
         dateTextView.setTypeface(Tf);*/
 
-            emailAddressTextView.setText(emailIdStr);
-            dateTextView.setText(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
+        emailAddressTextView.setText(emailIdStr);
+        dateTextView.setText(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 
-            compress_expand = (ImageView) findViewById(R.id.compress_expand);
-            back = (ImageButton) findViewById(R.id.back);
-            seekBar = (SeekBar) findViewById(R.id.progress);
-            center_play_pause = (ImageButton) findViewById(R.id.center_play_pause);
+        compress_expand = (ImageView) findViewById(R.id.compress_expand);
+        back = (ImageButton) findViewById(R.id.back);
+        seekBar = (SeekBar) findViewById(R.id.progress);
+        center_play_pause = (ImageButton) findViewById(R.id.center_play_pause);
 
-            current_time = (TextView) findViewById(R.id.current_time);
-            total_time = (TextView) findViewById(R.id.total_time);
-            progressView = (ProgressBar) findViewById(R.id.progress_view);
+        current_time = (TextView) findViewById(R.id.current_time);
+        total_time = (TextView) findViewById(R.id.total_time);
+        progressView = (ProgressBar) findViewById(R.id.progress_view);
 
 
-            Display display = getWindowManager().getDefaultDisplay();
-            screenWidth = display.getWidth();
-            screenHeight = display.getHeight();
+        Display display = getWindowManager().getDefaultDisplay();
+        screenWidth = display.getWidth();
+        screenHeight = display.getHeight();
 
-            playerModel.player_description = true;
+        playerModel.player_description = true;
 
-            LinearLayout.LayoutParams params1 = null;
+        LinearLayout.LayoutParams params1 = null;
 
-            if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                if (ExoPlayerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 45) / 100);
+        if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+            if (ExoPlayerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 45) / 100);
 
-                } else {
-                    params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 45) / 100);
-                }
             } else {
-                if (ExoPlayerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
-
-                } else {
-                    params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
-                }
+                params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 45) / 100);
             }
-            player_layout.setLayoutParams(params1);
+        } else {
+            if (ExoPlayerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
+
+            } else {
+                params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
+            }
+        }
+        player_layout.setLayoutParams(params1);
 
         if (isLiveStream) {
             seekBar.setEnabled(false);
@@ -879,210 +880,211 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             seekBar.setProgress(0);
         }
 
-            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                    //Toast.makeText(getApplicationContext(),""+seekBar.getProgress(),Toast.LENGTH_SHORT).show();
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                //Toast.makeText(getApplicationContext(),""+seekBar.getProgress(),Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                mHandler.removeCallbacks(updateTimeTask);
+                playerStartPosition = emVideoView.getCurrentPosition();
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mHandler.removeCallbacks(updateTimeTask);
+                emVideoView.seekTo(seekBar.getProgress());
+                current_time.setVisibility(View.VISIBLE);
+                current_time.setVisibility(View.GONE);
+                showCurrentTime();
+                current_time.setVisibility(View.VISIBLE);
+                updateProgressBar();
+                if (playerPreviousPosition == 0) {
+                    if (playerStartPosition < emVideoView.getCurrentPosition()) {
+                        isFastForward = true;
+                        playerPreviousPosition = playerStartPosition;
+
+                    } else {
+
+                        playerPreviousPosition = playerStartPosition;
+                        isFastForward = false;
+
+                    }
                 }
+            }
+        });
 
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                    mHandler.removeCallbacks(updateTimeTask);
-                    playerStartPosition = emVideoView.getCurrentPosition();
+        seekBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    Instant_End_Timer();
 
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    Start_Timer();
                 }
+                return false;
+            }
+        });
 
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    mHandler.removeCallbacks(updateTimeTask);
-                    emVideoView.seekTo(seekBar.getProgress());
-                    current_time.setVisibility(View.VISIBLE);
+        emVideoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (((ProgressBar) findViewById(R.id.progress_view)).getVisibility() == View.VISIBLE) {
+                    primary_ll.setVisibility(View.VISIBLE);
+                    center_play_pause.setVisibility(View.GONE);
+                    latest_center_play_pause.setVisibility(View.GONE);
                     current_time.setVisibility(View.GONE);
-                    showCurrentTime();
-                    current_time.setVisibility(View.VISIBLE);
-                    updateProgressBar();
-                    if (playerPreviousPosition == 0) {
-                        if (playerStartPosition < emVideoView.getCurrentPosition()) {
-                            isFastForward = true;
-                            playerPreviousPosition = playerStartPosition;
+                    subtitle_change_btn.setVisibility(View.INVISIBLE);
 
-                        } else {
-                            playerPreviousPosition = playerStartPosition;
-                            isFastForward = false;
 
-                        }
-                    }
-                }
-            });
-
-            seekBar.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                        Instant_End_Timer();
-
-                    } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                        Start_Timer();
-                    }
-                    return false;
-                }
-            });
-
-            emVideoView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (((ProgressBar) findViewById(R.id.progress_view)).getVisibility() == View.VISIBLE) {
-                        primary_ll.setVisibility(View.VISIBLE);
+                } else {
+                    if (primary_ll.getVisibility() == View.VISIBLE) {
+                        primary_ll.setVisibility(View.GONE);
+                        last_ll.setVisibility(View.GONE);
                         center_play_pause.setVisibility(View.GONE);
                         latest_center_play_pause.setVisibility(View.GONE);
                         current_time.setVisibility(View.GONE);
                         subtitle_change_btn.setVisibility(View.INVISIBLE);
 
-
-                    } else {
-                        if (primary_ll.getVisibility() == View.VISIBLE) {
-                            primary_ll.setVisibility(View.GONE);
-                            last_ll.setVisibility(View.GONE);
-                            center_play_pause.setVisibility(View.GONE);
-                            latest_center_play_pause.setVisibility(View.GONE);
-                            current_time.setVisibility(View.GONE);
-                            subtitle_change_btn.setVisibility(View.INVISIBLE);
-
-                            End_Timer();
-                        } else {
-
-
-                            primary_ll.setVisibility(View.VISIBLE);
-
-                            if (SubTitlePath.size() > 0 || ResolutionUrl.size() > 0) {
-                                subtitle_change_btn.setVisibility(View.VISIBLE);
-                            }
-
-                            last_ll.setVisibility(View.VISIBLE);
-                            center_play_pause.setVisibility(View.VISIBLE);
-                            latest_center_play_pause.setVisibility(View.VISIBLE);
-                            current_time.setVisibility(View.VISIBLE);
-                            current_time.setVisibility(View.GONE);
-                            showCurrentTime();
-                            current_time.setVisibility(View.VISIBLE);
-                            Start_Timer();
-                        }
-
-                    }
-
-
-                }
-            });
-
-            compress_expand.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //Write code here
-
-                    if (compressed) {
-                        compressed = false;
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.MATCH_PARENT);
-                        player_layout.setLayoutParams(params);
-                        compress_expand.setImageResource(R.drawable.ic_media_fullscreen_shrink);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                            }
-                        });
-                        playerModel.player_description = false;
-                        playerModel.landscape = true;
-                        hideSystemUI();
-                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                        End_Timer();
                     } else {
 
-                        playerModel.player_description = true;
-                        LinearLayout.LayoutParams params1 = null;
-                        if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                            if (ExoPlayerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                                params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 45) / 100);
 
-                            } else {
-                                params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 45) / 100);
-                            }
-                        } else {
-                            if (ExoPlayerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                                params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
+                        primary_ll.setVisibility(View.VISIBLE);
 
-                            } else {
-                                params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
-                            }
+                        if (SubTitlePath.size() > 0 || ResolutionUrl.size() > 0) {
+                            subtitle_change_btn.setVisibility(View.VISIBLE);
                         }
-                        player_layout.setLayoutParams(params1);
-                        compressed = true;
-                        compress_expand.setImageResource(R.drawable.ic_media_fullscreen_stretch);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                            }
-                        });
-                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                        showSystemUI();
-                    }
-                }
-            });
 
-
-            center_play_pause.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Execute_Pause_Play();
-                }
-            });
-            latest_center_play_pause.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if (playerModel.hide_pause) {
-                        playerModel.hide_pause = false;
+                        last_ll.setVisibility(View.VISIBLE);
+                        center_play_pause.setVisibility(View.VISIBLE);
+                        latest_center_play_pause.setVisibility(View.VISIBLE);
+                        current_time.setVisibility(View.VISIBLE);
+                        current_time.setVisibility(View.GONE);
+                        showCurrentTime();
+                        current_time.setVisibility(View.VISIBLE);
                         Start_Timer();
                     }
 
-                    Execute_Pause_Play();
                 }
-            });
 
-            emVideoView.setOnPreparedListener(new OnPreparedListener() {
-                @Override
-                public void onPrepared() {
 
-                    if (change_resolution) {
+            }
+        });
 
-                        change_resolution = false;
-                        emVideoView.start();
-                        emVideoView.seekTo(seekBarProgress);
-                        seekBar.setProgress(emVideoView.getCurrentPosition());
+        compress_expand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Write code here
 
-                        if (is_paused) {
-                            is_paused = false;
-                            emVideoView.pause();
-                            progressView.setVisibility(View.GONE);
+                if (compressed) {
+                    compressed = false;
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT);
+                    player_layout.setLayoutParams(params);
+                    compress_expand.setImageResource(R.drawable.ic_media_fullscreen_shrink);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        }
+                    });
+                    playerModel.player_description = false;
+                    playerModel.landscape = true;
+                    hideSystemUI();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                } else {
+
+                    playerModel.player_description = true;
+                    LinearLayout.LayoutParams params1 = null;
+                    if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+                        if (ExoPlayerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 45) / 100);
+
                         } else {
-                            updateProgressBar();
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 45) / 100);
                         }
-
                     } else {
+                        if (ExoPlayerActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
 
-                        if (playerModel.getPlayPos() >= emVideoView.getDuration() / 1000) {
-                            played_length = 0;
+                        } else {
+                            params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
                         }
+                    }
+                    player_layout.setLayoutParams(params1);
+                    compressed = true;
+                    compress_expand.setImageResource(R.drawable.ic_media_fullscreen_stretch);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        }
+                    });
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    showSystemUI();
+                }
+            }
+        });
 
-                        video_completed = false;
-                        progressView.setVisibility(View.VISIBLE);
-                        center_play_pause.setVisibility(View.GONE);
-                        latest_center_play_pause.setVisibility(View.GONE);
 
-                        try {
-                            //video log
-                            if (isLiveStream == true) {
+        center_play_pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Execute_Pause_Play();
+            }
+        });
+        latest_center_play_pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (playerModel.hide_pause) {
+                    playerModel.hide_pause = false;
+                    Start_Timer();
+                }
+
+                Execute_Pause_Play();
+            }
+        });
+
+        emVideoView.setOnPreparedListener(new OnPreparedListener() {
+            @Override
+            public void onPrepared() {
+
+                if (change_resolution) {
+
+                    change_resolution = false;
+                    emVideoView.start();
+                    emVideoView.seekTo(seekBarProgress);
+                    seekBar.setProgress(emVideoView.getCurrentPosition());
+
+                    if (is_paused) {
+                        is_paused = false;
+                        emVideoView.pause();
+                        progressView.setVisibility(View.GONE);
+                    } else {
+                        updateProgressBar();
+                    }
+
+                } else {
+
+                    if (playerModel.getPlayPos() >= emVideoView.getDuration() / 1000) {
+                        played_length = 0;
+                    }
+
+                    video_completed = false;
+                    progressView.setVisibility(View.VISIBLE);
+                    center_play_pause.setVisibility(View.GONE);
+                    latest_center_play_pause.setVisibility(View.GONE);
+
+                    try {
+                        //video log
+                        if (isLiveStream == true) {
 
                             if (SubTitlePath.size() > 0) {
                                 CheckSubTitleParsingType("1");
@@ -1098,7 +1100,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                             PreviousUsedDataByApp(false);
                             emVideoView.start();
                             /**ad **/
-                            if (playerModel.getAdNetworkId() == 3){
+                            if (playerModel.getAdNetworkId() == 3) {
                                 requestAds(playerModel.getChannel_id());
 
                             }
@@ -1107,18 +1109,18 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         } else {
                             startTimer();
 
-                                if (played_length > 0) {
-                                    playerModel.call_finish_at_onUserLeaveHint = false;
-                                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
-                                    Intent resumeIntent = new Intent(ExoPlayerActivity.this, ResumePopupActivity.class);
-                                    startActivityForResult(resumeIntent, 1001);
-                                } else {
+                            if (played_length > 0) {
+                                playerModel.call_finish_at_onUserLeaveHint = false;
+                                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                                Intent resumeIntent = new Intent(ExoPlayerActivity.this, ResumePopupActivity.class);
+                                startActivityForResult(resumeIntent, 1001);
+                            } else {
 
 
-                                    PreviousUsedDataByApp(false);
-                                    emVideoView.start();
+                                PreviousUsedDataByApp(false);
+                                emVideoView.start();
                                 /**ad **/
-                                if (playerModel.getAdNetworkId() == 3){
+                                if (playerModel.getAdNetworkId() == 3) {
                                     requestAds(playerModel.getChannel_id());
 
                                 }
@@ -1126,106 +1128,106 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 seekBar.setProgress(emVideoView.getCurrentPosition());
                                 updateProgressBar();
 
-                                    if (SubTitlePath.size() > 0) {
-                                        CheckSubTitleParsingType("1");
-                                        subtitleDisplayHandler = new Handler();
-                                        subsFetchTask = new SubtitleProcessingTask("1");
-                                        subsFetchTask.execute();
-                                    } else {
-                                        if (!userIdStr.matches("") && !movieId.matches("") && !playerModel.getAuthTokenStr().matches("") && !episodeId.matches("") && !ipAddressStr.matches("")) {
-                                            asyncVideoLogDetails = new AsyncVideoLogDetails();
-                                            asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-                                        }
-
+                                if (SubTitlePath.size() > 0) {
+                                    CheckSubTitleParsingType("1");
+                                    subtitleDisplayHandler = new Handler();
+                                    subsFetchTask = new SubtitleProcessingTask("1");
+                                    subsFetchTask.execute();
+                                } else {
+                                    if (!userIdStr.matches("") && !movieId.matches("") && !playerModel.getAuthTokenStr().matches("") && !episodeId.matches("") && !ipAddressStr.matches("")) {
+                                        asyncVideoLogDetails = new AsyncVideoLogDetails();
+                                        asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                     }
 
                                 }
 
                             }
-                        } catch (Exception e) {
+
                         }
+                    } catch (Exception e) {
                     }
-
                 }
-            });
 
-            back.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    backCalled();
-
-                }
-            });
-
-
-            //emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
-
-
-            // ================================This is added for the DRM video Play=========================
-
-            try {
-                Runtime.initialize(getDir("wasabi", MODE_PRIVATE).getAbsolutePath());
-
-                if (!Runtime.isPersonalized())
-                    Runtime.personalize();
-
-            } catch (NullPointerException e) {
-
-                backCalled();
-                return;
-            } catch (ErrorCodeException e) {
-                backCalled();
-                return;
             }
+        });
 
-            try {
-                EnumSet<PlaylistProxy.Flags> flags = EnumSet.noneOf(PlaylistProxy.Flags.class);
-                playerProxy = new PlaylistProxy(flags, this, new Handler());
-                playerProxy.start();
-            } catch (ErrorCodeException e) {
-
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 backCalled();
-                return;
+
             }
+        });
 
-            try {
+
+        //emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
 
 
-                ContentTypes1 contentType = ContentTypes1.DASH;
-                PlaylistProxy.MediaSourceParams params = new PlaylistProxy.MediaSourceParams();
-                params.sourceContentType = contentType
-                        .getMediaSourceParamsContentType();
+        // ================================This is added for the DRM video Play=========================
 
-                String contentTypeValue = contentType.toString();
+        try {
+            Runtime.initialize(getDir("wasabi", MODE_PRIVATE).getAbsolutePath());
+
+            if (!Runtime.isPersonalized())
+                Runtime.personalize();
+
+        } catch (NullPointerException e) {
+
+            backCalled();
+            return;
+        } catch (ErrorCodeException e) {
+            backCalled();
+            return;
+        }
+
+        try {
+            EnumSet<PlaylistProxy.Flags> flags = EnumSet.noneOf(PlaylistProxy.Flags.class);
+            playerProxy = new PlaylistProxy(flags, this, new Handler());
+            playerProxy.start();
+        } catch (ErrorCodeException e) {
+
+            backCalled();
+            return;
+        }
+
+        try {
+
+
+            ContentTypes1 contentType = ContentTypes1.DASH;
+            PlaylistProxy.MediaSourceParams params = new PlaylistProxy.MediaSourceParams();
+            params.sourceContentType = contentType
+                    .getMediaSourceParamsContentType();
+
+            String contentTypeValue = contentType.toString();
              /*@MUVI
              * this part is check if url is for drm then plAY if part other wise else part
              * */
-                if (isDrm) {
-                    String url = playerProxy.makeUrl(playerModel.getVideoUrl(), PlaylistProxy.MediaSourceType.valueOf((contentTypeValue == "MP4" || contentTypeValue == "HLS" || contentTypeValue == "DASH") ? contentTypeValue : "SINGLE_FILE"), params);
-                    emVideoView.setVideoURI(Uri.parse(url));
-                } else {
-                    emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
-                }
-
-
-            } catch (ErrorCodeException e) {
-                backCalled();
-                return;
-            } catch (IllegalArgumentException e) {
-                backCalled();
-                e.printStackTrace();
-            } catch (SecurityException e) {
-                backCalled();
-                e.printStackTrace();
-            } catch (IllegalStateException e) {
-                backCalled();
-                e.printStackTrace();
+            if (isDrm) {
+                String url = playerProxy.makeUrl(playerModel.getVideoUrl(), PlaylistProxy.MediaSourceType.valueOf((contentTypeValue == "MP4" || contentTypeValue == "HLS" || contentTypeValue == "DASH") ? contentTypeValue : "SINGLE_FILE"), params);
+                emVideoView.setVideoURI(Uri.parse(url));
+            } else {
+                emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
             }
-            //========================end of drm code====================================
 
-            AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
-            asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+
+        } catch (ErrorCodeException e) {
+            backCalled();
+            return;
+        } catch (IllegalArgumentException e) {
+            backCalled();
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            backCalled();
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            backCalled();
+            e.printStackTrace();
         }
+        //========================end of drm code====================================
+
+        AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
+        asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+    }
 
 
     private long DataUsedByDownloadContent() {
@@ -1260,7 +1262,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                             }
                         }
 
-                        Log.v("BIBHU11", "  TotalUsedData Download size============" + Total +"KB");
+                        Log.v("BIBHU11", "  TotalUsedData Download size============" + Total + "KB");
 
                     } while (cursor.moveToNext());
                 }
@@ -1274,7 +1276,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     }
 
     public void PreviousUsedDataByApp(boolean status) {
-        try{
+        try {
 
             long prev_data = 0;
             PackageManager pm = getPackageManager();
@@ -1286,19 +1288,15 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     int uid = pi.applicationInfo.uid;
                     prev_data = (TrafficStats.getUidRxBytes(uid) + TrafficStats.getUidTxBytes(uid)) / 1024;
                     PreviousUsedData = prev_data;
-                    if(status)
-                    {
+                    if (status) {
                         PreviousUsedData = prev_data;
                         Log.v("BIBHU", "PreviousUsedDataByApp  true===========================" + (appName + " : " + PreviousUsedData + "KB"));
 
-                    }
-                    else
-                    {
-                        Log.v("BIBHU", "*************** false===========================prev_data= " + prev_data+" KB==========CurrentUsedData= "+CurrentUsedData+" KB");
+                    } else {
+                        Log.v("BIBHU", "*************** false===========================prev_data= " + prev_data + " KB==========CurrentUsedData= " + CurrentUsedData + " KB");
 
 
-
-                        PreviousUsedData =  ((prev_data - PreviousUsedData) - CurrentUsedData)+ PreviousUsedData;
+                        PreviousUsedData = ((prev_data - PreviousUsedData) - CurrentUsedData) + PreviousUsedData;
                         Log.v("BIBHU", "PreviousUsedDataByApp false===========================" + (appName + " : " + PreviousUsedData + "KB"));
 
                     }
@@ -1327,7 +1325,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         protected Void doInBackground(Void... params) {
             Log.v("BKS", "urlRouteList==" + playerModel.getRootUrl());
 
-            String urlRouteList = playerModel.getRootUrl().trim() + "videoLogs";
+            String urlRouteList = playerModel.getRootUrl().trim() + "videoLogNew";
             Log.v("BKS", "urlRouteList==" + urlRouteList + movieId);
             Log.v("BKS", "userIdStr==" + userIdStr + userIdStr);
             Log.v("BKS", "ip_address==" + ipAddressStr);
@@ -1348,7 +1346,46 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("watch_status", watchStatus);
                 httppost.addHeader("device_type", "2");
                 httppost.addHeader("log_id", videoLogId);
+                httppost.addHeader("log_temp_id", log_temp_id);
+
                 Log.v("BISHALS", "movie_id=" + movieId.trim());
+                Log.v("BIBHU6","authToken="+Util.authTokenStr.trim());
+                Log.v("BIBHU6","user_id="+userIdStr.trim());
+                Log.v("BIBHU6","ip_address="+ipAddressStr.trim());
+                Log.v("BIBHU6","movie_id="+movieId.trim());
+                Log.v("BIBHU6","episode_id="+episodeId.trim());
+                Log.v("BIBHU6","played_length="+String.valueOf(playerPosition));
+                Log.v("BIBHU6","watch_status="+watchStatus);
+                Log.v("BIBHU6","device_type="+"2");
+                Log.v("BIBHU6","log_id="+videoLogId);
+
+
+                if (playerModel.isstreaming_restricted()) {
+                    Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
+                    httppost.addHeader("is_streaming_restriction", "1");
+                    httppost.addHeader("restrict_stream_id", restrict_stream_id);
+
+                    Log.v("BIBHU6","is_streaming_restriction="+"1");
+                    Log.v("BIBHU6","restrict_stream_id="+restrict_stream_id);
+                }
+                httppost.addHeader("played_length", ""+(playerPosition - player_start_time));
+                httppost.addHeader("resume_time", ""+(playerPosition));
+
+                Log.v("BIBHU", "player_start_time===*****************========="+player_start_time);
+                Log.v("BIBHU", "playerPosition======***************8======"+playerPosition);
+
+
+                Log.v("BIBHU", "played_length============"+(playerPosition - player_start_time));
+                Log.v("BIBHU", "log_temp_id============"+log_temp_id);
+                Log.v("BIBHU", "resume_time============"+(playerPosition));
+                Log.v("BIBHU", "playerPosition============"+playerPosition);
+                Log.v("BIBHU", "log_id============"+videoLogId);
+
+                Log.v("BIBHU", "user_id============"+userIdStr.trim());
+                Log.v("BIBHU", "movieId.trim()============"+movieId.trim());
+                Log.v("BIBHU", "episodeId.trim()============"+episodeId.trim());
+                Log.v("BIBHU", "watchStatus============"+watchStatus);
+                Log.v("BIBHU", "restrict_stream_id============"+restrict_stream_id);
 
 
                 // Execute HTTP Post Request
@@ -1379,14 +1416,18 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     statusCode = Integer.parseInt(myJson.optString("code"));
                     if (statusCode == 200) {
                         videoLogId = myJson.optString("log_id");
+                        log_temp_id = myJson.optString("log_temp_id");
+                        restrict_stream_id = myJson.optString("restrict_stream_id");
                     } else {
                         videoLogId = "0";
+                        log_temp_id = "0";
                     }
 
                 }
 
             } catch (Exception e) {
                 videoLogId = "0";
+                log_temp_id = "0";
                 Log.v("MUVI", "Exception" + e);
 
             }
@@ -1399,6 +1440,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             if (responseStr == null) {
                 videoLogId = "0";
+                log_temp_id = "0";
             }
             AsyncVideoBufferLogDetails asyncVideoBufferLogDetails = new AsyncVideoBufferLogDetails();
             asyncVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
@@ -1444,13 +1486,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("log_unique_id", videoBufferLogUniqueId);
                 httppost.addHeader("location", Location);
 
-                   Log.v("BKS","video buffer lof videourl"+playerModel.getVideoUrl());
+                Log.v("BKS", "video buffer lof videourl" + playerModel.getVideoUrl());
                 if (isDrm) {
-                    Log.v("BKS","if called and 2 header attached ");
+                    Log.v("BKS", "if called and 2 header attached ");
 
                     httppost.addHeader("video_type", "mped_dash");
                     httppost.addHeader("totalBandwidth", "" + CurrentUsedData);
-                    Log.v("BKS","video buffer bandwidth"+CurrentUsedData);
+                    Log.v("BKS", "video buffer bandwidth" + CurrentUsedData);
                 }
 
                 // Execute HTTP Post Request
@@ -1711,27 +1753,53 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = playerModel.getRootUrl().trim() + "videoLogs";
+            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", playerModel.getAuthTokenStr().trim());
+                httppost.addHeader("authToken", Util.authTokenStr.trim());
                 httppost.addHeader("user_id", userIdStr);
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
                 httppost.addHeader("episode_id", episodeId.trim());
 
-                httppost.addHeader("played_length", String.valueOf(playerPosition));
                 httppost.addHeader("watch_status", watchStatus);
 
                 httppost.addHeader("device_type", "2");
                 httppost.addHeader("log_id", videoLogId);
 
+                if (playerModel.isstreaming_restricted()) {
+
+                    Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
+                    httppost.addHeader("is_streaming_restriction", "1");
+                    httppost.addHeader("restrict_stream_id", restrict_stream_id);
+                }
+
+                // Following code is changed due to NewVideoLog API ;
+
+                httppost.addHeader("played_length", ""+(playerPosition - player_start_time));
+                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("resume_time", ""+(playerPosition));
+
+
+                Log.v("BIBHU11", "played_length============"+(playerPosition - player_start_time));
+
+
+
+                Log.v("BIBHU11", "log_temp_id============"+log_temp_id);
+                Log.v("BIBHU11", "resume_time============"+(playerPosition));
+                Log.v("BIBHU11", "log_id============"+videoLogId);
+
+                //===============End=============================//
+
                 // Execute HTTP Post Request
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
+
+                    Log.v("BIBHU", "responseStr of responseStr============" + responseStr);
+
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -1752,13 +1820,20 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     statusCode = Integer.parseInt(myJson.optString("code"));
                     if (statusCode == 200) {
                         videoLogId = myJson.optString("log_id");
+                        log_temp_id = myJson.optString("log_temp_id");
+                        restrict_stream_id = myJson.optString("restrict_stream_id");
+
+                        Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
                     } else {
                         videoLogId = "0";
+                        log_temp_id = "0";
                     }
+
                 }
 
             } catch (Exception e) {
                 videoLogId = "0";
+                log_temp_id = "0";
 
             }
 
@@ -1769,14 +1844,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         protected void onPostExecute(Void result) {
             if (responseStr == null) {
                 videoLogId = "0";
-
+                log_temp_id = "0";
             }
-            if (statusCode == 200) {
-                AsyncFFVideoBufferLogDetails asyncFFVideoBufferLogDetails = new AsyncFFVideoBufferLogDetails();
-                asyncFFVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
-
-            }
-            return;
+            AsyncVideoBufferLogDetails asyncVideoBufferLogDetails = new AsyncVideoBufferLogDetails();
+            asyncVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
 
         }
 
@@ -1784,7 +1855,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         protected void onPreExecute() {
             // updateSeekBarThread.stop();
             stoptimertask();
+
         }
+
+
     }
 
 
@@ -2201,7 +2275,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             current_matching_time = emVideoView.getCurrentPosition();
 
-            Log.v("TIme match :: ","current_matching_time : "+current_matching_time+"previous_matching_time::"+previous_matching_time);
+            Log.v("TIme match :: ", "current_matching_time : " + current_matching_time + "previous_matching_time::" + previous_matching_time);
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
                 //====start this condition for check the cuurent time AND THAT SEEKBAR SIMULTINOUSLY RUN====
                 findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
@@ -2222,7 +2296,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
                 } else {
-                    Log.v("TIme match else:: ","current_matching_time : "+current_matching_time+"emVideoView.getDuration()::"+emVideoView.getDuration());
+                    Log.v("TIme match else:: ", "current_matching_time : " + current_matching_time + "emVideoView.getDuration()::" + emVideoView.getDuration());
                     if (current_matching_time >= emVideoView.getDuration()) {
                         mHandler.removeCallbacks(updateTimeTask);
                         //  pause_play.setImageResource(R.drawable.ic_media_play);
@@ -2493,7 +2567,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             stoptimertask();
             timer = null;
         }
-        if (Util.getTextofLanguage(ExoPlayerActivity.this, Util.IS_STREAMING_RESTRICTION, Util.DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1") && Util.call_finish_at_onUserLeaveHint) {
+
+        if (playerModel.isstreaming_restricted() && Util.call_finish_at_onUserLeaveHint) {
 
 
             AsyncResumeVideoLogDetails_HomeClicked asyncResumeVideoLogDetails_homeClicked = new AsyncResumeVideoLogDetails_HomeClicked();
@@ -2668,7 +2743,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = playerModel.getRootUrl().trim() + "videoLogs";
+            String urlRouteList = playerModel.getRootUrl().trim() + "videoLogNew";
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
@@ -2688,6 +2763,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     }
 
                 });
+                if (playerModel.isstreaming_restricted()) {
+                    Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
+
+                    httppost.addHeader("is_streaming_restriction", "1");
+                    httppost.addHeader("restrict_stream_id", restrict_stream_id);
+                    httppost.addHeader("is_active_stream_closed", "1");
+                }
                 httppost.addHeader("played_length", String.valueOf(playerPosition));
                 httppost.addHeader("watch_status", watchSt);
               /*  runOnUiThread(new Runnable() {
@@ -2735,14 +2817,18 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     statusCode = Integer.parseInt(myJson.optString("code"));
                     if (statusCode == 200) {
                         videoLogId = myJson.optString("log_id");
+                        log_temp_id = myJson.optString("log_temp_id");
+                        restrict_stream_id = myJson.optString("restrict_stream_id");
                     } else {
                         videoLogId = "0";
+                        log_temp_id = "0";
                     }
 
                 }
 
             } catch (Exception e) {
                 videoLogId = "0";
+                log_temp_id = "0";
 
             }
 
@@ -2759,6 +2845,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             }*/
             if (responseStr == null) {
                 videoLogId = "0";
+                log_temp_id = "0";
 
             }
             mHandler.removeCallbacks(updateTimeTask);
@@ -2839,11 +2926,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             }
 
-                if (requestCode == 1001) {
+            if (requestCode == 1001) {
 
                 Player.call_finish_at_onUserLeaveHint = false;
 
-                    if (data.getStringExtra("yes").equals("1002")) {
+                if (data.getStringExtra("yes").equals("1002")) {
 
                     watchStatus = "halfplay";
                     playerPosition = playerModel.getPlayPos();
@@ -2854,122 +2941,122 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     seekBar.setProgress(played_length);
                     updateProgressBar();
 
-                    } else {
-                        if (playerModel.getPreRoll() == 1 && playerModel.getAdNetworkId() == 1) {
-                            if (Util.checkNetwork(ExoPlayerActivity.this)) {
-                                Util.call_finish_at_onUserLeaveHint = false;
-                                Util.hide_pause = true;
-                                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
-                                latest_center_play_pause.setVisibility(View.VISIBLE);
+                } else {
+                    if (playerModel.getPreRoll() == 1 && playerModel.getAdNetworkId() == 1) {
+                        if (Util.checkNetwork(ExoPlayerActivity.this)) {
+                            Util.call_finish_at_onUserLeaveHint = false;
+                            Util.hide_pause = true;
+                            ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                            latest_center_play_pause.setVisibility(View.VISIBLE);
 
 
-                                if (emVideoView.isPlaying()) {
-                                    emVideoView.pause();
-                                    latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
-                                    center_play_pause.setImageResource(R.drawable.ic_media_play);
-                                    mHandler.removeCallbacks(updateTimeTask);
+                            if (emVideoView.isPlaying()) {
+                                emVideoView.pause();
+                                latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
+                                center_play_pause.setImageResource(R.drawable.ic_media_play);
+                                mHandler.removeCallbacks(updateTimeTask);
 
-                                }
-
-                                if (center_pause_paly_timer_is_running) {
-                                    center_pause_paly_timer.cancel();
-                                    center_pause_paly_timer_is_running = false;
-                                    Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
-
-
-                                    subtitle_change_btn.setVisibility(View.INVISIBLE);
-                                    primary_ll.setVisibility(View.GONE);
-                                    last_ll.setVisibility(View.GONE);
-                                    center_play_pause.setVisibility(View.GONE);
-                                    current_time.setVisibility(View.GONE);
-                                }
-
-
-                                /**ad **/
-
-                                Intent adIntent = new Intent(ExoPlayerActivity.this, AdPlayerActivity.class);
-                                adIntent.putExtra("fromAd", "fromAd");
-                                adIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                adIntent.putExtra("PlayerModel", playerModel);
-                                startActivityForResult(adIntent, 8002);
-                                /**ad **/
-
-                            } else {
-                                Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ExoPlayerActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                             }
+
+                            if (center_pause_paly_timer_is_running) {
+                                center_pause_paly_timer.cancel();
+                                center_pause_paly_timer_is_running = false;
+                                Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
+
+
+                                subtitle_change_btn.setVisibility(View.INVISIBLE);
+                                primary_ll.setVisibility(View.GONE);
+                                last_ll.setVisibility(View.GONE);
+                                center_play_pause.setVisibility(View.GONE);
+                                current_time.setVisibility(View.GONE);
+                            }
+
+
+                            /**ad **/
+
+                            Intent adIntent = new Intent(ExoPlayerActivity.this, AdPlayerActivity.class);
+                            adIntent.putExtra("fromAd", "fromAd");
+                            adIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            adIntent.putExtra("PlayerModel", playerModel);
+                            startActivityForResult(adIntent, 8002);
+                            /**ad **/
+
                         } else {
-                            PreviousUsedDataByApp(false);
-                            emVideoView.start();
-                            seekBar.setProgress(emVideoView.getCurrentPosition());
-                            updateProgressBar();
+                            Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ExoPlayerActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
-                    }
-
-                    if (SubTitlePath.size() > 0) {
-
-                        CheckSubTitleParsingType("1");
-
-                        subtitleDisplayHandler = new Handler();
-                        subsFetchTask = new SubtitleProcessingTask("1");
-                        subsFetchTask.execute();
                     } else {
-                        if (!userIdStr.matches("") && !movieId.matches("") && !playerModel.getAuthTokenStr().matches("") && !episodeId.matches("") && !ipAddressStr.matches("")) {
-                            asyncVideoLogDetails = new AsyncVideoLogDetails();
-                            asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-                        }
+                        PreviousUsedDataByApp(false);
+                        emVideoView.start();
+                        seekBar.setProgress(emVideoView.getCurrentPosition());
+                        updateProgressBar();
+                    }
+                }
 
+                if (SubTitlePath.size() > 0) {
+
+                    CheckSubTitleParsingType("1");
+
+                    subtitleDisplayHandler = new Handler();
+                    subsFetchTask = new SubtitleProcessingTask("1");
+                    subsFetchTask.execute();
+                } else {
+                    if (!userIdStr.matches("") && !movieId.matches("") && !playerModel.getAuthTokenStr().matches("") && !episodeId.matches("") && !ipAddressStr.matches("")) {
+                        asyncVideoLogDetails = new AsyncVideoLogDetails();
+                        asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                     }
 
                 }
-                if (requestCode == 3333) {
-                    // This is for Subtitle feature
 
-                    if (data.getStringExtra("type").equals("subtitle")) {
+            }
+            if (requestCode == 3333) {
+                // This is for Subtitle feature
+
+                if (data.getStringExtra("type").equals("subtitle")) {
 
 //                    Toast.makeText(getApplicationContext(),"subtitle == "+data.getStringExtra("position"),Toast.LENGTH_SHORT).show();
-                        if (!data.getStringExtra("position").equals("nothing")) {
+                    if (!data.getStringExtra("position").equals("nothing")) {
 
-                            if (data.getStringExtra("position").equals("0")) {
-                                // Stop Showing Subtitle
-                                if (subtitleDisplayHandler != null)
-                                    subtitleDisplayHandler.removeCallbacks(subtitleProcessesor);
-                                subtitleText.setText("");
-                            } else {
-                                try {
+                        if (data.getStringExtra("position").equals("0")) {
+                            // Stop Showing Subtitle
+                            if (subtitleDisplayHandler != null)
+                                subtitleDisplayHandler.removeCallbacks(subtitleProcessesor);
+                            subtitleText.setText("");
+                        } else {
+                            try {
 
-                                    CheckSubTitleParsingType(data.getStringExtra("position"));
+                                CheckSubTitleParsingType(data.getStringExtra("position"));
 
-                                    subtitleDisplayHandler = new Handler();
-                                    subsFetchTask = new SubtitleProcessingTask(data.getStringExtra("position"));
-                                    subsFetchTask.execute();
-                                } catch (Exception e) {
-                                    Log.v("MUVI", "Exception of subtitle change process =" + e.toString());
-                                }
+                                subtitleDisplayHandler = new Handler();
+                                subsFetchTask = new SubtitleProcessingTask(data.getStringExtra("position"));
+                                subsFetchTask.execute();
+                            } catch (Exception e) {
+                                Log.v("MUVI", "Exception of subtitle change process =" + e.toString());
                             }
                         }
                     }
+                }
 
-                    // This is for Resolution feature
+                // This is for Resolution feature
 
-                    if (data.getStringExtra("type").equals("resolution")) {
+                if (data.getStringExtra("type").equals("resolution")) {
 
 //                Toast.makeText(getApplicationContext(),"resolution == "+data.getStringExtra("position"),Toast.LENGTH_SHORT).show();
-                        mHandler.removeCallbacks(updateTimeTask);
-                        if (!data.getStringExtra("position").equals("nothing")) {
+                    mHandler.removeCallbacks(updateTimeTask);
+                    if (!data.getStringExtra("position").equals("nothing")) {
 
-                            if (!emVideoView.isPlaying()) {
-                                is_paused = true;
-                            }
-
-                            change_resolution = true;
-                            ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
-                            emVideoView.setVideoURI(Uri.parse(ResolutionUrl.get(Integer.parseInt(data.getStringExtra("position")))));
-
+                        if (!emVideoView.isPlaying()) {
+                            is_paused = true;
                         }
+
+                        change_resolution = true;
+                        ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                        emVideoView.setVideoURI(Uri.parse(ResolutionUrl.get(Integer.parseInt(data.getStringExtra("position")))));
+
                     }
                 }
             }
         }
+    }
 
 
     @Override
@@ -2982,16 +3069,15 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         //to destroy the registerrecever
         // TODO Auto-generated method stub
 
-        try{
-            if(SelectedUrl!=null)
+        try {
+            if (SelectedUrl != null)
                 unregisterReceiver(SelectedUrl);
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
 
         }
         //super.onDestroy();
 
-        if (Util.getTextofLanguage(ExoPlayerActivity.this, Util.IS_STREAMING_RESTRICTION, Util.DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1") && Util.Call_API_For_Close_Streming) {
+        if (playerModel.isstreaming_restricted() && Util.Call_API_For_Close_Streming) {
             Util.Call_API_For_Close_Streming = false;
             Log.v("BIBHU", "==============Ondestory of Exoplyer called============");
 
@@ -3337,8 +3423,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                     downloading = false;
 
                                     SQLiteDatabase DB = ExoPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-                                    String query1 = "UPDATE "+DBHelper.DOWNLOAD_CONTENT_INFO+" SET download_status = '1'" +
-                                            " WHERE email = '"+emailIdStr+"' AND download_contnet_id = '"+model.getDOWNLOADID()+"'";
+                                    String query1 = "UPDATE " + DBHelper.DOWNLOAD_CONTENT_INFO + " SET download_status = '1'" +
+                                            " WHERE email = '" + emailIdStr + "' AND download_contnet_id = '" + model.getDOWNLOADID() + "'";
                                     DB.execSQL(query1);
 
                                 } else if (status == DownloadManager.STATUS_FAILED) {
@@ -3346,8 +3432,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                     model.setDSTATUS(0);
 
                                     SQLiteDatabase DB = ExoPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-                                    String query1 = "UPDATE "+DBHelper.DOWNLOAD_CONTENT_INFO+" SET download_status = '0'" +
-                                            " WHERE email = '"+emailIdStr+"' AND download_contnet_id = '"+model.getDOWNLOADID()+"'";
+                                    String query1 = "UPDATE " + DBHelper.DOWNLOAD_CONTENT_INFO + " SET download_status = '0'" +
+                                            " WHERE email = '" + emailIdStr + "' AND download_contnet_id = '" + model.getDOWNLOADID() + "'";
                                     DB.execSQL(query1);
 
                                 } else if ((status == DownloadManager.STATUS_PAUSED) ||
@@ -3519,17 +3605,16 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 lenghtOfFile = conection.getContentLength();
                 lengthfile = lenghtOfFile / 1024 / 1024;
                 //lengthfile = String.format("%.2f", lengthfile);
-               // BigDecimal roundlength = new BigDecimal(lengthfile).setScale(1,BigDecimal.ROUND_HALF_UP);
+                // BigDecimal roundlength = new BigDecimal(lengthfile).setScale(1,BigDecimal.ROUND_HALF_UP);
                 Log.v("SUBHA4", "" + lengthfile);
                /* lengthofdownloadsize=roundlength;
                 lengthfile=roundlength.floatValue(roundlength);*/
 
                 DecimalFormat decimalFormat = new DecimalFormat("#.#");
-                lengthfile= Float.valueOf(decimalFormat.format(lengthfile));
+                lengthfile = Float.valueOf(decimalFormat.format(lengthfile));
              /*   float size = (Float.parseFloat(""+execute.getEntity().getContentLength())/1024)/1024 ;
                 DecimalFormat decimalFormat = new DecimalFormat("#.#");
                 size = Float.valueOf(decimalFormat.format(size));*/
-
 
 
             } catch (Exception e) {
@@ -3602,9 +3687,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
         if (isDrm) {
-          offlinedrmplay(singlefile);
-        }
-        else {
+            offlinedrmplay(singlefile);
+        } else {
             offlinenondrmplay(singlefile);
         }
 
@@ -3616,11 +3700,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         }
 
         SQLiteDatabase DB = ExoPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-        String query1 = "INSERT INTO " + DBHelper.DOWNLOAD_CONTENT_INFO+ "(download_contnet_id,log_id,authtoken,email," +
+        String query1 = "INSERT INTO " + DBHelper.DOWNLOAD_CONTENT_INFO + "(download_contnet_id,log_id,authtoken,email," +
                 "ipaddress,movie_id,episode_id,device_type,download_status,server_sending_final_status) VALUES" +
-                "('"+enqueue+"','0','"+Util.authTokenStr.trim()+"','"+emailIdStr.trim()+"','"+ipAddressStr+"'," +
-                "'"+playerModel.getMovieUniqueId().trim()+"','"+ playerModel.getStreamUniqueId().trim()+"'," +
-                "'"+2+"','2','0')";
+                "('" + enqueue + "','0','" + Util.authTokenStr.trim() + "','" + emailIdStr.trim() + "','" + ipAddressStr + "'," +
+                "'" + playerModel.getMovieUniqueId().trim() + "','" + playerModel.getStreamUniqueId().trim() + "'," +
+                "'" + 2 + "','2','0')";
 
         DB.execSQL(query1);
 
@@ -3763,7 +3847,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("watch_status", watchSt);
 
 
-                if (Util.getTextofLanguage(ExoPlayerActivity.this, Util.IS_STREAMING_RESTRICTION, Util.DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (playerModel.isstreaming_restricted()) {
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
 
                     httppost.addHeader("is_streaming_restriction", "1");
@@ -3803,16 +3887,19 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     statusCode = Integer.parseInt(myJson.optString("code"));
                     if (statusCode == 200) {
                         videoLogId = myJson.optString("log_id");
+                        log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
                         Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
                     } else {
                         videoLogId = "0";
+                        log_temp_id = "0";
                     }
 
                 }
 
             } catch (Exception e) {
                 videoLogId = "0";
+                log_temp_id = "0";
 
             }
 
@@ -3885,20 +3972,18 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         }
 
 
-
                         // This parsing is responsible for multiple resolution
 
 
                         if ((mainJson.has("multiple_resolution")) && mainJson.getString("multiple_resolution").trim() != null && !mainJson.getString("multiple_resolution").trim().isEmpty() && !mainJson.getString("multiple_resolution").trim().equals("null") && !mainJson.getString("multiple_resolution").trim().matches("")) {
                             JSONArray jsonArray = mainJson.optJSONArray("multiple_resolution");
 
-                            for(int i=0 ;i<jsonArray.length();i++)
-                            {
+                            for (int i = 0; i < jsonArray.length(); i++) {
 
-                                if(jsonArray.getJSONObject(i).optString("resolution").trim().contains("BEST"))
+                                if (jsonArray.getJSONObject(i).optString("resolution").trim().contains("BEST"))
                                     List_Of_Resolution_Format.add(jsonArray.getJSONObject(i).optString("resolution"));
                                 else
-                                    List_Of_Resolution_Format.add(jsonArray.getJSONObject(i).optString("resolution")+"p");
+                                    List_Of_Resolution_Format.add(jsonArray.getJSONObject(i).optString("resolution") + "p");
 
                                 List_Of_Resolution_Url.add(jsonArray.getJSONObject(i).optString("url"));
                                 List_Of_Resolution_Url_Used_For_Download.add(jsonArray.getJSONObject(i).optString("url"));
@@ -3915,7 +4000,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         //=======================End====================//
 
 
-
                     }
                 } else {
 
@@ -3924,7 +4008,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 }
 
 
-            }catch (Exception e) {
+            } catch (Exception e) {
                 responseCode = 0;
             }
 
@@ -3941,7 +4025,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 }
             }
 
-            licensetoken = mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis()+".xml";
+            licensetoken = mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".xml";
             OutputStream output = null;
             try {
                 output = new FileOutputStream(licensetoken);
@@ -3990,22 +4074,19 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 //This portion is changed later because of multiple download option.
 
-                if(List_Of_Resolution_Url.size()>0)
-                {
+                if (List_Of_Resolution_Url.size() > 0) {
                     pDialog_for_gettig_filesize = new ProgressBarHandler(ExoPlayerActivity.this);
                     pDialog_for_gettig_filesize.show();
 
                     new DetectDownloadingFileSize().execute();
-                }
-                else
-                {
+                } else {
                     /*@BISHAL
                     * for drm player the length size is calculated by mlvfile but
                     * in case of non drm it calculate by videourl
                     * */
-                    if (isDrm){
+                    if (isDrm) {
                         new DownloadFileFromURL().execute(mlvfile);
-                    }else {
+                    } else {
                         new DownloadFileFromURL().execute(playerModel.getVideoUrl());
                     }
 
@@ -4036,6 +4117,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         @Override
         protected void onPreExecute() {
         }
+
         /**
          * Downloading file in background thread
          */
@@ -4051,11 +4133,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 HttpResponse execute = client.execute(httpGet);
 //                int contentLength = (int)execute.getEntity().getContentLength();
 
-                float size = (Float.parseFloat(""+execute.getEntity().getContentLength())/1024)/1024 ;
+                float size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
                 DecimalFormat decimalFormat = new DecimalFormat("#.#");
                 size = Float.valueOf(decimalFormat.format(size));
-                List_Of_FileSize.add("("+size+" MB)");
-
+                List_Of_FileSize.add("(" + size + " MB)");
 
 
             } catch (Exception e) {
@@ -4070,19 +4151,16 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         protected void onPostExecute(String file_url) {
 
 
-
             List_Of_Resolution_Url.remove(0);
-            if(List_Of_Resolution_Url.size()>0)
-            {
+            if (List_Of_Resolution_Url.size() > 0) {
                 new DetectDownloadingFileSize().execute();
-            }
-            else
-            {
+            } else {
                 try {
                     if (pDialog_for_gettig_filesize != null && pDialog_for_gettig_filesize.isShowing()) {
                         pDialog_for_gettig_filesize.hide();
                     }
-                } catch (IllegalArgumentException ex) {  }
+                } catch (IllegalArgumentException ex) {
+                }
 
                 // Show PopUp for Multiple Options for Download .
                 ShowDownloadOptionPopUp();
@@ -4090,8 +4168,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         }
     }
-    public void ShowDownloadOptionPopUp()
-    {
+
+    public void ShowDownloadOptionPopUp() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(ExoPlayerActivity.this, R.style.MyAlertDialogStyle);
         LayoutInflater inflater = (LayoutInflater) ExoPlayerActivity.this.getSystemService(ExoPlayerActivity.this.LAYOUT_INFLATER_SERVICE);
@@ -4105,11 +4183,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         Button save = (Button) convertView.findViewById(R.id.save);
         Button cancel = (Button) convertView.findViewById(R.id.cancel);
 
-        save.setText(Util.getTextofLanguage(ExoPlayerActivity.this,Util.SAVE,Util.DEFAULT_SAVE));
-        cancel.setText(Util.getTextofLanguage(ExoPlayerActivity.this,Util.CANCEL_BUTTON,Util.DEFAULT_CANCEL_BUTTON));
-        title_text.setText(Util.getTextofLanguage(ExoPlayerActivity.this,Util.SAVE_OFFLINE_VIDEO,Util.DEFAULT_SAVE_OFFLINE_VIDEO));
+        save.setText(Util.getTextofLanguage(ExoPlayerActivity.this, Util.SAVE, Util.DEFAULT_SAVE));
+        cancel.setText(Util.getTextofLanguage(ExoPlayerActivity.this, Util.CANCEL_BUTTON, Util.DEFAULT_CANCEL_BUTTON));
+        title_text.setText(Util.getTextofLanguage(ExoPlayerActivity.this, Util.SAVE_OFFLINE_VIDEO, Util.DEFAULT_SAVE_OFFLINE_VIDEO));
 
-        DownloadOptionAdapter adapter = new DownloadOptionAdapter(ExoPlayerActivity.this,List_Of_FileSize,List_Of_Resolution_Format);
+        DownloadOptionAdapter adapter = new DownloadOptionAdapter(ExoPlayerActivity.this, List_Of_FileSize, List_Of_Resolution_Format);
         resolution_list.setAdapter(adapter);
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -4143,6 +4221,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         });
 
     }
+
     private BroadcastReceiver SelectedUrl = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

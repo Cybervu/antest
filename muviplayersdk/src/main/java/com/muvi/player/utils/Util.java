@@ -83,7 +83,7 @@ public class Util {
     public static final String logoutUrl = "logout";
     public static final String loadProfileUrl = "getProfileDetails";
     public static final String updateProfileUrl = "updateUserProfile";
-    public static final String videoLogUrl = "videoLogs";
+    public static final String videoLogUrl = "videoLogNew";
     public static final String bufferLogUrl = "bufferLogs";
     public static final String updateBufferLogUrl = "updateBufferLogs";
     public static final String CsatAndCrew = "getCelibrity";
@@ -149,6 +149,7 @@ public class Util {
 
     public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
     public static  boolean Call_API_For_Close_Streming = false;
+    public static boolean app_is_in_player_context = false;
 
     public static boolean checkNetwork(Context context){
         ConnectivityManager cm =
@@ -458,8 +459,7 @@ public class Util {
     public static String IS_CHROMECAST = "IS_CHROMECAST";
     public static String DEFAULT_IS_CHROMECAST = "0";
 
-    public static String IS_STREAMING_RESTRICTION = "IS_STREAMING_RESTRICTION";
-    public static String DEFAULT_IS_IS_STREAMING_RESTRICTION = "0";
+
 
 
 // ======================= Constants For The Language Default Key =========================//

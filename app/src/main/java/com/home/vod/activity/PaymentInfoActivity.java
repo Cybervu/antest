@@ -227,6 +227,7 @@ LanguagePreference languagePreference;
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         playerModel=new Player();
+        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
 
 
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)

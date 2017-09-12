@@ -71,7 +71,6 @@ import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
 import static com.muvi.player.utils.Util.HAS_FAVORITE;
 import static com.muvi.player.utils.Util.IS_CHROMECAST;
 import static com.muvi.player.utils.Util.IS_OFFLINE;
-import static com.muvi.player.utils.Util.IS_STREAMING_RESTRICTION;
 
 public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddressListener,
         CheckGeoBlockCountryAsynTask.CheckGeoBlockForCountryListener,
@@ -130,6 +129,29 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         if (NetworkStatus.getInstance().isConnected(this)) {
             SDKInitializer.getInstance().init(this, this, authTokenStr);
+        } else {
+            noInternetLayout.setVisibility(View.VISIBLE);
+            geoBlockedLayout.setVisibility(View.GONE);
+        }
+
+        if (NetworkStatus.getInstance().isConnected(this)) {
+            if (preferenceManager != null) {
+                String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+
+                if (countryCodeStr == null) {
+                    GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+                    asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+                } else {
+                    GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+                    asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+                }
+            } else {
+                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+                asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+
+            }
+            GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+            asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
         } else {
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);

@@ -358,6 +358,9 @@ public class LanguagePreference {
     public static final String DEAFULT_CANCEL_BUTTON = "Cancel";
     public static final String DEAFULT_CONTINUE_BUTTON = "Continue";
 
+    public static String IS_STREAMING_RESTRICTION = "IS_STREAMING_RESTRICTION";
+    public static String DEFAULT_IS_IS_STREAMING_RESTRICTION = "0";
+
 
 
     /**
