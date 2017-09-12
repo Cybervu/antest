@@ -219,25 +219,10 @@ LanguagePreference languagePreference;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_info);
-        languagePreference = LanguagePreference.getLanguagePreference(PaymentInfoActivity.this);
-        videoPreview = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
-        creditCardDetailsTitleTextView = (TextView) findViewById(R.id.creditCardDetailsTitleTextView);
-
         //Set toolbar
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
-        playerModel=new Player();
-        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
-
-
-        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
-                .trim()).equals("1")) {
-            mActionBarToolbar.setNavigationIcon(null);
-            getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-        } else {
-            mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-        }
-
+        mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -245,6 +230,29 @@ LanguagePreference languagePreference;
                 onBackPressed();
             }
         });
+        languagePreference = LanguagePreference.getLanguagePreference(PaymentInfoActivity.this);
+        videoPreview = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        creditCardDetailsTitleTextView = (TextView) findViewById(R.id.creditCardDetailsTitleTextView);
+
+        playerModel=new Player();
+        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
+
+
+        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
+                .trim()).equals("1")) {
+           // mActionBarToolbar.setNavigationIcon(null);
+            getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+        } else {
+            //mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        }
+
+        /*mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideKeyboard(PaymentInfoActivity.this);
+                onBackPressed();
+            }
+        });*/
         if (pDialog == null) {
             pDialog = new ProgressDialog(PaymentInfoActivity.this, R.style.CustomDialogTheme);
             pDialog.setCancelable(false);
@@ -546,7 +554,7 @@ LanguagePreference languagePreference;
 
                 } else {
 
-                    if (NetworkStatus.getInstance().isConnected(PaymentInfoActivity.this)) {
+                    if (!NetworkStatus.getInstance().isConnected(PaymentInfoActivity.this)) {
                         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
                         dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
                         dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
