@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">MuviPlayerSDK</string>
-    <string name="regular_fonts">fonts/OpenSans-Regular.ttf</string>
-    <string name="light_fonts">fonts/RobotoCondensed-Light.ttf</string>
-
-</resources>

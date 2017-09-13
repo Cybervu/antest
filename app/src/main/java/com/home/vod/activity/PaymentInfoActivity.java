@@ -49,11 +49,11 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
-import com.muvi.player.activity.AdPlayerActivity;
-import com.muvi.player.activity.ExoPlayerActivity;
-import com.muvi.player.activity.Player;
-import com.muvi.player.activity.ThirdPartyPlayer;
-import com.muvi.player.activity.YouTubeAPIActivity;
+import player.activity.AdPlayerActivity;
+import player.activity.ExoPlayerActivity;
+import player.activity.Player;
+import player.activity.ThirdPartyPlayer;
+import player.activity.YouTubeAPIActivity;
 
 import java.io.BufferedInputStream;
 import java.io.File;

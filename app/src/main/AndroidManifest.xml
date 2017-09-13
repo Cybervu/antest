@@ -58,7 +58,7 @@
             android:name=".activity.SearchActivity"
             android:label=""
             android:screenOrientation="portrait" />
-        <activity android:name="com.muvi.player.activity.ExoPlayerActivity"
+        <activity android:name="player.activity.ExoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:screenOrientation="portrait"
@@ -69,38 +69,38 @@
             android:screenOrientation="portrait"
             />
         <activity
-            android:name="com.muvi.player.activity.ThirdPartyPlayer"
+            android:name="player.activity.ThirdPartyPlayer"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.muvi.player.activity.YouTubeAPIActivity"
+            android:name="player.activity.YouTubeAPIActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:windowSoftInputMode="stateHidden" />
 
         <service
-            android:name="com.muvi.player.activity.DataConsumptionService"
+            android:name="player.activity.DataConsumptionService"
             android:enabled="true"
             android:exported="true"></service>
         <activity
-            android:name="com.muvi.player.activity.Subtitle_Resolution"
+            android:name="player.activity.Subtitle_Resolution"
             android:configChanges="screenSize|orientation"
             android:label=""
             android:screenOrientation="sensor"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
-            android:name="com.muvi.player.activity.SubtitleList"
+            android:name="player.activity.SubtitleList"
             android:configChanges="screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <activity
-            android:name="com.muvi.player.activity.ResolutionChangeActivity"
+            android:name="player.activity.ResolutionChangeActivity"
             android:configChanges="screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity
-            android:name="com.muvi.player.activity.ResumePopupActivity"
+            android:name="player.activity.ResumePopupActivity"
             android:configChanges="screenSize|orientation"
             android:label=""
             android:screenOrientation="portrait"
@@ -241,12 +241,12 @@
             android:windowSoftInputMode="stateHidden" />
 
         <activity
-            android:name="com.muvi.player.activity.AdPlayerActivity"
+            android:name="player.activity.AdPlayerActivity"
             android:label=""
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.muvi.player.activity.MyActivity"
+            android:name="player.activity.MyActivity"
             android:label=""
             android:screenOrientation="portrait" />
 

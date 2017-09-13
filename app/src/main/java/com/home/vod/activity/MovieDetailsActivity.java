@@ -91,11 +91,11 @@ import com.google.android.gms.common.images.WebImage;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
-import com.muvi.player.activity.AdPlayerActivity;
-import com.muvi.player.activity.ExoPlayerActivity;
-import com.muvi.player.activity.Player;
-import com.muvi.player.activity.ThirdPartyPlayer;
-import com.muvi.player.activity.YouTubeAPIActivity;
+import player.activity.AdPlayerActivity;
+import player.activity.ExoPlayerActivity;
+import player.activity.Player;
+import player.activity.ThirdPartyPlayer;
+import player.activity.YouTubeAPIActivity;
 import com.squareup.picasso.Picasso;
 
 
@@ -173,12 +173,12 @@ import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
-import static com.muvi.player.utils.Util.ADD_A_REVIEW;
-import static com.muvi.player.utils.Util.DEFAULT_ADD_A_REVIEW;
-import static com.muvi.player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static com.muvi.player.utils.Util.DEFAULT_REVIEWS;
-import static com.muvi.player.utils.Util.HAS_FAVORITE;
-import static com.muvi.player.utils.Util.REVIEWS;
+import static player.utils.Util.ADD_A_REVIEW;
+import static player.utils.Util.DEFAULT_ADD_A_REVIEW;
+import static player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static player.utils.Util.DEFAULT_REVIEWS;
+import static player.utils.Util.HAS_FAVORITE;
+import static player.utils.Util.REVIEWS;
 
 public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsynctask.LogoutListener,
         GetValidateUserAsynTask.GetValidateUserListener, VideoDetailsAsynctask.VideoDetailsListener,
@@ -296,7 +296,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     String ContentName = "";
     AlertDialog voucher_alert;
     Player playerModel;
-    Video_Details_Output _video_details_output;
+   // Video_Details_Output _video_details_output;
     LanguagePreference languagePreference;
 
 
@@ -694,13 +694,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         setContentView(R.layout.details_layout);
         playerModel = new Player();
-        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
-
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(DELETE_ACTION, new IntentFilter("ITEM_STATUS"));
-
-        playerModel = new Player();
-        _video_details_output = new Video_Details_Output();
+       // _video_details_output = new Video_Details_Output();
         languagePreference = LanguagePreference.getLanguagePreference(this);
+        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));

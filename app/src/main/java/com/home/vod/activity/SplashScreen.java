@@ -68,9 +68,9 @@ import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_GOOGLE_FCM_TOKEN;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
-import static com.muvi.player.utils.Util.HAS_FAVORITE;
-import static com.muvi.player.utils.Util.IS_CHROMECAST;
-import static com.muvi.player.utils.Util.IS_OFFLINE;
+import static player.utils.Util.HAS_FAVORITE;
+import static player.utils.Util.IS_CHROMECAST;
+import static player.utils.Util.IS_OFFLINE;
 
 public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddressListener,
         CheckGeoBlockCountryAsynTask.CheckGeoBlockForCountryListener,
@@ -127,13 +127,13 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         noInternetLayout.setVisibility(View.GONE);
         geoBlockedLayout.setVisibility(View.GONE);
 
-        if (NetworkStatus.getInstance().isConnected(this)) {
+      /*  if (NetworkStatus.getInstance().isConnected(this)) {
             SDKInitializer.getInstance().init(this, this, authTokenStr);
         } else {
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
         }
-
+*/
         if (NetworkStatus.getInstance().isConnected(this)) {
             if (preferenceManager != null) {
                 String countryCodeStr = preferenceManager.getCountryCodeFromPref();

@@ -16,13 +16,15 @@ import com.home.vod.R;
 import com.home.vod.activity.MyDownloads;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
-import com.muvi.player.model.ContactModel1;
-import com.muvi.player.utils.DBHelper;
+
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import player.model.ContactModel1;
+import player.utils.DBHelper;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;

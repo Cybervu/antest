@@ -62,9 +62,9 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
-import com.muvi.player.activity.AdPlayerActivity;
-import com.muvi.player.activity.Player;
-import com.muvi.player.activity.Subtitle_Resolution;
+import player.activity.AdPlayerActivity;
+import player.activity.Player;
+import player.activity.Subtitle_Resolution;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -111,11 +111,6 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
-import com.muvi.player.activity.AdPlayerActivity;
-import com.muvi.player.activity.ExoPlayerActivity;
-import com.muvi.player.activity.Player;
-import com.muvi.player.activity.ThirdPartyPlayer;
-import com.muvi.player.activity.YouTubeAPIActivity;
 
 
 import org.json.JSONException;
@@ -204,18 +199,24 @@ import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.STORY_INTENT_KEY;
 import static com.home.vod.util.Constant.VIDEO_TITLE_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
-import static com.muvi.player.utils.Util.ADD_A_REVIEW;
-import static com.muvi.player.utils.Util.DEFAULT_ADD_A_REVIEW;
-import static com.muvi.player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static com.muvi.player.utils.Util.DEFAULT_REVIEWS;
-import static com.muvi.player.utils.Util.HAS_FAVORITE;
-import static com.muvi.player.utils.Util.REVIEWS;
+import static player.utils.Util.ADD_A_REVIEW;
+import static player.utils.Util.DEFAULT_ADD_A_REVIEW;
+import static player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static player.utils.Util.DEFAULT_REVIEWS;
+import static player.utils.Util.HAS_FAVORITE;
+import static player.utils.Util.REVIEWS;
 
 
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import player.activity.AdPlayerActivity;
+import player.activity.ExoPlayerActivity;
+import player.activity.Player;
+import player.activity.ThirdPartyPlayer;
+import player.activity.YouTubeAPIActivity;
 
 
 public class ShowWithEpisodesActivity extends AppCompatActivity implements

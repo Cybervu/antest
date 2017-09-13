@@ -129,8 +129,8 @@ import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
-import static com.muvi.player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static com.muvi.player.utils.Util.HAS_FAVORITE;
+import static player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static player.utils.Util.HAS_FAVORITE;
 
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,

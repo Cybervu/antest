@@ -68,7 +68,6 @@ import com.home.apisdk.apiModel.MyLibraryInputModel;
 import com.home.apisdk.apiModel.MyLibraryOutputModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
-import com.home.vod.R;
 import com.home.vod.activity.Episode_list_Activity;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.activity.MovieDetailsActivity;
@@ -84,11 +83,11 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
-import com.muvi.player.activity.AdPlayerActivity;
-import com.muvi.player.activity.ExoPlayerActivity;
-import com.muvi.player.activity.Player;
-import com.muvi.player.activity.ThirdPartyPlayer;
-import com.muvi.player.activity.YouTubeAPIActivity;
+import player.activity.AdPlayerActivity;
+import player.activity.ExoPlayerActivity;
+import player.activity.Player;
+import player.activity.ThirdPartyPlayer;
+import player.activity.YouTubeAPIActivity;
 
 
 import java.io.BufferedInputStream;
@@ -140,6 +139,7 @@ import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
+import com.home.vod.R;
 
 /*
 import com.twotoasters.jazzylistview.JazzyGridView;
