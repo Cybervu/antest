@@ -103,7 +103,7 @@ public class HeaderConstants {
     /**
      * Constant For Package Name Header used in API Call
      */
-    public static final String PACKAGE_NAME="package_name";
+    public static final String PACKAGE_NAME = "package_name";
     /**
      * Constant for Order By Header used in API Call
      */
@@ -300,5 +300,16 @@ public class HeaderConstants {
      * Constant for Content Type Header used in API Call
      */
     public static final String CONTENT_TYPE = "content_type";
+
+    /**
+     * Constant for Content Type Header used in API Call
+     */
+
+    public static final String IS_STREAMING_RESTRICTION = "is_streaming_restriction";
+    /**
+     * Constant for Content Type Header used in API Call
+     */
+
+    public static final String RESTRICT_STREAM_ID = "restrict_stream_id";
 
 }

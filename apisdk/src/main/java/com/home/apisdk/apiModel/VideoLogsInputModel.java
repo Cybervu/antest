@@ -17,6 +17,25 @@ public class VideoLogsInputModel {
     String watchStatus;
     String deviceType;
     String videoLogId;
+    String is_streaming_restriction;
+
+    public String getIs_streaming_restriction() {
+        return is_streaming_restriction;
+    }
+
+    public void setIs_streaming_restriction(String is_streaming_restriction) {
+        this.is_streaming_restriction = is_streaming_restriction;
+    }
+
+    public String getRestrict_stream_id() {
+        return restrict_stream_id;
+    }
+
+    public void setRestrict_stream_id(String restrict_stream_id) {
+        this.restrict_stream_id = restrict_stream_id;
+    }
+
+    String restrict_stream_id;
 
     /**
      * This Method is use to Get the Auth Token

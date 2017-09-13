@@ -518,7 +518,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
 
                     videoImageStr = contentListOutputArray.get(i).getPoster_url();
-                    videoName = contentListOutputArray.get(i).getName();
+                    videoName = contentListOutputArray.get(i).getEpisode_title();
                     videoTypeIdStr = contentListOutputArray.get(i).getContent_types_id();
                     videoGenreStr = contentListOutputArray.get(i).getGenre();
                     videoPermalinkStr = contentListOutputArray.get(i).getPermalink();

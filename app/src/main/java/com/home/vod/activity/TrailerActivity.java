@@ -32,6 +32,7 @@ import com.home.apisdk.apiController.ResumeVideoLogDetailsAsync;
 import com.home.apisdk.apiModel.FFVideoLogDetailsInput;
 import com.home.apisdk.apiModel.ResumeVideoLogDetailsInput;
 import com.home.apisdk.apiModel.VideoLogsInputModel;
+import com.home.apisdk.apiModel.Video_Log_Output_Model;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
@@ -754,7 +755,7 @@ public class TrailerActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onGetVideoLogsPostExecuteCompleted(int status, String message, String videoLogId) {
+    public void onGetVideoLogsPostExecuteCompleted(Video_Log_Output_Model video_log_output_model, int status, String message) {
         startTimer();
         return;
     }

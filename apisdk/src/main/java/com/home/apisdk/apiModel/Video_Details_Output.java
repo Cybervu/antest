@@ -17,6 +17,16 @@ public class Video_Details_Output {
     String channel_id;
     int midRoll;
 
+    public String getDownload_status() {
+        return download_status;
+    }
+
+    public void setDownload_status(String download_status) {
+        this.download_status = download_status;
+    }
+
+    String download_status;
+
     public int getMidRoll() {
         return midRoll;
     }

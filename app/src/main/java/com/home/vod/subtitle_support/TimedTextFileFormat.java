@@ -34,8 +34,7 @@ public interface TimedTextFileFormat {
 	
 	/**
 	 * This methods receives the path to a file, parses it, and returns a TimedTextObject
-	 * 
-	 * @param path String that contains the path to the file
+	 *
 	 * @return TimedTextObject representing the parsed file
 	 * @throws IOException when having trouble reading the file from the given path
 	 */

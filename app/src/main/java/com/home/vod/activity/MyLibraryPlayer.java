@@ -48,6 +48,7 @@ import com.home.apisdk.apiController.ResumeVideoLogDetailsAsync;
 import com.home.apisdk.apiModel.FFVideoLogDetailsInput;
 import com.home.apisdk.apiModel.ResumeVideoLogDetailsInput;
 import com.home.apisdk.apiModel.VideoLogsInputModel;
+import com.home.apisdk.apiModel.Video_Log_Output_Model;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
@@ -61,9 +62,9 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
-import com.muvi.player.activity.AdPlayerActivity;
-import com.muvi.player.activity.Player;
-import com.muvi.player.activity.Subtitle_Resolution;
+import player.activity.AdPlayerActivity;
+import player.activity.Player;
+import player.activity.Subtitle_Resolution;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -92,7 +93,9 @@ import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.util.Constant.authTokenStr;
 
@@ -162,6 +165,8 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     int player_layout_height, player_layout_width;
     int screenWidth, screenHeight;
     ImageButton latest_center_play_pause;
+    String restrict_stream_id = "0";
+
 
 
     String resolution = "BEST";
@@ -890,8 +895,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     }
 
     @Override
-    public void onGetVideoLogsPostExecuteCompleted(int status, String message, String videoLogId) {
+    public void onGetVideoLogsPostExecuteCompleted(Video_Log_Output_Model video_log_output_model, int status, String message) {
 
+        videoLogId=video_log_output_model.getVideoLogId();
         startTimer();
         return;
     }
@@ -2126,6 +2132,10 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             videoLogsInputModel.setWatchStatus(watchStatus);
             videoLogsInputModel.setDeviceType("2");
             videoLogsInputModel.setVideoLogId(videoLogId);
+            if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                videoLogsInputModel.setIs_streaming_restriction("1");
+                videoLogsInputModel.setRestrict_stream_id(restrict_stream_id);
+            }
             asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel, MyLibraryPlayer.this, MyLibraryPlayer.this);
             asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 

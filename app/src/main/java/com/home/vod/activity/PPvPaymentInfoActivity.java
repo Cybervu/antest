@@ -59,9 +59,9 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
-import com.muvi.player.activity.AdPlayerActivity;
-import com.muvi.player.activity.ExoPlayerActivity;
-import com.muvi.player.activity.Player;
+import player.activity.AdPlayerActivity;
+import player.activity.ExoPlayerActivity;
+import player.activity.Player;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -252,6 +252,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_ppv_payment_info);
       //  playerModel=new Player();
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
         languagePreference = LanguagePreference.getLanguagePreference(this);
         /* playerModel.setVideoTitle(playerModel.getVideoTitle());
         playerModel.setVideoStory(playerModel.getVideoStory());

@@ -4,15 +4,14 @@
     android:id="@+id/activity_resolution_change"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    tools:context="com.home.vod.activity.ResolutionChangeActivity">
+    >
 
     <LinearLayout
-        android:id="@+id/total_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#60000000"
         android:gravity="bottom"
+        android:id="@+id/total_layout"
+        android:background="#60000000"
         android:orientation="vertical">
 
 
@@ -20,10 +19,11 @@
             android:id="@+id/listView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@color/appBackgroundColor"
             android:divider="#A9A9A9"
+            android:background="#fff"
+            android:paddingBottom="20dp"
             android:dividerHeight="0dip"
-            android:paddingBottom="@dimen/transactionDownloadButton_padding" />
+            />
     </LinearLayout>
 
 </RelativeLayout>

@@ -34,6 +34,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.home.vod.subtitle_support.Caption;
+import com.home.vod.subtitle_support.FormatSRT;
+import com.home.vod.subtitle_support.FormatSRT_WithoutCaption;
+import com.home.vod.subtitle_support.TimedTextObject;
 import com.intertrust.wasabi.Runtime;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.home.vod.R;
@@ -44,12 +48,6 @@ import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
 
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -76,14 +74,11 @@ import java.util.concurrent.TimeUnit;
 import com.intertrust.wasabi.ErrorCodeException;
 import com.intertrust.wasabi.media.PlaylistProxy;
 import com.intertrust.wasabi.media.PlaylistProxyListener;
-import com.muvi.player.activity.ResumePopupActivity;
-import com.muvi.player.activity.SubtitleList;
-import com.muvi.player.subtitle_support.Caption;
-import com.muvi.player.subtitle_support.FormatSRT;
-import com.muvi.player.subtitle_support.FormatSRT_WithoutCaption;
-import com.muvi.player.subtitle_support.TimedTextObject;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import javax.net.ssl.HttpsURLConnection;
+
+import player.activity.ResumePopupActivity;
+import player.activity.SubtitleList;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;

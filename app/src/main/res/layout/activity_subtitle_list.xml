@@ -3,16 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.home.vod.activity.SubtitleList">
+    android:gravity="center_horizontal"
+    >
 
     <LinearLayout
-        android:id="@+id/total_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#60000000"
         android:gravity="bottom"
+        android:id="@+id/total_layout"
+        android:background="#60000000"
         android:orientation="vertical">
 
 
@@ -20,10 +20,11 @@
             android:id="@+id/listView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@color/subtitleListColor"
             android:divider="#A9A9A9"
+            android:background="#fff"
+            android:paddingBottom="18dp"
             android:dividerHeight="0dip"
-            android:paddingBottom="@dimen/editEmailStr_padding" />
+             />
     </LinearLayout>
 
 </RelativeLayout>

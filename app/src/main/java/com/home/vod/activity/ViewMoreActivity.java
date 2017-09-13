@@ -119,8 +119,8 @@ import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
-import static com.muvi.player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static com.muvi.player.utils.Util.HAS_FAVORITE;
+import static player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static player.utils.Util.HAS_FAVORITE;
 
 public class ViewMoreActivity extends AppCompatActivity implements
         LogoutAsynctask.LogoutListener, GetLanguageListAsynTask.GetLanguageListListener,

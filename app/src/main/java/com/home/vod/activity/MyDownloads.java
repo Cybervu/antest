@@ -21,12 +21,14 @@ import com.home.vod.R;
 import com.home.vod.adapter.MyDownloadAdapter;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
-import com.muvi.player.model.ContactModel1;
-import com.muvi.player.utils.DBHelper;
-import com.muvi.player.utils.ProgressBarHandler;
+import com.home.vod.util.ProgressBarHandler;
+
 
 import java.util.ArrayList;
 import java.util.List;
+
+import player.model.ContactModel1;
+import player.utils.DBHelper;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;

@@ -358,6 +358,22 @@ public class LanguagePreference {
     public static final String DEAFULT_CANCEL_BUTTON = "Cancel";
     public static final String DEAFULT_CONTINUE_BUTTON = "Continue";
 
+    public static String IS_STREAMING_RESTRICTION = "IS_STREAMING_RESTRICTION";
+    public static String DEFAULT_IS_IS_STREAMING_RESTRICTION = "0";
+
+    public static String STOP_SAVING_THIS_VIDEO = "STOP_SAVING_THIS_VIDEO";
+    public static String DEFAULT_STOP_SAVING_THIS_VIDEO = "Stop saving this video";
+    public static String YOUR_VIDEO_WONT_BE_SAVED = "YOUR_VIDEO_WONT_BE_SAVED";
+    public static String DEFAULT_YOUR_VIDEO_WONT_BE_SAVED = "Your video can not be saved";
+    public static String BTN_KEEP = "BTN_KEEP";
+    public static String DEFAULT_BTN_KEEP = "Keep";
+    public static String BTN_DISCARD = "BTN_DISCARD";
+    public static String DEFAULT_BTN_DISCARD = "Discard";
+    public static String WANT_TO_DOWNLOAD = "WANT_TO_DOWNLOAD";
+    public static String DEFAULT_WANT_TO_DOWNLOAD = "Want to Download";
+    public static String DOWNLOAD_CANCELLED = "DOWNLOAD_CANCELLED";
+    public static String DEFAULT_DOWNLOAD_CANCELLED = "Download Cancelled";
+
 
 
     /**

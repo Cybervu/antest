@@ -200,10 +200,7 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
                                 content.setEpisode_title(jsonChildNode.optString("episode_title"));
 
                             }
-                            if ((jsonChildNode.has("name")) && jsonChildNode.optString("name").trim() != null && !jsonChildNode.optString("name").trim().isEmpty() && !jsonChildNode.optString("name").trim().equals("null") && !jsonChildNode.optString("name").trim().matches("")) {
-                                content.setName(jsonChildNode.optString("name"));
 
-                            }
                             if ((jsonChildNode.has("display_name")) && jsonChildNode.optString("display_name").trim() != null && !jsonChildNode.optString("display_name").trim().isEmpty() && !jsonChildNode.optString("display_name").trim().equals("null") && !jsonChildNode.optString("display_name").trim().matches("")) {
                                 content.setDisplay_name(jsonChildNode.optString("display_name"));
 
