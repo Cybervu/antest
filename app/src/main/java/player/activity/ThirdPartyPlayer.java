@@ -89,7 +89,7 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
 //        getSupportActionBar().hide();
         playerModel=new Player();
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
-        Log.v("BISHALK","ThirdpartyUrl=="+playerModel.getVideoUrl());
+        LogUtil.showLog("BISHALK","ThirdpartyUrl=="+playerModel.getVideoUrl());
 
 
 

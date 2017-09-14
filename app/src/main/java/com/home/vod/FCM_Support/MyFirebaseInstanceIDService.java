@@ -106,7 +106,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("BIBHU", "Response Of the google_id updatation =" + responseStr);
+                    LogUtil.showLog("BIBHU", "Response Of the google_id updatation =" + responseStr);
 
                 } catch (Exception e) {
                     responseStr = "0";

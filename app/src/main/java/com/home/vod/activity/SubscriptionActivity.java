@@ -140,7 +140,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
             @Override
             public void onClick(View v) {
 
-                Log.v("MUVI","Chek for content click ="+Util.check_for_subscription);
+                LogUtil.showLog("MUVI","Chek for content click ="+Util.check_for_subscription);
 
                 Intent intentpayment=new Intent(SubscriptionActivity.this,PaymentInfoActivity.class);
                 intentpayment.putExtra("currencyId",movieList.get(selected_subscription_plan).getPlanCurrencyIdStr());
@@ -286,7 +286,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
 
                         } else {
                             movieList.add(new PlanModel(planNamestr, planPriceStr, planRecurrenceStr, planFrequencyStr, false, planStudioIdStr, planStatusStr, planLanguage_idStr, planIdStr, currencyIdStr, currencySymbolStr,currencyTrialPeriodStr,currencyTrialRecurrenceStr,currencyCountryCodeStr));
-                            Log.v("MUVI","movieList"+movieList.size());
+                            LogUtil.showLog("MUVI","movieList"+movieList.size());
                         }
                     }
                 }
@@ -436,7 +436,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
 //                if(responseStr!=null){
 //                    myJson = new JSONObject(responseStr);
 //
-//                    Log.v("MUVI", "responseStr" + responseStr);
+//                    LogUtil.showLog("MUVI", "responseStr" + responseStr);
 //                    status = Integer.parseInt(myJson.optString("code"));
 //                }
 //                if (status > 0) {
@@ -547,7 +547,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
 //
 //                                        } else {
 //                                            movieList.add(new PlanModel(planNamestr, planPriceStr, planRecurrenceStr, planFrequencyStr, false, planStudioIdStr, planStatusStr, planLanguage_idStr, planIdStr, currencyIdStr, currencySymbolStr,currencyTrialPeriodStr,currencyTrialRecurrenceStr,currencyCountryCodeStr));
-//                                            Log.v("MUVI","movieList"+movieList.size());
+//                                            LogUtil.showLog("MUVI","movieList"+movieList.size());
 //                                        }
 //                                    }
 //                                }

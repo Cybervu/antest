@@ -180,7 +180,7 @@ public class TrailerActivity extends AppCompatActivity implements
         if (preferenceManager != null) {
             emailIdStr = preferenceManager.getEmailIdFromPref();
             userIdStr = preferenceManager.getUseridFromPref();
-            Log.v("BKS","userid trailer=="+userIdStr);
+            LogUtil.showLog("BKS","userid trailer=="+userIdStr);
             if (emailIdStr==null){
                 emailIdStr = "";
             }
@@ -381,7 +381,7 @@ public class TrailerActivity extends AppCompatActivity implements
       /*  back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("MUVI","CHFHFH");
+                LogUtil.showLog("MUVI","CHFHFH");
                // onBackPressed();
                 backCalled();
             }
@@ -626,8 +626,8 @@ public class TrailerActivity extends AppCompatActivity implements
 
 
 
-               /* Log.v("MUVI","played_length"+played_length);
-                Log.v("MUVI","emVideoView.getDuration()"+emVideoView.getDuration());
+               /* LogUtil.showLog("MUVI","played_length"+played_length);
+                LogUtil.showLog("MUVI","emVideoView.getDuration()"+emVideoView.getDuration());
                 int duration=emVideoView.getDuration()/1000;
                 int hours = duration / 3600;
                 int minutes = (duration / 60) - (hours * 60);
@@ -1459,7 +1459,7 @@ public class TrailerActivity extends AppCompatActivity implements
 
     /* public void onBackPressed() {
          super.onBackPressed();
-         Log.v("MUVI","HHVID"+videoLogId);
+         LogUtil.showLog("MUVI","HHVID"+videoLogId);
          if (asynGetIpAddress!=null){
              asynGetIpAddress.cancel(true);
          }
@@ -1643,7 +1643,7 @@ public class TrailerActivity extends AppCompatActivity implements
    /* @Override
     public boolean onKeyDown(int keyCode, KeyEvent objEvent) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Log.v("MUVI","FHFHFHCALLED");
+            LogUtil.showLog("MUVI","FHFHFHCALLED");
             return true;
         }
         return super.onKeyUp(keyCode, objEvent);

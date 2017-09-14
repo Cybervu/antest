@@ -283,7 +283,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         preferenceManager.setLoginFeatureToPref(isRegistrationEnabledOutputModel.getIs_login());
 
-        Log.v("MUVI", "Splash setLoginFeatureToPref ::" + isRegistrationEnabledOutputModel.getIs_login());
+        LogUtil.showLog("MUVI", "Splash setLoginFeatureToPref ::" + isRegistrationEnabledOutputModel.getIs_login());
 
         LanguageListInputModel languageListInputModel = new LanguageListInputModel();
         languageListInputModel.setAuthToken(authTokenStr);

@@ -25,6 +25,7 @@ import com.home.vod.adapter.CastCrewAdapter;
 import com.home.vod.model.GetCastCrewItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -130,7 +131,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
                 GetCastCrewItem item = castCrewItems.get(position);
                 Intent castCrewIntent = new Intent(CastAndCrewActivity.this,CastCrewDetailsActivity.class);
                 castCrewIntent.putExtra("castPermalink",item.getCastPermalink());
-                Log.v("SUBHA", "PERMALINK_INTENT_KEY" + item.getCastPermalink());
+                LogUtil.showLog("SUBHA", "PERMALINK_INTENT_KEY" + item.getCastPermalink());
 
                 castCrewIntent.putExtra("castName",item.getCastPermalink());
                 castCrewIntent.putExtra("castSummary",item.getCelebritySummary());

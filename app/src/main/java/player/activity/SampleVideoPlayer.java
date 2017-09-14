@@ -65,11 +65,11 @@ public class SampleVideoPlayer extends VideoView {
                 // player crashing when switching between videos.
                 mediaPlayer.reset();
                 mediaPlayer.setDisplay(getHolder());
-                Log.v("SUBHA", "setOnCompletionListener");
+                LogUtil.showLog("SUBHA", "setOnCompletionListener");
 
                 for (OnVideoCompletedListener listener : mOnVideoCompletedListeners) {
                     listener.onVideoCompleted();
-                    Log.v("SUBHA","JJJ");
+                    LogUtil.showLog("SUBHA","JJJ");
                 }
             }
         });
@@ -105,7 +105,7 @@ public class SampleVideoPlayer extends VideoView {
 
     public void addVideoCompletedListener(OnVideoCompletedListener listener) {
         mOnVideoCompletedListeners.add(listener);
-        Log.v("SUBHA", "addVideoCompletedListener");
+        LogUtil.showLog("SUBHA", "addVideoCompletedListener");
 
     }
 }

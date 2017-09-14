@@ -39,7 +39,7 @@ public final class NetworkStatus {
 		} catch (Exception e) {
 			// System.out.println("CheckConnectivity Exception: " +
 			// e.getMessage());
-			Log.v("connectivity", e.toString());
+			LogUtil.showLog("connectivity", e.toString());
 		}
 		return connected;
 	}

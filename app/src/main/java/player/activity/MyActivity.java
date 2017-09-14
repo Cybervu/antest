@@ -132,7 +132,7 @@ public class MyActivity extends ActionBarActivity {
                     // Handle completed event for playing post-rolls.
                     if (mAdsLoader != null) {
                         mAdsLoader.contentComplete();
-                        Log.v("SUBHA","COMPLETED");
+                        LogUtil.showLog("SUBHA","COMPLETED");
 
 
                     }
@@ -174,7 +174,7 @@ public class MyActivity extends ActionBarActivity {
 
                         @Override
                         public void run() {
-                            Log.v("SUBHA", "Ad Error: " + mVideoPlayer.getCurrentPosition()/1000);
+                            LogUtil.showLog("SUBHA", "Ad Error: " + mVideoPlayer.getCurrentPosition()/1000);
 
                         }
                     });

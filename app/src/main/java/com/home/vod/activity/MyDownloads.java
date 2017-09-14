@@ -180,8 +180,8 @@ public class MyDownloads extends AppCompatActivity {
                                     SubTitlePath.add(cursor.getString(1).trim());
 
 
-                                    Log.v("BIBHU3","SubTitleName============"+cursor.getString(0).trim());
-                                    Log.v("BIBHU3","SubTitlePath============"+cursor.getString(1).trim());
+                                    LogUtil.showLog("BIBHU3","SubTitleName============"+cursor.getString(0).trim());
+                                    LogUtil.showLog("BIBHU3","SubTitlePath============"+cursor.getString(1).trim());
 
                                 } while (cursor.moveToNext());
                             }
@@ -211,9 +211,9 @@ public class MyDownloads extends AppCompatActivity {
                                 public void run() {
 
                                     Intent in=new Intent(MyDownloads.this,MarlinBroadbandExample.class);
-                                    Log.v("BKS", "PATH==" + pathh);
-                                    Log.v("BKS", "Title==" + titles);
-                                    Log.v("BKS", "TOK=" + tok);
+                                    LogUtil.showLog("BKS", "PATH==" + pathh);
+                                    LogUtil.showLog("BKS", "Title==" + titles);
+                                    LogUtil.showLog("BKS", "TOK=" + tok);
 
                                     in.putExtra("SubTitleName", SubTitleName);
                                     in.putExtra("SubTitlePath", SubTitlePath);

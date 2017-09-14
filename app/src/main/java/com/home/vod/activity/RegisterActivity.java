@@ -869,7 +869,7 @@ public class RegisterActivity extends AppCompatActivity implements
                 else {
                     if (_video_details_output.getVideoUrl() != null || !_video_details_output.getVideoUrl().matches("")) {
                         playerModel.setVideoUrl(_video_details_output.getVideoUrl());
-                        Log.v("BISHAL", "videourl===" + playerModel.getVideoUrl());
+                        LogUtil.showLog("BISHAL", "videourl===" + playerModel.getVideoUrl());
                         playerModel.setThirdPartyPlayer(false);
                     } else {
                         //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
@@ -973,7 +973,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
                     final Intent playVideoIntent;
                     if (Util.dataModel.getAdNetworkId() == 3){
-                        Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+                        LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
 
                         playVideoIntent = new Intent(RegisterActivity.this, MyActivity.class);
 
@@ -2273,8 +2273,8 @@ public class RegisterActivity extends AppCompatActivity implements
             Util.selected_episode_id = "0";
             Util.selected_season_id = "0";
 
-            Log.v("MUVI", "priceFosubscribedStr=" + priceFosubscribedStr);
-            Log.v("MUVI", "priceForUnsubscribedStr=" + priceForUnsubscribedStr);
+            LogUtil.showLog("MUVI", "priceFosubscribedStr=" + priceFosubscribedStr);
+            LogUtil.showLog("MUVI", "priceForUnsubscribedStr=" + priceForUnsubscribedStr);
 
             final Intent showPaymentIntent = new Intent(RegisterActivity.this, PPvPaymentInfoActivity.class);
             showPaymentIntent.putExtra("muviuniqueid", Util.dataModel.getMovieUniqueId().trim());
@@ -2905,7 +2905,7 @@ public class RegisterActivity extends AppCompatActivity implements
             @Override
             public void onResult(@NonNull RemoteMediaClient.MediaChannelResult mediaChannelResult) {
                 if (!mediaChannelResult.getStatus().isSuccess()) {
-                    Log.v("SUBHA", "Failed with status code:" +
+                    LogUtil.showLog("SUBHA", "Failed with status code:" +
                             mediaChannelResult.getStatus().getStatusCode());
                 }
             }
@@ -3137,7 +3137,7 @@ public class RegisterActivity extends AppCompatActivity implements
                 }
                 final Intent playVideoIntent;
                 if (Util.dataModel.getAdNetworkId() == 3){
-                    Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+                    LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
 
                     playVideoIntent = new Intent(RegisterActivity.this, MyActivity.class);
 

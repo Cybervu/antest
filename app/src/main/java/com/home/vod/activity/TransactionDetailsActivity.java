@@ -290,7 +290,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         registerReceiver(InternetStatus, new IntentFilter("android.net.wifi.STATE_CHANGE"));
         new DownloadFileFromURL().execute(Util.Dwonload_pdf_rootUrl + download_Url);
 
-        Log.v("MUVI", "Url=" + Util.Dwonload_pdf_rootUrl + download_Url);
+        LogUtil.showLog("MUVI", "Url=" + Util.Dwonload_pdf_rootUrl + download_Url);
 
     }
 
@@ -411,7 +411,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                     // publishing the progress....
                     // After this onProgressUpdate will be called
                     publishProgress("" + (int) ((total * 100) / lenghtOfFile));
-                    // Log.v("MUVI", "Lrngth" + data.length);
+                    // LogUtil.showLog("MUVI", "Lrngth" + data.length);
                     // writing data to file
                     output.write(data, 0, count);
                 }
@@ -463,7 +463,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after the file was downloaded
 
-            Log.v("MUVI", "Download Completed");
+            LogUtil.showLog("MUVI", "Download Completed");
 
         }
     }
@@ -492,7 +492,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 //                    HttpResponse response = httpclient.execute(httppost);
 //                    responseStr = EntityUtils.toString(response.getEntity());
 //
-//                    Log.v("MUVI", "responseStr Delete Invoice Path=" + responseStr);
+//                    LogUtil.showLog("MUVI", "responseStr Delete Invoice Path=" + responseStr);
 //                } catch (Exception e) {
 //
 //                }
@@ -607,7 +607,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 //                    HttpResponse response = httpclient.execute(httppost);
 //                    responseStr = EntityUtils.toString(response.getEntity());
 //
-//                    Log.v("MUVI", "responseStr transcation Details=" + responseStr);
+//                    LogUtil.showLog("MUVI", "responseStr transcation Details=" + responseStr);
 //                } catch (Exception e) {
 //
 //                }
@@ -644,7 +644,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 //                            Date newDate = spf.parse(date);
 //                            spf = new SimpleDateFormat("MMMM dd,yyyy");
 //                            date = spf.format(newDate);
-//                            Log.v("MUVI", "Transaction Date = " + date);
+//                            LogUtil.showLog("MUVI", "Transaction Date = " + date);
 //                        }
 //
 //
@@ -660,13 +660,13 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 //                        if (Currency_symbol.equals("") || Currency_symbol == null || Currency_symbol.equals("null"))
 //                            Currency_symbol = "";
 //
-//                        Log.v("MUVI", "currency_symbol = " + Currency_symbol);
+//                        LogUtil.showLog("MUVI", "currency_symbol = " + Currency_symbol);
 //
 //                        currency_code = myJson1.optString("currency_code");
 //                        if (currency_code.equals("") || currency_code == null || currency_code.equals("null"))
 //                            currency_code = "";
 //
-//                        Log.v("MUVI", "currency_code = " + currency_code);
+//                        LogUtil.showLog("MUVI", "currency_code = " + currency_code);
 //
 //
 //                        Amount = myJson1.optString("amount");
@@ -681,7 +681,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 //                            }
 //                        }
 //
-//                        Log.v("MUVI", "amount" + Amount);
+//                        LogUtil.showLog("MUVI", "amount" + Amount);
 //
 //
 //                    } else {
@@ -809,7 +809,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 //                try {
 //                    HttpResponse response = httpclient.execute(httppost);
 //                    responseStr = EntityUtils.toString(response.getEntity());
-//                    Log.v("MUVI", "responseStr getpdf Details=" + responseStr);
+//                    LogUtil.showLog("MUVI", "responseStr getpdf Details=" + responseStr);
 //                } catch (Exception e) {
 //
 //                }

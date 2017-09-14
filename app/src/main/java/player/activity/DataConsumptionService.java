@@ -53,7 +53,7 @@ public class DataConsumptionService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Extract data included in the Intent
-            Log.v("BIBHU17", "Receiver called");
+            LogUtil.showLog("BIBHU17", "Receiver called");
 
             loginPref = getSharedPreferences(Util.LOGIN_PREF, 0);
             if (loginPref != null) {
@@ -80,7 +80,7 @@ public class DataConsumptionService extends Service {
             @Override
             public void run() {
                 GetTotalUsedData(Email_Id);
-                Log.v("BIBHU17", "*****************************************************==============Timer Called");
+                LogUtil.showLog("BIBHU17", "*****************************************************==============Timer Called");
             }
         },0,60000);
     }
@@ -96,7 +96,7 @@ public class DataConsumptionService extends Service {
             if (cursor.moveToFirst()) {
                 do {
 
-                    Log.v("BIBHU17", "fetching content size");
+                    LogUtil.showLog("BIBHU17", "fetching content size");
 
                     DownloadManager downloadManager1 = (DownloadManager) DataConsumptionService.this.getSystemService(DOWNLOAD_SERVICE);
                     DownloadManager.Query download_id_query = new DownloadManager.Query();
@@ -116,7 +116,7 @@ public class DataConsumptionService extends Service {
                             long downloaded = id_cursor.getInt(downloadedIndex);
 
                             TotalUsedData = downloaded/1024;
-                            Log.v("BIBHU17","TotalUsedData Download size============"+TotalUsedData);
+                            LogUtil.showLog("BIBHU17","TotalUsedData Download size============"+TotalUsedData);
 
                         }
                     }
@@ -179,7 +179,7 @@ public class DataConsumptionService extends Service {
         @Override
         protected String doInBackground(String... f_url) {
 
-            Log.v("BIBHU17","f_url[0]======="+f_url[0]);
+            LogUtil.showLog("BIBHU17","f_url[0]======="+f_url[0]);
 
             String Data[]= f_url[0].split(",");
 
@@ -210,7 +210,7 @@ public class DataConsumptionService extends Service {
                 }
 
 
-                Log.v("BIBHU17","f_url[0]responseStr======="+responseStr);
+                LogUtil.showLog("BIBHU17","f_url[0]responseStr======="+responseStr);
 
                 JSONObject myJson = null;
                 if(responseStr!=null) {

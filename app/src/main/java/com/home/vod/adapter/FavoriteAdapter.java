@@ -100,7 +100,7 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
         final GridItem item = data.get(position);
         holder.title.setText(item.getTitle());
         String imageId = item.getImage();
-        Log.v("Nihar_feb",""+imageId);
+        LogUtil.showLog("Nihar_feb",""+imageId);
 
 
 
@@ -110,7 +110,7 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
                 close=true;
                if (data.get(position).isClicked()){
 
-                   Log.v("ANU","movieUniqueId  ========"+item.getMovieUniqueId());
+                   LogUtil.showLog("ANU","movieUniqueId  ========"+item.getMovieUniqueId());
 
                    mActivity.removeFavorite(item);
 

@@ -322,7 +322,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 //
 //
 //        if (Util.downloadprogress >0){
-//            Log.v("SUBHA","hahahaha");
+//            LogUtil.showLog("SUBHA","hahahaha");
 //            percentg.setVisibility(View.VISIBLE);
 //            download.setVisibility(View.GONE);
 //            Progress.setVisibility(View.VISIBLE);
@@ -477,7 +477,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					if (center_pause_paly_timer_is_running) {
 						center_pause_paly_timer.cancel();
 						center_pause_paly_timer_is_running = false;
-						Log.v("BIBHU11","CastAndCrewActivity End_Timer cancel called");
+						LogUtil.showLog("BIBHU11","CastAndCrewActivity End_Timer cancel called");
 
 
 						subtitle_change_btn.setVisibility(View.INVISIBLE);
@@ -528,7 +528,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
       /*  back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("SUBHA","CHFHFH");
+                LogUtil.showLog("SUBHA","CHFHFH");
                // onBackPressed();
                 backCalled();
             }
@@ -856,7 +856,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 							{
 
 
-								Log.v("BIBHU3","parsing called============");
+								LogUtil.showLog("BIBHU3","parsing called============");
 
 								CheckSubTitleParsingType("1");
 								subtitleDisplayHandler = new Handler();
@@ -947,7 +947,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		//String licenseAcquisitionToken = getActionTokenFromAssets("license_action_token.xml");
 		//String licenseAcquisitionToken = getActionTokenFromStorage("/storage/emulated/0/Download/DRM/token.xml");
 		//String licenseAcquisitionToken = getActionTokenFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/DRM"+"/token.xml");
-		Log.v("SUBHA", "path" + token);
+		LogUtil.showLog("SUBHA", "path" + token);
 		String licenseAcquisitionToken = getActionTokenFromStorage(token);
 		if (licenseAcquisitionToken == null) {
 			Log.e(TAG,
@@ -957,7 +957,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 		}
 		//long start = System.currentTimeMillis();
-//		Log.v("SUBHA", licenseAcquisitionToken);
+//		LogUtil.showLog("SUBHA", licenseAcquisitionToken);
 		com.intertrust.wasabi.jni.Runtime.processServiceToken(licenseAcquisitionToken);
 //		Log.i(TAG,
 //				"License successfully acquired in (ms): "
@@ -1011,12 +1011,12 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				if (path.contains("WITHDRM")){
 					String proxy_url = playerProxy.makeUrl(dash_url, PlaylistProxy.MediaSourceType.SINGLE_FILE, new PlaylistProxy.MediaSourceParams());
 					emVideoView.setVideoURI(Uri.parse(proxy_url));
-					Log.v("BKS","emvideoview videouro=i====="+emVideoView.getVideoUri());
+					LogUtil.showLog("BKS","emvideoview videouro=i====="+emVideoView.getVideoUri());
 					emVideoView.start();
 				}
 				/*String proxy_url = playerProxy.makeUrl(dash_url, PlaylistProxy.MediaSourceType.SINGLE_FILE, new PlaylistProxy.MediaSourceParams());
 				emVideoView.setVideoURI(Uri.parse(proxy_url));
-				Log.v("BKS","emvideoview videouro=i====="+emVideoView.getVideoUri());
+				LogUtil.showLog("BKS","emvideoview videouro=i====="+emVideoView.getVideoUri());
 				emVideoView.start();*/
 				else{
 					emVideoView.setVideoURI(Uri.parse(path));
@@ -1745,7 +1745,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 	/* public void onBackPressed() {
          super.onBackPressed();
-         Log.v("SUBHA","HHVID"+videoLogId);
+         LogUtil.showLog("SUBHA","HHVID"+videoLogId);
          if (asynGetIpAddress!=null){
              asynGetIpAddress.cancel(true);
          }
@@ -1943,7 +1943,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
    /* @Override
     public boolean onKeyDown(int keyCode, KeyEvent objEvent) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Log.v("SUBHA","FHFHFHCALLED");
+            LogUtil.showLog("SUBHA","FHFHFHCALLED");
             return true;
         }
         return super.onKeyUp(keyCode, objEvent);
@@ -2183,7 +2183,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		public SubtitleProcessingTask(String path) {
 
 			Subtitle_Path = SubTitlePath.get((Integer.parseInt(path)-1));
-			Log.v("BIBHU3","parsing called Subtitle_Path============"+Subtitle_Path);
+			LogUtil.showLog("BIBHU3","parsing called Subtitle_Path============"+Subtitle_Path);
 		}
 
 		@Override
@@ -2325,7 +2325,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	{
 
 		String Subtitle_Path = SubTitlePath.get((Integer.parseInt(path)-1));
-		Log.v("BIBHU3","parsing called CheckSubTitleParsingType============"+Subtitle_Path);
+		LogUtil.showLog("BIBHU3","parsing called CheckSubTitleParsingType============"+Subtitle_Path);
 
 
 		callWithoutCaption = true;

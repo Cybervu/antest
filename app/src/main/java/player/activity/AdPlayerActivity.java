@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.home.vod.R;
+import com.home.vod.util.LogUtil;
 import com.spotxchange.v3.SpotX;
 import com.spotxchange.v3.SpotXAd;
 import com.spotxchange.v3.SpotXAdGroup;
@@ -44,7 +45,7 @@ public class AdPlayerActivity extends AppCompatActivity implements AdLoader.Call
     private void loadAd() {
 
 
-        Log.v("Abhishek", "CHANNEL" + playerModel.getChannel_id());
+        LogUtil.showLog("Abhishek", "CHANNEL" + playerModel.getChannel_id());
 
           if (!playerModel.getChannel_id().equalsIgnoreCase("")) {
             AdLoader loader = new AdLoader(playerModel.getChannel_id(), 1, 10 /*seconds*/, this);
@@ -199,7 +200,7 @@ public class AdPlayerActivity extends AppCompatActivity implements AdLoader.Call
 
     @Override
     public void onComplete(SpotXAd spotXAd) {
-        Log.v("SUBHA", "Ad Complete");
+        LogUtil.showLog("SUBHA", "Ad Complete");
         // startActivity(new Intent(MainActivity.this,Main2Activity.class));
 
     }

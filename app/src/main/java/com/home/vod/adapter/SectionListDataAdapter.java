@@ -152,7 +152,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                     String moviePermalink = itemsList.get(position).getPermalink();
                     String movieTypeId = itemsList.get(position).getVideoTypeId();
 
-                    Log.v("MUVI","HHH"+moviePermalink + movieTypeId);
+                    LogUtil.showLog("MUVI","HHH"+moviePermalink + movieTypeId);
                     if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
                         final Intent detailsIntent = new Intent(mContext, MovieDetailsActivity.class);
                         detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);

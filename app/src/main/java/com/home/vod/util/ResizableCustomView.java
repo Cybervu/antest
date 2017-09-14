@@ -32,7 +32,7 @@ public class ResizableCustomView {
             tv.setTag(tv.getText());
         }
 
-//        Log.v("sanjay:--------","story data"+tv.getText().toString());
+//        LogUtil.showLog("sanjay:--------","story data"+tv.getText().toString());
 
         ViewTreeObserver vto = tv.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -54,7 +54,7 @@ public class ResizableCustomView {
                                     viewMore), TextView.BufferType.SPANNABLE);
                 }
                else if ((tv.getLineCount() <= maxLine && isViewMore == false) || (tv.getLineCount() < maxLine)){
-                    Log.v("sanjay:--------","story data else if called");
+                    LogUtil.showLog("sanjay:--------","story data else if called");
                     tv.setText(tv.getText());
              }
 
@@ -62,7 +62,7 @@ public class ResizableCustomView {
                     isViewMore = true;
                     if (maxLine > 0 && tv.getLineCount() >= maxLine) {
 
-                        Log.v("sanjay:--------","story data maxline "+tv.getLineCount());
+                        LogUtil.showLog("sanjay:--------","story data maxline "+tv.getLineCount());
 
                         int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
                         String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
@@ -73,11 +73,11 @@ public class ResizableCustomView {
                                         viewMore), TextView.BufferType.SPANNABLE);
                     } else {
 
-                        Log.v("sanjay:--------","story data maxline ==========="+tv.getLineCount());
+                        LogUtil.showLog("sanjay:--------","story data maxline ==========="+tv.getLineCount());
                         int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
                         String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
                         tv.setText(text);
-                        Log.v("sanjay:--------","story data maxline ===========text"+text);
+                        LogUtil.showLog("sanjay:--------","story data maxline ===========text"+text);
                         tv.setMovementMethod(LinkMovementMethod.getInstance());
                         tv.setText(
                                 addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, lineEndIndex, expandText,

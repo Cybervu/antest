@@ -21,7 +21,7 @@ public class APIUrlConstant {
     /**
      * endpoint to get Menu List API
      */
-    public static String MENU_LIST_URL = "getMenuList";
+    public static String MENU_LIST_URL = "List";
     /**
      * endpoint to get Genre List API
      */
@@ -341,7 +341,7 @@ public class APIUrlConstant {
         return BASE_URl + INITIALIZATION_URL;
     }
 
-    public static String getMenuListUrl() {
+    public static String ListUrl() {
         return BASE_URl + MENU_LIST_URL;
     }
 
