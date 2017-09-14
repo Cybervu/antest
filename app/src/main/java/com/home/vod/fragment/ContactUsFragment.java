@@ -366,7 +366,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
 ////    protected void onPreExecute() {
 ////        pDialog = new ProgressBarHandler(getActivity().getBaseContext());
 ////        pDialog.show();
-////        Log.v("NIhar","onpreExecution");
+////        LogUtil.showLog("NIhar","onpreExecution");
 ////    }
 //
 //    @Override

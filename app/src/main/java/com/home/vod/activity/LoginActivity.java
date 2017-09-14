@@ -641,7 +641,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 else {
                     if (_video_details_output.getVideoUrl() != null || !_video_details_output.getVideoUrl().matches("")) {
                         playerModel.setVideoUrl(_video_details_output.getVideoUrl());
-                        Log.v("BISHAL", "videourl===" + playerModel.getVideoUrl());
+                        LogUtil.showLog("BISHAL", "videourl===" + playerModel.getVideoUrl());
                         playerModel.setThirdPartyPlayer(false);
                     } else {
                         //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
@@ -746,7 +746,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     }  else
                     {
                         if (Util.dataModel.getAdNetworkId() == 3){
-                            Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+                            LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
 
                             playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
 
@@ -1112,9 +1112,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         });*/
 
 
-        /*Log.v("MUVI","is Apv = "+ Util.dataModel.getIsAPV());
-        Log.v("MUVI","is Apv = "+ Util.dataModel.getIsPPV());
-        Log.v("MUVI","is Apv = "+ Util.dataModel.getContentTypesId());*/
+        /*LogUtil.showLog("MUVI","is Apv = "+ Util.dataModel.getIsAPV());
+        LogUtil.showLog("MUVI","is Apv = "+ Util.dataModel.getIsPPV());
+        LogUtil.showLog("MUVI","is Apv = "+ Util.dataModel.getContentTypesId());*/
 
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts),editPasswordStr);
 
@@ -1416,7 +1416,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 loginWithFacebookButton.invalidate();
 
                 if (AccessToken.getCurrentAccessToken() ==null) {
-                    Log.v("MUVI","Gbb");
+                    LogUtil.showLog("MUVI","Gbb");
 
                     loginWithFacebookButton.registerCallback(callbackManager, mCallBack);
                 }
@@ -1535,7 +1535,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 boolean isValidEmail = Util.isValidMail(regEmailStr);
                 if (isValidEmail == true) {
 
-                    Log.v("MUVI","login valid");
+                    LogUtil.showLog("MUVI","login valid");
                     Login_input login_input = new Login_input();
                     login_input.setAuthToken(authTokenStr);
                     login_input.setEmail(regEmailStr);
@@ -1601,8 +1601,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                    HttpResponse response = httpclient.execute(httppost);
 //                    responseStr = EntityUtils.toString(response.getEntity());
 //
-//                    Log.v("MUVI2","google_id="+languagePreference.getTextofLanguage(Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
-//                    Log.v("MUVI2","responseStr="+responseStr);
+//                    LogUtil.showLog("MUVI2","google_id="+languagePreference.getTextofLanguage(Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN));
+//                    LogUtil.showLog("MUVI2","responseStr="+responseStr);
 //
 //
 //                } catch (org.apache.http.conn.ConnectTimeoutException e){
@@ -1698,7 +1698,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                    editor.commit();
 //
 //
-//                Log.v("MUVI","planId="+planId+" ,isSubscribedStr="+isSubscribedStr);
+//                LogUtil.showLog("MUVI","planId="+planId+" ,isSubscribedStr="+isSubscribedStr);
 //
 //                    if (Util.checkNetwork(LoginActivity.this) == true) {
 //                        if (pDialog != null && pDialog.isShowing()) {
@@ -1710,7 +1710,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                        if(languagePreference.getTextofLanguage(Util.IS_RESTRICT_DEVICE,Util.DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1"))
 //                        {
 //
-//                            Log.v("MUVI","isRestrictDevice called");
+//                            LogUtil.showLog("MUVI","isRestrictDevice called");
 //                            // Call For Check Api.
 //                            AsynCheckDevice asynCheckDevice = new AsynCheckDevice();
 //                            asynCheckDevice.executeOnExecutor(threadPoolExecutor);
@@ -3396,7 +3396,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 } else
                 {
                     if (Util.dataModel.getAdNetworkId() == 3){
-                        Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+                        LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
 
                         playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
 

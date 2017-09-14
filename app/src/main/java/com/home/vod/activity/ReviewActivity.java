@@ -207,27 +207,27 @@ public class ReviewActivity extends AppCompatActivity implements
         super.onResume();
         /*if(isLogin == 1) {
             if (pref != null) {
-                Log.v("MUVI","FHFH");
+                LogUtil.showLog("MUVI","FHFH");
                 String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
                 if (loggedInStr == null) {
-                    Log.v("MUVI","loggedInStr");
+                    LogUtil.showLog("MUVI","loggedInStr");
 
                     clickHereToLogin.setVisibility(View.VISIBLE);
                     submitRatingLayout.setVisibility(View.GONE);
                 }else{
-                    Log.v("MUVI","loggedInStr1");
+                    LogUtil.showLog("MUVI","loggedInStr1");
 
                     clickHereToLogin.setVisibility(View.GONE);
                     submitRatingLayout.setVisibility(View.VISIBLE);
                 }
             }else{
-                Log.v("MUVI","loggedInStr2");
+                LogUtil.showLog("MUVI","loggedInStr2");
 
                 clickHereToLogin.setVisibility(View.VISIBLE);
                 submitRatingLayout.setVisibility(View.GONE);
             }
         }else{
-            Log.v("MUVI","loggedInStr3");
+            LogUtil.showLog("MUVI","loggedInStr3");
 
             clickHereToLogin.setVisibility(View.GONE);
             submitRatingLayout.setVisibility(View.GONE);
@@ -284,7 +284,7 @@ public class ReviewActivity extends AppCompatActivity implements
 
                         String loggedInStr = preferenceManager.getLoginStatusFromPref();
                         if (loggedInStr == null) {
-                            Log.v("MUVI","loggedInStr");
+                            LogUtil.showLog("MUVI","loggedInStr");
 
                             clickHereToLogin.setVisibility(View.VISIBLE);
                             submitRatingLayout.setVisibility(View.GONE);
@@ -299,7 +299,7 @@ public class ReviewActivity extends AppCompatActivity implements
                             // submitRatingLayout.setVisibility(View.VISIBLE);
                         }
                     }else{
-                        Log.v("MUVI","loggedInStr2");
+                        LogUtil.showLog("MUVI","loggedInStr2");
 
                         clickHereToLogin.setVisibility(View.VISIBLE);
                         submitRatingLayout.setVisibility(View.GONE);
@@ -316,7 +316,7 @@ public class ReviewActivity extends AppCompatActivity implements
 
                 String loggedInStr = preferenceManager.getUseridFromPref();
                 if (loggedInStr == null) {
-                    Log.v("MUVI","loggedInStr");
+                    LogUtil.showLog("MUVI","loggedInStr");
 
                     clickHereToLogin.setVisibility(View.VISIBLE);
                     submitRatingLayout.setVisibility(View.GONE);
@@ -333,13 +333,13 @@ public class ReviewActivity extends AppCompatActivity implements
                     // submitRatingLayout.setVisibility(View.VISIBLE);
                 }
             }else{
-                Log.v("MUVI","loggedInStr2");
+                LogUtil.showLog("MUVI","loggedInStr2");
 
                 clickHereToLogin.setVisibility(View.VISIBLE);
                 submitRatingLayout.setVisibility(View.GONE);
             }
         }else{
-            Log.v("MUVI","loggedInStr3");
+            LogUtil.showLog("MUVI","loggedInStr3");
 
             clickHereToLogin.setVisibility(View.GONE);
             submitRatingLayout.setVisibility(View.GONE);
@@ -387,8 +387,8 @@ public class ReviewActivity extends AppCompatActivity implements
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("MUVI","RESPO"+responseStr);
-                    Log.v("MUVI","RESPO"+getIntent().getStringExtra("muviId"));
+                    LogUtil.showLog("MUVI","RESPO"+responseStr);
+                    LogUtil.showLog("MUVI","RESPO"+getIntent().getStringExtra("muviId"));
 
 
                 } catch (Exception e){
@@ -403,7 +403,7 @@ public class ReviewActivity extends AppCompatActivity implements
                     msg = myJson.optString("msg");
                     if ((myJson.has("showrating")) && myJson.optString("showrating").trim() != null && !myJson.optString("showrating").trim().isEmpty() && !myJson.optString("showrating").trim().equals("null") && !myJson.optString("showrating").trim().matches("")) {
                         showRating = Integer.parseInt(myJson.optString("showrating"));
-                        Log.v("MUVI","HFFH"+showRating);
+                        LogUtil.showLog("MUVI","HFFH"+showRating);
                     }
 
                 }
@@ -445,7 +445,7 @@ public class ReviewActivity extends AppCompatActivity implements
                     }
                     if ((myJson.has("showrating")) && myJson.optString("showrating").trim() != null && !myJson.optString("showrating").trim().isEmpty() && !myJson.optString("showrating").trim().equals("null") && !myJson.optString("showrating").trim().matches("")) {
                         showRating = Integer.parseInt(myJson.optString("showrating"));
-                        Log.v("MUVI","HFFH"+showRating);
+                        LogUtil.showLog("MUVI","HFFH"+showRating);
                     }
 
                 }else{
@@ -504,10 +504,10 @@ public class ReviewActivity extends AppCompatActivity implements
             }else{
                 if(isLogin == 1) {
                     if (pref != null) {
-                        Log.v("MUVI","FHFH");
+                        LogUtil.showLog("MUVI","FHFH");
                         String loggedInStr = pref.getString("PREFS_LOGGEDIN_KEY", null);
                         if (loggedInStr == null) {
-                            Log.v("MUVI","loggedInStr");
+                            LogUtil.showLog("MUVI","loggedInStr");
 
                             clickHereToLogin.setVisibility(View.VISIBLE);
                             submitRatingLayout.setVisibility(View.GONE);
@@ -522,13 +522,13 @@ public class ReviewActivity extends AppCompatActivity implements
                             // submitRatingLayout.setVisibility(View.VISIBLE);
                         }
                     }else{
-                        Log.v("MUVI","loggedInStr2");
+                        LogUtil.showLog("MUVI","loggedInStr2");
 
                         clickHereToLogin.setVisibility(View.VISIBLE);
                         submitRatingLayout.setVisibility(View.GONE);
                     }
                 }else{
-                    Log.v("MUVI","loggedInStr3");
+                    LogUtil.showLog("MUVI","loggedInStr3");
 
                     clickHereToLogin.setVisibility(View.GONE);
                     submitRatingLayout.setVisibility(View.GONE);
@@ -618,8 +618,8 @@ public class ReviewActivity extends AppCompatActivity implements
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("MUVI","RESPO"+responseStr);
-                    Log.v("MUVI","RESPO"+getIntent().getStringExtra("muviId"));
+                    LogUtil.showLog("MUVI","RESPO"+responseStr);
+                    LogUtil.showLog("MUVI","RESPO"+getIntent().getStringExtra("muviId"));
 
 
                 } catch (Exception e){

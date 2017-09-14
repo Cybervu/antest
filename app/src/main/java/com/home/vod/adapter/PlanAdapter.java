@@ -86,7 +86,7 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.MyViewHolder> 
         }*/
 
         holder.subcriptionmonth.setText("(" +movie.getPlanFrequencuStr()+" "+movie.getPlanRecurrenceStr() +")");
-        Log.v("MUVI","name"+movie.getPlanRecurrenceStr());
+        LogUtil.showLog("MUVI","name"+movie.getPlanRecurrenceStr());
         holder.planName.setText(movie.getPlanNameStr());
         holder.purchaseValue.setText(movie.getPurchaseValueStr());
         holder.planPurchaseCurrenyTextView.setText(movie.getPlanCurrencySymbolstr());

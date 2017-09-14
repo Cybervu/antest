@@ -55,7 +55,7 @@ public class MyDownloadAdapter extends BaseAdapter {
     //Downloadlistdb downloadlistdb;
     public MyDownloadAdapter(MyDownloads activity, int simple_dropdown_item_1line, ArrayList<ContactModel1> downloadModel) {
 
-        Log.v("MUVI","DOWNLOAD MODEL=="+downloadModel.get(0).toString());
+        LogUtil.showLog("MUVI","DOWNLOAD MODEL=="+downloadModel.get(0).toString());
         this.activity = activity;
         this.downloadModel = downloadModel;
         dbHelper = new DBHelper(activity);
@@ -114,7 +114,7 @@ public class MyDownloadAdapter extends BaseAdapter {
         realise_date.setText("");
         genre.setText(downloadModel.get(position).getGenere());
         String dd = downloadModel.get(position).getDuration();
-        Log.v("SUBHA", dd);
+        LogUtil.showLog("SUBHA", dd);
         duration.setText(dd);
 
         image1.setOnClickListener(new View.OnClickListener() {

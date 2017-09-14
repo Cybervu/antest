@@ -256,7 +256,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
         } else {
                /* if (counter >= 0 && counter >= menuList.size()-1) {
-                    Log.v("MUVI","COUNTER");
+                    LogUtil.showLog("MUVI","COUNTER");
                     loading_completed = true;
                 }*/
         }
@@ -414,7 +414,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
-                    Log.v("MUVI", "onScrollStateChanged");
+                    LogUtil.showLog("MUVI", "onScrollStateChanged");
                    *//* if (counter >= 0 && counter >= menuList.size()-1) {
                         adapter.swapItems();
                     }*//*
@@ -424,7 +424,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                       Log.v("MUVI","ONSCROLL");
+                       LogUtil.showLog("MUVI","ONSCROLL");
                   *//*  if (counter >= 0 && counter >= menuList.size()-1) {
                         adapter.swapItems();
                     }*//*
@@ -448,8 +448,8 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
 
                 /*    loading_completed = loading_completed + 1;
-                    Log.v("MUVI","loading_completed"+loading_completed);
-                    Log.v("MUVI","ui_completed"+ui_completed);*/
+                    LogUtil.showLog("MUVI","loading_completed"+loading_completed);
+                    LogUtil.showLog("MUVI","ui_completed"+ui_completed);*/
 
                     // default data
                     LoadVideoInput loadVideoInput = new LoadVideoInput();

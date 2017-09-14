@@ -47,6 +47,7 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import player.activity.AdPlayerActivity;
@@ -646,7 +647,7 @@ LanguagePreference languagePreference;
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
                 if (_video_details_output.getVideoUrl() != null || !_video_details_output.getVideoUrl().matches("")) {
                     playerModel.setVideoUrl(_video_details_output.getVideoUrl());
-                    Log.v("BISHAL", "videourl===" + playerModel.getVideoUrl());
+                    LogUtil.showLog("BISHAL", "videourl===" + playerModel.getVideoUrl());
                     playerModel.setThirdPartyPlayer(false);
                 } else {
                     //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
@@ -748,7 +749,7 @@ LanguagePreference languagePreference;
                     final Intent playVideoIntent;
 
                     if (Util.dataModel.getAdNetworkId() == 3){
-                        Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+                        LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
 
                         playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
 
@@ -995,13 +996,13 @@ LanguagePreference languagePreference;
 //                httppost.addHeader("email", emailIdStr);
 //                httppost.addHeader("authToken", Util.authTokenStr.trim());
 //
-//            /*    Log.v("MUVI", "nameOnCardStr = " + nameOnCardStr);
-//                Log.v("MUVI", "expiryMonth = " + String.valueOf(expiryMonthStr).trim());
-//                Log.v("MUVI", "expiryYear = " + String.valueOf(expiryYearStr).trim());
-//                Log.v("MUVI", "cardNumber = " + cardNumberStr);
-//                Log.v("MUVI", "cvv = " + securityCodeStr);
-//                Log.v("MUVI", "email = " + emailIdStr);
-//                Log.v("MUVI", "authToken = " + Util.authTokenStr.trim());
+//            /*    LogUtil.showLog("MUVI", "nameOnCardStr = " + nameOnCardStr);
+//                LogUtil.showLog("MUVI", "expiryMonth = " + String.valueOf(expiryMonthStr).trim());
+//                LogUtil.showLog("MUVI", "expiryYear = " + String.valueOf(expiryYearStr).trim());
+//                LogUtil.showLog("MUVI", "cardNumber = " + cardNumberStr);
+//                LogUtil.showLog("MUVI", "cvv = " + securityCodeStr);
+//                LogUtil.showLog("MUVI", "email = " + emailIdStr);
+//                LogUtil.showLog("MUVI", "authToken = " + Util.authTokenStr.trim());
 //*/
 //
 //                // Execute HTTP Post Request
@@ -1270,7 +1271,7 @@ LanguagePreference languagePreference;
 //
 //        @Override
 //        protected Void doInBackground(Void... params) {
-//            Log.v("MUVI", "payment at doInBackground called ");
+//            LogUtil.showLog("MUVI", "payment at doInBackground called ");
 //            String userIdStr = preferenceManager.getUseridFromPref();
 //            String emailIdSubStr = preferenceManager.getEmailIdFromPref();
 //
@@ -1312,9 +1313,9 @@ LanguagePreference languagePreference;
 //                LogUtil.showLog("MUVI", "=========== 3333=" + tokenStr.trim());
 //                httppost.addHeader("cvv", securityCardStr);
 //                // httppost.addHeader("country",currencyCountryCodeStr.trim());
-//                Log.v("MUVI", "=========== 33333");
+//                LogUtil.showLog("MUVI", "=========== 33333");
 //                httppost.addHeader("country", preferenceManager.getCountryCodeFromPref());
-//                Log.v("MUVI", "=========== 4");
+//                LogUtil.showLog("MUVI", "=========== 4");
 //                httppost.addHeader("season_id", "0");
 //                LogUtil.showLog("MUVI", "=========== 44");
 //                httppost.addHeader("episode_id", "0");
@@ -1926,7 +1927,7 @@ public void Download_SubTitle(String Url) {
                 }
                 final Intent playVideoIntent;
                 if (Util.dataModel.getAdNetworkId() == 3){
-                    Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+                    LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
 
                     playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
 

@@ -261,8 +261,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         playerModel.setVideoReleaseDate(playerModel.getVideoReleaseDate());
         playerModel.setCensorRating(playerModel.getCensorRating());*/
 
-        Log.v("BKS", "ppvpayment Activity Season Id =" + getIntent().getSerializableExtra("PlayerModel"));
-        Log.v("MUVI", "ppvpatment Activity episode Id =" + Util.selected_episode_id);
+        LogUtil.showLog("BKS", "ppvpayment Activity Season Id =" + getIntent().getSerializableExtra("PlayerModel"));
+        LogUtil.showLog("MUVI", "ppvpatment Activity episode Id =" + Util.selected_episode_id);
 
         videoPreview = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -1137,15 +1137,15 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                  * for nondrm player below condition added
                  * if studio_approved_url is there in api then set the videourl from this other wise goto 2nd one
                  */
-                Log.v("BKS","studipapprovedurlbefore if entery===="+ _video_details_output.getStudio_approved_url());
+                LogUtil.showLog("BKS","studipapprovedurlbefore if entery===="+ _video_details_output.getStudio_approved_url());
                 if (_video_details_output.getStudio_approved_url() != null &&
                         !_video_details_output.getStudio_approved_url().isEmpty() &&
                         !_video_details_output.getStudio_approved_url().equals("null") &&
                         !_video_details_output.getStudio_approved_url().matches("") && playerModel !=null ){
-                    Log.v("BKS","if called means  studioapproved");
+                    LogUtil.showLog("BKS","if called means  studioapproved");
 
                     playerModel.setVideoUrl(_video_details_output.getStudio_approved_url());
-                    Log.v("BKS","studipapprovedurl===="+playerModel.getVideoUrl());
+                    LogUtil.showLog("BKS","studipapprovedurl===="+playerModel.getVideoUrl());
 
 
                     if ( _video_details_output.getLicenseUrl().trim() != null && !_video_details_output.getLicenseUrl().trim().isEmpty() && !_video_details_output.getLicenseUrl().trim().equals("null") && !_video_details_output.getLicenseUrl().trim().matches("")) {
@@ -1161,7 +1161,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 else {
                     if (_video_details_output.getVideoUrl() != null || !_video_details_output.getVideoUrl().matches("")) {
                         playerModel.setVideoUrl(_video_details_output.getVideoUrl());
-                        Log.v("BISHAL", "videourl===" + playerModel.getVideoUrl());
+                        LogUtil.showLog("BISHAL", "videourl===" + playerModel.getVideoUrl());
                         playerModel.setThirdPartyPlayer(false);
                     } else {
                         //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
@@ -2899,8 +2899,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 //                httppost.addHeader("episode_id", Util.selected_episode_id);
 //
 //
-//                Log.v("MUVI", "season_id=====================" + Util.selected_season_id);
-//                Log.v("MUVI", "episode_id=====================" + Util.selected_episode_id);
+//                LogUtil.showLog("MUVI", "season_id=====================" + Util.selected_season_id);
+//                LogUtil.showLog("MUVI", "episode_id=====================" + Util.selected_episode_id);
 //
 //                httppost.addHeader("currency_id", currencyIdStr.trim());
 //
@@ -3663,7 +3663,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 }
                 final Intent playVideoIntent;
                 if (Util.dataModel.getAdNetworkId() == 3){
-                    Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+                    LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
 
                     playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
 

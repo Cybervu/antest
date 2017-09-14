@@ -90,7 +90,7 @@ public class EpisodesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
            // episodeNameTextView.setText(item.getEpisodeNumber());
 
             String imageId = item.getEpisodeThumbnailImageView();
-            Log.v("MUVI","kjshdvuih");
+            LogUtil.showLog("MUVI","kjshdvuih");
 
 
             if(imageId.matches("") || imageId.matches(LanguagePreference.getLanguagePreference(context).getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){

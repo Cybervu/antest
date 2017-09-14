@@ -652,10 +652,10 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                         castNameStr = "";
 
                     }
-                    Log.v("MUVI","JFHF"+castSummaryStr);
+                    LogUtil.showLog("MUVI","JFHF"+castSummaryStr);
                     if ((myJson.has("summary")) && myJson.getString("summary").trim() != null && !myJson.getString("summary").trim().isEmpty() && !myJson.getString("summary").trim().equals("null") && !myJson.getString("summary").trim().matches("")) {
                         castSummaryStr = myJson.getString("summary");
-                        Log.v("MUVI","castSummaryStr"+castSummaryStr);
+                        LogUtil.showLog("MUVI","castSummaryStr"+castSummaryStr);
 
                     }else{
                         castSummaryStr = "";

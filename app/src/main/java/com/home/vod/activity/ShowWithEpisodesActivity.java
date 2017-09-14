@@ -1284,7 +1284,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
                     final Intent playVideoIntent;
                     if (Util.dataModel.getAdNetworkId() == 3){
-                        Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+                        LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
 
                         playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
 
@@ -3996,7 +3996,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 }
                 final Intent playVideoIntent;
                 if (Util.dataModel.getAdNetworkId() == 3){
-                    Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+                    LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
 
                     playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
 

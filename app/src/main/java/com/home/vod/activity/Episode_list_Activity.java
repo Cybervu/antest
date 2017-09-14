@@ -364,7 +364,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 } else {
                     if (_video_details_output.getVideoUrl() != null || !_video_details_output.getVideoUrl().matches("")) {
                         playerModel.setVideoUrl(_video_details_output.getVideoUrl());
-                        Log.v("BISHAL", "videourl===" + playerModel.getVideoUrl());
+                        LogUtil.showLog("BISHAL", "videourl===" + playerModel.getVideoUrl());
                         playerModel.setThirdPartyPlayer(false);
                     } else {
                         //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
@@ -470,7 +470,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                     } else {
                         if (Util.dataModel.getAdNetworkId() == 3) {
-                            Log.v("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
+                            LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
                             playVideoIntent = new Intent(Episode_list_Activity.this, ExoPlayerActivity.class);
 
@@ -783,7 +783,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     @Override
     public void onGetEpisodeDetailsPostExecuteCompleted(Episode_Details_output episode_details_output, int status, int i, String message, String movieUniqueId) {
 
-        Log.v("BKS", "onget eisode details ca;l==");
+        LogUtil.showLog("BKS", "onget eisode details ca;l==");
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
@@ -839,7 +839,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         Util.currencyModel = episode_details_output.getCurrencyDetails();
         Util.apvModel = episode_details_output.getApvDetails();
         Util.ppvModel = episode_details_output.getPpvDetails();
-        Log.v("BKS", "onget eisode details itemdata==" + itemData);
+        LogUtil.showLog("BKS", "onget eisode details itemdata==" + itemData);
 
         if (itemData.size() <= 0) {
             footerView.setVisibility(View.GONE);
@@ -864,7 +864,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
  /*   @Override
     public void onGetEpisodeDetailsPostExecuteCompleted(ArrayList<Episode_Details_output> episode_details_output, int status, int i, String message,String movieUniqueId) {
 
-        Log.v("BKS", "onget eisode details ca;l==");
+        LogUtil.showLog("BKS", "onget eisode details ca;l==");
 
         for (int a = 0; a < episode_details_output.size(); a++) {
 
@@ -883,7 +883,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr, movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, episodeContenTTypesId, videodurationStr));
 
         }
-        Log.v("BKS", "onget eisode details itemdata==" + itemData);
+        LogUtil.showLog("BKS", "onget eisode details itemdata==" + itemData);
 
         if (itemData.size() <= 0) {
             footerView.setVisibility(View.GONE);
@@ -1135,7 +1135,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
         mLayoutManager = new LinearLayoutManager(Episode_list_Activity.this, LinearLayoutManager.VERTICAL, false);
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
-        Log.v("BKS", "permslink  najhjh == " + permalinkStr);
+        LogUtil.showLog("BKS", "permslink  najhjh == " + permalinkStr);
 
         footerView = (RelativeLayout) findViewById(R.id.loadingPanel);
         footerView.setVisibility(View.GONE);
@@ -3409,7 +3409,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 } else {
                     if (Util.dataModel.getAdNetworkId() == 3) {
-                        Log.v("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
+                        LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
                         playVideoIntent = new Intent(Episode_list_Activity.this, ExoPlayerActivity.class);
 

@@ -150,8 +150,8 @@ LanguagePreference languagePreference;
                         detailsIntent.putExtra("id",Id_Purchase_History.get(position));
                         detailsIntent.putExtra("user_id",user_id);
 
-                        Log.v("MUVI","ID = "+Id_Purchase_History.get(position));
-                        Log.v("MUVI","user_id = "+user_id);
+                        LogUtil.showLog("MUVI","ID = "+Id_Purchase_History.get(position));
+                        LogUtil.showLog("MUVI","user_id = "+user_id);
 
                         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(detailsIntent);
@@ -267,7 +267,7 @@ LanguagePreference languagePreference;
 //                                Id = "";
 //
 //                            Id_Purchase_History.add(Id);
-//                            Log.v("MUVI","ID =========================== "+Id);
+//                            LogUtil.showLog("MUVI","ID =========================== "+Id);
 //
 //                            PutrcahseDate = jsonArray.getJSONObject(i).optString("transaction_date");
 //                            if(PutrcahseDate.equals("") || PutrcahseDate==null || PutrcahseDate.equals("null"))
@@ -285,13 +285,13 @@ LanguagePreference languagePreference;
 //                            if(Currency_symbol.equals("") || Currency_symbol==null || Currency_symbol.equals("null"))
 //                                Currency_symbol = "";
 //
-//                            Log.v("MUVI","currency_symbol = "+Currency_symbol);
+//                            LogUtil.showLog("MUVI","currency_symbol = "+Currency_symbol);
 //
 //                            currency_code = jsonArray.getJSONObject(i).optString("currency_code");
 //                            if(currency_code.equals("") || currency_code==null || currency_code.equals("null"))
 //                                currency_code = "";
 //
-//                            Log.v("MUVI","currency_code = "+currency_code);
+//                            LogUtil.showLog("MUVI","currency_code = "+currency_code);
 //
 //
 //                            Amount = jsonArray.getJSONObject(i).optString("amount");
@@ -309,7 +309,7 @@ LanguagePreference languagePreference;
 //                                }
 //                            }
 //
-//                            Log.v("MUVI","amount"+ Amount);
+//                            LogUtil.showLog("MUVI","amount"+ Amount);
 //
 //
 //                            purchaseHistoryModel = new PurchaseHistoryModel(Invoice,Id,PutrcahseDate,TranactionStatus,Amount,Ppvstatus);

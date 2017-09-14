@@ -194,7 +194,7 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
 
                     while ((inputLine = in.readLine()) != null)
                     {
-                        Log.v("BISHAL","response1=="+inputLine);
+                        LogUtil.showLog("BISHAL","response1=="+inputLine);
                         System.out.println(inputLine);
                         responseStr = inputLine;
 
@@ -211,16 +211,16 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
                     ipAddressStr = "";
 
                 }catch (IOException e) {
-                    Log.v("BISHAL","Exception="+e.toString());
+                    LogUtil.showLog("BISHAL","Exception="+e.toString());
                     ipAddressStr = "";
 
                 }
-                Log.v("BISHAL","response=="+responseStr);
+                LogUtil.showLog("BISHAL","response=="+responseStr);
                 if(responseStr!=null){
                     Object json = new JSONTokener(responseStr).nextValue();
                     if (json instanceof JSONObject){
                         ipAddressStr = ((JSONObject) json).getString("ip");
-                        Log.v("BISHAL","IpYoutube=="+ipAddressStr);
+                        LogUtil.showLog("BISHAL","IpYoutube=="+ipAddressStr);
 
                     }
 
@@ -237,7 +237,7 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
 
 
         protected void onPostExecute(Void result) {
-            Log.v("BISHAL","IpYoutube1=="+ipAddressStr);
+            LogUtil.showLog("BISHAL","IpYoutube1=="+ipAddressStr);
 
             if(responseStr == null){
                 ipAddressStr = "";
@@ -267,7 +267,7 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
 
             String urlRouteList = playerModel.getRootUrl().trim() + "videoLogs";
             //YoutubeVideoUrl=playerModel.getVideoUrl();
-            Log.v("BISHAL","YoutubeVideoUrl=="+playerModel.getVideoUrl());
+            LogUtil.showLog("BISHAL","YoutubeVideoUrl=="+playerModel.getVideoUrl());
             try {
                 HttpClient httpclient=new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
@@ -298,7 +298,7 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                    Log.v("BISHAL","responseStr=="+responseStr);
+                    LogUtil.showLog("BISHAL","responseStr=="+responseStr);
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e){
 

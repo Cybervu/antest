@@ -83,9 +83,9 @@ public class FormatSRT_WithoutCaption implements TimedTextFileFormat {
 						lineCounter++;
 						line = br.readLine().trim();
 						String start = line.substring(0, 12);
-						Log.v("BIBHU","start time ="+start);
+						LogUtil.showLog("BIBHU","start time ="+start);
 						String end = line.substring(line.length()-12, line.length());
-						Log.v("BIBHU","end time ="+end);
+						LogUtil.showLog("BIBHU","end time ="+end);
 						Time time = new Time("hh:mm:ss,ms",start);
 						caption.start = time;
 						time = new Time("hh:mm:ss,ms",end);
@@ -94,7 +94,7 @@ public class FormatSRT_WithoutCaption implements TimedTextFileFormat {
 						tto.warnings += "incorrect time format at line "+lineCounter;
 						allGood = false;
 						line = null;
-						Log.v("BIBHU","Exception called after finish");
+						LogUtil.showLog("BIBHU","Exception called after finish");
 					}
 				}
 				if (allGood){

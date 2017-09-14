@@ -61,6 +61,7 @@ import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -307,7 +308,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 String moviePermalink = item.getPermalink();
 
 
-                Log.v("bibhu","moviePermalink ="+moviePermalink);
+                LogUtil.showLog("bibhu","moviePermalink ="+moviePermalink);
                 String movieTypeId = item.getVideoTypeId();
                 if (a){
                     a=false;
@@ -469,7 +470,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         scrolling = false;
 
 
-        Log.v("MUVI","favorite calling");
+        LogUtil.showLog("MUVI","favorite calling");
         ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
         viewFavouriteInputModel.setAuthToken(authTokenStr);
         viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
@@ -477,8 +478,8 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,FavoriteActivity.this,FavoriteActivity.this);
         asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
 
-        Log.v("MUVI","authtokenn = "+Util.authTokenStr);
-        Log.v("MUVI","user id = "+preferenceManager.getUseridFromPref());
+        LogUtil.showLog("MUVI","authtokenn = "+Util.authTokenStr);
+        LogUtil.showLog("MUVI","user id = "+preferenceManager.getUseridFromPref());
 
 
 
@@ -588,7 +589,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     @Override
     public void onViewFavouritePostExecuteCompleted(ArrayList<ViewFavouriteOutputModel> viewFavouriteOutputModelArray, int status, int totalItems, String message) {
 
-        Log.v("MUVI","item data =="+ itemData);
+        LogUtil.showLog("MUVI","item data =="+ itemData);
 
         try {
             if (pDialog != null && pDialog.isShowing()) {
@@ -610,7 +611,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             isEpisodeStr = viewFavouriteOutputModelArray.get(i).getIsEpisodeStr();
             movieUniqueId = viewFavouriteOutputModelArray.get(i).getMovieId();
             itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, "", "", moviePermalinkStr,isEpisodeStr,movieUniqueId,"",0,0,0));
-            Log.v("MUVI","item data =="+ itemData);
+            LogUtil.showLog("MUVI","item data =="+ itemData);
 
         }
         if (itemData.size() <= 0) {
@@ -652,7 +653,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                     //
                     @Override
                     public void onBitmapFailed(final Drawable errorDrawable) {
-                        Log.v("MUVI", "videoImageStrToHeight = " + videoImageStrToHeight);
+                        LogUtil.showLog("MUVI", "videoImageStrToHeight = " + videoImageStrToHeight);
                         videoImageStrToHeight = "https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png";
                         videoWidth = errorDrawable.getIntrinsicWidth();
                         videoHeight = errorDrawable.getIntrinsicHeight();
@@ -691,7 +692,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             FavoriteActivity.this.sucessMsg=sucessMsg;
             showToast();
 
-            Log.v("ANU", "REMOVED");
+            LogUtil.showLog("ANU", "REMOVED");
             itemData.remove(index);
             gridView.invalidateViews();
             customGridAdapter.notifyDataSetChanged();

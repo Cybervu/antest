@@ -1114,7 +1114,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         // if (genreArray!=null && genreArray.size() > 0) {
         if ((filterOrderByStr != null && !filterOrderByStr.equalsIgnoreCase("")) || (genreArray != null && genreArray.size() > 0)) {
             firstTime = true;
-            Log.v("SUBHAA", "hgdjhdgjhbj" + clearClicked);
+            LogUtil.showLog("SUBHAA", "hgdjhdgjhbj" + clearClicked);
 
             offset = 1;
             scrolledPosition = 0;
@@ -1167,7 +1167,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             pDialog.hide();
             pDialog = null;
         }
-//        Log.v("SUBHA","JFJFJCLEA"+clearClicked);
+//        LogUtil.showLog("SUBHA","JFJFJCLEA"+clearClicked);
         if (clearClicked == true) {
             boolean isNetwork = NetworkStatus.getInstance().isConnected(context);
             if (isNetwork == false) {
@@ -1177,7 +1177,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 footerView.setVisibility(View.GONE);
             }
             resetData();
-            Log.v("SUBHAA", "JFJFJCLEA" + clearClicked);
+            LogUtil.showLog("SUBHAA", "JFJFJCLEA" + clearClicked);
 
             clearClicked = false;
 
@@ -1365,7 +1365,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                             //
                             @Override
                             public void onBitmapFailed(final Drawable errorDrawable) {
-                                Log.v("MUVI", "videoImageStrToHeight = " + videoImageStrToHeight);
+                                LogUtil.showLog("MUVI", "videoImageStrToHeight = " + videoImageStrToHeight);
                                 videoImageStrToHeight = "https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png";
                                 videoWidth = errorDrawable.getIntrinsicWidth();
                                 videoHeight = errorDrawable.getIntrinsicHeight();
@@ -1472,7 +1472,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                         //
                         @Override
                         public void onBitmapFailed(final Drawable errorDrawable) {
-                            Log.v("MUVI", "videoImageStrToHeight = " + videoImageStrToHeight);
+                            LogUtil.showLog("MUVI", "videoImageStrToHeight = " + videoImageStrToHeight);
                             videoImageStrToHeight = "https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png";
                             videoWidth = errorDrawable.getIntrinsicWidth();
                             videoHeight = errorDrawable.getIntrinsicHeight();

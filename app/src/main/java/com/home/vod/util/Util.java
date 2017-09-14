@@ -441,7 +441,7 @@ public class Util {
          for (Signature signature : info.signatures) {
             MessageDigest md = MessageDigest.getInstance("SHA");
             md.update(signature.toByteArray());
-            //  Log.v("MUVI:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            //  LogUtil.showLog("MUVI:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
 
          }
       } catch (PackageManager.NameNotFoundException e) {

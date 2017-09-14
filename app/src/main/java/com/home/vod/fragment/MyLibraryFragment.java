@@ -818,7 +818,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 if (Util.dataModel.getThirdPartyUrl().matches("") || Util.dataModel.getThirdPartyUrl().equalsIgnoreCase(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA))) {
                     final Intent playVideoIntent;
                     if (Util.dataModel.getAdNetworkId() == 3){
-                        Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+                        LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
 
                         playVideoIntent = new Intent(getActivity(), ExoPlayerActivity.class);
 
@@ -2377,7 +2377,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 Intent playVideoIntent;
 
                 if (Util.dataModel.getAdNetworkId() == 3){
-                    Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+                    LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
 
                     playVideoIntent = new Intent(getActivity(), ExoPlayerActivity.class);
 

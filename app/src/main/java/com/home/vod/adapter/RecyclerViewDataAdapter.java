@@ -69,7 +69,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
     @Override
     public ItemRowHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         float density = mContext.getResources().getDisplayMetrics().density;
-        Log.v("SUBHA","density === "+ density);
+        LogUtil.showLog("SUBHA","density === "+ density);
         if(density >= 1.5 && density <= 3.0){
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_small, null);
             ItemRowHolder mh = new ItemRowHolder(v);
@@ -85,7 +85,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
     @Override
     public void onBindViewHolder(final ItemRowHolder itemRowHolder, final int i) {
 
-        Log.v("MUVI","position of the item in adapter =============="+i);
+        LogUtil.showLog("MUVI","position of the item in adapter =============="+i);
 
        /* if(i>=counter)
         {
@@ -146,7 +146,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
             itemRowHolder.mDemoSliderLayout.setVisibility(View.GONE);
 
         }
-        Log.v("SUBHA","hggf"+singleSectionItems.size());
+        LogUtil.showLog("SUBHA","hggf"+singleSectionItems.size());
         //  itemRowHolder.btnMore.setVisibility(View.VISIBLE);
 
         if (singleSectionItems.size() <= 0) {

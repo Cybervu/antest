@@ -22,6 +22,7 @@ import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.model.FilterListModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.LogUtil;
 
 
 import java.util.ArrayList;
@@ -215,13 +216,13 @@ public class FilterActivity extends AppCompatActivity {
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("ANURADHA","genrearray length======"+genreArray.size());
-                Log.v("ANURADHA"," filterOrderByStr======"+filterOrderByStr);
+                LogUtil.showLog("ANURADHA","genrearray length======"+genreArray.size());
+                LogUtil.showLog("ANURADHA"," filterOrderByStr======"+filterOrderByStr);
                 if (genreArray!=null && genreArray.size() > 0) {
                     VideosListFragment.genreArray = genreArray;
                     VideosListFragment.filterOrderByStr =filterOrderByStr;
                     VideosListFragment.clearClicked = false;
-                    Log.v("ANURADHA"," genreArray======"+filterOrderByStr);
+                    LogUtil.showLog("ANURADHA"," genreArray======"+filterOrderByStr);
 
                 } /*if (filterOrderByStr!=null) {
                     VideosListFragment.genreArray = null;
