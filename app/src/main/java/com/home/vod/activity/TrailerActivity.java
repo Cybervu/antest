@@ -4,7 +4,6 @@ package com.home.vod.activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -200,29 +199,26 @@ public class TrailerActivity extends AppCompatActivity implements
 
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
         videoTitle = (TextView) findViewById(R.id.videoTitle);
-        Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        videoTitle.setTypeface(videoTitleface);
+
+        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.regular_fonts),videoTitle);
         GenreTextView = (TextView) findViewById(R.id.GenreTextView);
-        Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        GenreTextView.setTypeface(GenreTextViewface);
+        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.light_fonts),GenreTextView);
+
         videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
-        Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        videoDurationTextView.setTypeface(videoDurationTextViewface);
+        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.light_fonts),videoDurationTextView);
+
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
-        Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
-        videoCensorRatingTextView.setTypeface(videoCensorRatingTextViewface);
+        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.light_fonts),videoCensorRatingTextView);
         videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
-        Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        videoCensorRatingTextView1.setTypeface(videoCensorRatingTextView1face);
+        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.light_fonts),videoCensorRatingTextView1);
         videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
-        Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
+        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.light_fonts),videoReleaseDateTextView);
+
         story = (TextView) findViewById(R.id.videoStoryTextView);
-        Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        story.setTypeface(storyTypeface);
+        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.light_fonts),story);
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
-        Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
-        videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
+        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.light_fonts),videoCastCrewTitleTextView);
+
         videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE,DEFAULT_CAST_CREW_BUTTON_TITLE));
 
         //Call For Subtitle Loading // Added By Bibhu

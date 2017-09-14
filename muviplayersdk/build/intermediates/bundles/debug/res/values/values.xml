@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="OsTextColor">#757575</color>
+    <color name="alertPopupColor">#fff</color>
+    <color name="alreadyHaveALoginButtonTextColor">#662D91</color>
+    <color name="alreadyMemberTextColor">#757575</color>
+    <color name="appBackgroundColor">#fff</color>
+    <color name="appBackgroundColor1">#000</color>
+    <color name="border_color">#662D91</color>
+    <color name="buttonBackgroundColor">#2acb99</color>
+    <color name="buttonTextColor">#fff</color>
+    <color name="button_background">#b70000</color>
+    <color name="cancel_button_background">#DDD</color>
+    <color name="cancel_button_text_color">#662D91</color>
+    <color name="castCrewTitleTextColor">#662D91</color>
+    <color name="censorRatingBackground">#80000000</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="color_card_background">#000</color>
+    <color name="contactFormTitle">#333</color>
+    <color name="contentTitleColor">#fff</color>
+    <color name="disableTextColor">#50757575</color>
+    <color name="dividerColor">#662D91</color>
+    <color name="editTextColor">#5c6873</color>
+    <color name="episodeBackgroundColor">#f5f4f4</color>
+    <color name="fb_button_background">#3b5998</color>
+    <color name="fb_text_color">#fff</color>
+    <color name="filterBgColor">#fff</color>
+    <color name="filterTextColor">#5c6873</color>
+    <color name="filter_text_color">#000</color>
+    <color name="forgotPasswordTextViewColor">#662D91</color>
+    <color name="hint_background">#662D91</color>
+    <color name="hint_color">#999</color>
+    <color name="languagePopupColor">#fff</color>
+    <color name="languagePopupFadeColor">#50696969</color>
+    <color name="languageTextColor">#000</color>
+    <color name="leftMenuBackground">#fff</color>
+    <color name="loader_color">#5d6c7e</color>
+    <color name="loginTextViewColor">#662D91</color>
+    <color name="login_new_user_text_color">#757575</color>
+    <color name="movieTitleColor">#fff</color>
+    <color name="nav_drawer_lineColor">#000</color>
+    <color name="nav_drawer_text_Color">#000000</color>
+    <color name="noInternetColor">#5c6873</color>
+    <color name="pageTitleColor">#3f444a</color>
+    <color name="playPauseColor">#00000000</color>
+    <color name="playerColor">#000000</color>
+    <color name="preOrderButtonTextColor">#DDD</color>
+    <color name="pre_order_button_background">#fff</color>
+    <color name="resumePopupColor">#fff</color>
+    <color name="seekTimeTextColor">#80ffffff</color>
+    <color name="selected_color">#000</color>
+    <color name="sign_up_text_color">#662D91</color>
+    <color name="spinnerDropDownListColor">#000</color>
+    <color name="spinnerTextColor">#fff</color>
+    <color name="subTitleTextColor">#000</color>
+    <color name="subtitleListColor">#fff</color>
+    <color name="teal_100">#FFCDD2</color>
+    <color name="teal_500">#F44336</color>
+    <color name="textColor">#5c6873</color>
+    <color name="textColorPrimary">#3b5998</color>
+    <color name="titlecolor">#FF0000</color>
+    <color name="totalTimeTxtColor">#ffffff</color>
+    <color name="transparent">@android:color/transparent</color>
+    <color name="unselected_color">#fff</color>
+    <color name="videomovieTitleColor">#3f444a</color>
+    <color name="videotextColor">#000000</color>
+    <color name="waterMarkTextColor">#80ffffff</color>
+    <color name="white">#ffffff</color>
+    <color name="windowBackground">#000</color>
+    <declare-styleable name="ExpandableTextView"><attr format="integer" name="trimLength"/></declare-styleable>
+    <integer name="column_count">3</integer>
+    <string name="app_name">MuviPlayerSDK</string>
+    <string name="light_fonts">fonts/RobotoCondensed-Light.ttf</string>
+    <string name="regular_fonts">fonts/OpenSans-Regular.ttf</string>
+    <style name="AndroidImageSlider_Corner_Oval_Orange">
+
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="shape">oval</item>
+        <item name="padding_left">3dp</item>
+        <item name="padding_right">3dp</item>
+        <item name="padding_top">4dp</item>
+        <item name="padding_bottom">4dp</item>
+
+        <item name="selected_color">@color/selected_color</item>
+        <item name="unselected_color">@color/unselected_color</item>
+        <item name="selected_width">10dp</item>
+        <item name="selected_height">10dp</item>
+        <item name="unselected_width">6dp</item>
+        <item name="unselected_height">6dp</item>
+
+    </style>
+    <style name="CustomAlertDialogStyle">
+        <item name="android:bottomBright">@color/transparent</item>
+        <item name="android:bottomDark">@color/transparent</item>
+        <item name="android:bottomMedium">@color/transparent</item>
+        <item name="android:centerBright">@color/transparent</item>
+        <item name="android:centerDark">@color/transparent</item>
+        <item name="android:centerMedium">@color/transparent</item>
+        <item name="android:fullBright">@color/transparent</item>
+        <item name="android:fullDark">@color/transparent</item>
+        <item name="android:topBright">@color/transparent</item>
+        <item name="android:topDark">@color/transparent</item>
+    </style>
+    <style name="CustomDialogTheme" parent="android:Theme.Holo.Dialog">
+        <item name="android:alertDialogStyle">@style/CustomAlertDialogStyle</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="FullyTranslucent" parent="android:Theme.Translucent.NoTitleBar">
+        <item name="android:progressBarStyle">@style/InvisibleProgress</item>
+    </style>
+    <style name="InvisibleProgress">
+        <item name="android:visibility">gone</item>
+    </style>
+    <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">@color/button_background</item>
+        <!-- Used for the title and text -->
+        <item name="android:textColorPrimary">@color/hint_color</item>
+        <!-- Used for the background -->
+        <item name="android:background">@color/alertPopupColor</item>
+    </style>
+    <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
+
+    </style>
+    <style name="MyMaterialTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorControlNormal">@color/hint_color</item>
+        <item name="colorControlActivated">@color/hint_background</item>
+        <!--
+        <item name="windowActionBar">false</item>
+-->
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!--
+        status bar color
+-->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+
+    </style>
+    <style name="MyMaterialTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="MyTheme" parent="android:Theme.Holo.Dialog">
+        <item name="android:alertDialogStyle">@style/CustomAlertDialogStyle</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="Widget.CardContent" parent="android:Widget">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="Widget.CardContent.Header" parent="android:Widget">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="applicationTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:dropDownListViewStyle">@style/mySpinnerStyle</item>
+    </style>
+    <style name="mySpinnerStyle" parent="android:Widget.ListView.DropDown">
+        <item name="android:divider">#d0cece</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
+    <style name="spinner_style">
+        <item name="android:background">@drawable/selector_spinner</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+</resources>

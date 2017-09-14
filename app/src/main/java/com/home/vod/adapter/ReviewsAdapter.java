@@ -1,7 +1,6 @@
 package com.home.vod.adapter;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
 import com.home.vod.R;
 import com.home.vod.model.ReviewsItem;
+import com.home.vod.util.FontUtls;
 
 import java.util.ArrayList;
 
@@ -69,11 +69,14 @@ public class ReviewsAdapter extends BaseAdapter {
         TextView userNameTextView = (TextView) grid.findViewById(R.id.userNameTextView);
         TextView userReviewTextView = (TextView) grid.findViewById(R.id.userreviewTextView);
         RatingBar rating = (RatingBar)grid.findViewById(R.id.ratingBar);
+        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.light_fonts),userNameTextView);
+/*
         Typeface custom_name = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.light_fonts));
-        userNameTextView.setTypeface(custom_name);
+        userNameTextView.setTypeface(custom_name);*/
+        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.light_fonts),userReviewTextView);
 
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.light_fonts));
-        userReviewTextView.setTypeface(castDescriptionTypeface);
+        /*Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.light_fonts));
+        userReviewTextView.setTypeface(castDescriptionTypeface);*/
 
         userNameTextView.setText(reviewsItems.get(position).getDisplay_name());
         userReviewTextView.setText(reviewsItems.get(position).getReview());

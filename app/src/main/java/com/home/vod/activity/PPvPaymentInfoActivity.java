@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -57,6 +56,7 @@ import com.home.vod.model.CardModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import player.activity.AdPlayerActivity;
@@ -385,12 +385,10 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         couponCodeEditText = (EditText) findViewById(R.id.couponCodeEditText);
         couponCodeEditText.addTextChangedListener(filterTextWatcher);
 
-
-        Typeface typeface6 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        nameOnCardEditText.setTypeface(typeface6);
-        cardNumberEditText.setTypeface(typeface6);
-        securityCodeEditText.setTypeface(typeface6);
-        couponCodeEditText.setTypeface(typeface6);
+        FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.light_fonts),nameOnCardEditText);
+        FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.light_fonts),cardNumberEditText);
+        FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.light_fonts),securityCodeEditText);
+        FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.light_fonts),couponCodeEditText);
 
 
         chargedPriceTextView = (TextView) findViewById(R.id.chargeDetailsTextView);
@@ -414,30 +412,24 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         applyButton = (Button) findViewById(R.id.addCouponButton);
         selectShowRadioButton = (TextView) findViewById(R.id.showNameWithPrice);
         creditCardDetailsTitleTextView = (TextView) findViewById(R.id.creditCardDetailsTitleTextView);
+        FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.regular_fonts),applyButton);
 
-        Typeface typeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        applyButton.setTypeface(typeface);
         applyButton.setText(languagePreference.getTextofLanguage(BUTTON_APPLY, DEFAULT_BUTTON_APPLY));
+        FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.regular_fonts),purchaseTextView);
 
-        Typeface typeface1 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        purchaseTextView.setTypeface(typeface1);
         purchaseTextView.setText(languagePreference.getTextofLanguage(PURCHASE, DEFAULT_PURCHASE));
+        FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.regular_fonts),creditCardDetailsTitleTextView);
 
-        Typeface typeface2 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        creditCardDetailsTitleTextView.setTypeface(typeface2);
         creditCardDetailsTitleTextView.setText(languagePreference.getTextofLanguage(CREDIT_CARD_DETAILS, DEFAULT_CREDIT_CARD_DETAILS));
+        FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.regular_fonts),chargedPriceTextView);
+        FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.regular_fonts),selectShowRadioButton);
 
-        Typeface typeface3 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        chargedPriceTextView.setTypeface(typeface3);
-        selectShowRadioButton.setTypeface(typeface3);
+        FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.regular_fonts),payNowButton);
 
-        Typeface typeface4 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        payNowButton.setTypeface(typeface4);
         payNowButton.setText(languagePreference.getTextofLanguage(BUTTON_PAY_NOW, DEFAULT_BUTTON_PAY_NOW));
 
+        FontUtls.loadFont(PPvPaymentInfoActivity.this, getResources().getString(R.string.regular_fonts),saveCardCheckbox);
 
-        Typeface typeface7 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        saveCardCheckbox.setTypeface(typeface7);
         saveCardCheckbox.setText(languagePreference.getTextofLanguage( "  " + SAVE_THIS_CARD, "  " + DEFAULT_SAVE_THIS_CARD));
 
 

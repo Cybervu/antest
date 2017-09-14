@@ -2,7 +2,6 @@ package com.home.vod.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +23,7 @@ import com.home.vod.activity.ViewMoreActivity;
 import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
 
 import java.util.ArrayList;
@@ -98,8 +98,10 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
         for (int j = 0; j > bannerUrls.size(); j++) {
             image = bannerUrls.get(j);
         }
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
-        itemRowHolder.itemTitle.setTypeface(castDescriptionTypeface);
+        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.regular_fonts),itemRowHolder.itemTitle);
+
+       /* Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
+        itemRowHolder.itemTitle.setTypeface(castDescriptionTypeface);*/
         itemRowHolder.itemTitle.setText(sectionName);
         SectionListDataAdapter itemListDataAdapter = null;
 //            if (MainActivity.vertical == 1) {
@@ -257,8 +259,11 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
             this.itemTitle = (TextView) view.findViewById(R.id.itemTitle);
             this.recycler_view_list = (RecyclerView) view.findViewById(R.id.featureContent);
             this.btnMore= (Button) view.findViewById(R.id.btnMore);
+            FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.regular_fonts),this.btnMore);
+
+/*
             Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
-            this.btnMore.setTypeface(watchTrailerButtonTypeface);
+            this.btnMore.setTypeface(watchTrailerButtonTypeface);*/
             this.btnMore.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
             mDemoSlider = (SliderLayout) view.findViewById(R.id.sliderLayout);
             mDemoSliderLayout = (RelativeLayout) view.findViewById(R.id.sliderRelativeLayout);

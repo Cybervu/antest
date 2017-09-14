@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -26,6 +25,7 @@ import com.home.vod.activity.ManageDevices;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -116,10 +116,12 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
         TextView device_name = (TextView) view.findViewById(R.id.device_name);
         TextView os_version = (TextView) view.findViewById(R.id.os_version);
         TextView delete_device = (TextView) view.findViewById(R.id.delete_device);
+        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.regular_fonts),device_name);
+        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.regular_fonts),delete_device);
 
-        Typeface typeface = Typeface.createFromAsset(mContext.getAssets(), mContext.getResources().getString(R.string.regular_fonts));
+        /*Typeface typeface = Typeface.createFromAsset(mContext.getAssets(), mContext.getResources().getString(R.string.regular_fonts));
         device_name.setTypeface(typeface);
-        delete_device.setTypeface(typeface);
+        delete_device.setTypeface(typeface);*/
 
 
         if(deviceInfo.get(position).trim().contains(","))

@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v19\\values-v19.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 76,
+                    "endOffset": 127
+                },
+                "from": {
+                    "file": "C:\\Users\\BISHAL\\.android\\build-cache\\00d2a9149df460e25c5cbbc1913bb78159bda96d\\output\\res\\values-v19\\values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 230,
+                        "endColumn": 76,
+                        "endOffset": 302
+                    }
+                }
+            }
+        ]
+    }
+]

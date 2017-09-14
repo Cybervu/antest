@@ -4,7 +4,6 @@ package com.home.vod.adapter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,7 @@ import com.home.vod.R;
 import com.home.vod.activity.FavoriteActivity;
 import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
@@ -63,9 +63,10 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
 
 
 
-
+            FontUtls.loadFont(mActivity,mActivity.getResources().getString(R.string.regular_fonts),holder.title);
+/*
             Typeface castDescriptionTypeface = Typeface.createFromAsset(mActivity.getAssets(),mActivity.getResources().getString(R.string.regular_fonts));
-            holder.title.setTypeface(castDescriptionTypeface);
+            holder.title.setTypeface(castDescriptionTypeface);*/
            /* int height = holder.videoImageview.getDrawable().getIntrinsicHeight();
             int width = holder.videoImageview.getDrawable().getIntrinsicWidth();
 

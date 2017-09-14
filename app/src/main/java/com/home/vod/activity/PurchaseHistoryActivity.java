@@ -1,7 +1,6 @@
 package com.home.vod.activity;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +24,7 @@ import com.home.vod.model.RecyclerItemClickListener;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -94,10 +94,8 @@ LanguagePreference languagePreference;
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         user_id = preferenceManager.getUseridFromPref();
+        FontUtls.loadFont(PurchaseHistoryActivity.this, getResources().getString(R.string.regular_fonts),purchaseHistoryTitleTextView);
 
-
-        Typeface typeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
-        purchaseHistoryTitleTextView.setTypeface(typeface);
         purchaseHistoryTitleTextView.setText(languagePreference.getTextofLanguage(PURCHASE_HISTORY,DEFAULT_PURCHASE_HISTORY
         ));
 

@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -81,6 +80,7 @@ import com.home.vod.model.GridItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import player.activity.AdPlayerActivity;
@@ -407,8 +407,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             sectionTitle.setText("");
 
         }
-        Typeface sectionTitleTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
-        sectionTitle.setTypeface(sectionTitleTypeface);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),sectionTitle);
+
+        /*Typeface sectionTitleTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
+        sectionTitle.setTypeface(sectionTitleTypeface);*/
 
         gridView.setAdapter(customGridAdapter);
 

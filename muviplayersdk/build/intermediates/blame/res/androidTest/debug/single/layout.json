@@ -1,0 +1,286 @@
+[
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\activity_subtitle_list.xml",
+        "source": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_subtitle_list.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\exomedia_default_controls_mobile.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\f27269dca208d6fd68841b0ff666b467bb618c71\\output\\res\\layout\\exomedia_default_controls_mobile.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_search_dropdown_item_icons_2line.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_search_dropdown_item_icons_2line.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\select_dialog_item_material.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\select_dialog_item_material.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\cast_intro_overlay.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\00d2a9149df460e25c5cbbc1913bb78159bda96d\\output\\res\\layout\\cast_intro_overlay.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_alert_dialog_button_bar_material.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_alert_dialog_button_bar_material.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\activity_download_resolution_list.xml",
+        "source": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_download_resolution_list.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_action_mode_close_item_material.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_action_mode_close_item_material.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_dialog_title_material.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_dialog_title_material.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_expanded_menu_layout.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_expanded_menu_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_template_media.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\notification_template_media.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\select_dialog_multichoice_material.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\select_dialog_multichoice_material.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_action_menu_layout.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_action_menu_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\render_type_default.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\d56fa774fd47138fb4d2847abb5b8941ecce9ba3\\output\\res\\layout\\render_type_default.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_list_menu_item_checkbox.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_list_menu_item_checkbox.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_search_view.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_search_view.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_template_part_chronometer.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\notification_template_part_chronometer.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\cast_tracks_chooser_dialog_layout.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\00d2a9149df460e25c5cbbc1913bb78159bda96d\\output\\res\\layout\\cast_tracks_chooser_dialog_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_activity_chooser_view_list_item.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_activity_chooser_view_list_item.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\exomedia_video_view_layout.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\f27269dca208d6fd68841b0ff666b467bb618c71\\output\\res\\layout\\exomedia_video_view_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\activity_resume_playing.xml",
+        "source": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_resume_playing.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\mr_media_route_controller_material_dialog_b.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\eb6f9682231447e45182bb0afcc0a25d6bd582d9\\output\\res\\layout\\mr_media_route_controller_material_dialog_b.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\notification_template_icon_group.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\activity_download_popup.xml",
+        "source": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_download_popup.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\support_simple_spinner_dropdown_item.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\support_simple_spinner_dropdown_item.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_action_bar_up_container.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_action_bar_up_container.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_list_menu_item_layout.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_list_menu_item_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_screen_content_include.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_screen_content_include.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\slider_layout.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\d56fa774fd47138fb4d2847abb5b8941ecce9ba3\\output\\res\\layout\\slider_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\exomedia_default_native_video_view.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\f27269dca208d6fd68841b0ff666b467bb618c71\\output\\res\\layout\\exomedia_default_native_video_view.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\activity_main.xml",
+        "source": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\activity_main2_activityaaa.xml",
+        "source": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_main2_activityaaa.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_screen_simple_overlay_action_mode.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_screen_simple_overlay_action_mode.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_screen_simple.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_screen_simple.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\mr_media_route_list_item.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\eb6f9682231447e45182bb0afcc0a25d6bd582d9\\output\\res\\layout\\mr_media_route_list_item.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\cast_tracks_chooser_dialog_row_layout.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\00d2a9149df460e25c5cbbc1913bb78159bda96d\\output\\res\\layout\\cast_tracks_chooser_dialog_row_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\select_dialog_singlechoice_material.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\select_dialog_singlechoice_material.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_action_bar_view_list_nav_layout.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_action_bar_view_list_nav_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\activity_you_tube_api.xml",
+        "source": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_you_tube_api.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_action_mode_bar.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_action_mode_bar.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\progress_bar_layout.xml",
+        "source": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\bundles\\debug\\res\\layout\\progress_bar_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_template_media_custom.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\notification_template_media_custom.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\render_type_text.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\d56fa774fd47138fb4d2847abb5b8941ecce9ba3\\output\\res\\layout\\render_type_text.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_template_part_time.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\notification_template_part_time.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_template_lines_media.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\notification_template_lines_media.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\cast_expanded_controller_activity.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\00d2a9149df460e25c5cbbc1913bb78159bda96d\\output\\res\\layout\\cast_expanded_controller_activity.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\exomedia_default_exo_video_view.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\f27269dca208d6fd68841b0ff666b467bb618c71\\output\\res\\layout\\exomedia_default_exo_video_view.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\indicator_layout.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\d56fa774fd47138fb4d2847abb5b8941ecce9ba3\\output\\res\\layout\\indicator_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_action_bar_title_item.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_action_bar_title_item.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_popup_menu_header_item_layout.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_popup_menu_header_item_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_alert_dialog_title_material.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_alert_dialog_title_material.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\activity_third_party_player.xml",
+        "source": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_third_party_player.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_list_menu_item_radio.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_list_menu_item_radio.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_action.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\notification_action.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_select_dialog_material.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_select_dialog_material.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\notification_action_tombstone.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_action_menu_item_layout.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_action_menu_item_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_list_menu_item_icon.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_list_menu_item_icon.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_popup_menu_item_layout.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_popup_menu_item_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_screen_toolbar.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_screen_toolbar.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_alert_dialog_material.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_alert_dialog_material.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\cast_mini_controller.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\00d2a9149df460e25c5cbbc1913bb78159bda96d\\output\\res\\layout\\cast_mini_controller.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\mr_media_route_chooser_dialog.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\eb6f9682231447e45182bb0afcc0a25d6bd582d9\\output\\res\\layout\\mr_media_route_chooser_dialog.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\activity_subtitle__resolution.xml",
+        "source": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_subtitle__resolution.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\activity_resolution_change.xml",
+        "source": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_resolution_change.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_activity_chooser_view.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\abc_activity_chooser_view.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_template_custom_big.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\dcf99777aaa971e5c45135245f234482d5c999f8\\output\\res\\layout\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\subtitile_list_layout.xml",
+        "source": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\bundles\\debug\\res\\layout\\subtitile_list_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\activity_player.xml",
+        "source": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_player.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\resolution_list_layout.xml",
+        "source": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\bundles\\debug\\res\\layout\\resolution_list_layout.xml"
+    },
+    {
+        "merged": "F:\\Vod1sept_latest\\VOD\\muviplayersdk\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\cast_help_text.xml",
+        "source": "C:\\Users\\BISHAL\\.android\\build-cache\\00d2a9149df460e25c5cbbc1913bb78159bda96d\\output\\res\\layout\\cast_help_text.xml"
+    }
+]

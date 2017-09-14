@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +21,7 @@ import com.home.vod.activity.MovieDetailsActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.model.SingleItemModel;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
@@ -95,8 +95,10 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
     public void onBindViewHolder(SingleItemRowHolder holder, int i) {
 
         SingleItemModel singleItem = itemsList.get(i);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
-        holder.itemTitle.setTypeface(castDescriptionTypeface);
+        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.regular_fonts),holder.itemTitle);
+
+      /*  Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
+        holder.itemTitle.setTypeface(castDescriptionTypeface);*/
 
         holder.itemTitle.setText(singleItem.getTitle());
         holder.position = i;

@@ -127,14 +127,13 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         noInternetLayout.setVisibility(View.GONE);
         geoBlockedLayout.setVisibility(View.GONE);
 
-      /*  if (NetworkStatus.getInstance().isConnected(this)) {
+        if (NetworkStatus.getInstance().isConnected(this)) {
             SDKInitializer.getInstance().init(this, this, authTokenStr);
         } else {
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
         }
-*/
-        if (NetworkStatus.getInstance().isConnected(this)) {
+        /*if (NetworkStatus.getInstance().isConnected(this)) {
             if (preferenceManager != null) {
                 String countryCodeStr = preferenceManager.getCountryCodeFromPref();
 
@@ -155,7 +154,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         } else {
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
-        }
+        }*/
     }
 
     @Override

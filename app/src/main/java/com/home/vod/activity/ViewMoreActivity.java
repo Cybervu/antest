@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -57,6 +56,7 @@ import com.home.vod.model.GridItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
@@ -229,8 +229,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
         isLogin = preferenceManager.getLoginFeatureFromPref();
         sectionTitle = (TextView) findViewById(R.id.sectionTitle);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        sectionTitle.setTypeface(castDescriptionTypeface);
+        FontUtls.loadFont(ViewMoreActivity.this, getResources().getString(R.string.regular_fonts),sectionTitle);
         if (getIntent().getStringExtra("sectionName") != null) {
             sectionName = getIntent().getStringExtra("sectionName");
             sectionTitle.setText(sectionName);

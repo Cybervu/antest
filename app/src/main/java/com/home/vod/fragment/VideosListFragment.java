@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -55,6 +54,7 @@ import com.home.vod.model.ListItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -351,8 +351,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 */
 
         TextView categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-        categoryTitle.setTypeface(castDescriptionTypeface);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),categoryTitle);
+
+        /*Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
+        categoryTitle.setTypeface(castDescriptionTypeface);*/
         categoryTitle.setText(getArguments().getString("title"));
         genreListData = (RecyclerView) rootView.findViewById(R.id.demoListView);
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);

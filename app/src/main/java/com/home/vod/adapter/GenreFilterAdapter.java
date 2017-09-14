@@ -2,7 +2,6 @@ package com.home.vod.adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import com.home.vod.R;
 import com.home.vod.model.ListItem;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
 
 import java.util.ArrayList;
@@ -101,16 +101,20 @@ public class GenreFilterAdapter extends RecyclerView.Adapter<GenreFilterAdapter.
           //  holder.filterTextName.setTypeface(holder.filterTextName.getTypeface(), Typeface.BOLD);
            // holder.filterTextName.setGravity(Gravity.LEFT);
             holder.filterTextName.setGravity(Gravity.LEFT);
-            Typeface filterTextNameTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-            holder.filterTextName.setTypeface(filterTextNameTypeface);
+            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.filterTextName);
+
+            /*Typeface filterTextNameTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
+            holder.filterTextName.setTypeface(filterTextNameTypeface)*/;
         }
        else if (position == (genreTempArr.length - 5)){
             holder.selectButton.setVisibility(View.GONE);
             holder.listviewLay1.setClickable(false);
             holder.filterTextName.setTextColor(context.getResources().getColor(R.color.castCrewTitleTextColor));
             holder.filterTextName.setTextSize(18);
-            Typeface filterTextNameTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-            holder.filterTextName.setTypeface(filterTextNameTypeface);
+            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.filterTextName);
+
+        /*    Typeface filterTextNameTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
+            holder.filterTextName.setTypeface(filterTextNameTypeface);*/
           //  holder.filterTextName.setTypeface(holder.filterTextName.getTypeface(), Typeface.BOLD);
             holder.filterTextName.setGravity(Gravity.LEFT);
 
@@ -120,8 +124,10 @@ public class GenreFilterAdapter extends RecyclerView.Adapter<GenreFilterAdapter.
             holder.filterTextName.setTextColor(context.getResources().getColor(R.color.filter_text_color));
             holder.filterTextName.setTextSize(14);
           //  holder.filterTextName.setTypeface(holder.filterTextName.getTypeface(), Typeface.BOLD);
-            Typeface filterTextNameTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-            holder.filterTextName.setTypeface(filterTextNameTypeface);
+            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.filterTextName);
+
+          /*  Typeface filterTextNameTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
+            holder.filterTextName.setTypeface(filterTextNameTypeface);*/
             holder.selectButton.setVisibility(View.VISIBLE);
         }
 

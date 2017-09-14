@@ -1,7 +1,6 @@
 package com.home.vod.adapter;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.widget.TextView;
 
 
 import com.home.vod.R;
+import com.home.vod.util.FontUtls;
 
 import java.util.ArrayList;
 
@@ -55,9 +55,10 @@ public class SubtitleAdapter extends BaseAdapter {
 
         //sets the text for item name and item description from the current item object
         title.setText(items.get(position));
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),title);
 
-        Typeface typeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-        title.setTypeface(typeface);
+      /*  Typeface typeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
+        title.setTypeface(typeface);*/
 
 
         // returns the view for the current row

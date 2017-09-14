@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -82,6 +81,7 @@ import com.home.vod.model.EpisodesListModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -1121,8 +1121,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             }
         });
         TextView sectionTitle = (TextView) findViewById(R.id.sectionTitle);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        sectionTitle.setTypeface(castDescriptionTypeface);
+        FontUtls.loadFont(Episode_list_Activity.this, getResources().getString(R.string.regular_fonts),sectionTitle);
         sectionTitle.setText(languagePreference.getTextofLanguage(EPISODE_TITLE, DEFAULT_EPISODE_TITLE));
 
         episodelist = (RecyclerView) findViewById(R.id.episodelist);

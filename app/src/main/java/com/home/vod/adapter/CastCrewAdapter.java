@@ -1,7 +1,6 @@
 package com.home.vod.adapter;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import com.home.vod.R;
 import com.home.vod.model.GetCastCrewItem;
+import com.home.vod.util.FontUtls;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -65,11 +65,13 @@ public class CastCrewAdapter extends BaseAdapter {
         ImageView imageView = (ImageView)grid.findViewById(R.id.castImageView);
         TextView castNameTextView = (TextView) grid.findViewById(R.id.castNameTextView);
         TextView castDescriptionTextView = (TextView) grid.findViewById(R.id.castDescriptionTextView);
-        Typeface custom_name = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
-        castNameTextView.setTypeface(custom_name);
+        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.regular_fonts),castNameTextView);
+        /*Typeface custom_name = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
+        castNameTextView.setTypeface(custom_name);*/
+        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.light_fonts),castDescriptionTextView);
 
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.light_fonts));
-        castDescriptionTextView.setTypeface(castDescriptionTypeface);
+       /* Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.light_fonts));
+        castDescriptionTextView.setTypeface(castDescriptionTypeface);*/
 
         castNameTextView.setText(castCrewItems.get(position).getTitle());
         castDescriptionTextView.setText(castCrewItems.get(position).getDesc());

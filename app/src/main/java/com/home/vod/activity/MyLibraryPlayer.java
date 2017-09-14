@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -58,6 +57,7 @@ import com.home.vod.subtitle_support.FormatSRT;
 import com.home.vod.subtitle_support.FormatSRT_WithoutCaption;
 import com.home.vod.subtitle_support.TimedTextObject;
 import com.home.vod.util.ExpandableTextView;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.SensorOrientationChangeNotifier;
@@ -310,29 +310,28 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
         videoTitle = (TextView) findViewById(R.id.videoTitle);
-        Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        videoTitle.setTypeface(videoTitleface);
+        FontUtls.loadFont(MyLibraryPlayer.this, getResources().getString(R.string.light_fonts),videoTitle);
+
         GenreTextView = (TextView) findViewById(R.id.GenreTextView);
-        Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        GenreTextView.setTypeface(GenreTextViewface);
+        FontUtls.loadFont(MyLibraryPlayer.this, getResources().getString(R.string.light_fonts),GenreTextView);
+
         videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
-        Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        videoDurationTextView.setTypeface(videoDurationTextViewface);
+        FontUtls.loadFont(MyLibraryPlayer.this, getResources().getString(R.string.light_fonts),videoDurationTextView);
+
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
-        Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        videoCensorRatingTextView.setTypeface(videoCensorRatingTextViewface);
+        FontUtls.loadFont(MyLibraryPlayer.this, getResources().getString(R.string.light_fonts),videoCensorRatingTextView);
+
         videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
-        Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        videoCensorRatingTextView1.setTypeface(videoCensorRatingTextView1face);
+        FontUtls.loadFont(MyLibraryPlayer.this, getResources().getString(R.string.light_fonts),videoCensorRatingTextView1);
         videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
-        Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
+        FontUtls.loadFont(MyLibraryPlayer.this, getResources().getString(R.string.light_fonts),videoReleaseDateTextView);
+
         story = (ExpandableTextView) findViewById(R.id.story);
-        Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        story.setTypeface(storyTypeface);
+        FontUtls.loadFont(MyLibraryPlayer.this, getResources().getString(R.string.light_fonts),story);
+
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
-        Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
+        FontUtls.loadFont(MyLibraryPlayer.this, getResources().getString(R.string.light_fonts),videoCastCrewTitleTextView);
+
         videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
 
 
@@ -517,11 +516,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         ipAddressTextView = (TextView) findViewById(R.id.emailAddressTextView);
         emailAddressTextView = (TextView) findViewById(R.id.ipAddressTextView);
         dateTextView = (TextView) findViewById(R.id.dateTextView);
-
-        Typeface Tf = Typeface.createFromAsset(getAssets(), "fonts/SOURCESANSPRO-REGULAR.OTF");
-        ipAddressTextView.setTypeface(Tf);
-        emailAddressTextView.setTypeface(Tf);
-        dateTextView.setTypeface(Tf);
+        FontUtls.loadFont(MyLibraryPlayer.this, "fonts/SOURCESANSPRO-REGULAR.OTF",ipAddressTextView);
+        FontUtls.loadFont(MyLibraryPlayer.this, "fonts/SOURCESANSPRO-REGULAR.OTF",emailAddressTextView);
+        FontUtls.loadFont(MyLibraryPlayer.this, "fonts/SOURCESANSPRO-REGULAR.OTF",dateTextView);
 
 
         emailAddressTextView.setText(emailIdStr);

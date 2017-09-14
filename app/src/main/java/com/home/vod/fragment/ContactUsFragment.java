@@ -3,7 +3,6 @@ package com.home.vod.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -27,6 +26,7 @@ import com.home.vod.R;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -111,33 +111,44 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         languagePreference = LanguagePreference.getLanguagePreference(context);
 
         TextView categoryTitle = (TextView) v.findViewById(R.id.categoryTitle);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-        categoryTitle.setTypeface(castDescriptionTypeface);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),categoryTitle);
+      /*  Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
+        categoryTitle.setTypeface(castDescriptionTypeface);*/
         categoryTitle.setText(getArguments().getString("title"));
 
         contactFormTitle = (TextView) v.findViewById(R.id.contactFormTitle);
-        Typeface contactFormTitleTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
-        contactFormTitle.setTypeface(contactFormTitleTypeface);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),contactFormTitle);
+
+     /*   Typeface contactFormTitleTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
+        contactFormTitle.setTypeface(contactFormTitleTypeface)*/;
         contactFormTitle.setText(languagePreference.getTextofLanguage(FILL_FORM_BELOW, DEFAULT_FILL_FORM_BELOW));
 
         editEmailStr=(EditText) v.findViewById(R.id.contact_email) ;
-        Typeface editEmailStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
-        editEmailStr.setTypeface(editEmailStrTypeface);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),editEmailStr);
+
+       /* Typeface editEmailStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
+        editEmailStr.setTypeface(editEmailStrTypeface);*/
         editEmailStr.setHint(languagePreference.getTextofLanguage( TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
 
         editNameStr=(EditText) v.findViewById(R.id.contact_name) ;
-        Typeface editNameStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
-        editNameStr.setTypeface(editNameStrTypeface);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),editNameStr);
+
+        /*Typeface editNameStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
+        editNameStr.setTypeface(editNameStrTypeface);*/
         editNameStr.setHint(languagePreference.getTextofLanguage( NAME_HINT, DEFAULT_NAME_HINT));
 
         editMessageStr=(EditText) v.findViewById(R.id.contact_msg) ;
-        Typeface editMessageStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
-        editMessageStr.setTypeface(editMessageStrTypeface);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),editMessageStr);
+
+        /*Typeface editMessageStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
+        editMessageStr.setTypeface(editMessageStrTypeface);*/
         editMessageStr.setHint(languagePreference.getTextofLanguage( MESSAGE, DEFAULT_MESSAGE));
 
         submit = (Button) v.findViewById(R.id.submit_cont);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),submit);
+/*
         Typeface submitTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-        submit.setTypeface(submitTypeface);
+        submit.setTypeface(submitTypeface);*/
         submit.setText(languagePreference.getTextofLanguage( BTN_SUBMIT, DEFAULT_BTN_SUBMIT));
 
         submit.setOnClickListener(new View.OnClickListener() {

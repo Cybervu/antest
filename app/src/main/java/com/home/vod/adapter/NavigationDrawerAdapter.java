@@ -1,7 +1,6 @@
 package com.home.vod.adapter;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import com.home.vod.R;
 import com.home.vod.model.NavDrawerItem;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
@@ -116,8 +116,10 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
             title = (TextView) itemView.findViewById(R.id.title);
             textViewLine = (TextView) itemView.findViewById(R.id.textViewLine);
 
-            Typeface custom_name = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
-            title.setTypeface(custom_name);
+            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),title);
+
+           /* Typeface custom_name = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
+            title.setTypeface(custom_name);*/
            // iconImageView = (ImageView) itemView.findViewById(R.id.navIconImageView);
 
         }

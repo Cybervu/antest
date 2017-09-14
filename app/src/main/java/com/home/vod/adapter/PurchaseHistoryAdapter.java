@@ -2,7 +2,6 @@ package com.home.vod.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 import com.home.vod.R;
 import com.home.vod.model.PurchaseHistoryModel;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
 
 import java.util.ArrayList;
@@ -50,20 +50,25 @@ public class PurchaseHistoryAdapter extends RecyclerView.Adapter<PurchaseHistory
 
         int POSITION = position;
 
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.transactionTitleTextView);
+/*
         Typeface typeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-        holder.transactionTitleTextView.setTypeface(typeface);
+        holder.transactionTitleTextView.setTypeface(typeface);*/
         holder.transactionTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_TITLE,DEFAULT_TRANSACTION_TITLE));
-
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.transactionInvoiceTitleTextView);
+/*
         Typeface typeface1 = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-        holder.transactionInvoiceTitleTextView.setTypeface(typeface1);
+        holder.transactionInvoiceTitleTextView.setTypeface(typeface1);*/
         holder.transactionInvoiceTitleTextView.setText(languagePreference.getTextofLanguage(INVOICE,DEFAULT_INVOICE)+" :");
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.transactionOrderTitleTextView);
 
-        Typeface typeface2 = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-        holder.transactionOrderTitleTextView.setTypeface(typeface2);
+       /* Typeface typeface2 = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
+        holder.transactionOrderTitleTextView.setTypeface(typeface2);*/
         holder.transactionOrderTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_ORDER_ID,DEFAULT_TRANSACTION_ORDER_ID)+" :");
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.transactionPurchaseDateTitleTextView);
 
-        Typeface typeface3 = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-        holder.transactionPurchaseDateTitleTextView.setTypeface(typeface3);
+       /* Typeface typeface3 = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
+        holder.transactionPurchaseDateTitleTextView.setTypeface(typeface3);*/
         holder.transactionPurchaseDateTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_DETAIL_PURCHASE_DATE,DEFAULT_TRANSACTION_DETAIL_PURCHASE_DATE)+" :");
 
         if((purchaseData.get(position).getTransctionActiveInactive().contains("Active")) ||(purchaseData.get(position).getTransctionActiveInactive().contains("active")))
@@ -85,12 +90,17 @@ public class PurchaseHistoryAdapter extends RecyclerView.Adapter<PurchaseHistory
             holder.activeAlertTextView.setTextColor(Color.parseColor("#737373"));
         }
 
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.transactionInvoicetextView);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.transactionOrderTextView);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.transactionPurchaseDateTextView);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.showPriceTextView);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.successTextView);
 
-        holder.transactionInvoicetextView.setTypeface(typeface3);
+      /*  holder.transactionInvoicetextView.setTypeface(typeface3);
         holder.transactionOrderTextView.setTypeface(typeface3);
         holder.transactionPurchaseDateTextView.setTypeface(typeface3);
         holder.showPriceTextView.setTypeface(typeface3);
-        holder.successTextView.setTypeface(typeface3);
+        holder.successTextView.setTypeface(typeface3);*/
 
         holder.transactionInvoicetextView.setText(purchaseData.get(position).getInvoice());
         holder.transactionOrderTextView.setText(purchaseData.get(position).getOrderId());

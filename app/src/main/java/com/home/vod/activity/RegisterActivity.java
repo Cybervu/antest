@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -72,6 +71,7 @@ import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -374,29 +374,15 @@ public class RegisterActivity extends AppCompatActivity implements
         registerButton = (Button) findViewById(R.id.registerButton);
         alreadyMemmberText = (TextView) findViewById(R.id.alreadyMemberText);
         loginTextView = (TextView) findViewById(R.id.alreadyHaveALoginButton);
-        Typeface editNameTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        editName.setTypeface(editNameTypeface);
 
-        Typeface editEmailStrTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        editEmail.setTypeface(editEmailStrTypeface);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts),editName);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts),editEmail);
 
-
-        Typeface editPasswordTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        editPassword.setTypeface(editPasswordTypeface);
-
-
-        Typeface editConfirmPasswordTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        editConfirmPassword.setTypeface(editConfirmPasswordTypeface);
-        Typeface registerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        registerButton.setTypeface(registerButtonTypeface);
-
-
-        Typeface alreadyMemmberTextTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        alreadyMemmberText.setTypeface(alreadyMemmberTextTypeface);
-
-
-        Typeface loginTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        loginTextView.setTypeface(loginTextViewTypeface);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts),editPassword);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts),editConfirmPassword);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts),registerButton);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts),alreadyMemmberText);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts),loginTextView);
 
         editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
         editEmail.setHint(languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
@@ -410,8 +396,8 @@ public class RegisterActivity extends AppCompatActivity implements
         loginWithFacebookButton = (LoginButton) findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
         TextView fbLoginTextView = (TextView) findViewById(R.id.fbLoginTextView);
-        Typeface loginWithFbButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        fbLoginTextView.setTypeface(loginWithFbButtonTypeface);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.regular_fonts),fbLoginTextView);
+
         /**********fb*********/
 
 

@@ -3,7 +3,6 @@ package com.home.vod.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -22,6 +21,7 @@ import android.widget.TextView;
 import com.home.apisdk.apiController.AboutUsAsync;
 import com.home.apisdk.apiModel.AboutUsInput;
 import com.home.vod.R;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.preferences.LanguagePreference;
@@ -70,8 +70,9 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         asyncAboutUS = new AboutUsAsync(aboutUsInput,this,context);
         asyncAboutUS.execute();
         TextView categoryTitle = (TextView) view.findViewById(R.id.categoryTitle);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-        categoryTitle.setTypeface(castDescriptionTypeface);
+        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),categoryTitle);
+        /*Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
+        categoryTitle.setTypeface(castDescriptionTypeface);*/
         categoryTitle.setText(getArguments().getString("title"));
 
         view.setFocusableInTouchMode(true);

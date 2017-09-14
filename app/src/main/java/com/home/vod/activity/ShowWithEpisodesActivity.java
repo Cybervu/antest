@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -108,6 +107,7 @@ import com.home.vod.model.EpisodesListModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
@@ -459,8 +459,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             }
             videoTitle.setVisibility(View.VISIBLE);
-            Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
-            videoTitle.setTypeface(videoGenreTextViewTypeface);
+            FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts),videoTitle);
             videoTitle.setText(movieNameStr);
 
             if (movieTrailerUrlStr.matches("") || movieTrailerUrlStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
@@ -475,8 +474,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             } else {
                 videoGenreTextView.setVisibility(View.VISIBLE);
-                Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoGenreTextView.setTypeface(watchTrailerButtonTypeface);
+                FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts),videoGenreTextView);
                 videoGenreTextView.setText(movieTypeStr);
 
             }
@@ -485,8 +483,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             } else {
                 videoDurationTextView.setVisibility(View.VISIBLE);
-                Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoDurationTextView.setTypeface(watchTrailerButtonTypeface);
+
+                FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts),videoDurationTextView);
+
                 videoDurationTextView.setText(videoduration);
                 iconImageRelativeLayout.setVisibility(View.VISIBLE);
             }
@@ -496,8 +495,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 videoReleaseDateTextView.setVisibility(View.GONE);
             } else {
                 videoReleaseDateTextView.setVisibility(View.VISIBLE);
-                Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoReleaseDateTextView.setTypeface(watchTrailerButtonTypeface);
+                FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts),videoReleaseDateTextView);
                 movieReleaseDateStr = Util.formateDateFromstring("yyyy-mm-dd", "mm-dd-yyyy", contentDetailsOutput.getReleaseDate());
                 videoReleaseDateTextView.setText(movieReleaseDateStr);
 
@@ -509,8 +507,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             } else {
                 //  videoStoryTextView.setMaxLines(3);
                 videoStoryTextView.setVisibility(View.VISIBLE);
-                Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoStoryTextView.setTypeface(watchTrailerButtonTypeface);
+
+                FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts),videoStoryTextView);
+
                 videoStoryTextView.setText(movieDetailsStr.trim());
                 ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this,videoStoryTextView, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE), true);
 
@@ -518,8 +517,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
 
             if (castStr) {
-                Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
+                FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts),videoCastCrewTitleTextView);
                 videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
 
                 videoCastCrewTitleTextView.setVisibility(View.VISIBLE);
@@ -536,17 +534,17 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                     String Data[] = censorRatingStr.split("-");
                     videoCensorRatingTextView.setVisibility(View.VISIBLE);
                     videoCensorRatingTextView1.setVisibility(View.VISIBLE);
-                    Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                    videoCensorRatingTextView.setTypeface(watchTrailerButtonTypeface);
-                    videoCensorRatingTextView1.setTypeface(watchTrailerButtonTypeface);
+
+                    FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts),videoCensorRatingTextView);
+                    FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts),videoCensorRatingTextView1);
+
                     videoCensorRatingTextView.setText(Data[0]);
                     videoCensorRatingTextView1.setText(Data[1]);
 
                 } else {
                     videoCensorRatingTextView.setVisibility(View.VISIBLE);
                     videoCensorRatingTextView1.setVisibility(View.GONE);
-                    Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                    videoCensorRatingTextView.setTypeface(watchTrailerButtonTypeface);
+                    FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts),videoCensorRatingTextView);
                     videoCensorRatingTextView.setText(censorRatingStr);
                 }
 
@@ -1576,16 +1574,14 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         btnmore = (Button) findViewById(R.id.btnMore);
         favorite_view_episode = (ImageView) findViewById(R.id.favorite_view_episode);
 
-        Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        btnmore.setTypeface(videoGenreTextViewTypeface);
+        FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts),btnmore);
 
         btnmore.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
 
         btnmore.setVisibility(View.GONE);
         playButton = (ImageView) findViewById(R.id.playButton);
         watchTrailerButton = (Button) findViewById(R.id.viewTrailerButton);
-        Typeface submitButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        watchTrailerButton.setTypeface(submitButtonTypeface);
+        FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts),watchTrailerButton);
         watchTrailerButton.setText(languagePreference.getTextofLanguage(VIEW_TRAILER, DEFAULT_VIEW_TRAILER));
 
         playButton.setVisibility(View.GONE);

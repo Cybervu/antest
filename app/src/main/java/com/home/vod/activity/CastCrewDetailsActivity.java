@@ -33,6 +33,7 @@ import com.home.vod.model.GetCastCrewItem;
 import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
 import com.home.vod.util.Util;
@@ -137,10 +138,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
         // castNameTextView.setTypeface(videoGenreTextViewTypeface);
         castDescriptionTextView = (TextView) findViewById(R.id.castDescriptionTextView);
         btnmore= (Button) findViewById(R.id.btnMore);
-
-        Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
-        btnmore.setTypeface(videoGenreTextViewTypeface);
-
+        FontUtls.loadFont(CastCrewDetailsActivity.this,getResources().getString(R.string.regular_fonts),btnmore);
         btnmore.setText(languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE));
 
         btnmore.setVisibility(View.GONE);
@@ -344,8 +342,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                     if (castNameStr.matches("")) {
                         castNameTextView.setVisibility(View.GONE);
                     } else {
-                        Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-                        castNameTextView.setTypeface(videoGenreTextViewTypeface);
+                        FontUtls.loadFont(CastCrewDetailsActivity.this,getResources().getString(R.string.regular_fonts),castNameTextView);
                         castNameTextView.setText(getCastDetailsOutputModelArray.getName());
                         castNameTextView.setVisibility(View.VISIBLE);
 
@@ -353,8 +350,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                     if (castSummaryStr.matches("")) {
                         castDescriptionTextView.setVisibility(View.GONE);
                     } else {
-                        Typeface castDescriptionTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                        castDescriptionTextView.setTypeface(castDescriptionTextViewTypeface);
+                        FontUtls.loadFont(CastCrewDetailsActivity.this,getResources().getString(R.string.light_fonts),castDescriptionTextView);
                         castDescriptionTextView.setText(getCastDetailsOutputModelArray.getSummary());
                         ResizableCustomView.doResizeTextView(CastCrewDetailsActivity.this, castDescriptionTextView, 2, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
                     }
@@ -362,8 +358,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                     if (castNameStr.matches("")) {
                         castNameTextView.setVisibility(View.GONE);
                     } else {
-                        Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-                        castNameTextView.setTypeface(videoGenreTextViewTypeface);
+                        FontUtls.loadFont(CastCrewDetailsActivity.this,getResources().getString(R.string.regular_fonts),castNameTextView);
                         castNameTextView.setText(getCastDetailsOutputModelArray.getName());
                         castNameTextView.setVisibility(View.VISIBLE);
 
@@ -371,8 +366,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                     if (castSummaryStr.matches("")) {
                         castDescriptionTextView.setVisibility(View.GONE);
                     } else {
-                        Typeface castDescriptionTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                        castDescriptionTextView.setTypeface(castDescriptionTextViewTypeface);
+                        FontUtls.loadFont(CastCrewDetailsActivity.this,getResources().getString(R.string.light_fonts),castDescriptionTextView);
                         castDescriptionTextView.setText(getCastDetailsOutputModelArray.getSummary());
                         ResizableCustomView.doResizeTextView(CastCrewDetailsActivity.this, castDescriptionTextView, 2, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
 
@@ -479,8 +473,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
             if (castNameStr.matches("")) {
                 castNameTextView.setVisibility(View.GONE);
             } else {
-                Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-                castNameTextView.setTypeface(videoGenreTextViewTypeface);
+                FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.regular_fonts),castNameTextView);
                 castNameTextView.setText(castNameStr);
                 castNameTextView.setVisibility(View.VISIBLE);
 
@@ -488,8 +481,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
             if (castSummaryStr.matches("")) {
                 castDescriptionTextView.setVisibility(View.GONE);
             } else {
-                Typeface castDescriptionTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                castDescriptionTextView.setTypeface(castDescriptionTextViewTypeface);
+                FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.light_fonts),castDescriptionTextView);
                 castDescriptionTextView.setText(castSummaryStr);
                 ResizableCustomView.doResizeTextView(CastCrewDetailsActivity.this, castDescriptionTextView, 2, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
             }

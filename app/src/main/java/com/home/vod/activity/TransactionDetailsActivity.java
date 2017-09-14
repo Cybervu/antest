@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +41,7 @@ import com.home.apisdk.apiModel.PurchaseHistoryOutputModel;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import java.io.BufferedInputStream;
@@ -168,49 +168,47 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         transactionStatusLayout = (LinearLayout) findViewById(R.id.transactionStatusLayout);
         transactionPLanNameLayout = (LinearLayout) findViewById(R.id.transactionPLanNameLayout);
 
-
         transactionDateTitleTextView = (TextView) findViewById(R.id.transactionDateTitleTextView);
-        Typeface typeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        transactionDateTitleTextView.setTypeface(typeface);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionDateTitleTextView);
+
         transactionDateTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_DATE, DEFAULT_TRANSACTION_DATE) + " :");
 
         transactionOrderTitletextView = (TextView) findViewById(R.id.transactionOrderTitletextView);
-        Typeface typeface1 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        transactionOrderTitletextView.setTypeface(typeface1);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionOrderTitletextView);
         transactionOrderTitletextView.setText(languagePreference.getTextofLanguage(ORDER, DEFAULT_ORDER) + " :");
 
         transactionAmountTitletextView = (TextView) findViewById(R.id.transactionAmountTitletextView);
-        Typeface typeface2 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        transactionAmountTitletextView.setTypeface(typeface2);
+
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionAmountTitletextView);
+
         transactionAmountTitletextView.setText(languagePreference.getTextofLanguage(AMOUNT, DEFAULT_AMOUNT) + " :");
 
 
         transactionInvoiceTitletextView = (TextView) findViewById(R.id.transactionInvoiceTitletextView);
-        Typeface typeface3 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        transactionInvoiceTitletextView.setTypeface(typeface3);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionInvoiceTitletextView);
+
         transactionInvoiceTitletextView.setText(languagePreference.getTextofLanguage(INVOICE, DEFAULT_INVOICE) + " :");
 
         transactionStatusTitletextView = (TextView) findViewById(R.id.transactionStatusTitletextView);
-        Typeface typeface4 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        transactionStatusTitletextView.setTypeface(typeface4);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionStatusTitletextView);
+
+
         transactionStatusTitletextView.setText(languagePreference.getTextofLanguage(TRANSACTION_STATUS, DEFAULT_TRANSACTION_STATUS) + " :");
 
         transactionPlanNameTitleTextView = (TextView) findViewById(R.id.transactionPlanNameTitleTextView);
-        Typeface typeface5 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        transactionPlanNameTitleTextView.setTypeface(typeface5);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionPlanNameTitleTextView);
+
         transactionPlanNameTitleTextView.setText(languagePreference.getTextofLanguage(PLAN_NAME, DEFAULT_PLAN_NAME) + " :");
 
         transactionTitleTextView = (TextView) findViewById(R.id.transactionTitleTextView);
-        Typeface typeface6 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        transactionTitleTextView.setTypeface(typeface6);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionTitleTextView);
+
         transactionTitleTextView.setText(languagePreference.getTextofLanguage(TRANASCTION_DETAIL, DEFAULT_TRANASCTION_DETAIL));
 
         transactionDownloadButton = (Button) findViewById(R.id.transactionDownloadButton);
-        Typeface typeface7 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        transactionDownloadButton.setTypeface(typeface7);
-        transactionDownloadButton.setText(languagePreference.getTextofLanguage(DOWNLOAD_BUTTON_TITLE, DEFAULT_DOWNLOAD_BUTTON_TITLE));
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.regular_fonts),transactionDownloadButton);
 
-        Typeface typeface8 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+        transactionDownloadButton.setText(languagePreference.getTextofLanguage(DOWNLOAD_BUTTON_TITLE, DEFAULT_DOWNLOAD_BUTTON_TITLE));
 
         transactionDateTextView = (TextView) findViewById(R.id.transactionDateTextView);
         transactionOrdertextView = (TextView) findViewById(R.id.transactionOrdertextView);
@@ -219,12 +217,13 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         transactionStatustextView = (TextView) findViewById(R.id.transactionStatustextView);
         transactionPlanNameTextView = (TextView) findViewById(R.id.transactionPlanNameTextView);
 
-        transactionDateTextView.setTypeface(typeface8);
-        transactionOrdertextView.setTypeface(typeface8);
-        transactionAmounttextView.setTypeface(typeface8);
-        transactionInvoicetextView.setTypeface(typeface8);
-        transactionStatustextView.setTypeface(typeface8);
-        transactionPlanNameTextView.setTypeface(typeface8);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts),transactionDateTextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts),transactionOrdertextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts),transactionAmounttextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts),transactionInvoicetextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts),transactionStatustextView);
+        FontUtls.loadFont(TransactionDetailsActivity.this, getResources().getString(R.string.light_fonts),transactionPlanNameTextView);
+
 
         id = getIntent().getStringExtra("id");
         user_id = getIntent().getStringExtra("user_id");

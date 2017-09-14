@@ -3,7 +3,6 @@ package com.home.vod.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +21,7 @@ import com.home.apisdk.apiModel.Forgotpassword_output;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import java.util.concurrent.BlockingQueue;
@@ -104,16 +104,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         editEmailStr = (EditText) findViewById(R.id.editEmailStr);
         logintextView = (TextView) findViewById(R.id.loginTextView);
         submitButton = (Button) findViewById(R.id.submitButton);
-
-        Typeface submitButtonTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
-        submitButton.setTypeface(submitButtonTypeface);
-
-        Typeface editEmailStrTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
-        editEmailStr.setTypeface(editEmailStrTypeface);
-
-        Typeface logintextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
-        logintextView.setTypeface(logintextViewTypeface);
-
+        FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.regular_fonts),submitButton);
+        FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.light_fonts),editEmailStr);
+        FontUtls.loadFont(ForgotPasswordActivity.this, getResources().getString(R.string.light_fonts),logintextView);
 
         editEmailStr.setHint(languagePreference.getTextofLanguage( TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
         submitButton.setText(languagePreference.getTextofLanguage( BTN_SUBMIT, DEFAULT_BTN_SUBMIT));

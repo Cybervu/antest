@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -72,6 +71,7 @@ import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -1077,8 +1077,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         });
 
         editEmailStr = (EditText) findViewById(R.id.editEmailStr);
-        Typeface editEmailStrTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        editEmailStr.setTypeface(editEmailStrTypeface);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts),editEmailStr);
 
         editEmailStr.setHint(languagePreference.getTextofLanguage( TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
       /*  editEmailStr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -1117,34 +1116,25 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         Log.v("MUVI","is Apv = "+ Util.dataModel.getIsPPV());
         Log.v("MUVI","is Apv = "+ Util.dataModel.getContentTypesId());*/
 
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts),editPasswordStr);
 
-        Typeface editPasswordStrTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        editPasswordStr.setTypeface(editPasswordStrTypeface);
         editPasswordStr.setHint(languagePreference.getTextofLanguage( TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD));
-
-
         forgotPassword = (TextView) findViewById(R.id.forgotPasswordTextView);
-        Typeface forgotPasswordTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        forgotPassword.setTypeface(forgotPasswordTypeface);
-
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts),forgotPassword);
         forgotPassword.setText(languagePreference.getTextofLanguage( FORGOT_PASSWORD, DEFAULT_FORGOT_PASSWORD));
-
-
         loginNewUser = (TextView) findViewById(R.id.loginNewUser);
-        Typeface loginNewUserTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        loginNewUser.setTypeface(loginNewUserTypeface);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts),loginNewUser);
 
         loginNewUser.setText(languagePreference.getTextofLanguage( NEW_HERE_TITLE, DEFAULT_NEW_HERE_TITLE));
 
         signUpTextView = (TextView) findViewById(R.id.signUpTextView);
-        Typeface signUpTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        signUpTextView.setTypeface(signUpTypeface);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts),signUpTextView);
+
         signUpTextView.setText(languagePreference.getTextofLanguage( SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE));
 
 
         loginButton = (Button) findViewById(R.id.loginButton);
-        Typeface loginButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        loginButton.setTypeface(loginButtonTypeface);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts),loginButton);
 
         loginButton.setText(languagePreference.getTextofLanguage( LOGIN, DEFAULT_LOGIN));
         loginWithFacebookButton = (LoginButton) findViewById(R.id.loginWithFacebookButton);
@@ -1204,8 +1194,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         btnLogin= (LinearLayout) findViewById(R.id.btnLogin);*/
         TextView fbLoginTextView = (TextView) findViewById(R.id.fbLoginTextView);
-        Typeface loginWithFbButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        fbLoginTextView.setTypeface(loginWithFbButtonTypeface);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts),fbLoginTextView);
 
      /*   btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -4121,11 +4110,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
             // Font implemented Here//
-
-            Typeface typeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-            logout_text.setTypeface(typeface);
-            ok.setTypeface(typeface);
-            cancel.setTypeface(typeface);
+            FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts),logout_text);
+            FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts),ok);
+            FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts),cancel);
 
             //==============end===============//
 

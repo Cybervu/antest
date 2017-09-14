@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -61,6 +60,7 @@ import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -215,8 +215,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         isLogin = preferenceManager.getLoginFeatureFromPref();
 
         sectionTitle = (TextView) findViewById(R.id.sectionTitle);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        sectionTitle.setTypeface(castDescriptionTypeface);
+        FontUtls.loadFont(FavoriteActivity.this, getResources().getString(R.string.regular_fonts),sectionTitle);
         if (getIntent().getStringExtra("sectionName") != null) {
             sectionName = getIntent().getStringExtra("sectionName");
             sectionTitle.setText(sectionName);

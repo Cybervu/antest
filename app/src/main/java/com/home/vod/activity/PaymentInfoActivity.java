@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,6 +46,7 @@ import com.home.vod.model.CardModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import player.activity.AdPlayerActivity;
@@ -288,11 +288,10 @@ LanguagePreference languagePreference;
         securityCodeEditText = (EditText) findViewById(R.id.securityCodeEditText);
         couponCodeEditText = (EditText) findViewById(R.id.couponCodeEditText);
 
-        Typeface typeface6 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        nameOnCardEditText.setTypeface(typeface6);
-        cardNumberEditText.setTypeface(typeface6);
-        securityCodeEditText.setTypeface(typeface6);
-        couponCodeEditText.setTypeface(typeface6);
+        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts),nameOnCardEditText);
+        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts),cardNumberEditText);
+        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts),securityCodeEditText);
+        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts),couponCodeEditText);
 
 
         chargedPriceTextView = (TextView) findViewById(R.id.chargeDetailsTextView);
@@ -318,16 +317,11 @@ LanguagePreference languagePreference;
         payNowButton = (Button) findViewById(R.id.payNowButton);
         applyButton = (Button) findViewById(R.id.addCouponButton);
 
+        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.regular_fonts),creditCardDetailsTitleTextView);
 
-        Typeface typeface2 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        creditCardDetailsTitleTextView.setTypeface(typeface2);
         creditCardDetailsTitleTextView.setText(languagePreference.getTextofLanguage(CREDIT_CARD_DETAILS, DEFAULT_CREDIT_CARD_DETAILS));
-
-        Typeface typeface3 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        chargedPriceTextView.setTypeface(typeface3);
-
-        Typeface typeface4 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        payNowButton.setTypeface(typeface4);
+        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts),chargedPriceTextView);
+        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.regular_fonts),payNowButton);
         payNowButton.setText(languagePreference.getTextofLanguage(BUTTON_PAY_NOW, DEFAULT_BUTTON_PAY_NOW));
 
 

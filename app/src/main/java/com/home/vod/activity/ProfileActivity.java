@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -35,6 +34,7 @@ import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -147,22 +147,13 @@ public class ProfileActivity extends AppCompatActivity implements
         language_spinner = (Spinner) findViewById(R.id.languageSpinner);
         country_spinner.setVisibility(View.GONE);
         language_spinner.setVisibility(View.GONE);
-        Typeface editProfileNameEditTextTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        editProfileNameEditText.setTypeface(editProfileNameEditTextTypeface);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts),editProfileNameEditText);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts),editConfirmPassword);
 
-
-        Typeface editConfirmPasswordTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        editConfirmPassword.setTypeface(editConfirmPasswordTypeface);
-
-
-        Typeface editNewPasswordTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        editNewPassword.setTypeface(editNewPasswordTypeface);
-
-
-        Typeface changePasswordTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        changePassword.setTypeface(changePasswordTypeface);
-        update_profile.setTypeface(changePasswordTypeface);
-        manage_devices.setTypeface(changePasswordTypeface);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts),editNewPassword);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts),changePassword);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts),update_profile);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts),manage_devices);
 
         editProfileNameEditText.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
         editConfirmPassword.setHint(languagePreference.getTextofLanguage(CONFIRM_PASSWORD, DEFAULT_CONFIRM_PASSWORD));
@@ -215,16 +206,20 @@ public class ProfileActivity extends AppCompatActivity implements
         Language_arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.country_language_spinner, Language_List) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
+                FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts),(TextView) v);
+
+/*
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                ((TextView) v).setTypeface(externalFont);
+                ((TextView) v).setTypeface(externalFont);*/
                 return v;
             }
 
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View v = super.getDropDownView(position, convertView, parent);
-
+                FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts),(TextView) v);
+/*
                 Typeface externalFont1 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                ((TextView) v).setTypeface(externalFont1);
+                ((TextView) v).setTypeface(externalFont1);*/
 
                 return v;
             }
@@ -236,16 +231,20 @@ public class ProfileActivity extends AppCompatActivity implements
         Country_arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.country_language_spinner, Country_List) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
+
+                FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts),(TextView) v);
+/*
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                ((TextView) v).setTypeface(externalFont);
+                ((TextView) v).setTypeface(externalFont);*/
                 return v;
             }
 
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View v = super.getDropDownView(position, convertView, parent);
+                FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts),(TextView) v);
 
-                Typeface externalFont1 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                ((TextView) v).setTypeface(externalFont1);
+               /* Typeface externalFont1 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+                ((TextView) v).setTypeface(externalFont1);*/
 
                 return v;
             }

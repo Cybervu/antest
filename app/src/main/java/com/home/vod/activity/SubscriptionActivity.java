@@ -1,7 +1,6 @@
 package com.home.vod.activity;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -24,6 +23,7 @@ import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.model.PlanModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -114,14 +114,13 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
             }
         });
 
+        FontUtls.loadFont(SubscriptionActivity.this, getResources().getString(R.string.regular_fonts),subscriptionTitleTextView);
 
-        Typeface typeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
-        subscriptionTitleTextView.setTypeface(typeface);
         subscriptionTitleTextView.setText(languagePreference.getTextofLanguage(SELECT_PLAN,DEFAULT_SELECT_PLAN)+" :");
-        Typeface typeface1 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
-        activation_plan.setTypeface(typeface1);
+        FontUtls.loadFont(SubscriptionActivity.this, getResources().getString(R.string.regular_fonts),activation_plan);
         activation_plan.setText(languagePreference.getTextofLanguage(ACTIAVTE_PLAN_TITLE,DEFAULT_ACTIAVTE_PLAN_TITLE));
-        skipButton.setTypeface(typeface1);
+        FontUtls.loadFont(SubscriptionActivity.this, getResources().getString(R.string.regular_fonts),skipButton);
+
         skipButton.setText(languagePreference.getTextofLanguage(SKIP_BUTTON_TITLE,DEFAULT_SKIP_BUTTON_TITLE));
 
 

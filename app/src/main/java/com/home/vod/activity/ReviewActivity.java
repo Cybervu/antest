@@ -2,7 +2,6 @@ package com.home.vod.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +30,7 @@ import com.home.vod.model.ReviewsItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -126,9 +126,9 @@ public class ReviewActivity extends AppCompatActivity implements
         submitReviewTextView = (EditText) findViewById(R.id.reviewEditText);
         submitButton = (Button) findViewById(R.id.submitReviewButton);
         addRatingBar = (RatingBar) findViewById(R.id.ratingBar);
-        Typeface typeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
-        submitButton.setTypeface(typeface);
-        submitTitleTextView.setTypeface(typeface);
+
+        FontUtls.loadFont(ReviewActivity.this, getResources().getString(R.string.light_fonts),submitButton);
+        FontUtls.loadFont(ReviewActivity.this, getResources().getString(R.string.light_fonts),submitTitleTextView);
         submitTitleTextView.setText(languagePreference.getTextofLanguage(SUBMIT_YOUR_RATING_TITLE,DEFAULT_SUBMIT_YOUR_RATING_TITLE));
         submitButton.setText(languagePreference.getTextofLanguage(BTN_POST_REVIEW,DEFAULT_BTN_POST_REVIEW));
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,7 @@ import android.widget.TextView;
 import com.home.vod.R;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
@@ -78,14 +78,18 @@ public class EpisodesListViewMoreAdapter extends RecyclerView.Adapter<RecyclerVi
             episodeNameTextView = (TextView) view.findViewById(R.id.episodeNameTextView);
             episodeNameTextView.setVisibility(View.GONE);
             episodeDateTextView = (TextView) view.findViewById(R.id.episodeDateTextView);
-            Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
+            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeTitleTextView);
+            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeNameTextView);
+            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeDateTextView);
+
+        /*    Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
             episodeTitleTextView.setTypeface(castDescriptionTypeface);
 
             Typeface episodeNameTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
             episodeNameTextView.setTypeface(episodeNameTypeface);
 
             Typeface episodeDateTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
-            episodeDateTextView.setTypeface(episodeDateTypeface);
+            episodeDateTextView.setTypeface(episodeDateTypeface);*/
 
             episodeImageView = (ImageView) view.findViewById(R.id.episodeImageView);
             episodeImageView.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.episodeImageView,episodeImageView.getDrawable().getIntrinsicWidth(),episodeImageView.getDrawable().getIntrinsicHeight()));

@@ -19,6 +19,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.MediaRouteButton;
 import android.support.v7.app.NotificationCompat;
+import com.intertrust.wasabi.media.PlaylistProxy;
+import com.intertrust.wasabi.media.PlaylistProxyListener;
 import android.text.Html;
 import android.util.Log;
 import android.view.Display;

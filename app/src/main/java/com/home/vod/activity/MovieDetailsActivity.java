@@ -88,6 +88,7 @@ import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.common.images.WebImage;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -715,10 +716,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         watchTrailerButton = (Button) findViewById(R.id.viewTrailerButton);
         preorderButton = (Button) findViewById(R.id.preOrderButton);
         favorite_view = (ImageView) findViewById(R.id.favorite_view);
-        Typeface submitButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        watchTrailerButton.setTypeface(submitButtonTypeface);
-        Typeface preorderButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        preorderButton.setTypeface(preorderButtonTypeface);
+        FontUtls.loadFont(MovieDetailsActivity.this, getResources().getString(R.string.regular_fonts),watchTrailerButton);
+        FontUtls.loadFont(MovieDetailsActivity.this, getResources().getString(R.string.regular_fonts),preorderButton);
         preorderButton.setVisibility(View.GONE);
 
         offlineImageButton = (ImageButton) findViewById(R.id.offlineImageButton);
@@ -4460,8 +4459,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             }
             videoTitle.setVisibility(View.VISIBLE);
-            Typeface castDescriptionTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-            videoTitle.setTypeface(castDescriptionTypeface);
+            FontUtls.loadFont(MovieDetailsActivity.this, getResources().getString(R.string.regular_fonts),videoTitle);
             videoTitle.setText(contentDetailsOutput.getName());
 
             if (contentDetailsOutput.getTrailerUrl().matches("") || contentDetailsOutput.getTrailerUrl().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
@@ -4476,8 +4474,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             } else {
                 videoGenreTextView.setVisibility(View.VISIBLE);
-                Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoGenreTextView.setTypeface(videoGenreTextViewTypeface);
+                FontUtls.loadFont(MovieDetailsActivity.this, getResources().getString(R.string.light_fonts),videoGenreTextView);
                 videoGenreTextView.setText(contentDetailsOutput.getGenre());
 
             }
@@ -4487,8 +4484,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             } else {
 
                 videoDurationTextView.setVisibility(View.VISIBLE);
-                Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoDurationTextView.setTypeface(videoGenreTextViewTypeface);
+                FontUtls.loadFont(MovieDetailsActivity.this, getResources().getString(R.string.light_fonts),videoDurationTextView);
                 videoDurationTextView.setText(contentDetailsOutput.getVideoDuration());
             }
 
@@ -4497,8 +4493,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 videoReleaseDateTextView.setVisibility(View.GONE);
             } else {
                 videoReleaseDateTextView.setVisibility(View.VISIBLE);
-                Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoReleaseDateTextView.setTypeface(videoGenreTextViewTypeface);
+                FontUtls.loadFont(MovieDetailsActivity.this, getResources().getString(R.string.light_fonts),videoReleaseDateTextView);
                 movieReleaseDateStr = Util.formateDateFromstring("yyyy-mm-dd", "yyyy", contentDetailsOutput.getReleaseDate());
                 videoReleaseDateTextView.setText(movieReleaseDateStr);
 
@@ -4509,8 +4504,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             } else {
                 videoStoryTextView.setVisibility(View.VISIBLE);
-                Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                videoStoryTextView.setTypeface(videoGenreTextViewTypeface);
+                FontUtls.loadFont(MovieDetailsActivity.this, getResources().getString(R.string.light_fonts),videoStoryTextView);
                 videoStoryTextView.setText(contentDetailsOutput.getStory());
 
             }
@@ -4525,9 +4519,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     String Data[] = contentDetailsOutput.getCensorRating().split("-");
                     videoCensorRatingTextView.setVisibility(View.VISIBLE);
                     videoCensorRatingTextView1.setVisibility(View.VISIBLE);
-                    Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                    videoCensorRatingTextView.setTypeface(videoGenreTextViewTypeface);
-                    videoCensorRatingTextView1.setTypeface(videoGenreTextViewTypeface);
+                    FontUtls.loadFont(MovieDetailsActivity.this, getResources().getString(R.string.light_fonts),videoCensorRatingTextView);
+                    FontUtls.loadFont(MovieDetailsActivity.this, getResources().getString(R.string.light_fonts),videoCensorRatingTextView1);
 
                     videoCensorRatingTextView.setText(Data[0]);
                     videoCensorRatingTextView1.setText(Data[1]);
@@ -4535,8 +4528,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 } else {
                     videoCensorRatingTextView.setVisibility(View.VISIBLE);
                     videoCensorRatingTextView1.setVisibility(View.GONE);
-                    Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-                    videoCensorRatingTextView.setTypeface(videoGenreTextViewTypeface);
+                    FontUtls.loadFont(MovieDetailsActivity.this, getResources().getString(R.string.light_fonts),videoCensorRatingTextView);
+
                     videoCensorRatingTextView.setText(contentDetailsOutput.getCensorRating());
                 }
 

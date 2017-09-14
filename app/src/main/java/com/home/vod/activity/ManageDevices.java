@@ -1,7 +1,7 @@
 package com.home.vod.activity;
 
 
-import android.graphics.Typeface;
+
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +19,7 @@ import com.home.vod.R;
 import com.home.vod.adapter.DeviceListAdapter;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -69,9 +70,7 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
         manage_device_text = (TextView) findViewById(R.id.manage_device_text);
 
         manage_device_text.setText("  " + languagePreference.getTextofLanguage( YOUR_DEVICE, DEFAULT_YOUR_DEVICE));
-        Typeface typeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
-        manage_device_text.setTypeface(typeface);
-
+        FontUtls.loadFont(ManageDevices.this, getResources().getString(R.string.regular_fonts),manage_device_text);
 
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));

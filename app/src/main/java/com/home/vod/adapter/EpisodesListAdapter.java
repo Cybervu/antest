@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import com.home.vod.R;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
@@ -74,8 +74,10 @@ public class EpisodesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public ViewHolder(View view) {
             super(view);
             episodeTitleTextView = (TextView) view.findViewById(R.id.itemTitle);
-            Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-            episodeTitleTextView.setTypeface(castDescriptionTypeface);
+            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeTitleTextView);
+
+           /* Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
+            episodeTitleTextView.setTypeface(castDescriptionTypeface);*/
           //  episodeNameTextView = (TextView) view.findViewById(R.id.episodeNameTextView);
             //episodeDateTextView = (TextView) view.findViewById(R.id.itemImage);
 
