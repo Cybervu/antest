@@ -21,7 +21,7 @@ public class APIUrlConstant {
     /**
      * endpoint to get Menu List API
      */
-    public static String MENU_LIST_URL = "List";
+    public static String MENU_LIST_URL = "getMenuList";
     /**
      * endpoint to get Genre List API
      */
@@ -249,6 +249,7 @@ public class APIUrlConstant {
     /**
      * endpoint to get Video Logs Details API
      */
+
     public static String VIDEO_LOGS_URL = "VideoLogNew";
     /**
      * endpoint to get Remove Device Details API
@@ -261,7 +262,9 @@ public class APIUrlConstant {
 
 
 
-
+    public static String getMenuListUrl() {
+        return BASE_URl + MENU_LIST_URL;
+    }
 
     public static String getRemoveDevice() {
         return BASE_URl + RemoveDevice;
@@ -339,10 +342,6 @@ public class APIUrlConstant {
 
     public static String getInitializationUrl() {
         return BASE_URl + INITIALIZATION_URL;
-    }
-
-    public static String ListUrl() {
-        return BASE_URl + MENU_LIST_URL;
     }
 
     public static String getGenreListUrl() {
