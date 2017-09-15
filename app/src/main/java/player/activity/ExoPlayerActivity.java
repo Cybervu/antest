@@ -29,6 +29,7 @@ import com.home.vod.subtitle_support.FormatSRT;
 import com.home.vod.subtitle_support.FormatSRT_WithoutCaption;
 import com.home.vod.subtitle_support.TimedTextObject;
 import com.home.vod.util.ExpandableTextView;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.intertrust.wasabi.Runtime;
 import android.net.Uri;
