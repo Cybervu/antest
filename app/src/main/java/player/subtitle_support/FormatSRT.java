@@ -1,5 +1,4 @@
-package com.home.vod.subtitle_support;
-import android.util.Log;
+package player.subtitle_support;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,115 +30,108 @@ import java.util.Iterator;
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
+ * 
  * @author J. David Requejo
  *
  */
-public class FormatSRT_WithoutCaption implements TimedTextFileFormat {
+public class FormatSRT implements TimedTextFileFormat {
 
 
 	public TimedTextObject parseFile(String fileName, InputStream is) throws IOException {
-
 
 		TimedTextObject tto = new TimedTextObject();
 		Caption caption = new Caption();
 		int captionNumber = 1;
 		boolean allGood;
-		boolean startParsing = true;
-		boolean callWithoutCaption = true;
 
 		//first lets load the file
 		InputStreamReader in= new InputStreamReader(is);
-		BufferedReader br = null;
-		br = new BufferedReader(in);
+		BufferedReader br = new BufferedReader(in);
 
 		//the file name is saved
 		tto.fileName = fileName;
+
 		String line = br.readLine();
 		int lineCounter = 0;
 		try {
 			while(line!=null){
 				line = line.trim();
 				lineCounter++;
-				allGood = false;
-
-				try {
-					if (line.toString().contains("WEBVTT")) {
+				//if its a blank line, ignore it, otherwise...
+				if (!line.isEmpty()){
+					allGood = false;
+					//the first thing should be an increasing number
+					try {
+						int num = Integer.parseInt(line);
+						if (num != captionNumber)
+							throw new Exception();
+						else {
+							captionNumber++;
+							allGood = true;
+						}
+					} catch (Exception e) {
 						tto.warnings+= captionNumber + " expected at line " + lineCounter;
 						tto.warnings+= "\n skipping to next line\n\n";
 					}
-					else
-					{
-						captionNumber++;
-						allGood = true;
+					if (allGood){
+						//we go to next line, here the begin and end time should be found
+						try {
+							lineCounter++;
+							line = br.readLine().trim();
+							String start = line.substring(0, 12);
+							String end = line.substring(line.length()-12, line.length());
+							Time time = new Time("hh:mm:ss,ms",start);
+							caption.start = time;
+							time = new Time("hh:mm:ss,ms",end);
+							caption.end = time;
+						} catch (Exception e){
+							tto.warnings += "incorrect time format at line "+lineCounter;
+							allGood = false;
+						}
 					}
-				} catch (Exception e) {
-					tto.warnings+= captionNumber + " expected at line " + lineCounter;
-					tto.warnings+= "\n skipping to next line\n\n";
-				}
-				if (allGood){
-					//we go to next line, here the begin and end time should be found
-					try {
+					if (allGood){
+						//we go to next line where the caption text starts
 						lineCounter++;
 						line = br.readLine().trim();
-						String start = line.substring(0, 12);
-						LogUtil.showLog("BIBHU","start time ="+start);
-						String end = line.substring(line.length()-12, line.length());
-						LogUtil.showLog("BIBHU","end time ="+end);
-						Time time = new Time("hh:mm:ss,ms",start);
-						caption.start = time;
-						time = new Time("hh:mm:ss,ms",end);
-						caption.end = time;
-					} catch (Exception e){
-						tto.warnings += "incorrect time format at line "+lineCounter;
-						allGood = false;
-						line = null;
-						LogUtil.showLog("BIBHU","Exception called after finish");
+						String text = "";
+						while (!line.isEmpty()){
+							text+=line+"<br />";
+							line = br.readLine().trim();
+							lineCounter++;
+						}
+						caption.content = text;
+						int key = caption.start.mseconds;
+						//in case the key is already there, we increase it by a millisecond, since no duplicates are allowed
+						while (tto.captions.containsKey(key)) key++;
+						if (key != caption.start.mseconds)
+							tto.warnings+= "caption with same start time found...\n\n";
+						//we add the caption.
+						tto.captions.put(key, caption);
 					}
-				}
-				if (allGood){
-					//we go to next line where the caption text starts
-					lineCounter++;
-					line = br.readLine().trim();
-					String text = "";
-					while (!line.isEmpty()){
-						text+=line+"<br />";
+					//we go to next blank
+					while (!line.isEmpty()) {
 						line = br.readLine().trim();
 						lineCounter++;
 					}
-					caption.content = text;
-					int key = caption.start.mseconds;
-					//in case the key is already there, we increase it by a millisecond, since no duplicates are allowed
-					while (tto.captions.containsKey(key)) key++;
-					if (key != caption.start.mseconds)
-						tto.warnings+= "caption with same start time found...\n\n";
-					//we add the caption.
-					tto.captions.put(key, caption);
-				}
-
-				//we go to next blank
-				while (!line.isEmpty()) {
-					line = br.readLine().trim();
-					lineCounter++;
-				}
-				if(line!=null)
 					caption = new Caption();
+				}
+				line = br.readLine();
 			}
 
 		}  catch (NullPointerException e){
 			tto.warnings+= "unexpected end of file, maybe last caption is not complete.\n\n";
 		} finally{
-			//we close the reader
-			is.close();
-		}
-
+	        //we close the reader
+	       is.close();
+	     }
+		
 		tto.built = true;
 		return tto;
 	}
 
 
 	public String[] toFile(TimedTextObject tto) {
-
+		
 		//first we check if the TimedTextObject had been built, otherwise...
 		if(!tto.built)
 			return null;
@@ -191,7 +183,7 @@ public class FormatSRT_WithoutCaption implements TimedTextFileFormat {
 
 	/**
 	 * This method cleans caption.content of XML and parses line breaks.
-	 *
+	 * 
 	 */
 	private String[] cleanTextForSRT(Caption current) {
 		String[] lines;
@@ -205,6 +197,5 @@ public class FormatSRT_WithoutCaption implements TimedTextFileFormat {
 		}
 		return lines;
 	}
-
 
 }

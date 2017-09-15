@@ -15,7 +15,6 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -94,6 +93,7 @@ import java.util.concurrent.TimeUnit;
 
 import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
+import player.activity.MyLibraryPlayer;
 import player.activity.Player;
 
 import static com.home.vod.preferences.LanguagePreference.ANDROID_VERSION;

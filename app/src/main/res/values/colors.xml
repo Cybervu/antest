@@ -92,4 +92,17 @@
  <color name="spinnerbackground">#e2e1e1</color>
  <color name="cast_crew_textcolor">#000000</color>
 
+
+ // Following code is added by Bibhuprasad Jena //
+
+
+ <color name="playerBgColor">#000000</color>
+ <color name="videoTitleTextColor">#32c5d2</color>
+ <color name="detailsPageTextColor">#fff</color>
+ <color name="cast_crew_titleCololr">#32c5d2</color>
+ <color name="resumeTitleTextColor">#ffffff</color>
+
+
+ //************************END**************************//
+
 </resources>

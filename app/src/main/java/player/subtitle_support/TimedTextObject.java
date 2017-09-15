@@ -1,4 +1,4 @@
-package com.home.vod.subtitle_support;
+package player.subtitle_support;
 
 import java.util.Hashtable;
 import java.util.Iterator;

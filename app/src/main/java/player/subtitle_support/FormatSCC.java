@@ -1,4 +1,4 @@
-package com.home.vod.subtitle_support;
+package player.subtitle_support;
 
 import java.io.BufferedReader;
 import java.io.IOException;

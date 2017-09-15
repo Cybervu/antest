@@ -37,6 +37,9 @@
     <string name="play_now">Play Now</string>
     <string name="introducing_cast">Introducing Cast</string>
 
+    <string name="fonts">fonts/ROBOTO-LIGHT.TTF</string>
+    <string name="fonts_regular">fonts/ROBOTO-REGULAR.TTF</string>
+
 
     <string name="addReview"><u>Click here to login and add your review</u></string>
 

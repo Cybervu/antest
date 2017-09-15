@@ -1,4 +1,4 @@
-package com.home.vod.subtitle_support;
+package player.subtitle_support;
 
 /**
  * This class represents problems that may arise during the parsing of a subttile file.

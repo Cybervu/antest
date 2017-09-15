@@ -51,6 +51,15 @@ public class DBHelper extends SQLiteOpenHelper {
     //................................. END ......................................//
 
 
+    // This code is only responsible for Access period and Watch Period feature on Download Contnet
+    public static final String WATCH_ACCESS_INFO = "WATCH_ACCESS_INFO";
+
+    public static final String WATCH_ACCESS_INFO_TABLE = "CREATE TABLE IF NOT EXISTS " + WATCH_ACCESS_INFO
+            + " (download_id TEXT,stream_unique_id TEXT,server_current_time INTEGER,watch_period INTEGER,access_period INTEGER," +
+            "initial_played_time INTEGER,"+"updated_server_current_time INTEGER,email TEXT)";
+    //=================================End=======================================================//
+
+
 
     private static final String CREATE_SOL =
             "CREATE TABLE " + TABLE_NAME + " (" + COLUMN_ID +
@@ -92,6 +101,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_SOL);
         db.execSQL(CREATE_SOL_SUBTITLE_LUIMERE);
         db.execSQL(DOWNLOAD_CONTENT_INFO_TABLE);
+        db.execSQL(WATCH_ACCESS_INFO_TABLE);
     }
 
     @Override
@@ -169,9 +179,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
         cursor = db.query(TABLE_NAME, new String[]{COLUMN_ID,
-                COLUMN_MUVI_ID,
+                        COLUMN_MUVI_ID,
                         COLUMN_DOWNLOADID,
-                COLUMN_DOWNLOAD_PROGRESS,COLUMN_DOWNLOAD_USERNAME,COLUMN_DOWNLOAD_UNIQUEID, COLUMN_DOWNLOAD_STATUS,
+                        COLUMN_DOWNLOAD_PROGRESS,COLUMN_DOWNLOAD_USERNAME,COLUMN_DOWNLOAD_UNIQUEID, COLUMN_DOWNLOAD_STATUS,
 
                         COLUMN_POSTER,COLUMN_MUVI_TOKEN,COLUMN_FILE_PATH,COLUMN_CONTENT_ID,COLUMN_GENERE,COLUMN_MUVIID,COLUMN_DURATION,
 
@@ -406,7 +416,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 //
         //Cursor cursor = db.rawQuery(query,null);
-       Cursor cursor = null;
+        Cursor cursor = null;
 
         cursor = db.query(TABLE_NAME, new String[]{COLUMN_ID,
                         COLUMN_MUVI_ID,

@@ -75,7 +75,8 @@ public class SubtitleList extends Activity {
                 }
                 else
                 {
-                    Util.DefaultSubtitle =SubTitleName.get(position).trim();
+
+                    Util.DefaultSubtitle =SubTitleName.get(position-1).trim();
                 }
 
 
