@@ -13,6 +13,8 @@ import android.util.Log;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import com.home.vod.util.LogUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 

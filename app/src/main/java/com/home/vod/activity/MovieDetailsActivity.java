@@ -4115,6 +4115,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         if (code == 200) {
             playerModel.setIsOffline(_video_details_output.getIs_offline());
+            playerModel.setDownloadStatus(_video_details_output.getDownload_status());
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
                 /**@bishal

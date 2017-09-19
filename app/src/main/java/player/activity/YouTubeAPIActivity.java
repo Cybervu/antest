@@ -13,6 +13,7 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.home.vod.R;
+import com.home.vod.util.LogUtil;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

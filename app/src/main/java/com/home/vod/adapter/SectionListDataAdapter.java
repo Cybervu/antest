@@ -22,6 +22,7 @@ import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.model.SingleItemModel;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 

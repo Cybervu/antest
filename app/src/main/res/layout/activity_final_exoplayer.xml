@@ -19,7 +19,7 @@
             <RelativeLayout
                 android:id="@+id/player_layout"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="@dimen/player_relativlayout_height"
                 android:background="@color/playerBgColor">
 
                 <LinearLayout
@@ -68,9 +68,9 @@
                             android:layout_alignParentBottom="true"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:layout_marginBottom="103dp"
+                            android:layout_marginBottom="@dimen/player_margin_bottom"
                             android:orientation="vertical"
-                            android:paddingRight="10dp"
+                            android:paddingRight="@dimen/player_padding_right"
                             android:visibility="visible">
 
                             <TextView
@@ -103,7 +103,7 @@
                             android:layout_marginBottom="38dp"
                             android:text="wwwwwwwwww"
                             android:textColor="#ffffff"
-                            android:textSize="12dp"
+                            android:textSize="@dimen/current_time_textsize"
                             android:visibility="gone" />
 
 
@@ -114,7 +114,7 @@
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
                             android:layout_gravity="bottom|center_horizontal"
-                            android:layout_marginBottom="20dp"
+                            android:layout_marginBottom="@dimen/offline_margin_bottom"
                             android:ellipsize="middle"
                             android:gravity="center"
                             android:shadowColor="#000"
@@ -122,7 +122,7 @@
                             android:shadowDy="3"
                             android:shadowRadius="1"
                             android:text=""
-                            android:textSize="18dp" />
+                            android:textSize="@dimen/offLine_subtitleText_textsize" />
                         <!-- <TextView
                              android:id="@+id/detais_text"
                              android:layout_width="wrap_content"
@@ -149,8 +149,8 @@
                     android:gravity="center_vertical"
                     android:minHeight="?attr/actionBarSize"
                     android:orientation="horizontal"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp"
+                    android:paddingBottom="@dimen/paddingBottom5dp"
+                    android:paddingTop="@dimen/paddingtop5dp"
                     android:visibility="gone">
 
                     <ImageButton
@@ -158,7 +158,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="@dimen/marginLeft15dp"
                         android:background="@drawable/ic_back" />
 
                     <LinearLayout
@@ -172,7 +172,7 @@
                             android:id="@+id/media_route_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="20dp" />
+                            android:layout_marginRight="@dimen/marginRight20dp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -184,9 +184,9 @@
 
                         <ImageView
                             android:id="@+id/subtitle_change_btn"
-                            android:layout_width="31dp"
-                            android:layout_height="26dp"
-                            android:layout_marginRight="20dp"
+                            android:layout_width="@dimen/subtitle_change_btn_width"
+                            android:layout_height="@dimen/subtitle_change_btn_height"
+                            android:layout_marginRight="@dimen/marginRight20dp"
                             android:background="@drawable/cc_button_radious"
                             android:src="@drawable/subtitle_image" />
 
@@ -208,14 +208,14 @@
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="@dimen/marginBottom5dp"
+                        android:layout_marginTop="@dimen/margintop5dp"
                         android:background="#00000000"
                         android:gravity="center"
                         android:orientation="horizontal">
 
                         <ImageButton
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="@dimen/marginleft10dp"
                             android:id="@+id/center_play_pause"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -244,14 +244,14 @@
                             android:gravity="center"
                             android:text=""
                             android:textColor="#ffffff"
-                            android:textSize="12dp" />
+                            android:textSize="@dimen/totaltme_text_size" />
 
                         <ImageView
                             android:id="@+id/compress_expand"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:padding="16dp"
-                            android:layout_marginRight="5dp"
+                            android:layout_width="@dimen/compress_expand_height"
+                            android:layout_height="@dimen/compress_expand_width"
+                            android:padding="@dimen/padding15dp"
+                            android:layout_marginRight="@dimen/marginright5dp"
                             android:src="@drawable/ic_media_fullscreen_stretch"
                             android:gravity="center"
                             android:visibility="visible" />
@@ -282,13 +282,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_above="@+id/relativeOverlayLayout"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:layout_marginTop="@dimen/margintop8dp"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text=""
                         android:textColor="@color/videoTitleTextColor"
-                        android:textSize="15dp"
+                        android:textSize="@dimen/videotitle_text_size"
                         android:textStyle="bold" />
 
                     <RelativeLayout
@@ -301,21 +301,21 @@
 
                         <ImageView
                             android:id="@+id/downloadImageView"
-                            android:layout_width="30dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/downloadimg_width"
+                            android:layout_height="@dimen/downloadimg_height"
                             android:layout_alignParentRight="true"
-                            android:layout_marginRight="20dp"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginRight="@dimen/marginRight20dp"
+                            android:layout_marginTop="@dimen/margintop8dp"
                             android:src="@drawable/download_black"
                             android:visibility="visible" />
 
                         <ProgressBar
                             android:id="@+id/progressBar"
                             style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="@dimen/progressbar_width"
+                            android:layout_height="@dimen/progressbar_height"
                             android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
+                            android:layout_marginRight="@dimen/marginright15dp"
                             android:indeterminate="false"
                             android:max="100"
                             android:progress="0"
@@ -329,11 +329,11 @@
                             android:layout_alignEnd="@+id/progressBar"
                             android:layout_alignRight="@+id/progressBar"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginRight="@dimen/marginright10dp"
                             android:gravity="center"
                             android:text="0%"
                             android:textColor="@color/border_color"
-                            android:textSize="12dp"
+                            android:textSize="@dimen/percentage_text_size"
                             android:visibility="gone" />
                     </RelativeLayout>
                 </LinearLayout>
@@ -345,12 +345,12 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/videoTitle"
                     android:layout_marginBottom="0dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="@dimen/marginleft10dp"
+                    android:layout_marginRight="@dimen/marginright10dp"
+                    android:layout_marginTop="@dimen/margintop8dp"
                     android:text=""
                     android:textColor="@color/nav_drawer_lineColor"
-                    android:textSize="14dp" />
+                    android:textSize="@dimen/genre_textsize" />
 
 
                 <LinearLayout
@@ -371,25 +371,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/videoGenreTextView"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
                         android:textColor="@color/nav_drawer_lineColor"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/genre_textsize" />
 
                     <TextView
                         android:id="@+id/videoCensorRatingTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/videoGenreTextView"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:layout_marginTop="@dimen/margintop8dp"
                         android:background="@drawable/button_bg_orange"
                         android:paddingLeft="1dp"
-                        android:paddingRight="4dp"
+                        android:paddingRight="@dimen/padding_right4dp"
                         android:text=""
                         android:textColor="@color/nav_drawer_lineColor"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/genre_textsize" />
 
                     <TextView
                         android:id="@+id/videoCensorRatingTextView1"
@@ -397,10 +397,10 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/videoGenreTextView"
                         android:layout_marginLeft="2dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
                         android:textColor="@color/nav_drawer_lineColor"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/genre_textsize" />
 
 
                     <TextView
@@ -408,11 +408,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/videoGenreTextView"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:layout_marginTop="@dimen/margintop8dp"
                         android:text=""
                         android:textColor="@color/nav_drawer_lineColor"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/genre_textsize" />
 
                 </LinearLayout>
 
@@ -421,23 +421,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/videoTitle"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="@dimen/marginleft10dp"
+                    android:layout_marginLeft="@dimen/marginleft10dp"
+                    android:layout_marginRight="@dimen/marginright10dp"
+                    android:layout_marginTop="@dimen/margintop8dp"
                     android:text=""
                     android:textColor="@color/nav_drawer_lineColor"
-                    android:textSize="14dp" />
+                    android:textSize="@dimen/genre_textsize" />
 
                 <TextView
                     android:id="@+id/videoCastCrewTitleTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="@dimen/marginleft10dp"
+                    android:layout_marginTop="@dimen/margintop12dp"
                     android:textColor="@color/cast_crew_titleCololr"
-                    android:textSize="15dp"
+                    android:textSize="@dimen/genre_textsize"
                     android:textStyle="bold" />
 
             </LinearLayout>

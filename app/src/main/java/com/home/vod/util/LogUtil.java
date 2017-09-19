@@ -8,6 +8,6 @@ import android.util.Log;
 
 public class LogUtil {
     public static void showLog(String tag,String message){
-        LogUtil.showLog(tag,message);
+        Log.d(tag,message);
     }
 }

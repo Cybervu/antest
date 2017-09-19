@@ -24,7 +24,6 @@
     <dimen name="submit_text_size">18sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
-    <dimen name="pass_text_size">16sp</dimen>
     <dimen name="submit_height_size">40dp</dimen>
     <dimen name="left_padding">0dp</dimen>
     <dimen name="right_padding">0dp</dimen>
@@ -33,7 +32,6 @@
     <dimen name="registerlayout_padding">0dp</dimen>
     <dimen name="movieimg_width">85dp</dimen>
     <dimen name="movieimg_height">120dp</dimen>
-    <dimen name="submit_height_size">45dp</dimen>
     <dimen name="video280_width">150dp</dimen>
     <dimen name="video280_height">80dp</dimen>
     <dimen name="testview2_text_size">12sp</dimen>

@@ -16,6 +16,7 @@ import com.home.vod.R;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 

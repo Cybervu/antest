@@ -17,6 +17,7 @@ import com.home.vod.activity.FavoriteActivity;
 import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 

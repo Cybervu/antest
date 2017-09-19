@@ -10,6 +10,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.home.vod.BuildConfig;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
 import org.apache.http.HttpResponse;

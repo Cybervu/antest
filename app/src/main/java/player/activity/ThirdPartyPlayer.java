@@ -17,6 +17,7 @@ import android.webkit.WebViewClient;
 
 
 import com.home.vod.R;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 
 import org.apache.http.HttpResponse;

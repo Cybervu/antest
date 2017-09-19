@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,6 +22,7 @@ import com.home.vod.R;
 import com.home.vod.adapter.NavigationDrawerAdapter;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
@@ -46,6 +48,7 @@ public class FragmentDrawer extends Fragment {
     private static TypedArray navMenuIcons;
     private FragmentDrawerListener drawerListener;
     private LanguagePreference languagePreference;
+    PreferenceManager preferenceManager;
 
     public FragmentDrawer() {
 
@@ -87,7 +90,7 @@ public class FragmentDrawer extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        
+        preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         // Inflating view layout
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
@@ -123,7 +126,7 @@ public class FragmentDrawer extends Fragment {
                /* if (MainActivity.menuList != null && MainActivity.menuList.size() > 0) {
                     titles = MainActivity.menuList;*/
                     // navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
-
+                loggedInStr = preferenceManager.getUseridFromPref();
                     boolean mylibrary_title_added = false;
                     Util.my_library_visibility = false;
 
@@ -133,9 +136,10 @@ public class FragmentDrawer extends Fragment {
                             LogUtil.showLog("MUVI", "IS_MYLIBRARY =" + languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY));
                             LogUtil.showLog("MUVI", "loggedInStr value =" + loggedInStr);
                             mylibrary_title_added = true;
+                            Log.v("BKS","my library=="+languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY));
 
                             if (languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
-
+                                Log.v("BKS","my library=="+languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY));
                             } else {
                                 titles.remove(i);
                                 LogUtil.showLog("MUVI", "My lib removed");

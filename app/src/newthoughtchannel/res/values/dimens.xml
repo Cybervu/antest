@@ -154,7 +154,7 @@
     <dimen name="downloadimg_height">20dp</dimen>
     <dimen name="progressbar_width">40dp</dimen>
     <dimen name="progressbar_height">40dp</dimen>
-    <dimen name="percentage_text_size">8sp</dimen>
+    <dimen name="percentage_text_size">12sp</dimen>
     <dimen name="videotitle_text_size">19sp</dimen>
     <dimen name="subscription_text_size">23sp</dimen>
     <dimen name="activation_text_size">18sp</dimen>

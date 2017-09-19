@@ -1167,6 +1167,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         if (statusCode == 200) {
             playerModel.setIsOffline(_video_details_output.getIs_offline());
+            playerModel.setDownloadStatus(_video_details_output.getDownload_status());
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
                 /**@bishal
@@ -3994,6 +3995,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 if (progressBarHandler != null && progressBarHandler.isShowing()) {
                     progressBarHandler.hide();
                 }
+                playerModel.setSubTitlePath(SubTitlePath);
                 final Intent playVideoIntent;
                 if (Util.dataModel.getAdNetworkId() == 3){
                     LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
