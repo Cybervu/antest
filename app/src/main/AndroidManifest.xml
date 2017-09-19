@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
 
     <!-- Permission to use camera - required -->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -83,6 +85,11 @@
             android:name="player.activity.DataConsumptionService"
             android:enabled="true"
             android:exported="true"></service>
+
+        <service
+            android:name="player.service.PopUpService"
+            android:enabled="true"
+            android:exported="true" />
         <activity
             android:name="player.activity.Subtitle_Resolution"
             android:configChanges="screenSize|orientation"
@@ -234,7 +241,7 @@
         <activity android:name=".activity.SubscriptionActivity" />
 
         <activity
-            android:name=".activity.MyLibraryPlayer"
+            android:name="player.activity.MyLibraryPlayer"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:screenOrientation="landscape"

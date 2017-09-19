@@ -25,6 +25,50 @@ public class Player implements Serializable{
     public static String VideoResolution = "Auto";
     public static final String loadIPUrl = "https://api.ipify.org/?format=json";
 
+
+    // This code is added by Bibhuprasad Jena //
+
+    public ArrayList<String> offline_url = new ArrayList<>();
+    public ArrayList<String> offline_language = new ArrayList<>();
+    public ArrayList<String> offline_language_code = new ArrayList<>();
+
+    String downloadStatus = "0";
+
+    public void setDownloadStatus(String downloadStatus) {
+        this.downloadStatus = downloadStatus;
+    }
+
+    public String getDownloadStatus() {
+        return downloadStatus;
+    }
+
+    public void setOfflineUrl(ArrayList<String> offline_url) {
+        this.offline_url = offline_url;
+    }
+
+    public ArrayList<String> getOfflineUrl() {
+        return offline_url;
+    }
+
+    public void setOfflineLanguage(ArrayList<String> offline_language) {
+        this.offline_language = offline_language;
+    }
+
+    public ArrayList<String> getOfflineLanguage() {
+        return offline_language;
+    }
+
+
+    public void setOffline_language_code(ArrayList<String> offline_language_code) {
+        this.offline_language_code = offline_language_code;
+    }
+
+    public ArrayList<String> getOffline_language_code() {
+        return offline_language_code;
+    }
+
+    //********************** END ***************************//
+
     public static boolean checkNetwork(Context context){
         ConnectivityManager cm =
                 (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -242,24 +286,8 @@ public class Player implements Serializable{
     ArrayList<String> FakeSubTitlePath = new ArrayList<>();
     ArrayList<String> ResolutionFormat = new ArrayList<>();
     ArrayList<String> ResolutionUrl = new ArrayList<>();
-    ArrayList<String> offlineUrl = new ArrayList<>();
-    ArrayList<String> offlineLanguage = new ArrayList<>();
 
-    public ArrayList<String> getOfflineUrl() {
-        return offlineUrl;
-    }
 
-    public void setOfflineUrl(ArrayList<String> offlineUrl) {
-        this.offlineUrl = offlineUrl;
-    }
-
-    public ArrayList<String> getOfflineLanguage() {
-        return offlineLanguage;
-    }
-
-    public void setOfflineLanguage(ArrayList<String> offlineLanguage) {
-        this.offlineLanguage = offlineLanguage;
-    }
 
     public ArrayList<String> getSubTitleLanguage() {
         return SubTitleLanguage;
@@ -282,9 +310,9 @@ public class Player implements Serializable{
 
     private String videoTitle = "";
     private String videoGenre = "";
-   /* private String videoDuration = "00:00:00";
-    private String videoReleaseDate = "00/00/0000";*/
-   private String videoDuration = "";
+    /* private String videoDuration = "00:00:00";
+     private String videoReleaseDate = "00/00/0000";*/
+    private String videoDuration = "";
     private String videoReleaseDate = "";
     private String videoStory = "";
     private boolean castCrew = false;

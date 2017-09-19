@@ -3,11 +3,13 @@ package com.home.vod.activity;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -29,6 +31,7 @@ import java.util.List;
 
 import player.model.ContactModel1;
 import player.utils.DBHelper;
+import player.utils.Util;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
@@ -51,7 +54,7 @@ public class MyDownloads extends AppCompatActivity {
     int islogin=0;
     MyDownloadAdapter adapter;
     List<String[]> allElements;
-   // CSVReader readers = null;
+    // CSVReader readers = null;
     String[] nextLine=null;
     SharedPreferences pref;
     String emailIdStr = "";
@@ -62,12 +65,13 @@ public class MyDownloads extends AppCompatActivity {
     ArrayList<ContactModel1> databaseupdate;
     DownloadManager downloadManager;
     public boolean downloading;
-   // MydownloadModel mydownloadModel;
+    // MydownloadModel mydownloadModel;
     static String path,filename,_filename,token,title,poster,genre,duration,rdate,movieid,user,uniqid;
     ArrayList<ContactModel1> download;
     ProgressBarHandler pDialog;
     ArrayList<String> SubTitleName = new ArrayList<>();
     ArrayList<String> SubTitlePath = new ArrayList<>();
+    String download_id_from_watch_access_table = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +96,7 @@ public class MyDownloads extends AppCompatActivity {
         list= (ListView)findViewById(R.id.listView);
         nodata= (RelativeLayout) findViewById(R.id.noData);
         noDataTextView= (TextView) findViewById(R.id.noDataTextView);
-      //  islogin = preferenceManager.getLoginFeatureFromPref();
+        //  islogin = preferenceManager.getLoginFeatureFromPref();
         if (preferenceManager!=null){
             emailIdStr= preferenceManager.getEmailIdFromPref();
 
@@ -137,7 +141,7 @@ public class MyDownloads extends AppCompatActivity {
 
        /* ArrayAdapter<String> adapter=new ArrayAdapter<String>(getActivity(),R.layout.listitem,mylist);
         list.setAdapter(adapter);*/
-       list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
@@ -180,12 +184,97 @@ public class MyDownloads extends AppCompatActivity {
                                     SubTitlePath.add(cursor.getString(1).trim());
 
 
-                                    LogUtil.showLog("BIBHU3","SubTitleName============"+cursor.getString(0).trim());
-                                    LogUtil.showLog("BIBHU3","SubTitlePath============"+cursor.getString(1).trim());
+                                    Log.v("BIBHU3","SubTitleName============"+cursor.getString(0).trim());
+                                    Log.v("BIBHU3","SubTitlePath============"+cursor.getString(1).trim());
 
                                 } while (cursor.moveToNext());
                             }
                         }
+
+
+
+                        // following block is responsible for restriction on download content .....
+
+
+                        long server_current_time = 0;
+                        long watch_period = -1;
+                        long access_period = -1;
+                        long initial_played_time = 0;
+                        long updated_server_current_time = 0;
+
+                        Cursor cursor1 = DB.rawQuery("SELECT server_current_time , watch_period , access_period , initial_played_time , updated_server_current_time,download_id FROM "+DBHelper.WATCH_ACCESS_INFO+" WHERE download_id = '"+download.get(position).getDOWNLOADID()+"'", null);
+                        int count1 = cursor1.getCount();
+
+                        if (count1 > 0) {
+                            if (cursor1.moveToFirst()) {
+                                do {
+                                    server_current_time = cursor1.getLong(0);
+                                    watch_period = cursor1.getLong(1);
+                                    access_period = cursor1.getLong(2);
+                                    initial_played_time = cursor1.getLong(3);
+                                    updated_server_current_time = cursor1.getLong(4);
+                                    download_id_from_watch_access_table = cursor1.getString(5);
+
+
+                                    Log.v("BIBHU3","server_current_time============"+server_current_time);
+                                    Log.v("BIBHU3","watch_period============"+watch_period);
+                                    Log.v("BIBHU3","access_period============"+access_period);
+                                    Log.v("BIBHU3","initial_played_time============"+initial_played_time);
+                                    Log.v("BIBHU3","updated_server_current_time============"+updated_server_current_time);
+                                    Log.v("BIBHU3","download_id_from_watch_access_table============"+download_id_from_watch_access_table);
+
+                                } while (cursor1.moveToNext());
+                            }
+                        }else
+                        {
+                            return;
+                        }
+
+                        if(initial_played_time == 0)
+                        {
+                            if(((server_current_time < System.currentTimeMillis()) && (access_period > System.currentTimeMillis())) || (access_period == -1))
+                            {
+                                String Qry = "UPDATE " +DBHelper.WATCH_ACCESS_INFO+ " SET initial_played_time = '"+System.currentTimeMillis()+"'" +
+                                        " WHERE download_id = '"+download.get(position).getDOWNLOADID()+"' ";
+
+                                DB.execSQL(Qry);
+                            }
+                            else
+                            {
+                                // Show Restriction Message
+                                ShowRestrictionMsg("You don't have access to play this video.");
+                                return;
+
+                            }
+                        }
+                        else
+                        {
+                            if(updated_server_current_time < System.currentTimeMillis())
+                            {
+                                if(access_period == -1 || (System.currentTimeMillis() < access_period)) // && (((System.currentTimeMillis() - initial_played_time) < watch_period)) || watch_period == -1)
+                                {
+                                    String Qry = "UPDATE " +DBHelper.WATCH_ACCESS_INFO+ " SET updated_server_current_time = '"+System.currentTimeMillis()+"'" +
+                                            " WHERE download_id = '"+download.get(position).getDOWNLOADID()+"' ";
+                                    DB.execSQL(Qry);
+                                }
+                                else
+                                {
+                                    // Show Restriction Meassge
+                                    ShowRestrictionMsg("You don't have access to play this video.");
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                // Show Restriction Message
+                                ShowRestrictionMsg("You don't have access to play this video.");
+                                return;
+                            }
+                        }
+
+
+                        //=====================================END================================================//
+
 
 
                         final String pathh=download.get(position).getPath();
@@ -211,9 +300,9 @@ public class MyDownloads extends AppCompatActivity {
                                 public void run() {
 
                                     Intent in=new Intent(MyDownloads.this,MarlinBroadbandExample.class);
-                                    LogUtil.showLog("BKS", "PATH==" + pathh);
-                                    LogUtil.showLog("BKS", "Title==" + titles);
-                                    LogUtil.showLog("BKS", "TOK=" + tok);
+                                    Log.v("BKS", "PATH==" + pathh);
+                                    Log.v("BKS", "Title==" + titles);
+                                    Log.v("BKS", "TOK=" + tok);
 
                                     in.putExtra("SubTitleName", SubTitleName);
                                     in.putExtra("SubTitlePath", SubTitlePath);
@@ -228,6 +317,8 @@ public class MyDownloads extends AppCompatActivity {
                                     in.putExtra("muvid", muviid);
                                     in.putExtra("vid", vidduration);
                                     in.putExtra("FNAME", filename);
+                                    in.putExtra("download_id_from_watch_access_table", download_id_from_watch_access_table);
+
                                     //
                                     startActivity(in);
 
@@ -243,8 +334,6 @@ public class MyDownloads extends AppCompatActivity {
                                                 pDialog.hide();
                                                 pDialog = null;
                                             }
-
-
                                         }
                                     });
 
@@ -360,10 +449,7 @@ public class MyDownloads extends AppCompatActivity {
                             // model.setDSTATUS(3);
                         }
 
-
 //
-
-
                         // Log.d(Constants.MAIN_VIEW_ACTIVITY, statusMessage(cursor));
                         cursor.close();
                     }
@@ -372,8 +458,21 @@ public class MyDownloads extends AppCompatActivity {
                 }
             }).start();
 
-
         }
 
+    }
+    public void ShowRestrictionMsg(String msg) {
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MyDownloads.this, R.style.MyAlertDialogStyle);
+
+        dlgAlert.setMessage(msg);
+        dlgAlert.setTitle(Util.getTextofLanguage(MyDownloads.this, Util.SORRY, Util.DEFAULT_SORRY));
+        dlgAlert.setCancelable(false);
+        dlgAlert.setPositiveButton(Util.getTextofLanguage(MyDownloads.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        dlgAlert.create().show();
     }
 }

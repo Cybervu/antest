@@ -103,6 +103,7 @@ public class Util {
     public static final String AddtoFavlist = "AddtoFavlist";
     public static final String DeleteFavList = "DeleteFavList";
     public static final String morlineBB = "getMarlinBBOffline";
+    public static final String GetOfflineViewRemainingTime = "GetOfflineViewRemainingTime";
     //==========Added For FCM===============//
 
     public static final String CheckIfUserLoggedIn = "CheckIfUserLoggedIn";

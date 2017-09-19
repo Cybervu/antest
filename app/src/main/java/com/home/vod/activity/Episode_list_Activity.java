@@ -105,6 +105,7 @@ import java.util.concurrent.TimeUnit;
 
 import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
+import player.activity.MyLibraryPlayer;
 import player.activity.Player;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;

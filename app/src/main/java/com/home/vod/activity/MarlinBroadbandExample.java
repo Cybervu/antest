@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -17,10 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.MediaRouteButton;
 import android.support.v7.app.NotificationCompat;
-import com.intertrust.wasabi.media.PlaylistProxy;
-import com.intertrust.wasabi.media.PlaylistProxyListener;
 import android.text.Html;
 import android.util.Log;
 import android.view.Display;
@@ -36,10 +34,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.home.vod.subtitle_support.Caption;
-import com.home.vod.subtitle_support.FormatSRT;
-import com.home.vod.subtitle_support.FormatSRT_WithoutCaption;
-import com.home.vod.subtitle_support.TimedTextObject;
+import player.subtitle_support.Caption;
+import player.subtitle_support.FormatSRT;
+import player.subtitle_support.FormatSRT_WithoutCaption;
+import player.subtitle_support.TimedTextObject;
 import com.intertrust.wasabi.Runtime;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.home.vod.R;
@@ -81,6 +79,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import player.activity.ResumePopupActivity;
 import player.activity.SubtitleList;
+import player.utils.DBHelper;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -136,6 +135,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	AsynGetIpAddress asynGetIpAddress;
 	LanguagePreference languagePreference;
 	PreferenceManager preferenceManager;
+	String download_id_from_watch_access_table = "";
 
 	ImageButton back, center_play_pause;
 	ImageView compress_expand;
@@ -203,7 +203,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	BroadcastReceiver receiver;
 	private boolean downloading;
 
-    String contid,muviid,gen,vidduration;
+	String contid,muviid,gen,vidduration;
 
 	private SubtitleProcessingTask subsFetchTask;
 	public TimedTextObject srt;
@@ -236,6 +236,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		gen = getIntent().getStringExtra("gen").trim();
 		title=getIntent().getStringExtra("Title").trim();
 		vidduration = getIntent().getStringExtra("vid").trim();
+		download_id_from_watch_access_table = getIntent().getStringExtra("download_id_from_watch_access_table").trim();
 
 
 
@@ -324,7 +325,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 //
 //
 //        if (Util.downloadprogress >0){
-//            LogUtil.showLog("SUBHA","hahahaha");
+//            Log.v("SUBHA","hahahaha");
 //            percentg.setVisibility(View.VISIBLE);
 //            download.setVisibility(View.GONE);
 //            Progress.setVisibility(View.VISIBLE);
@@ -479,7 +480,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					if (center_pause_paly_timer_is_running) {
 						center_pause_paly_timer.cancel();
 						center_pause_paly_timer_is_running = false;
-						LogUtil.showLog("BIBHU11","CastAndCrewActivity End_Timer cancel called");
+						Log.v("BIBHU11","CastAndCrewActivity End_Timer cancel called");
 
 
 						subtitle_change_btn.setVisibility(View.INVISIBLE);
@@ -530,7 +531,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
       /*  back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogUtil.showLog("SUBHA","CHFHFH");
+                Log.v("SUBHA","CHFHFH");
                // onBackPressed();
                 backCalled();
             }
@@ -858,7 +859,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 							{
 
 
-								LogUtil.showLog("BIBHU3","parsing called============");
+								Log.v("BIBHU3","parsing called============");
 
 								CheckSubTitleParsingType("1");
 								subtitleDisplayHandler = new Handler();
@@ -949,7 +950,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		//String licenseAcquisitionToken = getActionTokenFromAssets("license_action_token.xml");
 		//String licenseAcquisitionToken = getActionTokenFromStorage("/storage/emulated/0/Download/DRM/token.xml");
 		//String licenseAcquisitionToken = getActionTokenFromStorage(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/DRM"+"/token.xml");
-		LogUtil.showLog("SUBHA", "path" + token);
+		Log.v("SUBHA", "path" + token);
 		String licenseAcquisitionToken = getActionTokenFromStorage(token);
 		if (licenseAcquisitionToken == null) {
 			Log.e(TAG,
@@ -959,7 +960,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 		}
 		//long start = System.currentTimeMillis();
-//		LogUtil.showLog("SUBHA", licenseAcquisitionToken);
+//		Log.v("SUBHA", licenseAcquisitionToken);
 		com.intertrust.wasabi.jni.Runtime.processServiceToken(licenseAcquisitionToken);
 //		Log.i(TAG,
 //				"License successfully acquired in (ms): "
@@ -1013,12 +1014,12 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				if (path.contains("WITHDRM")){
 					String proxy_url = playerProxy.makeUrl(dash_url, PlaylistProxy.MediaSourceType.SINGLE_FILE, new PlaylistProxy.MediaSourceParams());
 					emVideoView.setVideoURI(Uri.parse(proxy_url));
-					LogUtil.showLog("BKS","emvideoview videouro=i====="+emVideoView.getVideoUri());
+					Log.v("BKS","emvideoview videouro=i====="+emVideoView.getVideoUri());
 					emVideoView.start();
 				}
 				/*String proxy_url = playerProxy.makeUrl(dash_url, PlaylistProxy.MediaSourceType.SINGLE_FILE, new PlaylistProxy.MediaSourceParams());
 				emVideoView.setVideoURI(Uri.parse(proxy_url));
-				LogUtil.showLog("BKS","emvideoview videouro=i====="+emVideoView.getVideoUri());
+				Log.v("BKS","emvideoview videouro=i====="+emVideoView.getVideoUri());
 				emVideoView.start();*/
 				else{
 					emVideoView.setVideoURI(Uri.parse(path));
@@ -1747,7 +1748,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 	/* public void onBackPressed() {
          super.onBackPressed();
-         LogUtil.showLog("SUBHA","HHVID"+videoLogId);
+         Log.v("SUBHA","HHVID"+videoLogId);
          if (asynGetIpAddress!=null){
              asynGetIpAddress.cancel(true);
          }
@@ -1945,7 +1946,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
    /* @Override
     public boolean onKeyDown(int keyCode, KeyEvent objEvent) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            LogUtil.showLog("SUBHA","FHFHFHCALLED");
+            Log.v("SUBHA","FHFHFHCALLED");
             return true;
         }
         return super.onKeyUp(keyCode, objEvent);
@@ -2185,7 +2186,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		public SubtitleProcessingTask(String path) {
 
 			Subtitle_Path = SubTitlePath.get((Integer.parseInt(path)-1));
-			LogUtil.showLog("BIBHU3","parsing called Subtitle_Path============"+Subtitle_Path);
+			Log.v("BIBHU3","parsing called Subtitle_Path============"+Subtitle_Path);
 		}
 
 		@Override
@@ -2293,13 +2294,18 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 	@Override
 	protected void onPause() {
-        /*if (subtitleDisplayHandler != null) {
-            subtitleDisplayHandler.removeCallbacks(subtitleProcessesor);
-            subtitleDisplayHandler = null;
-            if (subsFetchTask != null)
-                subsFetchTask.cancel(true);
-        }*/
 		super.onPause();
+
+		// Update Data Base Here for Restriction ondownload content.
+		SQLiteDatabase DB = MarlinBroadbandExample.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
+
+		String Qry = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET updated_server_current_time = '" + System.currentTimeMillis() + "'" +
+				" WHERE download_id = '" + download_id_from_watch_access_table + "' ";
+		DB.execSQL(Qry);
+
+		if (Util.call_finish_at_onUserLeaveHint) {
+			finish();
+		}
 	}
 
 	private Runnable subtitleProcessesor = new Runnable() {
@@ -2327,7 +2333,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	{
 
 		String Subtitle_Path = SubTitlePath.get((Integer.parseInt(path)-1));
-		LogUtil.showLog("BIBHU3","parsing called CheckSubTitleParsingType============"+Subtitle_Path);
+		Log.v("BIBHU3","parsing called CheckSubTitleParsingType============"+Subtitle_Path);
 
 
 		callWithoutCaption = true;
