@@ -253,20 +253,20 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_ppv_payment_info);
       //  playerModel=new Player();
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
-        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
         languagePreference = LanguagePreference.getLanguagePreference(this);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
         /* playerModel.setVideoTitle(playerModel.getVideoTitle());
         playerModel.setVideoStory(playerModel.getVideoStory());
         playerModel.setVideoGenre(playerModel.getVideoGenre());
         playerModel.setVideoDuration(playerModel.getVideoDuration());
         playerModel.setVideoReleaseDate(playerModel.getVideoReleaseDate());
         playerModel.setCensorRating(playerModel.getCensorRating());*/
-
+        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
         LogUtil.showLog("BKS", "ppvpayment Activity Season Id =" + getIntent().getSerializableExtra("PlayerModel"));
         LogUtil.showLog("MUVI", "ppvpatment Activity episode Id =" + Util.selected_episode_id);
 
         videoPreview = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
-        preferenceManager = PreferenceManager.getPreferenceManager(this);
+
 
         //Set toolbar
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);

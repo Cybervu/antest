@@ -4404,7 +4404,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         if (status == 200) {
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.GONE);
-
+            isPPV=contentDetailsOutput.getIsPpv();
+            isAPV=contentDetailsOutput.getIsApv();
             movieUniqueId = contentDetailsOutput.getMuviUniqId();
             isEpisode = contentDetailsOutput.getIsEpisode();
             movieStreamUniqueId = contentDetailsOutput.getMovieStreamUniqId();

@@ -938,7 +938,7 @@ LanguagePreference languagePreference;
             } else {
                 RegisterUserPaymentInputModel registerUserPaymentInputModel = new RegisterUserPaymentInputModel();
                 registerUserPaymentInputModel.setAuthToken(authTokenStr);
-                registerUserPaymentInputModel.setCard_name(cardNumberEditText.getText().toString().trim());
+                registerUserPaymentInputModel.setCard_name(nameOnCardEditText.getText().toString().trim());
                 registerUserPaymentInputModel.setExp_month(String.valueOf(expiryMonthStr).trim());
                 registerUserPaymentInputModel.setCard_number(cardNumberEditText.getText().toString().trim());
                 registerUserPaymentInputModel.setExp_year(String.valueOf(expiryYearStr).trim());
@@ -951,10 +951,10 @@ LanguagePreference languagePreference;
                 } else {
                     registerUserPaymentInputModel.setCouponCode("");
                 }
-                registerUserPaymentInputModel.setCard_type(cardTypeStr.trim());
-                registerUserPaymentInputModel.setCard_last_fourdigit(cardLastFourDigitStr.trim());
-                registerUserPaymentInputModel.setProfile_id(profileIdStr.trim());
-                registerUserPaymentInputModel.setToken(tokenStr.trim());
+                registerUserPaymentInputModel.setCard_type(authUserPaymentInfoOutputModel.getCard_type());
+                registerUserPaymentInputModel.setCard_last_fourdigit(authUserPaymentInfoOutputModel.getCard_last_fourdigit());
+                registerUserPaymentInputModel.setProfile_id(authUserPaymentInfoOutputModel.getProfile_id());
+                registerUserPaymentInputModel.setToken(authUserPaymentInfoOutputModel.getToken());
                 registerUserPaymentInputModel.setCvv(securityCodeEditText.getText().toString().trim());
                 registerUserPaymentInputModel.setCountry(preferenceManager.getCountryCodeFromPref());
                 registerUserPaymentInputModel.setEpisode_id("0");

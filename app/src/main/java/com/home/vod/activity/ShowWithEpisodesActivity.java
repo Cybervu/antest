@@ -1556,7 +1556,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         LogUtil.showLog("MUVI", "onCreate");
         season = new ArrayList<String>();
         Util.goToLibraryplayer = false;
-        preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(ShowWithEpisodesActivity.this);
         playerModel = new Player();
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
