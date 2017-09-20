@@ -152,6 +152,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_RE
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
@@ -174,6 +175,7 @@ import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTI
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
@@ -3136,6 +3138,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             }
 
+            item6 = menu.findItem(R.id.action_mydownload);
+            item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
+            item6.setVisible(true);
+
 
         } else if (loggedInStr == null) {
             item4 = menu.findItem(R.id.action_login);
@@ -3163,7 +3169,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             item3 = menu.findItem(R.id.action_logout);
             item3.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
             item3.setVisible(false);
-
+            item6 = menu.findItem(R.id.action_mydownload);
+            item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
+            item6.setVisible(false);
             item7 = menu.findItem(R.id.menu_item_favorite);
             item7.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE));
             item7.setVisible(false);
