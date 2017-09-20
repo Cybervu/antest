@@ -133,29 +133,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
         }
-     /*   SDKInitializer.setData(this);
-        if (NetworkStatus.getInstance().isConnected(this)) {
-            if (preferenceManager != null) {
-                String countryCodeStr = preferenceManager.getCountryCodeFromPref();
-
-                if (countryCodeStr == null) {
-                    GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-                    asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
-                } else {
-                    GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-                    asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
-                }
-            } else {
-                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-                asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
-
-            }
-            GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-            asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
-        } else {
-            noInternetLayout.setVisibility(View.VISIBLE);
-            geoBlockedLayout.setVisibility(View.GONE);
-        }*/
 
     }
 
