@@ -438,7 +438,7 @@
                     android:stateListAnimator="@null"
                     android:padding="@dimen/payment_spinner_padding"
                     android:layout_marginRight="@dimen/ppv_margin"
-                    android:background="@color/button_background"
+                    android:background="@drawable/view_more_button_background"
                     android:textAllCaps="false"
                     android:textColor="@color/buttonTextColor"
                     android:textSize="@dimen/email_text_size" />

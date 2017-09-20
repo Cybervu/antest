@@ -256,7 +256,7 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                 }
             }
         } catch (Exception e) {
-            code = 0;
+           // code = 0;
             message = "";
             status = "";
         }

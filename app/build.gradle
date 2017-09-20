@@ -124,6 +124,7 @@ android {
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             versionCode 1
             versionName '1.0'
+            buildConfigField "String", "AUTH_TOKEN", "\"8c6e6162f22f3f43a6d88efc1a64cd18\""
         }
         digiOsmosis_staging_ {
             dimension 'environment'
