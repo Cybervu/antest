@@ -4643,10 +4643,10 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         if (Util.dataModel.getIsFreeContent() == 1) {
                             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                             getVideoDetailsInput.setAuthToken(authTokenStr);
-                            getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
-                            getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
-                            getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
-                            getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
+                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                             VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
