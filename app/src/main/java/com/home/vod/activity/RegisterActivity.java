@@ -333,7 +333,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
         LogUtil.showLog("BKS","packagename==="+ SDKInitializer.user_Package_Name_At_Api);
 
-
+        languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
 
 
@@ -346,8 +346,8 @@ public class RegisterActivity extends AppCompatActivity implements
 
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
         if(playerModel!=null)
+
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
-        languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.this);
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
             mActionBarToolbar.setNavigationIcon(null);
@@ -825,7 +825,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
                 playerModel.setIsOffline(_video_details_output.getIs_offline());
-
+                playerModel.setDownloadStatus(_video_details_output.getDownload_status());
 
                 /**@bishal
                  * for drm player below condition added
@@ -3121,6 +3121,7 @@ public class RegisterActivity extends AppCompatActivity implements
                 if (progressBarHandler != null && progressBarHandler.isShowing()) {
                     progressBarHandler.hide();
                 }
+                playerModel.setSubTitlePath(SubTitlePath);
                 final Intent playVideoIntent;
                 if (Util.dataModel.getAdNetworkId() == 3){
                     LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());

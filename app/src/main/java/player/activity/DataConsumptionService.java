@@ -15,6 +15,8 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.home.vod.util.LogUtil;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;

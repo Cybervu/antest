@@ -24,6 +24,7 @@ import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.FontUtls;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
 
 import java.util.ArrayList;

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.home.vod.R;
 import com.home.vod.model.PlanModel;
+import com.home.vod.util.LogUtil;
 
 import java.util.ArrayList;
 

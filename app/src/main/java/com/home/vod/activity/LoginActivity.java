@@ -611,6 +611,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
         if (statusCode == 200) {
+            playerModel.setIsOffline(_video_details_output.getIs_offline());
+            playerModel.setDownloadStatus(_video_details_output.getDownload_status());
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
                 /**@bishal
@@ -3388,7 +3390,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 if (progressBarHandler != null && progressBarHandler.isShowing()) {
                     progressBarHandler.hide();
                 }
-
+                playerModel.setSubTitlePath(SubTitlePath);
                 final Intent playVideoIntent;
 
                 if (Util.goToLibraryplayer) {
@@ -4641,21 +4643,21 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         if (Util.dataModel.getIsFreeContent() == 1) {
                             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                             getVideoDetailsInput.setAuthToken(authTokenStr);
-                            getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
-                            getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
-                            getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
-                            getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
+                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                             VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
                             ValidateUserInput validateUserInput = new ValidateUserInput();
                             validateUserInput.setAuthToken(authTokenStr);
-                            validateUserInput.setUserId(validateUserInput.getUserId());
-                            validateUserInput.setMuviUniqueId(validateUserInput.getMuviUniqueId());
-                            validateUserInput.setEpisodeStreamUniqueId(validateUserInput.getEpisodeStreamUniqueId());
-                            validateUserInput.setSeasonId(validateUserInput.getSeasonId());
-                            validateUserInput.setLanguageCode(validateUserInput.getLanguageCode());
-                            validateUserInput.setPurchaseType(validateUserInput.getPurchaseType());
+                            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
+                            validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
+                            validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
+                            validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
+                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                             GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
                             asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 

@@ -38,6 +38,7 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ExpandableTextView;
 import com.home.vod.util.FontUtls;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ResizableCustomView;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;

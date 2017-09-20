@@ -242,8 +242,16 @@ public class MyDownloads extends AppCompatActivity {
                             else
                             {
                                 // Show Restriction Message
-                                ShowRestrictionMsg("You don't have access to play this video.");
-                                return;
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ShowRestrictionMsg("You don't have access to play this video.");
+                                        return;
+                                    }
+                                });
+
+
 
                             }
                         }
@@ -260,15 +268,29 @@ public class MyDownloads extends AppCompatActivity {
                                 else
                                 {
                                     // Show Restriction Meassge
-                                    ShowRestrictionMsg("You don't have access to play this video.");
-                                    return;
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ShowRestrictionMsg("You don't have access to play this video.");
+                                            return;
+                                        }
+                                    });
+
+
                                 }
                             }
                             else
                             {
                                 // Show Restriction Message
-                                ShowRestrictionMsg("You don't have access to play this video.");
-                                return;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ShowRestrictionMsg("You don't have access to play this video.");
+                                        return;
+                                    }
+                                });
+
+
                             }
                         }
 

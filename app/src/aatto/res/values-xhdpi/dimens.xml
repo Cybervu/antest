@@ -27,7 +27,6 @@
     <dimen name="listitemlayout_height">200dp</dimen>
     <dimen name="slider_height">210dp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
-    <dimen name="submit_height_size">45dp</dimen>
     <dimen name="left_padding">10dp</dimen>
     <dimen name="right_padding">10dp</dimen>
     <dimen name="login_padding">10dp</dimen>

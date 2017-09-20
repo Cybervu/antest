@@ -644,6 +644,7 @@ LanguagePreference languagePreference;
 
         if (statusCode == 200) {
             playerModel.setIsOffline(_video_details_output.getIs_offline());
+            playerModel.setDownloadStatus(_video_details_output.getDownload_status());
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
                 if (_video_details_output.getVideoUrl() != null || !_video_details_output.getVideoUrl().matches("")) {
                     playerModel.setVideoUrl(_video_details_output.getVideoUrl());

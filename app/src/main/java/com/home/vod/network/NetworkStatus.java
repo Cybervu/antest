@@ -5,6 +5,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.home.vod.util.LogUtil;
+
 
 /**
  * @author alok.acharya

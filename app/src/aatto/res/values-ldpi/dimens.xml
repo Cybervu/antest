@@ -13,7 +13,6 @@
     <dimen name="cast_width_icon">80dp</dimen>
     <dimen name="cast_height_icon">100dp</dimen>
     <dimen name="cast_name_text">17sp</dimen>
-    <dimen name="submit_height_size">45dp</dimen>
     <dimen name="cast_description_text">14sp</dimen>
     <dimen name="forgot_logo_width">100dp</dimen>
     <dimen name="forgot_logo_height">150dp</dimen>

@@ -17,6 +17,7 @@ import com.home.vod.activity.MyDownloads;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 
+import com.home.vod.util.LogUtil;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;

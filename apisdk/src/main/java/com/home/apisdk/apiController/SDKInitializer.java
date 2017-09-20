@@ -216,6 +216,12 @@ public class SDKInitializer {
         return (dateLater.getTime() - dateEarly.getTime()) / (24 * 60 * 60 * 1000);
     }
 
+    public static void setData(Context ctx){
+        sdkInitializerPreference = SDKInitializerPreference.getSdkInitializerPreference(ctx);
+        sdkInitializerPreference.setPackage_namePref(ctx.getPackageName());
+        sdkInitializerPreference.setHash_KeyPref("NN");
+    }
+
 }
 
 

@@ -336,13 +336,14 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
 
         if (statusCode == 200) {
+            playerModel.setIsOffline(_video_details_output.getIs_offline());
+            playerModel.setDownloadStatus(_video_details_output.getDownload_status());
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
                 /**@bishal
                  * for drm player below condition added
                  * if studio_approved_url is there in api then set the videourl from this other wise goto 2nd one
                  */
-                playerModel.setIsOffline(_video_details_output.getIs_offline());
 
                 if (_video_details_output.getStudio_approved_url() != null &&
                         !_video_details_output.getStudio_approved_url().isEmpty() &&
@@ -3404,6 +3405,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 if (progressBarHandler != null && progressBarHandler.isShowing()) {
                     progressBarHandler.hide();
                 }
+                playerModel.setSubTitlePath(SubTitlePath);
                 Intent playVideoIntent;
                 if (Util.goToLibraryplayer) {
                     playVideoIntent = new Intent(Episode_list_Activity.this, MyLibraryPlayer.class);
@@ -3429,10 +3431,10 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 }
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                playVideoIntent.putExtra("SubTitleName", SubTitleName);
+                /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);
+                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                 playVideoIntent.putExtra("PlayerModel", playerModel);
                 startActivity(playVideoIntent);
             }
