@@ -116,7 +116,23 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
-
+        digiOsmosis {
+            dimension 'vendor'
+            minSdkVersion 21
+            applicationId 'com.release.digiosmosis'
+            targetSdkVersion 25
+            testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+            versionCode 1
+            versionName '1.0'
+        }
+        digiOsmosis_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.idogic.com/rest/\""
+        }
+        digiOsmosis_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
     }
 }
 
@@ -177,6 +193,21 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    /*Avoid defaultFlavor to digiosmosis combination for both debug & release mode.*/
+
+    if (vendor.equals('defaultFlavor') && environment.equals('digiOsmosis_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('digiOsmosis_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('digiOsmosis_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('digiOsmosis_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered vishwamtv variant.
      */
@@ -215,6 +246,19 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     if (vendor.equals('vishwamtv') && environment.equals('aatto_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('vishwamtv') && environment.equals('digiOsmosis_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('digiOsmosis_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('digiOsmosis_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('digiOsmosis_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
 
@@ -260,6 +304,19 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    if (vendor.equals('newthoughtchannel') && environment.equals('digiOsmosis_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('digiOsmosis_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('digiOsmosis_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('digiOsmosis_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
 
     /**
      * Filtered aattoo variant.
@@ -301,6 +358,74 @@ android.variantFilter { variant ->
     if (vendor.equals('aatto') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+    if (vendor.equals('aatto') && environment.equals('digiOsmosis_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('digiOsmosis_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('digiOsmosis_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('digiOsmosis_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+
+
+    /**
+     * Filtered digiosmosis variant.
+     */
+    if (vendor.equals('digiOsmosis') && environment.equals('defaultFlavor_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('defaultFlavor_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('digiOsmosis') && environment.equals('defaultFlavor_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('defaultFlavor_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('vishwamtv_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('vishwamtv_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('vishwamtv_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('vishwamtv_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('newthoughtchannel_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('newthoughtchannel_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('newthoughtchannel_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('aatto_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('aatto_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('aatto_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('aatto_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
 }
 
 
@@ -343,7 +468,7 @@ dependencies {
     compile project(':apisdk')
     compile files('libs/wasabi.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')
-    compile ('com.spotxchange:spotx-sdk-android:3.1.+') {
+    compile('com.spotxchange:spotx-sdk-android:3.1.+') {
         transitive = false
     }
     compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.6.0'
