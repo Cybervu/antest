@@ -1,4 +1,5 @@
 package player.activity;
+
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.DownloadManager;
@@ -39,6 +40,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
@@ -56,6 +58,16 @@ import android.widget.Toast;
 import com.androidquery.AQuery;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.google.ads.interactivemedia.v3.api.AdDisplayContainer;
+import com.google.ads.interactivemedia.v3.api.AdErrorEvent;
+import com.google.ads.interactivemedia.v3.api.AdEvent;
+import com.google.ads.interactivemedia.v3.api.AdsLoader;
+import com.google.ads.interactivemedia.v3.api.AdsManager;
+import com.google.ads.interactivemedia.v3.api.AdsManagerLoadedEvent;
+import com.google.ads.interactivemedia.v3.api.AdsRequest;
+import com.google.ads.interactivemedia.v3.api.ImaSdkFactory;
+import com.google.ads.interactivemedia.v3.api.player.ContentProgressProvider;
+import com.google.ads.interactivemedia.v3.api.player.VideoProgressUpdate;
 import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.MediaInfo;
@@ -153,9 +165,11 @@ enum ContentTypes3 {
     }
 }
 
-public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener, PlaylistProxyListener {
+public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener, PlaylistProxyListener, AdEvent.AdEventListener, AdErrorEvent.AdErrorListener {
+
     PlaylistProxy playerProxy;
     int played_length = 0;
+    String adDetails[];
     int playerStartPosition = 0;
     boolean censor_layout = true;
 
@@ -175,7 +189,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     static String filename, path;
     ArrayList<ContactModel1> dmanager;
     AsynWithdrm asynWithdrm;
-    ContactModel1 audio,audio_1;
+    ContactModel1 audio, audio_1;
     DBHelper dbHelper;
     public Handler exoplayerdownloadhandler;
     public long enqueue;
@@ -183,7 +197,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     ProgressBar Progress;
     TextView percentg;
     private static final int REQUEST_STORAGE = 1;
-    File mediaStorageDir,mediaStorageDir1;
+    File mediaStorageDir, mediaStorageDir1;
 
     String mlvfile = "";
     String token = "";
@@ -263,7 +277,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     long PreviousUsedData_By_DownloadContent = 0;
 
 
-
     long DataUsedByChrmoeCast = 0;
     long Current_Sesion_DataUsedByChrmoeCast = 0;
 
@@ -303,13 +316,14 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     // =====================End==============================//
 
 
-
     /*----------------chromecast-------------------------------------*/
     View view;
+
     public enum PlaybackLocation {
         LOCAL,
         REMOTE
     }
+
     /**
      * List of various states that we can be in
      */
@@ -340,23 +354,42 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     LinearLayout new_detailsLayout;
 
 
-
     @Override
     protected void onResume() {
+
         super.onResume();
+        if (mAdsManager != null && mIsAdDisplayed) {
+            mAdsManager.resume();
+        } else {
+            Util.app_is_in_player_context = true;
+            Log.v("PINTU", "onresume called");
 
-        Util.app_is_in_player_context = true;
-        Log.v("PINTU","onresume called");
+            if (Util.call_finish_at_onUserLeaveHint) {
 
-        if(Util.call_finish_at_onUserLeaveHint)
-        {
-
-            SensorOrientationChangeNotifier.getInstance(MyLibraryPlayer.this).addListener(MyLibraryPlayer.this);
-            AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
-            asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+                SensorOrientationChangeNotifier.getInstance(MyLibraryPlayer.this).addListener(MyLibraryPlayer.this);
+                AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
+                asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+            }
         }
-
     }
+
+    ProgressBarHandler mDialog;
+    // private SampleVideoPlayer mVideoPlayer;
+
+    // The container for the ad's UI.
+    private ViewGroup mAdUiContainer;
+
+    // Factory class for creating SDK objects.
+    private ImaSdkFactory mSdkFactory;
+
+    // The AdsLoader instance exposes the requestAds method.
+    private AdsLoader mAdsLoader;
+
+    // AdsManager exposes methods to control ad playback and listen to ad events.
+    private AdsManager mAdsManager;
+
+    // Whether an ad is displayed.
+    private boolean mIsAdDisplayed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -364,6 +397,27 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         setContentView(R.layout.activity_final_exoplayer);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+
+        mAdUiContainer = (ViewGroup) findViewById(R.id.videoPlayerWithAdPlayback);
+
+        // setContentView(layout);
+        mSdkFactory = ImaSdkFactory.getInstance();
+        mAdsLoader = mSdkFactory.createAdsLoader(this);
+        // Add listeners for when ads are loaded and for errors.
+        mAdsLoader.addAdErrorListener(this);
+        mAdsLoader.addAdsLoadedListener(new AdsLoader.AdsLoadedListener() {
+            @Override
+            public void onAdsManagerLoaded(AdsManagerLoadedEvent adsManagerLoadedEvent) {
+                // Ads were successfully loaded, so get the AdsManager instance. AdsManager has
+                // events for ad playback and errors.
+                mAdsManager = adsManagerLoadedEvent.getAdsManager();
+
+                // Attach event and error event listeners.
+                mAdsManager.addAdErrorListener(MyLibraryPlayer.this);
+                mAdsManager.addAdEventListener(MyLibraryPlayer.this);
+                mAdsManager.init();
+            }
+        });
 
         if (playerModel.getVideoUrl().contains(".mpd")) {
             isDrm = true;
@@ -401,14 +455,14 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 }
             }
-        }else
+        } else
             backCalled();
 
         content_types_id = playerModel.getContentTypesId();
         played_length = playerModel.getPlayPos() * 1000;
         current_played_length = played_length;
         PreviousUsedDataByApp(true);
-        PreviousUsedData_By_DownloadContent =  DataUsedByDownloadContent();
+        PreviousUsedData_By_DownloadContent = DataUsedByDownloadContent();
 
         /********* Offline********/
 
@@ -424,13 +478,13 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
 
         exoplayerdownloadhandler = new Handler();
-        dbHelper=new DBHelper(MyLibraryPlayer.this);
+        dbHelper = new DBHelper(MyLibraryPlayer.this);
         dbHelper.getWritableDatabase();
-        audio_1 = dbHelper.getContact(playerModel.getStreamUniqueId()+emailIdStr);
+        audio_1 = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
 
         if (audio_1 != null) {
             if (audio_1.getUSERNAME().trim().equals(emailIdStr.trim())) {
-                checkDownLoadStatusFromDownloadManager1(audio_1,false);
+                checkDownLoadStatusFromDownloadManager1(audio_1, false);
             }
         }
 
@@ -444,7 +498,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         //Check for offline content // Added By sanjay
         mediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
         download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
-        if (content_types_id!=4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
+        if (content_types_id != 4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
             download_layout.setVisibility(View.VISIBLE);
         }
 
@@ -462,7 +516,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(MyLibraryPlayer.this, savedInstanceState);
         mCastSession = CastContext.getSharedInstance(MyLibraryPlayer.this).getSessionManager().getCurrentCastSession();
         mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
-
 
 
         boolean shouldStartPlayback = false;
@@ -497,7 +550,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
         a.recycle();
         DrawableCompat.setTint(drawable, getResources().getColor(R.color.resumeTitleTextColor));
-
 
 
         CastButtonFactory.setUpMediaRouteButton(MyLibraryPlayer.this, mediaRouteButton);
@@ -561,7 +613,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         if (playerModel.getSubTitleName() != null) {
             SubTitleName = playerModel.getSubTitleName();
 
-            Log.v("BIBHU1","SubTitleName = "+SubTitleName.size());
+            Log.v("BIBHU1", "SubTitleName = " + SubTitleName.size());
 
         } else {
             SubTitleName.clear();
@@ -569,7 +621,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         if (playerModel.getSubTitlePath() != null) {
             SubTitlePath = playerModel.getSubTitlePath();
-            Log.v("BIBHU1","SubTitlePath = "+SubTitlePath.size());
+            Log.v("BIBHU1", "SubTitlePath = " + SubTitlePath.size());
         } else {
             SubTitlePath.clear();
         }
@@ -577,9 +629,14 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         //===============================This is used for Resolution Change ===================================//
 
-        if(!isDrm)
-        {
+        if (!isDrm) {
             Util.VideoResolution = "Auto";
+
+            if (playerModel.getMidRoll() == 1) {
+
+                adDetails = playerModel.getAdDetails().split(",");
+
+            }
 
             if (playerModel.getResolutionFormat() != null) {
                 ResolutionFormat = playerModel.getResolutionFormat();
@@ -594,8 +651,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 ResolutionUrl.clear();
             }
 
-            if (ResolutionUrl.size() < 1)
-            {
+            if (ResolutionUrl.size() < 1) {
                 Log.v("SUBHA", "resolution image Invisible called");
             } else {
                 ResolutionUrl.add(playerModel.getVideoUrl().trim());
@@ -614,7 +670,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     Log.v("BIBHU", "RESOLUTION URL======" + ResolutionUrl.get(n));
                 }
             }
-
 
 
         }
@@ -640,7 +695,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         }
 
 
-
         subtitle_change_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -648,15 +702,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 try {
                     Util.call_finish_at_onUserLeaveHint = false;
 
-                    if(isDrm)
-                    {
+                    if (isDrm) {
                         Intent intent = new Intent(MyLibraryPlayer.this, SubtitleList.class);
                         intent.putExtra("SubTitleName", SubTitleName);
                         intent.putExtra("SubTitlePath", SubTitlePath);
                         startActivityForResult(intent, 222);
-                    }
-                    else
-                    {
+                    } else {
                         Intent intent = new Intent(MyLibraryPlayer.this, Subtitle_Resolution.class);
                         intent.putExtra("ResolutionFormat", ResolutionFormat);
                         intent.putExtra("ResolutionUrl", ResolutionUrl);
@@ -894,7 +945,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 current_time.setVisibility(View.VISIBLE);
                 updateProgressBar();
 
-                Log.v("BIBHU11","stop tracking called");
+                Log.v("BIBHU11", "stop tracking called");
 
                 // Changed due to New VoideoLogApi
 
@@ -1135,6 +1186,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                         }
 
                         PreviousUsedDataByApp(false);
+                        requestAds(playerModel.getChannel_id());
                         emVideoView.start();
                         updateProgressBar();
                     } else {
@@ -1144,11 +1196,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                             ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
                             Util.call_finish_at_onUserLeaveHint = false;
 
-                            Intent resumeIntent = new Intent(MyLibraryPlayer.this,ResumePopupActivity.class);
+                            Intent resumeIntent = new Intent(MyLibraryPlayer.this, ResumePopupActivity.class);
                             startActivityForResult(resumeIntent, 1001);
                         } else {
 
                             PreviousUsedDataByApp(false);
+                            requestAds(playerModel.getChannel_id());
                             emVideoView.start();
                             seekBar.setProgress(emVideoView.getCurrentPosition());
                             updateProgressBar();
@@ -1232,11 +1285,11 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
 
         	/*
-		 * create a playlist proxy url and pass it to the native player
+         * create a playlist proxy url and pass it to the native player
 		 */
         try {
-			/*
-			 * Note that the MediaSourceType must be adapted to the stream type
+            /*
+             * Note that the MediaSourceType must be adapted to the stream type
 			 * (DASH or HLS). Similarly,
 			 * the MediaSourceParams need to be set according to the media type
 			 * if MediaSourceType is SINGLE_FILE
@@ -1246,7 +1299,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             PlaylistProxy.MediaSourceParams params = new PlaylistProxy.MediaSourceParams();
             params.sourceContentType = contentType
                     .getMediaSourceParamsContentType();
-			/*
+            /*
 			 * if the content has separate audio tracks (eg languages) you may
 			 * select one using MediaSourceParams, eg params.language="es";
 			 */
@@ -1296,8 +1349,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     }
                 } else {
 
-                    if(isDrm)
-                    {
+                    if (isDrm) {
                         // This is applicable for DRM content.
 
                         List_Of_Resolution_Format.clear();
@@ -1308,17 +1360,13 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                         asynWithdrm = new AsynWithdrm();
                         asynWithdrm.executeOnExecutor(threadPoolExecutor);
-                    }
-                    else
-                    {
+                    } else {
                         // This is applicable for NON-DRM contnet.
 
                         List_Of_Resolution_Url.clear();
                         List_Of_FileSize.clear();
-                        if(List_Of_Resolution_Url.size()>0)
-                        {
-                            for(int i=1;i<List_Of_Resolution_Url.size();i++)
-                            {
+                        if (List_Of_Resolution_Url.size() > 0) {
+                            for (int i = 1; i < List_Of_Resolution_Url.size(); i++) {
                                 List_Of_Resolution_Url.add(playerModel.ResolutionUrl.get(i));
                             }
 
@@ -1326,13 +1374,11 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                             pDialog_for_gettig_filesize.show();
 
                             new DetectDownloadingFileSize().execute();
-                        }
-                        else{
+                        } else {
                             new DownloadFileFromURL().execute(playerModel.getVideoUrl());
                         }
 
                     }
-
 
 
                     if (playerModel.getOfflineUrl().size() > 0) {
@@ -1366,7 +1412,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                                         public void onClick(DialogInterface dialog, int id) {
                                                             dialog.cancel();
                                                             downloading = false;
-                                                            audio = dbHelper.getContact(playerModel.getStreamUniqueId()+emailIdStr);
+                                                            audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
 
                                                             if (audio != null) {
 
@@ -1377,7 +1423,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                                                 dbHelper.deleteRecord(audio);
 
                                                                 SQLiteDatabase DB = MyLibraryPlayer.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-                                                                String query = "DELETE FROM " + DBHelper.DOWNLOAD_CONTENT_INFO+ " WHERE download_contnet_id = '"+enqueue+"'";
+                                                                String query = "DELETE FROM " + DBHelper.DOWNLOAD_CONTENT_INFO + " WHERE download_contnet_id = '" + enqueue + "'";
                                                                 DB.execSQL(query);
 
                                                             }
@@ -1439,55 +1485,50 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 httppost.addHeader("device_type", "2");
                 httppost.addHeader("log_id", videoLogId);
 
-                Log.v("BIBHU6","authToken="+Util.authTokenStr.trim());
-                Log.v("BIBHU6","user_id="+userIdStr.trim());
-                Log.v("BIBHU6","ip_address="+ipAddressStr.trim());
-                Log.v("BIBHU6","movie_id="+movieId.trim());
-                Log.v("BIBHU6","episode_id="+episodeId.trim());
-                Log.v("BIBHU6","played_length="+String.valueOf(playerPosition));
-                Log.v("BIBHU6","watch_status="+watchStatus);
-                Log.v("BIBHU6","device_type="+"2");
-                Log.v("BIBHU6","log_id="+videoLogId);
+                Log.v("BIBHU6", "authToken=" + Util.authTokenStr.trim());
+                Log.v("BIBHU6", "user_id=" + userIdStr.trim());
+                Log.v("BIBHU6", "ip_address=" + ipAddressStr.trim());
+                Log.v("BIBHU6", "movie_id=" + movieId.trim());
+                Log.v("BIBHU6", "episode_id=" + episodeId.trim());
+                Log.v("BIBHU6", "played_length=" + String.valueOf(playerPosition));
+                Log.v("BIBHU6", "watch_status=" + watchStatus);
+                Log.v("BIBHU6", "device_type=" + "2");
+                Log.v("BIBHU6", "log_id=" + videoLogId);
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION,DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
                     httppost.addHeader("is_streaming_restriction", "1");
                     httppost.addHeader("restrict_stream_id", restrict_stream_id);
 
-                    Log.v("BIBHU6","is_streaming_restriction="+"1");
-                    Log.v("BIBHU6","restrict_stream_id="+restrict_stream_id);
+                    Log.v("BIBHU6", "is_streaming_restriction=" + "1");
+                    Log.v("BIBHU6", "restrict_stream_id=" + restrict_stream_id);
                 }
 
                 // Following code is changed due to NewVideoLog API ;
 
-                httppost.addHeader("played_length", ""+(playerPosition - player_start_time));
+                httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
                 httppost.addHeader("log_temp_id", log_temp_id);
-                httppost.addHeader("resume_time", ""+(playerPosition));
+                httppost.addHeader("resume_time", "" + (playerPosition));
 
-                Log.v("BIBHU", "player_start_time===*****************========="+player_start_time);
-                Log.v("BIBHU", "playerPosition======***************8======"+playerPosition);
+                Log.v("BIBHU", "player_start_time===*****************=========" + player_start_time);
+                Log.v("BIBHU", "playerPosition======***************8======" + playerPosition);
 
 
-                Log.v("BIBHU", "played_length============"+(playerPosition - player_start_time));
-                Log.v("BIBHU", "log_temp_id============"+log_temp_id);
-                Log.v("BIBHU", "resume_time============"+(playerPosition));
-                Log.v("BIBHU", "playerPosition============"+playerPosition);
-                Log.v("BIBHU", "log_id============"+videoLogId);
+                Log.v("BIBHU", "played_length============" + (playerPosition - player_start_time));
+                Log.v("BIBHU", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU", "resume_time============" + (playerPosition));
+                Log.v("BIBHU", "playerPosition============" + playerPosition);
+                Log.v("BIBHU", "log_id============" + videoLogId);
 
-                Log.v("BIBHU", "user_id============"+userIdStr.trim());
-                Log.v("BIBHU", "movieId.trim()============"+movieId.trim());
-                Log.v("BIBHU", "episodeId.trim()============"+episodeId.trim());
-                Log.v("BIBHU", "watchStatus============"+watchStatus);
-                Log.v("BIBHU", "restrict_stream_id============"+restrict_stream_id);
-
+                Log.v("BIBHU", "user_id============" + userIdStr.trim());
+                Log.v("BIBHU", "movieId.trim()============" + movieId.trim());
+                Log.v("BIBHU", "episodeId.trim()============" + episodeId.trim());
+                Log.v("BIBHU", "watchStatus============" + watchStatus);
+                Log.v("BIBHU", "restrict_stream_id============" + restrict_stream_id);
 
 
                 //===============End=============================//
-
-
-
-
 
 
                 // Execute HTTP Post Request
@@ -1573,7 +1614,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         //stop the timer, if it's not already null
         if (timer != null) {
 
-            Log.v("BIBHU","=======================================stoptimertask caled=================================");
+            Log.v("BIBHU", "=======================================stoptimertask caled=================================");
 
             timer.cancel();
             timer = null;
@@ -1662,7 +1703,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 httppost.addHeader("device_type", "2");
                 httppost.addHeader("log_id", videoLogId);
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION,DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
 
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
                     httppost.addHeader("is_streaming_restriction", "1");
@@ -1671,18 +1712,17 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 // Following code is changed due to NewVideoLog API ;
 
-                httppost.addHeader("played_length", ""+(playerPosition - player_start_time));
+                httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
                 httppost.addHeader("log_temp_id", log_temp_id);
-                httppost.addHeader("resume_time", ""+(playerPosition));
+                httppost.addHeader("resume_time", "" + (playerPosition));
 
 
-                Log.v("BIBHU11", "played_length============"+(playerPosition - player_start_time));
+                Log.v("BIBHU11", "played_length============" + (playerPosition - player_start_time));
 
 
-
-                Log.v("BIBHU11", "log_temp_id============"+log_temp_id);
-                Log.v("BIBHU11", "resume_time============"+(playerPosition));
-                Log.v("BIBHU11", "log_id============"+videoLogId);
+                Log.v("BIBHU11", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU11", "resume_time============" + (playerPosition));
+                Log.v("BIBHU11", "log_id============" + videoLogId);
 
                 //===============End=============================//
 
@@ -1889,7 +1929,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         public void run() {
 
 
-            if(emVideoView.getCurrentPosition() % 2 == 0)
+            if (emVideoView.getCurrentPosition() % 2 == 0)
                 BufferBandWidth();
 
             current_played_length = emVideoView.getCurrentPosition();
@@ -1947,6 +1987,41 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 previous_matching_time = current_matching_time;
                 ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+
+                if (playerModel.getMidRoll() == 1) {
+
+                    if (adDetails != null && adDetails.length > 0) {
+                        for (int i = 0; i < adDetails.length; i++) {
+                            Log.v("SUBHA", "SEC" + (int) (TimeUnit.MILLISECONDS.toSeconds(emVideoView.getCurrentPosition())));
+                            Log.v("SUBHA", "Integer.parseInt(adDetails[i])" + Integer.parseInt(adDetails[i]));
+
+                            if ((int) (TimeUnit.MILLISECONDS.toSeconds(emVideoView.getCurrentPosition())) > 0 && ((int) (TimeUnit.MILLISECONDS.toSeconds(emVideoView.getCurrentPosition())) == Integer.parseInt(adDetails[i]))) {
+                                if (Util.checkNetwork(MyLibraryPlayer.this)) {
+                                    //Will Add Some Data to send
+                                    Util.call_finish_at_onUserLeaveHint = false;
+                                    Util.hide_pause = true;
+                                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                                    latest_center_play_pause.setVisibility(View.VISIBLE);
+
+                                    if (emVideoView.isPlaying()) {
+                                        emVideoView.pause();
+                                        latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
+                                        center_play_pause.setImageResource(R.drawable.ic_media_play);
+                                        mHandler.removeCallbacks(updateTimeTask);
+                                    }
+                                    Intent adIntent = new Intent(MyLibraryPlayer.this, AdPlayerActivity.class);
+                                    adIntent.putExtra("fromAd", "fromAd");
+                                    adIntent.putExtra("PlayerModel", playerModel);
+                                    startActivity(adIntent);
+
+                                } else {
+                                    Toast.makeText(getApplicationContext(), Util.getTextofLanguage(MyLibraryPlayer.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
         }
@@ -2091,7 +2166,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             timer = null;
         }
 
-        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION,DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1") && Util.call_finish_at_onUserLeaveHint) {
+        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1") && Util.call_finish_at_onUserLeaveHint) {
 
 
             AsyncResumeVideoLogDetails_HomeClicked asyncResumeVideoLogDetails_homeClicked = new AsyncResumeVideoLogDetails_HomeClicked();
@@ -2100,7 +2175,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         if (Util.call_finish_at_onUserLeaveHint) {
 
-            Log.v("BIBHU6","finish activity");
+            Log.v("BIBHU6", "finish activity");
 
             Util.call_finish_at_onUserLeaveHint = true;
 
@@ -2120,13 +2195,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     public void Execute_Pause_Play() {
 
 
-        if (mCastSession != null && mCastSession.isConnected())
-        {
-            if(remoteMediaClient.isPlaying()){
+        if (mCastSession != null && mCastSession.isConnected()) {
+            if (remoteMediaClient.isPlaying()) {
                 remoteMediaClient.pause();
                 return;
             }
-            if(remoteMediaClient.isPaused()) {
+            if (remoteMediaClient.isPaused()) {
                 remoteMediaClient.play();
                 return;
             }
@@ -2274,7 +2348,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 */
 
 
-
     private class AsyncResumeVideoLogDetails extends AsyncTask<Void, Void, Void> {
         //  ProgressDialog pDialog;
         String responseStr;
@@ -2307,7 +2380,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 httppost.addHeader("watch_status", watchSt);
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION,DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
 
                     httppost.addHeader("is_streaming_restriction", "1");
@@ -2317,14 +2390,14 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 // Following code is changed due to NewVideoLog API ;
 
-                httppost.addHeader("played_length", ""+(playerPosition - player_start_time));
+                httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
                 httppost.addHeader("log_temp_id", log_temp_id);
-                httppost.addHeader("resume_time", ""+(playerPosition));
+                httppost.addHeader("resume_time", "" + (playerPosition));
 
-                Log.v("BIBHU11", "played_length============"+(playerPosition - player_start_time));
-                Log.v("BIBHU11", "log_temp_id============"+log_temp_id);
-                Log.v("BIBHU11", "resume_time============"+(playerPosition));
-                Log.v("BIBHU11", "log_id============"+videoLogId);
+                Log.v("BIBHU11", "played_length============" + (playerPosition - player_start_time));
+                Log.v("BIBHU11", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU11", "resume_time============" + (playerPosition));
+                Log.v("BIBHU11", "log_id============" + videoLogId);
 
                 //===============End=============================//
 
@@ -2396,6 +2469,18 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             if (emVideoView != null) {
                 emVideoView.release();
             }
+            if (video_completed == true) {
+                Log.v("SUBHA", "CALLED");
+                if (playerModel.getPostRoll() == 1) {
+                    Intent adIntent = new Intent(MyLibraryPlayer.this, AdPlayerActivity.class);
+                    adIntent.putExtra("PlayerModel", playerModel);
+                    adIntent.putExtra("fromAd", "fromAd");
+                    startActivity(adIntent);
+
+                    finish();
+                    overridePendingTransition(0, 0);
+                }
+            }
             finish();
             overridePendingTransition(0, 0);
             //startTimer();
@@ -2443,7 +2528,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 httppost.addHeader("watch_status", watchSt);
 
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION,DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
 
                     httppost.addHeader("is_streaming_restriction", "1");
@@ -2454,15 +2539,15 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 // Following code is changed due to NewVideoLog API ;
 
-                httppost.addHeader("played_length", ""+(playerPosition - player_start_time));
+                httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
                 httppost.addHeader("log_temp_id", log_temp_id);
-                httppost.addHeader("resume_time", ""+(playerPosition));
+                httppost.addHeader("resume_time", "" + (playerPosition));
 
 
-                Log.v("BIBHU11", "played_length============"+(playerPosition - player_start_time));
-                Log.v("BIBHU11", "log_temp_id============"+log_temp_id);
-                Log.v("BIBHU11", "resume_time============"+(playerPosition));
-                Log.v("BIBHU11", "log_id============"+videoLogId);
+                Log.v("BIBHU11", "played_length============" + (playerPosition - player_start_time));
+                Log.v("BIBHU11", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU11", "resume_time============" + (playerPosition));
+                Log.v("BIBHU11", "log_id============" + videoLogId);
 
 
                 httppost.addHeader("device_type", "2");
@@ -2548,14 +2633,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         super.onActivityResult(requestCode, resultCode, data);
 
 
-        if(requestCode == 22222)
-        {
+        if (requestCode == 22222) {
 
-            Log.v("BIBHU1111","requestCode="+requestCode+"==========resultCode=="+resultCode);
+            Log.v("BIBHU1111", "requestCode=" + requestCode + "==========resultCode==" + resultCode);
             Util.call_finish_at_onUserLeaveHint = true;
 
-            if(isDrm)
-            {
+            if (isDrm) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(MyLibraryPlayer.this)) {
                     List_Of_Resolution_Format.clear();
                     List_Of_FileSize.clear();
@@ -2566,16 +2649,14 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     asynWithdrm = new AsynWithdrm();
                     asynWithdrm.executeOnExecutor(threadPoolExecutor);
 
-                    Log.v("BIBHU1111","(playerModel.getOfflineUrl()="+(playerModel.getOfflineUrl().size()));
+                    Log.v("BIBHU1111", "(playerModel.getOfflineUrl()=" + (playerModel.getOfflineUrl().size()));
 
 
                     if (playerModel.getOfflineUrl().size() > 0) {
                         Download_SubTitle(playerModel.getOfflineUrl().get(0));
                     }
                 }
-            }
-            else
-            {
+            } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(MyLibraryPlayer.this)) {
                     // This is applicable for NON-DRM contnet.
 
@@ -2640,8 +2721,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             if (requestCode == 222) {
 
 
-                if (mCastSession != null && mCastSession.isConnected())
-                {
+                if (mCastSession != null && mCastSession.isConnected()) {
                     Util.call_finish_at_onUserLeaveHint = false;
                 }
 
@@ -2656,12 +2736,11 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                         active_track_index = "";
 
-                        Log.v("BIBHU","selected trackid===========**"+active_track_index);
+                        Log.v("BIBHU", "selected trackid===========**" + active_track_index);
 
                         // check chromecast is connected or not , if connected then remove the active track id
 
-                        if (mCastSession != null && mCastSession.isConnected())
-                        {
+                        if (mCastSession != null && mCastSession.isConnected()) {
 
                             subtitleText.setText("");
                             remoteMediaClient.setActiveMediaTracks(new long[]{}).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {
@@ -2670,12 +2749,11 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                     if (!mediaChannelResult.getStatus().isSuccess()) {
                                         Log.v("SUBHA", "Failed with status code:" +
                                                 mediaChannelResult.getStatus().getStatusCode());
-                                        Toast.makeText(getApplicationContext(),"failed to off subtitle",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "failed to off subtitle", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
                         }
-
 
 
                     } else {
@@ -2686,15 +2764,14 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                             subsFetchTask = new SubtitleProcessingTask(data.getStringExtra("position"));
                             subsFetchTask.execute();
 
-                            active_track_index =(Integer.parseInt(data.getStringExtra("position")) - 1)+"";
+                            active_track_index = (Integer.parseInt(data.getStringExtra("position")) - 1) + "";
                             int id = Integer.parseInt(active_track_index);
 
-                            Log.v("BIBHU"," trackid==========="+id);
+                            Log.v("BIBHU", " trackid===========" + id);
 
                             // check chromecast is connected or not , if connected then remove the active track id
 
-                            if (mCastSession != null && mCastSession.isConnected())
-                            {
+                            if (mCastSession != null && mCastSession.isConnected()) {
                                 subtitleText.setText("");
                                 remoteMediaClient.setActiveMediaTracks(new long[]{id}).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {
                                     @Override
@@ -2702,7 +2779,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                         if (!mediaChannelResult.getStatus().isSuccess()) {
                                             Log.v("SUBHA", "Failed with status code:" +
                                                     mediaChannelResult.getStatus().getStatusCode());
-                                            Toast.makeText(getApplicationContext(),"failed to set subtitle",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(), "failed to set subtitle", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
@@ -2727,17 +2804,17 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         mCastContext.getSessionManager().removeSessionManagerListener(mSessionManagerListener, CastSession.class);
 
         Util.app_is_in_player_context = false;
-        Log.v("BIBHU","***********************************************************************************Ondestory called");
+        Log.v("BIBHU", "***********************************************************************************Ondestory called");
 
         Util.hide_pause = false;
 
 
-        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION,DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1") && Util.Call_API_For_Close_Streming) {
+        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1") && Util.Call_API_For_Close_Streming) {
 
             Util.Call_API_For_Close_Streming = false;
             Log.v("BIBHU", "==============Ondestory of Exoplyer called============");
 
-            if(!video_completed_at_chromecast) {
+            if (!video_completed_at_chromecast) {
                 AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
                 asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
             }
@@ -2756,7 +2833,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         public SubtitleProcessingTask(String path) {
 
             Subtitle_Path = SubTitlePath.get((Integer.parseInt(path) - 1));
-            Log.v("BIBHU1","SubTitlePath=============="+SubTitlePath.get((Integer.parseInt(path) - 1)));
+            Log.v("BIBHU1", "SubTitlePath==============" + SubTitlePath.get((Integer.parseInt(path) - 1)));
         }
 
         @Override
@@ -2778,11 +2855,11 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                         R.raw.subtitle);*/
 
                 if (callWithoutCaption) {
-                    Log.v("BIBHU1","SubTitlePath==============callWithoutCaption");
+                    Log.v("BIBHU1", "SubTitlePath==============callWithoutCaption");
                     FormatSRT_WithoutCaption formatSRT = new FormatSRT_WithoutCaption();
                     srt = formatSRT.parseFile("sample", fIn);
                 } else {
-                    Log.v("BIBHU1","SubTitlePath==============callWithCaption");
+                    Log.v("BIBHU1", "SubTitlePath==============callWithCaption");
 
                     FormatSRT formatSRT = new FormatSRT();
                     srt = formatSRT.parseFile("sample", fIn);
@@ -2838,7 +2915,18 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
     @Override
     protected void onPause() {
-        Log.v("PINTU","onPause called");
+        /*if (subtitleDisplayHandler != null) {
+            subtitleDisplayHandler.removeCallbacks(subtitleProcessesor);
+            subtitleDisplayHandler = null;
+            if (subsFetchTask != null)
+                subsFetchTask.cancel(true);
+        }*/
+        if (mAdsManager != null && mIsAdDisplayed) {
+            mAdsManager.pause();
+        } else {
+            Util.call_finish_at_onUserLeaveHint = false;
+            emVideoView.pause();
+        }
         super.onPause();
     }
 
@@ -2936,7 +3024,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     }
 
 
-
     // Added for Bandwidth Log
 
     public void BufferBandWidth() {
@@ -2970,7 +3057,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                     }
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
 
@@ -2980,7 +3067,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
     public void PreviousUsedDataByApp(boolean status) {
 
-        try{
+        try {
 
             long prev_data = 0;
             PackageManager pm = getPackageManager();
@@ -2991,19 +3078,15 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     int uid = pi.applicationInfo.uid;
                     prev_data = (TrafficStats.getUidRxBytes(uid) + TrafficStats.getUidTxBytes(uid)) / 1024;
 
-                    if(status)
-                    {
+                    if (status) {
                         PreviousUsedData = prev_data;
                         Log.v("BIBHU", "PreviousUsedDataByApp  true===========================" + (appName + " : " + PreviousUsedData + "KB"));
 
-                    }
-                    else
-                    {
-                        Log.v("BIBHU", "*************** false===========================prev_data= " + prev_data+" KB==========CurrentUsedData= "+CurrentUsedData+" KB");
+                    } else {
+                        Log.v("BIBHU", "*************** false===========================prev_data= " + prev_data + " KB==========CurrentUsedData= " + CurrentUsedData + " KB");
 
 
-
-                        PreviousUsedData =  ((prev_data - PreviousUsedData) - CurrentUsedData)+ PreviousUsedData;
+                        PreviousUsedData = ((prev_data - PreviousUsedData) - CurrentUsedData) + PreviousUsedData;
                         Log.v("BIBHU", "PreviousUsedDataByApp false===========================" + (appName + " : " + PreviousUsedData + "KB"));
 
                     }
@@ -3011,7 +3094,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 }
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -3050,7 +3133,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                             }
                         }
 
-                        Log.v("BIBHU11", "  TotalUsedData Download size============" + Total +"KB");
+                        Log.v("BIBHU11", "  TotalUsedData Download size============" + Total + "KB");
 
                     } while (cursor.moveToNext());
                 }
@@ -3091,11 +3174,10 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 httppost.addHeader("location", Location);
                 httppost.addHeader("video_type", "mped_dash");
 
-                if(videoBufferLogUniqueId.equals("0"))
+                if (videoBufferLogUniqueId.equals("0"))
                     httppost.addHeader("totalBandwidth", "0");
                 else
-                    httppost.addHeader("totalBandwidth", ""+(CurrentUsedData + DataUsedByChrmoeCast));
-
+                    httppost.addHeader("totalBandwidth", "" + (CurrentUsedData + DataUsedByChrmoeCast));
 
 
                 Log.v("BIBHU", "Response of the bufferlog totalBandwidth======#############=" + (CurrentUsedData + DataUsedByChrmoeCast));
@@ -3158,7 +3240,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 videoBufferLogUniqueId = "0";
                 Location = "0";
             }
-            if(!watchStatus.equals("complete"))
+            if (!watchStatus.equals("complete"))
                 startTimer();
 
             return;
@@ -3233,13 +3315,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                         if ((mainJson.has("multiple_resolution")) && mainJson.getString("multiple_resolution").trim() != null && !mainJson.getString("multiple_resolution").trim().isEmpty() && !mainJson.getString("multiple_resolution").trim().equals("null") && !mainJson.getString("multiple_resolution").trim().matches("")) {
                             JSONArray jsonArray = mainJson.optJSONArray("multiple_resolution");
 
-                            for(int i=0 ;i<jsonArray.length();i++)
-                            {
+                            for (int i = 0; i < jsonArray.length(); i++) {
 
-                                if(jsonArray.getJSONObject(i).optString("resolution").trim().contains("BEST"))
+                                if (jsonArray.getJSONObject(i).optString("resolution").trim().contains("BEST"))
                                     List_Of_Resolution_Format.add(jsonArray.getJSONObject(i).optString("resolution"));
                                 else
-                                    List_Of_Resolution_Format.add(jsonArray.getJSONObject(i).optString("resolution")+"p");
+                                    List_Of_Resolution_Format.add(jsonArray.getJSONObject(i).optString("resolution") + "p");
 
                                 List_Of_Resolution_Url.add(jsonArray.getJSONObject(i).optString("url"));
                                 List_Of_Resolution_Url_Used_For_Download.add(jsonArray.getJSONObject(i).optString("url"));
@@ -3260,7 +3341,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     responseStr = "0";
                 }
 
-            }catch (Exception e) {
+            } catch (Exception e) {
                 responseCode = 0;
             }
 
@@ -3277,7 +3358,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 }
             }
 
-            licensetoken = mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis()+".xml";
+            licensetoken = mediaStorageDir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".xml";
             OutputStream output = null;
             try {
                 output = new FileOutputStream(licensetoken);
@@ -3326,15 +3407,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 //MyLibraryPlayer.this portion is changed later because of multiple download option.
 
-                if(List_Of_Resolution_Url.size()>0)
-                {
+                if (List_Of_Resolution_Url.size() > 0) {
                     pDialog_for_gettig_filesize = new ProgressBarHandler(MyLibraryPlayer.this);
                     pDialog_for_gettig_filesize.show();
 
                     new DetectDownloadingFileSize().execute();
-                }
-                else
-                {
+                } else {
                     new DownloadFileFromURL().execute(mlvfile);
 
                 }
@@ -3384,11 +3462,10 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 DefaultHttpClient client = new DefaultHttpClient();
                 HttpGet httpGet = new HttpGet(f_url[0]);
                 HttpResponse execute = client.execute(httpGet);
-                float size = (Float.parseFloat(""+execute.getEntity().getContentLength())/1024)/1024 ;
+                float size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
                 DecimalFormat decimalFormat = new DecimalFormat("#.#");
                 size = Float.valueOf(decimalFormat.format(size));
-                lengthfile = (int)size;
-
+                lengthfile = (int) size;
 
 
             } catch (Exception e) {
@@ -3415,7 +3492,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MyLibraryPlayer.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setTitle(Util.getTextofLanguage(MyLibraryPlayer.this, Util.WANT_TO_DOWNLOAD, Util.DEFAULT_WANT_TO_DOWNLOAD));
-                dlgAlert.setMessage(playerModel.getVideoTitle() + " "+ "(" + lengh + "MB)");
+                dlgAlert.setMessage(playerModel.getVideoTitle() + " " + "(" + lengh + "MB)");
                 dlgAlert.setPositiveButton(Util.getTextofLanguage(MyLibraryPlayer.this, Util.DOWNLOAD_BUTTON_TITLE, Util.DEFAULT_DOWNLOAD_BUTTON_TITLE), null);
                 dlgAlert.setCancelable(false);
                 dlgAlert.setPositiveButton(Util.getTextofLanguage(MyLibraryPlayer.this, Util.DOWNLOAD_BUTTON_TITLE, Util.DEFAULT_DOWNLOAD_BUTTON_TITLE),
@@ -3454,7 +3531,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         }
     }
 
-    public void checkDownLoadStatusFromDownloadManager1(final ContactModel1 model,final boolean CallAccessPeriodApi) {
+    public void checkDownLoadStatusFromDownloadManager1(final ContactModel1 model, final boolean CallAccessPeriodApi) {
 
         if (model.getDOWNLOADID() != 0) {
             new Thread(new Runnable() {
@@ -3488,12 +3565,11 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                     sendBroadcast(intent);
 
                                     SQLiteDatabase DB = MyLibraryPlayer.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-                                    String query1 = "UPDATE "+DBHelper.DOWNLOAD_CONTENT_INFO+" SET download_status = '1'" +
-                                            " WHERE email = '"+emailIdStr+"' AND download_contnet_id = '"+model.getDOWNLOADID()+"'";
+                                    String query1 = "UPDATE " + DBHelper.DOWNLOAD_CONTENT_INFO + " SET download_status = '1'" +
+                                            " WHERE email = '" + emailIdStr + "' AND download_contnet_id = '" + model.getDOWNLOADID() + "'";
                                     DB.execSQL(query1);
 
-                                    if(isDrm)
-                                    {
+                                    if (isDrm) {
                                         try {
                                             String licenseAcquisitionToken = getActionTokenFromStorage(model.getToken());
                                             com.intertrust.wasabi.jni.Runtime.processServiceToken(licenseAcquisitionToken);
@@ -3507,10 +3583,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                         }
                                     }
 
-                                    if(CallAccessPeriodApi)
-                                    {
+                                    if (CallAccessPeriodApi) {
                                         // Call API to get Access Period and Watch period of download content...
-                                        new AsyncWatchAccessDetails().execute(""+model.getDOWNLOADID());
+                                        new AsyncWatchAccessDetails().execute("" + model.getDOWNLOADID());
                                     }
                                     // Have to unComment
 
@@ -3520,8 +3595,8 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                     model.setDSTATUS(0);
 
                                     SQLiteDatabase DB = MyLibraryPlayer.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-                                    String query1 = "UPDATE "+DBHelper.DOWNLOAD_CONTENT_INFO+" SET download_status = '0'" +
-                                            " WHERE email = '"+emailIdStr+"' AND download_contnet_id = '"+model.getDOWNLOADID()+"'";
+                                    String query1 = "UPDATE " + DBHelper.DOWNLOAD_CONTENT_INFO + " SET download_status = '0'" +
+                                            " WHERE email = '" + emailIdStr + "' AND download_contnet_id = '" + model.getDOWNLOADID() + "'";
                                     DB.execSQL(query1);
 
                                 } else if ((status == DownloadManager.STATUS_PAUSED) ||
@@ -3604,21 +3679,18 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     private void downloadFile(boolean singlefile) {
 
         DownloadManager.Request request;
-        if(singlefile)
-        {
+        if (singlefile) {
             selected_download_format = 0;
-            if(isDrm)
+            if (isDrm)
                 request = new DownloadManager.Request(Uri.parse(mlvfile));
             else
                 request = new DownloadManager.Request(Uri.parse(Util.dataModel.getVideoUrl()));
-        }
-        else
-        {
-            if(isDrm)
+        } else {
+            if (isDrm)
                 request = new DownloadManager.Request(Uri.parse(List_Of_Resolution_Url_Used_For_Download.get(selected_download_format)));
             else
-                request = new DownloadManager.Request(Uri.parse(ResolutionUrl.get(selected_download_format+1)));
-            selected_download_format =  0;
+                request = new DownloadManager.Request(Uri.parse(ResolutionUrl.get(selected_download_format + 1)));
+            selected_download_format = 0;
         }
 
 
@@ -3656,13 +3728,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         contactModel1.setPoster(playerModel.getPosterImageId().trim());
 
 
-        if(isDrm){
+        if (isDrm) {
             contactModel1.setToken(licensetoken);
-            contactModel1.setPath(Environment.getExternalStorageDirectory() + "/Android/data/"+getApplicationContext().getPackageName().trim()+"/WITHDRM/"+timestamp);
-        }
-        else{
+            contactModel1.setPath(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/WITHDRM/" + timestamp);
+        } else {
             contactModel1.setToken(fileExtenstion);
-            contactModel1.setPath(Environment.getExternalStorageDirectory() + "/Android/data/"+getApplicationContext().getPackageName().trim()+"/WITHOUT_DRM/"+timestamp);
+            contactModel1.setPath(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/WITHOUT_DRM/" + timestamp);
         }
 
         contactModel1.setContentid(String.valueOf(playerModel.getContentTypesId()));
@@ -3674,20 +3745,20 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         Log.d("BIBHU", emailIdStr);
 
 
-        audio = dbHelper.getContact(playerModel.getStreamUniqueId()+emailIdStr);
+        audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
         if (audio != null) {
             if (audio.getUSERNAME().trim().equals(emailIdStr.trim())) {
-                checkDownLoadStatusFromDownloadManager1(audio,true);
+                checkDownLoadStatusFromDownloadManager1(audio, true);
             }
         }
 
 
         SQLiteDatabase DB = MyLibraryPlayer.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-        String query1 = "INSERT INTO " + DBHelper.DOWNLOAD_CONTENT_INFO+ "(download_contnet_id,log_id,authtoken,email," +
+        String query1 = "INSERT INTO " + DBHelper.DOWNLOAD_CONTENT_INFO + "(download_contnet_id,log_id,authtoken,email," +
                 "ipaddress,movie_id,episode_id,device_type,download_status,server_sending_final_status) VALUES" +
-                "('"+enqueue+"','0','"+Util.authTokenStr.trim()+"','"+emailIdStr.trim()+"','"+ipAddressStr+"'," +
-                "'"+playerModel.getMovieUniqueId().trim()+"','"+ playerModel.getStreamUniqueId().trim()+"'," +
-                "'"+2+"','2','0')";
+                "('" + enqueue + "','0','" + Util.authTokenStr.trim() + "','" + emailIdStr.trim() + "','" + ipAddressStr + "'," +
+                "'" + playerModel.getMovieUniqueId().trim() + "','" + playerModel.getStreamUniqueId().trim() + "'," +
+                "'" + 2 + "','2','0')";
 
         DB.execSQL(query1);
 
@@ -3703,34 +3774,28 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         // Have to unComment
 
         // MyLibraryPlayer.this code is only responsible for Access period and Watch Period feature on Download Contnet
-        Cursor cursor = DB.rawQuery("SELECT * FROM "+DBHelper.WATCH_ACCESS_INFO+"" +
-                " WHERE email = '"+emailIdStr.trim()+"' AND stream_unique_id = '"+playerModel.getStreamUniqueId()+"'", null);
+        Cursor cursor = DB.rawQuery("SELECT * FROM " + DBHelper.WATCH_ACCESS_INFO + "" +
+                " WHERE email = '" + emailIdStr.trim() + "' AND stream_unique_id = '" + playerModel.getStreamUniqueId() + "'", null);
 
-        if(cursor.getCount()>0)
-        {
-            String query = "UPDATE " + DBHelper.WATCH_ACCESS_INFO+ " SET download_id = '"+enqueue+"' , " +
-                    "stream_unique_id = '"+playerModel.getStreamUniqueId()+"',initial_played_time = '0'," +
-                    "updated_server_current_time = '0' WHERE email = '"+emailIdStr.trim()+"' AND stream_unique_id = '"+playerModel.getStreamUniqueId()+"'";
+        if (cursor.getCount() > 0) {
+            String query = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET download_id = '" + enqueue + "' , " +
+                    "stream_unique_id = '" + playerModel.getStreamUniqueId() + "',initial_played_time = '0'," +
+                    "updated_server_current_time = '0' WHERE email = '" + emailIdStr.trim() + "' AND stream_unique_id = '" + playerModel.getStreamUniqueId() + "'";
             DB.execSQL(query);
 
-            Log.v("BIBHU1234","update called");
+            Log.v("BIBHU1234", "update called");
 
-        }
-        else
-        {
-            String query = "INSERT INTO " + DBHelper.WATCH_ACCESS_INFO+ " (download_id , stream_unique_id , initial_played_time , updated_server_current_time,email) VALUES" +
-                    " ('"+enqueue+"','"+playerModel.getStreamUniqueId()+"','0','0','"+emailIdStr.trim()+"')";
+        } else {
+            String query = "INSERT INTO " + DBHelper.WATCH_ACCESS_INFO + " (download_id , stream_unique_id , initial_played_time , updated_server_current_time,email) VALUES" +
+                    " ('" + enqueue + "','" + playerModel.getStreamUniqueId() + "','0','0','" + emailIdStr.trim() + "')";
             DB.execSQL(query);
 
-            Log.v("BIBHU1234","insert called");
+            Log.v("BIBHU1234", "insert called");
 
         }
 
 
         //=================================End=======================================================//
-
-
-
 
 
     }
@@ -3741,11 +3806,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             ActivityCompat.requestPermissions(MyLibraryPlayer.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE);
         } else {
 
-            if(List_Of_Resolution_Url_Used_For_Download.size()>0)
-            {
+            if (List_Of_Resolution_Url_Used_For_Download.size() > 0) {
                 downloadFile(false);
-            }else
-            {
+            } else {
                 downloadFile(true);
             }
         }
@@ -3810,15 +3873,15 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 }
 
                 SubtitleModel subtitleModel = new SubtitleModel();
-                subtitleModel.setUID(playerModel.getStreamUniqueId()+emailIdStr);
+                subtitleModel.setUID(playerModel.getStreamUniqueId() + emailIdStr);
                 subtitleModel.setLanguage(playerModel.getOfflineLanguage().get(0));
-                String filename = mediaStorageDir1.getAbsolutePath() + "/" + System.currentTimeMillis()+".vtt";
+                String filename = mediaStorageDir1.getAbsolutePath() + "/" + System.currentTimeMillis() + ".vtt";
                 subtitleModel.setPath(filename);
 
-                Log.v("BIBHU3","SubTitleName============"+filename);
+                Log.v("BIBHU3", "SubTitleName============" + filename);
 
                 long rowId = dbHelper.insertRecordSubtittel(subtitleModel);
-                Log.v("BIBHU3","rowId============"+rowId+"sub id ::"+subtitleModel.getUID());
+                Log.v("BIBHU3", "rowId============" + rowId + "sub id ::" + subtitleModel.getUID());
 
                 playerModel.getOfflineLanguage().remove(0);
 
@@ -3837,13 +3900,14 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 input.close();
 
             } catch (Exception e) {
-                Log.v("BIBHU3","error==========="+e.getMessage());
+                Log.v("BIBHU3", "error===========" + e.getMessage());
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
 
             return null;
         }
+
         protected void onProgressUpdate(String... progress) {
         }
 
@@ -3851,13 +3915,13 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         protected void onPostExecute(String file_url) {
 
             playerModel.getOfflineUrl().remove(0);
-            if(playerModel.getOfflineUrl().size()>0)
-            {
+            if (playerModel.getOfflineUrl().size() > 0) {
                 Download_SubTitle(playerModel.getOfflineUrl().get(0).trim());
             }
 
         }
     }
+
     /*****offline *****/
 
 
@@ -3870,8 +3934,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 onApplicationDisconnected();
 
-                if(!Util.app_is_in_player_context)
-                {
+                if (!Util.app_is_in_player_context) {
                     Log.v("BIBHU2", "context not matched");
                     return;
                 }
@@ -3887,7 +3950,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 PreviousUsedDataByApp(false);
                 emVideoView.start();
 
-                if(cast_disconnected_position != 0) {
+                if (cast_disconnected_position != 0) {
 
                     Log.v("BIBHU2", "onSessionEnded===and video log called");
 
@@ -3955,14 +4018,15 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 restrict_stream_id = "0";
 
                 session.getRemoteMediaClient().getMediaInfo().getMetadata();
-                Log.v("BIBHU3", "onSessionEnding==================="+ cast_disconnected_position);
-                Log.v("BIBHU3", "onSessionEnding DataUsedByChrmoeCast==================="+ DataUsedByChrmoeCast);
+                Log.v("BIBHU3", "onSessionEnding===================" + cast_disconnected_position);
+                Log.v("BIBHU3", "onSessionEnding DataUsedByChrmoeCast===================" + DataUsedByChrmoeCast);
 
             }
 
             @Override
             public void onSessionResuming(CastSession session, String sessionId) {
             }
+
             @Override
             public void onSessionSuspended(CastSession session, int reason) {
 
@@ -3988,9 +4052,8 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                             Log.v("bibhu", "onMessageReceived Message from receiver=" + s1);
 
 
-                            if(s1.contains("completed"))
-                            {
-                                video_completed_at_chromecast = true ;
+                            if (s1.contains("completed")) {
+                                video_completed_at_chromecast = true;
                                 Log.v("bibhu", "video completed at chromecast");
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -3998,9 +4061,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                         finish();
                                     }
                                 });
-                            }
-                            else
-                            {
+                            } else {
                                 try {
                                     JSONObject jsonObject = new JSONObject(s1);
                                     videoLogId = jsonObject.optString("video_log_id");
@@ -4024,7 +4085,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
 
 
                 //================================================================================//
@@ -4061,13 +4121,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
 
 
-
                     last_ll.setVisibility(View.GONE);
                     center_play_pause.setVisibility(View.GONE);
                     current_time.setVisibility(View.GONE);
                 }
 
-                if(SubTitlePath.size()>0)
+                if (SubTitlePath.size() > 0)
                     subtitle_change_btn.setVisibility(View.VISIBLE);
                 mediaRouteButton.setVisibility(View.VISIBLE);
                 primary_ll.setVisibility(View.VISIBLE);
@@ -4198,7 +4257,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         remoteMediaClient = mCastSession.getRemoteMediaClient();
 
 
-
         if (remoteMediaClient == null) {
             return;
         }
@@ -4216,8 +4274,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 if (mCastSession != null && mCastSession.isConnected()) {
                     Log.v("BIBHU222", "======" + remoteMediaClient.isPlaying());
 
-                    if(remoteMediaClient.isPlaying())
-                    {
+                    if (remoteMediaClient.isPlaying()) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -4225,9 +4282,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                 latest_center_play_pause.setVisibility(View.VISIBLE);
                             }
                         });
-                    }
-                    else
-                    {
+                    } else {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -4260,7 +4315,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         });
 
 
-
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
 
 
@@ -4290,40 +4344,39 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 jsonObj.put("description", playerModel.getVideoTitle());
                 jsonObj.put("licenseUrl", playerModel.getLicenseUrl());
 
-                jsonObj.put("active_track_index",active_track_index);
+                jsonObj.put("active_track_index", active_track_index);
 
                 //  This Code Is Added For Video Log By Bibhu..
 
                 jsonObj.put("authToken", Util.authTokenStr.trim());
                 jsonObj.put("user_id", userIdStr.trim());
                 jsonObj.put("ip_address", ipAddressStr.trim());
-                jsonObj.put("movie_id",playerModel.getMovieUniqueId());
+                jsonObj.put("movie_id", playerModel.getMovieUniqueId());
                 jsonObj.put("episode_id", playerModel.getEpisode_id());
 
 
-
-                jsonObj.put("watch_status",watchStatus);
+                jsonObj.put("watch_status", watchStatus);
                 jsonObj.put("device_type", "2");
                 jsonObj.put("log_id", videoLogId);
 
-                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION,DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
-                    jsonObj.put("restrict_stream_id",restrict_stream_id);
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                    jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "1");
-                    Log.v("BIBHU4","restrict_stream_id============1");
-                }else{
-                    jsonObj.put("restrict_stream_id",restrict_stream_id);
+                    Log.v("BIBHU4", "restrict_stream_id============1");
+                } else {
+                    jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "0");
-                    Log.v("BIBHU4","restrict_stream_id============0");
+                    Log.v("BIBHU4", "restrict_stream_id============0");
                 }
 
-                jsonObj.put("domain_name",Util.rootUrl().trim().substring(0, Util.rootUrl().trim().length()-6));
+                jsonObj.put("domain_name", Util.rootUrl().trim().substring(0, Util.rootUrl().trim().length() - 6));
                 jsonObj.put("is_log", "1");
 
                 // MyLibraryPlayer.this code is changed according to new Video log //
 
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
-                jsonObj.put("resume_time", ""+(playerPosition));
+                jsonObj.put("resume_time", "" + (playerPosition));
                 jsonObj.put("seek_status", "first_time");
 
 
@@ -4333,24 +4386,24 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 // MyLibraryPlayer.this  Code Is Added For Drm BufferLog By Bibhu ...
 
                 jsonObj.put("resolution", "BEST");
-                jsonObj.put("start_time",String.valueOf(playerPosition));
+                jsonObj.put("start_time", String.valueOf(playerPosition));
                 jsonObj.put("end_time", String.valueOf(playerPosition));
                 jsonObj.put("log_unique_id", videoBufferLogUniqueId);
                 jsonObj.put("bandwidth_log_id", videoBufferLogId);
                 jsonObj.put("location", Location);
 
 
-                if(isDrm) {
+                if (isDrm) {
                     jsonObj.put("video_type", "mped_dash");
-                }else{
+                } else {
                     jsonObj.put("video_type", "");
                 }
 
-                Log.v("BIBHU4","drm_bandwidth_by_sender============"+((CurrentUsedData + DataUsedByChrmoeCast)*1024));
-                Log.v("BIBHU4","CurrentUsedData============"+CurrentUsedData);
-                Log.v("BIBHU4","DataUsedByChrmoeCast============"+DataUsedByChrmoeCast);
+                Log.v("BIBHU4", "drm_bandwidth_by_sender============" + ((CurrentUsedData + DataUsedByChrmoeCast) * 1024));
+                Log.v("BIBHU4", "CurrentUsedData============" + CurrentUsedData);
+                Log.v("BIBHU4", "DataUsedByChrmoeCast============" + DataUsedByChrmoeCast);
 
-                jsonObj.put("drm_bandwidth_by_sender",""+((CurrentUsedData + DataUsedByChrmoeCast)*1024));
+                jsonObj.put("drm_bandwidth_by_sender", "" + ((CurrentUsedData + DataUsedByChrmoeCast) * 1024));
 
                 //====================End=====================//
 
@@ -4359,10 +4412,10 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
             List tracks = new ArrayList();
 
-            Log.v("BIBHU","url size============"+playerModel.offline_url.size());
-            if(playerModel.offline_url.size()>0) {
+            Log.v("BIBHU", "url size============" + playerModel.offline_url.size());
+            if (playerModel.offline_url.size() > 0) {
 
-                for (int i = 0; i < playerModel.offline_url.size() ; i++) {
+                for (int i = 0; i < playerModel.offline_url.size(); i++) {
 
                     MediaTrack mediaTrack = new MediaTrack.Builder(i,
                             MediaTrack.TYPE_TEXT)
@@ -4401,6 +4454,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         @Override
         protected void onPreExecute() {
         }
+
         /**
          * Downloading file in background thread
          */
@@ -4416,11 +4470,10 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 HttpResponse execute = client.execute(httpGet);
 //                int contentLength = (int)execute.getEntity().getContentLength();
 
-                float size = (Float.parseFloat(""+execute.getEntity().getContentLength())/1024)/1024 ;
+                float size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
                 DecimalFormat decimalFormat = new DecimalFormat("#.#");
                 size = Float.valueOf(decimalFormat.format(size));
-                List_Of_FileSize.add("("+size+" MB)");
-
+                List_Of_FileSize.add("(" + size + " MB)");
 
 
             } catch (Exception e) {
@@ -4435,19 +4488,16 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         protected void onPostExecute(String file_url) {
 
 
-
             List_Of_Resolution_Url.remove(0);
-            if(List_Of_Resolution_Url.size()>0)
-            {
+            if (List_Of_Resolution_Url.size() > 0) {
                 new DetectDownloadingFileSize().execute();
-            }
-            else
-            {
+            } else {
                 try {
                     if (pDialog_for_gettig_filesize != null && pDialog_for_gettig_filesize.isShowing()) {
                         pDialog_for_gettig_filesize.hide();
                     }
-                } catch (IllegalArgumentException ex) {  }
+                } catch (IllegalArgumentException ex) {
+                }
 
                 // Show PopUp for Multiple Options for Download .
                 ShowDownloadOptionPopUp();
@@ -4456,8 +4506,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         }
     }
 
-    public void ShowDownloadOptionPopUp()
-    {
+    public void ShowDownloadOptionPopUp() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MyLibraryPlayer.this, R.style.MyAlertDialogStyle);
         LayoutInflater inflater = (LayoutInflater) MyLibraryPlayer.this.getSystemService(MyLibraryPlayer.this.LAYOUT_INFLATER_SERVICE);
@@ -4471,11 +4520,11 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         Button save = (Button) convertView.findViewById(R.id.save);
         Button cancel = (Button) convertView.findViewById(R.id.cancel);
 
-        save.setText(Util.getTextofLanguage(MyLibraryPlayer.this,Util.SAVE,Util.DEFAULT_SAVE));
-        cancel.setText(Util.getTextofLanguage(MyLibraryPlayer.this,Util.CANCEL_BUTTON,Util.DEFAULT_CANCEL_BUTTON));
-        title_text.setText(Util.getTextofLanguage(MyLibraryPlayer.this,Util.SAVE_OFFLINE_VIDEO,Util.DEFAULT_SAVE_OFFLINE_VIDEO));
+        save.setText(Util.getTextofLanguage(MyLibraryPlayer.this, Util.SAVE, Util.DEFAULT_SAVE));
+        cancel.setText(Util.getTextofLanguage(MyLibraryPlayer.this, Util.CANCEL_BUTTON, Util.DEFAULT_CANCEL_BUTTON));
+        title_text.setText(Util.getTextofLanguage(MyLibraryPlayer.this, Util.SAVE_OFFLINE_VIDEO, Util.DEFAULT_SAVE_OFFLINE_VIDEO));
 
-        DownloadOptionAdapter adapter = new DownloadOptionAdapter(MyLibraryPlayer.this,List_Of_FileSize,List_Of_Resolution_Format);
+        DownloadOptionAdapter adapter = new DownloadOptionAdapter(MyLibraryPlayer.this, List_Of_FileSize, List_Of_Resolution_Format);
         resolution_list.setAdapter(adapter);
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -4542,10 +4591,10 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         @Override
         protected String doInBackground(String... f_url) {
 
-            Log.v("BIBHU11","f_url[0]======="+f_url[0]);
+            Log.v("BIBHU11", "f_url[0]=======" + f_url[0]);
 
             SQLiteDatabase DB = MyLibraryPlayer.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-            Cursor cursor = DB.rawQuery("SELECT stream_unique_id FROM "+DBHelper.WATCH_ACCESS_INFO+" WHERE download_id = '"+f_url[0].trim()+"'", null);
+            Cursor cursor = DB.rawQuery("SELECT stream_unique_id FROM " + DBHelper.WATCH_ACCESS_INFO + " WHERE download_id = '" + f_url[0].trim() + "'", null);
             int count = cursor.getCount();
             String Stream_Id = "";
 
@@ -4554,25 +4603,25 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     do {
                         Stream_Id = cursor.getString(0).trim();
 
-                        Log.v("BIBHU3","Stream_Id============"+Stream_Id);
+                        Log.v("BIBHU3", "Stream_Id============" + Stream_Id);
                     } while (cursor.moveToNext());
                 }
             }
 
 
-            String urlRouteList = Util.rootUrl().trim()+Util.GetOfflineViewRemainingTime.trim();
+            String urlRouteList = Util.rootUrl().trim() + Util.GetOfflineViewRemainingTime.trim();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
                 httppost.addHeader("stream_uniq_id", Stream_Id);
-                httppost.addHeader("watch_remaining_time","0");
-                httppost.addHeader("device_id",Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                httppost.addHeader("user_id",userIdStr);
-                httppost.addHeader("device_type ","2");
-                httppost.addHeader("request_data ","");
-                httppost.addHeader("lang_code",Util.getTextofLanguage(MyLibraryPlayer.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("watch_remaining_time", "0");
+                httppost.addHeader("device_id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                httppost.addHeader("user_id", userIdStr);
+                httppost.addHeader("device_type ", "2");
+                httppost.addHeader("request_data ", "");
+                httppost.addHeader("lang_code", Util.getTextofLanguage(MyLibraryPlayer.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
                 // Execute HTTP Post Request
@@ -4586,32 +4635,30 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 }
 
 
-                Log.v("BIBHU11","response of GetOfflineViewRemainingTime in exoplayer======="+responseStr);
+                Log.v("BIBHU11", "response of GetOfflineViewRemainingTime in exoplayer=======" + responseStr);
 
                 JSONObject myJson = null;
-                if(responseStr!=null) {
+                if (responseStr != null) {
                     myJson = new JSONObject(responseStr);
                     statusCode = Integer.parseInt(myJson.optString("code"));
                     request_data = myJson.optString("request_data");
                     log_id = myJson.optString("log_id");
 
-                    Log.v("BIBHU11","response of server_current_time in exoplayer======="+myJson.optLong("created_date"));
-                    Log.v("BIBHU11","response of server_current_time in exoplayer======="+myJson.optLong("access_expiry_time"));
+                    Log.v("BIBHU11", "response of server_current_time in exoplayer=======" + myJson.optLong("created_date"));
+                    Log.v("BIBHU11", "response of server_current_time in exoplayer=======" + myJson.optLong("access_expiry_time"));
                     Dwonload_Complete_Msg = "";
-                    if(statusCode == 200)
-                    {
+                    if (statusCode == 200) {
 
                         Dwonload_Complete_Msg = myJson.optString("download_complete_msg");
 
-                        if(Dwonload_Complete_Msg.trim().equals(""))
+                        if (Dwonload_Complete_Msg.trim().equals(""))
                             Dwonload_Complete_Msg = "Your video has been downloaded successfully.";
 
                         SQLiteDatabase DB1 = MyLibraryPlayer.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
 
 
-                        String query1 = "UPDATE "+DBHelper.WATCH_ACCESS_INFO+" SET server_current_time = '"+myJson.optLong("created_date")+"' ," +
-                                "watch_period = '0',access_period = '"+myJson.optLong("access_expiry_time")+"' WHERE download_id = '"+f_url[0].trim()+"'";
-
+                        String query1 = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET server_current_time = '" + myJson.optLong("created_date") + "' ," +
+                                "watch_period = '0',access_period = '" + myJson.optLong("access_expiry_time") + "' WHERE download_id = '" + f_url[0].trim() + "'";
 
 
 //                        String query1 = "UPDATE "+DBHelper.WATCH_ACCESS_INFO+" SET server_current_time = '"+myJson.optLong("created_date")+"' ," +
@@ -4621,20 +4668,21 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                         DB1.execSQL(query1);
                     }
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 statusCode = 0;
             }
 
             return null;
         }
+
         @Override
         protected void onPostExecute(String file_url) {
-            Intent intent = new Intent(MyLibraryPlayer.this,PopUpService.class);
-            intent.putExtra("msg",Dwonload_Complete_Msg);
+            Intent intent = new Intent(MyLibraryPlayer.this, PopUpService.class);
+            intent.putExtra("msg", Dwonload_Complete_Msg);
             startService(intent);
         }
     }
+
     private String getActionTokenFromStorage(String tokenFileName) {
         String token = null;
         byte[] readBuffer = new byte[1024];
@@ -4657,4 +4705,142 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         return token;
     }
 
+    /**
+     * Request video ads from the given VAST ad tag.
+     *
+     * @param adTagUrl URL of the ad's VAST XML
+     */
+    private void requestAds(String adTagUrl) {
+        AdDisplayContainer adDisplayContainer = mSdkFactory.createAdDisplayContainer();
+        adDisplayContainer.setAdContainer(mAdUiContainer);
+
+        // Create the ads request.
+        AdsRequest request = mSdkFactory.createAdsRequest();
+        request.setAdTagUrl(adTagUrl);
+        request.setAdDisplayContainer(adDisplayContainer);
+        request.setContentProgressProvider(new ContentProgressProvider() {
+            @Override
+            public VideoProgressUpdate getContentProgress() {
+                if (mIsAdDisplayed || emVideoView == null || emVideoView.getDuration() <= 0) {
+                    return VideoProgressUpdate.VIDEO_TIME_NOT_READY;
+                }
+                Log.v("SUBHA", "emVideoView.getCurrentPosition()" + emVideoView.getCurrentPosition());
+                Log.v("SUBHA", "emVideoView.getDuration()" + emVideoView.getDuration());
+
+               /* if (emVideoView.getCurrentPosition() >= emVideoView.getDuration()){
+                    return new VideoProgressUpdate(emVideoView.getCurrentPosition(),
+                            emVideoView.getDuration());
+                }
+*/
+                return new VideoProgressUpdate(emVideoView.getCurrentPosition(),
+                        emVideoView.getDuration());
+            }
+        });
+       /* if (mAdsManager !=null){
+            Log.v("SUBHA","ddT"+mAdsManager.getAdCuePoints());
+
+        }*/
+        Log.v("SUBHA", "ddT");
+
+        // Request the ad. After the ad is loaded, onAdsManagerLoaded() will be called.
+        mAdsLoader.requestAds(request);
+    }
+
+    @Override
+    public void onAdEvent(AdEvent adEvent) {
+        Log.v("SUBHA", "Event: " + adEvent.getType());
+
+        // These are the suggested event types to handle. For full list of all ad event
+        // types, see the documentation for AdEvent.AdEventType.
+        switch (adEvent.getType()) {
+            case LOADED:
+                onClick1();
+             /*   if (pDialog == null){
+                    pDialog = new ProgressDialog(ExoPlayerActivity.this);
+                    pDialog.setMessage("loading");
+                    pDialog.show();
+                }*/
+
+                // AdEventType.LOADED will be fired when ads are ready to be played.
+                // AdsManager.start() begins ad playback. This method is ignored for VMAP or
+                // ad rules playlists, as the SDK will automatically start executing the
+                // playlist.
+                mAdsManager.start();
+                break;
+
+            case STARTED:
+             /*   if (pDialog != null){
+                    Log.v("SUBHA","DISMISS");
+                    pDialog.dismiss();
+                }*/
+                //  progressView.setVisibility(View.VISIBLE);
+                Util.call_finish_at_onUserLeaveHint = false;
+                onClick1();
+             /*   final ProgressDialog finalPDialog = pDialog;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(finalPDialog !=null && finalPDialog.isShowing()) {
+                            Log.v("SUBHA","DISMISS");
+
+                            finalPDialog.dismiss();
+
+                        }
+                    }
+                });*/
+
+
+                break;
+
+            case CONTENT_PAUSE_REQUESTED:
+                // AdEventType.CONTENT_PAUSE_REQUESTED is fired immediately before a video
+                // ad is played.
+                mIsAdDisplayed = true;
+                Util.call_finish_at_onUserLeaveHint = false;
+
+                emVideoView.pause();
+                //  mVideoPlayer.pause();
+                break;
+            case CONTENT_RESUME_REQUESTED:
+                // AdEventType.CONTENT_RESUME_REQUESTED is fired when the ad is completed
+                // and you should start playing your content.
+                mIsAdDisplayed = false;
+                if (video_completed == true) {
+                    backCalled();
+                }
+
+                Util.call_finish_at_onUserLeaveHint = true;
+                emVideoView.start();
+                break;
+            case ALL_ADS_COMPLETED:
+                if (mAdsManager != null) {
+                    mAdsManager.destroy();
+                    mAdsManager = null;
+                }
+                if (video_completed == true) {
+                    backCalled();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onAdError(AdErrorEvent adErrorEvent) {
+        Log.e("subha", "Ad Error: " + adErrorEvent.getError().getMessage());
+        Util.call_finish_at_onUserLeaveHint = true;
+        emVideoView.start();
+    }
+
+    public void onClick1() {
+        if (mDialog == null) {
+            mDialog = new ProgressBarHandler(MyLibraryPlayer.this);
+            mDialog.show();
+        } else {
+            mDialog.hide();
+
+        }
+
+    }
 }

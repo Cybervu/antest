@@ -127,7 +127,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         noInternetLayout.setVisibility(View.GONE);
         geoBlockedLayout.setVisibility(View.GONE);
 
-      /*  if (NetworkStatus.getInstance().isConnected(this)) {
+        /*if (NetworkStatus.getInstance().isConnected(this)) {
             SDKInitializer.getInstance().init(this, this, authTokenStr);
         } else {
             noInternetLayout.setVisibility(View.VISIBLE);
