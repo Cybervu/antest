@@ -404,6 +404,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.GONE);
 
+
             movieUniqueId = contentDetailsOutput.getMuviUniqId();
             isEpisode = contentDetailsOutput.getIsEpisode();
             movieStreamUniqueId = contentDetailsOutput.getMovieStreamUniqId();
@@ -628,7 +629,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         }else{
             noDataTextView.setText(languagePreference.getTextofLanguage(CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY,DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
             noInternetConnectionLayout.setVisibility(View.GONE);
-            noDataLayout.setVisibility(View.VISIBLE);
+            noDataLayout.setVisibility(View.GONE);
 
             story_layout.setVisibility(View.GONE);
             bannerImageRelativeLayout.setVisibility(View.GONE);
@@ -669,6 +670,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
         if (status == 200) {
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.GONE);
             itemData = new ArrayList<EpisodesListModel>();
 
             Util.currencyModel = episode_details_output.getCurrencyDetails();
@@ -1036,6 +1039,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         }
 
         if (status == 200) {
+
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.GONE);
 
             String loggedInStr = preferenceManager.getLoginStatusFromPref();
             // int logI
@@ -1556,7 +1562,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         LogUtil.showLog("MUVI", "onCreate");
         season = new ArrayList<String>();
         Util.goToLibraryplayer = false;
-        preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(ShowWithEpisodesActivity.this);
         playerModel = new Player();
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
@@ -1661,6 +1666,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         seasontiveLayout = (RecyclerView) findViewById(R.id.featureContent);
         noInternetConnectionLayout = (RelativeLayout) findViewById(R.id.noInternet);
         noDataLayout = (RelativeLayout) findViewById(R.id.noData);
+        noDataLayout.setVisibility(View.GONE);
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
         noDataTextView = (TextView) findViewById(R.id.noDataTextView);
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));

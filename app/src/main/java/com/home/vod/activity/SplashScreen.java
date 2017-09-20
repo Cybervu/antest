@@ -323,21 +323,48 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     public void onGetGenreListPostExecuteCompleted(ArrayList<GenreListOutput> genreListOutput, int code, String status) {
 
         if (code > 0) {
-            int lengthJsonArr = genreListOutput.size();
-            if (lengthJsonArr > 0) {
-                genreArrayList.add(0, languagePreference.getTextofLanguage(FILTER_BY, DEFAULT_FILTER_BY));
-                genreValueArrayList.add(0, "");
 
-            }
-            for (int i = 0; i < lengthJsonArr; i++) {
-                genreArrayList.add(genreListOutput.get(i).getGenre_name());
-                genreValueArrayList.add(genreListOutput.get(i).getGenre_name());
+            if (code == 200) {
+                int lengthJsonArr = genreListOutput.size();
+                if (lengthJsonArr > 0) {
+                    genreArrayList.add(0, languagePreference.getTextofLanguage(FILTER_BY, DEFAULT_FILTER_BY));
+                    genreValueArrayList.add(0, "");
+
+                }
+                for (int i = 0; i < lengthJsonArr; i++) {
+                    genreArrayList.add(genreListOutput.get(i).getGenre_name());
+                    genreValueArrayList.add(genreListOutput.get(i).getGenre_name());
 
 
-            }
+                }
 
-            if (genreArrayList.size() > 1) {
+                if (genreArrayList.size() > 1) {
 
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
+                    genreValueArrayList.add(genreValueArrayList.size(), "");
+
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED));
+                    genreValueArrayList.add(genreValueArrayList.size(), "lastupload");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_RELEASE_DATE, DEFAULT_SORT_RELEASE_DATE));
+                    genreValueArrayList.add(genreValueArrayList.size(), "releasedate");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z));
+                    genreValueArrayList.add(genreValueArrayList.size(), "sortasc");
+
+                    genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A));
+                    genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
+
+
+                }
+                genreArrToSend = new String[genreArrayList.size()];
+                genreArrToSend = genreArrayList.toArray(genreArrToSend);
+
+
+                genreValueArrayToSend = new String[genreValueArrayList.size()];
+                genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
+            } else {
                 genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
                 genreValueArrayList.add(genreValueArrayList.size(), "");
 
@@ -354,15 +381,15 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A));
                 genreValueArrayList.add(genreValueArrayList.size(), "sortdesc");
 
+                genreArrToSend = new String[genreArrayList.size()];
+                genreArrToSend = genreArrayList.toArray(genreArrToSend);
+
+
+                genreValueArrayToSend = new String[genreValueArrayList.size()];
+                genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
 
             }
-            genreArrToSend = new String[genreArrayList.size()];
-            genreArrToSend = genreArrayList.toArray(genreArrToSend);
-
-
-            genreValueArrayToSend = new String[genreValueArrayList.size()];
-            genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
-        } else {
+        }else{
             genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
             genreValueArrayList.add(genreValueArrayList.size(), "");
 
@@ -385,7 +412,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
             genreValueArrayToSend = new String[genreValueArrayList.size()];
             genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
-
         }
 
 
