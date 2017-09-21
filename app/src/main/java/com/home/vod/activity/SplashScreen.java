@@ -136,6 +136,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -250,7 +251,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         languagePreference.setLanguageSharedPrefernce(HAS_FAVORITE, "" + isRegistrationEnabledOutputModel.getHas_favourite());
         languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
 
-        languagePreference.setLanguageSharedPrefernce(IS_RESTRICT_DEVICE, ""+isRegistrationEnabledOutputModel.getIsRestrictDevice());
+        languagePreference.setLanguageSharedPrefernce(IS_RESTRICT_DEVICE, "" + isRegistrationEnabledOutputModel.getIsRestrictDevice());
         languagePreference.setLanguageSharedPrefernce(IS_ONE_STEP_REGISTRATION, "" + isRegistrationEnabledOutputModel.getSignup_step());
         languagePreference.setLanguageSharedPrefernce(IS_MYLIBRARY, "" + isRegistrationEnabledOutputModel.getIsMylibrary());
 
@@ -389,7 +390,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
 
             }
-        }else{
+        } else {
             genreArrayList.add(genreArrayList.size(), languagePreference.getTextofLanguage(SORT_BY, DEFAULT_SORT_BY));
             genreValueArrayList.add(genreValueArrayList.size(), "");
 
@@ -580,7 +581,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onPostExecuteListner() {
 
-
+        SDKInitializer.setData(this);
         if (NetworkStatus.getInstance().isConnected(this)) {
             GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
             asynGetIpAddress.executeOnExecutor(threadPoolExecutor);

@@ -373,6 +373,14 @@ public class LanguagePreference {
     public static String DEFAULT_WANT_TO_DOWNLOAD = "Want to Download";
     public static String DOWNLOAD_CANCELLED = "DOWNLOAD_CANCELLED";
     public static String DEFAULT_DOWNLOAD_CANCELLED = "Download Cancelled";
+    public static String DEFAULT_BTN_NEXT = "Next";
+    public static String BTN_NEXT = "BTN_NEXT";
+    public static  String DEFAULT_CREDIT_CARD_CVV_HINT = "CVV";
+    public static String DEFAULT_VOUCHER_CODE = "Voucher Code";
+    public static String DEFAULT_WATCH_NOW = "Watch Now";
+    public static String DEFAULT_PAYMENT_OPTIONS_TITLE = "Payment Options";
+    public static String VOUCHER_BLANK_MESSAGE = "VOUCHER_BLANK_MESSAGE";
+    public static String DEFAULT_VOUCHER_BLANK_MESSAGE = "Please Enter Your Voucher Code";
 
 
 

@@ -135,14 +135,61 @@ public class GetVoucherPlanAsynTask extends AsyncTask<GetVoucherPlanInputModel, 
 
 
             if (status == 200) {
-                if ((myJson.has("is_show")) && myJson.optString("is_show").trim() != null && !myJson.optString("is_show").trim().isEmpty() && !myJson.optString("is_show").trim().equals("null") && !myJson.optString("is_show").trim().matches("")) {
-                    getVoucherPlanOutputModel.setIs_show(myJson.optString("is_show"));
+
+
+                if(myJson.optString("is_show")!=null)
+                {
+                    if(!(myJson.optString("is_show").equals("")) && !(myJson.optString("is_show").equals("null"))
+                            && (myJson.optString("is_show").trim().equals("1")))
+                    {
+                        getVoucherPlanOutputModel.setIs_show(myJson.optString("1"));
+                    }
+                    else
+                    {
+                        getVoucherPlanOutputModel.setIs_show(myJson.optString("0"));
+                    }
                 }
-                if ((myJson.has("is_episode")) && myJson.optString("is_episode").trim() != null && !myJson.optString("is_episode").trim().isEmpty() && !myJson.optString("is_episode").trim().equals("null") && !myJson.optString("is_episode").trim().matches("")) {
-                    getVoucherPlanOutputModel.setIs_episode(myJson.optString("is_episode"));
+                else
+                {
+                    getVoucherPlanOutputModel.setIs_show(myJson.optString("0"));
                 }
-                if ((myJson.has("is_season")) && myJson.optString("is_season").trim() != null && !myJson.optString("is_season").trim().isEmpty() && !myJson.optString("is_season").trim().equals("null") && !myJson.optString("is_season").trim().matches("")) {
-                    getVoucherPlanOutputModel.setIs_season(myJson.optString("is_season"));
+
+                // Checking for Season Purchase Type
+
+                if(myJson.optString("is_season")!=null)
+                {
+                    if(!(myJson.optString("is_season").equals("")) && !(myJson.optString("is_season").equals("null"))
+                            && (myJson.optString("is_season").trim().equals("1")))
+                    {
+                        getVoucherPlanOutputModel.setIs_season(myJson.optString("1"));
+                    }
+                    else
+                    {
+                        getVoucherPlanOutputModel.setIs_season(myJson.optString("0"));
+                    }
+                }
+                else
+                {
+                    getVoucherPlanOutputModel.setIs_season(myJson.optString("0"));
+                }
+
+                // Checking for Episode Purchase Type
+
+                if(myJson.optString("is_episode")!=null)
+                {
+                    if(!(myJson.optString("is_episode").equals("")) && !(myJson.optString("is_episode").equals("null"))
+                            && (myJson.optString("is_episode").trim().equals("1")))
+                    {
+                        getVoucherPlanOutputModel.setIs_episode(myJson.optString("1"));
+                    }
+                    else
+                    {
+                        getVoucherPlanOutputModel.setIs_episode(myJson.optString("0"));
+                    }
+                }
+                else
+                {
+                    getVoucherPlanOutputModel.setIs_episode(myJson.optString("0"));
                 }
 
             }

@@ -14,6 +14,7 @@
         android:id="@+id/imagesGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/textColor_margin"
         android:layout_gravity="center_horizontal"
         android:horizontalSpacing="@dimen/pre_order_button_margin"
         android:verticalSpacing="@dimen/pre_order_button_margin"

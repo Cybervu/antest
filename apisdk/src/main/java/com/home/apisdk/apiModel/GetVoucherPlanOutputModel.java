@@ -8,9 +8,9 @@ package com.home.apisdk.apiModel;
 
 public class GetVoucherPlanOutputModel {
 
-    String is_show;
-    String is_episode;
-    String is_season;
+    String is_show="0";
+    String is_episode="0";
+    String is_season="0";
 
     /**
      * This Method is use to Get the Is Season Details

@@ -173,7 +173,7 @@
                             android:stateListAnimator="@null"
                             android:textAllCaps="false"
                             android:textColor="@color/buttonTextColor"
-                            android:textSize="@dimen/review_btn_textsize"
+                            android:textSize="@dimen/email_text_size"
                             android:visibility="gone"
 
                             />
@@ -343,7 +343,7 @@
                             android:layout_height="wrap_content"
                             android:text="View More"
                             android:visibility="gone"
-                            android:textSize="@dimen/review_btn_textsize"
+                            android:textSize="@dimen/email_text_size"
                             android:background="@color/transparent"
                             android:textColor="@color/button_background"
                             android:layout_centerVertical="true"/>
