@@ -1050,14 +1050,14 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             LogUtil.showLog("BISHAL", "review data" + reviews);
             LogUtil.showLog("BISHAL", "rating data" + rating);
 
-            if (reviews.equalsIgnoreCase("0")) {
+            if (reviews.equalsIgnoreCase("")) {
                 viewRatingTextView.setVisibility(View.GONE);
 
             } else {
                 ratingBar.setVisibility(View.VISIBLE);
                 ratingBar.setRating(Float.parseFloat(rating));
             }
-            if (rating.equalsIgnoreCase("0")) {
+            if (rating.equalsIgnoreCase("")) {
                 ratingBar.setVisibility(View.GONE);
             } else {
                 LogUtil.showLog("BISHAL", "rating ==== " + rating);
