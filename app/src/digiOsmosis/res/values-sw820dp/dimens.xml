@@ -9,7 +9,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="card_margin">16dp</dimen>
     <dimen name="recy_margin">8dp</dimen>
-
+    <dimen name="trailer_btn_text_size">18sp</dimen>
     <dimen name="castcrew_text">18sp</dimen>
     <dimen name="castnointernet_text">18sp</dimen>
     <dimen name="cast_width_icon">80dp</dimen>

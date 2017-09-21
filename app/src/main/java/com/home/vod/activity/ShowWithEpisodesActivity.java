@@ -3171,7 +3171,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             item3.setVisible(false);
             item6 = menu.findItem(R.id.action_mydownload);
             item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
-            item6.setVisible(false);
+            item6.setVisible(true);
             item7 = menu.findItem(R.id.menu_item_favorite);
             item7.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE));
             item7.setVisible(false);

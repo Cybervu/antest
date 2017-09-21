@@ -72,6 +72,7 @@
     <dimen name="payment_spinner_padding">6dp</dimen>
     <dimen name="payment_margin_textview_top">38dp</dimen>
     <dimen name="login_maring_top">12dp</dimen>
+    <dimen name="trailer_btn_text_size">14sp</dimen>
     <dimen name="profile_spinner_margin">15dp</dimen>
     <dimen name="login_padding_bottom">17dp</dimen>
     <dimen name="pop_up_view_height">3dp</dimen>

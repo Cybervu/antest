@@ -90,6 +90,7 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.common.images.WebImage;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
+import com.home.vod.util.ResizableCustomView;
 import com.home.vod.util.Util;
 import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
@@ -149,6 +150,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGU
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
@@ -170,6 +172,7 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
@@ -4525,6 +4528,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
                 videoStoryTextView.setTypeface(videoGenreTextViewTypeface);
                 videoStoryTextView.setText(contentDetailsOutput.getStory());
+                ResizableCustomView.doResizeTextView(MovieDetailsActivity.this,videoStoryTextView, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE), true);
 
             }
 

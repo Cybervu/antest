@@ -13,6 +13,7 @@
     <dimen name="singleimgwidth">90dp</dimen>
     <dimen name="singleimgheight">146dp</dimen>
 
+    <dimen name="trailer_btn_text_size">14sp</dimen>
     <dimen name="buttonheight">39dp</dimen>
     <dimen name="titletxt">14sp</dimen>
     <dimen name="indicatorheight">180dp</dimen>
