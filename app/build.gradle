@@ -124,7 +124,8 @@ android {
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             versionCode 1
             versionName '1.0'
-            buildConfigField "String", "AUTH_TOKEN", "\"8c6e6162f22f3f43a6d88efc1a64cd18\""
+//            buildConfigField "String", "AUTH_TOKEN", "\"8c6e6162f22f3f43a6d88efc1a64cd18\""
+            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
         }
         digiOsmosis_staging_ {
             dimension 'environment'
@@ -456,6 +457,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:palette-v7:25.3.1'
+    compile 'com.google.android.gms:play-services-auth:9.4.0'
     // compile 'com.github.Muvidevelopers:APISDK:v1.02'
 
     // compile 'com.muvi:APISDK:v1.02'

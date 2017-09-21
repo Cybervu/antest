@@ -204,8 +204,10 @@ import static com.home.vod.util.Constant.authTokenStr;
 import static player.utils.Util.ADD_A_REVIEW;
 import static player.utils.Util.DEFAULT_ADD_A_REVIEW;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static player.utils.Util.DEFAULT_IS_OFFLINE;
 import static player.utils.Util.DEFAULT_REVIEWS;
 import static player.utils.Util.HAS_FAVORITE;
+import static player.utils.Util.IS_OFFLINE;
 import static player.utils.Util.REVIEWS;
 
 
@@ -1571,6 +1573,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         isLogin = preferenceManager.getLoginFeatureFromPref();
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -3140,7 +3143,13 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             item6 = menu.findItem(R.id.action_mydownload);
             item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
-            item6.setVisible(true);
+            if ((languagePreference.getTextofLanguage(IS_OFFLINE,DEFAULT_IS_OFFLINE)
+                    .trim()).equals("1")) {
+                item6.setVisible(true);
+            } else {
+                item6.setVisible(false);
+
+            }
 
 
         } else if (loggedInStr == null) {
