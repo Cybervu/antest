@@ -1048,6 +1048,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         /*********fb****/
         FacebookSdk.sdkInitialize(getApplicationContext());
         /*********fb****/
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         setContentView(R.layout.activity_login);
 
         languagePreference = LanguagePreference.getLanguagePreference((this));

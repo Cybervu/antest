@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -329,6 +330,9 @@ public class RegisterActivity extends AppCompatActivity implements
         /*********fb****/
         FacebookSdk.sdkInitialize(getApplicationContext());
         /*********fb****/
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         setContentView(R.layout.activity_register);
 
         LogUtil.showLog("BKS","packagename==="+ SDKInitializer.user_Package_Name_At_Api);
@@ -432,6 +436,8 @@ public class RegisterActivity extends AppCompatActivity implements
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                 registerButtonClicked();
             }
         });

@@ -287,7 +287,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     public static String filterOrderByStr = "lastupload";
     GenreFilterAdapter genreAdapter;
     MenuItem filterMenuItem;
-    int prevPosition = 5;
+    //int prevPosition = 5;
     String filterPermalink = "";
     int scrolledPosition = 0;
     boolean scrolling;
@@ -679,13 +679,13 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         }
 
 
-        genreAdapter = new GenreFilterAdapter(mdata, getActivity());
-        genreListData.setAdapter(genreAdapter);
-        if (mdata.size() > 0) {
+     //   genreAdapter = new GenreFilterAdapter(mdata, getActivity());
+    //    genreListData.setAdapter(genreAdapter);
+      /*  if (mdata.size() > 0) {
             prevPosition = mdata.size() - 4;
-        }
-        mdata.get(prevPosition).setSelected(true);
-        genreListData.addOnItemTouchListener(new RecyclerTouchListener(context, genreListData, new VideosListFragment.ClickListener() {
+        }*/
+      //  mdata.get(prevPosition).setSelected(true);
+     /*   genreListData.addOnItemTouchListener(new RecyclerTouchListener(context, genreListData, new VideosListFragment.ClickListener() {
             @Override
             public void onClick(View view, int position) {
 
@@ -726,7 +726,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             public void onLongClick(View view, int position) {
 
             }
-        }));
+        }));*/
 
 
 
