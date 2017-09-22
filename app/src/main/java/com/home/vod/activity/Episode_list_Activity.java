@@ -143,6 +143,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMIN
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
@@ -163,6 +164,7 @@ import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTI
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
@@ -185,7 +187,11 @@ import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static player.utils.Util.DEFAULT_IS_CHROMECAST;
+import static player.utils.Util.DEFAULT_IS_OFFLINE;
 import static player.utils.Util.HAS_FAVORITE;
+import static player.utils.Util.IS_CHROMECAST;
+import static player.utils.Util.IS_OFFLINE;
 
 /**
  * Created by Muvi on 2/6/2017.
@@ -2798,15 +2804,23 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-        MenuItem item, item1, item2, item3, item4, item5, item6;
+        MenuItem item, item1, item2, item3, item4, item5, item6,item7;
         item = menu.findItem(R.id.action_filter);
         /***************chromecast**********************/
 
         CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
         /***************chromecast**********************/
         item.setVisible(false);
-        MenuItem item7 = null;
-        mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(Episode_list_Activity.this, menu, R.id.media_route_menu_item);
+        if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1")) {
+            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
+                    R.id.media_route_menu_item);
+            mediaRouteMenuItem.setVisible(true);
+
+        }else {
+            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
+                    R.id.media_route_menu_item);
+            mediaRouteMenuItem.setVisible(false);
+        }
 
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
         id = preferenceManager.getUseridFromPref();
@@ -2823,27 +2837,36 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             item5 = menu.findItem(R.id.action_register);
             item5.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
             item5.setVisible(false);
-            /*item6= menu.findItem(R.id.menu_item_language);
-            item6.setTitle(languagePreference.getTextofLanguage(Util.LANGUAGE_POPUP_LANGUAGE,Util.DEFAULT_LANGUAGE_POPUP_LANGUAGE));
-            item6.setVisible(true);*/
+
             item1 = menu.findItem(R.id.menu_item_profile);
             item1.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
 
             item1.setVisible(true);
 
+            item7 = menu.findItem(R.id.menu_item_favorite);
             if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
                 item7.setVisible(true);
             } else {
                 item7.setVisible(false);
 
             }
+
             item2 = menu.findItem(R.id.action_purchage);
             item2.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
-
             item2.setVisible(true);
             item3 = menu.findItem(R.id.action_logout);
             item3.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
             item3.setVisible(true);
+
+            item6 = menu.findItem(R.id.action_mydownload);
+            item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD));
+            if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
+                    .trim()).equals("1")) {
+                item6.setVisible(true);
+            }else{
+                item6.setVisible(false);
+
+            }
 
         } else if (loggedInStr == null) {
             item4 = menu.findItem(R.id.action_login);
@@ -2861,9 +2884,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 item5.setVisible(false);
 
             }
-           /* item6= menu.findItem(R.id.menu_item_language);
-            item6.setTitle(languagePreference.getTextofLanguage(Util.LANGUAGE_POPUP_LANGUAGE,Util.DEFAULT_LANGUAGE_POPUP_LANGUAGE));
-            item6.setVisible(true);*/
+
             item1 = menu.findItem(R.id.menu_item_profile);
             item1.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
             item1.setVisible(false);
@@ -2873,6 +2894,13 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             item3 = menu.findItem(R.id.action_logout);
             item3.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
             item3.setVisible(false);
+            item6 = menu.findItem(R.id.action_mydownload);
+            item6.setTitle(languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE));
+            item6.setVisible(false);
+            item7 = menu.findItem(R.id.menu_item_favorite);
+            item7.setTitle(languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE));
+            item7.setVisible(false);
+
         }
         return true;
     }

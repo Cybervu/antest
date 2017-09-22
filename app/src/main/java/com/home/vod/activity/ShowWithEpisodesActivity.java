@@ -202,9 +202,11 @@ import static com.home.vod.util.Constant.authTokenStr;
 import static player.utils.Util.ADD_A_REVIEW;
 import static player.utils.Util.DEFAULT_ADD_A_REVIEW;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static player.utils.Util.DEFAULT_IS_CHROMECAST;
 import static player.utils.Util.DEFAULT_IS_OFFLINE;
 import static player.utils.Util.DEFAULT_REVIEWS;
 import static player.utils.Util.HAS_FAVORITE;
+import static player.utils.Util.IS_CHROMECAST;
 import static player.utils.Util.IS_OFFLINE;
 import static player.utils.Util.REVIEWS;
 
@@ -3256,14 +3258,23 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         /***************chromecast**********************/
 
-        CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
+        mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
+                R.id.media_route_menu_item);
+        if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1")) {
+
+            mediaRouteMenuItem.setVisible(true);
+
+        }else {
+            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
+                    R.id.media_route_menu_item);
+            mediaRouteMenuItem.setVisible(false);
+        }
         /***************chromecast**********************/
 
 
-        MenuItem item, item1, item2, item3, item4, item5, item6;
+        MenuItem item, item1, item2, item3, item4, item5, item6,item7;
         item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
-        MenuItem item7 = menu.findItem(R.id.menu_item_favorite);
         //  pref = getSharedPreferences(Util.LOGIN_PREF, 0);
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
         id = preferenceManager.getUseridFromPref();
@@ -3284,6 +3295,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             item1.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
             item1.setVisible(true);
 
+            item7 = menu.findItem(R.id.menu_item_favorite);
             if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
                 item7.setVisible(true);
             } else {
@@ -3298,18 +3310,16 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             item3.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
             item3.setVisible(true);
 
-
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE)
+            item6 = menu.findItem(R.id.action_mydownload);
+            item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD));
+            if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
                     .trim()).equals("1")) {
-                item7.setVisible(true);
-            } else {
-                item7.setVisible(false);
+                item6.setVisible(true);
+            }else{
+                item6.setVisible(false);
 
             }
-
-            item6 = menu.findItem(R.id.action_mydownload);
-            item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
-            if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
+            if ((languagePreference.getTextofLanguage(IS_OFFLINE,DEFAULT_IS_OFFLINE)
                     .trim()).equals("1")) {
                 item6.setVisible(true);
             } else {
@@ -3346,9 +3356,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             item3.setVisible(false);
             item6 = menu.findItem(R.id.action_mydownload);
             item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
-            item6.setVisible(true);
+            item6.setVisible(false);
             item7 = menu.findItem(R.id.menu_item_favorite);
-            item7.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
+            item7.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE));
             item7.setVisible(false);
 
         }
