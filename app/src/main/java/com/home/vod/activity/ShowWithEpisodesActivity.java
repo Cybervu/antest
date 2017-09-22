@@ -1714,7 +1714,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
 
-                if (pref != null) {
+                if (preferenceManager != null) {
                     loggedInStr = preferenceManager.getUseridFromPref();
                 }
 
