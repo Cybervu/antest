@@ -56,6 +56,7 @@ import com.daimajia.slider.library.SliderLayout;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaTrack;
+import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.CastStateListener;
@@ -64,6 +65,7 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.images.WebImage;
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
 import com.home.apisdk.apiController.MyLibraryAsynTask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
@@ -89,6 +91,7 @@ import com.home.vod.util.Constant;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
+
 import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
 import player.activity.MyLibraryPlayer;
@@ -98,10 +101,14 @@ import player.activity.YouTubeAPIActivity;
 
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -148,10 +155,14 @@ import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
+
 import com.home.vod.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /*
 import com.twotoasters.jazzylistview.JazzyGridView;
@@ -163,7 +174,8 @@ import com.twotoasters.jazzylistview.JazzyHelper;
  */
 public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask.VideoDetailsListener,
         GetValidateUserAsynTask.GetValidateUserListener,
-        MyLibraryAsynTask.MyLibraryListener {
+        MyLibraryAsynTask.MyLibraryListener, GetIpAddressAsynTask.IpAddressListener {
+
 
     /***************chromecast**********************/
     public enum PlaybackLocation {
@@ -174,7 +186,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     public enum PlaybackState {
         PLAYING, PAUSED, BUFFERING, IDLE
     }
-
 
 
     private VideoView mVideoView;
@@ -201,7 +212,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     private int mDuration;
     private TextView mAuthorView;
     private ImageButton mPlayCircle;
-    String ipAddressStr ="";
+    String ipAddressStr = "";
 
 
     private CastContext mCastContext;
@@ -258,7 +269,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         public void onSessionSuspended(CastSession session, int reason) {
         }
     }
-
 
 
     MediaInfo mediaInfo;
@@ -392,7 +402,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         genreListData.setItemAnimator(new DefaultItemAnimator());
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());// 0 - for private mode
         sectionTitle = (TextView) rootView.findViewById(R.id.sectionTitle);
-        posterUrl = languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA);
+        posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
         gridView = (GridView) rootView.findViewById(R.id.imagesGridView);
        /* gridView.setHasFixedSize(true);
@@ -405,8 +415,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         noDataLayout = (RelativeLayout) rootView.findViewById(R.id.noData);
         noInternetTextView = (TextView) rootView.findViewById(R.id.noInternetTextView);
         noDataTextView = (TextView) rootView.findViewById(R.id.noDataTextView);
-        noInternetTextView.setText(languagePreference.getTextofLanguage( NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
-        noDataTextView.setText(languagePreference.getTextofLanguage( NO_CONTENT, DEFAULT_NO_CONTENT));
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+        noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT, DEFAULT_NO_CONTENT));
 
         noInternetConnectionLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
@@ -449,19 +459,19 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             //Call whatever you want
             if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
-                MyLibraryInputModel myLibraryInputModel=new MyLibraryInputModel();
+                MyLibraryInputModel myLibraryInputModel = new MyLibraryInputModel();
                 myLibraryInputModel.setAuthToken(authTokenStr);
                 myLibraryInputModel.setUser_id(preferenceManager.getUseridFromPref());
                 myLibraryInputModel.setLimit(String.valueOf(limit));
                 myLibraryInputModel.setOffset(String.valueOf(offset));
-                String countryPref=preferenceManager.getCountryCodeFromPref();
+                String countryPref = preferenceManager.getCountryCodeFromPref();
                 if (countryPref != null) {
                     myLibraryInputModel.setCountry(countryPref);
-                }else {
+                } else {
                     myLibraryInputModel.setCountry("IN");
                 }
-                myLibraryInputModel.setLang_code(languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                MyLibraryAsynTask asyncLoadVideos = new MyLibraryAsynTask(myLibraryInputModel,MyLibraryFragment.this,context);
+                myLibraryInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                MyLibraryAsynTask asyncLoadVideos = new MyLibraryAsynTask(myLibraryInputModel, MyLibraryFragment.this, context);
                 asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
             } else {
@@ -522,19 +532,19 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
                             // default data
-                            MyLibraryInputModel myLibraryInputModel=new MyLibraryInputModel();
+                            MyLibraryInputModel myLibraryInputModel = new MyLibraryInputModel();
                             myLibraryInputModel.setAuthToken(authTokenStr);
                             myLibraryInputModel.setUser_id(preferenceManager.getUseridFromPref());
                             myLibraryInputModel.setLimit(String.valueOf(limit));
                             myLibraryInputModel.setOffset(String.valueOf(offset));
-                            String countryPref=preferenceManager.getCountryCodeFromPref();
+                            String countryPref = preferenceManager.getCountryCodeFromPref();
                             if (countryPref != null) {
                                 myLibraryInputModel.setCountry(countryPref);
-                            }else {
+                            } else {
                                 myLibraryInputModel.setCountry("IN");
                             }
                             myLibraryInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                            MyLibraryAsynTask asyncLoadVideos = new MyLibraryAsynTask(myLibraryInputModel,MyLibraryFragment.this,context);
+                            MyLibraryAsynTask asyncLoadVideos = new MyLibraryAsynTask(myLibraryInputModel, MyLibraryFragment.this, context);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
                             scrolling = false;
 
@@ -571,13 +581,13 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 Util.dataModel = dbModel;
 
 
-                if (moviePermalink.matches(languagePreference.getTextofLanguage( NO_DATA, DEFAULT_NO_DATA))) {
+                if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(context, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(languagePreference.getTextofLanguage( NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
-                    dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -613,7 +623,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             validateUserInput.setPurchaseType("episode");
                             validateUserInput.setSeasonId("" + season_id);
                             validateUserInput.setEpisodeStreamUniqueId(movieStreamUniqueId);
-                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MyLibraryFragment.this, context);
                             asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -625,7 +635,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             validateUserInput.setPurchaseType("episode");
                             validateUserInput.setSeasonId("" + season_id);
                             validateUserInput.setEpisodeStreamUniqueId(movieStreamUniqueId);
-                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MyLibraryFragment.this, context);
                             asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                         }
@@ -673,12 +683,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         int startPosition = 0;
 
 
-
-
         if (shouldStartPlayback) {
             // this will be the case only if we are coming from the
             // CastControllerActivity by disconnecting from a device
-            mPlaybackState =PlaybackState.PLAYING;
+            mPlaybackState = PlaybackState.PLAYING;
             updatePlaybackLocation(PlaybackLocation.LOCAL);
             updatePlayButton(mPlaybackState);
             if (startPosition > 0) {
@@ -708,12 +716,15 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
 
     public void onResume() {
+
+        GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, context);
+        asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+
         /***************chromecast**********************/
         if (mCastSession == null) {
             mCastSession = CastContext.getSharedInstance(getActivity()).getSessionManager()
                     .getCurrentCastSession();
         }
-
 
 
         mCastContext.getSessionManager().addSessionManagerListener(
@@ -733,6 +744,17 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     }
 
     @Override
+    public void onIPAddressPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
+        this.ipAddressStr = ipAddressStr;
+        return;
+    }
+
+    @Override
     public void onVideoDetailsPreExecuteStarted() {
         pDialog = new ProgressBarHandler(getActivity());
         pDialog.show();
@@ -748,14 +770,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
 
                 play_video = false;
-            }
-            else
-            {
+            } else {
                 play_video = true;
             }
-        }
-        else
-        {
+        } else {
             play_video = true;
         }
         if (!play_video) {
@@ -769,7 +787,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(message);
             dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
             dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
@@ -846,6 +864,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             if (_video_details_output.getPlayed_length() != null && !_video_details_output.getPlayed_length().equals(""))
                 playerModel.setPlayPos((Util.isDouble(_video_details_output.getPlayed_length())));
 
+            SubTitleName = _video_details_output.getSubTitleName();
+
 
             //dependency for datamodel
             Util.dataModel.setVideoUrl(playerModel.getVideoUrl());
@@ -903,8 +923,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
                         MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
 
-                        movieMetadata.putString(MediaMetadata.KEY_SUBTITLE,Util.dataModel.getVideoStory());
-                        movieMetadata.putString(MediaMetadata.KEY_TITLE,  Util.dataModel.getVideoTitle());
+                        movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, Util.dataModel.getVideoStory());
+                        movieMetadata.putString(MediaMetadata.KEY_TITLE, Util.dataModel.getVideoTitle());
                         movieMetadata.addImage(new WebImage(Uri.parse(posterUrl.trim())));
                         movieMetadata.addImage(new WebImage(Uri.parse(posterUrl.trim())));
 
@@ -920,22 +940,22 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                                 //  This Code Is Added For Video Log By Bibhu..
 
                                 jsonObj.put("authToken", Constant.authTokenStr.trim());
-                                jsonObj.put("user_id",preferenceManager.getUseridFromPref());
+                                jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                                 jsonObj.put("ip_address", ipAddressStr.trim());
-                                jsonObj.put("movie_id",playerModel.getMovieUniqueId());
+                                jsonObj.put("movie_id", playerModel.getMovieUniqueId());
                                 jsonObj.put("episode_id", playerModel.getEpisode_id());
-                                jsonObj.put("played_length","0");
+                                jsonObj.put("played_length", "0");
                                 jsonObj.put("watch_status", "start");
                                 jsonObj.put("device_type", "2");
                                 jsonObj.put("log_id", "0");
 
-                                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION,DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                                     jsonObj.put("restrict_stream_id", "1");
-                                }else{
+                                } else {
                                     jsonObj.put("restrict_stream_id", "0");
                                 }
 
-                                jsonObj.put("domain_name",APIUrlConstant.BASE_URl.trim().substring(0, APIUrlConstant.BASE_URl.trim().length()-6));
+                                jsonObj.put("domain_name", APIUrlConstant.BASE_URl.trim().substring(0, APIUrlConstant.BASE_URl.trim().length() - 6));
                                 jsonObj.put("is_log", "1");
                                 jsonObj.put("seek_status", "");
 
@@ -944,7 +964,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                                 // This  Code Is Added For Drm BufferLog By Bibhu ...
 
                                 jsonObj.put("resolution", "BEST");
-                                jsonObj.put("start_time","0");
+                                jsonObj.put("start_time", "0");
                                 jsonObj.put("end_time", "0");
                                 jsonObj.put("log_unique_id", "0");
                                 jsonObj.put("location", "0");
@@ -957,7 +977,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             }
 
                             List tracks = new ArrayList();
-                            for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i ++){
+                            for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i++) {
                                 MediaTrack englishSubtitle = new MediaTrack.Builder(i,
                                         MediaTrack.TYPE_TEXT)
                                         .setName(playerModel.getSubTitleName().get(0))
@@ -981,7 +1001,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
 
                             togglePlayback();
-                        }else{
+                        } else {
                             JSONObject jsonObj = null;
                             try {
                                 jsonObj = new JSONObject();
@@ -990,22 +1010,23 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                                 //  This Code Is Added For Video Log By Bibhu..
 
                                 jsonObj.put("authToken", Constant.authTokenStr.trim());
-                                jsonObj.put("user_id",preferenceManager.getUseridFromPref());                                jsonObj.put("ip_address", ipAddressStr.trim());
-                                jsonObj.put("movie_id",playerModel.getMovieUniqueId());
+                                jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+                                jsonObj.put("ip_address", ipAddressStr.trim());
+                                jsonObj.put("movie_id", playerModel.getMovieUniqueId());
                                 jsonObj.put("episode_id", playerModel.getEpisode_id());
-                                jsonObj.put("played_length","0");
+                                jsonObj.put("played_length", "0");
                                 jsonObj.put("watch_status", "start");
                                 jsonObj.put("device_type", "2");
                                 jsonObj.put("log_id", "0");
                                 jsonObj.put("seek_status", "");
 
-                                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION,DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                                     jsonObj.put("restrict_stream_id", "1");
-                                }else{
+                                } else {
                                     jsonObj.put("restrict_stream_id", "0");
                                 }
 
-                                jsonObj.put("domain_name",APIUrlConstant.BASE_URl.trim().substring(0, APIUrlConstant.BASE_URl.trim().length()-6));
+                                jsonObj.put("domain_name", APIUrlConstant.BASE_URl.trim().substring(0, APIUrlConstant.BASE_URl.trim().length() - 6));
                                 jsonObj.put("is_log", "1");
 
                                 //=====================End===================//
@@ -1014,7 +1035,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                                 // This  Code Is Added For Drm BufferLog By Bibhu ...
 
                                 jsonObj.put("resolution", "BEST");
-                                jsonObj.put("start_time","0");
+                                jsonObj.put("start_time", "0");
                                 jsonObj.put("end_time", "0");
                                 jsonObj.put("log_unique_id", "0");
                                 jsonObj.put("location", "0");
@@ -1024,13 +1045,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                                 //====================End=====================//
 
 
-
                             } catch (JSONException e) {
                             }
 
 
                             List tracks = new ArrayList();
-                            for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i ++){
+                            for (int i = 0; i < playerModel.getFakeSubTitlePath().size(); i++) {
                                 MediaTrack englishSubtitle = new MediaTrack.Builder(i,
                                         MediaTrack.TYPE_TEXT)
                                         .setName(playerModel.getSubTitleName().get(0))
@@ -1428,11 +1448,11 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 status = 0;
             }
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(languagePreference.getTextofLanguage( NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
-            dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -1449,11 +1469,11 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 status = 0;
             }
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(languagePreference.getTextofLanguage( NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
-            dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
             dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -1476,12 +1496,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
 
-                dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
 
-                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -1502,12 +1522,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     status = 0;
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 
-                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -1528,12 +1548,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     status = 0;
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(languagePreference.getTextofLanguage( CROSSED_MAXIMUM_LIMIT, CROSSED_MAXIMUM_LIMIT) + " " + languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(CROSSED_MAXIMUM_LIMIT, CROSSED_MAXIMUM_LIMIT) + " " + languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 
-                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -1588,12 +1608,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 }
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
 
-                dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 
-                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -1619,13 +1639,13 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 if (message != null && message.equalsIgnoreCase("")) {
                     dlgAlert.setMessage(message);
                 } else {
-                    dlgAlert.setMessage(languagePreference.getTextofLanguage( CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
 
                 }
-                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -1646,12 +1666,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     }
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
 
-                    dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 
-                    dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -1696,12 +1716,12 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
                             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
 
-                            dlgAlert.setMessage(languagePreference.getTextofLanguage( ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage( APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
+                            dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + getResources().getString(R.string.studio_site));
 
-                            dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
-                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                             dlgAlert.setCancelable(false);
-                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
+                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             dialog.cancel();
@@ -1752,14 +1772,14 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             movieImageStr = myLibraryOutputModelArray.get(i).getPosterUrl();
             String movieName = myLibraryOutputModelArray.get(i).getName();
             String videoTypeIdStr = myLibraryOutputModelArray.get(i).getContentTypesId();
-            String movieGenreStr=myLibraryOutputModelArray.get(i).getGenre();
-            String moviePermalinkStr=myLibraryOutputModelArray.get(i).getPermalink();
-            String isEpisodeStr=myLibraryOutputModelArray.get(i).getIs_episode();
-            movieStreamUniqueId=myLibraryOutputModelArray.get(i).getMovie_stream_uniq_id();
-            movieUniqueId=myLibraryOutputModelArray.get(i).getMovieId();
-            int isConverted=myLibraryOutputModelArray.get(i).getIsConverted();
-            int isFreeContent=myLibraryOutputModelArray.get(i).getIsfreeContent();
-            int season_id=myLibraryOutputModelArray.get(i).getSeason_id();
+            String movieGenreStr = myLibraryOutputModelArray.get(i).getGenre();
+            String moviePermalinkStr = myLibraryOutputModelArray.get(i).getPermalink();
+            String isEpisodeStr = myLibraryOutputModelArray.get(i).getIs_episode();
+            movieStreamUniqueId = myLibraryOutputModelArray.get(i).getMovie_stream_uniq_id();
+            movieUniqueId = myLibraryOutputModelArray.get(i).getMovieId();
+            int isConverted = myLibraryOutputModelArray.get(i).getIsConverted();
+            int isFreeContent = myLibraryOutputModelArray.get(i).getIsfreeContent();
+            int season_id = myLibraryOutputModelArray.get(i).getSeason_id();
 
             itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, movieUniqueId, movieStreamUniqueId, isConverted, isFreeContent, season_id));
         }
@@ -2226,7 +2246,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Do something that differs the Activity's menu here
+/***************chromecast**********************/
 
+        CastButtonFactory.setUpMediaRouteButton(getActivity(), menu, R.id.media_route_menu_item);
+        /***************chromecast**********************/
         MenuItem item;
         item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
@@ -2470,22 +2493,22 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         //Call whatever you want
                         if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
-                            MyLibraryInputModel myLibraryInputModel=new MyLibraryInputModel();
+                            MyLibraryInputModel myLibraryInputModel = new MyLibraryInputModel();
                             myLibraryInputModel.setAuthToken(authTokenStr);
                             myLibraryInputModel.setUser_id(preferenceManager.getUseridFromPref());
                             myLibraryInputModel.setLimit(String.valueOf(limit));
                             myLibraryInputModel.setOffset(String.valueOf(offset));
-                            String countryPref=preferenceManager.getCountryCodeFromPref();
+                            String countryPref = preferenceManager.getCountryCodeFromPref();
                             if (countryPref != null) {
                                 myLibraryInputModel.setCountry(countryPref);
-                            }else {
+                            } else {
                                 myLibraryInputModel.setCountry("IN");
                             }
-                            myLibraryInputModel.setLang_code(languagePreference.getTextofLanguage( SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                            MyLibraryAsynTask asyncLoadVideos = new MyLibraryAsynTask(myLibraryInputModel,MyLibraryFragment.this,context);
+                            myLibraryInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            MyLibraryAsynTask asyncLoadVideos = new MyLibraryAsynTask(myLibraryInputModel, MyLibraryFragment.this, context);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
                         } else {
-                            Toast.makeText(getActivity(), languagePreference.getTextofLanguage( NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                             getActivity().finish();
                         }
                     } else {
@@ -2884,20 +2907,19 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 }
                 Intent playVideoIntent;
 
-                if (Util.dataModel.getAdNetworkId() == 3){
-                    Log.v("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+                if (Util.dataModel.getAdNetworkId() == 3) {
+                    Log.v("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
                     playVideoIntent = new Intent(getActivity(), ExoPlayerActivity.class);
 
-                }
-                else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1){
+                } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                     if (Util.dataModel.getPlayPos() <= 0) {
                         playVideoIntent = new Intent(getActivity(), AdPlayerActivity.class);
-                    }else{
+                    } else {
                         playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);
 
                     }
-                }else{
+                } else {
                     playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);
 
                 }
@@ -3381,6 +3403,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
         }
     }
+
     /***************chromecast**********************/
 
     private void showIntroductoryOverlay() {
@@ -3522,14 +3545,14 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
                 break;
             case IDLE:
-                if (mLocation == PlaybackLocation.LOCAL){
+                if (mLocation == PlaybackLocation.LOCAL) {
                    /* if (isAPV == 1) {
                         watchMovieButton.setText(getResources().getString(R.string.advance_purchase_str));
                     }else {
                         watchMovieButton.setText(getResources().getString(R.string.movie_details_watch_video_button_title));
                     }*/
 
-                }else{
+                } else {
                    /* if (isAPV == 1) {
                         watchMovieButton.setText(getResources().getString(R.string.advance_purchase_str));
                     }else {
@@ -3628,9 +3651,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
 
                             // Utils.showQueuePopup(this, mPlayCircle, mSelectedMedia);
-                        }
-                        else
-                        {
+                        } else {
                         }
                         break;
                     default:
@@ -3677,9 +3698,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
     }
-
-
-
 
 
     private void stopControllersTimer() {
