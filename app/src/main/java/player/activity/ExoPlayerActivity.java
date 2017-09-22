@@ -84,6 +84,7 @@ import com.google.android.gms.common.images.WebImage;
 import com.home.vod.R;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
+import com.home.vod.util.ResizableCustomView;
 import com.intertrust.wasabi.ErrorCodeException;
 import com.intertrust.wasabi.Runtime;
 import com.intertrust.wasabi.media.PlaylistProxy;
@@ -149,7 +150,9 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 
 
 enum ContentTypes2 {
@@ -195,7 +198,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
      * ad
      **/
 
-
+    private static final int MAX_LINES = 2;
     PlaylistProxy playerProxy;
     int played_length = 0;
     int playerStartPosition = 0;
@@ -3215,6 +3218,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     private void showSystemUI() {
         story.setText(playerModel.getVideoStory());
+        ResizableCustomView.doResizeTextView(ExoPlayerActivity.this, story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE), true);
+
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE

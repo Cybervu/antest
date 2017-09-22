@@ -4384,6 +4384,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     public void onAddToFavPostExecuteCompleted(AddToFavOutputModel addToFavOutputModel, int status, String sucessMsg) {
         favorite_view.setImageResource(R.drawable.favorite_red);
         isFavorite = 1;
+        MovieDetailsActivity.this.sucessMsg = sucessMsg;
         showToast();
         if (pDialog.isShowing() && pDialog != null) {
             pDialog.hide();
@@ -4716,6 +4717,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     @Override
     public void onDeleteFavPostExecuteCompleted(DeleteFavOutputModel deleteFavOutputModel, int status, String sucessMsg) {
         favorite_view.setImageResource(R.drawable.favorite_unselected);
+        MovieDetailsActivity.this.sucessMsg = sucessMsg;
         showToast();
         isFavorite = 0;
         if (pDialog.isShowing() && pDialog != null) {

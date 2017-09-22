@@ -192,9 +192,19 @@ LanguagePreference languagePreference;
         catch(IllegalArgumentException ex)
         {
         }
-
+        Id_Purchase_History = new ArrayList<>();
         if (status>0){
             if (status==200){
+
+               if (purchaseHistoryOutputModel!=null && purchaseHistoryOutputModel.size()>0){
+                   for (PurchaseHistoryOutputModel model:purchaseHistoryOutputModel
+                        ) {
+
+                       purchaseData.add(new PurchaseHistoryModel(model.getInvoice_id(), model.getId(), model.getTransaction_date(), model.getTransaction_status(), model.getAmount(), model.getStatusppv()));
+                       Id_Purchase_History.add( model.getId());
+                   }
+               }
+
                 if(purchaseData.size()>0){
 
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
