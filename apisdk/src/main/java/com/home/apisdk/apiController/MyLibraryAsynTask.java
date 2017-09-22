@@ -193,7 +193,7 @@ public class MyLibraryAsynTask extends AsyncTask<MyLibraryInputModel, Void, Void
 
                         }
                         if ((jsonChildNode.has("is_episode")) && jsonChildNode.optString("is_episode").trim() != null && !jsonChildNode.optString("is_episode").trim().isEmpty() && !jsonChildNode.optString("is_episode").trim().equals("null") && !jsonChildNode.optString("is_episode").trim().matches("")) {
-                            content.setContentTypesId(jsonChildNode.optString("is_episode"));
+                            content.setIs_episode(jsonChildNode.optString("is_episode"));
 
                         }
                         myLibraryOutputModel.add(content);
