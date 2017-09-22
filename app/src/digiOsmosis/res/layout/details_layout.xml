@@ -292,7 +292,7 @@
                     android:layout_marginRight="@dimen/ppv_margin"
                     android:layout_marginTop="@dimen/compress_expand_margin">
 
-                    <com.home.vod.util.ExpandableTextView
+                    <TextView
                         android:id="@+id/videoStoryTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

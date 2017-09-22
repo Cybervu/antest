@@ -40,6 +40,7 @@ import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -113,7 +114,7 @@ public class ProfileActivity extends AppCompatActivity implements
     Spinner country_spinner, language_spinner;
     ArrayAdapter<String> Language_arrayAdapter, Country_arrayAdapter;
 
-    String Selected_Language, Selected_Country = "0", Selected_Language_Id="", Selected_Country_Id="";
+    String Selected_Language, Selected_Country = "0", Selected_Language_Id = "", Selected_Country_Id = "";
     PreferenceManager preferenceManager;
     List<String> Country_List, Country_Code_List, Language_List, Language_Code_List;
 
@@ -147,13 +148,13 @@ public class ProfileActivity extends AppCompatActivity implements
         language_spinner = (Spinner) findViewById(R.id.languageSpinner);
         country_spinner.setVisibility(View.GONE);
         language_spinner.setVisibility(View.GONE);
-        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts),editProfileNameEditText);
-        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts),editConfirmPassword);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), editProfileNameEditText);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), editConfirmPassword);
 
-        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts),editNewPassword);
-        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts),changePassword);
-        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts),update_profile);
-        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts),manage_devices);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), editNewPassword);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts), changePassword);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts), update_profile);
+        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts), manage_devices);
 
         editProfileNameEditText.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
         editConfirmPassword.setHint(languagePreference.getTextofLanguage(CONFIRM_PASSWORD, DEFAULT_CONFIRM_PASSWORD));
@@ -183,6 +184,13 @@ public class ProfileActivity extends AppCompatActivity implements
         manage_devices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+
                 if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
                     Intent intent = new Intent(ProfileActivity.this, ManageDevices.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -206,7 +214,7 @@ public class ProfileActivity extends AppCompatActivity implements
         Language_arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.country_language_spinner, Language_List) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
-                FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts),(TextView) v);
+                FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), (TextView) v);
 
 /*
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
@@ -216,7 +224,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View v = super.getDropDownView(position, convertView, parent);
-                FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts),(TextView) v);
+                FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), (TextView) v);
 /*
                 Typeface externalFont1 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
                 ((TextView) v).setTypeface(externalFont1);*/
@@ -232,7 +240,7 @@ public class ProfileActivity extends AppCompatActivity implements
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
 
-                FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts),(TextView) v);
+                FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), (TextView) v);
 /*
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
                 ((TextView) v).setTypeface(externalFont);*/
@@ -241,7 +249,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View v = super.getDropDownView(position, convertView, parent);
-                FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts),(TextView) v);
+                FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), (TextView) v);
 
                /* Typeface externalFont1 = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
                 ((TextView) v).setTypeface(externalFont1);*/
@@ -295,6 +303,11 @@ public class ProfileActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
 
+                InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
 
                 if (changePassword.isClickable() && editConfirmPassword.isShown() && editNewPassword.isShown()) {
 
@@ -363,6 +376,13 @@ public class ProfileActivity extends AppCompatActivity implements
 
                 } else {
                     if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
+
+                        InputMethodManager inputManager = (InputMethodManager)
+                                getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                                InputMethodManager.HIDE_NOT_ALWAYS);
+
                         UpdateProfile();
                     }
                 }
@@ -455,13 +475,13 @@ public class ProfileActivity extends AppCompatActivity implements
                 pDialog.hide();
                 pDialog = null;
             }
-        }catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
 
         }
 
-        if (code>0){
-            if (code==200){
-                String confirmPasswordStr =editNewPassword.getText().toString().trim();
+        if (code > 0) {
+            if (code == 200) {
+                String confirmPasswordStr = editNewPassword.getText().toString().trim();
                 name_of_user.setText(editProfileNameEditText.getText().toString().trim());
                 if (!confirmPasswordStr.trim().equalsIgnoreCase("") &&
                         !confirmPasswordStr.isEmpty() &&
@@ -470,12 +490,12 @@ public class ProfileActivity extends AppCompatActivity implements
                         !confirmPasswordStr.matches("")) {
                     preferenceManager.setPwdToPref(confirmPasswordStr);
                 }
-                if (update_userProfile_output!=null){
+                if (update_userProfile_output != null) {
 
                     String displayNameStr = update_userProfile_output.getName();
                     preferenceManager.setDispNameToPref(displayNameStr);
                 }
-                Util.showToast(ProfileActivity.this,languagePreference.getTextofLanguage(PROFILE_UPDATED,DEFAULT_PROFILE_UPDATED));
+                Util.showToast(ProfileActivity.this, languagePreference.getTextofLanguage(PROFILE_UPDATED, DEFAULT_PROFILE_UPDATED));
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                 if (name_of_user != null) {
                     name_of_user.clearFocus();
@@ -489,11 +509,10 @@ public class ProfileActivity extends AppCompatActivity implements
                 if (editNewPassword != null) {
                     editNewPassword.clearFocus();
                 }
-            }else {
+            } else {
 
             }
-        }
-        else {
+        } else {
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(languagePreference.getTextofLanguage(UPDATE_PROFILE_ALERT, DEFAULT_UPDATE_PROFILE_ALERT));
             dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
@@ -745,95 +764,95 @@ public class ProfileActivity extends AppCompatActivity implements
                 pDialog.hide();
                 pDialog = null;
             }
-        }catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
 
         }
 
-            if (Selected_Country_Id.equals("0")) {
-                country_spinner.setSelection(224);
-                Selected_Country_Id = Country_Code_List.get(224);
-                LogUtil.showLog("Muvi", "country not  matched =" + Selected_Country + "==" + Selected_Country_Id);
-            } else {
-                for (int i = 0; i < Country_Code_List.size(); i++) {
-                    if (Selected_Country_Id.trim().equals(Country_Code_List.get(i))) {
-                        country_spinner.setSelection(i);
-                        Selected_Country_Id = Country_Code_List.get(i);
+        if (Selected_Country_Id.equals("0")) {
+            country_spinner.setSelection(224);
+            Selected_Country_Id = Country_Code_List.get(224);
+            LogUtil.showLog("Muvi", "country not  matched =" + Selected_Country + "==" + Selected_Country_Id);
+        } else {
+            for (int i = 0; i < Country_Code_List.size(); i++) {
+                if (Selected_Country_Id.trim().equals(Country_Code_List.get(i))) {
+                    country_spinner.setSelection(i);
+                    Selected_Country_Id = Country_Code_List.get(i);
 
-                        LogUtil.showLog("Muvi", "country  matched =" + Selected_Country_Id + "==" + Selected_Country_Id);
-                    }
+                    LogUtil.showLog("Muvi", "country  matched =" + Selected_Country_Id + "==" + Selected_Country_Id);
                 }
             }
-            Country_arrayAdapter.notifyDataSetChanged();
+        }
+        Country_arrayAdapter.notifyDataSetChanged();
 
 
-            for (int i = 0; i < Language_Code_List.size(); i++) {
-                if (Selected_Language_Id.trim().equals(Language_Code_List.get(i))) {
-                    language_spinner.setSelection(i);
-                    Selected_Language_Id = Language_Code_List.get(i);
+        for (int i = 0; i < Language_Code_List.size(); i++) {
+            if (Selected_Language_Id.trim().equals(Language_Code_List.get(i))) {
+                language_spinner.setSelection(i);
+                Selected_Language_Id = Language_Code_List.get(i);
 
-                    LogUtil.showLog("Muvi", "Selected_Language_Id =" + Selected_Language_Id);
+                LogUtil.showLog("Muvi", "Selected_Language_Id =" + Selected_Language_Id);
+            }
+        }
+        Language_arrayAdapter.notifyDataSetChanged();
+
+
+        editProfileNameEditText.setText(get_userProfile_output.getDisplay_name());
+        name_of_user.setText(get_userProfile_output.getDisplay_name());
+        emailAddressEditText.setText(get_userProfile_output.getEmail());
+        if (get_userProfile_output.getProfile_image().matches(NO_DATA)) {
+            bannerImageView.setAlpha(0.8f);
+            bannerImageView.setImageResource(R.drawable.logo);
+        } else {
+            Picasso.with(ProfileActivity.this)
+                    .load(get_userProfile_output.getProfile_image())
+                    .placeholder(R.drawable.logo).error(R.drawable.logo).noFade().resize(200, 200).into(bannerImageView, new Callback() {
+
+                @Override
+                public void onSuccess() {
+
+                    Bitmap bitmapFromPalette = ((BitmapDrawable) bannerImageView.getDrawable()).getBitmap();
+                    Palette palette = Palette.generate(bitmapFromPalette);
+                }
+
+                @Override
+                public void onError() {
+                    // reset your views to default colors, etc.
+                    bannerImageView.setAlpha(0.8f);
+                    bannerImageView.setImageResource(R.drawable.no_image);
+                }
+
+            });
+            if (get_userProfile_output.getProfile_image() != null && get_userProfile_output.getProfile_image().length() > 0) {
+                int pos = get_userProfile_output.getProfile_image().lastIndexOf("/");
+                String x = get_userProfile_output.getProfile_image().substring(pos + 1, get_userProfile_output.getProfile_image().length());
+
+                if (x.equalsIgnoreCase("no-user.png")) {
+                    bannerImageView.setImageResource(R.drawable.no_image);
+                    bannerImageView.setAlpha(0.8f);
+                    //imagebg.setBackgroundColor(Color.parseColor("#969393"));
+
+                } else {
+                    Picasso.with(ProfileActivity.this)
+                            .load(get_userProfile_output.getProfile_image())
+                            .placeholder(R.drawable.logo).error(R.drawable.logo).noFade().resize(200, 200).into(bannerImageView, new Callback() {
+
+                        @Override
+                        public void onSuccess() {
+                            bannerImageView.setAlpha(0.3f);
+
+                        }
+
+                        @Override
+                        public void onError() {
+                            bannerImageView.setImageResource(R.drawable.no_image);
+                            bannerImageView.setAlpha(0.8f);
+                            //imagebg.setBackgroundColor(Color.parseColor("#969393"));
+                        }
+
+                    });
                 }
             }
-            Language_arrayAdapter.notifyDataSetChanged();
-
-
-            editProfileNameEditText.setText(get_userProfile_output.getDisplay_name());
-            name_of_user.setText(get_userProfile_output.getDisplay_name());
-            emailAddressEditText.setText(get_userProfile_output.getEmail());
-            if (get_userProfile_output.getProfile_image().matches(NO_DATA)) {
-                bannerImageView.setAlpha(0.8f);
-                bannerImageView.setImageResource(R.drawable.logo);
-            } else {
-                Picasso.with(ProfileActivity.this)
-                        .load(get_userProfile_output.getProfile_image())
-                        .placeholder(R.drawable.logo).error(R.drawable.logo).noFade().resize(200, 200).into(bannerImageView, new Callback() {
-
-                    @Override
-                    public void onSuccess() {
-
-                        Bitmap bitmapFromPalette = ((BitmapDrawable) bannerImageView.getDrawable()).getBitmap();
-                        Palette palette = Palette.generate(bitmapFromPalette);
-                    }
-
-                    @Override
-                    public void onError() {
-                        // reset your views to default colors, etc.
-                        bannerImageView.setAlpha(0.8f);
-                        bannerImageView.setImageResource(R.drawable.no_image);
-                    }
-
-                });
-                if (get_userProfile_output.getProfile_image() != null && get_userProfile_output.getProfile_image().length() > 0) {
-                    int pos = get_userProfile_output.getProfile_image().lastIndexOf("/");
-                    String x = get_userProfile_output.getProfile_image().substring(pos + 1, get_userProfile_output.getProfile_image().length());
-
-                    if (x.equalsIgnoreCase("no-user.png")) {
-                        bannerImageView.setImageResource(R.drawable.no_image);
-                        bannerImageView.setAlpha(0.8f);
-                        //imagebg.setBackgroundColor(Color.parseColor("#969393"));
-
-                    } else {
-                        Picasso.with(ProfileActivity.this)
-                                .load(get_userProfile_output.getProfile_image())
-                                .placeholder(R.drawable.logo).error(R.drawable.logo).noFade().resize(200, 200).into(bannerImageView, new Callback() {
-
-                            @Override
-                            public void onSuccess() {
-                                bannerImageView.setAlpha(0.3f);
-
-                            }
-
-                            @Override
-                            public void onError() {
-                                bannerImageView.setImageResource(R.drawable.no_image);
-                                bannerImageView.setAlpha(0.8f);
-                                //imagebg.setBackgroundColor(Color.parseColor("#969393"));
-                            }
-
-                        });
-                    }
-                }
-            }
+        }
     }
 
 //    private class AsynLoadProfileDetails extends AsyncTask<Void, Void, Void> {
