@@ -431,7 +431,7 @@
                     android:stateListAnimator="@null"
                     android:textAllCaps="false"
                     android:textColor="@color/buttonTextColor"
-                    android:textSize="@dimen/review_btn_textsize" />
+                    android:textSize="@dimen/trailerbtn_text_size" />
 
 
             </RelativeLayout>
