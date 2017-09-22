@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/paymentOptionLinearLayout"
                 android:layout_marginTop="@dimen/payment_margin_top"
-                android:visibility="gone">
+                android:visibility="visible">
 
 
                 <RelativeLayout
@@ -194,7 +194,7 @@
                         android:layout_marginTop="@dimen/ppv_margin"
                         android:button="@drawable/savecard_style"
                         android:text=""
-                        android:textColor="@color/buttonTextColor"
+                        android:textColor="@color/savecardtextcolor"
                         android:textSize="@dimen/savecard_text_size"
                         android:visibility="visible" />
 
