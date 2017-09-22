@@ -787,9 +787,10 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         if (Ph.isShowing())
             Ph.hide();
 
-        if (!getInvoicePdfOutputModel.getSection().equals(""))
+        if (!getInvoicePdfOutputModel.getSection().equals("")) {
+            download_Url = getInvoicePdfOutputModel.getSection();
             DownloadTransactionDetails();
-        else
+        } else
             Util.showToast(getApplicationContext(),languagePreference.getTextofLanguage(NO_PDF,DEFAULT_NO_PDF));
 
     }
@@ -903,6 +904,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                         dialog.cancel();
 
                         if (deletevalue == 1) {
+                            /*Delete download url from server */
                             DeleteInvoicePdfInputModel deleteInvoicePdfInputModel = new DeleteInvoicePdfInputModel();
                             deleteInvoicePdfInputModel.setAuthToken(authTokenStr);
                             deleteInvoicePdfInputModel.setFilepath(download_Url);
