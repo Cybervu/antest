@@ -147,13 +147,13 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                 contentDetailsOutput.setRating(myJson.getString("rating"));
 
             } else {
-                contentDetailsOutput.setRating("0");
+                contentDetailsOutput.setRating("");
             }
 
             if (myJson.has("review") && myJson.has("review") != false && myJson.getString("review").trim() != null && !myJson.getString("review").trim().isEmpty() && !myJson.getString("review").trim().equals("null") && !myJson.getString("review").trim().equals("false")) {
                 contentDetailsOutput.setReview(myJson.getString("review"));
             } else {
-                contentDetailsOutput.setReview("0");
+                contentDetailsOutput.setReview("");
             }
 
             if ((myJson.has("epDetails")) && myJson.getString("epDetails").trim() != null && !myJson.getString("epDetails").trim().isEmpty() && !myJson.getString("epDetails").trim().equals("null") && !myJson.getString("epDetails").trim().matches("")) {
