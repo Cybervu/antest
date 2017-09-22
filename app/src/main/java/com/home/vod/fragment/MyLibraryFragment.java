@@ -2538,7 +2538,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                httppost.addHeader("content_uniq_id",movieUniqueId);
 //                httppost.addHeader("stream_uniq_id",movieStreamUniqueId);
 //                httppost.addHeader("internet_speed",MainActivity.internetSpeed.trim());
-//                httppost.addHeader("user_id",pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+//                httppost.addHeader("user_id",preferenceManager.getString("PREFS_LOGGEDIN_ID_KEY", null));
 //
 //
 //
@@ -2555,7 +2555,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //
 //
 //                httppost.addHeader("internet_speed",MainActivity.internetSpeed.trim());
-//                httppost.addHeader("user_id",pref.getString("PREFS_LOGGEDIN_ID_KEY", null));*/
+//                httppost.addHeader("user_id",preferenceManager.getString("PREFS_LOGGEDIN_ID_KEY", null));*/
 //
 //                // Execute HTTP Post Request
 //                try {
@@ -2945,8 +2945,8 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //        @Override
 //        protected Void doInBackground(Void... params) {
 //
-//            if (pref != null) {
-//                loggedInIdStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+//            if (preferenceManager != null) {
+//                loggedInIdStr = preferenceManager.getString("PREFS_LOGGEDIN_ID_KEY", null);
 //            }
 //
 //
@@ -3310,7 +3310,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 //                            getVideoDetailsInput.setContent_uniq_id(movieUniqueId);
 //                            getVideoDetailsInput.setStream_uniq_id(movieStreamUniqueId);
 //                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-//                            getVideoDetailsInput.setUser_id(pref.getString("PREFS_LOGGEDIN_ID_KEY", null));
+//                            getVideoDetailsInput.setUser_id(preferenceManager.getString("PREFS_LOGGEDIN_ID_KEY", null));
 //                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MyLibraryFragment.this, context);
 //                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 //                        } else {

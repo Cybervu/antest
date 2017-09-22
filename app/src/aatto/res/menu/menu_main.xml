@@ -67,6 +67,10 @@
                 android:icon="@drawable/purchase_history"
                 android:title="Purchase History"/>
             <item
+                android:id="@+id/menu_item_favorite"
+                android:icon="@drawable/favorite"
+                android:title="My favorites"/>
+            <item
                 android:id="@+id/action_mydownload"
                 android:icon="@drawable/action_download"
                 android:title="My Download"/>
