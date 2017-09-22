@@ -169,6 +169,9 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
 
 
                     }
+
+                    episode_details_output.setIs_ppv(is_ppv);
+
                     if ((myJson.has("is_advance")) && myJson.getString("is_advance").trim() != null && !myJson.getString("is_advance").trim().isEmpty() && !myJson.getString("is_advance").trim().equals("null") && !myJson.getString("is_advance").trim().matches("")) {
 
                         isAPV = Integer.parseInt(myJson.getString("is_advance"));
@@ -176,6 +179,7 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
                         isAPV = 0;
                     }
 
+                    episode_details_output.setIsAPV(isAPV);
 
                     // Episode_Details_output payment = new Episode_Details_output();
 

@@ -8,14 +8,14 @@ package com.home.apisdk.apiModel;
 
 public class GetMonetizationDetailsOutputModel {
 
-    String voucher;
+    int voucher;
 
     /**
      * This Method is use to Get the Voucher
      *
      * @return voucher
      */
-    public String getVoucher() {
+    public int getVoucher() {
         return voucher;
     }
 
@@ -24,7 +24,7 @@ public class GetMonetizationDetailsOutputModel {
      *
      * @param voucher For Setting The Voucher
      */
-    public void setVoucher(String voucher) {
+    public void setVoucher(int voucher) {
         this.voucher = voucher;
     }
 

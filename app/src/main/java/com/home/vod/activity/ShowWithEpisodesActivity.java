@@ -679,6 +679,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.GONE);
             itemData = new ArrayList<EpisodesListModel>();
+            isAPV=episode_details_output.getIsAPV();
+            isPPV=episode_details_output.getIs_ppv();
 
             Util.currencyModel = episode_details_output.getCurrencyDetails();
             Util.apvModel = episode_details_output.getApvDetails();
@@ -1888,7 +1890,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
 
-                if (pref != null) {
+                if (preferenceManager != null) {
                     loggedInStr = preferenceManager.getUseridFromPref();
                 }
 
