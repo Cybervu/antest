@@ -267,7 +267,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
     private VideoFilterAdapter customGridAdapter;
 
     //Model for GridView
-    ArrayList<GridItem> itemData;
+    ArrayList<GridItem> itemData = new ArrayList<GridItem>();;
     GridLayoutManager mLayoutManager;
     String posterUrl;
 
@@ -985,7 +985,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
         protected void onPostExecute(Void result) {
 
-            itemData = new ArrayList<GridItem>();
+
             if (responseStr == null)
                 responseStr = "0";
             if ((responseStr.trim().equals("0"))) {

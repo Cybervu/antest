@@ -845,6 +845,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         {
             story.setText(playerModel.getVideoStory());
             story.setVisibility(View.VISIBLE);
+            ResizableCustomView.doResizeTextView(ExoPlayerActivity.this, story, MAX_LINES, Util.getTextofLanguage(ExoPlayerActivity.this, Util.VIEW_MORE, Util.DEFAULT_VIEW_MORE), true);
         } else {
             story.setVisibility(View.GONE);
         }
