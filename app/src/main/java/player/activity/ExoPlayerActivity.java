@@ -4206,10 +4206,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 onApplicationDisconnected();
 
-                if (!Util.app_is_in_player_context) {
-                    Log.v("BIBHU2", "context not matched");
-                    return;
-                }
+
                 //mSessionManagerListener  = null;
                 mCastSession = null;
 
