@@ -83,6 +83,7 @@ import com.google.android.gms.common.images.WebImage;
 import com.home.vod.R;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
+import com.home.vod.util.ResizableCustomView;
 import com.intertrust.wasabi.ErrorCodeException;
 import com.intertrust.wasabi.Runtime;
 import com.intertrust.wasabi.media.PlaylistProxy;
@@ -147,7 +148,9 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 
 
 enum ContentTypes3 {
@@ -265,6 +268,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     TextView videoTitle, GenreTextView, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView,
             videoCastCrewTitleTextView;
     TextView story;
+    private static final int MAX_LINES = 2;
 
     private EMVideoView emVideoView;
     int seek_label_pos = 0;
@@ -794,6 +798,8 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         {
             story.setText(playerModel.getVideoStory());
             story.setVisibility(View.VISIBLE);
+            ResizableCustomView.doResizeTextView(MyLibraryPlayer.this, story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE), true);
+
         } else {
             story.setVisibility(View.GONE);
         }
@@ -3016,6 +3022,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
     private void showSystemUI() {
         story.setText(playerModel.getVideoStory());
+        ResizableCustomView.doResizeTextView(MyLibraryPlayer.this, story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE), true);
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
