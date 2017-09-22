@@ -36,7 +36,6 @@
                 android:layout_marginTop="@dimen/loginImageViewMarging_top"
                 android:background="@drawable/logo"
                 android:paddingTop="@dimen/login_padding" />
-
             <EditText
                 android:id="@+id/editEmailStr"
                 android:layout_width="match_parent"
@@ -49,8 +48,7 @@
                 android:paddingTop="@dimen/login_padding_bottom"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:textSize="@dimen/email_text_size"/>
-
+                android:textSize="@dimen/email_text_size" />
             <EditText
                 android:id="@+id/editPasswordStr"
                 android:layout_width="match_parent"
@@ -158,6 +156,8 @@
                     android:layout_marginBottom="30dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />-->
+
+
 
             <com.facebook.login.widget.LoginButton
                 android:visibility="gone"
