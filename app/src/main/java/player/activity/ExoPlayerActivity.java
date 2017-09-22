@@ -4280,18 +4280,24 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             @Override
             public void onSessionEnding(CastSession session) {
-                cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
-                DataUsedByChrmoeCast = Current_Sesion_DataUsedByChrmoeCast + DataUsedByChrmoeCast;
-                Current_Sesion_DataUsedByChrmoeCast = 0;
+                try {
 
-                // ExoPlayerActivity.this is done because , during cast ending receiver already closed the streaming restriction for ExoPlayerActivity.this user , so we have to
-                // satrt a new streaming restriction at sender end.
-                restrict_stream_id = "0";
 
-                session.getRemoteMediaClient().getMediaInfo().getMetadata();
-                Log.v("BIBHU3", "onSessionEnding===================" + cast_disconnected_position);
-                Log.v("BIBHU3", "onSessionEnding DataUsedByChrmoeCast===================" + DataUsedByChrmoeCast);
+                    cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
+                    DataUsedByChrmoeCast = Current_Sesion_DataUsedByChrmoeCast + DataUsedByChrmoeCast;
+                    Current_Sesion_DataUsedByChrmoeCast = 0;
 
+                    // ExoPlayerActivity.this is done because , during cast ending receiver already closed the streaming restriction for ExoPlayerActivity.this user , so we have to
+                    // satrt a new streaming restriction at sender end.
+                    restrict_stream_id = "0";
+
+                    session.getRemoteMediaClient().getMediaInfo().getMetadata();
+                    Log.v("BIBHU3", "onSessionEnding===================" + cast_disconnected_position);
+                    Log.v("BIBHU3", "onSessionEnding DataUsedByChrmoeCast===================" + DataUsedByChrmoeCast);
+                }
+                catch (Exception e){
+
+                }
             }
 
             @Override

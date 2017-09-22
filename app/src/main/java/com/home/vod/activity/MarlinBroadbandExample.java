@@ -809,9 +809,9 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
                     } else {
                         emailAddressTextView.setVisibility(View.GONE);
                     }
-                    if (ipAddressStr!=null){
+                    if (ipAddres!=null){
                         ipAddressTextView.setVisibility(View.VISIBLE);
-                        ipAddressTextView.setText(ipAddressStr);
+                        ipAddressTextView.setText(ipAddres);
                     }else{
                         ipAddressTextView.setVisibility(View.GONE);
                     }
@@ -1149,7 +1149,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 				httppost.addHeader("authToken", Util.authTokenStr.trim());
 				httppost.addHeader("user_id", userIdStr.trim());
-				httppost.addHeader("ip_address", ipAddressStr.trim());
+				httppost.addHeader("ip_address", ipAddres.trim());
 				httppost.addHeader("movie_id", movieId.trim());
 				httppost.addHeader("episode_id", episodeId.trim());
 				httppost.addHeader("played_length", String.valueOf(playerPosition));
@@ -1308,7 +1308,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 				httppost.addHeader("authToken", Util.authTokenStr.trim());
 				httppost.addHeader("user_id", userIdStr);
-				httppost.addHeader("ip_address", ipAddressStr.trim());
+				httppost.addHeader("ip_address", ipAddres.trim());
 				httppost.addHeader("movie_id", movieId.trim());
 				httppost.addHeader("episode_id", episodeId.trim());
 
@@ -1970,7 +1970,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 				httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 				httppost.addHeader("authToken", Util.authTokenStr.trim());
 				httppost.addHeader("user_id", userIdStr.trim());
-				httppost.addHeader("ip_address", ipAddressStr.trim());
+				httppost.addHeader("ip_address", ipAddres.trim());
 				httppost.addHeader("movie_id", movieId.trim());
 				httppost.addHeader("episode_id", episodeId.trim());
 				runOnUiThread(new Runnable() {
