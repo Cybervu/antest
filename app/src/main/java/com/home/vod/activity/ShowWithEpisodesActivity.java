@@ -558,7 +558,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             if (season != null && season.size() > 0) {
                 season.clear();
             }
-            LogUtil.showLog("MUVI", "dd====== " + contentDetailsOutput.getSeason().length);
+           // LogUtil.showLog("MUVI", "dd====== " + contentDetailsOutput.getSeason().length);
 
             if (contentDetailsOutput.getSeason() != null && contentDetailsOutput.getSeason().length > 0) {
                 for (int j = 0; j < contentDetailsOutput.getSeason().length; j++) {
