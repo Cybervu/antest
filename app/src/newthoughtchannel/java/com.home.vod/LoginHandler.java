@@ -11,10 +11,10 @@ import com.home.vod.activity.LoginActivity;
  * Created by Android on 9/21/2017.
  */
 
-public class GmailLoginHandler {
+public class LoginHandler {
     LoginActivity context;
     private RelativeLayout GoogleSignView;
-    public GmailLoginHandler(LoginActivity context){
+    public LoginHandler(LoginActivity context){
         this.context=context;
        // GoogleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
 
