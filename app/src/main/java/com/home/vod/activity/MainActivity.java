@@ -130,7 +130,11 @@ import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static player.utils.Util.DEFAULT_IS_CHROMECAST;
+import static player.utils.Util.DEFAULT_IS_OFFLINE;
 import static player.utils.Util.HAS_FAVORITE;
+import static player.utils.Util.IS_CHROMECAST;
+import static player.utils.Util.IS_OFFLINE;
 
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,
@@ -392,9 +396,16 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         getMenuInflater().inflate(R.menu.menu_main, menu);
         //************chromecast***********//*
 
-        mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
-                R.id.media_route_menu_item);
-        showIntroductoryOverlay();
+        if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1")) {
+            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
+                    R.id.media_route_menu_item);
+            mediaRouteMenuItem.setVisible(true);
+
+        } else {
+            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
+                    R.id.media_route_menu_item);
+            mediaRouteMenuItem.setVisible(false);
+        }
 
         //************chromecast***********/
 
@@ -434,16 +445,21 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         if (loggedInStr != null) {
 
+            itemDownload = menu.findItem(R.id.action_mydownload);
             itemDownload.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD));
-            itemDownload.setVisible(true);
+            if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
+                    .trim()).equals("1")) {
+                itemDownload.setVisible(true);
+            }else{
+                itemDownload.setVisible(false);
+
+            }
             itemLoginMenu.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
             itemLoginMenu.setVisible(false);
 
             itemRegisterMenu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
             itemRegisterMenu.setVisible(false);
-          /*  item6= itemLanguageMenu;
-            item6.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE,DEFAULT_LANGUAGE_POPUP_LANGUAGE));
-            item6.setVisible(true);*/
+
 
             itemProfileMenu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
             itemProfileMenu.setVisible(true);
@@ -478,10 +494,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 itemLoginMenu.setVisible(false);
                 itemRegisterMenu.setVisible(false);
             }
-           /* item6= itemLanguageMenu;
-            item6.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE,DEFAULT_LANGUAGE_POPUP_LANGUAGE));
-            item6.setVisible(true);*/
-
             itemProfileMenu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
             itemProfileMenu.setVisible(false);
 
@@ -490,6 +502,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
             itemLogoutMenu.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
             itemLogoutMenu.setVisible(false);
+            itemFavMenu.setTitle(languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE));
             itemFavMenu.setVisible(false);
         }
         return true;

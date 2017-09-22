@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.androidquery.AQuery;
 import com.google.android.gms.cast.MediaInfo;
+import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManagerListener;
@@ -88,6 +89,8 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
@@ -104,6 +107,8 @@ import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATI
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
@@ -120,7 +125,11 @@ import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static player.utils.Util.DEFAULT_IS_CHROMECAST;
+import static player.utils.Util.DEFAULT_IS_OFFLINE;
 import static player.utils.Util.HAS_FAVORITE;
+import static player.utils.Util.IS_CHROMECAST;
+import static player.utils.Util.IS_OFFLINE;
 
 public class ViewMoreActivity extends AppCompatActivity implements
         LogoutAsynctask.LogoutListener, GetLanguageListAsynTask.GetLanguageListListener,
@@ -1254,11 +1263,19 @@ public class ViewMoreActivity extends AppCompatActivity implements
         inflater.inflate(R.menu.menu_main, menu);
         /***************chromecast**********************/
 
-        // CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
+        if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1")) {
+            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
+                    R.id.media_route_menu_item);
+            mediaRouteMenuItem.setVisible(true);
+
+        } else {
+            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
+                    R.id.media_route_menu_item);
+            mediaRouteMenuItem.setVisible(false);
+        }
         /***************chromecast**********************/
 
-        MenuItem item, item1, item2, item3, item4, item5, item6;
-        MenuItem item7=  menu.findItem(R.id.menu_item_favorite);
+        MenuItem item, item1, item2, item3, item4, item5, item6,item7;
         item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
@@ -1274,27 +1291,32 @@ public class ViewMoreActivity extends AppCompatActivity implements
             item5 = menu.findItem(R.id.action_register);
             item5.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
             item5.setVisible(false);
-          /*  item6= menu.findItem(R.id.menu_item_language);
-            item6.setTitle(getTextofLanguage(ViewMoreActivity.this,LANGUAGE_POPUP_LANGUAGE,DEFAULT_LANGUAGE_POPUP_LANGUAGE));
-            item6.setVisible(true);*/
             item1 = menu.findItem(R.id.menu_item_profile);
             item1.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
-
             item1.setVisible(true);
             item2 = menu.findItem(R.id.action_purchage);
             item2.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
-
             item2.setVisible(true);
-
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE,DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
+            item7 = menu.findItem(R.id.menu_item_favorite);
+            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
                 item7.setVisible(true);
-            }else{
+            } else {
                 item7.setVisible(false);
 
             }
             item3 = menu.findItem(R.id.action_logout);
             item3.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
             item3.setVisible(true);
+
+            item6 = menu.findItem(R.id.action_mydownload);
+            item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD));
+            if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
+                    .trim()).equals("1")) {
+                item6.setVisible(true);
+            }else{
+                item6.setVisible(false);
+
+            }
 
         } else if (loggedInStr == null) {
             item4 = menu.findItem(R.id.action_login);
@@ -1312,9 +1334,6 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 item5.setVisible(false);
 
             }
-           /* item6= menu.findItem(R.id.menu_item_language);
-            item6.setTitle(Util.getTextofLanguage(ViewMoreActivity.this,Util.LANGUAGE_POPUP_LANGUAGE,Util.DEFAULT_LANGUAGE_POPUP_LANGUAGE));
-            item6.setVisible(true);*/
             item1 = menu.findItem(R.id.menu_item_profile);
             item1.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
             item1.setVisible(false);
@@ -1324,6 +1343,12 @@ public class ViewMoreActivity extends AppCompatActivity implements
             item3 = menu.findItem(R.id.action_logout);
             item3.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
             item3.setVisible(false);
+            item6 = menu.findItem(R.id.action_mydownload);
+            item6.setTitle(languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE));
+            item6.setVisible(false);
+            item7 = menu.findItem(R.id.menu_item_favorite);
+            item7.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE));
+            item7.setVisible(false);
         }
         return true;
     }
@@ -1354,6 +1379,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
     private SessionManagerListener<CastSession> mSessionManagerListener =
             new MySessionManagerListener();
     private CastSession mCastSession;
+    private MenuItem mediaRouteMenuItem;
 
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
