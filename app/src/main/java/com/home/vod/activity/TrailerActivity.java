@@ -649,9 +649,9 @@ public class TrailerActivity extends AppCompatActivity implements
                     } else {
                         emailAddressTextView.setVisibility(View.GONE);
                     }
-                    if (ipAddressStr!=null){
+                    if (ipAddres!=null){
                         ipAddressTextView.setVisibility(View.VISIBLE);
-                        ipAddressTextView.setText(ipAddressStr);
+                        ipAddressTextView.setText(ipAddres);
                     }else{
                         ipAddressTextView.setVisibility(View.GONE);
                     }
@@ -773,7 +773,7 @@ public class TrailerActivity extends AppCompatActivity implements
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //                httppost.addHeader("authToken", authTokenStr.trim());
 //                httppost.addHeader("user_id", userIdStr.trim());
-//                httppost.addHeader("ip_address", ipAddressStr.trim());
+//                httppost.addHeader("ip_address", ipAddres.trim());
 //                httppost.addHeader("movie_id", movieId.trim());
 //                httppost.addHeader("episode_id", episodeId.trim());
 //                httppost.addHeader("played_length", String.valueOf(playerPosition));
@@ -994,7 +994,7 @@ public class TrailerActivity extends AppCompatActivity implements
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //                httppost.addHeader("authToken", authTokenStr.trim());
 //                httppost.addHeader("user_id", userIdStr);
-//                httppost.addHeader("ip_address", ipAddressStr.trim());
+//                httppost.addHeader("ip_address", ipAddres.trim());
 //                httppost.addHeader("movie_id", movieId.trim());
 //                httppost.addHeader("episode_id", episodeId.trim());
 //
@@ -1225,27 +1225,27 @@ public class TrailerActivity extends AppCompatActivity implements
 //
 //
 //                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-//                    ipAddressStr = "";
+//                    ipAddres = "";
 //
 //                } catch (UnsupportedEncodingException e) {
 //
-//                    ipAddressStr = "";
+//                    ipAddres = "";
 //
 //                } catch (IOException e) {
-//                    ipAddressStr = "";
+//                    ipAddres = "";
 //
 //                }
 //                if (responseStr != null) {
 //                    Object json = new JSONTokener(responseStr).nextValue();
 //                    if (json instanceof JSONObject) {
-//                        ipAddressStr = ((JSONObject) json).getString("ip");
+//                        ipAddres = ((JSONObject) json).getString("ip");
 //
 //                    }
 //
 //                }
 //
 //            } catch (Exception e) {
-//                ipAddressStr = "";
+//                ipAddres = "";
 //
 //            }
 //
@@ -1256,7 +1256,7 @@ public class TrailerActivity extends AppCompatActivity implements
 //        protected void onPostExecute(Void result) {
 //
 //            if (responseStr == null) {
-//                ipAddressStr = "";
+//                ipAddres = "";
 //            }
 //            return;
 //        }
@@ -1685,7 +1685,7 @@ public class TrailerActivity extends AppCompatActivity implements
 //                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 //                httppost.addHeader("authToken", authTokenStr.trim());
 //                httppost.addHeader("user_id", userIdStr.trim());
-//                httppost.addHeader("ip_address", ipAddressStr.trim());
+//                httppost.addHeader("ip_address", ipAddres.trim());
 //                httppost.addHeader("movie_id", movieId.trim());
 //                httppost.addHeader("episode_id", episodeId.trim());
 //                runOnUiThread(new Runnable() {
