@@ -198,7 +198,13 @@ public class TransactionDetailsAsynctask extends AsyncTask<TransactionInputModel
                         transactionOutputModel.setAmount("");
 
                     }
+                    if ((mainJson.has("invoice_id")) && mainJson.optString("invoice_id").trim() != null && !mainJson.optString("invoice_id").trim().isEmpty() && !mainJson.optString("invoice_id").trim().equals("null") && !mainJson.optString("invoice_id").trim().matches("")) {
+                        transactionOutputModel.setInvoice_id(mainJson.optString("invoice_id"));
 
+                    } else {
+                        transactionOutputModel.setInvoice_id("");
+
+                    }
 
                 }
             } else {

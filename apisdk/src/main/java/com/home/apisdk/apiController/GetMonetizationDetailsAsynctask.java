@@ -143,11 +143,14 @@ public class GetMonetizationDetailsAsynctask extends AsyncTask<GetMonetizationDe
                 if (status == 200) {
 
                     JSONObject mainJson = myJson.getJSONObject("monetization_plans");
-                    if ((mainJson.has("voucher")) && mainJson.optString("voucher").trim() != null && !mainJson.optString("voucher").trim().isEmpty() && !mainJson.optString("voucher").trim().equals("null") && !mainJson.optString("voucher").trim().matches("")) {
-                        getMonetizationDetailsOutputModel.setVoucher(mainJson.optString("voucher"));
-                    } else {
-                        getMonetizationDetailsOutputModel.setVoucher("");
-
+                    if(!(mainJson.optString("voucher").equals("")) && !(mainJson.optString("voucher").equals("null"))
+                            && (mainJson.optString("voucher").trim().equals("1")))
+                    {
+                        getMonetizationDetailsOutputModel.setVoucher(1);
+                    }
+                    else
+                    {
+                        getMonetizationDetailsOutputModel.setVoucher(0);
                     }
 
 

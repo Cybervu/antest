@@ -8,7 +8,17 @@ import java.util.ArrayList;
 public class Episode_Details_output {
     ArrayList<Episode> EpisodeArray = new ArrayList<>();
     private String name,code,msg,muvi_uniq_id,permalink,item_count,limit,offset;
-    int is_ppv;
+    private int is_ppv=0;
+
+    public int getIsAPV() {
+        return isAPV;
+    }
+
+    public void setIsAPV(int isAPV) {
+        this.isAPV = isAPV;
+    }
+
+    private int isAPV=0;
     APVModel apvDetails;
     PPVModel ppvDetails;
     CurrencyModel currencyDetails;
