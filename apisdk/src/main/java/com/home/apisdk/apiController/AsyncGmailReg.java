@@ -64,12 +64,13 @@ public class AsyncGmailReg extends AsyncTask<GmailLoginInput,Void,Void> {
             httppost.addHeader("email", this.gmailLoginInput.getEmail());
             httppost.addHeader("password","");
             httppost.addHeader("authToken", this.gmailLoginInput.getAuthToken());
-//            httppost.addHeader("gplus_userid", this.gmailLoginInput.getGmail_userid());
-            httppost.addHeader("fb_userid", this.gmailLoginInput.getGmail_userid());
+            httppost.addHeader("gplus_userid", this.gmailLoginInput.getGmail_userid());
+//            httppost.addHeader("fb_userid", this.gmailLoginInput.getGmail_userid());
             httppost.addHeader("profile_image", this.gmailLoginInput.getProfile_image());
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
+                Log.v("Nihar",responseStr);
             } catch (org.apache.http.conn.ConnectTimeoutException e){
                 status = 0;
                 message = "Error";

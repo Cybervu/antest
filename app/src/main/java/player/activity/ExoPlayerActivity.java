@@ -314,6 +314,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     String videoBufferLogUniqueId = "0";
     String Location = "0";
 
+    Timer CheckAvailabilityOfChromecast;
+    boolean video_prepared = false;
+
     // Adder Later // By Bibhu
 
     private SubtitleProcessingTask subsFetchTask;
@@ -390,6 +393,29 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     @Override
     protected void onResume() {
         super.onResume();
+
+        CheckAvailabilityOfChromecast = new Timer();
+        CheckAvailabilityOfChromecast.schedule(new TimerTask() {
+            @Override
+            public void run() {
+
+                Log.v("PINTU","CheckAvailabilityOfChromecast called");
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if(video_prepared){
+                            if (mediaRouteButton.isEnabled()) {
+                                mediaRouteButton.setVisibility(View.VISIBLE);
+                            } else {
+                                mediaRouteButton.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                });
+            }
+        },3000,3000);
 
         SensorOrientationChangeNotifier.getInstance(ExoPlayerActivity.this).addListener(this);
 
@@ -1037,8 +1063,15 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                             }
                         }
 
+                        // This is changed Later
 
-                        mediaRouteButton.setVisibility(View.VISIBLE);
+                        if(mediaRouteButton.isEnabled())
+                        {
+                            mediaRouteButton.setVisibility(View.VISIBLE);
+                        }else
+                        {
+                            mediaRouteButton.setVisibility(View.GONE);
+                        }
 
 
                         last_ll.setVisibility(View.VISIBLE);
@@ -1158,7 +1191,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onPrepared() {
 
-
+                video_prepared = true;
                 if (change_resolution) {
 
                     change_resolution = false;
@@ -3155,6 +3188,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     @Override
     protected void onPause() {
+
+        if(CheckAvailabilityOfChromecast!=null)
+            CheckAvailabilityOfChromecast.cancel();
+
         Log.v("PINTU", "onPause called");
         super.onPause();
     }
