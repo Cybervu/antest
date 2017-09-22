@@ -86,7 +86,7 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //            buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
-           // buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
+            // buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
 
         }
         newthoughtchannel_staging_ {
@@ -124,8 +124,8 @@ android {
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             versionCode 1
             versionName '1.0'
-//            buildConfigField "String", "AUTH_TOKEN", "\"8c6e6162f22f3f43a6d88efc1a64cd18\""
-              buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            buildConfigField "String", "AUTH_TOKEN", "\"8c6e6162f22f3f43a6d88efc1a64cd18\""
+            // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
         }
         digiOsmosis_staging_ {
             dimension 'environment'

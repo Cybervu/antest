@@ -581,7 +581,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onPostExecuteListner() {
 
-        SDKInitializer.setData(this);
         if (NetworkStatus.getInstance().isConnected(this)) {
             GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
             asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
