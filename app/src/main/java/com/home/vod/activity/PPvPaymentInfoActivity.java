@@ -225,6 +225,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
     public enum PlaybackState {
         PLAYING, PAUSED, BUFFERING, IDLE
     }
+
     private MovieDetailsActivity.PlaybackLocation mLocation;
     private MovieDetailsActivity.PlaybackState mPlaybackState;
     private final float mAspectRatio = 72f / 128;
@@ -339,8 +340,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
     private TextView chargedPriceTextView;
 
     String cardLastFourDigitStr;
-    String tokenStr="";
-    String cardTypeStr="";
+    String tokenStr = "";
+    String cardTypeStr = "";
     String responseText;
     String statusStr;
     //ProgressDialog pDialog1;
@@ -652,7 +653,15 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
                 VoucherCode = voucher_code.getText().toString().trim();
                 if (!VoucherCode.equals("")) {
+
+                    InputMethodManager inputManager = (InputMethodManager)
+                            getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                    inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+
                     ValidateVoucher_And_VoucherSubscription();
+
                 } else {
                     Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(VOUCHER_BLANK_MESSAGE, DEFAULT_VOUCHER_BLANK_MESSAGE), Toast.LENGTH_SHORT).show();
 
@@ -677,16 +686,16 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                     voucherSubscriptionInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     if (Util.dataModel.getContentTypesId() == 3) {
                         voucherSubscriptionInputModel.setSeason(Util.dataModel.getSeason_id());
-                        if(selectedPurchaseType==1)
+                        if (selectedPurchaseType == 1)
                             voucherSubscriptionInputModel.setPurchase_type("show");
-                        if (selectedPurchaseType==2)
+                        if (selectedPurchaseType == 2)
                             voucherSubscriptionInputModel.setPurchase_type("season");
-                        if (selectedPurchaseType==3)
+                        if (selectedPurchaseType == 3)
                             voucherSubscriptionInputModel.setPurchase_type("episode");
-                    }else
+                    } else
                         voucherSubscriptionInputModel.setPurchase_type("show");
 
-                    VoucherSubscriptionAsyntask asynVoucherSubscription = new VoucherSubscriptionAsyntask(voucherSubscriptionInputModel,PPvPaymentInfoActivity.this,PPvPaymentInfoActivity.this);
+                    VoucherSubscriptionAsyntask asynVoucherSubscription = new VoucherSubscriptionAsyntask(voucherSubscriptionInputModel, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
                     asynVoucherSubscription.executeOnExecutor(threadPoolExecutor);
 
 
@@ -926,6 +935,12 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         payNowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
 
                 if (creditCardSaveSpinner != null && cardSavedArray != null && cardSavedArray.length > 0 && creditCardSaveSpinner.getSelectedItemPosition() > 0) {
 
@@ -3973,7 +3988,6 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         }
 
 
-
         mCastContext.getSessionManager().addSessionManagerListener(
                 mSessionManagerListener, CastSession.class);
 
@@ -4300,6 +4314,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
             //updateControllersVisibility(false);
         }
     }
+
     private void togglePlayback() {
         //stopControllersTimer();
         switch (mPlaybackState) {

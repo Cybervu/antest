@@ -4,6 +4,7 @@ package com.home.vod.activity;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -526,6 +527,11 @@ LanguagePreference languagePreference;
             @Override
             public void onClick(View v) {
 
+                InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
 
                 String nameOnCardStr = nameOnCardEditText.getText().toString().trim();
                 String cardNumberStr = cardNumberEditText.getText().toString().trim();
