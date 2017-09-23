@@ -1824,7 +1824,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
 
-                        Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
+//                        Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
                     } else {
                         videoLogId = "0";
                         log_temp_id = "0";
