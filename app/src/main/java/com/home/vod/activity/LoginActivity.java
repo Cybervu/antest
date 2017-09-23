@@ -5081,7 +5081,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     // [START handleSignInResult]
     private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG, "handleSignInResult:" + result.isSuccess()+result.getSignInAccount());
+       // Log.d(TAG, "handleSignInResult:" + result.isSuccess()+result.getSignInAccount());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
