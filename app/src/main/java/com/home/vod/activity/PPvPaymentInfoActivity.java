@@ -153,6 +153,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_DISCOUNT_ON_CO
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_PAYMENT_VALIDATION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_SUBSCRIPTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FREE_FOR_COUPON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_INVALID_COUPON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
@@ -173,6 +174,7 @@ import static com.home.vod.preferences.LanguagePreference.DISCOUNT_ON_COUPON;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_PAYMENT_VALIDATION;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_SUBSCRIPTION;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
+import static com.home.vod.preferences.LanguagePreference.FREE_FOR_COUPON;
 import static com.home.vod.preferences.LanguagePreference.INVALID_COUPON;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
@@ -2310,6 +2312,9 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
                     //paywithCreditCardButton.setVisibility(View.GONE);
                     withoutCreditCardLayout.setVisibility(View.VISIBLE);
+
+                    withoutPaymentTitleTextView.setText(languagePreference.getTextofLanguage(FREE_FOR_COUPON,DEFAULT_FREE_FOR_COUPON));
+
                     withoutCreditCardChargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " : " + currencySymbolStr + chargedPrice);
                 }
 

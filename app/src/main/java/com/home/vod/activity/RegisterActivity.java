@@ -396,14 +396,14 @@ public class RegisterActivity extends AppCompatActivity implements
         alreadyMemmberText.setText(languagePreference.getTextofLanguage(ALREADY_MEMBER, DEFAULT_ALREADY_MEMBER));
         loginTextView.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
 
-        /**********fb*********/
+       /* *//**********fb*********//*
         loginWithFacebookButton = (LoginButton) findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
         TextView fbLoginTextView = (TextView) findViewById(R.id.fbLoginTextView);
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.regular_fonts),fbLoginTextView);
 
-        /**********fb*********/
-
+        *//**********fb*********//*
+*/
 
        /* Toolbar mActionBarToolbar= (Toolbar) findViewById(R.id.toolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
@@ -446,32 +446,10 @@ public class RegisterActivity extends AppCompatActivity implements
         /************fb************/
         callbackManager = CallbackManager.Factory.create();
 
-
-        loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
-
-        btnLogin = (LinearLayout) findViewById(R.id.btnLogin);
-        btnLogin.setVisibility(View.GONE);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginWithFacebookButton.performClick();
-
-                loginWithFacebookButton.setPressed(true);
-
-                loginWithFacebookButton.invalidate();
-
-                loginWithFacebookButton.registerCallback(callbackManager, mCallBack);
-
-                loginWithFacebookButton.setPressed(false);
-
-                loginWithFacebookButton.invalidate();
-
-            }
-        });
-
         registerUIHandler=new RegisterUIHandler(this);
         registerUIHandler.setCountryList(preferenceManager);
         registerUIHandler.setTermsTextView(languagePreference);
+        registerUIHandler.callFblogin(callbackManager,registerButton,languagePreference);
 
 
 // =======End ===========================//
@@ -2955,6 +2933,17 @@ public class RegisterActivity extends AppCompatActivity implements
 
             } else if (status == 200) {
 
+
+                preferenceManager.setLogInStatusToPref("1");
+                preferenceManager.setUserIdToPref(socialAuthOutputModel.getId());
+                preferenceManager.setPwdToPref("");
+                preferenceManager.setEmailIdToPref(socialAuthOutputModel.getEmail());
+                preferenceManager.setDispNameToPref(socialAuthOutputModel.getDisplay_name());
+                preferenceManager.setLoginProfImgoPref( socialAuthOutputModel.getProfile_image());
+                preferenceManager.setIsSubscribedToPref(socialAuthOutputModel.getIsSubscribed());
+                preferenceManager.setLoginHistIdPref(socialAuthOutputModel.getLogin_history_id());
+
+
                 if (Util.check_for_subscription == 1) {
                     // Go for subscription
 
@@ -3161,91 +3150,6 @@ public class RegisterActivity extends AppCompatActivity implements
     }
 
 
-    private FacebookCallback<LoginResult> mCallBack = new FacebookCallback<LoginResult>() {
-        @Override
-        public void onSuccess(LoginResult loginResult) {
-
-            //progressDialog.dismiss();
-
-            // App code
-            GraphRequest request = GraphRequest.newMeRequest(
-                    loginResult.getAccessToken(),
-                    new GraphRequest.GraphJSONObjectCallback() {
-                        @Override
-                        public void onCompleted(
-                                JSONObject object,
-                                GraphResponse response) {
-
-
-                            JSONObject json = response.getJSONObject();
-                            try {
-                                if (json != null) {
-
-
-                                    if ((json.has("name")) && json.getString("name").trim() != null && !json.getString("name").trim().isEmpty() && !json.getString("name").trim().equals("null") && !json.getString("name").trim().matches("")) {
-
-                                        fbName = json.getString("name");
-
-                                    }
-                                    if ((json.has("email")) && json.getString("email").trim() != null && !json.getString("email").trim().isEmpty() && !json.getString("email").trim().equals("null") && !json.getString("email").trim().matches("")) {
-                                        fbEmail = json.getString("email");
-                                    } else {
-                                        fbEmail = fbName + "@facebook.com";
-
-                                    }
-                                    if ((json.has("id")) && json.optString("id").trim() != null && !json.optString("id").trim().isEmpty() && !json.optString("id").trim().equals("null") && !json.optString("id").trim().matches("")) {
-                                        fbUserId = json.optString("id");
-                                    }
-                                    registerButton.setVisibility(View.GONE);
-                                    loginWithFacebookButton.setVisibility(View.GONE);
-                                    btnLogin.setVisibility(View.GONE);
-                                    CheckFbUserDetailsInput checkFbUserDetailsInput=new CheckFbUserDetailsInput();
-                                    checkFbUserDetailsInput.setAuthToken(authTokenStr);
-                                    checkFbUserDetailsInput.setFb_userid(fbUserId.trim());
-                                    asynCheckFbUserDetails = new CheckFbUserDetailsAsyn(checkFbUserDetailsInput,RegisterActivity.this,RegisterActivity.this);
-                                    asynCheckFbUserDetails.executeOnExecutor(threadPoolExecutor);
-
-//
-                                }
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-
-//
-                        }
-
-                    });
-
-            Bundle parameters = new Bundle();
-            parameters.putString("fields", "id,name,email,gender, birthday");
-            request.setParameters(parameters);
-            request.executeAsync();
-        }
-
-        @Override
-        public void onCancel() {
-
-            registerButton.setVisibility(View.VISIBLE);
-            loginWithFacebookButton.setVisibility(View.GONE);
-            btnLogin.setVisibility(View.VISIBLE);
-            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
-            //progressDialog.dismiss();
-        }
-
-        @Override
-        public void onError(FacebookException e) {
-
-            registerButton.setVisibility(View.VISIBLE);
-            loginWithFacebookButton.setVisibility(View.GONE);
-            btnLogin.setVisibility(View.VISIBLE);
-            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
-
-            //progressDialog.dismiss();
-        }
-    };
-
     @Override
     public void onCheckFbUserDetailsAsynPreExecuteStarted() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -3306,6 +3210,8 @@ public class RegisterActivity extends AppCompatActivity implements
             socialAuthInputModel.setEmail(fbEmail.trim());
             socialAuthInputModel.setPassword("");
             socialAuthInputModel.setFb_userid(fbUserId.trim());
+            socialAuthInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+            socialAuthInputModel.setDevice_type("1");
             socialAuthInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynFbRegDetails = new SocialAuthAsynTask(socialAuthInputModel, RegisterActivity.this, RegisterActivity.this);
             asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
@@ -4116,5 +4022,17 @@ public class RegisterActivity extends AppCompatActivity implements
 //        }
 //    }
 
+
+    public void handleFbUserDetails(String fbUserId,String fbEmail,String fbName){
+        this.fbUserId=fbUserId;
+        this.fbEmail = fbEmail;
+        this.fbName =fbName;
+        CheckFbUserDetailsInput checkFbUserDetailsInput=new CheckFbUserDetailsInput();
+        checkFbUserDetailsInput.setAuthToken(authTokenStr);
+        checkFbUserDetailsInput.setFb_userid(fbUserId.trim());
+        asynCheckFbUserDetails = new CheckFbUserDetailsAsyn(checkFbUserDetailsInput,RegisterActivity.this,RegisterActivity.this);
+        asynCheckFbUserDetails.executeOnExecutor(threadPoolExecutor);
+
+    }
 
 }

@@ -5012,6 +5012,38 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     @Override
     public void onGetTranslateLanguagePostExecuteCompleted(String jsonResponse, int status) {
 
+        if (progressBarHandler != null && progressBarHandler.isShowing()) {
+            progressBarHandler.hide();
+            progressBarHandler = null;
+
+        }
+
+        if (jsonResponse == null) {
+        } else {
+            if (status > 0 && status == 200) {
+
+                try {
+
+                    Util.parseLanguage(languagePreference, jsonResponse, default_Language);
+                    //Call For Language PopUp Dialog
+
+                    languageCustomAdapter.notifyDataSetChanged();
+
+                    Intent intent = new Intent(MovieDetailsActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                // Call For Other Methods.
+
+
+            } else {
+            }
+        }
+
     }
 
 
