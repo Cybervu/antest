@@ -3,24 +3,27 @@
          (such as screen margins) for screens with more than 820dp of available width. This
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
     <dimen name="activity_horizontal_margin">64dp</dimen>
+
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="nav_drawer_width">260dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="card_margin">16dp</dimen>
     <dimen name="recy_margin">8dp</dimen>
-
+    <dimen name="trailer_btn_text_size">18sp</dimen>
     <dimen name="castcrew_text">18sp</dimen>
     <dimen name="castnointernet_text">18sp</dimen>
     <dimen name="cast_width_icon">80dp</dimen>
     <dimen name="cast_height_icon">100dp</dimen>
     <dimen name="cast_name_text">17sp</dimen>
     <dimen name="cast_description_text">14sp</dimen>
-    <dimen name="forgot_logo_width">40dp</dimen>
+    <dimen name="forgot_logo_width">150dp</dimen>
+    <dimen name="banner_image_height">300dp</dimen>
     <dimen name="forgot_logo_height">150dp</dimen>
-    <dimen name="email_text_size">20sp</dimen>
+    <dimen name="email_text_size">16sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>
     <dimen name="login_text_size">17sp</dimen>
     <dimen name="submit_text_size">16sp</dimen>
+    <dimen name="itemtitle1_text_size">14sp</dimen>
     <dimen name="submit_width_size">170dp</dimen>
     <dimen name="submit_height_size">45dp</dimen>
     <dimen name="pass_text_size">16sp</dimen>
@@ -33,7 +36,7 @@
     <dimen name="alreadymember_text_size">15sp</dimen>
     <dimen name="already_login_size">16sp</dimen>
     <dimen name="register_button">18sp</dimen>
-    <dimen name="changepas_edittest">16dp</dimen>
+    <dimen name="changepas_edittest">16sp</dimen>
     <dimen name="user_text_size">30sp</dimen>
     <dimen name="preorderbtn_width">90dp</dimen>
     <dimen name="preorderbtn_height">38dp</dimen>
@@ -68,7 +71,7 @@
     <dimen name="downloadimg_height">20dp</dimen>
     <dimen name="progressbar_width">40dp</dimen>
     <dimen name="progressbar_height">40dp</dimen>
-    <dimen name="percentage_text_size">12sp</dimen>
+    <dimen name="percentage_text_size">8sp</dimen>
     <dimen name="videotitle_text_size">19sp</dimen>
     <dimen name="subscription_text_size">23sp</dimen>
     <dimen name="activation_text_size">18sp</dimen>
@@ -91,7 +94,7 @@
     <dimen name="creditcarddetail_text_size">22sp</dimen>
     <dimen name="withoutpayment_text_size">20sp</dimen>
     <dimen name="withoutpaymentcharge_text_size">16sp</dimen>
-    <dimen name="nextbtn_text_size">14sp</dimen>
+    <dimen name="nextbtn_text_size">16sp</dimen>
     <dimen name="nextbtn_height">40dp</dimen>
     <dimen name="showname_text_size">16sp</dimen>
     <dimen name="coupancode_height">48dp</dimen>
@@ -144,8 +147,8 @@
     <dimen name="language_text_size">17sp</dimen>
     <dimen name="listcard_width">171dp</dimen>
     <dimen name="listcard_height">93dp</dimen>
-    <dimen name="list_singlecard_img_width">102dp</dimen>
-    <dimen name="list_singlecard_img_height">146dp</dimen>
+    <dimen name="list_singlecard_img_width">108dp</dimen>
+    <dimen name="list_singlecard_img_height">154dp</dimen>
     <dimen name="listview_img_width">18dp</dimen>
     <dimen name="listview_img_height">18dp</dimen>
     <dimen name="logouttext_height">110dp</dimen>
@@ -202,5 +205,7 @@
     <dimen name="review_btn_height">38dp</dimen>
     <dimen name="review_btn_textsize">14sp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
-    <dimen name="user_review_textsize">14sp</dimen>
+    <dimen name="user_review_textsize">14sp</dimen>v
+
+
 </resources>

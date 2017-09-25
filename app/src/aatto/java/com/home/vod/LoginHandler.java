@@ -1,17 +1,11 @@
 package com.home.vod;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,79 +16,48 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.home.apisdk.apiController.CheckFbUserDetailsAsyn;
-import com.home.apisdk.apiModel.CheckFbUserDetailsInput;
+import com.home.vod.activity.LoginActivity;
 import com.home.vod.activity.RegisterActivity;
 import com.home.vod.preferences.LanguagePreference;
-import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
-import com.home.vod.util.LogUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
-import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALERT;
-import static com.home.vod.preferences.LanguagePreference.TERMS;
-import static com.home.vod.util.Constant.authTokenStr;
 
 /**
- * Created by BISHAL on 21-08-2017.
+ * Created by Android on 9/21/2017.
  */
 
-public class RegisterUIHandler {
-    private Activity context;
-    private TextView termsTextView,termsTextView1;
+public class LoginHandler {
+    LoginActivity context;
     private LinearLayout btnLogin;
+    private RelativeLayout GoogleSignView;
     LoginButton loginWithFacebookButton;
-    String fbUserId = "";
+
+    String fbUserId =   "";
     String fbEmail = "";
     String fbName = "";
-    private Button registerButton;
+    private Button loginButton;
     private LanguagePreference languagePreference;
 
-    public  String selected_Language_Id="", selected_Country_Id="";
-
-    public RegisterUIHandler(Activity context){
+    public LoginHandler(LoginActivity context){
         this.context=context;
-        /*termsTextView = (TextView) context.findViewById(R.id.termsTextView);
-        termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);*/
         btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
         TextView fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
-
-    }
-    public void setCountryList(PreferenceManager preferenceManager){
-
-
-    }
-    public void setTermsTextView(LanguagePreference languagePreference){
-        /*termsTextView1.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
-        termsTextView.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));*/
-
-/*
-        termsTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.newthoughtchannel.com/page/terms-privacy-policy"));
-                browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                context.startActivity(browserIntent);
-            }
-        });*/
     }
 
-    public void callFblogin(final CallbackManager callbackManager,Button registerButton,LanguagePreference languagePreference){
+    public void callSignin(){
 
-        this.registerButton=registerButton;
+    }
+    public void callFblogin(final CallbackManager callbackManager, Button loginButton, LanguagePreference languagePreference){
+
+        this.loginButton=loginButton;
         this.languagePreference=languagePreference;
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,19 +115,16 @@ public class RegisterUIHandler {
                                     if ((json.has("id")) && json.optString("id").trim() != null && !json.optString("id").trim().isEmpty() && !json.optString("id").trim().equals("null") && !json.optString("id").trim().matches("")) {
                                         fbUserId = json.optString("id");
                                     }
-                                    registerButton.setVisibility(View.GONE);
+                                    loginButton.setVisibility(View.GONE);
                                     loginWithFacebookButton.setVisibility(View.GONE);
                                     btnLogin.setVisibility(View.GONE);
-                                    ((RegisterActivity)context).handleFbUserDetails(fbUserId,fbEmail,fbName);
-//
+                                    ((LoginActivity)context).handleFbUserDetails(fbUserId,fbEmail,fbName);
                                 }
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
-
-//
                         }
 
                     });
@@ -178,7 +138,7 @@ public class RegisterUIHandler {
         @Override
         public void onCancel() {
 
-            registerButton.setVisibility(View.VISIBLE);
+            loginButton.setVisibility(View.VISIBLE);
             loginWithFacebookButton.setVisibility(View.GONE);
             btnLogin.setVisibility(View.VISIBLE);
             Toast.makeText(context, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
@@ -188,7 +148,7 @@ public class RegisterUIHandler {
         @Override
         public void onError(FacebookException e) {
 
-            registerButton.setVisibility(View.VISIBLE);
+            loginButton.setVisibility(View.VISIBLE);
             loginWithFacebookButton.setVisibility(View.GONE);
             btnLogin.setVisibility(View.VISIBLE);
             Toast.makeText(context, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
