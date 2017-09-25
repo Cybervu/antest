@@ -4,6 +4,7 @@
     <color name="appBackgroundColor">#fff</color>
     <color name="textColor">#757575</color>
     <color name="videotextColor">#4f4f4f</color>
+    <color name="videotitleColor">#4f4f4f</color>
     <color name="loginTextViewColor">#ff5a75</color>
     <color name="savecardtextcolor">#000</color>
     <color name="buttonTextColor">#fff</color>
@@ -45,6 +46,7 @@
     <color name="languagePopupFadeColor">#50696969</color>
     <color name="filterTextColor">#5c6873</color>
     <color name="nav_drawer_lineColor">#000</color>
+    <color name="nav_lineColor">#000</color>
     <color name="nav_drawer_text_Color">#000000</color>
     <color name="button_background">#ff5a75</color>
     <color name="button_background_plan_textview">#ff5a75</color>

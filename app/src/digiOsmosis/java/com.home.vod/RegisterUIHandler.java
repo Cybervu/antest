@@ -32,7 +32,8 @@ import static com.home.vod.preferences.LanguagePreference.TERMS;
 public class RegisterUIHandler {
     private Activity context;
     private TextView termsTextView,termsTextView1;
-
+    private Button loginButton;
+    private LanguagePreference languagePreference;
     public  String selected_Language_Id="", selected_Country_Id="";
 
     public RegisterUIHandler(Activity context){
@@ -61,6 +62,9 @@ public class RegisterUIHandler {
    }
 
 
+    public void callFblogin(final CallbackManager callbackManager, Button loginButton, LanguagePreference languagePreference){
+
+    }
 
 
 

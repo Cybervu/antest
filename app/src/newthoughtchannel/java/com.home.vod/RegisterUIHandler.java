@@ -34,6 +34,8 @@ public class RegisterUIHandler {
     private TextView termsTextView,termsTextView1;
 
     public  String selected_Language_Id="", selected_Country_Id="";
+    private Button loginButton;
+    private LanguagePreference languagePreference;
 
     public RegisterUIHandler(Activity context){
         this.context=context;
@@ -61,6 +63,9 @@ public class RegisterUIHandler {
    }
 
 
+    public void callFblogin(final CallbackManager callbackManager, Button loginButton, LanguagePreference languagePreference){
+
+    }
 
 
 

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -145,6 +146,26 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.release.aatto",  // replace with your unique package name
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.v("SUBHA:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+            Log.v("SUBHA:---------", "Bishallllll");
+
+        } catch (NoSuchAlgorithmException e) {
+
+            Log.v("SUBHA:---------", "Bishallllll");
+
+        }
         _init();
     }
 
@@ -580,7 +601,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onPostExecuteListner() {
-
+        SDKInitializer.setData(this);
         if (NetworkStatus.getInstance().isConnected(this)) {
             GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
             asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
