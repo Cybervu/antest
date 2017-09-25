@@ -3449,7 +3449,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 if (videoBufferLogUniqueId.equals("0"))
                     httppost.addHeader("totalBandwidth", "0");
                 else
-                    httppost.addHeader("totalBandwidth", "" + (CurrentUsedData + DataUsedByChrmoeCast));
+                    if(isDrm)
+                        httppost.addHeader("totalBandwidth", "" + (CurrentUsedData + DataUsedByChrmoeCast));
+                    else
+                        httppost.addHeader("totalBandwidth", "" + CurrentUsedData);
 
 
                 Log.v("BIBHU", "Response of the bufferlog totalBandwidth======#############=" + (CurrentUsedData + DataUsedByChrmoeCast));
@@ -4282,14 +4285,17 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
                     cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
-                    DataUsedByChrmoeCast = Current_Sesion_DataUsedByChrmoeCast + DataUsedByChrmoeCast;
-                    Current_Sesion_DataUsedByChrmoeCast = 0;
+
+                    if(isDrm){
+
+                        DataUsedByChrmoeCast = Current_Sesion_DataUsedByChrmoeCast + DataUsedByChrmoeCast;
+                        Current_Sesion_DataUsedByChrmoeCast = 0;
+                    }
 
                     // ExoPlayerActivity.this is done because , during cast ending receiver already closed the streaming restriction for ExoPlayerActivity.this user , so we have to
                     // satrt a new streaming restriction at sender end.
                     restrict_stream_id = "0";
 
-                    session.getRemoteMediaClient().getMediaInfo().getMetadata();
                     Log.v("BIBHU3", "onSessionEnding===================" + cast_disconnected_position);
                     Log.v("BIBHU3", "onSessionEnding DataUsedByChrmoeCast===================" + DataUsedByChrmoeCast);
                 }
@@ -4340,14 +4346,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                 try {
                                     JSONObject jsonObject = new JSONObject(s1);
                                     videoLogId = jsonObject.optString("video_log_id");
-                                    videoBufferLogId = jsonObject.optString("bandwidth_log_id");
 
-
-                                    Current_Sesion_DataUsedByChrmoeCast = Long.parseLong(jsonObject.optString("bandwidth"));
-                                    //  Log.v("PINTU", "videoLogId=" + videoLogId);
-                                    //Log.v("PINTU", "videoBufferLogId=" + videoBufferLogId);
-                                    Log.v("bibhu", "Current_Sesion_DataUsedByChrmoeCast=*****************=====" + Current_Sesion_DataUsedByChrmoeCast);
-
+                                    if(isDrm)
+                                    {
+                                        videoBufferLogId = jsonObject.optString("bandwidth_log_id");
+                                        Current_Sesion_DataUsedByChrmoeCast = Long.parseLong(jsonObject.optString("bandwidth"));
+                                        Log.v("bibhu", "Current_Sesion_DataUsedByChrmoeCast=*****************=====" + Current_Sesion_DataUsedByChrmoeCast);
+                                    }
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -4666,13 +4671,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 jsonObj.put("log_unique_id", videoBufferLogUniqueId);
                 jsonObj.put("bandwidth_log_id", videoBufferLogId);
                 jsonObj.put("location", Location);
+                jsonObj.put("video_type", "mped_dash");
 
-
-                if (isDrm) {
-                    jsonObj.put("video_type", "mped_dash");
-                } else {
-                    jsonObj.put("video_type", "");
-                }
 
                 Log.v("BIBHU4", "drm_bandwidth_by_sender============" + ((CurrentUsedData + DataUsedByChrmoeCast) * 1024));
                 Log.v("BIBHU4", "CurrentUsedData============" + CurrentUsedData);
@@ -4707,6 +4707,105 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
             mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
+                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                    .setContentType(mediaContentType)
+                    .setMetadata(movieMetadata)
+                    .setCustomData(jsonObj)
+                    .setMediaTracks(tracks)
+                    .build();
+            mSelectedMedia = mediaInfo;
+
+
+            togglePlayback();
+
+        }
+
+        else
+        {
+            mediaContentType = "videos/mp4";
+            JSONObject jsonObj = null;
+            try {
+                jsonObj = new JSONObject();
+                jsonObj.put("description", playerModel.getVideoTitle());
+                jsonObj.put("active_track_index", active_track_index);
+
+                //  This Code Is Added For Video Log By Bibhu..
+
+                jsonObj.put("authToken", Util.authTokenStr.trim());
+                jsonObj.put("user_id", userIdStr.trim());
+                jsonObj.put("ip_address", ipAddressStr.trim());
+                jsonObj.put("movie_id", playerModel.getMovieUniqueId());
+                jsonObj.put("episode_id", playerModel.getEpisode_id());
+
+
+                jsonObj.put("watch_status", watchStatus);
+                jsonObj.put("device_type", "2");
+                jsonObj.put("log_id", videoLogId);
+
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                    jsonObj.put("restrict_stream_id", restrict_stream_id);
+                    jsonObj.put("is_streaming_restriction", "1");
+                    Log.v("BIBHU4", "restrict_stream_id============1");
+                } else {
+                    jsonObj.put("restrict_stream_id", restrict_stream_id);
+                    jsonObj.put("is_streaming_restriction", "0");
+                    Log.v("BIBHU4", "restrict_stream_id============0");
+                }
+
+                jsonObj.put("domain_name", Util.rootUrl().trim().substring(0, Util.rootUrl().trim().length() - 6));
+                jsonObj.put("is_log", "1");
+
+                // ExoPlayerActivity.this code is changed according to new Video log //
+
+                jsonObj.put("played_length", "0");
+                jsonObj.put("log_temp_id", "0");
+                jsonObj.put("resume_time", "" + (playerPosition));
+                jsonObj.put("seek_status", "first_time");
+
+
+                //=====================End===================//
+
+                // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                jsonObj.put("resolution", "BEST");
+                jsonObj.put("start_time",String.valueOf(playerPosition));
+                jsonObj.put("end_time", String.valueOf(playerPosition));
+
+                // This ia always "0" for Non DRM play and Cast.
+                jsonObj.put("log_unique_id", "");
+                jsonObj.put("bandwidth_log_id", "0");
+                //====END========================//
+
+                jsonObj.put("location", Location);
+                jsonObj.put("video_type", "");
+
+
+                //====================End=====================//
+            } catch (JSONException e) {
+            }
+
+            List tracks = new ArrayList();
+
+            Log.v("BIBHU", "url size============" + playerModel.offline_url.size());
+            if (playerModel.offline_url.size() > 0) {
+
+                for (int i = 0; i < playerModel.offline_url.size(); i++) {
+
+                    MediaTrack mediaTrack = new MediaTrack.Builder(i,
+                            MediaTrack.TYPE_TEXT)
+                            .setName(playerModel.offline_language.get(i))
+                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                            .setContentId(playerModel.offline_url.get(i))
+                            .setLanguage(playerModel.SubTitleLanguage.get(i))
+                            .setContentType("text/vtt")
+                            .build();
+
+                    tracks.add(mediaTrack);
+                }
+            }
+
+
+            mediaInfo = new MediaInfo.Builder(playerModel.getVideoUrl().trim())
                     .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
                     .setContentType(mediaContentType)
                     .setMetadata(movieMetadata)
