@@ -1177,9 +1177,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts),loginButton);
 
         loginButton.setText(languagePreference.getTextofLanguage( LOGIN, DEFAULT_LOGIN));
-        loginWithFacebookButton = (LoginButton) findViewById(R.id.loginWithFacebookButton);
-        loginWithFacebookButton.setVisibility(View.GONE);
-
 
 
        /* Toolbar mActionBarToolbar= (Toolbar) findViewById(R.id.toolbar);
@@ -1294,40 +1291,13 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         callbackManager = CallbackManager.Factory.create();
 
-
-        loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
-
-        btnLogin = (LinearLayout) findViewById(R.id.btnLogin);
-        btnLogin.setVisibility(View.GONE);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-//                progressDialog = new ProgressDialog(LoginActivity.this);
-//                progressDialog.setMessage("Loading...");
-//                progressDialog.show();
-
-                loginWithFacebookButton.performClick();
-
-                loginWithFacebookButton.setPressed(true);
-
-                loginWithFacebookButton.invalidate();
-
-                loginWithFacebookButton.registerCallback(callbackManager, mCallBack);
-
-                loginWithFacebookButton.setPressed(false);
-
-                loginWithFacebookButton.invalidate();
-
-            }
-        });
-
-
-
         //-----------------------google signin--------------//
 
         loginHandler =new LoginHandler(this);
         loginHandler.callSignin();
+        loginHandler.callFblogin(callbackManager,loginButton,languagePreference);
+
+        // loginHandler.callFblogin(callbackManager,mCallBack);
        /* RelativeLayout GoogleSignView = (RelativeLayout) findViewById(R.id.sign_in_button);
         GoogleSignView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1506,101 +1476,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         });*/
     }
 
-    /* private FacebookCallback<LoginResult> mCallBack = new FacebookCallback<LoginResult>() {
-         @Override
-         public void onSuccess(LoginResult loginResult) {
-             if (progressDialog != null && progressDialog.isShowing()) {
-                 progressDialog.hide();
-                 progressDialog = null;
-             }
-            // progressDialog.dismiss();
-
-             // App code
-             GraphRequest request = GraphRequest.newMeRequest(
-                     loginResult.getAccessToken(),
-                     new GraphRequest.GraphJSONObjectCallback() {
-                         @Override
-                         public void onCompleted(
-                                 JSONObject json,
-                                 GraphResponse response) {
-
-                             try {
-                                 String jsonresult = String.valueOf(json);
-                                 System.out.println("JSON Result" + jsonresult);
-
-                                *//* if ((json.has("first_name")) && json.getString("first_name").trim() != null && !json.getString("first_name").trim().isEmpty() && !json.getString("first_name").trim().equals("null") && !json.getString("first_name").trim().matches("")) {
-                                    if ((json.has("last_name")) && json.getString("last_name").trim() != null && !json.getString("last_name").trim().isEmpty() && !json.getString("last_name").trim().equals("null") && !json.getString("last_name").trim().matches("")) {
-                                        fbName = json.getString("first_name") + " " + json.getString("last_name");
-                                    }
-                                } else {
-                                    if ((json.has("last_name")) && json.getString("last_name").trim() != null && !json.getString("last_name").trim().isEmpty() && !json.getString("last_name").trim().equals("null") && !json.getString("last_name").trim().matches("")) {
-                                        fbName = json.getString("last_name");
-                                    }
-                                }*//*
-                                if ((json.has("name")) && json.getString("first_name").trim() != null && !json.getString("first_name").trim().isEmpty() && !json.getString("first_name").trim().equals("null") && !json.getString("first_name").trim().matches("")) {
-                                        fbName = json.getString("name");
-
-                                }
-                                if ((json.has("email")) && json.getString("email").trim() != null && !json.getString("email").trim().isEmpty() && !json.getString("email").trim().equals("null") && !json.getString("email").trim().matches("")) {
-                                    fbEmail = json.getString("email");
-                                } else {
-                                    fbEmail = fbName + "@facebook.com";
-
-                                }
-                                if ((json.has("id")) && json.getString("id").trim() != null && !json.getString("id").trim().isEmpty() && !json.getString("id").trim().equals("null") && !json.getString("id").trim().matches("")) {
-                                    fbUserId = json.getString("id");
-                                }
-                                //fbName = json.getString("first_name") + " "+ json.getString("last_name");
-                                asynCheckFbUserDetails = new AsynCheckFbUserDetails();
-                                asynCheckFbUserDetails.executeOnExecutor(threadPoolExecutor);
-
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
-                            loginButton.setVisibility(View.GONE);
-                            loginWithFacebookButton.setVisibility(View.GONE);
-                            btnLogin.setVisibility(View.GONE);
-                            LoginManager.getInstance().logOut();
-                            asynCheckFbUserDetails = new AsynCheckFbUserDetails();
-                            asynCheckFbUserDetails.executeOnExecutor(threadPoolExecutor);
-
-                        }
-
-                    });
-
-            Bundle parameters = new Bundle();
-            parameters.putString("fields", "id,name,email");
-            request.setParameters(parameters);
-            request.executeAsync();
-        }
-
-        @Override
-        public void onCancel() {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.hide();
-                progressDialog = null;
-            }
-           // progressDialog.dismiss();
-           // LoginManager.getInstance().logOut();
-            loginButton.setVisibility(View.VISIBLE);
-            loginWithFacebookButton.setVisibility(View.GONE);
-            btnLogin.setVisibility(View.VISIBLE);
-
-        }
-
-        @Override
-        public void onError(FacebookException e) {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.hide();
-                progressDialog = null;
-            }
-           // progressDialog.dismiss();
-           // LoginManager.getInstance().logOut();
-            loginButton.setVisibility(View.VISIBLE);
-            loginWithFacebookButton.setVisibility(View.GONE);
-            btnLogin.setVisibility(View.VISIBLE);
-        }
-    };*/
     public void loginButtonClicked() {
 
         regEmailStr = editEmailStr.getText().toString().trim();
@@ -3526,7 +3401,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     }
 
-    private FacebookCallback<LoginResult> mCallBack = new FacebookCallback<LoginResult>() {
+   /* private FacebookCallback<LoginResult> mCallBack = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
 
@@ -3608,7 +3483,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
             //progressDialog.dismiss();
         }
-    };
+    };*/
 
     @Override
     public void onCheckFbUserDetailsAsynPreExecuteStarted() {
@@ -3844,7 +3719,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 String loginHistoryIdStr = socialAuthOutputModel.getLogin_history_id();
 
                 preferenceManager.setLogInStatusToPref("1");
-                preferenceManager.setUserIdToPref(loggedInIdStr);
+                preferenceManager.setUserIdToPref(socialAuthOutputModel.getId());
                 preferenceManager.setPwdToPref("");
                 preferenceManager.setEmailIdToPref(emailFromApiStr);
                 preferenceManager.setDispNameToPref(displayNameStr);
@@ -5081,7 +4956,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     // [START handleSignInResult]
     private void handleSignInResult(GoogleSignInResult result) {
-       // Log.d(TAG, "handleSignInResult:" + result.isSuccess()+result.getSignInAccount());
+        // Log.d(TAG, "handleSignInResult:" + result.isSuccess()+result.getSignInAccount());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
@@ -5400,7 +5275,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                 } else {
                     if (getIntent().getStringExtra("from") != null) {
-                                //** review **//*
+                        //** review **//*
                         onBackPressed();
                     } else {
                         if (Util.check_for_subscription == 1) {
@@ -5472,4 +5347,16 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     }
 
+
+    public void handleFbUserDetails(String fbUserId,String fbEmail,String fbName ){
+        this.fbUserId=fbUserId;
+        this.fbEmail = fbEmail;
+        this.fbName =fbName;
+        CheckFbUserDetailsInput checkFbUserDetailsInput=new CheckFbUserDetailsInput();
+        checkFbUserDetailsInput.setAuthToken(authTokenStr);
+        checkFbUserDetailsInput.setFb_userid(fbUserId.trim());
+        asynCheckFbUserDetails = new CheckFbUserDetailsAsyn(checkFbUserDetailsInput,LoginActivity.this,LoginActivity.this);
+        asynCheckFbUserDetails.executeOnExecutor(threadPoolExecutor);
+
+    }
 }

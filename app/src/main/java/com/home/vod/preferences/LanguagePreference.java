@@ -22,6 +22,7 @@ public class LanguagePreference {
     public static String WANT_TO_DELETE = "WANT_TO_DELETE";
     public static String MY_DOWNLOAD = "MY_DOWNLOAD";
     public static String DEFAULT_MY_DOWNLOAD = "My Download";
+    public static String FREE_FOR_COUPON = "FREE_FOR_COUPON";
     public static final String TO_LOGIN = "TO_LOGIN";
     public static final String CLICK_HERE = "CLICK_HERE";
     public static final String SUBMIT_YOUR_RATING_TITLE = "SUBMIT_YOUR_RATING_TITLE";
@@ -194,7 +195,7 @@ public class LanguagePreference {
 
 
     public static final String DEFAULT_IS_ONE_STEP_REGISTRATION = "0";
-
+    public static String DEFAULT_FREE_FOR_COUPON = "You can watch the video at free of cost.";
     //ADD LATER FOR PURCHASE AND TRANSACTION DETAILS
     public static final String DEFAULT_NEED_LOGIN_TO_REVIEW = "You need to login to add your review.";
     public static final String NEED_LOGIN_TO_REVIEW = "NEED_LOGIN_TO_REVIEW";
