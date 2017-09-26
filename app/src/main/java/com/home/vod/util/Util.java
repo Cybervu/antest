@@ -462,7 +462,7 @@ public class Util {
    public static void parseLanguage(LanguagePreference languagePreference, String jsonResponse,String default_Language) throws JSONException {
          JSONObject json = new JSONObject(jsonResponse);
 
-
+         languagePreference.setLanguageSharedPrefernce( VIEW_LESS, json.optString("view_less").trim());
          languagePreference.setLanguageSharedPrefernce( ALREADY_MEMBER, json.optString("already_member").trim());
          languagePreference.setLanguageSharedPrefernce( ACTIAVTE_PLAN_TITLE, json.optString("activate_plan_title").trim());
          languagePreference.setLanguageSharedPrefernce( TRANSACTION_STATUS_ACTIVE, json.optString("transaction_status_active").trim());

@@ -2,10 +2,13 @@ package com.home.vod;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.CallbackManager;
 import com.home.vod.activity.LoginActivity;
+import com.home.vod.preferences.LanguagePreference;
 
 /**
  * Created by Android on 9/21/2017.

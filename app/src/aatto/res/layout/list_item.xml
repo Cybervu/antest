@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:text="Sample title"
             android:textAllCaps="true"
-            android:textColor="@color/videotitleColor"
+            android:textColor="@color/pageTitleColor"
             android:textSize="@dimen/itemtitle_text_size"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"

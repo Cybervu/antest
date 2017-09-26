@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/paymentOptionLinearLayout"
                 android:layout_marginTop="@dimen/payment_margin_top"
-                android:visibility="visible">
+                android:visibility="gone">
 
 
                 <RelativeLayout
