@@ -1294,7 +1294,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         //-----------------------google signin--------------//
 
         loginHandler =new LoginHandler(this);
-        loginHandler.callSignin();
+        loginHandler.callSignin(languagePreference);
         loginHandler.callFblogin(callbackManager,loginButton,languagePreference);
 
         // loginHandler.callFblogin(callbackManager,mCallBack);

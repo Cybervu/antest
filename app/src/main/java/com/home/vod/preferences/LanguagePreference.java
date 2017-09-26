@@ -161,6 +161,8 @@ public class LanguagePreference {
     public static final String PAY_BY_PAYPAL = "PAY_BY_PAYPAL";
     public static final String BTN_PAYNOW = "BTN_PAYNOW";
     public static final String BTN_REGISTER = "BTN_REGISTER";
+    public static final String GMAIL_SIGNUP = "GMAIL_SIGNUP";
+    public static final String GMAIL_SIGNIN = "GMAIL_SIGNIN";
     public static final String SORT_RELEASE_DATE = "SORT_RELEASE_DATE";
     public static final String TEXT_SEARCH_PLACEHOLDER = "TEXT_SEARCH_PLACEHOLDER";
     public static final String SLOW_ISSUE_INTERNET_CONNECTION = "SLOW_ISSUE_INTERNET_CONNECTION";
@@ -189,11 +191,11 @@ public class LanguagePreference {
     public static final String DEFAULT_MANAGE_DEVICE = "Manage Device";
     public static final String DEFAULT_YOUR_DEVICE = "Your Devices";
 
-
+    public static String DEFAULT_VIDEO_ISSUE = "There's a problem with a video or Internet connection";
     public static final String DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE = "Logout process has been successfully completed. Now you are authorized to login.";
     public static final String DEFAULT_LOGIN_STATUS_MESSAGE = "You are no longer logged in . Please log in again.";
 
-
+    public static final String DEFAULT_TRANSACTION_STATUS_ACTIVE = "Transcation status active";
     public static final String DEFAULT_IS_ONE_STEP_REGISTRATION = "0";
     public static String DEFAULT_FREE_FOR_COUPON = "You can watch the video at free of cost.";
     //ADD LATER FOR PURCHASE AND TRANSACTION DETAILS
@@ -351,6 +353,8 @@ public class LanguagePreference {
     public static final String DEFAULT_TEXT_EMIAL = "Enter your Email Address";
     public static final String DEFAULT_TEXT_PASSWORD = "Enter your Password";
     public static final String DEFAULT_BTN_REGISTER = "Register";
+    public static final String DEFAULT_GMAIL_SIGNUP = "Register with Google";
+    public static final String DEFAULT_GMAIL_SIGNIN = "Login with Google";
     public static final String DEFAULT_SORT_RELEASE_DATE = "Release Date";
     public static final String DEFAULT_TEXT_SEARCH_PLACEHOLDER = "Search";
     public static final String DEFAULT_SIGN_OUT_ERROR = "Sorry, we can not be able to log out. Try again!.";
