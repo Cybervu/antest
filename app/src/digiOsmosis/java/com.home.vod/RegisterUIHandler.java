@@ -8,9 +8,14 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.facebook.CallbackManager;
+import com.home.vod.activity.RegisterActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
@@ -33,14 +38,18 @@ public class RegisterUIHandler {
     private Activity context;
     private TextView termsTextView,termsTextView1;
     private Button loginButton;
+    private LinearLayout btnLogin;
+    private RelativeLayout googleSignView;
     private LanguagePreference languagePreference;
     public  String selected_Language_Id="", selected_Country_Id="";
 
     public RegisterUIHandler(Activity context){
         this.context=context;
+        googleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
         termsTextView = (TextView) context.findViewById(R.id.termsTextView);
         termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
-
+        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
+        btnLogin.setVisibility(View.GONE);
     }
     public void setCountryList(PreferenceManager preferenceManager){
 
@@ -66,6 +75,15 @@ public class RegisterUIHandler {
 
     }
 
+    public void callSignin(){
 
+        googleSignView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ((RegisterActivity)context).signIn();
+            }
+        });
+    }
 
 }
