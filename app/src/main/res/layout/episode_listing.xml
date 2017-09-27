@@ -15,8 +15,8 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/episodesectiontitle_height"
         android:layout_below="@+id/toolbar"
-        android:padding="@dimen/payment_spinner_padding"
         android:layout_marginLeft="2dp"
+        android:padding="@dimen/payment_spinner_padding"
         android:textColor="@color/pageTitleColor"
         android:textSize="@dimen/itemtitle_text_size"
         android:textStyle="bold" />

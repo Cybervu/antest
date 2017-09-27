@@ -87,7 +87,6 @@ android {
 //            buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             // buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
-
         }
         newthoughtchannel_staging_ {
             dimension 'environment'
@@ -134,6 +133,27 @@ android {
         digiOsmosis_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+
+        /*Structuring lumiere flavour with dimension*/
+
+        lumiere {
+            dimension 'vendor'
+            minSdkVersion 21
+            applicationId 'com.release.teststreamingapp'
+            versionCode 11
+            targetSdkVersion 25
+            versionName '2.2.4'
+            testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
+        }
+        lumiere_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+        lumiere_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
     }
 }
@@ -210,6 +230,22 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+
+    /*Avoid defaultFlavor to Lumiere combination for both debug & release mode.*/
+
+    if (vendor.equals('defaultFlavor') && environment.equals('lumiere_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('lumiere_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('lumiere_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('lumiere_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered vishwamtv variant.
      */
@@ -261,6 +297,21 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     if (vendor.equals('vishwamtv') && environment.equals('digiOsmosis_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid defaultFlavor to Lumiere combination for both debug & release mode.*/
+
+    if (vendor.equals('vishwamtv') && environment.equals('lumiere_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('lumiere_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('lumiere_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('lumiere_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
 
@@ -318,6 +369,19 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    if (vendor.equals('newthoughtchannel') && environment.equals('lumiere_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('lumiere_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('lumiere_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('lumiere_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered aattoo variant.
      */
@@ -368,6 +432,18 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     if (vendor.equals('aatto') && environment.equals('digiOsmosis_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('lumiere_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('lumiere_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('lumiere_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('lumiere_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
 
@@ -423,7 +499,83 @@ android.variantFilter { variant ->
     if (vendor.equals('digiOsmosis') && environment.equals('aatto_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+    if (vendor.equals('digiOsmosis') && environment.equals('lumiere_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('lumiere_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('lumiere_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('lumiere_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
 
+    /**
+     * Filtered Lumiere variant.
+     */
+    if (vendor.equals('lumiere') && environment.equals('defaultFlavor_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('defaultFlavor_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('lumiere') && environment.equals('defaultFlavor_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('defaultFlavor_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('vishwamtv_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('vishwamtv_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('vishwamtv_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('vishwamtv_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('newthoughtchannel_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('newthoughtchannel_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('newthoughtchannel_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('aatto_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('aatto_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('aatto_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('aatto_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('digiOsmosis_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('digiOsmosis_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('digiOsmosis_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('digiOsmosis_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
 }
 
 

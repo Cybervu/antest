@@ -13,10 +13,11 @@
     <dimen name="singleimgheight">126dp</dimen>
 
     <dimen name="buttonheight">37dp</dimen>
+    <dimen name="castcrew_text">20sp</dimen>
     <dimen name="titletxt">13sp</dimen>
     <dimen name="indicatorheight">130dp</dimen>
-    <dimen name="forgot_logo_width">120dp</dimen>
-    <dimen name="forgot_logo_height">120dp</dimen>
+    <dimen name="forgot_logo_width">150dp</dimen>
+    <dimen name="forgot_logo_height">150dp</dimen>
     <dimen name="email_text_size">13sp</dimen>
     <dimen name="pass_text_size">13sp</dimen>
     <dimen name="forgot_text_size">13sp</dimen>
@@ -47,8 +48,8 @@
     <dimen name="fragmentimgview_height">120dp</dimen>
     <dimen name="view_margin_top">10dp</dimen>
     <dimen name="registerimg_margin_top">300dp</dimen>
-    <dimen name="layout_padding_left">10dp</dimen>
-    <dimen name="layout_padding_right">10dp</dimen>
+    <dimen name="layout_padding_left">15dp</dimen>
+    <dimen name="layout_padding_right">15dp</dimen>
     <dimen name="register_edittext_padding">17dp</dimen>
     <dimen name="register_margin_top">20dp</dimen>
     <dimen name="listitemlayout_height">155dp</dimen>

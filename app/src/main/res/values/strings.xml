@@ -7,6 +7,7 @@
     <!--App Drawer-->
     <string name="action_search">Search</string>
     <string name="drawer_open">Open</string>
+    <string name="app_id">9C631550</string>
     <string name="drawer_close">Close</string>
     <string name="studio_site">http://apptestsite.com/</string>
     <string name="title_activity_resume_popup">ResumePopupActivity</string>
@@ -557,6 +558,7 @@
         <item>or</item>
 
     </string-array>
+
 
 
 </resources>

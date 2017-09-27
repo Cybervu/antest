@@ -399,7 +399,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/detailsRelativeLayout"
-                android:padding="2dp">
+                android:padding="@dimen/itemTitle_padding">
 
 
                 <Spinner

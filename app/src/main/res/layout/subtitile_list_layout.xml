@@ -3,17 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#fff"
-    android:padding="10dp"
+    android:padding="@dimen/main_padding"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="@dimen/scanbtn_height"
         android:id="@+id/title"
-        android:textSize="20dp"
+        android:textSize="@dimen/withoutpayment_text_size"
         android:text="wdeded"
         android:gravity="center_vertical"
-        android:layout_marginLeft="18dp"
+        android:layout_marginLeft="@dimen/confirm_passwrd_margin_top"
         android:textColor="#808080"
         android:orientation="vertical" />
 <!--    <View

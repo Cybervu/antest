@@ -107,4 +107,39 @@
 
  //************************END**************************//
 
+ <color name="teal_100">#FFCDD2</color>
+ <color name="teal_500">#F44336</color>
+ <color name="no_internet_textColor">#000</color>
+ <color name="unSelectedHintColor">#eee</color>
+ <color name="selectedHintColor">#0b8f66</color>
+ <color name="hintTextColor">#999</color>
+ <color name="editTexColor">#666</color>
+ <color name="buttonBackgroundColor">#2acb99</color>
+ <color name="loginTextColor">#2acb99</color>
+ <color name="signUpTextColor">#2acb99</color>
+ <color name="loginNewUserTextColor">#666</color>
+ <color name="forgotPasswordTextColor">#2acb99</color>
+ <color name="userNameTextColor">#666</color>
+ <color name="alreadyHaveALoginButtonColor">#2acb99</color>
+ <color name="resumeCancelButtonTextColor">#000000</color>
+ <color name="resumeCancelButtonBackgroundColor">#DDD</color>
+ <color name="borderColor">#2acb99</color>
+ <color name="subtitleListBgColor">#fff</color>
+ <color name="subtitleDividerColor">#A9A9A9</color>
+ <color name="pageTitleTextColor">#666666</color>
+ <color name="castNameTextColor">#2acb99</color>
+ <color name="castDescTextColor">#A9A9A9</color>
+ <color name="seasonTextColor">#666666</color>
+ <color name="listTitleContentColor">#fff</color>
+ <color name="languagePopup">#fff</color>
+ <color name="languagePopupFade">#fff</color>
+ <color name="genreTextColor">#666</color>
+ <color name="navDrawerTextColor">#666</color>
+ <color name="ccbuttonbg">#2acb99</color>
+ <color name="progressbarEndColor">#2acb99</color>
+ <color name="progressbarstartColor">#000</color>
+ <color name="termsTextColor">#2acb99</color>
+ <color name="leftMenuBgColor">#1e292d</color>
+
+
 </resources>
