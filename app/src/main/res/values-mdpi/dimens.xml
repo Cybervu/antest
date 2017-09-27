@@ -7,8 +7,8 @@
     <dimen name="txt">50sp</dimen>
     <dimen name="imgheight">100dp</dimen>
     <dimen name="imgwidth">100dp</dimen>
-    <dimen name="forgot_logo_width">120dp</dimen>
-    <dimen name="forgot_logo_height">120dp</dimen>
+    <dimen name="forgot_logo_width">150dp</dimen>
+    <dimen name="forgot_logo_height">150dp</dimen>
     <dimen name="email_text_size">11sp</dimen>
     <dimen name="pass_text_size">11sp</dimen>
     <dimen name="forgot_text_size">13sp</dimen>
@@ -17,6 +17,7 @@
     <dimen name="submit_text_size">13sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>
     <dimen name="registerbtn_height">35dp</dimen>
+    <dimen name="castcrew_text">20sp</dimen>
     <dimen name="submit_height_size">35sp</dimen>
     <dimen name="left_padding">0dp</dimen>
     <dimen name="right_padding">0dp</dimen>
@@ -41,8 +42,8 @@
     <dimen name="fragmentimgview_height">120dp</dimen>
     <dimen name="view_margin_top">10dp</dimen>
     <dimen name="registerimg_margin_top">300dp</dimen>
-    <dimen name="layout_padding_left">20dp</dimen>
-    <dimen name="layout_padding_right">20dp</dimen>
+    <dimen name="layout_padding_left">15dp</dimen>
+    <dimen name="layout_padding_right">15dp</dimen>
     <dimen name="register_edittext_padding">17dp</dimen>
     <dimen name="register_margin_top">20dp</dimen>
     <dimen name="listitemlayout_height">145dp</dimen>

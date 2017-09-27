@@ -8,16 +8,19 @@
     <dimen name="recy_margin">8dp</dimen>
 
     <dimen name="trailer_btn_text_size">14sp</dimen>
-    <dimen name="castcrew_text">18sp</dimen>
+    <dimen name="castcrew_text">20sp</dimen>
     <dimen name="listViewLayout_height">102dp</dimen>
     <dimen name="videoGenreTextView_margin">200dp</dimen>
     <dimen name="resolution_list_margin">13dp</dimen>
     <dimen name="login_button_margin">30dp</dimen>
+    <dimen name="list_card_height">171dp</dimen>
+    <dimen name="list_card_width">117dp</dimen>
     <dimen name="videoCensorRatingTextView_margin">2dp</dimen>
     <dimen name="voucher_pop_up_height">2dp</dimen>
     <dimen name="voucher_pop_up_padding">3dp</dimen>
     <dimen name="voucher_pop_up_margin">0dp</dimen>
     <dimen name="select_planMark_margin2">95dp</dimen>
+    <dimen name="list_single_card_small_height">140dp</dimen>
     <dimen name="textColor_margin">8dp</dimen>
     <dimen name="select_planMark_margin">135dp</dimen>
     <dimen name="planPurchaseMonthTextView_padding">18dp</dimen>
@@ -80,7 +83,11 @@
     <dimen name="itemTitle_padding">2dp</dimen>
     <dimen name="sliderLayout_height">230dp</dimen>
     <dimen name="login_linear_margin_top">16dp</dimen>
+    <dimen name="videoTitle_textview">15sp</dimen>
+    <dimen name="durationratingLiearLayout_padding">0dp</dimen>
+    <dimen name="sectionTitle_textsize">22sp</dimen>
     <dimen name="login_linear_padding">6dp</dimen>
+    <dimen name="percentage_textview">8sp</dimen>
     <dimen name="login_padding_bottom">17dp</dimen>
     <dimen name="contact_name_margin">22dp</dimen>
     <dimen name="itemTitle_widht">98dp</dimen>
@@ -203,9 +210,11 @@
     <dimen name="transcationview_text_size">16sp</dimen>
     <dimen name="transcationshowprice_text_size">25sp</dimen>
     <dimen name="episodelayout_width">171dp</dimen>
-    <dimen name="episodelayout_height">95dp</dimen>
+    <dimen name="episodelayout_height">117dp</dimen>
+    <dimen name="arrowIv_imageview_margin">47dp</dimen>
     <dimen name="playimg_width">60dp</dimen>
     <dimen name="playimg_height">60dp</dimen>
+    <dimen name="episode_listing_section_textview">21sp</dimen>
     <dimen name="episodename_text_size">13sp</dimen>
     <dimen name="episodedate_text_size">11sp</dimen>
     <dimen name="episodesectiontitle_text_size">18sp</dimen>

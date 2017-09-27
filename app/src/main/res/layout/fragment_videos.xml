@@ -134,7 +134,7 @@
             android:layout_marginRight="@dimen/payment_textview_showname_margin"
             android:background="@drawable/filterbg"
             android:gravity="center"
-            android:paddingBottom="@dimen/demoListView_padding"/>
+            android:paddingBottom="@dimen/demoListView_padding" />
 
 
     </RelativeLayout>

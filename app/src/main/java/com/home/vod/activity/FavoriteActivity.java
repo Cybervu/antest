@@ -55,6 +55,7 @@ import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
 import com.home.apisdk.apiModel.ViewFavouriteInputModel;
 import com.home.apisdk.apiModel.ViewFavouriteOutputModel;
+import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.FavoriteAdapter;
 import com.home.vod.adapter.LanguageCustomAdapter;
@@ -105,6 +106,7 @@ import static player.utils.Util.IS_OFFLINE;
 public class FavoriteActivity extends AppCompatActivity implements GetLanguageListAsynTask.GetLanguageListListener,ViewFavouriteAsynTask.ViewFavouriteListener,
         LogoutAsynctask.LogoutListener, GetTranslateLanguageAsync.GetTranslateLanguageInfoListener
         ,DeleteFavAsync.DeleteFavListener{
+
     public static ProgressBarHandler progressBarHandler;
     String email, id;
     LanguageCustomAdapter languageCustomAdapter;
@@ -194,6 +196,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     private GridView gridView;
     // private JazzyGridView gridView;
     RelativeLayout footerView;
+    private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     ///
 
     //////
@@ -223,6 +226,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         }
 
         loggedInStr =preferenceManager.getUseridFromPref();
+        episodeListOptionMenuHandler=new EpisodeListOptionMenuHandler(this);
 
         isLogin = preferenceManager.getLoginFeatureFromPref();
 
@@ -514,11 +518,21 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     @Override
     public void onGetLanguageListPreExecuteStarted() {
 
+        progressBarHandler = new ProgressBarHandler(FavoriteActivity.this);
+        progressBarHandler.show();
     }
 
     @Override
     public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
 
+        if (progressBarHandler.isShowing()) {
+            progressBarHandler.hide();
+            progressBarHandler = null;
+
+        }
+        if (status > 0 && status == 200) {
+            ShowLanguagePopup();
+        }
     }
 
 
@@ -848,102 +862,10 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        /***************chromecast**********************/
+        id = preferenceManager.getUseridFromPref();
+        email = preferenceManager.getEmailIdFromPref();
+        episodeListOptionMenuHandler.createOptionMenu(menu,preferenceManager,languagePreference);
 
-        // CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
-        if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1")) {
-            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
-                    R.id.media_route_menu_item);
-            mediaRouteMenuItem.setVisible(true);
-
-        }else {
-            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
-                    R.id.media_route_menu_item);
-            mediaRouteMenuItem.setVisible(false);
-        }
-
-        /***************chromecast**********************/
-
-        MenuItem item, item1, item2, item3, item4, item5, item6,item7;
-        item = menu.findItem(R.id.action_filter);
-        item.setVisible(false);
-        String loggedInStr = preferenceManager.getLoginStatusFromPref();
-        String id = preferenceManager.getUseridFromPref();
-        String email = preferenceManager.getEmailIdFromPref();
-        SharedPreferences language_list_pref = getSharedPreferences(Util.LANGUAGE_LIST_PREF, 0);
-        if(preferenceManager.getLanguageListFromPref().equals("1"))
-            (menu.findItem(R.id.menu_item_language)).setVisible(false);
-
-        if (loggedInStr != null) {
-            item4 = menu.findItem(R.id.action_login);
-            item4.setTitle(Util.getTextofLanguage(FavoriteActivity.this, Util.LANGUAGE_POPUP_LOGIN, Util.DEFAULT_LANGUAGE_POPUP_LOGIN));
-            item4.setVisible(false);
-            item5 = menu.findItem(R.id.action_register);
-            item5.setTitle(Util.getTextofLanguage(FavoriteActivity.this, Util.BTN_REGISTER, Util.DEFAULT_BTN_REGISTER));
-            item5.setVisible(false);
-            item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(Util.getTextofLanguage(FavoriteActivity.this, Util.PROFILE, Util.DEFAULT_PROFILE));
-
-            item1.setVisible(true);
-            item2 = menu.findItem(R.id.action_purchage);
-            item2.setTitle(Util.getTextofLanguage(FavoriteActivity.this, Util.PURCHASE_HISTORY, Util.DEFAULT_PURCHASE_HISTORY));
-
-            item2.setVisible(true);
-            item3 = menu.findItem(R.id.action_logout);
-            item3.setTitle(Util.getTextofLanguage(FavoriteActivity.this, Util.LOGOUT, Util.DEFAULT_LOGOUT));
-            item3.setVisible(true);
-            item6 = menu.findItem(R.id.action_mydownload);
-            item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD));
-            if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
-                    .trim()).equals("1")) {
-                item6.setVisible(true);
-            }else{
-                item6.setVisible(false);
-
-            }
-            item7 = menu.findItem(R.id.menu_item_favorite);
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
-                item7.setVisible(true);
-            } else {
-                item7.setVisible(false);
-
-            }
-
-        } else if (loggedInStr == null) {
-            item4 = menu.findItem(R.id.action_login);
-            item4.setTitle(Util.getTextofLanguage(FavoriteActivity.this, Util.LANGUAGE_POPUP_LOGIN, Util.DEFAULT_LANGUAGE_POPUP_LOGIN));
-
-
-            item5 = menu.findItem(R.id.action_register);
-            item5.setTitle(Util.getTextofLanguage(FavoriteActivity.this, Util.BTN_REGISTER, Util.DEFAULT_BTN_REGISTER));
-            if (isLogin == 1) {
-                item4.setVisible(true);
-                item5.setVisible(true);
-
-            } else {
-                item4.setVisible(false);
-                item5.setVisible(false);
-
-            }
-
-            item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(Util.getTextofLanguage(FavoriteActivity.this, Util.PROFILE, Util.DEFAULT_PROFILE));
-            item1.setVisible(false);
-            item2 = menu.findItem(R.id.action_purchage);
-            item2.setTitle(Util.getTextofLanguage(FavoriteActivity.this, Util.PURCHASE_HISTORY, Util.DEFAULT_PURCHASE_HISTORY));
-            item2.setVisible(false);
-            item3 = menu.findItem(R.id.action_logout);
-            item3.setTitle(Util.getTextofLanguage(FavoriteActivity.this, Util.LOGOUT, Util.DEFAULT_LOGOUT));
-            item3.setVisible(false);
-            item6 = menu.findItem(R.id.action_mydownload);
-            item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
-            item6.setVisible(false);
-            item7 = menu.findItem(R.id.menu_item_favorite);
-            item7.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE));
-            item7.setVisible(false);
-        }
         return true;
     }
     /*chromecast-------------------------------------*/

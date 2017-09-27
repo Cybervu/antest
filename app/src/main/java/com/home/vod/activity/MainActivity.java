@@ -54,6 +54,7 @@ import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
 import com.home.apisdk.apiModel.MenuListInput;
 import com.home.apisdk.apiModel.MenuListOutput;
+import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -176,6 +177,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private MenuItem mediaRouteMenuItem;
     private IntroductoryOverlay mIntroductoryOverlay;
     private CastStateListener mCastStateListener;
+    private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
 
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
@@ -282,6 +284,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
 
         languagePreference = LanguagePreference.getLanguagePreference(this);
+        episodeListOptionMenuHandler=new EpisodeListOptionMenuHandler(this);
 
         /*Set Toolbar*/
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -392,119 +395,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        //************chromecast***********//*
 
-        if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1")) {
-            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
-                    R.id.media_route_menu_item);
-            mediaRouteMenuItem.setVisible(true);
-
-        } else {
-            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
-                    R.id.media_route_menu_item);
-            mediaRouteMenuItem.setVisible(false);
-        }
-
-        //************chromecast***********/
-
-
-        MenuItem itemFillterMenu,
-                itemProfileMenu,
-                itemPurchaseMenu,
-                itemLogoutMenu,
-                itemLoginMenu,
-                itemRegisterMenu,
-                itemLanguageMenu,
-                itemDownload,
-                itemFavMenu;
-
-        itemDownload = menu.findItem(R.id.action_mydownload);
-        itemFillterMenu = menu.findItem(R.id.action_filter);
-        itemFavMenu = menu.findItem(R.id.menu_item_favorite);
-        itemLanguageMenu = menu.findItem(R.id.menu_item_language);
-        itemLoginMenu = menu.findItem(R.id.action_login);
-        itemRegisterMenu = menu.findItem(R.id.action_register);
-        itemProfileMenu = menu.findItem(R.id.menu_item_profile);
-        itemPurchaseMenu = menu.findItem(R.id.action_purchage);
-        itemLogoutMenu = menu.findItem(R.id.action_logout);
-
-        itemFillterMenu.setVisible(false);
-
-
-        loggedInStr = preferenceManager.getLoginStatusFromPref();
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
+        episodeListOptionMenuHandler.createOptionMenu(menu,preferenceManager,languagePreference);
 
-        (itemLanguageMenu).setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE));
-
-
-        if (preferenceManager.getLanguageListFromPref().equals("1"))
-            (itemLanguageMenu).setVisible(false);
-
-        if (loggedInStr != null) {
-
-            itemDownload = menu.findItem(R.id.action_mydownload);
-            itemDownload.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD));
-            if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
-                    .trim()).equals("1")) {
-                itemDownload.setVisible(true);
-            }else{
-                itemDownload.setVisible(false);
-
-            }
-            itemLoginMenu.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
-            itemLoginMenu.setVisible(false);
-
-            itemRegisterMenu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
-            itemRegisterMenu.setVisible(false);
-
-
-            itemProfileMenu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
-            itemProfileMenu.setVisible(true);
-
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
-                itemFavMenu.setVisible(true);
-            } else {
-                itemFavMenu.setVisible(false);
-
-            }
-
-
-            itemPurchaseMenu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
-            itemPurchaseMenu.setVisible(true);
-
-
-            itemLogoutMenu.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
-            itemLogoutMenu.setVisible(true);
-
-        } else if (loggedInStr == null) {
-            itemDownload.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD));
-            itemDownload.setVisible(false);
-            itemLoginMenu.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
-
-
-            itemRegisterMenu.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
-            if (isLogin == 1) {
-                itemLoginMenu.setVisible(true);
-                itemRegisterMenu.setVisible(true);
-
-            } else {
-                itemLoginMenu.setVisible(false);
-                itemRegisterMenu.setVisible(false);
-            }
-            itemProfileMenu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
-            itemProfileMenu.setVisible(false);
-
-            itemPurchaseMenu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
-            itemPurchaseMenu.setVisible(false);
-
-            itemLogoutMenu.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
-            itemLogoutMenu.setVisible(false);
-            itemFavMenu.setTitle(languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE));
-            itemFavMenu.setVisible(false);
-        }
         return true;
     }
 
@@ -2948,6 +2843,16 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    /**
+     * For Handling The Search Menu Action
+     */
+
+    public void actionSearchHendler(){
+        final Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
+        searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(searchIntent);
     }
 
 }

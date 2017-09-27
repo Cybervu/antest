@@ -75,6 +75,7 @@ import com.home.apisdk.apiModel.PPVModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.BuildConfig;
+import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.R;
 import com.home.apisdk.apiModel.ViewContentRatingInputModel;
 import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
@@ -320,6 +321,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     Player playerModel;
     // Video_Details_Output _video_details_output;
     LanguagePreference languagePreference;
+    private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
 
 
     // voucher ends here //
@@ -362,110 +364,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        /***************chromecast**********************/
-
-        if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1")) {
-            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
-                    R.id.media_route_menu_item);
-            mediaRouteMenuItem.setVisible(true);
-
-        }else {
-            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
-                    R.id.media_route_menu_item);
-            mediaRouteMenuItem.setVisible(false);
-        }
-        /***************chromecast**********************/
-
-        MenuItem item, item1, item2, item3, item4, item5, item6,item7;
-        item = menu.findItem(R.id.action_filter);
-        item.setVisible(false);
-        item = menu.findItem(R.id.action_filter);
-        item.setVisible(false);
-        String loggedInStr = preferenceManager.getLoginStatusFromPref();
-
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-
-
-        if (preferenceManager.getLanguageListFromPref().equals("1"))
-            (menu.findItem(R.id.menu_item_language)).setVisible(false);
-
-
-        if (loggedInStr != null) {
-            item4 = menu.findItem(R.id.action_login);
-            item4.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
-            item4.setVisible(false);
-            item5 = menu.findItem(R.id.action_register);
-            item5.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
-            item5.setVisible(false);
-
-            item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
-
-            item1.setVisible(true);
-            item2 = menu.findItem(R.id.action_purchage);
-            item2.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
-            item2.setVisible(true);
-
-            item3 = menu.findItem(R.id.action_logout);
-            item3.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
-            item3.setVisible(true);
-
-            item7 = menu.findItem(R.id.menu_item_favorite);
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
-                item7.setVisible(true);
-            } else {
-                item7.setVisible(false);
-
-            }
-
-            item6 = menu.findItem(R.id.action_mydownload);
-            item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD));
-            if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
-                    .trim()).equals("1")) {
-                item6.setVisible(true);
-            }else{
-                item6.setVisible(false);
-
-            }
-        } else if (loggedInStr == null) {
-            item4 = menu.findItem(R.id.action_login);
-            item4.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
-
-
-            item5 = menu.findItem(R.id.action_register);
-            item5.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
-            if (isLogin == 1) {
-                item4.setVisible(true);
-                item5.setVisible(true);
-
-            } else {
-                item4.setVisible(false);
-                item5.setVisible(false);
-
-            }
-
-            item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
-            item1.setVisible(false);
-            item2 = menu.findItem(R.id.action_purchage);
-            item2.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
-            item2.setVisible(false);
-            item3 = menu.findItem(R.id.action_logout);
-            item3.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
-            item3.setVisible(false);
-
-            item7 = menu.findItem(R.id.menu_item_favorite);
-            item7.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
-            item7.setVisible(false);
-
-            item6 = menu.findItem(R.id.action_mydownload);
-            item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
-            item6.setVisible(false);
-
-        }
+        episodeListOptionMenuHandler.createOptionMenu(menu,preferenceManager,languagePreference);
         return true;
     }
 
@@ -756,6 +657,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 onBackPressed();
             }
         });
+        episodeListOptionMenuHandler=new EpisodeListOptionMenuHandler(this);
 
         Util.goToLibraryplayer = false;
 
@@ -5012,6 +4914,37 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     @Override
     public void onGetTranslateLanguagePostExecuteCompleted(String jsonResponse, int status) {
 
+        if (progressBarHandler != null && progressBarHandler.isShowing()) {
+            progressBarHandler.hide();
+            progressBarHandler = null;
+
+        }
+
+        if (jsonResponse == null) {
+        } else {
+            if (status > 0 && status == 200) {
+
+                try {
+
+                    Util.parseLanguage(languagePreference, jsonResponse, default_Language);
+                    //Call For Language PopUp Dialog
+
+                    languageCustomAdapter.notifyDataSetChanged();
+
+                    Intent intent = new Intent(MovieDetailsActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                // Call For Other Methods.
+
+
+            } else {
+            }
+        }
     }
 
 

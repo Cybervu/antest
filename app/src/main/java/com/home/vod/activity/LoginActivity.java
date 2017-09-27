@@ -598,7 +598,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
 
-            if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
+             if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
 
                 play_video = false;
             }
