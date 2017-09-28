@@ -70,12 +70,11 @@ public class ReviewsAdapter extends BaseAdapter {
         TextView userReviewTextView = (TextView) grid.findViewById(R.id.userreviewTextView);
         RatingBar rating = (RatingBar)grid.findViewById(R.id.ratingBar);
         FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.light_fonts),userNameTextView);
-/*
-        Typeface custom_name = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.light_fonts));
-        userNameTextView.setTypeface(custom_name);*/
+      /*  Typeface custom_name = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.light_fonts));
+        userNameTextView.setTypeface(custom_name);
         FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.light_fonts),userReviewTextView);
 
-        /*Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.light_fonts));
+        Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.light_fonts));
         userReviewTextView.setTypeface(castDescriptionTypeface);*/
 
         userNameTextView.setText(reviewsItems.get(position).getDisplay_name());

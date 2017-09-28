@@ -109,7 +109,7 @@ android {
         }
         aatto_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.muvi.com/rest/\""
         }
         aatto_Prod_ {
             dimension 'environment'

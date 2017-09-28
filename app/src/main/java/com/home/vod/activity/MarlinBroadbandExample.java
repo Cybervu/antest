@@ -1725,9 +1725,11 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			stoptimertask();
 			timer = null;
 		}
+		finish();
 		/*AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
 		asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);*/
 		return;
+
       /*  if (video_completed == false){
 
             AsyncResumeVideoLogDetails  asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();

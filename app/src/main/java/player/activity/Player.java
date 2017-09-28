@@ -86,7 +86,7 @@ public class Player implements Serializable{
         this.isstreaming_restricted = isstreaming_restricted;
     }
 
-    private boolean isstreaming_restricted;
+    private boolean isstreaming_restricted=false;
 
 
     public boolean isLandScape() {

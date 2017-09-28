@@ -4,6 +4,7 @@
  <color name="appBackgroundColor">#fff</color>
  <color name="textColor">#eee</color>
  <color name="videotextColor">#000000</color>
+ <color name="videotitleColor">#000000</color>
  <color name="loginTextViewColor">#b70000</color>
  <color name="buttonTextColor">#fff</color>
  <color name="forgotPasswordTextViewColor">#b70000</color>
@@ -32,6 +33,7 @@
  <color name="languagePopupFadeColor">#50696969</color>
  <color name="filterTextColor">#5c6873</color>
  <color name="nav_drawer_lineColor">#000</color>
+ <color name="nav_lineColor">#000</color>
  <color name="nav_drawer_text_Color">#000000</color>
  <color name="button_background">#b70000</color>
  <color name="cancel_button_background">#DDD</color>

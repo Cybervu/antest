@@ -574,7 +574,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
                                 if (lengthBannerImagesArray > 0) {
                                     for (int i = 0; i < lengthBannerImagesArray; i++) {
-                                        url_maps.add(jsonBannerImageNode.getJSONObject(i).getString("mobile_view"));
+                                        url_maps.add(jsonBannerImageNode.getJSONObject(i).getString("original"));
 
                                     }
                                 } else {

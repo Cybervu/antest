@@ -170,8 +170,10 @@ public class ViewContentRatingAsynTask extends AsyncTask<ViewContentRatingInputM
                                 rating.setStatus(jsonChildNode.optString("status"));
 
                             }
+                            if(rating.getStatus().equals("1")) {
+                                ratingArrayList.add(rating);
+                            }
 
-                            ratingArrayList.add(rating);
                         } catch (Exception e) {
                             status = 0;
                             // totalItems = 0;
