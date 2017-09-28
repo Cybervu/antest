@@ -1821,46 +1821,44 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void onGetCardListForPPVPostExecuteCompleted(ArrayList<GetCardListForPPVOutputModel> getCardListForPPVOutputModelArray, int status, int totalItems, String message) {
+    public void onGetCardListForPPVPostExecuteCompleted(ArrayList<GetCardListForPPVOutputModel> getCardListForPPVOutputModelArray,
+                                                        int status, int totalItems, String message) {
 
-        ArrayList<CardModel> savedCards = new ArrayList<CardModel>();
+        try {
+            if (videoPDialog.isShowing())
+                videoPDialog.hide();
+        } catch (IllegalArgumentException ex) {
 
-
-        if (message == null)
-            message = "0";
-        if ((message.trim().equals("0"))) {
-            try {
-                if (videoPDialog.isShowing())
-                    videoPDialog.hide();
-            } catch (IllegalArgumentException ex) {
-
-                creditCardSaveSpinner.setVisibility(View.GONE);
-
-            }
             creditCardSaveSpinner.setVisibility(View.GONE);
 
-        } else {
-            if (savedCards.size() <= 0) {
-                try {
-                    if (videoPDialog.isShowing())
-                        videoPDialog.hide();
-                } catch (IllegalArgumentException ex) {
-
-                    creditCardSaveSpinner.setVisibility(View.GONE);
-
-                }
-                creditCardSaveSpinner.setVisibility(View.GONE);
-
-            } else {
-                savedCards.add(0, new CardModel("0", languagePreference.getTextofLanguage(USE_NEW_CARD, DEFAULT_USE_NEW_CARD)));
-                cardSavedArray = savedCards.toArray(new CardModel[savedCards.size()]);
-                creditCardSaveSpinnerAdapter = new CardSpinnerAdapter(PPvPaymentInfoActivity.this, cardSavedArray);
-                //cardExpiryYearSpinnerAdapter = new CardSpinnerAdapter<Integer>(this, R.layout.spinner_new, yearArray);
-
-                creditCardSaveSpinner.setAdapter(creditCardSaveSpinnerAdapter);
-                creditCardSaveSpinner.setSelection(0);
-            }
         }
+       if(status==200)
+       {
+           ArrayList<CardModel> savedCards = new ArrayList<CardModel>();
+           for (GetCardListForPPVOutputModel model:getCardListForPPVOutputModelArray) {
+               savedCards.add(new CardModel(model.getCard_id(), model.getCard_last_fourdigit()));
+           }
+           if (savedCards.size() <= 0) {
+
+               creditCardSaveSpinner.setVisibility(View.GONE);
+
+           } else {
+
+               savedCards.add(0, new CardModel("0", languagePreference.getTextofLanguage(USE_NEW_CARD, DEFAULT_USE_NEW_CARD)));
+               cardSavedArray = savedCards.toArray(new CardModel[savedCards.size()]);
+               creditCardSaveSpinnerAdapter = new CardSpinnerAdapter(PPvPaymentInfoActivity.this, cardSavedArray);
+               //cardExpiryYearSpinnerAdapter = new CardSpinnerAdapter<Integer>(this, R.layout.spinner_new, yearArray);
+
+               creditCardSaveSpinner.setAdapter(creditCardSaveSpinnerAdapter);
+               creditCardSaveSpinner.setSelection(0);
+           }
+
+       }
+        else{
+           creditCardSaveSpinner.setVisibility(View.GONE);
+       }
+
+
     }
 
     //Load Films Videos
@@ -2006,9 +2004,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 //                if (savedCards.size() <= 0) {
 //                    try {
 //                        if (videoPDialog.isShowing())
-//                            videoPDialog.hide();
-//                    } catch (IllegalArgumentException ex) {
-//
+//                            videoPDi
 //                        creditCardSaveSpinner.setVisibility(View.GONE);
 //
 //                    }
