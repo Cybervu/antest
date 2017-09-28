@@ -443,9 +443,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 if (user_Id != null && email_Id != null) {
                     Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
                     get_userProfile_input.setAuthToken(authTokenStr);
-                    get_userProfile_input.setEmail(get_userProfile_input.getEmail());
-                    get_userProfile_input.setUser_id(get_userProfile_input.getEmail());
-                    get_userProfile_input.setLang_code(get_userProfile_input.getLang_code());
+                    get_userProfile_input.setEmail(email_Id);
+                    get_userProfile_input.setUser_id(user_Id);
+                    get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
                     asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -469,6 +469,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     public void onGet_UserProfilePostExecuteCompleted(Get_UserProfile_Output get_userProfile_output, int code, String message, String status) {
         if (status == null) {
             isSubscribed = "0";
+        }
+        if (code==200){
+            isSubscribed=get_userProfile_output.getIsSubscribed();
         }
 
         Call_One_Step_Procedure();

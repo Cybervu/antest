@@ -51,6 +51,7 @@ import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
+
 import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
 import player.activity.Player;
@@ -118,7 +119,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
     String isCheckedToSavetheCard = "1";
 
     String videoResolution = "BEST";
-LanguagePreference languagePreference;
+    LanguagePreference languagePreference;
     PreferenceManager preferenceManager;
     ProgressBarHandler progressBarHandler;
     Toolbar mActionBarToolbar;
@@ -236,13 +237,13 @@ LanguagePreference languagePreference;
         videoPreview = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         creditCardDetailsTitleTextView = (TextView) findViewById(R.id.creditCardDetailsTitleTextView);
 
-        playerModel=new Player();
+        playerModel = new Player();
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
 
 
-        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
+        if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
-           // mActionBarToolbar.setNavigationIcon(null);
+            // mActionBarToolbar.setNavigationIcon(null);
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         } else {
             //mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
@@ -290,10 +291,10 @@ LanguagePreference languagePreference;
         securityCodeEditText = (EditText) findViewById(R.id.securityCodeEditText);
         couponCodeEditText = (EditText) findViewById(R.id.couponCodeEditText);
 
-        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts),nameOnCardEditText);
-        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts),cardNumberEditText);
-        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts),securityCodeEditText);
-        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts),couponCodeEditText);
+        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts), nameOnCardEditText);
+        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts), cardNumberEditText);
+        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts), securityCodeEditText);
+        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts), couponCodeEditText);
 
 
         chargedPriceTextView = (TextView) findViewById(R.id.chargeDetailsTextView);
@@ -319,11 +320,11 @@ LanguagePreference languagePreference;
         payNowButton = (Button) findViewById(R.id.payNowButton);
         applyButton = (Button) findViewById(R.id.addCouponButton);
 
-        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.regular_fonts),creditCardDetailsTitleTextView);
+        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.regular_fonts), creditCardDetailsTitleTextView);
 
         creditCardDetailsTitleTextView.setText(languagePreference.getTextofLanguage(CREDIT_CARD_DETAILS, DEFAULT_CREDIT_CARD_DETAILS));
-        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts),chargedPriceTextView);
-        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.regular_fonts),payNowButton);
+        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.light_fonts), chargedPriceTextView);
+        FontUtls.loadFont(PaymentInfoActivity.this, getResources().getString(R.string.regular_fonts), payNowButton);
         payNowButton.setText(languagePreference.getTextofLanguage(BUTTON_PAY_NOW, DEFAULT_BUTTON_PAY_NOW));
 
 
@@ -676,10 +677,8 @@ LanguagePreference languagePreference;
             Util.dataModel.setVideoResolution(_video_details_output.getVideoResolution());
 
             playerModel.setVideoResolution(_video_details_output.getVideoResolution());
-            if(_video_details_output.getPlayed_length()!=null && !_video_details_output.getPlayed_length().equals(""))
+            if (_video_details_output.getPlayed_length() != null && !_video_details_output.getPlayed_length().equals(""))
                 playerModel.setPlayPos((Util.isDouble(_video_details_output.getPlayed_length())));
-
-
 
 
             //dependency for datamodel
@@ -692,7 +691,6 @@ LanguagePreference languagePreference;
             Util.dataModel.setVideoResolution(_video_details_output.getVideoResolution());
             Util.dataModel.setThirdPartyUrl(_video_details_output.getThirdparty_url());
             Util.dataModel.setAdDetails(_video_details_output.getAdDetails());
-
 
 
             //player model set
@@ -709,7 +707,6 @@ LanguagePreference languagePreference;
             playerModel.setFakeSubTitlePath(_video_details_output.getFakeSubTitlePath());
             playerModel.setVideoResolution(_video_details_output.getVideoResolution());
             FakeSubTitlePath = _video_details_output.getFakeSubTitlePath();
-
 
 
             if (playerModel.getVideoUrl() == null ||
@@ -747,7 +744,7 @@ LanguagePreference languagePreference;
 
 
                 // condition for checking if the response has third party url or not.
-                if (_video_details_output.getThirdparty_url()==null ||
+                if (_video_details_output.getThirdparty_url() == null ||
                         _video_details_output.getThirdparty_url().matches("")
                         ) {
 
@@ -755,20 +752,19 @@ LanguagePreference languagePreference;
                     playerModel.setThirdPartyPlayer(false);
                     final Intent playVideoIntent;
 
-                    if (Util.dataModel.getAdNetworkId() == 3){
-                        LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+                    if (Util.dataModel.getAdNetworkId() == 3) {
+                        LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
                         playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
 
-                    }
-                    else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1){
+                    } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                         if (Util.dataModel.getPlayPos() <= 0) {
                             playVideoIntent = new Intent(PaymentInfoActivity.this, AdPlayerActivity.class);
-                        }else{
+                        } else {
                             playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
 
                         }
-                    }else{
+                    } else {
                         playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
 
                     }
@@ -795,7 +791,7 @@ LanguagePreference languagePreference;
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
-                                playVideoIntent.putExtra("PlayerModel",playerModel);
+                                playVideoIntent.putExtra("PlayerModel", playerModel);
                                 startActivity(playVideoIntent);
                                 finish();
                             }
@@ -809,7 +805,7 @@ LanguagePreference languagePreference;
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
-                    playVideoIntent.putExtra("PlayerModel",playerModel);
+                    playVideoIntent.putExtra("PlayerModel", playerModel);
                     startActivity(playVideoIntent);
                     finish();
 
@@ -884,8 +880,6 @@ LanguagePreference languagePreference;
             dlgAlert.create().show();*/
             Util.showNoDataAlert(PaymentInfoActivity.this);
         }
-
-
 
 
     }
@@ -970,7 +964,7 @@ LanguagePreference languagePreference;
                 registerUserPaymentInputModel.setName(preferenceManager.getDispNameFromPref());
 
 
-                RegisterUserPaymentAsyntask asyncSubsrInfo = new RegisterUserPaymentAsyntask(registerUserPaymentInputModel,this,this);
+                RegisterUserPaymentAsyntask asyncSubsrInfo = new RegisterUserPaymentAsyntask(registerUserPaymentInputModel, this, this);
                 asyncSubsrInfo.executeOnExecutor(threadPoolExecutor);
             }
         }
@@ -1588,7 +1582,7 @@ LanguagePreference languagePreference;
     }*/
 
 
-//    private class AsynLoadVideoUrls extends AsyncTask<Void, Void, Void> {
+    //    private class AsynLoadVideoUrls extends AsyncTask<Void, Void, Void> {
 //        ProgressBarHandler pDialog;
 //        String responseStr;
 //        int statusCode;
@@ -1861,9 +1855,9 @@ LanguagePreference languagePreference;
 //
 //
 //    }
-public void Download_SubTitle(String Url) {
-    new DownloadFileFromURL().execute(Url);
-}
+    public void Download_SubTitle(String Url) {
+        new DownloadFileFromURL().execute(Url);
+    }
 
     class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
@@ -1933,26 +1927,25 @@ public void Download_SubTitle(String Url) {
                     progressBarHandler.hide();
                 }
                 final Intent playVideoIntent;
-                if (Util.dataModel.getAdNetworkId() == 3){
-                    LogUtil.showLog("responseStr","playVideoIntent"+Util.dataModel.getAdNetworkId());
+                if (Util.dataModel.getAdNetworkId() == 3) {
+                    LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
                     playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
 
-                }
-                else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1){
+                } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                     if (Util.dataModel.getPlayPos() <= 0) {
                         playVideoIntent = new Intent(PaymentInfoActivity.this, AdPlayerActivity.class);
-                    }else{
+                    } else {
                         playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
 
                     }
-                }else{
+                } else {
                     playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
 
                 }
                 playerModel.setSubTitlePath(SubTitlePath);
                 //Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
-                playVideoIntent.putExtra("PlayerModel",playerModel);
+                playVideoIntent.putExtra("PlayerModel", playerModel);
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                 startActivity(playVideoIntent);
