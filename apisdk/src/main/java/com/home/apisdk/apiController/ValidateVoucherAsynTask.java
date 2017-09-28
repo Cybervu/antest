@@ -133,16 +133,16 @@ public class ValidateVoucherAsynTask extends AsyncTask<ValidateVoucherInputModel
             if (responseStr != null) {
                 myJson = new JSONObject(responseStr);
                 status = Integer.parseInt(myJson.optString("code"));
-                message = myJson.optString("status");
+                message = myJson.optString("msg");
             }
 
 
-            if (status == 200) {
+            /*if (status == 200) {
                 if ((myJson.has("msg")) && myJson.optString("msg").trim() != null && !myJson.optString("msg").trim().isEmpty() && !myJson.optString("msg").trim().equals("null") && !myJson.optString("msg").trim().matches("")) {
                     validateVoucherOutputModel.setMsg(myJson.optString("msg"));
                 }
 
-            }
+            }*/
 
         } catch (Exception e) {
             status = 0;

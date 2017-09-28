@@ -1013,7 +1013,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
             });
         }*/
-
+        isAPV = episode_details_output.getIsAPV();
+        isPPV = episode_details_output.getIs_ppv();
         for (int a = 0; a < episode_details_output.getEpisodeArray().size(); a++) {
 
             String episodeNoStr = episode_details_output.getEpisodeArray().get(a).getEpisode_number();

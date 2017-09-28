@@ -52,7 +52,7 @@ public class LoginHandler {
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
     }
 
-    public void callSignin(){
+    public void callSignin(LanguagePreference languagePreference){
 
     }
     public void callFblogin(final CallbackManager callbackManager, Button loginButton, LanguagePreference languagePreference){

@@ -17,7 +17,7 @@
         <com.daimajia.slider.library.SliderLayout
             android:id="@+id/sliderLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/sliderLayout_height"
+            android:layout_height="@dimen/listitemlayout_height"
             custom:auto_cycle="true"
             custom:indicator_visibility="visible"
             custom:pager_animation_span="1100" />
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/payment_relative_margin" />
+            />
         <!--  <com.daimajia.slider.library.Indicators.PagerIndicator
               android:id="@+id/custom_indicator2"
               style="@style/AndroidImageSlider_Corner_Oval_Orange"

@@ -3068,8 +3068,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        mCastContext.getSessionManager().removeSessionManagerListener(mSessionManagerListener, CastSession.class);
+      if (mCastContext!=null){
+          mCastContext.getSessionManager().removeSessionManagerListener(mSessionManagerListener, CastSession.class);
+      }
 
         Util.app_is_in_player_context = false;
         Log.v("BIBHU", "***********************************************************************************Ondestory called");

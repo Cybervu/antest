@@ -1,6 +1,7 @@
 package com.home.vod.activity;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
@@ -122,6 +123,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FO
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_PASSWORD_INVALID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FORGOT_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_GOOGLE_FCM_TOKEN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_RESTRICT_DEVICE;
@@ -144,6 +146,7 @@ import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALER
 import static com.home.vod.preferences.LanguagePreference.EMAIL_PASSWORD_INVALID;
 import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.FORGOT_PASSWORD;
+import static com.home.vod.preferences.LanguagePreference.GOOGLE_FCM_TOKEN;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
@@ -174,7 +177,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
     /*subtitle-------------------------------------*/
-
+    public static Activity loginA;
     LoginHandler loginHandler;
     String filename = "";
     static File mediaStorageDir;
@@ -270,7 +273,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             if (Util.check_for_subscription == 1) {
                                 //go to subscription page
                                 if (NetworkStatus.getInstance().isConnected(this)) {
-                                    if (Util.dataModel.getIsFreeContent() == 1) {
+                                   /* if (Util.dataModel.getIsFreeContent() == 1) {
                                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                                         getVideoDetailsInput.setAuthToken(authTokenStr);
                                         getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
@@ -279,7 +282,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                         getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                                         VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
                                         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                    } else {
+                                    } else {*/
                                         ValidateUserInput validateUserInput = new ValidateUserInput();
                                         validateUserInput.setAuthToken(authTokenStr);
                                         validateUserInput.setUserId(preferenceManager.getUseridFromPref());
@@ -292,7 +295,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                         asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 
 
-                                    }
+                                   // }
                                 } else {
                                     Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                                 }
@@ -486,10 +489,10 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         if (NetworkStatus.getInstance().isConnected(this)) {
                             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                             getVideoDetailsInput.setAuthToken(authTokenStr);
-                            getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
-                            getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
-                            getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
-                            getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
+                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                             VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this, this);
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
@@ -573,6 +576,13 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 }
             }
         }
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 
     @Override
@@ -1085,7 +1095,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         setContentView(R.layout.activity_login);
-
+        loginA=this;
         languagePreference = LanguagePreference.getLanguagePreference((this));
         BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
         deviceName = myDevice.getName();
@@ -1220,14 +1230,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         signUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent detailsIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                /****rating ******/
-
-                if (getIntent().getStringExtra("from")!=null){
-                    detailsIntent.putExtra("from", getIntent().getStringExtra("from"));
-                }
-                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(detailsIntent);
                 onBackPressed();
             }
         });
@@ -1492,6 +1494,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     login_input.setAuthToken(authTokenStr);
                     login_input.setEmail(regEmailStr);
                     login_input.setPassword(regPasswordStr);
+                    login_input.setDevice_id(Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID));
+                    login_input.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN,DEFAULT_GOOGLE_FCM_TOKEN));
+                    login_input.setDevice_type("1");
                     LoginAsynTask asyncReg = new LoginAsynTask(login_input, this, this);
                     asyncReg.executeOnExecutor(threadPoolExecutor);
                 } else {
@@ -2529,6 +2534,14 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //        if (asynValidateUserDetails!=null){
 //            asynValidateUserDetails.cancel(true);
 //        }
+        final Intent detailsIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+        /****rating ******/
+
+        if (getIntent().getStringExtra("from")!=null){
+            detailsIntent.putExtra("from", getIntent().getStringExtra("from"));
+        }
+        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(detailsIntent);
         if (asynCheckFbUserDetails != null) {
             asynCheckFbUserDetails.cancel(true);
         }

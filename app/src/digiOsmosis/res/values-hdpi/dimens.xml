@@ -56,7 +56,7 @@
     <dimen name="layout_padding_right">10dp</dimen>
     <dimen name="register_edittext_padding">17dp</dimen>
     <dimen name="register_margin_top">20dp</dimen>
-    <dimen name="listitemlayout_height">178dp</dimen>
+    <dimen name="listitemlayout_height">150dp</dimen>
     <dimen name="slider_height">180dp</dimen>
     <dimen name="login_butn_width">90dp</dimen>
     <dimen name="login_butn_height">35dp</dimen>

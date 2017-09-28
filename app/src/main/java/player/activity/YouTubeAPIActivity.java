@@ -74,7 +74,7 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
         fragmentYoutube = (YouTubePlayerFragment)getFragmentManager().findFragmentById(R.id.youtubeplayerfragment);
 
         fragmentYoutube.initialize(YoutubeDeveloperKey, YouTubeAPIActivity.this);
-        playerModel=new Player();
+        //playerModel=new Player();
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
 
       /*YoutubeVideoUrl=playerModel.getVideoUrl();

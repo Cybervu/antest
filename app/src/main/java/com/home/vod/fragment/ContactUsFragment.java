@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -144,7 +146,22 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         /*Typeface editMessageStrTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.light_fonts));
         editMessageStr.setTypeface(editMessageStrTypeface);*/
         editMessageStr.setHint(languagePreference.getTextofLanguage( MESSAGE, DEFAULT_MESSAGE));
+        /*******enter key of keyboard *************/
 
+        InputFilter filter = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+                for (int i = start; i < end; i++) {
+
+                    if (source.charAt(i) == '\n') {
+                        return " ";
+                    }
+                }
+                return null;
+            }
+        };
+
+        editMessageStr.setFilters(new InputFilter[]{filter});
         submit = (Button) v.findViewById(R.id.submit_cont);
         FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),submit);
 /*
