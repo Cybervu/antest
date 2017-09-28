@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
@@ -134,6 +136,23 @@ public class ReviewActivity extends AppCompatActivity implements
 
         submitReviewTextView.setHint(languagePreference.getTextofLanguage(ENTER_REVIEW_HERE,DEFAULT_ENTER_REVIEW_HERE));
         String clickHereStr = languagePreference.getTextofLanguage(NEED_LOGIN_TO_REVIEW,DEFAULT_NEED_LOGIN_TO_REVIEW) + " " + languagePreference.getTextofLanguage(CLICK_HERE,DEFAULT_CLICK_HERE) + " "+ languagePreference.getTextofLanguage(TO_LOGIN,DEFAULT_TO_LOGIN);
+
+        /*******enter key of keyboard *************/
+
+        InputFilter filter = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+                for (int i = start; i < end; i++) {
+
+                    if (source.charAt(i) == '\n') {
+                        return " ";
+                    }
+                }
+                return null;
+            }
+        };
+
+        submitReviewTextView.setFilters(new InputFilter[]{filter});
 
         SpannableString mySpannableString = new SpannableString(clickHereStr);
         mySpannableString.setSpan(new UnderlineSpan(), 0, mySpannableString.length(), 0);
@@ -279,7 +298,16 @@ public class ReviewActivity extends AppCompatActivity implements
         if (status>0){
             if (status==200){
 
-                LogUtil.showLog("MUVI", "Review activity login featrure ::"+preferenceManager.getLoginFeatureFromPref());
+               /* for (int a = 0; a < viewContentRatingOutputModel.getRatingArray().size(); a++) {
+
+                    if(viewContentRatingOutputModel.getRatingArray().get(a).getStatus().equals("1")){
+                        ReviewsItem reviewItem = new ReviewsItem(viewContentRatingOutputModel.getRatingArray().get(a).getReview()
+                                , viewContentRatingOutputModel.getRatingArray().get(a).getDisplay_name(),
+                                viewContentRatingOutputModel.getRatingArray().get(a).getRating());
+                        reviewsItem.add(reviewItem);
+                    }
+                }*/
+                //LogUtil.showLog("MUVI", "Review activity login featrure ::"+preferenceManager.getLoginFeatureFromPref());
                     if (preferenceManager.getLoginFeatureFromPref() == 1) {
 
                         String loggedInStr = preferenceManager.getLoginStatusFromPref();

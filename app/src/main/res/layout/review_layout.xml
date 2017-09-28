@@ -54,9 +54,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/textColor_margin"
-                android:ellipsize="end"
+                android:ellipsize="marquee"
                 android:gravity="center_vertical"
-                android:maxLines="1"
+                android:maxLines="4"
+                android:lines="2"
+                android:singleLine="true"
                 android:text="jhhhhh"
                 android:textColor="@color/pageTitleColor"
                 android:textSize="@dimen/user_review_textsize" />

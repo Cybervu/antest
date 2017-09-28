@@ -149,6 +149,8 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         });
     }
 
+
+
     public void forgotPasswordButtonClicked() {
 
         loginEmailStr = editEmailStr.getText().toString().trim();
@@ -223,6 +225,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+        final Intent detailsIntent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(detailsIntent);
         finish();
         overridePendingTransition(0, 0);
         super.onBackPressed();

@@ -29,7 +29,7 @@
     <dimen name="purchasevalue_text_size">45sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>
     <dimen name="submit_text_size">16sp</dimen>
-    <dimen name="listitemlayout_height">330dp</dimen>
+    <dimen name="listitemlayout_height">150dp</dimen>
     <dimen name="slider_height">210dp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
     <dimen name="banner_image_height">210dp</dimen>

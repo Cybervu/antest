@@ -302,12 +302,11 @@ public class RegisterActivity extends AppCompatActivity implements
                                 Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(intent);
-                               /* if (RegisterActivity.fa != null) {
-                                    RegisterActivity.fa.finish();
+                                if (LoginActivity.loginA!=null)
+                                {
+                                    LoginActivity.loginA.finish();
                                 }
-                                if (ForgotPasswordActivity.forgotA != null) {
-                                    ForgotPasswordActivity.forgotA.finish();
-                                }*/
+
                                 onBackPressed();
                             } else {
 
@@ -315,6 +314,10 @@ public class RegisterActivity extends AppCompatActivity implements
                                 in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(in);
+                                if (LoginActivity.loginA!=null)
+                                {
+                                    LoginActivity.loginA.finish();
+                                }
                                 onBackPressed();
                             }
                         }
@@ -498,7 +501,7 @@ public class RegisterActivity extends AppCompatActivity implements
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
         if(playerModel!=null)
 
-        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
+            playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
             mActionBarToolbar.setNavigationIcon(null);
@@ -567,6 +570,9 @@ public class RegisterActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 final Intent detailsIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+                if (getIntent().getStringExtra("from")!=null){
+                    detailsIntent.putExtra("from", getIntent().getStringExtra("from"));
+                }
                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(detailsIntent);
                 finish();
@@ -830,7 +836,7 @@ public class RegisterActivity extends AppCompatActivity implements
             } else if (status == 200) {
 
                 // Take appropiate step here
-               // playerModel.setEmailId(registration_output.getEmail());
+                // playerModel.setEmailId(registration_output.getEmail());
 
                 isSubscribedStr=registration_output.getIsSubscribed();
                 preferenceManager.setLogInStatusToPref("1");
@@ -865,7 +871,7 @@ public class RegisterActivity extends AppCompatActivity implements
                         onBackPressed();
                     }
 
-                else{
+                    else{
                         if (Util.check_for_subscription == 1) {
                             // Go for subscription
 
@@ -901,12 +907,20 @@ public class RegisterActivity extends AppCompatActivity implements
                                 Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(intent);
+                                if (LoginActivity.loginA!=null)
+                                {
+                                    LoginActivity.loginA.finish();
+                                }
                                 finish();
                             } else {
                                 Intent in = new Intent(RegisterActivity.this, MainActivity.class);
                                 in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(in);
+                                if (LoginActivity.loginA!=null)
+                                {
+                                    LoginActivity.loginA.finish();
+                                }
                                 finish();
                             }
                         }
@@ -1157,6 +1171,10 @@ public class RegisterActivity extends AppCompatActivity implements
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                                 playVideoIntent.putExtra("PlayerModel",playerModel);
                                 startActivity(playVideoIntent);
+                                if (LoginActivity.loginA!=null)
+                                {
+                                    LoginActivity.loginA.finish();
+                                }
                                 finish();
                             }
 
@@ -1171,6 +1189,10 @@ public class RegisterActivity extends AppCompatActivity implements
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                     playVideoIntent.putExtra("PlayerModel",playerModel);
                     startActivity(playVideoIntent);
+                    if (LoginActivity.loginA!=null)
+                    {
+                        LoginActivity.loginA.finish();
+                    }
 
                     //below part  checked at exoplayer thats why no need of checking here
 
@@ -1284,6 +1306,10 @@ public class RegisterActivity extends AppCompatActivity implements
                                 in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(in);
+                                if (LoginActivity.loginA!=null)
+                                {
+                                    LoginActivity.loginA.finish();
+                                }
                                 finish();
                             }
                         });
@@ -1310,6 +1336,10 @@ public class RegisterActivity extends AppCompatActivity implements
                                 in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(in);
+                                if (LoginActivity.loginA!=null)
+                                {
+                                    LoginActivity.loginA.finish();
+                                }
                                 finish();
                             }
                         });
@@ -1386,6 +1416,10 @@ public class RegisterActivity extends AppCompatActivity implements
                                     Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     startActivity(intent);
+                                    if (LoginActivity.loginA!=null)
+                                    {
+                                        LoginActivity.loginA.finish();
+                                    }
                                     finish();
                                 } else {
                                     if (Util.dataModel.getContentTypesId() == 3) {
@@ -1413,6 +1447,10 @@ public class RegisterActivity extends AppCompatActivity implements
                     Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
+                    if (LoginActivity.loginA!=null)
+                    {
+                        LoginActivity.loginA.finish();
+                    }
                     finish();
                     overridePendingTransition(0, 0);
 
@@ -2442,6 +2480,10 @@ public class RegisterActivity extends AppCompatActivity implements
 
             showPaymentIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(showPaymentIntent);
+            if (LoginActivity.loginA!=null)
+            {
+                LoginActivity.loginA.finish();
+            }
             finish();
         }
     }
@@ -2725,6 +2767,10 @@ public class RegisterActivity extends AppCompatActivity implements
 
                     showPaymentIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(showPaymentIntent);
+                    if (LoginActivity.loginA!=null)
+                    {
+                        LoginActivity.loginA.finish();
+                    }
                     finish();
 
                 }
@@ -3027,6 +3073,10 @@ public class RegisterActivity extends AppCompatActivity implements
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 remoteMediaClient.removeListener(this);
+                if (LoginActivity.loginA!=null)
+                {
+                    LoginActivity.loginA.finish();
+                }
                 finish();            }
 
             @Override
@@ -3151,6 +3201,10 @@ public class RegisterActivity extends AppCompatActivity implements
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     removeFocusFromViews();
                     startActivity(intent);
+                    if (LoginActivity.loginA!=null)
+                    {
+                        LoginActivity.loginA.finish();
+                    }
                     finish();
                     overridePendingTransition(0, 0);
                 }
@@ -3316,6 +3370,10 @@ public class RegisterActivity extends AppCompatActivity implements
                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                 playVideoIntent.putExtra("PlayerModel",playerModel);
                 startActivity(playVideoIntent);
+                if (LoginActivity.loginA!=null)
+                {
+                    LoginActivity.loginA.finish();
+                }
                 removeFocusFromViews();
                 finish();
                 overridePendingTransition(0, 0);
@@ -3862,12 +3920,20 @@ public class RegisterActivity extends AppCompatActivity implements
                         Intent intent = new Intent(RegisterActivity.this, SubscriptionActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
+                        if (LoginActivity.loginA!=null)
+                        {
+                            LoginActivity.loginA.finish();
+                        }
                         finish();
                     } else {
                         Intent in = new Intent(RegisterActivity.this, MainActivity.class);
                         in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(in);
+                        if (LoginActivity.loginA!=null)
+                        {
+                            LoginActivity.loginA.finish();
+                        }
                         finish();
                     }
                 }
@@ -4242,4 +4308,9 @@ public class RegisterActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
 }

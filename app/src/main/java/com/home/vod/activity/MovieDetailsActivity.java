@@ -91,6 +91,7 @@ import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.common.images.WebImage;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
@@ -138,12 +139,14 @@ import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADVANCE_PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
@@ -4689,6 +4692,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
 
         if (status == 200) {
+            castStr=contentDetailsOutput.getCastStr();
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.GONE);
             isPPV = contentDetailsOutput.getIsPpv();
@@ -4835,13 +4839,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             }
 
-       /* if (castValue == true){
-            videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
-            Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
-            videoCastCrewTitleTextView.setTypeface(videoGenreTextViewTypeface);
-            videoCastCrewTitleTextView.setVisibility(View.VISIBLE);
-        }
-*/
+              if (castStr){
+                videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
+                  FontUtls.loadFont(MovieDetailsActivity.this, getResources().getString(R.string.regular_fonts), videoCastCrewTitleTextView);
+                videoCastCrewTitleTextView.setVisibility(View.VISIBLE);
+            }
+
+
             if (contentDetailsOutput.getBanner().trim().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
 
                 if (contentDetailsOutput.getPoster().trim().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {

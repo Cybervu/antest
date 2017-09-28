@@ -407,8 +407,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         if (status == 200) {
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.GONE);
-
-
+            castStr=contentDetailsOutput.getCastStr();
+            isFreeContent=Integer.parseInt(contentDetailsOutput.getIsFreeContent());
             movieUniqueId = contentDetailsOutput.getMuviUniqId();
             isEpisode = contentDetailsOutput.getIsEpisode();
             movieStreamUniqueId = contentDetailsOutput.getMovieStreamUniqId();
@@ -1044,6 +1044,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         }
 
         if (status == 200) {
+
 
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.GONE);

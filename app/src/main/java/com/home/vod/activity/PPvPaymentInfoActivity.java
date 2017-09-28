@@ -1442,7 +1442,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 if (s.length() <= 0) {
                     withoutCreditCardLayout.setVisibility(View.GONE);
                     creditCardLayout.setVisibility(View.VISIBLE);
-
+                    paymentOptionLinearLayout.setVisibility(View.VISIBLE);
                     chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + previousChargedPrice);
                     isCouponCodeAdded = false;
                     validCouponCode = "";
@@ -2302,6 +2302,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 }
 
                 creditCardLayout.setVisibility(View.VISIBLE);
+                paymentOptionLinearLayout.setVisibility(View.VISIBLE);
 
                 chargedPriceTextView.setText(languagePreference.getTextofLanguage(CARD_WILL_CHARGE, DEFAULT_CARD_WILL_CHARGE) + " " + currencySymbolStr + chargedPrice);
                 isCouponCodeAdded = true;
@@ -2309,7 +2310,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 Toast.makeText(PPvPaymentInfoActivity.this, languagePreference.getTextofLanguage(DISCOUNT_ON_COUPON, DEFAULT_DISCOUNT_ON_COUPON), Toast.LENGTH_LONG).show();
                 if (chargedPrice <= 0.0f && isCouponCodeAdded == true) {
                     creditCardLayout.setVisibility(View.GONE);
-
+                    paymentOptionLinearLayout.setVisibility(View.GONE);
                     //paywithCreditCardButton.setVisibility(View.GONE);
                     withoutCreditCardLayout.setVisibility(View.VISIBLE);
 
@@ -2418,13 +2419,20 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
     @Override
     public void onGetVoucherPlanPreExecuteStarted() {
-
+        videoPDialog = new ProgressBarHandler(PPvPaymentInfoActivity.this);
+        videoPDialog.show();
     }
 
     @Override
     public void onGetVoucherPlanPostExecuteCompleted(GetVoucherPlanOutputModel getVoucherPlanOutputModel, int status, String message) {
 
-
+        try {
+            if (videoPDialog != null && videoPDialog.isShowing()) {
+                videoPDialog.hide();
+            }
+        } catch (IllegalArgumentException ex) {
+            status = 0;
+        }
         if (status == 200) {
 
             if (selectedPurchaseType == Integer.parseInt(getVoucherPlanOutputModel.getIs_show()) || selectedPurchaseType == Integer.parseInt(getVoucherPlanOutputModel.getIs_season()) || selectedPurchaseType == Integer.parseInt(getVoucherPlanOutputModel.getIs_episode()))
@@ -2466,6 +2474,9 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         } else {
             validateVoucherInputModel.setPurchase_type("show");
         }
+        validateVoucherInputModel.setMovie_id(Util.dataModel.getMovieUniqueId().trim());
+        validateVoucherInputModel.setStream_id(Util.dataModel.getStreamUniqueId().trim());
+        validateVoucherInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
 
         validateVoucherInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         ValidateVoucherAsynTask asynValidateVoucher = new ValidateVoucherAsynTask(validateVoucherInputModel, this, this);
@@ -2474,12 +2485,19 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
     @Override
     public void onValidateVoucherPreExecuteStarted() {
-
+        videoPDialog = new ProgressBarHandler(PPvPaymentInfoActivity.this);
+        videoPDialog.show();
     }
 
     @Override
     public void onValidateVoucherPostExecuteCompleted(ValidateVoucherOutputModel validateVoucherOutputModel, int status, String message) {
-
+        try {
+            if (videoPDialog != null && videoPDialog.isShowing()) {
+                videoPDialog.hide();
+            }
+        } catch (IllegalArgumentException ex) {
+            status = 0;
+        }
 
         if (status == 200) {
 
@@ -2500,14 +2518,15 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
     @Override
     public void onVoucherSubscriptionPreExecuteStarted() {
-        pDialog.show();
+        videoPDialog = new ProgressBarHandler(PPvPaymentInfoActivity.this);
+        videoPDialog.show();
     }
 
     @Override
     public void onVoucherSubscriptionPostExecuteCompleted(VoucherSubscriptionOutputModel voucherSubscriptionOutputModel, int status) {
         try {
-            if (pDialog != null && pDialog.isShowing()) {
-                pDialog.hide();
+            if (videoPDialog != null && videoPDialog.isShowing()) {
+                videoPDialog.hide();
             }
         } catch (IllegalArgumentException ex) {
             status = 0;
@@ -4467,4 +4486,6 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         super.onBackPressed();
 
     }*/
+
+
 }

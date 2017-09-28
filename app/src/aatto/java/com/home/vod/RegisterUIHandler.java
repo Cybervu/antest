@@ -197,5 +197,7 @@ public class RegisterUIHandler {
         }
     };
 
+    public void callSignin(LanguagePreference languagePreference){
 
+    }
 }

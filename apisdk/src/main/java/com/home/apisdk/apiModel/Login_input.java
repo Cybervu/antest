@@ -14,6 +14,16 @@ public class Login_input {
     String device_id;
     String google_id;
 
+    public String getDevice_type() {
+        return device_type;
+    }
+
+    public void setDevice_type(String device_type) {
+        this.device_type = device_type;
+    }
+
+    String device_type;
+
     /**
      * This Method is use to Get the Language Code
      *

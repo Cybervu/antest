@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -34,7 +35,7 @@ import static com.home.vod.preferences.LanguagePreference.TERMS;
 public class RegisterUIHandler {
     private Activity context;
     private TextView termsTextView,termsTextView1;
-
+    private LinearLayout btnLogin;
     public  String selected_Language_Id="", selected_Country_Id="";
     private Button loginButton;
     private LanguagePreference languagePreference;
@@ -43,7 +44,8 @@ public class RegisterUIHandler {
         this.context=context;
         termsTextView = (TextView) context.findViewById(R.id.termsTextView);
         termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
-
+        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
+        btnLogin.setVisibility(View.GONE);
     }
     public void setCountryList(PreferenceManager preferenceManager){
 
@@ -69,6 +71,8 @@ public class RegisterUIHandler {
 
     }
 
+    public void callSignin(LanguagePreference languagePreference){
 
+    }
 
 }
