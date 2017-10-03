@@ -101,6 +101,7 @@ import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.R;
 import com.home.vod.BuildConfig;
+import com.home.vod.ShowWithEpisodeActivityHandler;
 import com.home.vod.adapter.EpisodesListAdapter;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -231,8 +232,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         VideoDetailsAsynctask.VideoDetailsListener,
         AddToFavAsync.AddToFavListener,
         DeleteFavAsync.DeleteFavListener,
-        ViewContentRatingAsynTask.ViewContentRatingListener,GetIpAddressAsynTask.IpAddressListener {
-
+        ViewContentRatingAsynTask.ViewContentRatingListener, GetIpAddressAsynTask.IpAddressListener {
 
 
     String movieDetailsStr = "";
@@ -409,8 +409,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         if (status == 200) {
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.GONE);
-            castStr=contentDetailsOutput.getCastStr();
-            isFreeContent=Integer.parseInt(contentDetailsOutput.getIsFreeContent());
+            castStr = contentDetailsOutput.getCastStr();
+            isFreeContent = Integer.parseInt(contentDetailsOutput.getIsFreeContent());
             movieUniqueId = contentDetailsOutput.getMuviUniqId();
             isEpisode = contentDetailsOutput.getIsEpisode();
             movieStreamUniqueId = contentDetailsOutput.getMovieStreamUniqId();
@@ -565,7 +565,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             if (season != null && season.size() > 0) {
                 season.clear();
             }
-           // LogUtil.showLog("MUVI", "dd====== " + contentDetailsOutput.getSeason().length);
+            // LogUtil.showLog("MUVI", "dd====== " + contentDetailsOutput.getSeason().length);
 
             if (contentDetailsOutput.getSeason() != null && contentDetailsOutput.getSeason().length > 0) {
                 for (int j = 0; j < contentDetailsOutput.getSeason().length; j++) {
@@ -894,40 +894,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                         });
                 dlgAlert.create().show();
             } else if (status == 429 || status == 430) {
+                new ShowWithEpisodeActivityHandler(ShowWithEpisodesActivity.this).handle429OR430statusCod(validUserStr, message, subscription_Str);
 
-                if (validUserStr != null) {
-
-
-                    if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
-                        if (NetworkStatus.getInstance().isConnected(this)) {
-                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                            getVideoDetailsInput.setAuthToken(authTokenStr);
-                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                            asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                        } else {
-                            Toast.makeText(ShowWithEpisodesActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                        }
-                    } else {
-
-                        if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
-                            if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-                                ShowPpvPopUp();
-                            } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                                Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(intent);
-                            } else {
-                                ShowPpvPopUp();
-                            }
-                        }
-
-                    }
-                }
 
             } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
                 ShowPpvPopUp();
@@ -1740,7 +1708,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         LogUtil.showLog("MUVI", "onCreate");
         season = new ArrayList<String>();
         Util.goToLibraryplayer = false;
-        episodeListOptionMenuHandler=new EpisodeListOptionMenuHandler(this);
+        episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
         languagePreference = LanguagePreference.getLanguagePreference(ShowWithEpisodesActivity.this);
         playerModel = new Player();
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
@@ -3259,7 +3227,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu,preferenceManager,languagePreference);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
         return true;
     }
 
@@ -5190,7 +5158,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     @Override
     public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
 
-        ipAddres=ipAddressStr;
+        ipAddres = ipAddressStr;
         return;
     }
 
@@ -5204,9 +5172,44 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         viewContentRatingInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         asynGetReviewDetails = new ViewContentRatingAsynTask(viewContentRatingInputModel, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
         asynGetReviewDetails.executeOnExecutor(threadPoolExecutor);
-
     }
     //Asyntask for getDetails of the csat and crew members.
+
+    public void handleActionForValidateUserPayment(String validUserStr, String message, String subscription_Str) {
+        if (validUserStr != null) {
+
+
+            if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
+                if (NetworkStatus.getInstance().isConnected(this)) {
+                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
+                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                } else {
+                    Toast.makeText(ShowWithEpisodesActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+
+                }
+            } else {
+
+                if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
+                    if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                        ShowPpvPopUp();
+                    } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+                        Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(intent);
+                    } else {
+                        ShowPpvPopUp();
+                    }
+                }
+
+            }
+        }
+    }
 
 
 }

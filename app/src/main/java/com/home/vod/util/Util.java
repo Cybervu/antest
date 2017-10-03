@@ -34,6 +34,7 @@ import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.PPVModel;
 import com.home.vod.QueueDataProvider;
 import com.home.vod.R;
+import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.activity.SplashScreen;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
@@ -426,6 +427,31 @@ public class Util {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
+                    }
+                });
+        dlgAlert.create().show();
+    }
+
+    public static void showActivateSubscriptionWatchVideoAleart(Context mContext){
+        LanguagePreference languagePreference = LanguagePreference.getLanguagePreference(mContext);
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext,R.style.MyAlertDialogStyle);
+                  /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
+                        dlgAlert.setMessage(userMessage);
+                    }else{
+                        dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+
+                    }*/
+        dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO)+ " " +languagePreference.getTextofLanguage(APP_ON,DEFAULT_APP_ON)+" "+mContext.getResources().getString(R.string.studio_site));
+
+        dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY));
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
+        dlgAlert.setCancelable(false);
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+
+
                     }
                 });
         dlgAlert.create().show();
