@@ -185,6 +185,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
 
                 castCrewItems.add(movie);
             }
+
             noDataLayout.setVisibility(View.GONE);
             noInternetLayout.setVisibility(View.GONE);
             primary_layout.setVisibility(View.VISIBLE);
