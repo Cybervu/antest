@@ -4311,6 +4311,6 @@ public class RegisterActivity extends AppCompatActivity implements
     @Override
     protected void onStop() {
         super.onStop();
-        finish();
+       // finish();
     }
 }

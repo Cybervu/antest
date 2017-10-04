@@ -390,15 +390,17 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     @Override
     public void onGetValidateUserPostExecuteCompleted(ValidateUserOutput validateUserOutput, int status, String message) {
 
-        if (validateUserOutput == null) {
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                status = 0;
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
             }
+        } catch (IllegalArgumentException ex) {
+            status = 0;
+        }
+
+        if (validateUserOutput == null) {
+
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this);
             dlgAlert.setMessage(languagePreference.getTextofLanguage (NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
             dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
@@ -417,14 +419,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     });
             dlgAlert.create().show();
         } else if (status <= 0) {
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                status = 0;
-            }
+
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this);
             dlgAlert.setMessage(languagePreference.getTextofLanguage( NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
             dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
@@ -447,14 +442,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         if (status > 0) {
             if (status == 427) {
 
-                try {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                } catch (IllegalArgumentException ex) {
-                    status = 0;
-                }
+
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this);
                 if (message != null && message.equalsIgnoreCase("")) {
                     dlgAlert.setMessage(message);
@@ -476,14 +464,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             } else if (status == 429) {
 
                 if (validateUserOutput.getValiduser_str() != null) {
-                    try {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        status = 0;
-                    }
+
 
                     if ((validateUserOutput.getValiduser_str().trim().equalsIgnoreCase("OK")) || (validateUserOutput.getValiduser_str().trim().matches("OK")) || (validateUserOutput.getValiduser_str().trim().equals("OK"))) {
                         if (NetworkStatus.getInstance().isConnected(this)) {
@@ -582,7 +563,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     @Override
     protected void onStop() {
         super.onStop();
-        finish();
+       // finish();
     }
 
     @Override
@@ -1230,6 +1211,14 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         signUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final Intent detailsIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                /****rating ******/
+
+                if (getIntent().getStringExtra("from")!=null){
+                    detailsIntent.putExtra("from", getIntent().getStringExtra("from"));
+                }
+                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(detailsIntent);
                 onBackPressed();
             }
         });
@@ -2534,14 +2523,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //        if (asynValidateUserDetails!=null){
 //            asynValidateUserDetails.cancel(true);
 //        }
-        final Intent detailsIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-        /****rating ******/
 
-        if (getIntent().getStringExtra("from")!=null){
-            detailsIntent.putExtra("from", getIntent().getStringExtra("from"));
-        }
-        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(detailsIntent);
         if (asynCheckFbUserDetails != null) {
             asynCheckFbUserDetails.cancel(true);
         }
