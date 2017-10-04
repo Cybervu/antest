@@ -1,9 +1,11 @@
 package com.home.vod;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
+import com.home.vod.activity.Episode_list_Activity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 
 import static com.home.vod.util.Util.showActivateSubscriptionWatchVideoAleart;
@@ -14,15 +16,26 @@ import static com.home.vod.util.Util.showActivateSubscriptionWatchVideoAleart;
 
 public class MonetizationHandler {
 
-    ShowWithEpisodesActivity activity;
+        Activity activity;
 
-    public MonetizationHandler(ShowWithEpisodesActivity activity) {
-        this.activity = activity;
+        public MonetizationHandler(Activity activity) {
+            this.activity = activity;
+        }
+
+        public void handle429OR430statusCod(String validUserStr,String message, String subscription_Str) {
+           try {
+
+               if (activity instanceof ShowWithEpisodesActivity)
+                   ((ShowWithEpisodesActivity) activity).handleActionForValidateUserPayment(validUserStr, message, subscription_Str);
+               if (activity instanceof Episode_list_Activity)
+                   ((Episode_list_Activity) activity).handleActionForValidateUserPayment(validUserStr, message, subscription_Str);
+
+
+           } catch (ClassCastException e){
+               e.printStackTrace();
+           } catch (Exception e){
+               e.printStackTrace();
+           }
+        }
+
     }
-
-    public void handle429OR430statusCod(String validUserStr,String message, String subscription_Str) {
-       activity.handleActionForValidateUserPayment(validUserStr,message,subscription_Str);
-
-    }
-
-}
