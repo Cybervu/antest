@@ -866,6 +866,9 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         email = preferenceManager.getEmailIdFromPref();
         episodeListOptionMenuHandler.createOptionMenu(menu,preferenceManager,languagePreference);
 
+        MenuItem favorite_menu;
+        favorite_menu = menu.findItem(R.id.menu_item_favorite);
+        favorite_menu.setVisible(false);
         return true;
     }
     /*chromecast-------------------------------------*/
