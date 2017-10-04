@@ -79,6 +79,7 @@ import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.BuildConfig;
 import com.home.vod.EpisodeListOptionMenuHandler;
+import com.home.vod.MonetizationHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.EpisodesListViewMoreAdapter;
 import com.home.vod.adapter.LanguageCustomAdapter;
@@ -892,46 +893,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 dlgAlert.create().show();
             } else if (status == 429 || status == 430) {
 
-                if (validUserStr != null) {
-                    try {
-                        if (pDialog != null && pDialog.isShowing()) {
-                            pDialog.hide();
-                            pDialog = null;
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        status = 0;
-                    }
+                new MonetizationHandler(Episode_list_Activity.this).handle429OR430statusCod(validUserStr, message, Subscription_Str);
 
-                    if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
-                        if (NetworkStatus.getInstance().isConnected(this)) {
-                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                            getVideoDetailsInput.setAuthToken(authTokenStr);
-                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, Episode_list_Activity.this, this);
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                        } else {
-                            Toast.makeText(Episode_list_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                        }
-                    } else {
-
-                        if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
-                            if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-                                ShowPpvPopUp();
-                            } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
-                                Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(intent);
-                            } else {
-                                ShowPpvPopUp();
-                            }
-                        }
-
-                    }
-                }
 
             } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
                 ShowPpvPopUp();
@@ -3595,6 +3558,42 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                 playVideoIntent.putExtra("PlayerModel", playerModel);
                 startActivity(playVideoIntent);
+            }
+        }
+
+        public void handleActionForValidateUserPayment(String validUserStr, String message, String subscription_Str) {
+            if (validUserStr != null) {
+
+
+                if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
+                    if (NetworkStatus.getInstance().isConnected(Episode_list_Activity.this)) {
+                        GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                        getVideoDetailsInput.setAuthToken(authTokenStr);
+                        getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                        getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                        getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                        getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                        asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, Episode_list_Activity.this, Episode_list_Activity.this);
+                        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                    } else {
+                        Toast.makeText(Episode_list_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+
+                    }
+                } else {
+
+                    if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
+                        if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                            ShowPpvPopUp();
+                        } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+                            Intent intent = new Intent(Episode_list_Activity.this, SubscriptionActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(intent);
+                        } else {
+                            ShowPpvPopUp();
+                        }
+                    }
+
+                }
             }
         }
     }

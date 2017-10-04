@@ -12,11 +12,11 @@ import static com.home.vod.util.Util.showActivateSubscriptionWatchVideoAleart;
  * Created by MUVI on 10/3/2017.
  */
 
-public class ShowWithEpisodeActivityHandler {
+public class MonetizationHandler {
 
     ShowWithEpisodesActivity activity;
 
-    public ShowWithEpisodeActivityHandler(ShowWithEpisodesActivity activity) {
+    public MonetizationHandler(ShowWithEpisodesActivity activity) {
         this.activity = activity;
     }
 
