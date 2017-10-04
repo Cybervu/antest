@@ -122,6 +122,7 @@ public class EpisodeListOptionMenuHandler {
 
         } else if (loggedInStr == null) {
 
+
             if (isLogin == 1) {
 
                 login_menu.setVisible(true);
