@@ -4949,7 +4949,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             } else {
             }
         }
-
     }
 
 
