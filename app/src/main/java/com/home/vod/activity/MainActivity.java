@@ -59,6 +59,7 @@ import com.home.apisdk.apiModel.MenuListOutput;
 import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.R;
+import com.home.vod.SideMenuHandler;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.fragment.AboutUsFragment;
@@ -119,6 +120,7 @@ import static com.home.vod.preferences.LanguagePreference.HOME;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
@@ -173,6 +175,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private AQuery mAquery;
     private MediaInfo mSelectedMedia;
 
+    //String login_menu,register_menu,profile_menu,mydownload_menu,purchase_menu,logout_menu,login_menuPermalink,register_menuPermalink,profile_menuPermalink,mydownload_menuPermalink,purchase_menuPermalink,logout_menuPermalink;
 
     private CastContext mCastContext;
     private SessionManagerListener<CastSession> mSessionManagerListener =
@@ -182,6 +185,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private IntroductoryOverlay mIntroductoryOverlay;
     private CastStateListener mCastStateListener;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
+    private SideMenuHandler sideMenuHandler;
 
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
@@ -631,27 +635,107 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             }
 
 
-        } else if (menuList.get(position).getIsEnabled() == true) {
+        } else  if (menuList.get(position).getPermalink().equals("login_permalink")){
+            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+            Util.check_for_subscription = 0;
+            startActivity(loginIntent);
+            fragment = null;
+        }
+        else  if (menuList.get(position).getPermalink().equals("profile_Permalink")){
+            Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+            profileIntent.putExtra("EMAIL", email);
+            profileIntent.putExtra("LOGID", id);
+            startActivity(profileIntent);
+            fragment = null;
+        }
+
+
+        else  if (menuList.get(position).getPermalink().equals("mydownload_Permalink")){
+            Intent mydownload = new Intent(MainActivity.this, MyDownloads.class);
+            startActivity(mydownload);
+            fragment = null;
+        }
+
+
+        else  if (menuList.get(position).getPermalink().equals("purchase_Permalink")) {
+            Intent purchaseintent = new Intent(MainActivity.this, PurchaseHistoryActivity.class);
+            startActivity(purchaseintent);
+            fragment = null;
+        }
+
+        else  if (menuList.get(position).getPermalink().equals("logout_Permalink")) {
+            fragment = null;
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
+            dlgAlert.setTitle("");
+
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    // Do nothing but close the dialog
+
+                    // dialog.cancel();
+                    LogoutInput logoutInput = new LogoutInput();
+                    logoutInput.setAuthToken(authTokenStr);
+                    LogUtil.showLog("Abhi", authTokenStr);
+                    String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
+                    logoutInput.setLogin_history_id(loginHistoryIdStr);
+                    logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    LogUtil.showLog("Abhi", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MainActivity.this, MainActivity.this);
+                    asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
+
+
+                    dialog.dismiss();
+                }
+            });
+
+            dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    // Do nothing
+                    dialog.dismiss();
+                }
+            });
+            // dlgAlert.setPositiveButton(getResources().getString(R.string.yes_str), null);
+            dlgAlert.setCancelable(false);
+
+            dlgAlert.create().show();
+
+        }
+
+
+        else {
 
             fragment = new VideosListFragment();
             bundle.putString("item", str);
             bundle.putString("title", titleStr);
-
-
         }
+
+
+      /*  else if (menuList.get(position).getPermalink().equals("login_permalink")) {
+
+            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+            Util.check_for_subscription = 0;
+            startActivity(loginIntent);
+
+        }*/
        /* else if (menuList.get(position).getIsEnabled() == false) {
 
             fragment = new WebViewFragment();
             bundle.putString("item", getResources().getString(R.string.studio_site)+str);
 
         }*/
-        fragment.setArguments(bundle);
+
 
       /*  dataEditor.putString("state", String.valueOf(state));
                 dataEditor.commit();*/
 
 
         if (fragment != null) {
+            fragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
@@ -879,7 +963,29 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                     menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getLink_type()));
                 }
             }
+            sideMenuHandler = new SideMenuHandler(this);
+            sideMenuHandler.staticSideMenu(languagePreference,menuList,preferenceManager);
+           /* login_menuPermalink = "login_permalink";
+            register_menuPermalink = "register_permalink";
+            profile_menuPermalink = "profile_Permalink";
+            mydownload_menuPermalink = "mydownload_Permalink";
+            purchase_menuPermalink = "purchase_Permalink";
+            logout_menuPermalink = "logout_Permalink";
 
+            login_menu = languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN);
+            register_menu =languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER);
+            profile_menu = languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE);
+            logout_menu = languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT);
+            mydownload_menu = languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD);
+            purchase_menu = languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY);
+
+            menuList.add(new NavDrawerItem(login_menu,login_menuPermalink,true,"internal"));
+            menuList.add(new NavDrawerItem(register_menu,register_menuPermalink,true,"internal"));
+            menuList.add(new NavDrawerItem(profile_menu,profile_menuPermalink,true,"internal"));
+            menuList.add(new NavDrawerItem(logout_menu,mydownload_menuPermalink,true,"internal"));
+            menuList.add(new NavDrawerItem(mydownload_menu,purchase_menuPermalink,true,"internal"));
+            menuList.add(new NavDrawerItem(purchase_menu,logout_menuPermalink,true,"internal"));
+*/
             menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
             LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
 

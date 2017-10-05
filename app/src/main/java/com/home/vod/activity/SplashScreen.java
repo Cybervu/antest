@@ -7,12 +7,17 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -146,6 +151,46 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        ImageView imageResize = (ImageView) findViewById(R.id.splash_screen);
+
+
+        float density = getResources().getDisplayMetrics().density;
+        if (density >= 3.5 && density <= 4.0) {
+            imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        } else if (density <= 1.5) {
+            imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
+        } else {
+            imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        }
+
+
+        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        Log.v("nihar_gg", dpHeight + "////////" + dpWidth);
+
+        imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.release.quickflix",  // replace with your unique package name
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.v("SUBHA:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+            Log.v("ANUU", e.toString());
+
+        } catch (NoSuchAlgorithmException e) {
+            Log.v("ANUU", e.toString());
+
+        }
+
+
         _init();
     }
 
@@ -471,8 +516,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         if (status == null) {
             isSubscribed = "0";
         }
-        if (code==200){
-            isSubscribed=get_userProfile_output.getIsSubscribed();
+        if (code == 200) {
+            isSubscribed = get_userProfile_output.getIsSubscribed();
         }
 
         Call_One_Step_Procedure();
@@ -600,6 +645,39 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         super.onStop();
         LogUtil.showLog("BKS", "packagenamesplash===" + SDKInitializer.user_Package_Name_At_Api);
 
+    }
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         float reqWidth, float reqHeight) {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, float reqWidth, float reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
 }
