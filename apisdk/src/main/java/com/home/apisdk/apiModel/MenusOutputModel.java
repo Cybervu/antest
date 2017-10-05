@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by MUVI on 1/20/2017.
  */
 
-public class GetMenusOutputModel {
+public class MenusOutputModel {
 
     public String getMsg() {
         return msg;
@@ -53,6 +53,72 @@ public class GetMenusOutputModel {
         String id;
         String parent_id;
         String link_type;
+        String value;
+        String id_seq;
+
+        public boolean isEnable() {
+            return isEnable;
+        }
+
+        public void setEnable(boolean enable) {
+            isEnable = enable;
+        }
+
+        boolean isEnable;
+
+        public String getCategory_id() {
+            return category_id;
+        }
+
+        public void setCategory_id(String category_id) {
+            this.category_id = category_id;
+        }
+
+        public String getIsSubcategoryPresent() {
+            return isSubcategoryPresent;
+        }
+
+        public void setIsSubcategoryPresent(String isSubcategoryPresent) {
+            this.isSubcategoryPresent = isSubcategoryPresent;
+        }
+
+        String category_id;
+        String isSubcategoryPresent;
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public String getId_seq() {
+            return id_seq;
+        }
+
+        public void setId_seq(String id_seq) {
+            this.id_seq = id_seq;
+        }
+
+        public String getLanguage_id() {
+            return language_id;
+        }
+
+        public void setLanguage_id(String language_id) {
+            this.language_id = language_id;
+        }
+
+        public String getLanguage_parent_id() {
+            return language_parent_id;
+        }
+
+        public void setLanguage_parent_id(String language_parent_id) {
+            this.language_parent_id = language_parent_id;
+        }
+
+        String language_id;
+        String language_parent_id;
 
         public ArrayList<MainMenuChild> getMainMenuChildModel() {
             return mainMenuChildModel;
@@ -65,13 +131,50 @@ public class GetMenusOutputModel {
         ArrayList<MainMenuChild> mainMenuChildModel = new ArrayList<>();
 
 
-        public class MainMenuChild{
+        public class MainMenuChild {
 
             String title;
             String permalink;
             String id;
             String parent_id;
             String link_type;
+            String value;
+            String id_seq;
+            String language_id;
+
+            public String getValue() {
+                return value;
+            }
+
+            public void setValue(String value) {
+                this.value = value;
+            }
+
+            public String getId_seq() {
+                return id_seq;
+            }
+
+            public void setId_seq(String id_seq) {
+                this.id_seq = id_seq;
+            }
+
+            public String getLanguage_id() {
+                return language_id;
+            }
+
+            public void setLanguage_id(String language_id) {
+                this.language_id = language_id;
+            }
+
+            public String getLanguage_parent_id() {
+                return language_parent_id;
+            }
+
+            public void setLanguage_parent_id(String language_parent_id) {
+                this.language_parent_id = language_parent_id;
+            }
+
+            String language_parent_id;
 
             public String getLink_type() {
                 return link_type;
@@ -112,7 +215,6 @@ public class GetMenusOutputModel {
             public void setParent_id(String parent_id) {
                 this.parent_id = parent_id;
             }
-
 
 
         }
@@ -178,8 +280,7 @@ public class GetMenusOutputModel {
         ArrayList<UserMenuChild> userMenuChildModel = new ArrayList<>();
 
 
-
-        public class UserMenuChild{
+        public class UserMenuChild {
 
 
             String title;
@@ -264,6 +365,16 @@ public class GetMenusOutputModel {
         String display_name;
         String permalink;
         String url;
+
+        public boolean isEnable() {
+            return isEnable;
+        }
+
+        public void setEnable(boolean enable) {
+            isEnable = enable;
+        }
+
+        boolean isEnable;
 
         public String getUrl() {
             return url;

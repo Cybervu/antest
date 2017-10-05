@@ -81,11 +81,14 @@ public class APIUrlConstant {
     /**
      * endpoint to get Home Page API
      */
-    public static String HOMEPAGE_URL = "homePage";
+   // public static String HOMEPAGE_URL = "homePage";
+
+    public static String HOMEPAGE_URL = "getAppHomePage";
     /**
      * endpoint to get Featured Content Details API
      */
-    public static String GET_FEATURE_CONTENT_URL = "getFeaturedContent";
+   // public static String GET_FEATURE_CONTENT_URL = "getFeaturedContent";
+    public static String GET_FEATURE_CONTENT_URL = "getAPPFeaturedContent";
     /**
      * endpoint to get Image For Download API
      */
@@ -185,7 +188,7 @@ public class APIUrlConstant {
     public static String GmailRegUrl = "socialAuth";
 
     public static String getGmailRegUrl() {
-        return BASE_URl +GmailRegUrl;
+        return BASE_URl + GmailRegUrl;
     }
 
     /**
@@ -266,6 +269,15 @@ public class APIUrlConstant {
      */
     public static final String CheckIfUserLoggedIn = "CheckIfUserLoggedIn";
 
+    /**
+     * endpoint to get all the menu lists including sub menus
+     */
+
+    public static final String GetAppMenu = "getAppMenu";
+
+    public static String getGetAppMenu() {
+        return BASE_URl + GetAppMenu;
+    }
 
 
     public static String getMenuListUrl() {

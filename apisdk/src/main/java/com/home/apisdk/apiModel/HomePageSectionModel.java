@@ -13,6 +13,27 @@ public class HomePageSectionModel {
     private String title;
     private String language_id;
 
+
+    public String getSection_type() {
+        return section_type;
+    }
+
+    public void setSection_type(String section_type) {
+        this.section_type = section_type;
+    }
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
+    }
+
+    String section_type;
+    String total;
+
+
     /**
      * This Method is use to Get the Language ID
      *
