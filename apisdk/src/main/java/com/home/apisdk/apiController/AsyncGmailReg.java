@@ -1,7 +1,9 @@
 package com.home.apisdk.apiController;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
@@ -180,6 +182,10 @@ public class AsyncGmailReg extends AsyncTask<GmailLoginInput,Void,Void> {
     @Override
     protected void onPostExecute(Void result) {
         listener.onGmailRegPostExecuteCompleted(gmailLoginOutput, status, message);
+
+        Intent Sintent = new Intent("LOGIN_SUCCESS");
+
+        LocalBroadcastManager.getInstance((context)).sendBroadcast(Sintent);
 
     }
 }

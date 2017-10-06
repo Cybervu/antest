@@ -173,7 +173,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
-                    getResources().getString(R.string.app_name),  // replace with your unique package name
+                    "com.release.digiosmosis",  // replace with your unique package name
+//                    getResources().getString(R.string.app_name),  // replace with your unique package name
                     PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
