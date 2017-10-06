@@ -932,6 +932,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             }
 
 
+           sideMenuHandler.logoutMenu(languagePreference,menuList,preferenceManager);
+
             imageUrlStr = "https://dadc-muvi.s3-eu-west-1.amazonaws.com/check-download-speed.jpg";
             if (NetworkStatus.getInstance().isConnected(MainActivity.this)) {
 
@@ -1001,20 +1003,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             sideMenuHandler = new SideMenuHandler(this);
             sideMenuHandler.staticSideMenu(languagePreference,menuList,preferenceManager);
 
-            login_menu = languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN);
-            register_menu =languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER);
-            profile_menu = languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE);
-            logout_menu = languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT);
-            mydownload_menu = languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD);
-            purchase_menu = languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY);
-
-            menuList.add(new NavDrawerItem(login_menu,login_menuPermalink,true,"internal"));
-            menuList.add(new NavDrawerItem(register_menu,register_menuPermalink,true,"internal"));
-            menuList.add(new NavDrawerItem(profile_menu,profile_menuPermalink,true,"internal"));
-            menuList.add(new NavDrawerItem(logout_menu,mydownload_menuPermalink,true,"internal"));
-            menuList.add(new NavDrawerItem(mydownload_menu,purchase_menuPermalink,true,"internal"));
-            menuList.add(new NavDrawerItem(purchase_menu,logout_menuPermalink,true,"internal"));
-*/
             menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
             LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
 

@@ -146,21 +146,20 @@
                     <LinearLayout
                         android:id="@+id/btnLogin"
                         android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_below="@+id/registerButton"
-                        android:layout_marginTop="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/login_btn_margin_top"
                         android:background="@drawable/fbbg"
                         android:clickable="true"
                         android:gravity="center_horizontal"
                         android:orientation="horizontal"
-                        android:padding="6dp">
+                        android:padding="@dimen/payment_spinner_padding">
 
                         <ImageView
                             android:id="@+id/fbIcon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginRight="15dp"
+                            android:layout_marginRight="@dimen/loginImageViewMarging_top"
                             android:src="@drawable/fb_icon" />
 
                         <TextView
@@ -168,13 +167,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_margin="5dp"
+                            android:layout_margin="@dimen/my_download_margin"
                             android:gravity="center"
                             android:text="@string/fb_registration_text"
                             android:textColor="@color/fb_text_color"
 
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/fb_text_size" />
                     </LinearLayout>
+
 
                     <com.facebook.login.widget.LoginButton
                         android:id="@+id/loginWithFacebookButton"
@@ -185,45 +185,43 @@
                         android:layout_marginTop="@dimen/login_facebook_margin"
                         android:visibility="gone" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:padding="6dp"
                         android:layout_marginTop="20dp"
                         android:id="@+id/sign_in_button"
                         android:layout_width="match_parent"
-                        android:layout_height="45dp"
+                        android:layout_height="wrap_content"
                         android:paddingRight="8dp"
                         android:paddingLeft="8dp"
-                        android:orientation="horizontal"
                         android:elevation="2dp"
                         android:background="@drawable/gbg"
                         android:layout_below="@+id/btnLogin"
                         android:layout_centerVertical="true">
-
-                        <ImageView
-                            android:id="@+id/imageView2"
-                            android:layout_width="45dp"
-                            android:layout_height="45dp"
-                            android:layout_marginRight="15dp"
-                            android:layout_marginLeft="25dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/google_icon_svg" />
 
 
                         <TextView
                             android:gravity="center"
                             android:id="@+id/textView"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="40dp"
                             android:fontFamily="@string/regular_fonts"
                             android:text="Sign up with Google"
-                            android:textSize="18dp"
+                            android:layout_gravity="start"
+                            android:textSize="18sp"
                             android:layout_marginLeft="5dp"
-                            android:layout_gravity="center_vertical"
+
                             android:textColor="#a49f9f"
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true" />
+                        <ImageView
+                            android:layout_toLeftOf="@+id/textView"
+                            android:id="@+id/imageView2"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/google_icon_svg" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <Button
                         android:id="@+id/regtisterEmailButton"
@@ -253,29 +251,29 @@
                     android:orientation="horizontal">
 
 
-                    <TextView
-                        android:id="@+id/alreadyMemberText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/offlinebtn_height"
-                        android:layout_marginRight="@dimen/ppv_margin"
-                        android:text="already member"
-                        android:textColor="@color/alreadyMemberTextColor"
-                        android:textSize="@dimen/alreadymember_text_size" />
+                <TextView
+                    android:id="@+id/alreadyMemberText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/offlinebtn_height"
+                    android:layout_marginRight="@dimen/ppv_margin"
+                    android:text="already member"
+                    android:textColor="@color/alreadyMemberTextColor"
+                    android:textSize="@dimen/alreadymember_text_size" />
 
 
-                    <TextView
-                        android:id="@+id/alreadyHaveALoginButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/offlinebtn_height"
-                        android:layout_centerHorizontal="true"
-                        android:layout_toRightOf="@+id/alreadyMemberText"
-                        android:clickable="true"
-                        android:maxLines="3"
-                        android:singleLine="false"
-                        android:text="Login"
-                        android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                        android:textSize="@dimen/already_login_size"
-                        android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/alreadyHaveALoginButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/offlinebtn_height"
+                    android:layout_centerHorizontal="true"
+                    android:layout_toRightOf="@+id/alreadyMemberText"
+                    android:clickable="true"
+                    android:maxLines="3"
+                    android:singleLine="false"
+                    android:text="Login"
+                    android:textColor="@color/alreadyHaveALoginButtonTextColor"
+                    android:textSize="@dimen/already_login_size"
+                    android:textStyle="bold" />
 
                 </RelativeLayout>
 
