@@ -1,7 +1,9 @@
 package com.home.vod;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -180,5 +182,11 @@ public class LoginHandler {
         }
     };
 
+    public void sendBroadCast()
+    {
+        Intent Sintent = new Intent("LOGIN_SUCCESS");
+        Sintent.putExtra("login_status","1");
+        context.sendBroadcast(Sintent);
+    }
 
 }

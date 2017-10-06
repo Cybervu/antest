@@ -246,10 +246,6 @@ public class LoginAsynTask extends AsyncTask<Login_input, Void, Void> {
     protected void onPostExecute(Void result) {
         listener.onLoginPostExecuteCompleted(login_output, status, message);
 
-        Intent Sintent = new Intent("LOGIN_SUCCESS");
-
-        LocalBroadcastManager.getInstance((context)).sendBroadcast(Sintent);
-
     }
 
 }
