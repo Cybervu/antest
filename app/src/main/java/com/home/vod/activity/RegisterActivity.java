@@ -597,8 +597,9 @@ public class RegisterActivity extends AppCompatActivity implements
         /************fb************/
         callbackManager = CallbackManager.Factory.create();
 
-        registerUIHandler = new RegisterUIHandler(this);
+        registerUIHandler=new RegisterUIHandler(this,languagePreference);
         registerUIHandler.setCountryList(preferenceManager);
+        registerUIHandler.callEmailSignIn(languagePreference);
 
         //registerUIHandler.setEmailText(languagePreference);
         registerUIHandler.callFblogin(callbackManager, registerButton, languagePreference);
@@ -1173,6 +1174,7 @@ public class RegisterActivity extends AppCompatActivity implements
                         LoginActivity.loginA.finish();
                     }
 
+                    onBackPressed();
                     //below part  checked at exoplayer thats why no need of checking here
 
                    /* playerModel.setThirdPartyPlayer(true);

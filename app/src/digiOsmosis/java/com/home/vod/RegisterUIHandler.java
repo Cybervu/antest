@@ -33,8 +33,14 @@ import static com.home.vod.R.id.loginWithFacebookButton;
 import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNUP;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN_FACEBOOK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_REGISTER_FACEBOOK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_UP_WITH_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TERMS;
 import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNUP;
+import static com.home.vod.preferences.LanguagePreference.LOGIN_FACEBOOK;
+import static com.home.vod.preferences.LanguagePreference.REGISTER_FACEBOOK;
+import static com.home.vod.preferences.LanguagePreference.SIGN_UP_WITH_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.TERMS;
 import static player.utils.Util.DEFAULT_DETAILS_NOT_FOUND_ALERT;
 import static player.utils.Util.DETAILS_NOT_FOUND_ALERT;
@@ -49,47 +55,37 @@ public class RegisterUIHandler {
     private Button loginButton;
     private LinearLayout btnLogin;
     LoginButton loginWithFacebookButton;
-    private RelativeLayout googleSignView;
+    private LinearLayout googleSignView;
     private LanguagePreference languagePreference;
     public  String selected_Language_Id="", selected_Country_Id="";
     private Button registerButton;
     RelativeLayout  registerPage1,registerPage2;
     Button regtisterEmailButton;
+    TextView fbLoginTextView;
 
     String fbUserId = "";
     String fbEmail = "";
     String fbName = "";
 
-    public RegisterUIHandler(Activity context){
+    public RegisterUIHandler(Activity context,LanguagePreference languagePreference){
         this.context=context;
         gmailTest=(TextView) context.findViewById(R.id.textView);
-        googleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
+        googleSignView = (LinearLayout) context.findViewById(R.id.sign_in_button);
 //        termsTextView = (TextView) context.findViewById(R.id.termsTextView);
 //        termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
         btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
-        TextView fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
+        fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
         registerPage1 = (RelativeLayout) context.findViewById(R.id.registerPage1);
         registerPage2 = (RelativeLayout) context.findViewById(R.id.registerPage2);
         regtisterEmailButton = (Button) context.findViewById(R.id.regtisterEmailButton);
 
-        regtisterEmailButton.setText("Sign Up With Email");
 
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
 
 
-        registerPage2.setVisibility(View.GONE);
-        registerPage1.setVisibility(View.VISIBLE);
 
-        regtisterEmailButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                registerPage1.setVisibility(View.GONE);
-                registerPage2.setVisibility(View.VISIBLE);
-            }
-        });
 
     }
     public void setCountryList(PreferenceManager preferenceManager){
@@ -111,10 +107,31 @@ public class RegisterUIHandler {
         });
    }*/
 
+
+   public void callEmailSignIn(LanguagePreference languagePreference) {
+
+
+       regtisterEmailButton.setText(languagePreference.getTextofLanguage(SIGN_UP_WITH_EMAIL,DEFAULT_SIGN_UP_WITH_EMAIL));
+       registerPage2.setVisibility(View.GONE);
+       registerPage1.setVisibility(View.VISIBLE);
+
+
+       regtisterEmailButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+
+               registerPage1.setVisibility(View.GONE);
+               registerPage2.setVisibility(View.VISIBLE);
+           }
+       });
+   }
+
     public void callFblogin(final CallbackManager callbackManager,Button registerButton,LanguagePreference languagePreference){
 
         this.registerButton=registerButton;
         this.languagePreference=languagePreference;
+        fbLoginTextView.setText(languagePreference.getTextofLanguage(REGISTER_FACEBOOK,DEFAULT_REGISTER_FACEBOOK));
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

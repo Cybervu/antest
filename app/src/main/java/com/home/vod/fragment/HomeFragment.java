@@ -732,7 +732,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
                     }
                 }
             } catch (Exception e) {
-                if (progressBarHandler != null) {
+                if (progressBarHandler != null && progressBarHandler.isShowing()) {
                     progressBarHandler.hide();
                     progressBarHandler = null;
                 }
