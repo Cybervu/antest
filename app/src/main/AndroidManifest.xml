@@ -277,6 +277,8 @@
 
         <activity android:name=".activity.FavoriteActivity"/>
         <activity android:name=".activity.ReviewActivity"/>
+        <activity android:name=".activity.SeasonActivity"/>
+        <activity android:name=".activity.ProgrammeActivity"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"

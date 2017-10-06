@@ -34,6 +34,9 @@ import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.PPVModel;
 import com.home.vod.QueueDataProvider;
 import com.home.vod.R;
+import com.home.vod.activity.LoginActivity;
+import com.home.vod.activity.MainActivity;
+import com.home.vod.activity.RegisterActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.activity.SplashScreen;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -432,7 +435,7 @@ public class Util {
         dlgAlert.create().show();
     }
 
-    public static void showActivateSubscriptionWatchVideoAleart(Context mContext){
+    public static void showActivateSubscriptionWatchVideoAleart(final Activity mContext){
         LanguagePreference languagePreference = LanguagePreference.getLanguagePreference(mContext);
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext,R.style.MyAlertDialogStyle);
                   /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
@@ -450,7 +453,15 @@ public class Util {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
-
+                        Intent in=new Intent(mContext,MainActivity.class);
+                        if (mContext instanceof LoginActivity) {
+                            mContext.startActivity(in);
+                            ((LoginActivity) mContext).onBackPressed();
+                        }
+                        if (mContext instanceof RegisterActivity) {
+                            mContext.startActivity(in);
+                            ((RegisterActivity) mContext).onBackPressed();
+                        }
 
                     }
                 });
