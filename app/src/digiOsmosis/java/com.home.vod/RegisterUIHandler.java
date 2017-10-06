@@ -26,7 +26,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_TERMS;
 import static com.home.vod.preferences.LanguagePreference.TERMS;
 
 /**
- * Created by BISHAL on 21-08-2017. alok 
+ * Created by BISHAL on 21-08-2017. alok
  */
 
 public class RegisterUIHandler {
