@@ -42,7 +42,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
     private  boolean firstTime;
     private ArrayList<String> bannerUrls = new ArrayList<String>();
     String pemalink;
-    String image;
+   // String image;
     int vertical = 0;
     boolean loaded = false;
     //int counter=0;
@@ -96,9 +96,9 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
 
         singleSectionItems = dataList.get(i).getAllItemsInSection();
         pemalink=dataList.get(i).getHeaderPermalink();
-        for (int j = 0; j > bannerUrls.size(); j++) {
-            image = bannerUrls.get(j);
-        }
+        /*for (int j = 0; j > bannerUrls.size(); j++) {
+            //image = bannerUrls.get(j);
+        }*/
         FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.regular_fonts),itemRowHolder.itemTitle);
 
        /* Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
@@ -272,18 +272,23 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
 
             if(!firstTime){
                 firstTime = true;
-                //for dynamic banner
-               loadDynamicBanners(mDemoSlider,view,this);
+              /*  //for dynamic banner
+               loadDynamicBanners(mDemoSlider,view,this);*/
 
-                //for static banner
-              // loadStaticBanners(mDemoSlider,view,this);
+               // for static banner
+               loadStaticBanners(mDemoSlider,view,this);
 
             }
 
-            mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-            mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-            mDemoSlider.setDuration(10000);
-            mDemoSlider.addOnPageChangeListener(this);
+            if (bannerUrls.size() > 1) {
+                mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+                mDemoSlider.setDuration(10000);
+                mDemoSlider.addOnPageChangeListener(this);
+            }else{
+                mDemoSlider.stopAutoCycle();
+                mDemoSlider.getPagerIndicator().setVisibility(View.INVISIBLE);
+            }
 
         }
 

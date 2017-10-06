@@ -11,6 +11,25 @@ public class HomePageBannerModel {
     private String original;
     private String mobile_view;
 
+    public String getImage_path() {
+        return image_path;
+    }
+
+    public void setImage_path(String image_path) {
+        this.image_path = image_path;
+    }
+
+    public String getBanner_url() {
+        return banner_url;
+    }
+
+    public void setBanner_url(String banner_url) {
+        this.banner_url = banner_url;
+    }
+
+    private String image_path;
+    private String banner_url;
+
     /**
      * This Method is use to Get the Original
      *

@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.facebook.CallbackManager;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
@@ -60,7 +62,13 @@ public class RegisterUIHandler {
         });
    }
 
+    public void callFblogin(final CallbackManager callbackManager, Button loginButton, LanguagePreference languagePreference){
 
+    }
+
+    public void callSignin(LanguagePreference languagePreference){
+
+    }
 
 
 
