@@ -193,7 +193,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
                 textSliderView
                         .description("")
                         .image(bannerUrls.get(i))
-                        .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                        .setScaleType(BaseSliderView.ScaleType.Fit)
                         .setOnSliderClickListener(onSliderClickListener);
                 mDemoSlider.addSlider(textSliderView);
 
