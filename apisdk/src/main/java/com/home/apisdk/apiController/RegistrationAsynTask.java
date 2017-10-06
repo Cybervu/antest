@@ -244,8 +244,6 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
     @Override
     protected void onPostExecute(Void result) {
         listener.onRegistrationDetailsPostExecuteCompleted(registration_output, status, message);
-        Intent Sintent = new Intent("LOGIN_SUCCESS");
-        LocalBroadcastManager.getInstance((context)).sendBroadcast(Sintent);
 
     }
 }

@@ -185,7 +185,6 @@ public class LoginHandler {
     public void sendBroadCast()
     {
         Intent Sintent = new Intent("LOGIN_SUCCESS");
-        Sintent.putExtra("login_status","1");
         context.sendBroadcast(Sintent);
     }
 

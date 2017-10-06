@@ -22,6 +22,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -246,8 +247,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     int check = 0;
     public static int isNavigated = 0;
     String Default_Language = "";
-    public ArrayList<NavDrawerItem> menuList = new ArrayList<>();
+    public ArrayList<NavDrawerItem> originalMenuList;
     public ArrayList<LanguageModel> languageModels = new ArrayList<>();
+    public ArrayList<NavDrawerItem> menuList = new ArrayList<>();
+    int adding_position = 0;
 
 
     public HashMap <String,Integer> menuHashMap = new HashMap();
@@ -413,7 +416,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         public void onReceive(Context context, Intent intent) {
 
             sideMenuHandler = new SideMenuHandler(MainActivity.this);
-            sideMenuHandler.staticSideMenu(languagePreference,menuList,preferenceManager);
+            sideMenuHandler.staticSideMenu(languagePreference,menuList,originalMenuList,preferenceManager,adding_position);
+            //sideMenuHandler.addLogoutMenu(languagePreference,menuList,preferenceManager);
+
 
         }
     };
@@ -919,6 +924,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 }
             }
 
+            adding_position = menuList.size();
+
+
             menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
             LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
 
@@ -931,8 +939,14 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 }
             }
 
+            originalMenuList = new ArrayList<>(menuList);
 
-           sideMenuHandler.addLogoutMenu(languagePreference,menuList,preferenceManager);
+            Log.v("BIBHU1","menuList size="+adding_position);
+            Log.v("BIBHU1","originalMenuList size="+originalMenuList.size());
+
+            sideMenuHandler = new SideMenuHandler(this);
+            sideMenuHandler.staticSideMenu(languagePreference,menuList,originalMenuList,preferenceManager,adding_position);
+
 
             imageUrlStr = "https://dadc-muvi.s3-eu-west-1.amazonaws.com/check-download-speed.jpg";
             if (NetworkStatus.getInstance().isConnected(MainActivity.this)) {
@@ -942,8 +956,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 internetSpeed = "0";
             }
 
-            drawerFragment = (FragmentDrawer)
-                    getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+            drawerFragment = (FragmentDrawer)getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
             drawerFragment.setData(menuList);
             drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
             drawerFragment.setDrawerListener(MainActivity.this);
