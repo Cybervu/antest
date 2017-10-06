@@ -35,7 +35,7 @@ import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.TERMS;
 
 /**
- * Created by BISHAL on 21-08-2017. alok
+ * Created by BISHAL on 21-08-2017. alok kumar
  */
 
 public class RegisterUIHandler {
