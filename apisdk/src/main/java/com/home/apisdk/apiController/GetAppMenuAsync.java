@@ -186,7 +186,7 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                     try {
 
                         JSONArray jsonMainMenu = myJson.optJSONArray("menu_items");
-                        mainMenuArrayList = new ArrayList<>();
+                         mainMenuArrayList = new ArrayList<>();
 
 
                         for (int i = 0; i < jsonMainMenu.length(); i++) {
@@ -211,10 +211,12 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                             language_parent_id = jsonMainMenu.getJSONObject(i).getString("language_parent_id").toString().trim();
                             mainMenu.setLanguage_parent_id(language_parent_id);
                             category_id = jsonMainMenu.getJSONObject(i).getString("category_id").toString().trim();
-                            mainMenu.setLanguage_parent_id(category_id);
-                            language_parent_id = jsonMainMenu.getJSONObject(i).getString("language_parent_id").toString().trim();
-                            mainMenu.setLanguage_parent_id(language_parent_id);
+                            mainMenu.setCategory_id(category_id);
+                            isSubcategoryPresent = jsonMainMenu.getJSONObject(i).getString("isSubcategoryPresent").toString().trim();
+                            mainMenu.setIsSubcategoryPresent(isSubcategoryPresent);
 
+                            mainMenuArrayList.add(mainMenu);
+                            menusOutputModel.setMainMenuModel(mainMenuArrayList);
 
                             if (jsonMainMenu.getJSONObject(i).has("child")) {
 
@@ -243,22 +245,19 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                                         mainMenuChild.setLanguage_id(child_language_id);
                                         child_language_parent_id = jsonChildNode.getJSONObject(i).getString("language_parent_id").toString().trim();
                                         mainMenuChild.setLanguage_parent_id(child_language_parent_id);
-
                                         mainMenuChildArrayList.add(mainMenuChild);
 
 
                                     }
+
                                     mainMenu.setMainMenuChildModel(mainMenuChildArrayList);
-                                    mainMenuArrayList.add(mainMenu);
+
+
 
                                 } catch (Exception e) {
                                 }
                             }
                         }
-
-
-                        menusOutputModel.setMainMenuModel(mainMenuArrayList);
-
 
                         JSONArray jsonUserMenu = myJson.optJSONArray("usermenu");
                         userMenuArrayList = new ArrayList<>();
@@ -337,7 +336,6 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                                 footerMenuArrayList.add(footerMenu);
 
                             }
-
 
                             menusOutputModel.setFooterMenuModel(footerMenuArrayList);
                         } catch (Exception e) {
