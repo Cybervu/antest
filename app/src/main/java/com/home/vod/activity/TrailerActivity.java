@@ -265,7 +265,7 @@ public class TrailerActivity extends AppCompatActivity implements
                 videoCensorRatingTextView.setVisibility(View.VISIBLE);
                 videoCensorRatingTextView1.setVisibility(View.VISIBLE);
                 videoCensorRatingTextView.setText(Data[0]);
-                videoCensorRatingTextView1.setText(Data[1]);
+                videoCensorRatingTextView1.setText(Data[-1]);
                 censor_layout = false;
             } else {
                 censor_layout = false;

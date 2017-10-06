@@ -43,17 +43,20 @@ import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+import com.home.apisdk.apiController.GetAppMenuAsync;
 import com.home.apisdk.apiController.GetImageForDownloadAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetMenuListAsynctask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiController.SDKInitializer;
+import com.home.apisdk.apiModel.GetMenusInputModel;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
 import com.home.apisdk.apiModel.MenuListInput;
 import com.home.apisdk.apiModel.MenuListOutput;
+import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.LanguageCustomAdapter;
@@ -139,15 +142,16 @@ import static player.utils.Util.IS_OFFLINE;
 
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,
-        LogoutAsynctask.LogoutListener, GetMenuListAsynctask.GetMenuListListener,
+        LogoutAsynctask.LogoutListener,
         GetLanguageListAsynTask.GetLanguageListListener,
-        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener {
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, GetAppMenuAsync.GetMenusListener {
 
 
     public MainActivity() {
     }
 
     LanguagePreference languagePreference;
+
 
     //*** chromecast**************//*
 
@@ -259,7 +263,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     String loggedInStr, loginHistoryIdStr, email, id;
 
     GetImageForDownloadAsynTask as = null;
-    GetMenuListAsynctask asynLoadMenuItems = null;
+    GetAppMenuAsync asynLoadMenuItems = null;
     int isLogin = 0;
 
     public static int planIdOfStudios = 3;
@@ -284,7 +288,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
 
         languagePreference = LanguagePreference.getLanguagePreference(this);
-        episodeListOptionMenuHandler=new EpisodeListOptionMenuHandler(this);
+        episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
 
         /*Set Toolbar*/
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -341,15 +345,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             if (asynLoadMenuItems != null) {
                 asynLoadMenuItems = null;
             }
-            MenuListInput menuListInput = new MenuListInput();
+            GetMenusInputModel menuListInput = new GetMenusInputModel();
             menuListInput.setAuthToken(authTokenStr);
-            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
-            if (countryCodeStr == null) {
-                menuListInput.setCountry("IN");
-            }
-            menuListInput.setCountry(countryCodeStr);
             menuListInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-            asynLoadMenuItems = new GetMenuListAsynctask(menuListInput, MainActivity.this, this);
+            asynLoadMenuItems = new GetAppMenuAsync(menuListInput, this, this);
             asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
 
         } else {
@@ -398,7 +397,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu,preferenceManager,languagePreference);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
 
         return true;
     }
@@ -754,13 +753,98 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     }
 
     @Override
-    public void onGetMenuListPreExecuteStarted() {
+    public void onGetMenusPreExecuteStarted() {
+
         try {
              /*   internetSpeedDialog = new ProgressDialog(MainActivity.this);
                 internetSpeedDialog.setMessage(getResources().getString(R.string.loading_str));
                 internetSpeedDialog.setIndeterminate(false);
                 internetSpeedDialog.setCancelable(false);
                 internetSpeedDialog.show();*/
+
+            internetSpeedDialog = new ProgressBarHandler(MainActivity.this);
+            internetSpeedDialog.show();
+            LogUtil.showLog("Alok", "onGetMenusPreExecuteStarted");
+
+
+        } catch (IllegalArgumentException ex) {
+
+            noInternetLayout.setVisibility(View.VISIBLE);
+            DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
+            dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            LogUtil.showLog("Alok", "onGetMenusPreExecuteStarted IllegalArgumentException");
+        }
+    }
+
+    @Override
+    public void onGetMenusPostExecuteCompleted(MenusOutputModel menusOutputModel, int status, String message) {
+
+
+        LogUtil.showLog("Alok", "onGetMenusPostExecuteCompleted");
+        if (status == 0) {
+            noInternetLayout.setVisibility(View.VISIBLE);
+            DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
+            dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+
+        } else {
+            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME), "-101", true, "-101"));
+
+            if (menusOutputModel.getMainMenuModel() != null && menusOutputModel.getMainMenuModel().size() > 0) {
+
+                for (MenusOutputModel.MainMenu menuListOutput : menusOutputModel.getMainMenuModel()) {
+                    LogUtil.showLog("Alok", "menuListOutputList ::" + menuListOutput.getPermalink());
+                    if (menuListOutput.getLink_type() != null && !menuListOutput.getLink_type().equalsIgnoreCase("") && menuListOutput.getLink_type().equalsIgnoreCase("0")) {
+                        menuList.add(new NavDrawerItem(menuListOutput.getTitle(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getLink_type()));
+                    }
+                }
+            }
+
+            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
+            LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
+
+            if (menusOutputModel.getFooterMenuModel() != null && menusOutputModel.getFooterMenuModel().size() > 0) {
+                for (MenusOutputModel.FooterMenu menuListOutput : menusOutputModel.getFooterMenuModel()) {
+                    LogUtil.showLog("Alok", "footermenuListOutputList ::" + menuListOutput.getPermalink());
+                    if (menuListOutput.getUrl() != null && !menuListOutput.getUrl().equalsIgnoreCase("")) {
+                        menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getUrl()));
+                    }
+                }
+            }
+
+
+            imageUrlStr = "https://dadc-muvi.s3-eu-west-1.amazonaws.com/check-download-speed.jpg";
+            if (NetworkStatus.getInstance().isConnected(MainActivity.this)) {
+
+                new Thread(mWorker).start();
+            } else {
+                internetSpeed = "0";
+            }
+
+            drawerFragment = (FragmentDrawer)
+                    getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+            drawerFragment.setData(menuList);
+            drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+            drawerFragment.setDrawerListener(MainActivity.this);
+            displayView(0);
+        }
+
+        if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
+            internetSpeedDialog.hide();
+            internetSpeedDialog = null;
+
+        }
+
+    }
+
+    /*@Override
+    public void onGetMenuListPreExecuteStarted() {
+        try {
+             *//*   internetSpeedDialog = new ProgressDialog(MainActivity.this);
+                internetSpeedDialog.setMessage(getResources().getString(R.string.loading_str));
+                internetSpeedDialog.setIndeterminate(false);
+                internetSpeedDialog.setCancelable(false);
+                internetSpeedDialog.show();*//*
 
             internetSpeedDialog = new ProgressBarHandler(MainActivity.this);
             internetSpeedDialog.show();
@@ -830,7 +914,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
 
     }
-
+*/
 //    private class AsynLoadImageUrls extends AsyncTask<Void, Void, Void> {
 //        String responseStr;
 //        int statusCode;
@@ -2582,14 +2666,13 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private DecimalFormat mDecimalFormater;
 
 
-   //**** chromecast*************//*
+    //**** chromecast*************//*
 
     @Override
     public boolean dispatchKeyEvent(@NonNull KeyEvent event) {
         return mCastContext.onDispatchVolumeKeyEventBeforeJellyBean(event)
                 || super.dispatchKeyEvent(event);
     }
-
 
 
     @Override
@@ -2850,7 +2933,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
      * For Handling The Search Menu Action
      */
 
-    public void actionSearchHendler(){
+    public void actionSearchHendler() {
         final Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
         searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(searchIntent);
