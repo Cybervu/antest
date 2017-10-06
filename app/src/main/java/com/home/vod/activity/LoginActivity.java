@@ -823,6 +823,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                     playVideoIntent.putExtra("PlayerModel", playerModel);
                     startActivity(playVideoIntent);
+                    onBackPressed();
 
                     //below part  checked at exoplayer thats why no need of checking here
 
@@ -3703,6 +3704,10 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             //    SharedPreferences.Editor editor = pref.edit();
 
             if (status == 200) {
+
+
+                loginHandler.sendBroadCast();
+
                 String displayNameStr = socialAuthOutputModel.getDisplay_name();
                 String emailFromApiStr = socialAuthOutputModel.getEmail();
                 String profileImageStr = socialAuthOutputModel.getProfile_image();
@@ -5234,6 +5239,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
         if (status == 200) {
+
+            loginHandler.sendBroadCast();
 
             preferenceManager.setLogInStatusToPref("1");
             preferenceManager.setUserIdToPref(gmailLoginOutput.getId());

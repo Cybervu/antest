@@ -75,6 +75,7 @@ import com.home.apisdk.apiModel.SocialAuthInputModel;
 import com.home.apisdk.apiModel.SocialAuthOutputModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
+import com.home.vod.LoginHandler;
 import com.home.vod.R;
 import com.home.vod.RegisterUIHandler;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -241,6 +242,8 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
         if (status==200){
+
+            registerUIHandler.sendBroadCast();
 
             preferenceManager.setLogInStatusToPref("1");
             preferenceManager.setUserIdToPref(gmailLoginOutput.getId());
@@ -489,7 +492,6 @@ public class RegisterActivity extends AppCompatActivity implements
 
         languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
-
 
         BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
         deviceName = myDevice.getName();
@@ -838,6 +840,8 @@ public class RegisterActivity extends AppCompatActivity implements
 
                 // Take appropiate step here
                 // playerModel.setEmailId(registration_output.getEmail());
+
+                registerUIHandler.sendBroadCast();
 
                 isSubscribedStr=registration_output.getIsSubscribed();
                 preferenceManager.setLogInStatusToPref("1");
@@ -3159,6 +3163,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
             } else if (status == 200) {
 
+                registerUIHandler.sendBroadCast();
 
                 preferenceManager.setLogInStatusToPref("1");
                 preferenceManager.setUserIdToPref(socialAuthOutputModel.getId());

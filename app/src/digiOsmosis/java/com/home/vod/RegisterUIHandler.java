@@ -254,8 +254,7 @@ public class RegisterUIHandler {
    public void sendBroadCast()
    {
        Intent Sintent = new Intent("LOGIN_SUCCESS");
-       Sintent.putExtra("login_status","1");
-       LocalBroadcastManager.getInstance((context)).sendBroadcast(Sintent);
+       context.sendBroadcast(Sintent);
    }
 
 }
