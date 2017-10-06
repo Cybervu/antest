@@ -1,9 +1,11 @@
 package com.home.vod.activity;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
@@ -282,6 +285,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(SUCCESS, new IntentFilter("LOGIN_SUCCESS"));
+
+
         LogUtil.showLog("BKS", "packagenameMAINactivity1===" + SDKInitializer.user_Package_Name_At_Api);
         if (menuList != null && menuList.size() > 0) {
             menuList.clear();
@@ -396,6 +403,17 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }*/
     }
 
+
+    private BroadcastReceiver SUCCESS = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+
+            sideMenuHandler = new SideMenuHandler(MainActivity.this);
+            sideMenuHandler.staticSideMenu(languagePreference,menuList,preferenceManager);
+
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -551,6 +569,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     public void onResume() {
         super.onResume();
+       /// sideMenuHandler = new SideMenuHandler(this);
+       // sideMenuHandler.staticSideMenu(languagePreference,menuList,preferenceManager);
+
         mCastContext.addCastStateListener(mCastStateListener);
         mCastContext.getSessionManager().addSessionManagerListener(
                 mSessionManagerListener, CastSession.class);
@@ -903,7 +924,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             }
 
 
-           sideMenuHandler.logoutMenu(languagePreference,menuList,preferenceManager);
+           sideMenuHandler.addLogoutMenu(languagePreference,menuList,preferenceManager);
 
             imageUrlStr = "https://dadc-muvi.s3-eu-west-1.amazonaws.com/check-download-speed.jpg";
             if (NetworkStatus.getInstance().isConnected(MainActivity.this)) {
