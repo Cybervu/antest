@@ -348,7 +348,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             GetMenusInputModel menuListInput = new GetMenusInputModel();
             menuListInput.setAuthToken(authTokenStr);
             menuListInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-            asynLoadMenuItems = new GetAppMenuAsync(menuListInput,this,this);
+            asynLoadMenuItems = new GetAppMenuAsync(menuListInput, this, this);
             asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
 
         } else {
