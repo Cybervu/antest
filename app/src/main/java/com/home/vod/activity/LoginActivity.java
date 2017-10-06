@@ -230,6 +230,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             if (status == 200) {
                 //playerModel.setEmailId(login_output.getEmail());
 
+                loginHandler.sendBroadCast();
+
                 preferenceManager.setLogInStatusToPref("1");
                 preferenceManager.setUserIdToPref(login_output.getId());
                 preferenceManager.setPwdToPref("");

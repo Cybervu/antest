@@ -86,6 +86,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -243,6 +244,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     String Default_Language = "";
     public ArrayList<NavDrawerItem> menuList = new ArrayList<>();
     public ArrayList<LanguageModel> languageModels = new ArrayList<>();
+
+
+    public HashMap <String,Integer> menuHashMap = new HashMap();
+
     private String imageUrlStr;
     // public static SharedPreferences dataPref;
     int state = 0;
@@ -286,7 +291,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(SUCCESS, new IntentFilter("LOGIN_SUCCESS"));
+        registerReceiver(SUCCESS, new IntentFilter("LOGIN_SUCCESS"));
 
 
         LogUtil.showLog("BKS", "packagenameMAINactivity1===" + SDKInitializer.user_Package_Name_At_Api);
@@ -352,6 +357,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             if (asynLoadMenuItems != null) {
                 asynLoadMenuItems = null;
             }
+
             MenuListInput menuListInput = new MenuListInput();
             menuListInput.setAuthToken(authTokenStr);
             String countryCodeStr = preferenceManager.getCountryCodeFromPref();
@@ -360,6 +366,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             }
             menuListInput.setCountry(countryCodeStr);
             menuListInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
             asynLoadMenuItems = new GetMenuListAsynctask(menuListInput, MainActivity.this, this);
             asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
 
@@ -404,10 +411,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     }
 
 
-    private BroadcastReceiver SUCCESS = new BroadcastReceiver() {
+    public BroadcastReceiver SUCCESS = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
 
             sideMenuHandler = new SideMenuHandler(MainActivity.this);
             sideMenuHandler.staticSideMenu(languagePreference,menuList,preferenceManager);
