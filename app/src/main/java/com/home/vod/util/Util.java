@@ -498,8 +498,8 @@ public class Util {
 
     public static void parseLanguage(LanguagePreference languagePreference, String jsonResponse,String default_Language) throws JSONException {
         JSONObject json = new JSONObject(jsonResponse);
-        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNIN,DEFAULT_GMAIL_SIGNIN,"gmail_signin",json);
-        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNUP,DEFAULT_GMAIL_SIGNUP,"gmail_signup",json);
+        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNIN,DEFAULT_GMAIL_SIGNIN,"google_signin",json);
+        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNUP,DEFAULT_GMAIL_SIGNUP,"google_signup",json);
         setTranslationLanguageToPref(languagePreference, VIEW_LESS, DEFAULT_VIEW_LESS,"view_less",json);
         setTranslationLanguageToPref(languagePreference, ALREADY_MEMBER,DEFAULT_ALREADY_MEMBER,"already_member",json);
         setTranslationLanguageToPref(languagePreference, SUBSCRIPTION_COMPLETED,DEFAULT_SUBSCRIPTION_COMPLETED,"subscription completed",json);
