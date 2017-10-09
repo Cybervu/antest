@@ -160,10 +160,10 @@ android {
         matas {
             dimension 'vendor'
             minSdkVersion 21
-            applicationId 'com.home.matas'
+            applicationId 'com.release.matas'
             versionCode 11
             targetSdkVersion 25
-            versionName '2.2.4'
+            versionName '1.0.1'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"0c2236eee851357d1fecc01fbba128c5\""
         }
