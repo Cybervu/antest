@@ -2781,6 +2781,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
+
         if (asynValidateUserDetails != null) {
             asynValidateUserDetails.cancel(true);
         }
