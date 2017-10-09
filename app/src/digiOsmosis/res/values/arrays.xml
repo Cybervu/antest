@@ -45,4 +45,61 @@
         <item>@id/cast_button_type_empty</item>
         <item>@id/cast_button_type_empty</item>
     </array>
+
+    <integer-array name="season_image_array">
+        <item>@drawable/man_doing_pushups</item>
+        <item>@drawable/man_flexing_knees_with_arms_up</item>
+        <item>@drawable/man_flexing_waist</item>
+        <item>@drawable/man_flexing_waist_down</item>
+        <item>@drawable/man_flexing_waist_to_feet</item>
+        <item>@drawable/man_laying_on_his_back_with_his_knees_on_his_chest</item>
+        <item>@drawable/man_on_floor_flexing_backwards</item>
+        <item>@drawable/man_on_his_knees</item>
+        <item>@drawable/man_on_his_knees_stretching_arms_on_floor</item>
+        <item>@drawable/man_on_his_knees_stretching_back</item>
+        <item>@drawable/man_on_his_knees_stretching_side_view</item>
+        <item>@drawable/man_on_his_knees_with_head_on_floor</item>
+        <item>@drawable/man_on_squat_position_turning_waist</item>
+        <item>@drawable/man_on_the_floor_flexing_body</item>
+        <item>@drawable/man_sitting_on_the_floor_stretching_leg_and_waist</item>
+        <item>@drawable/man_squatting</item>
+        <item>@drawable/man_standing_on_his_right_leg_stretching_left_leg_and_right_arm</item>
+        <item>@drawable/man_standing_on_one_leg</item>
+        <item>@drawable/man_standing_on_right_leg_stretching_leg_and_arms</item>
+        <item>@drawable/man_stretching_back</item>
+        <item>@drawable/man_stretching_both_arms_and_legs</item>
+        <item>@drawable/man_stretching_left_leg_and_bending_waist</item>
+        <item>@drawable/man_stretching_leg_and_arms</item>
+        <item>@drawable/man_stretching_legs_and_flexing_body</item>
+        <item>@drawable/man_stretching_legs_and_waist</item>
+        <item>@drawable/man_supporting_himself_on_one_arm_and_stretching_right_arm</item>
+        <item>@drawable/man_up_flexing_to_right</item>
+        <item>@drawable/woman_bending_waist_to_feet_with_stretching_leg</item>
+        <item>@drawable/woman_flexing_body</item>
+        <item>@drawable/woman_flexing_waist_to_feet</item>
+        <item>@drawable/woman_honding_her_body_with_arms_and_legs</item>
+        <item>@drawable/woman_laying_down_lifting_head</item>
+        <item>@drawable/woman_laying_on_the_floor_stretching_right_leg</item>
+        <item>@drawable/woman_lifting_left_leg</item>
+        <item>@drawable/woman_on_her_knees_looking_up</item>
+        <item>@drawable/woman_on_her_knees_stretching_arms</item>
+        <item>@drawable/woman_on_lotus_position_front_view</item>
+        <item>@drawable/woman_sitting_on_the_floor_stretching_head</item>
+        <item>@drawable/woman_sitting_on_the_floor_stretching_left_leg</item>
+        <item>@drawable/woman_standing_on_her_arms</item>
+        <item>@drawable/woman_standing_on_one_leg_lifting_left_leg</item>
+        <item>@drawable/woman_sitting_on_the_floor_stretching_left_leg</item>
+        <item>@drawable/woman_standing_on_her_arms</item>
+        <item>@drawable/woman_standing_on_one_leg_lifting_left_leg</item>
+        <item>@drawable/woman_standing_on_right_leg_with_left_leg_up</item>
+        <item>@drawable/woman_stretching_and_flexing_legs_with_arms_up</item>
+        <item>@drawable/woman_stretching_arms_and_flexing_legs</item>
+        <item>@drawable/woman_stretching_back</item>
+        <item>@drawable/woman_stretching_her_body_on_the_floor</item>
+        <item>@drawable/woman_stretching_left_leg</item>
+        <item>@drawable/woman_stretching_on_floor</item>
+        <item>@drawable/woman_upside_down_stretching_body</item>
+        <item>@drawable/woman_with_left_leg_up_and_flexed</item>
+
+    </integer-array>
 </resources>

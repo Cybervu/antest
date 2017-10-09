@@ -1,8 +1,6 @@
 package com.home.vod;
 
 import android.app.Activity;
-
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;

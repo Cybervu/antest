@@ -85,8 +85,9 @@ android {
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //            buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
-            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
             // buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
+            // buildConfigField "String", "AUTH_TOKEN", "\"49c5986b92785b2ea7cdea83487dbaf8\""
         }
         newthoughtchannel_staging_ {
             dimension 'environment'
@@ -134,9 +135,7 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
-
         /*Structuring lumiere flavour with dimension*/
-
         lumiere {
             dimension 'vendor'
             minSdkVersion 21
@@ -152,6 +151,27 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
         lumiere_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+
+         /*Structuring Matas flavour with dimension*/
+
+        matas {
+            dimension 'vendor'
+            minSdkVersion 21
+            applicationId 'com.home.matas'
+            versionCode 11
+            targetSdkVersion 25
+            versionName '2.2.4'
+            testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+            buildConfigField "String", "AUTH_TOKEN", "\"0c2236eee851357d1fecc01fbba128c5\""
+        }
+        matas_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+        matas_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
@@ -229,7 +249,6 @@ android.variantFilter { variant ->
     if (vendor.equals('defaultFlavor') && environment.equals('digiOsmosis_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
-
 
     /*Avoid defaultFlavor to Lumiere combination for both debug & release mode.*/
 
@@ -591,6 +610,16 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
+    // compile 'com.muvi:APISDK:v1.02'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true;
+    }
+    compile project(':apisdk')
+    compile files('libs/wasabi.jar')
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
+    compile('com.spotxchange:spotx-sdk-android:3.1.+') {
+        transitive = false
+    }
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -610,16 +639,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:palette-v7:25.3.1'
     compile 'com.google.android.gms:play-services-auth:9.4.0'
-    // compile 'com.muvi:APISDK:v1.02'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true;
-    }
-    compile project(':apisdk')
-    compile files('libs/wasabi.jar')
-    compile files('libs/YouTubeAndroidPlayerApi.jar')
-    compile('com.spotxchange:spotx-sdk-android:3.1.+') {
-        transitive = false
-    }
     compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.6.0'
 }
 

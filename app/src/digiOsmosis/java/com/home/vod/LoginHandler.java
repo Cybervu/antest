@@ -1,6 +1,5 @@
 package com.home.vod;
 
-import android.app.Activity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -12,9 +11,7 @@ import com.home.vod.activity.LoginActivity;
 import com.home.vod.preferences.LanguagePreference;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNIN;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNUP;
 import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNIN;
-import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNUP;
 
 /**
  * Created by Android on 9/21/2017.
