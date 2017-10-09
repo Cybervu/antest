@@ -93,7 +93,7 @@
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/videoStory"
+                android:id="@+id/videoStoryTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/titleTextView"
@@ -109,7 +109,7 @@
                 android:id="@+id/startProgramButton"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/videoStory"
+                android:layout_below="@+id/videoStoryTextView"
                 android:layout_centerInParent="true"
                 android:background="@color/button_background"
                 android:padding="6dp"

@@ -120,7 +120,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         languagePreference = LanguagePreference.getLanguagePreference(ProgrammeActivity.this);
         playButton = (ImageView) findViewById(R.id.playButton);
         detailsTextView = (TextView) findViewById(R.id.detailsTextView);
-        videoStoryTextView = (TextView) findViewById(R.id.videoStory);
+        videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         benefitsTitleTextView = (TextView) findViewById(R.id.benefitsTitleTextView);
         benefitsStoryTextView = (TextView) findViewById(R.id.benefitsStoryTextView);
         startProgramButton = (Button) findViewById(R.id.startProgramButton);
