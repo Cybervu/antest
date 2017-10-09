@@ -668,7 +668,10 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, FILL_FORM_BELOW,DEFAULT_FILL_FORM_BELOW, "Fill_form_below",json);
 
 
-
+        setTranslationLanguageToPref(languagePreference, DETAILS_TITLE,DEFAULT_DETAILS_TITLE, "details_title",json);
+        setTranslationLanguageToPref(languagePreference, BENEFIT_TITLE,DEFAULT_BENEFIT_TITLE, "benefit_title",json);
+        setTranslationLanguageToPref(languagePreference, DIFFICULTY_TITLE,DEFAULT_DIFFICULTY_TITLE, "difficulty_title",json);
+        setTranslationLanguageToPref(languagePreference, DURATION_TITLE,DEFAULT_DURATION_TITLE, "duration_title",json);
 
         setTranslationLanguageToPref(languagePreference, SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE,DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, "simultaneous_logout_message",json);
         setTranslationLanguageToPref(languagePreference, LOGIN_STATUS_MESSAGE,DEFAULT_LOGIN_STATUS_MESSAGE, "login_status_message",json);

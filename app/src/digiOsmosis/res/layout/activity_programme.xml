@@ -6,12 +6,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+
+
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/appBackgroundColor"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:layout_below="@+id/toolbar">
+
 
 
         <RelativeLayout
@@ -66,6 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:text="DETAILS TITLE"
+                    android:textColor="@color/videotextColor"
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
@@ -84,7 +93,7 @@
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/videoStoryTextView"
+                android:id="@+id/videoStory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/titleTextView"
@@ -100,10 +109,11 @@
                 android:id="@+id/startProgramButton"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/videoStoryTextView"
+                android:layout_below="@+id/videoStory"
                 android:layout_centerInParent="true"
                 android:background="@color/button_background"
                 android:padding="6dp"
+                android:layout_marginTop="10dp"
                 android:stateListAnimator="@null"
                 android:text="Start Programme"
                 android:textAllCaps="false"
@@ -153,11 +163,13 @@
                         android:layout_height="wrap_content"
                         android:text="DURATION"
                         android:textSize="15dp"
+                        android:textColor="@color/videotextColor"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/videotextColor"
                         android:text="14 Days"
                         android:textSize="12dp" />
 
@@ -184,6 +196,7 @@
                         android:id="@+id/diffcultyTitleTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/videotextColor"
                         android:text="DIFFCULTY"
                         android:textSize="15dp"
                         android:textStyle="bold" />
@@ -191,6 +204,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/difficulty_color"
                         android:text="EASY"
                         android:textSize="12dp" />
 
@@ -211,6 +225,7 @@
                     android:id="@+id/benefitsTitleTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/videotextColor"
                     android:text="BENEFITS"
                     android:textSize="20dp"
                     android:textStyle="bold" />

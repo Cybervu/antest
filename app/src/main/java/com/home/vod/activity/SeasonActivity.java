@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
@@ -43,7 +44,9 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -61,6 +64,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
     LanguagePreference languagePreference;
     String useridStr;
     String permalinkStr;
+    Toolbar mActionBarToolbar;
     PreferenceManager preferenceManager;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
@@ -109,6 +113,16 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
 
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
         useridStr = preferenceManager.getUseridFromPref();
+        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mActionBarToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
 
         // seasonGridView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
@@ -176,7 +190,15 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
 
             status = 0;
         }
-        if (status == 200 && season != null && season.size() > 0) {
+        if (status == 200) {
+            if (season != null && season.size() > 0) {
+                season.clear();
+            }
+            season = new ArrayList<SeasonModel>();
+
+            for (int j = 0; j < contentDetailsOutput.getSeason().length; j++) {
+                season.add(new SeasonModel(String.valueOf(contentDetailsOutput.getSeason()[j]), imageArr[j], languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + contentDetailsOutput.getSeason()[j]));
+            }
             adapter = new SeasonAdapter(SeasonActivity.this, R.layout.season_card_row, season);
             seasonGridView.setVisibility(View.VISIBLE);
             seasonGridView.setAdapter(adapter);
