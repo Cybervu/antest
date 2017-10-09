@@ -231,7 +231,6 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
-
     /*Avoid defaultFlavor to Lumiere combination for both debug & release mode.*/
 
     if (vendor.equals('defaultFlavor') && environment.equals('lumiere_staging_') && isRelease) {
@@ -592,6 +591,16 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
+    // compile 'com.muvi:APISDK:v1.02'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true;
+    }
+    compile project(':apisdk')
+    compile files('libs/wasabi.jar')
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
+    compile('com.spotxchange:spotx-sdk-android:3.1.+') {
+        transitive = false
+    }
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -611,16 +620,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:palette-v7:25.3.1'
     compile 'com.google.android.gms:play-services-auth:9.4.0'
-    // compile 'com.muvi:APISDK:v1.02'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true;
-    }
-    compile project(':apisdk')
-    compile files('libs/wasabi.jar')
-    compile files('libs/YouTubeAndroidPlayerApi.jar')
-    compile('com.spotxchange:spotx-sdk-android:3.1.+') {
-        transitive = false
-    }
     compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.6.0'
 }
 
