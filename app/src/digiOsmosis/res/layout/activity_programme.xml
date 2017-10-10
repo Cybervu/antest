@@ -12,9 +12,15 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
+    <include
+        android:id="@+id/logo_image"
+        layout="@layout/logo_image"
+        />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/scroll_view"
         android:background="@color/appBackgroundColor"
         android:layout_below="@id/toolbar"
         android:fillViewport="true">

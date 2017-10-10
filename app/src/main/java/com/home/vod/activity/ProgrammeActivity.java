@@ -117,7 +117,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     ImageView bannerImageView, playButton, moviePoster,share;
     Button startProgramButton, dietPlanButton;
     ProgressBarHandler pDialog;
-    RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout;
+    RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout,image_logo;
     LinearLayout story_layout;
     String movieUniqueId = "";
     String movieTrailerUrlStr, isEpisode = "";
@@ -329,6 +329,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         favorite_view_episode = (ImageView) findViewById(R.id.favoriteImageView);
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
         share = (ImageView) findViewById(R.id.share);
+        image_logo = (RelativeLayout) findViewById(R.id.logo_image);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -346,6 +347,8 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         movieUniqueId = dbModel.getMovieUniqueId();
         isEpisode = dbModel.getEpisode_id();
 
+
+        image_logo.bringToFront();
 
         startProgramButton.setOnClickListener(new View.OnClickListener() {
 

@@ -12,11 +12,5 @@
     local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
 
-   <!-- <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:src="@drawable/logo"/>
--->
 
 </android.support.v7.widget.Toolbar>
