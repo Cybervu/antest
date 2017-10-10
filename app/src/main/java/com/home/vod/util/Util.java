@@ -748,6 +748,14 @@ public class Util {
         }
     }
 
+    public static void shareIt(Context context) {
+//sharing implementation here
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "AndroidSolved");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Now Learn Android with AndroidSolved clicke here to visit https://androidsolved.wordpress.com/ ");
+        context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
+    }
 
     public static boolean getStreamingRestriction(LanguagePreference languagePreference){
         return languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION,DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1");

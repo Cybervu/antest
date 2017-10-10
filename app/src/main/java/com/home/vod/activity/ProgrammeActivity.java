@@ -97,7 +97,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         GetIpAddressAsynTask.IpAddressListener{
 
     TextView detailsTextView, videoStoryTextView, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView;
-    ImageView bannerImageView, playButton, moviePoster;
+    ImageView bannerImageView, playButton, moviePoster,share;
     Button startProgramButton, dietPlanButton;
     ProgressBarHandler pDialog;
     RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout;
@@ -269,6 +269,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         diffcultyTitleTextView = (TextView) findViewById(R.id.diffcultyTitleTextView);
         favorite_view_episode = (ImageView) findViewById(R.id.favoriteImageView);
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
+        share = (ImageView) findViewById(R.id.share);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -298,6 +299,12 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
             }
         });
 
+
+        share.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Util.shareIt(ProgrammeActivity.this);
+            }
+        });
 
         ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
