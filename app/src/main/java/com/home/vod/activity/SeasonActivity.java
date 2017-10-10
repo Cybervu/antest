@@ -257,7 +257,6 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_season);
 
-        //  seasonGridView = (GridView) findViewById(R.id.seasonGridView);
 
         seasonGridView = (RecyclerView) findViewById(R.id.seasonGridView);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
