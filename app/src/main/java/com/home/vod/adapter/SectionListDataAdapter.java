@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.home.vod.Episode_Programme_Handler;
 import com.home.vod.R;
 import com.home.vod.activity.MovieDetailsActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
@@ -163,10 +164,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                         mContext.startActivity(detailsIntent);
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
-                        final Intent detailsIntent = new Intent(mContext, ShowWithEpisodesActivity.class);
-                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
-                        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        mContext.startActivity(detailsIntent);
+                        new Episode_Programme_Handler(mContext).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
 
                     }
 
