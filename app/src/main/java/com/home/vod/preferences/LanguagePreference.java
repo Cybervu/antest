@@ -14,7 +14,7 @@ public class LanguagePreference {
     private static LanguagePreference languagePreference;
 
     /**
-     *  Language Constant default Key
+     * Language Constant default Key
      */
     public static String DEFAULT_DELETE_BTN = "Delete";
     public static String DELETE_BTN = "DELETE_BTN";
@@ -380,26 +380,33 @@ public class LanguagePreference {
     public static String DEFAULT_DOWNLOAD_CANCELLED = "Download Cancelled";
     public static String DEFAULT_BTN_NEXT = "Next";
     public static String BTN_NEXT = "BTN_NEXT";
-    public static  String DEFAULT_CREDIT_CARD_CVV_HINT = "CVV";
+    public static String DEFAULT_CREDIT_CARD_CVV_HINT = "CVV";
     public static String DEFAULT_VOUCHER_CODE = "Voucher Code";
     public static String DEFAULT_WATCH_NOW = "Watch Now";
     public static String DEFAULT_PAYMENT_OPTIONS_TITLE = "Payment Options";
     public static String VOUCHER_BLANK_MESSAGE = "VOUCHER_BLANK_MESSAGE";
     public static String DEFAULT_VOUCHER_BLANK_MESSAGE = "Please Enter Your Voucher Code";
-
+    public static String DETAILS_TITLE = "DETAILS_TITLE";
+    public static String DEFAULT_DETAILS_TITLE = "Details Title";
+    public static String BENEFIT_TITLE = "BENEFIT_TITLE";
+    public static String DEFAULT_BENEFIT_TITLE = "Benefits";
+    public static String DIFFICULTY_TITLE = "DIFFICULTY_TITLE";
+    public static String DEFAULT_DIFFICULTY_TITLE = "Difficulty";
+    public static String DURATION_TITLE = "DURATION_TITLE";
+    public static String DEFAULT_DURATION_TITLE = " Duration";
 
 
     /**
      * @param mContext
      */
 
-    private LanguagePreference(Context mContext){
+    private LanguagePreference(Context mContext) {
         languageSharedPref = mContext.getSharedPreferences(LANGUAGE_SHARED_PRE, Context.MODE_PRIVATE);
         mEditor = languageSharedPref.edit();
     }
 
-    public static LanguagePreference getLanguagePreference(Context mContext){
-        if(languagePreference==null){
+    public static LanguagePreference getLanguagePreference(Context mContext) {
+        if (languagePreference == null) {
             return new LanguagePreference(mContext);
         }
         return languagePreference;
