@@ -178,8 +178,8 @@
     <dimen name="plainmark_width">30dp</dimen>
     <dimen name="subtitlelist_height">30dp</dimen>
     <dimen name="subtitlelist_text_size">20sp</dimen>
-    <dimen name="movieimg_width">108dp</dimen>
-    <dimen name="movieimg_height">150dp</dimen>
+    <dimen name="movieimg_width">100dp</dimen>
+    <dimen name="movieimg_height">100dp</dimen>
     <dimen name="video280_width">170dp</dimen>
     <dimen name="video280_height">95dp</dimen>
     <dimen name="listitemlayout_height">430dp</dimen>

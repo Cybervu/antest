@@ -99,7 +99,7 @@
     <dimen name="plainrowlayout_width">130dp</dimen>
     <dimen name="purchasevalue_text_size">60sp</dimen>
     <dimen name="purchasemonth_text_size">18sp</dimen>
-    <dimen name="movieimg_width">140dp</dimen>
+    <dimen name="movieimg_width">200dp</dimen>
     <dimen name="movieimg_height">200dp</dimen>
     <dimen name="video280_width">185dp</dimen>
     <dimen name="video280_height">103dp</dimen>
