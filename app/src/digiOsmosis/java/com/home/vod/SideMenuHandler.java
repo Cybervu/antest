@@ -22,10 +22,6 @@ import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
-import static player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static player.utils.Util.DEFAULT_IS_OFFLINE;
-import static player.utils.Util.HAS_FAVORITE;
-import static player.utils.Util.IS_OFFLINE;
 
 /**
  * Created by Android on 10/5/2017.
