@@ -212,7 +212,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     ArrayList<String> ResolutionUrl = new ArrayList<>();
     ArrayList<String> SubTitleLanguage = new ArrayList<>();
 
-    ProgressBarHandler loadEpisodedetailspDialog;
+   // ProgressBarHandler loadEpisodedetailspDialog;
     SharedPreferences pref;
     int previousTotal = 0;
     VideoDetailsAsynctask asynLoadVideoUrls;
@@ -700,8 +700,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                                         }
                                     }
 
-                                    progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
-                                    progressBarHandler.show();
+                                    /*progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
+                                    progressBarHandler.show();*/
                                     Download_SubTitle(FakeSubTitlePath.get(0).trim());
                                 } else {
                                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -809,18 +809,18 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
     @Override
     public void onGetValidateUserPostExecuteCompleted(ValidateUserOutput validateUserOutput, int status, String message) {
-
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
+            status = 0;
+        }
         String Subscription_Str = preferenceManager.getIsSubscribedFromPref();
         String validUserStr = validateUserOutput.getValiduser_str();
         if (validateUserOutput == null) {
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                status = 0;
-            }
+
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this);
             dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
             dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
@@ -837,14 +837,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     });
             dlgAlert.create().show();
         } else if (status <= 0) {
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                status = 0;
-            }
+
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this);
             dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
             dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
@@ -865,14 +858,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         if (status > 0) {
             if (status == 427) {
 
-                try {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                } catch (IllegalArgumentException ex) {
-                    status = 0;
-                }
+
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this);
                 if (message != null && message.equalsIgnoreCase("")) {
                     dlgAlert.setMessage(message);
@@ -1070,15 +1056,15 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
     @Override
     public void onGetLanguageListPreExecuteStarted() {
-        progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
-        progressBarHandler.show();
+        pDialog = new ProgressBarHandler(Episode_list_Activity.this);
+        pDialog.show();
     }
 
     @Override
     public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
-        if (progressBarHandler.isShowing()) {
-            progressBarHandler.hide();
-            progressBarHandler = null;
+        if (pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
 
         }
     }
@@ -3002,17 +2988,17 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
     @Override
     public void onGetTranslateLanguagePreExecuteStarted() {
-        progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
-        progressBarHandler.show();
+        pDialog = new ProgressBarHandler(Episode_list_Activity.this);
+        pDialog.show();
     }
 
     @Override
     public void onGetTranslateLanguagePostExecuteCompleted(String jsonResponse, int status) {
 
 
-        if (progressBarHandler != null && progressBarHandler.isShowing()) {
-            progressBarHandler.hide();
-            progressBarHandler = null;
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
 
         }
 
@@ -3463,6 +3449,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            pDialog = new ProgressBarHandler(Episode_list_Activity.this);
+            pDialog.show();
+
         }
 
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -3523,8 +3512,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             if (FakeSubTitlePath.size() > 0) {
                 Download_SubTitle(FakeSubTitlePath.get(0).trim());
             } else {
-                if (progressBarHandler != null && progressBarHandler.isShowing()) {
-                    progressBarHandler.hide();
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
                 }
                 playerModel.setSubTitlePath(SubTitlePath);
                 Intent playVideoIntent;

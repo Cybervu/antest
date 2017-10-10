@@ -21,6 +21,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This Class loads the Menus.
+ *
+ * @author Abhishek
+ */
+
 public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
 
     private GetMenusInputModel getMenusInputModel;
@@ -217,6 +223,7 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
 
                             mainMenuArrayList.add(mainMenu);
                             menusOutputModel.setMainMenuModel(mainMenuArrayList);
+
 
                             if (jsonMainMenu.getJSONObject(i).has("child")) {
 

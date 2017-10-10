@@ -89,5 +89,6 @@
     <color name="disableTextColor">#50757575</color>
     <color name="OsTextColor">#757575</color>
     <color name="cast_crew_textcolor">#ff5a75</color>
+    <color name="difficulty_color">#66e066</color>
 
 </resources>

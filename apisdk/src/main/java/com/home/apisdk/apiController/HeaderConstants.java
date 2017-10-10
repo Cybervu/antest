@@ -183,7 +183,7 @@ public class HeaderConstants {
     /**
      * Constant for Currency ID Header used in API Call
      */
-    public static final String CURRENCY_ID = "currency_id";
+    public static final String CURRENCY_ID = "currencyId";
     /**
      * Constant for Expiry Month Header used in API Call
      */

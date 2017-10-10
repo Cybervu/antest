@@ -4,31 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.home.vod.activity.RegisterActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
-import com.home.vod.util.FontUtls;
-import com.home.vod.util.LogUtil;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
-import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNUP;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TERMS;
 import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNUP;

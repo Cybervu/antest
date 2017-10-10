@@ -85,8 +85,9 @@ android {
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //            buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
-            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
             // buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
+            // buildConfigField "String", "AUTH_TOKEN", "\"49c5986b92785b2ea7cdea83487dbaf8\""
         }
         newthoughtchannel_staging_ {
             dimension 'environment'
@@ -134,9 +135,7 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
-
         /*Structuring lumiere flavour with dimension*/
-
         lumiere {
             dimension 'vendor'
             minSdkVersion 21
@@ -152,6 +151,27 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
         lumiere_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+
+        /*Structuring Matas flavour with dimension*/
+
+        matas {
+            dimension 'vendor'
+            minSdkVersion 21
+            applicationId 'com.home.matas'
+            versionCode 11
+            targetSdkVersion 25
+            versionName '2.2.4'
+            testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+            buildConfigField "String", "AUTH_TOKEN", "\"0c2236eee851357d1fecc01fbba128c5\""
+        }
+        matas_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+        matas_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
@@ -230,7 +250,6 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
-
     /*Avoid defaultFlavor to Lumiere combination for both debug & release mode.*/
 
     if (vendor.equals('defaultFlavor') && environment.equals('lumiere_staging_') && isRelease) {
@@ -243,6 +262,21 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     if (vendor.equals('defaultFlavor') && environment.equals('lumiere_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid defaultFlavor to Matas combination for both debug & release mode.*/
+
+    if (vendor.equals('defaultFlavor') && environment.equals('matas_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('matas_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('matas_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('matas_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
 
@@ -315,6 +349,21 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    /*Avoid defaultFlavor to Matas combination for both debug & release mode.*/
+
+    if (vendor.equals('vishwamtv') && environment.equals('matas_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('matas_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('matas_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('matas_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered newthoughtchannel variant.
      */
@@ -381,7 +430,20 @@ android.variantFilter { variant ->
     if (vendor.equals('newthoughtchannel') && environment.equals('lumiere_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+    /*Avoid newthoughtchannel to Matas combination for both debug & release mode.*/
 
+    if (vendor.equals('newthoughtchannel') && environment.equals('matas_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('matas_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('matas_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('matas_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
     /**
      * Filtered aattoo variant.
      */
@@ -444,6 +506,20 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     if (vendor.equals('aatto') && environment.equals('lumiere_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    /*Avoid aatto to Matas combination for both debug & release mode.*/
+
+    if (vendor.equals('aatto') && environment.equals('matas_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('matas_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('matas_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('matas_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
 
@@ -511,7 +587,20 @@ android.variantFilter { variant ->
     if (vendor.equals('digiOsmosis') && environment.equals('lumiere_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+    /*Avoid aatto to Matas combination for both debug & release mode.*/
 
+    if (vendor.equals('digiOsmosis') && environment.equals('matas_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('matas_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('matas_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('matas_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
     /**
      * Filtered Lumiere variant.
      */
@@ -576,6 +665,99 @@ android.variantFilter { variant ->
     if (vendor.equals('lumiere') && environment.equals('digiOsmosis_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+    /*Avoid lumiere to Matas combination for both debug & release mode.*/
+
+    if (vendor.equals('lumiere') && environment.equals('matas_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('matas_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('matas_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('matas_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+
+    /**
+     * Filtered Matas variant.
+     */
+    if (vendor.equals('matas') && environment.equals('defaultFlavor_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('defaultFlavor_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('matas') && environment.equals('defaultFlavor_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('defaultFlavor_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('vishwamtv_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('vishwamtv_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('vishwamtv_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('vishwamtv_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('newthoughtchannel_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('newthoughtchannel_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('newthoughtchannel_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('aatto_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('aatto_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('aatto_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('aatto_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('digiOsmosis_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('digiOsmosis_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('digiOsmosis_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('digiOsmosis_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('matas') && environment.equals('lumiere_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('lumiere_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('lumiere_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('lumiere_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
 }
 
 
@@ -590,6 +772,16 @@ dependencies {
     })
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
+    }
+    // compile 'com.muvi:APISDK:v1.02'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true;
+    }
+    compile project(':apisdk')
+    compile files('libs/wasabi.jar')
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
+    compile('com.spotxchange:spotx-sdk-android:3.1.+') {
+        transitive = false
     }
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
@@ -610,16 +802,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:palette-v7:25.3.1'
     compile 'com.google.android.gms:play-services-auth:9.4.0'
-    // compile 'com.muvi:APISDK:v1.02'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true;
-    }
-    compile project(':apisdk')
-    compile files('libs/wasabi.jar')
-    compile files('libs/YouTubeAndroidPlayerApi.jar')
-    compile('com.spotxchange:spotx-sdk-android:3.1.+') {
-        transitive = false
-    }
     compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.6.0'
 }
 

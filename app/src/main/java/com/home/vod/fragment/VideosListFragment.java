@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -54,12 +53,11 @@ import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.apiController.GetContentListAsynTask;
 import com.home.vod.R;
+import com.home.vod.Episode_Programme_Handler;
 import com.home.vod.activity.FilterActivity;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.activity.MovieDetailsActivity;
-import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.adapter.GenreFilterAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -127,8 +125,6 @@ import static com.home.vod.preferences.LanguagePreference.SORT_LAST_UPLOADED;
 import static com.home.vod.preferences.LanguagePreference.SORT_RELEASE_DATE;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
-import static player.utils.Util.GENRE_ARRAY_PREF_KEY;
-import static player.utils.Util.GENRE_VALUES_ARRAY_PREF_KEY;
 
 /*
 import com.twotoasters.jazzylistview.JazzyGridView;
@@ -543,15 +539,9 @@ public class VideosListFragment extends Fragment   {
                         });
 
 
-                    } else if ((movieTypeId.trim().equalsIgnoreCase("3")) ) {
-                        final Intent detailsIntent = new Intent(context, ShowWithEpisodesActivity.class);
-                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                context.startActivity(detailsIntent);
-                            }
-                        });
+                    } else if ((movieTypeId.trim().equalsIgnoreCase("3")) )
+                    {
+                        new Episode_Programme_Handler(getActivity()).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
                     }
                 }
 

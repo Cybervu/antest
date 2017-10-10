@@ -34,6 +34,9 @@ import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.PPVModel;
 import com.home.vod.QueueDataProvider;
 import com.home.vod.R;
+import com.home.vod.activity.LoginActivity;
+import com.home.vod.activity.MainActivity;
+import com.home.vod.activity.RegisterActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.activity.SplashScreen;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -432,7 +435,7 @@ public class Util {
         dlgAlert.create().show();
     }
 
-    public static void showActivateSubscriptionWatchVideoAleart(Context mContext){
+    public static void showActivateSubscriptionWatchVideoAleart(final Activity mContext){
         LanguagePreference languagePreference = LanguagePreference.getLanguagePreference(mContext);
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext,R.style.MyAlertDialogStyle);
                   /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
@@ -450,7 +453,15 @@ public class Util {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
-
+                        Intent in=new Intent(mContext,MainActivity.class);
+                        if (mContext instanceof LoginActivity) {
+                            mContext.startActivity(in);
+                            ((LoginActivity) mContext).onBackPressed();
+                        }
+                        if (mContext instanceof RegisterActivity) {
+                            mContext.startActivity(in);
+                            ((RegisterActivity) mContext).onBackPressed();
+                        }
 
                     }
                 });
@@ -487,8 +498,8 @@ public class Util {
 
     public static void parseLanguage(LanguagePreference languagePreference, String jsonResponse,String default_Language) throws JSONException {
         JSONObject json = new JSONObject(jsonResponse);
-        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNIN,DEFAULT_GMAIL_SIGNIN,"gmail_signin",json);
-        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNUP,DEFAULT_GMAIL_SIGNUP,"gmail_signup",json);
+        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNIN,DEFAULT_GMAIL_SIGNIN,"google_signin",json);
+        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNUP,DEFAULT_GMAIL_SIGNUP,"google_signup",json);
         setTranslationLanguageToPref(languagePreference, VIEW_LESS, DEFAULT_VIEW_LESS,"view_less",json);
         setTranslationLanguageToPref(languagePreference, ALREADY_MEMBER,DEFAULT_ALREADY_MEMBER,"already_member",json);
         setTranslationLanguageToPref(languagePreference, SUBSCRIPTION_COMPLETED,DEFAULT_SUBSCRIPTION_COMPLETED,"subscription completed",json);
@@ -657,7 +668,10 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, FILL_FORM_BELOW,DEFAULT_FILL_FORM_BELOW, "Fill_form_below",json);
 
 
-
+        setTranslationLanguageToPref(languagePreference, DETAILS_TITLE,DEFAULT_DETAILS_TITLE, "details_title",json);
+        setTranslationLanguageToPref(languagePreference, BENEFIT_TITLE,DEFAULT_BENEFIT_TITLE, "benefit_title",json);
+        setTranslationLanguageToPref(languagePreference, DIFFICULTY_TITLE,DEFAULT_DIFFICULTY_TITLE, "difficulty_title",json);
+        setTranslationLanguageToPref(languagePreference, DURATION_TITLE,DEFAULT_DURATION_TITLE, "duration_title",json);
 
         setTranslationLanguageToPref(languagePreference, SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE,DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, "simultaneous_logout_message",json);
         setTranslationLanguageToPref(languagePreference, LOGIN_STATUS_MESSAGE,DEFAULT_LOGIN_STATUS_MESSAGE, "login_status_message",json);

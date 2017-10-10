@@ -275,6 +275,20 @@ public class APIUrlConstant {
 
     public static final String GetAppMenu = "getAppMenu";
 
+    /**
+     * endpoint to get all the Sub Category lists including
+     */
+
+    public static final String GetSubCategoryList = "getSubCategoryList";
+
+
+
+    public static String getGetSubCategoryList() {
+        return GetSubCategoryList;
+    }
+
+
+
     public static String getGetAppMenu() {
         return BASE_URl + GetAppMenu;
     }
