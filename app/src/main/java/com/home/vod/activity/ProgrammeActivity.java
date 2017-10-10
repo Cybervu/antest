@@ -37,6 +37,7 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.apiController.AddToFavAsync;
 import com.home.apisdk.apiController.DeleteFavAsync;
 import com.home.apisdk.apiController.GetContentDetailsAsynTask;
+import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiModel.AddToFavInputModel;
 import com.home.apisdk.apiModel.AddToFavOutputModel;
 import com.home.apisdk.apiModel.ContentDetailsInput;
@@ -92,7 +93,8 @@ import static player.utils.Util.HAS_FAVORITE;
  * Created by MUVI on 10/6/2017.
  */
 
-public class ProgrammeActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener {
+public class ProgrammeActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,
+        GetIpAddressAsynTask.IpAddressListener{
 
     TextView detailsTextView, videoStoryTextView, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView;
     ImageView bannerImageView, playButton, moviePoster;
@@ -107,6 +109,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     String movieTypeStr = "";
     String movieIdStr;
     String email, id;
+    String ipAddres = "";
     String movieDetailsStr = "";
     String story;
     String useridStr;
@@ -155,6 +158,18 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     private int mDuration;
     private TextView mAuthorView;
     private ImageButton mPlayCircle;
+
+    @Override
+    public void onIPAddressPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
+
+        ipAddres = ipAddressStr;
+        return;
+    }
  /*chromecast-------------------------------------*/
      /*chromecast-------------------------------------*/
 
@@ -575,6 +590,26 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     @Override
     public void onResume() {
         super.onResume();
+
+        if (Util.favorite_clicked == true) {
+
+            ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
+            contentDetailsInput.setAuthToken(authTokenStr);
+            contentDetailsInput.setPermalink(permalinkStr);
+
+            asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, ProgrammeActivity.this, ProgrammeActivity.this);
+            asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+        }
+// **************chromecast*********************//
+        if (mCastSession == null) {
+            mCastSession = CastContext.getSharedInstance(this).getSessionManager()
+                    .getCurrentCastSession();
+        }
+
+        GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+        asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+
+        /***************chromecast**********************/
 
         /***************chromecast**********************/
         if (mCastSession == null) {
