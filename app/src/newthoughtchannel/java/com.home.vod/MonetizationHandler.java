@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 import com.home.vod.activity.Episode_list_Activity;
+import com.home.vod.activity.MovieDetailsActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 
 import static com.home.vod.util.Util.showActivateSubscriptionWatchVideoAleart;
@@ -29,7 +30,8 @@ public class MonetizationHandler {
                    ((ShowWithEpisodesActivity) activity).handleActionForValidateUserPayment(validUserStr, message, subscription_Str);
                if (activity instanceof Episode_list_Activity)
                    ((Episode_list_Activity) activity).handleActionForValidateUserPayment(validUserStr, message, subscription_Str);
-
+               if (activity instanceof MovieDetailsActivity)
+                   ((MovieDetailsActivity) activity).handleActionForValidateUserPayment(validUserStr, message, subscription_Str);
 
            } catch (ClassCastException e){
                e.printStackTrace();

@@ -26,6 +26,7 @@
     <color name="spinnerDropDownListColor">#000</color>
     <color name="leftMenuBackground">#fff</color>
     <color name="colorPrimary">#000000</color>
+    <color name="navlogobackgroundcolor">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#242424</color>
