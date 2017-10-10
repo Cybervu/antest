@@ -49,6 +49,7 @@ import com.home.apisdk.apiModel.FeatureContentOutputModel;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
+import com.home.vod.Episode_Programme_Handler;
 import com.home.vod.R;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
@@ -334,14 +335,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
-                        final Intent detailsIntent = new Intent(ViewMoreActivity.this, ShowWithEpisodesActivity.class);
-                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(detailsIntent);
-                            }
-                        });
+                        new Episode_Programme_Handler(ViewMoreActivity.this).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
                     }
                 }
 
