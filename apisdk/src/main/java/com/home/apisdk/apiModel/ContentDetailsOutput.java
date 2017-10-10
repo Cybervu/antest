@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 
 public class ContentDetailsOutput {
+
     String movieStreamUniqId = "";
     String muviUniqId = "";
     String censorRating = "";
@@ -34,6 +35,34 @@ public class ContentDetailsOutput {
     String rating = "";
     String review = "";
     String id = "";
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public String getRepetition() {
+        return repetition;
+    }
+
+    public void setRepetition(String repetition) {
+        this.repetition = repetition;
+    }
+
+    public String getDifficulty_level() {
+        return difficulty_level;
+    }
+
+    public void setDifficulty_level(String difficulty_level) {
+        this.difficulty_level = difficulty_level;
+    }
+
+    String duration;
+    String repetition;
+    String difficulty_level;
 
     /**
      * This Method is use to Get the Season

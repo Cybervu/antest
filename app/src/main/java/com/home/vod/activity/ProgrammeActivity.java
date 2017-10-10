@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -108,23 +109,26 @@ import static player.utils.Util.HAS_FAVORITE;
 
 /**
  * Created by MUVI on 10/6/2017.
+ *
+ * @author Abhishek
  */
 
 public class ProgrammeActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,
-        GetIpAddressAsynTask.IpAddressListener,GetLanguageListAsynTask.GetLanguageListListener{
+        GetIpAddressAsynTask.IpAddressListener, GetLanguageListAsynTask.GetLanguageListListener {
 
-    TextView detailsTextView, videoStoryTextView, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView;
-    ImageView bannerImageView, playButton, moviePoster,share;
+    TextView detailsTextView, videoStoryTextView, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days;
+    ImageView bannerImageView, playButton, moviePoster, share;
     Button startProgramButton, dietPlanButton;
     ProgressBarHandler pDialog;
     RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout;
     LinearLayout story_layout;
     String movieUniqueId = "";
     String movieTrailerUrlStr, isEpisode = "";
-    String movieNameStr;
+    String duration;
     String videoduration = "";
-    String movieTypeStr = "";
-    String movieIdStr;
+    String name;
+    String difficulty_level;
+    String repetition;
     String email, id;
     String ipAddres = "";
     String movieDetailsStr = "";
@@ -319,6 +323,8 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         languagePreference = LanguagePreference.getLanguagePreference(ProgrammeActivity.this);
         playButton = (ImageView) findViewById(R.id.playButton);
         detailsTextView = (TextView) findViewById(R.id.detailsTextView);
+        difficulty = (TextView) findViewById(R.id.difficulty);
+        days = (TextView) findViewById(R.id.days);
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         benefitsTitleTextView = (TextView) findViewById(R.id.benefitsTitleTextView);
         benefitsStoryTextView = (TextView) findViewById(R.id.benefitsStoryTextView);
@@ -615,12 +621,12 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     }
 
 
-
     @Override
     public void onGetContentDetailsPreExecuteStarted() {
         pDialog = new ProgressBarHandler(ProgrammeActivity.this);
         pDialog.show();
     }
+
     @Override
     public void onGetContentDetailsPostExecuteCompleted(ContentDetailsOutput contentDetailsOutput, int status, String message) {
 
@@ -642,12 +648,44 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
             _permalink = contentDetailsOutput.getPermalink();
             isFavorite = contentDetailsOutput.getIs_favorite();
             bannerImageId = contentDetailsOutput.getBanner();
+            posterImageId=contentDetailsOutput.getPoster();
+            duration = contentDetailsOutput.getDuration();
+            repetition = contentDetailsOutput.getRepetition();
+            difficulty_level = contentDetailsOutput.getDifficulty_level();
+            name = contentDetailsOutput.getName();
 
 
-            detailsTextView.setText(languagePreference.getTextofLanguage(DETAILS_TITLE, DEFAULT_DETAILS_TITLE));
+            if (name.matches("") || name.matches(languagePreference.getTextofLanguage(DETAILS_TITLE, DEFAULT_DETAILS_TITLE))) {
+                detailsTextView.setVisibility(View.GONE);
+            } else {
+
+
+                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), detailsTextView);
+                detailsTextView.setTypeface(null,Typeface.BOLD);
+                detailsTextView.setText(name);
+            }
+
             benefitsTitleTextView.setText(languagePreference.getTextofLanguage(BENEFIT_TITLE, DEFAULT_BENEFIT_TITLE));
             durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
             diffcultyTitleTextView.setText(languagePreference.getTextofLanguage(DIFFICULTY_TITLE, DEFAULT_DIFFICULTY_TITLE));
+
+            if (duration.matches("") || duration.matches(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE))) {
+                days.setVisibility(View.GONE);
+            } else {
+
+                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), durationTitleTextView);
+                days.setTypeface(null,Typeface.BOLD);
+                days.setText(duration);
+            }
+
+            if (difficulty_level.matches("") || difficulty_level.matches(languagePreference.getTextofLanguage(DIFFICULTY_TITLE, DEFAULT_DIFFICULTY_TITLE))) {
+                difficulty.setVisibility(View.GONE);
+            } else {
+
+                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), diffcultyTitleTextView);
+                difficulty.setTypeface(null,Typeface.BOLD);
+                difficulty.setText(difficulty_level);
+            }
 
 
             /***favorite *****/
@@ -710,7 +748,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
                 imageLoader.displayImage(bannerImageId.trim(), moviePoster, options);*/
 
                 Picasso.with(ProgrammeActivity.this)
-                        .load(bannerImageId.trim())
+                        .load(posterImageId)
                         .error(R.drawable.logo)
                         .placeholder(R.drawable.logo)
                         .into(moviePoster);
