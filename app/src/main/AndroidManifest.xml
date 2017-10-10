@@ -279,6 +279,7 @@
         <activity android:name=".activity.ReviewActivity"/>
         <activity android:name=".activity.SeasonActivity"/>
         <activity android:name=".activity.ProgrammeActivity"/>
+        <activity android:name=".activity.ProgramDetailsActivity"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"

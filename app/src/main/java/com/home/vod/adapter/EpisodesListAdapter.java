@@ -79,7 +79,7 @@ public class EpisodesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
            /* Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
             episodeTitleTextView.setTypeface(castDescriptionTypeface);*/
-          //  episodeNameTextView = (TextView) view.findViewById(R.id.episodeNameTextView);
+            //  episodeNameTextView = (TextView) view.findViewById(R.id.episodeNameTextView);
             //episodeDateTextView = (TextView) view.findViewById(R.id.itemImage);
 
             episodeImageView = (ImageView) view.findViewById(R.id.itemImage);
@@ -88,7 +88,7 @@ public class EpisodesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public void bind(final EpisodesListModel item, final OnItemClickListener listener) {
             episodeTitleTextView.setText(item.getEpisodeTitle());
-           // episodeNameTextView.setText(item.getEpisodeNumber());
+            // episodeNameTextView.setText(item.getEpisodeNumber());
 
             String imageId = item.getEpisodeThumbnailImageView();
             LogUtil.showLog("MUVI","kjshdvuih");
@@ -101,7 +101,8 @@ public class EpisodesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 Picasso.with(context)
                         .load(item.getEpisodeThumbnailImageView()).error(R.drawable.logo).placeholder(R.drawable.logo)
                         .into(episodeImageView);
-            }                itemView.setOnClickListener(new View.OnClickListener() {
+            }
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onItemClick(item);

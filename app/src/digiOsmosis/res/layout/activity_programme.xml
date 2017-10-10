@@ -182,13 +182,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="DURATION"
-                        android:textColor="@color/videotextColor"
-                        android:textSize="15dp"
+                        android:textColor="@color/nav_lineColor"
+                        android:textSize="16dp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/days"
                         android:text="14 Days"
                         android:textColor="@color/videotextColor"
                         android:textSize="12dp" />
@@ -218,14 +219,15 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="DIFFCULTY"
-                        android:textColor="@color/videotextColor"
-                        android:textSize="15dp"
+                        android:textColor="@color/nav_lineColor"
+                        android:textSize="16dp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="EASY"
+                        android:id="@+id/difficulty"
                         android:textColor="@color/videotextColor"
                         android:textSize="12dp" />
 
