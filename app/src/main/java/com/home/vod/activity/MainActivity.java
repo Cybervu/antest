@@ -1,9 +1,11 @@
 package com.home.vod.activity;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,12 +15,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -59,6 +63,7 @@ import com.home.apisdk.apiModel.MenuListOutput;
 import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.R;
+import com.home.vod.SideMenuHandler;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.fragment.AboutUsFragment;
@@ -85,6 +90,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -119,6 +125,7 @@ import static com.home.vod.preferences.LanguagePreference.HOME;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
@@ -173,6 +180,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private AQuery mAquery;
     private MediaInfo mSelectedMedia;
 
+    //String login_menu,register_menu,profile_menu,mydownload_menu,purchase_menu,logout_menu,login_menuPermalink,register_menuPermalink,profile_menuPermalink,mydownload_menuPermalink,purchase_menuPermalink,logout_menuPermalink;
 
     private CastContext mCastContext;
     private SessionManagerListener<CastSession> mSessionManagerListener =
@@ -182,6 +190,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private IntroductoryOverlay mIntroductoryOverlay;
     private CastStateListener mCastStateListener;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
+    private SideMenuHandler sideMenuHandler;
 
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
@@ -238,8 +247,14 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     int check = 0;
     public static int isNavigated = 0;
     String Default_Language = "";
-    public ArrayList<NavDrawerItem> menuList = new ArrayList<>();
+    public ArrayList<NavDrawerItem> originalMenuList;
     public ArrayList<LanguageModel> languageModels = new ArrayList<>();
+    public ArrayList<NavDrawerItem> menuList = new ArrayList<>();
+    int adding_position = 0;
+
+
+    public HashMap <String,Integer> menuHashMap = new HashMap();
+
     private String imageUrlStr;
     // public static SharedPreferences dataPref;
     int state = 0;
@@ -282,6 +297,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        registerReceiver(SUCCESS, new IntentFilter("LOGIN_SUCCESS"));
+
+
         LogUtil.showLog("BKS", "packagenameMAINactivity1===" + SDKInitializer.user_Package_Name_At_Api);
         if (menuList != null && menuList.size() > 0) {
             menuList.clear();
@@ -391,6 +410,18 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }*/
     }
 
+
+    public BroadcastReceiver SUCCESS = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            sideMenuHandler = new SideMenuHandler(MainActivity.this);
+            sideMenuHandler.staticSideMenu(languagePreference,menuList,originalMenuList,preferenceManager,adding_position);
+            //sideMenuHandler.addLogoutMenu(languagePreference,menuList,preferenceManager);
+
+
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -546,6 +577,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     public void onResume() {
         super.onResume();
+       /// sideMenuHandler = new SideMenuHandler(this);
+       // sideMenuHandler.staticSideMenu(languagePreference,menuList,preferenceManager);
+
         mCastContext.addCastStateListener(mCastStateListener);
         mCastContext.getSessionManager().addSessionManagerListener(
                 mSessionManagerListener, CastSession.class);
@@ -631,27 +665,117 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             }
 
 
-        } else if (menuList.get(position).getIsEnabled() == true) {
+        } else  if (menuList.get(position).getPermalink().equals("login_permalink")){
+            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+            Util.check_for_subscription = 0;
+            startActivity(loginIntent);
+            fragment = null;
+        }
+
+        else  if (menuList.get(position).getPermalink().equals("register_permalink")){
+            Intent loginIntent = new Intent(MainActivity.this, RegisterActivity.class);
+            Util.check_for_subscription = 0;
+            startActivity(loginIntent);
+            fragment = null;
+        }
+
+
+
+        else  if (menuList.get(position).getPermalink().equals("profile_Permalink")){
+            Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+            profileIntent.putExtra("EMAIL", email);
+            profileIntent.putExtra("LOGID", id);
+            startActivity(profileIntent);
+            fragment = null;
+        }
+
+
+        else  if (menuList.get(position).getPermalink().equals("mydownload_Permalink")){
+            Intent mydownload = new Intent(MainActivity.this, MyDownloads.class);
+            startActivity(mydownload);
+            fragment = null;
+        }
+
+
+        else  if (menuList.get(position).getPermalink().equals("purchase_Permalink")) {
+            Intent purchaseintent = new Intent(MainActivity.this, PurchaseHistoryActivity.class);
+            startActivity(purchaseintent);
+            fragment = null;
+        }
+
+        else  if (menuList.get(position).getPermalink().equals("logout_Permalink")) {
+            fragment = null;
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
+            dlgAlert.setTitle("");
+
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    // Do nothing but close the dialog
+
+                    // dialog.cancel();
+                    LogoutInput logoutInput = new LogoutInput();
+                    logoutInput.setAuthToken(authTokenStr);
+                    LogUtil.showLog("Abhi", authTokenStr);
+                    String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
+                    logoutInput.setLogin_history_id(loginHistoryIdStr);
+                    logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    LogUtil.showLog("Abhi", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MainActivity.this, MainActivity.this);
+                    asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
+
+
+                    dialog.dismiss();
+                }
+            });
+
+            dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    // Do nothing
+                    dialog.dismiss();
+                }
+            });
+            // dlgAlert.setPositiveButton(getResources().getString(R.string.yes_str), null);
+            dlgAlert.setCancelable(false);
+
+            dlgAlert.create().show();
+
+        }
+
+
+        else {
 
             fragment = new VideosListFragment();
             bundle.putString("item", str);
             bundle.putString("title", titleStr);
-
-
         }
+
+
+      /*  else if (menuList.get(position).getPermalink().equals("login_permalink")) {
+
+            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+            Util.check_for_subscription = 0;
+            startActivity(loginIntent);
+
+        }*/
        /* else if (menuList.get(position).getIsEnabled() == false) {
 
             fragment = new WebViewFragment();
             bundle.putString("item", getResources().getString(R.string.studio_site)+str);
 
         }*/
-        fragment.setArguments(bundle);
+
 
       /*  dataEditor.putString("state", String.valueOf(state));
                 dataEditor.commit();*/
 
 
         if (fragment != null) {
+            fragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
@@ -800,6 +924,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 }
             }
 
+            adding_position = menuList.size();
+
+
             menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
             LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
 
@@ -812,6 +939,14 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 }
             }
 
+            originalMenuList = new ArrayList<>(menuList);
+
+            Log.v("BIBHU1","menuList size="+adding_position);
+            Log.v("BIBHU1","originalMenuList size="+originalMenuList.size());
+
+            sideMenuHandler = new SideMenuHandler(this);
+            sideMenuHandler.staticSideMenu(languagePreference,menuList,originalMenuList,preferenceManager,adding_position);
+
 
             imageUrlStr = "https://dadc-muvi.s3-eu-west-1.amazonaws.com/check-download-speed.jpg";
             if (NetworkStatus.getInstance().isConnected(MainActivity.this)) {
@@ -821,8 +956,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 internetSpeed = "0";
             }
 
-            drawerFragment = (FragmentDrawer)
-                    getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+            drawerFragment = (FragmentDrawer)getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
             drawerFragment.setData(menuList);
             drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
             drawerFragment.setDrawerListener(MainActivity.this);
@@ -879,6 +1013,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                     menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getLink_type()));
                 }
             }
+            sideMenuHandler = new SideMenuHandler(this);
+            sideMenuHandler.staticSideMenu(languagePreference,menuList,preferenceManager);
 
             menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
             LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");

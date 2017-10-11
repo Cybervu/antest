@@ -498,9 +498,13 @@ public class Util {
 
     public static void parseLanguage(LanguagePreference languagePreference, String jsonResponse,String default_Language) throws JSONException {
         JSONObject json = new JSONObject(jsonResponse);
-        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNIN,DEFAULT_GMAIL_SIGNIN,"google_signin",json);
-        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNUP,DEFAULT_GMAIL_SIGNUP,"google_signup",json);
+        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNIN,DEFAULT_GMAIL_SIGNIN,"gmail_signin",json);
+        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNUP,DEFAULT_GMAIL_SIGNUP,"gmail_signup",json);
+        setTranslationLanguageToPref(languagePreference,SIGN_UP_WITH_EMAIL,DEFAULT_SIGN_UP_WITH_EMAIL,"signup_with_email",json);
         setTranslationLanguageToPref(languagePreference, VIEW_LESS, DEFAULT_VIEW_LESS,"view_less",json);
+        setTranslationLanguageToPref(languagePreference, LOGIN_FACEBOOK,DEFAULT_LOGIN_FACEBOOK,"login_facebook",json);
+        setTranslationLanguageToPref(languagePreference, REGISTER_FACEBOOK,DEFAULT_REGISTER_FACEBOOK,"register_facebook",json);
+
         setTranslationLanguageToPref(languagePreference, ALREADY_MEMBER,DEFAULT_ALREADY_MEMBER,"already_member",json);
         setTranslationLanguageToPref(languagePreference, SUBSCRIPTION_COMPLETED,DEFAULT_SUBSCRIPTION_COMPLETED,"subscription completed",json);
 
@@ -672,6 +676,8 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, BENEFIT_TITLE,DEFAULT_BENEFIT_TITLE, "benefit_title",json);
         setTranslationLanguageToPref(languagePreference, DIFFICULTY_TITLE,DEFAULT_DIFFICULTY_TITLE, "difficulty_title",json);
         setTranslationLanguageToPref(languagePreference, DURATION_TITLE,DEFAULT_DURATION_TITLE, "duration_title",json);
+        setTranslationLanguageToPref(languagePreference, DIFFICULTY_TITLE,DEFAULT_DIFFICULTY_TITLE, "difficulty_title",json);
+        setTranslationLanguageToPref(languagePreference, VIEW_ALL,DEFAULT_VIEW_ALL, "view_more",json);
 
         setTranslationLanguageToPref(languagePreference, SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE,DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, "simultaneous_logout_message",json);
         setTranslationLanguageToPref(languagePreference, LOGIN_STATUS_MESSAGE,DEFAULT_LOGIN_STATUS_MESSAGE, "login_status_message",json);
@@ -744,6 +750,14 @@ public class Util {
         }
     }
 
+    public static void shareIt(Context context) {
+//sharing implementation here
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "AndroidSolved");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Now Learn Android with AndroidSolved clicke here to visit https://androidsolved.wordpress.com/ ");
+        context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
+    }
 
     public static boolean getStreamingRestriction(LanguagePreference languagePreference){
         return languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION,DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1");

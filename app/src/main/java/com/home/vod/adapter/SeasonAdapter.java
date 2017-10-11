@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.home.vod.R;
+import com.home.vod.model.EpisodesListModel;
 import com.home.vod.model.SeasonModel;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
     private Context mContext;
     private ArrayList<SeasonModel> data = new ArrayList<SeasonModel>();
     private int layoutResourceId;
+    private  OnItemClickListener listener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
@@ -30,18 +32,25 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
 
         public MyViewHolder(View view) {
             super(view);
+
             title = (TextView) view.findViewById(R.id.seasonTitle);
             thumbnail = (ImageView) view.findViewById(R.id.seasonImageView);
         }
     }
 
     public SeasonAdapter(Context context, int layoutResourceId,
-                         ArrayList<SeasonModel> data) {
+                         ArrayList<SeasonModel> data, OnItemClickListener listener) {
         this.layoutResourceId = layoutResourceId;
         this.mContext = context;
         this.data = data;
+        this.listener=listener;
     }
 
+
+    public interface OnItemClickListener {
+        void onItemClick(SeasonModel item );
+
+    }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -51,14 +60,18 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
         return new MyViewHolder(itemView);
     }
 
+
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         SeasonModel album = data.get(position);
         holder.title.setText(album.getSeasonName());
         holder.thumbnail.setImageResource(album.getSeasonImage());
-
-
-
+        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(data.get(position));
+            }
+        });
 
     }
 

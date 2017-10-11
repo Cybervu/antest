@@ -56,6 +56,7 @@ import com.home.apisdk.apiModel.LogoutInput;
 import com.home.apisdk.apiModel.ViewFavouriteInputModel;
 import com.home.apisdk.apiModel.ViewFavouriteOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
+import com.home.vod.Episode_Programme_Handler;
 import com.home.vod.R;
 import com.home.vod.adapter.FavoriteAdapter;
 import com.home.vod.adapter.LanguageCustomAdapter;
@@ -95,6 +96,7 @@ import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
 import static player.utils.Util.DEFAULT_IS_CHROMECAST;
@@ -360,14 +362,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
 
                         } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
-                            final Intent detailsIntent = new Intent(FavoriteActivity.this, ShowWithEpisodesActivity.class);
-                            detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(detailsIntent);
-                                }
-                            });
+                            new Episode_Programme_Handler(FavoriteActivity.this).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
                         }
                     }
                 }
@@ -866,6 +861,9 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         email = preferenceManager.getEmailIdFromPref();
         episodeListOptionMenuHandler.createOptionMenu(menu,preferenceManager,languagePreference);
 
+        MenuItem favorite_menu;
+        favorite_menu = menu.findItem(R.id.menu_item_favorite);
+        favorite_menu.setVisible(false);
         return true;
     }
     /*chromecast-------------------------------------*/

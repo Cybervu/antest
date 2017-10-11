@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.home.apisdk.apiController.GetCastDetailsAsynTask;
 import com.home.apisdk.apiModel.GetCastDetailsInput;
 import com.home.apisdk.apiModel.GetCastDetailsOutputModel;
+import com.home.vod.Episode_Programme_Handler;
 import com.home.vod.R;
 import com.home.vod.adapter.FilmographyAdapter;
 import com.home.vod.model.GetCastCrewItem;
@@ -202,14 +203,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
 
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3")) ) {
-                        final Intent detailsIntent = new Intent(CastCrewDetailsActivity.this, ShowWithEpisodesActivity.class);
-                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(detailsIntent);
-                            }
-                        });
+                        new Episode_Programme_Handler(CastCrewDetailsActivity.this).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
                     }
                 }
 

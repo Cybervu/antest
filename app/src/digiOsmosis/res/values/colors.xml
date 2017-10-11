@@ -2,6 +2,7 @@
 <resources>
 
     <color name="appBackgroundColor">#fff</color>
+    <color name="textColorAll">#4f4f4f</color>
     <color name="textColor">#757575</color>
     <color name="videotextColor">#4f4f4f</color>
     <color name="videotitleColor">#4f4f4f</color>
@@ -41,6 +42,7 @@
     <color name="spinnerDropDownListColor">#000</color>
     <color name="leftMenuBackground">#fff</color>
     <color name="colorPrimary">#4cbfb8</color>
+    <color name="exercise_imagecolor">#4cbfb8</color>
     <color name="navlogobackgroundcolor">#4cbfb8</color>
     <color name="colorPrimaryDark">#4cbfb8</color>
     <color name="languagePopupColor">#fff</color>

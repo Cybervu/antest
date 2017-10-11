@@ -282,10 +282,12 @@ public class Player implements Serializable{
     public void setResolutionUrl(ArrayList<String> resolutionUrl) {
         ResolutionUrl = resolutionUrl;
     }
-    ArrayList<String> SubTitlePath = new ArrayList<>();
-    ArrayList<String> FakeSubTitlePath = new ArrayList<>();
-    ArrayList<String> ResolutionFormat = new ArrayList<>();
-    ArrayList<String> ResolutionUrl = new ArrayList<>();
+    public  ArrayList<String> SubTitlePath = new ArrayList<>();
+    public  ArrayList<String> FakeSubTitlePath = new ArrayList<>();
+    public ArrayList<String> ResolutionFormat = new ArrayList<>();
+    public  ArrayList<String> ResolutionUrl = new ArrayList<>();
+    public ArrayList<String> SubTitleLanguage = new ArrayList<>();
+
 
 
 
@@ -297,7 +299,6 @@ public class Player implements Serializable{
         SubTitleLanguage = subTitleLanguage;
     }
 
-    ArrayList<String> SubTitleLanguage = new ArrayList<>();
 
 
     public ArrayList<String> getFakeSubTitlePath() {

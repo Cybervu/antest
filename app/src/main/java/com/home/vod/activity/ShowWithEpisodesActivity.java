@@ -656,6 +656,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         LogUtil.showLog("MUVI", "episode show...");
 
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
+
         if (status == 200) {
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.GONE);

@@ -64,7 +64,6 @@ public class FragmentDrawer extends Fragment {
 
         // preparing navigation drawer items
         for (int i = 0; i < titles.size(); i++) {
-            LogUtil.showLog("alok getData ::",titles.get(i).getTitle());
             NavDrawerItem navItem = new NavDrawerItem();
             navItem.setTitle(titles.get(i).getTitle());
             navItem.setIsEnabled(titles.get(i).getIsEnabled());
@@ -78,7 +77,6 @@ public class FragmentDrawer extends Fragment {
 
     public void  setData(ArrayList<NavDrawerItem> titles){
 
-        LogUtil.showLog("alok setData ::",titles.get(titles.size()-1).getTitle());
         FragmentDrawer.titles =titles;
     }
 
@@ -131,18 +129,18 @@ public class FragmentDrawer extends Fragment {
                     Util.my_library_visibility = false;
 
                     for (int i = 0; i < titles.size(); i++) {
-                        LogUtil.showLog("alok setUp ::",titles.get(i).getTitle());
+
+                        Log.v("BKS","my library title=="+titles.get(i).getTitle());
+                        Log.v("BKS","my library=="+languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY));
+
                         if (titles.get(i).getTitle().trim().equals(languagePreference.getTextofLanguage(MY_LIBRARY,DEFAULT_MY_LIBRARY))) {
-                            LogUtil.showLog("MUVI", "IS_MYLIBRARY =" + languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY));
-                            LogUtil.showLog("MUVI", "loggedInStr value =" + loggedInStr);
                             mylibrary_title_added = true;
-                            Log.v("BKS","my library=="+languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY));
+
 
                             if (languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
                                 Log.v("BKS","my library=="+languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY));
                             } else {
                                 titles.remove(i);
-                                LogUtil.showLog("MUVI", "My lib removed");
                             }
                         }
                     }
@@ -156,7 +154,6 @@ public class FragmentDrawer extends Fragment {
                                     if (languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
                                         titles.add(i,new NavDrawerItem(languagePreference.getTextofLanguage( MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
                                         mylibrary_title_added = true;
-                                        LogUtil.showLog("MUVI", "My lib added");
                                     }
                                 }
                             }

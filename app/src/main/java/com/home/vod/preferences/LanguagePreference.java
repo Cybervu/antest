@@ -163,6 +163,9 @@ public class LanguagePreference {
     public static final String BTN_REGISTER = "BTN_REGISTER";
     public static final String GMAIL_SIGNUP = "GMAIL_SIGNUP";
     public static final String GMAIL_SIGNIN = "GMAIL_SIGNIN";
+    public static final String LOGIN_FACEBOOK = "LOGIN_FACEBOOK";
+    public static final String REGISTER_FACEBOOK = "REGISTER_FACEBOOK";
+    public static final String SIGN_UP_WITH_EMAIL = "SIGN_UP_WITH_EMAIL";
     public static final String SORT_RELEASE_DATE = "SORT_RELEASE_DATE";
     public static final String TEXT_SEARCH_PLACEHOLDER = "TEXT_SEARCH_PLACEHOLDER";
     public static final String SLOW_ISSUE_INTERNET_CONNECTION = "SLOW_ISSUE_INTERNET_CONNECTION";
@@ -353,6 +356,10 @@ public class LanguagePreference {
     public static final String DEFAULT_TEXT_EMIAL = "Enter your Email Address";
     public static final String DEFAULT_TEXT_PASSWORD = "Enter your Password";
     public static final String DEFAULT_BTN_REGISTER = "Register";
+    public static final String DEFAULT_LOGIN_FACEBOOK = "Login with Facebook";
+    public static final String DEFAULT_REGISTER_FACEBOOK = "Register with Facebook";
+
+    public static final String DEFAULT_SIGN_UP_WITH_EMAIL = "Sign Up with Email";
     public static final String DEFAULT_GMAIL_SIGNUP = "Register with Google";
     public static final String DEFAULT_GMAIL_SIGNIN = "Login with Google";
     public static final String DEFAULT_SORT_RELEASE_DATE = "Release Date";
@@ -394,6 +401,9 @@ public class LanguagePreference {
     public static String DEFAULT_DIFFICULTY_TITLE = "Difficulty";
     public static String DURATION_TITLE = "DURATION_TITLE";
     public static String DEFAULT_DURATION_TITLE = " Duration";
+    public static String VIEW_ALL = "VIEW_ALL";
+    public static String DEFAULT_VIEW_ALL = " View More >>";
+
 
 
     /**

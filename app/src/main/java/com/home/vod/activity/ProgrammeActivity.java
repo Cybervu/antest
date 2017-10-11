@@ -2,17 +2,21 @@ package com.home.vod.activity;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -37,16 +41,23 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.apiController.AddToFavAsync;
 import com.home.apisdk.apiController.DeleteFavAsync;
 import com.home.apisdk.apiController.GetContentDetailsAsynTask;
+import com.home.apisdk.apiController.GetIpAddressAsynTask;
+import com.home.apisdk.apiController.GetLanguageListAsynTask;
+import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiModel.AddToFavInputModel;
 import com.home.apisdk.apiModel.AddToFavOutputModel;
 import com.home.apisdk.apiModel.ContentDetailsInput;
 import com.home.apisdk.apiModel.ContentDetailsOutput;
 import com.home.apisdk.apiModel.DeleteFavInputModel;
 import com.home.apisdk.apiModel.DeleteFavOutputModel;
+import com.home.apisdk.apiModel.LanguageListInputModel;
+import com.home.apisdk.apiModel.LanguageListOutputModel;
+import com.home.apisdk.apiModel.LogoutInput;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.R;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
+import com.home.vod.model.LanguageModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
@@ -56,6 +67,7 @@ import com.home.vod.util.ResizableCustomView;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -72,41 +84,53 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AV
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIFFICULTY_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DURATION_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.DETAILS_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DIFFICULTY_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DURATION_TITLE;
+import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.util.Util.languageModel;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
 import static player.utils.Util.HAS_FAVORITE;
 
 /**
  * Created by MUVI on 10/6/2017.
+ *
+ * @author Abhishek
  */
 
-public class ProgrammeActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener {
+public class ProgrammeActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,
+        GetIpAddressAsynTask.IpAddressListener, GetLanguageListAsynTask.GetLanguageListListener {
 
-    TextView detailsTextView, videoStoryTextView, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView;
-    ImageView bannerImageView, playButton, moviePoster;
+    TextView detailsTextView, videoStoryTextView, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days;
+    ImageView bannerImageView, playButton, moviePoster, share;
     Button startProgramButton, dietPlanButton;
     ProgressBarHandler pDialog;
     RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout;
     LinearLayout story_layout;
     String movieUniqueId = "";
     String movieTrailerUrlStr, isEpisode = "";
-    String movieNameStr;
+    String duration;
     String videoduration = "";
-    String movieTypeStr = "";
-    String movieIdStr;
+    String name;
+    String difficulty_level;
+    String repetition;
     String email, id;
+    String ipAddres = "";
     String movieDetailsStr = "";
     String story;
     String useridStr;
@@ -117,6 +141,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     Toolbar mActionBarToolbar;
     static String _permalink;
     String sucessMsg;
+    String Default_Language = "";
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     String loggedInStr;
@@ -155,6 +180,59 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     private int mDuration;
     private TextView mAuthorView;
     private ImageButton mPlayCircle;
+
+    @Override
+    public void onIPAddressPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
+
+        ipAddres = ipAddressStr;
+        return;
+    }
+
+    @Override
+    public void onGetLanguageListPreExecuteStarted() {
+
+        pDialog = new ProgressBarHandler(ProgrammeActivity.this);
+        pDialog.show();
+    }
+
+    @Override
+    public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+
+            }
+        } catch (IllegalArgumentException ex) {
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.VISIBLE);
+        }
+        ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
+
+        for (int i = 0; i < languageListOutputArray.size(); i++) {
+            String language_id = languageListOutputArray.get(i).getLanguageCode();
+            String language_name = languageListOutputArray.get(i).getLanguageName();
+
+
+            LanguageModel languageModel = new LanguageModel();
+            languageModel.setLanguageId(language_id);
+            languageModel.setLanguageName(language_name);
+
+            if (Default_Language.equalsIgnoreCase(language_id)) {
+                languageModel.setIsSelected(true);
+            } else {
+                languageModel.setIsSelected(false);
+            }
+            languageModels.add(languageModel);
+        }
+
+        languageModel = languageModels;
+    }
  /*chromecast-------------------------------------*/
      /*chromecast-------------------------------------*/
 
@@ -245,6 +323,8 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         languagePreference = LanguagePreference.getLanguagePreference(ProgrammeActivity.this);
         playButton = (ImageView) findViewById(R.id.playButton);
         detailsTextView = (TextView) findViewById(R.id.detailsTextView);
+        difficulty = (TextView) findViewById(R.id.difficulty);
+        days = (TextView) findViewById(R.id.days);
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         benefitsTitleTextView = (TextView) findViewById(R.id.benefitsTitleTextView);
         benefitsStoryTextView = (TextView) findViewById(R.id.benefitsStoryTextView);
@@ -254,6 +334,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         diffcultyTitleTextView = (TextView) findViewById(R.id.diffcultyTitleTextView);
         favorite_view_episode = (ImageView) findViewById(R.id.favoriteImageView);
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
+        share = (ImageView) findViewById(R.id.share);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -263,6 +344,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pDialog.hide();
                 onBackPressed();
             }
         });
@@ -283,6 +365,27 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
             }
         });
 
+        dietPlanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(ProgrammeActivity.this,DietPlanActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        dietPlanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProgrammeActivity.this,DietPlanActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        share.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Util.shareIt(ProgrammeActivity.this);
+            }
+        });
 
         ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
@@ -329,6 +432,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
                        /* AsynFavoriteDelete asynFavoriteDelete=new AsynFavoriteDelete();
                         asynFavoriteDelete.execute();*/
                     } else {
+
                         LogUtil.showLog("MUVI", "favorite");
                         AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
                         addToFavInputModel.setAuthToken(authTokenStr);
@@ -468,10 +572,78 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
 
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.action_search:
+                final Intent searchIntent = new Intent(ProgrammeActivity.this, SearchActivity.class);
+                searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(searchIntent);
+                // Not implemented here
+                return false;
+            case R.id.action_filter:
+
+                // Not implemented here
+                return false;
+            case R.id.action_login:
+
+                Intent loginIntent = new Intent(ProgrammeActivity.this, LoginActivity.class);
+                Util.check_for_subscription = 0;
+                startActivity(loginIntent);
+                // Not implemented here
+                return false;
+            case R.id.action_register:
+
+                Intent registerIntent = new Intent(ProgrammeActivity.this, RegisterActivity.class);
+                Util.check_for_subscription = 0;
+                startActivity(registerIntent);
+                // Not implemented here
+                return false;
+            case R.id.menu_item_favorite:
+
+                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
+//                favoriteIntent.putExtra("EMAIL",email);
+//                favoriteIntent.putExtra("LOGID",id);
+                favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(favoriteIntent);
+                // Not implemented here
+                return false;
+            case R.id.action_mydownload:
+
+                Intent mydownload = new Intent(ProgrammeActivity.this, MyDownloads.class);
+                startActivity(mydownload);
+                // Not implemented here
+                return false;
+
+            case R.id.menu_item_profile:
+
+                Intent profileIntent = new Intent(ProgrammeActivity.this, ProfileActivity.class);
+                profileIntent.putExtra("EMAIL", email);
+                profileIntent.putExtra("LOGID", id);
+                startActivity(profileIntent);
+                // Not implemented here
+                return false;
+            case R.id.action_purchage:
+
+                Intent purchaseintent = new Intent(ProgrammeActivity.this, PurchaseHistoryActivity.class);
+                startActivity(purchaseintent);
+                // Not implemented here
+                return false;
+
+            default:
+                break;
+        }
+
+        return false;
+    }
+
+
+    @Override
     public void onGetContentDetailsPreExecuteStarted() {
         pDialog = new ProgressBarHandler(ProgrammeActivity.this);
         pDialog.show();
     }
+
     @Override
     public void onGetContentDetailsPostExecuteCompleted(ContentDetailsOutput contentDetailsOutput, int status, String message) {
 
@@ -493,12 +665,39 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
             _permalink = contentDetailsOutput.getPermalink();
             isFavorite = contentDetailsOutput.getIs_favorite();
             bannerImageId = contentDetailsOutput.getBanner();
+            posterImageId = contentDetailsOutput.getPoster();
+            duration = contentDetailsOutput.getDuration();
+            repetition = contentDetailsOutput.getRepetition();
+            difficulty_level = contentDetailsOutput.getDifficulty_level();
+            name = contentDetailsOutput.getName();
 
 
-            detailsTextView.setText(languagePreference.getTextofLanguage(DETAILS_TITLE, DEFAULT_DETAILS_TITLE));
+            if (name.matches("") || name.matches(languagePreference.getTextofLanguage(DETAILS_TITLE, DEFAULT_DETAILS_TITLE))) {
+                detailsTextView.setVisibility(View.GONE);
+            } else {
+
+
+                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), detailsTextView);
+                detailsTextView.setTypeface(null, Typeface.BOLD);
+                detailsTextView.setText(name);
+            }
+
             benefitsTitleTextView.setText(languagePreference.getTextofLanguage(BENEFIT_TITLE, DEFAULT_BENEFIT_TITLE));
             durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
             diffcultyTitleTextView.setText(languagePreference.getTextofLanguage(DIFFICULTY_TITLE, DEFAULT_DIFFICULTY_TITLE));
+
+
+            FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), durationTitleTextView);
+            durationTitleTextView.setTypeface(null, Typeface.BOLD);
+            days.setText(duration);
+
+
+            FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), diffcultyTitleTextView);
+            diffcultyTitleTextView.setTypeface(null, Typeface.BOLD);
+            difficulty.setText(difficulty_level);
+
+            Util.favorite_clicked=false;
+
 
 
             /***favorite *****/
@@ -561,7 +760,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
                 imageLoader.displayImage(bannerImageId.trim(), moviePoster, options);*/
 
                 Picasso.with(ProgrammeActivity.this)
-                        .load(bannerImageId.trim())
+                        .load(posterImageId)
                         .error(R.drawable.logo)
                         .placeholder(R.drawable.logo)
                         .into(moviePoster);
@@ -575,6 +774,26 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     @Override
     public void onResume() {
         super.onResume();
+
+        if (Util.favorite_clicked == true) {
+
+            ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
+            contentDetailsInput.setAuthToken(authTokenStr);
+            contentDetailsInput.setPermalink(permalinkStr);
+
+            asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, ProgrammeActivity.this, ProgrammeActivity.this);
+            asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+        }
+// **************chromecast*********************//
+        if (mCastSession == null) {
+            mCastSession = CastContext.getSharedInstance(this).getSessionManager()
+                    .getCurrentCastSession();
+        }
+
+        GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+        asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+
+        /***************chromecast**********************/
 
         /***************chromecast**********************/
         if (mCastSession == null) {
@@ -657,6 +876,11 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
                 pDialog.hide();
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /*****************
@@ -948,4 +1172,6 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     /*****************
      * chromecast*-------------------------------------
      */
+
+
 }

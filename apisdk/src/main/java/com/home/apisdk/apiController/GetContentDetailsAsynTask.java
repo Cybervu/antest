@@ -116,7 +116,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
             httppost.addHeader(HeaderConstants.PERMALINK, this.contentDetailsInput.getPermalink());
             httppost.addHeader(HeaderConstants.USER_ID, this.contentDetailsInput.getUser_id());
             httppost.addHeader("country", this.contentDetailsInput.getCountry());
-            httppost.addHeader("lang_code",this.contentDetailsInput.getLanguage());
+            httppost.addHeader("lang_code", this.contentDetailsInput.getLanguage());
 
             // Execute HTTP Post Request
             try {
@@ -136,12 +136,21 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                 message = "Error";
             }
 
+
             JSONObject myJson = null;
             if (responseStr != null) {
                 myJson = new JSONObject(responseStr);
                 status = Integer.parseInt(myJson.optString("code"));
                 message = myJson.optString("msg");
             }
+
+            if (status > 0) {
+
+                /** rating*///
+
+
+                if (status == 200) {
+
 
             if (myJson.has("rating") && myJson.has("rating") != false && myJson.getString("rating").trim() != null && !myJson.getString("rating").trim().isEmpty() && !myJson.getString("rating").trim().equals("null") && !myJson.getString("rating").trim().equals("false")) {
                 contentDetailsOutput.setRating(myJson.getString("rating"));
@@ -155,6 +164,8 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
             } else {
                 contentDetailsOutput.setReview("");
             }
+
+
 
             if ((myJson.has("epDetails")) && myJson.getString("epDetails").trim() != null && !myJson.getString("epDetails").trim().isEmpty() && !myJson.getString("epDetails").trim().equals("null") && !myJson.getString("epDetails").trim().matches("")) {
                 JSONObject epDetailsJson = myJson.getJSONObject("epDetails");
@@ -172,15 +183,35 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
 
             }
 
-
-            if (status > 0) {
-
-                /** rating*///
-
-
-                if (status == 200) {
-
                     JSONObject mainJson = myJson.getJSONObject("movie");
+
+                    if ((mainJson.has("custom_meta_data")) && mainJson.getString("custom_meta_data").trim() != null && !mainJson.getString("custom_meta_data").trim().isEmpty() && !mainJson.getString("custom_meta_data").trim().equals("null") && !mainJson.getString("custom_meta_data").trim().matches("")) {
+                        JSONObject custom_meta_data = mainJson.getJSONObject("custom_meta_data");
+
+                        if ((custom_meta_data.has("duration")) && custom_meta_data.optString("duration").trim() != null && !custom_meta_data.optString("duration").trim().isEmpty() && !custom_meta_data.optString("duration").trim().equals("null") && !custom_meta_data.optString("duration").trim().matches("")) {
+                            contentDetailsOutput.setDuration(custom_meta_data.optString("duration"));
+                        }
+                        else {
+                            contentDetailsOutput.setDuration("");
+
+                        }
+                        if ((custom_meta_data.has("repetition")) && custom_meta_data.optString("repetition").trim() != null && !custom_meta_data.optString("repetition").trim().isEmpty() && !custom_meta_data.optString("repetition").trim().equals("null") && !custom_meta_data.optString("repetition").trim().matches("")) {
+                            contentDetailsOutput.setRepetition(custom_meta_data.optString("repetition"));
+                        }
+                        else {
+                            contentDetailsOutput.setRepetition("");
+
+                        }
+                        if ((custom_meta_data.has("difficulty_level")) && custom_meta_data.optString("difficulty_level").trim() != null && !custom_meta_data.optString("difficulty_level").trim().isEmpty() && !custom_meta_data.optString("difficulty_level").trim().equals("null") && !custom_meta_data.optString("difficulty_level").trim().matches("")) {
+                            contentDetailsOutput.setDifficulty_level(custom_meta_data.optString("difficulty_level"));
+                        }
+                        else {
+                            contentDetailsOutput.setDifficulty_level("");
+
+                        }
+
+                    }
+
                     if ((mainJson.has("name")) && mainJson.optString("name").trim() != null && !mainJson.optString("name").trim().isEmpty() && !mainJson.optString("name").trim().equals("null") && !mainJson.optString("name").trim().matches("")) {
                         contentDetailsOutput.setName(mainJson.optString("name"));
                     } else {
@@ -191,8 +222,8 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                     if ((mainJson.has("genre")) && mainJson.optString("genre").trim() != null && !mainJson.optString("genre").trim().isEmpty() && !mainJson.optString("genre").trim().equals("null") && !mainJson.optString("genre").trim().matches("")) {
                         movieTypeStr = mainJson.getString("genre");
                         movieTypeStr = movieTypeStr.replaceAll("\\[", "");
-                        movieTypeStr = movieTypeStr.replaceAll("\\]","");
-                        movieTypeStr = movieTypeStr.replaceAll(","," , ");
+                        movieTypeStr = movieTypeStr.replaceAll("\\]", "");
+                        movieTypeStr = movieTypeStr.replaceAll(",", " , ");
                         movieTypeStr = movieTypeStr.replaceAll("\"", "");
                         contentDetailsOutput.setGenre(movieTypeStr);
 
@@ -215,10 +246,10 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
 
                     }
                     if ((mainJson.has("censor_rating")) && mainJson.optString("censor_rating").trim() != null && !mainJson.optString("censor_rating").trim().isEmpty() && !mainJson.optString("censor_rating").trim().equals("null") && !mainJson.optString("censor_rating").trim().matches("")) {
-                        String  censorRatingStr = mainJson.getString("censor_rating");
+                        String censorRatingStr = mainJson.getString("censor_rating");
                         censorRatingStr = censorRatingStr.replaceAll("\\[", "");
-                        censorRatingStr = censorRatingStr.replaceAll("\\]","");
-                        censorRatingStr = censorRatingStr.replaceAll(","," ");
+                        censorRatingStr = censorRatingStr.replaceAll("\\]", "");
+                        censorRatingStr = censorRatingStr.replaceAll(",", " ");
                         censorRatingStr = censorRatingStr.replaceAll("\"", "");
                         contentDetailsOutput.setCensorRating(censorRatingStr);
 
@@ -441,7 +472,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
         listener.onGetContentDetailsPreExecuteStarted();
 
         status = 0;
-       if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
+        if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetContentDetailsPostExecuteCompleted(contentDetailsOutput, status, message);

@@ -276,7 +276,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
                loadDynamicBanners(mDemoSlider,view,this);
 
                // for static banner
-              // loadStaticBanners(mDemoSlider,view,this);
+            //   loadStaticBanners(mDemoSlider,view,this);
 
             }
 

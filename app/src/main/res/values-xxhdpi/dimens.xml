@@ -12,7 +12,14 @@
 
     <dimen name="singleimgwidth">90dp</dimen>
     <dimen name="singleimgheight">146dp</dimen>
-
+    <dimen name="header_text_size">22sp</dimen>
+    <dimen name="diet_top_padding">10dp</dimen>
+    <dimen name="diet_left_padding">10dp</dimen>
+    <dimen name="diet_bottom_padding">40dp</dimen>
+    <dimen name="download_button_width">100dp</dimen>
+    <dimen name="download_button_height">30dp</dimen>
+    <dimen name="download_button_text_size">18sp</dimen>
+    <dimen name="diet_close_button_width">40dp</dimen>
     <dimen name="buttonheight">39dp</dimen>
     <dimen name="titletxt">14sp</dimen>
     <dimen name="indicatorheight">180dp</dimen>

@@ -28,7 +28,7 @@
         android:id="@+id/action_search"
         android:title="search"
         android:icon="@drawable/search"
-        android:orderInCategory="103"
+        android:orderInCategory="104"
         app:showAsAction="always|never"
         />
     <item
@@ -38,11 +38,17 @@
         android:orderInCategory="101"
         app:showAsAction="always|never"
         />
-
+    <item
+        android:id="@+id/menu_item_favorite"
+        android:icon="@drawable/ic_favorite"
+        android:title="My favorites"
+        android:orderInCategory="103"
+        app:showAsAction="always|never"/>
     <item
         android:title=""
         android:icon="@drawable/optionmanu"
         android:orderInCategory="105"
+        android:visible="false"
         app:showAsAction="always|never">
         <menu>
             <item
@@ -63,10 +69,6 @@
                 android:icon="@drawable/register"
                 android:title="Profile"/>
 
-            <item
-                android:id="@+id/menu_item_favorite"
-                android:icon="@drawable/favorite"
-                android:title="My favorites"/>
             <item
                 android:id="@+id/action_purchage"
                 android:icon="@drawable/purchase_history"
