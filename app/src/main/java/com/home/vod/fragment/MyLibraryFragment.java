@@ -75,6 +75,7 @@ import com.home.apisdk.apiModel.MyLibraryInputModel;
 import com.home.apisdk.apiModel.MyLibraryOutputModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
+import com.home.vod.Episode_Programme_Handler;
 import com.home.vod.activity.Episode_list_Activity;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.activity.MovieDetailsActivity;
@@ -642,15 +643,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3")) && isEpisode.equals("0") && season_id == 0) {
-                        final Intent detailsIntent = new Intent(context, ShowWithEpisodesActivity.class);
-                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                context.startActivity(detailsIntent);
-                            }
-                        });
-                    } else if ((movieTypeId.trim().equalsIgnoreCase("3")) && isEpisode.equals("0") && season_id != 0) {
+
+                        new Episode_Programme_Handler(getActivity()).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
+                    }
+                    else if ((movieTypeId.trim().equalsIgnoreCase("3")) && isEpisode.equals("0") && season_id != 0) {
 
 
                         final Intent detailsIntent = new Intent(context, Episode_list_Activity.class);

@@ -16,8 +16,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/appBackgroundColor"
+        android:fillViewport="true"
         android:layout_below="@id/toolbar"
-        android:fillViewport="true">
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
 
 
 
@@ -74,7 +76,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="DETAILS TITLE"
                     android:textColor="@color/videotextColor"
                     android:textSize="20dp"
                     android:textStyle="bold" />
@@ -124,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/videoStoryTextView"
                 android:layout_centerInParent="true"
-                android:background="@color/button_background"
+                android:background="@drawable/my_button"
                 android:padding="6dp"
                 android:stateListAnimator="@null"
                 android:text="Start Programme"
@@ -140,7 +141,7 @@
                 android:layout_below="@+id/startProgramButton"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="15dp"
-                android:background="@color/button_background"
+                android:background="@drawable/my_button"
                 android:padding="6dp"
                 android:stateListAnimator="@null"
                 android:text="Diet Plan"
@@ -175,7 +176,6 @@
                         android:id="@+id/durationTitleTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="DURATION"
                         android:textColor="@color/nav_lineColor"
                         android:textSize="16dp"
                         android:textStyle="bold" />
@@ -184,7 +184,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/days"
-                        android:text="14 Days"
                         android:textColor="@color/videotextColor"
                         android:textSize="12dp" />
 
@@ -212,7 +211,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="DIFFCULTY"
                         android:textColor="@color/nav_lineColor"
                         android:textSize="16dp"
                         android:textStyle="bold" />
@@ -220,7 +218,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="EASY"
                         android:id="@+id/difficulty"
                         android:textColor="@color/videotextColor"
                         android:textSize="12dp" />

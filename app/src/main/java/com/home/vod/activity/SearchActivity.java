@@ -36,6 +36,7 @@ import android.widget.TextView;
 import com.home.apisdk.apiController.SearchDataAsynTask;
 import com.home.apisdk.apiModel.Search_Data_input;
 import com.home.apisdk.apiModel.Search_Data_otput;
+import com.home.vod.Episode_Programme_Handler;
 import com.home.vod.R;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.model.GridItem;
@@ -262,14 +263,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                         dlgAlert.create().show();
                     } else {
 
-                        final Intent detailsIntent = new Intent(SearchActivity.this, ShowWithEpisodesActivity.class);
-                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(detailsIntent);
-                            }
-                        });
+                        new Episode_Programme_Handler(SearchActivity.this).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
                     }
 
                 }

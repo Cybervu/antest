@@ -7,12 +7,15 @@ package com.home.vod.activity;
 
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,9 +50,11 @@ import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -61,8 +66,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DURATION_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_ALL;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.DURATION_TITLE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.VIEW_ALL;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 
@@ -90,6 +101,8 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     GetContentDetailsAsynTask asynLoadMovieDetails;
     String permalinkStr;
     String useridStr;
+    String ipAddres;
+    String bannerImageId,posterImageId,duration;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     LanguagePreference languagePreference;
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
@@ -126,7 +139,8 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
     @Override
     public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
-
+        ipAddres = ipAddressStr;
+        return;
     }
 
     /*chromecast-------------------------------------*/
@@ -213,6 +227,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_program_details);
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         playButton = (ImageView) findViewById(R.id.playButton);
@@ -236,9 +251,13 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 onBackPressed();
             }
         });
+        mLayoutManager = new LinearLayoutManager(ProgramDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
+
+        viewAllTextView.setText(languagePreference.getTextofLanguage(VIEW_ALL, DEFAULT_VIEW_ALL));
 
 
         /*chromecast-------------------------------------*/
@@ -250,6 +269,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         mCastContext = CastContext.getSharedInstance(this);
         mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
+
 
         boolean shouldStartPlayback = false;
         int startPosition = 0;
@@ -309,6 +329,23 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                     updatePlayButton(mPlaybackState);
                 }
             }*/
+
+        viewAllTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent episode = new Intent(ProgramDetailsActivity.this, Tutorial_List_Activity.class);
+                episode.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
+                startActivity(episode);
+            }
+        });
+
+        dietPlanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(ProgramDetailsActivity.this,DietPlanActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         if (shouldStartPlayback) {
@@ -446,6 +483,35 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mCastSession == null) {
+            mCastSession = CastContext.getSharedInstance(this).getSessionManager()
+                    .getCurrentCastSession();
+        }
+
+        GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+        asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+
+        /***************chromecast**********************/
+
+        /***************chromecast**********************/
+        if (mCastSession == null) {
+            mCastSession = CastContext.getSharedInstance(this).getSessionManager()
+                    .getCurrentCastSession();
+        }
+
+
+        mCastContext.getSessionManager().addSessionManagerListener(
+                mSessionManagerListener, CastSession.class);
+        /***************chromecast**********************/
+        invalidateOptionsMenu();
+
+
+    }
+
+    @Override
     public void onGetContentDetailsPreExecuteStarted() {
         progressBarHandler = new ProgressBarHandler(ProgramDetailsActivity.this);
         progressBarHandler.show();
@@ -464,17 +530,78 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         }
         if (status == 200) {
 
+            bannerImageId = contentDetailsOutput.getBanner();
+            posterImageId=contentDetailsOutput.getPoster();
+            duration = contentDetailsOutput.getDuration();
+
+
+            durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
+
+            FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.light_fonts), durationTitleTextView);
+            durationTitleTextView.setTypeface(null, Typeface.BOLD);
+            durationTextView.setText(duration);
+
+
+            if (TextUtils.isEmpty(bannerImageId)) {
+
+                if (TextUtils.isEmpty(posterImageId)) {
+
+                    bannerImageView.setImageResource(R.drawable.logo);
+                } else {
+
+
+                    /*ImageLoader imageLoader = ImageLoader.getInstance();
+                    imageLoader.init(ImageLoaderConfiguration.createDefault(ShowWithEpisodesActivity.this));
+
+                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
+                            .cacheOnDisc(true).resetViewBeforeLoading(true)
+                            .showImageForEmptyUri(R.drawable.logo)
+                            .showImageOnFail(R.drawable.logo)
+                            .showImageOnLoading(R.drawable.logo).build();
+                    imageLoader.displayImage(posterImageId, moviePoster, options);*/
+
+                    Picasso.with(ProgramDetailsActivity.this)
+                            .load(posterImageId)
+                            .error(R.drawable.logo)
+                            .placeholder(R.drawable.logo)
+                            .into(bannerImageView);
+
+                }
+
+            } else {
+
+
+                /*ImageLoader imageLoader = ImageLoader.getInstance();
+                imageLoader.init(ImageLoaderConfiguration.createDefault(ShowWithEpisodesActivity.this));
+
+                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
+                        .cacheOnDisc(true).resetViewBeforeLoading(true)
+                        .showImageForEmptyUri(R.drawable.logo)
+                        .showImageOnFail(R.drawable.logo)
+                        .showImageOnLoading(R.drawable.logo).build();
+                imageLoader.displayImage(bannerImageId.trim(), moviePoster, options);*/
+
+                Picasso.with(ProgramDetailsActivity.this)
+                        .load(posterImageId)
+                        .error(R.drawable.logo)
+                        .placeholder(R.drawable.logo)
+                        .into(bannerImageView);
+
+
+            }
+
         }
-    }
+
+        }
 
     @Override
     public void onGetEpisodeDetailsPreExecuteStarted() {
 
-        progressBarHandler.show();
     }
 
     @Override
     public void onGetEpisodeDetailsPostExecuteCompleted(Episode_Details_output episode_details_output, int status, int i, String message, String movieUniqueId) {
+
         try {
             if (progressBarHandler != null && progressBarHandler.isShowing()) {
                 LogUtil.showLog("PINTU", "getepisodedetails pdlog hide");
