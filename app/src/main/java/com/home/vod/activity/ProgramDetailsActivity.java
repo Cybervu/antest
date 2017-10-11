@@ -47,5 +47,14 @@ public class ProgramDetailsActivity extends AppCompatActivity {
                 Util.shareIt(ProgramDetailsActivity.this);
             }
         });
+
+
+        dietPlanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProgramDetailsActivity.this,DietPlanActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
