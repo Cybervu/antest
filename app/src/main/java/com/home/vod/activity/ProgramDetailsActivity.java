@@ -360,7 +360,6 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 startActivity(intent);
             }
         });
-    }
 
         ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
@@ -378,7 +377,11 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         contentDetailsInput.setUser_id(useridStr);
         asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
         asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -539,7 +542,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 seasontiveLayout.setVisibility(View.VISIBLE);
                 seasontiveLayout.setLayoutManager(mLayoutManager);
                 seasontiveLayout.setItemAnimator(new DefaultItemAnimator());
-                EpisodesListAdapter mAdapter = new EpisodesListAdapter(ProgramDetailsActivity.this, R.layout.list_card_multipart, itemData, new EpisodesListAdapter.OnItemClickListener() {
+                EpisodesListAdapter mAdapter = new EpisodesListAdapter(ProgramDetailsActivity.this, R.layout.list_card_program_details, itemData, new EpisodesListAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(EpisodesListModel item) {
                         clickItem(item);
@@ -554,7 +557,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     }
 
     public void clickItem (EpisodesListModel item ){
-        Intent intent=new Intent(ProgramDetailsActivity.this,Episode_list_Activity.class);
+        Intent intent=new Intent(ProgramDetailsActivity.this,ProgramPlayerActivity.class);
         startActivity(intent);
     }
 
