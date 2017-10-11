@@ -360,8 +360,6 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 startActivity(intent);
             }
         });
-    }
-
         ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
         useridStr = preferenceManager.getUseridFromPref();
@@ -379,6 +377,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
         asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
