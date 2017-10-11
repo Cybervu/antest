@@ -373,6 +373,14 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
             }
         });
 
+        dietPlanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProgrammeActivity.this,DietPlanActivity.class);
+                startActivity(intent);
+            }
+        });
+
         share.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Util.shareIt(ProgrammeActivity.this);

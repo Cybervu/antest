@@ -191,11 +191,23 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                         if ((custom_meta_data.has("duration")) && custom_meta_data.optString("duration").trim() != null && !custom_meta_data.optString("duration").trim().isEmpty() && !custom_meta_data.optString("duration").trim().equals("null") && !custom_meta_data.optString("duration").trim().matches("")) {
                             contentDetailsOutput.setDuration(custom_meta_data.optString("duration"));
                         }
+                        else {
+                            contentDetailsOutput.setDuration("");
+
+                        }
                         if ((custom_meta_data.has("repetition")) && custom_meta_data.optString("repetition").trim() != null && !custom_meta_data.optString("repetition").trim().isEmpty() && !custom_meta_data.optString("repetition").trim().equals("null") && !custom_meta_data.optString("repetition").trim().matches("")) {
                             contentDetailsOutput.setRepetition(custom_meta_data.optString("repetition"));
                         }
+                        else {
+                            contentDetailsOutput.setRepetition("");
+
+                        }
                         if ((custom_meta_data.has("difficulty_level")) && custom_meta_data.optString("difficulty_level").trim() != null && !custom_meta_data.optString("difficulty_level").trim().isEmpty() && !custom_meta_data.optString("difficulty_level").trim().equals("null") && !custom_meta_data.optString("difficulty_level").trim().matches("")) {
                             contentDetailsOutput.setDifficulty_level(custom_meta_data.optString("difficulty_level"));
+                        }
+                        else {
+                            contentDetailsOutput.setDifficulty_level("");
+
                         }
 
                     }
