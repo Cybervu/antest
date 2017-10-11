@@ -1,5 +1,9 @@
 package com.home.vod.activity;
 
+/**
+ * Created by MUVI on 10/11/2017.
+ */
+
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -24,8 +28,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-
 import com.home.vod.R;
+import com.home.vod.network.NetworkStatus;
+import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
 
 import org.apache.http.HttpResponse;
@@ -53,12 +58,16 @@ import java.util.concurrent.TimeUnit;
 
 import player.utils.Util;
 
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_BUTTON_TITLE;
+
+
 public class DietPlanActivity extends AppCompatActivity {
     static File mediaStorageDir;
     int progress_bar_type = 0;
     int progressStatus = 0;
     String dietData;
-    ProgressDialog progressDialog;
+    LanguagePreference languagePreference;
     ProgressDialog pDialog;
     String filename;
     ProgressBarHandler Ph;
@@ -90,6 +99,8 @@ public class DietPlanActivity extends AppCompatActivity {
         categoryTitle.setTypeface(castDescriptionTypeface);
         categoryTitle.setText("DIET PLAN");
 
+        languagePreference = LanguagePreference.getLanguagePreference(DietPlanActivity.this);
+
         ImageView closeButton = (ImageView)findViewById(R.id.dietCloseButton);
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +113,7 @@ public class DietPlanActivity extends AppCompatActivity {
         Button downloadDietPlanButton = (Button) findViewById(R.id.downloadDietPlanButton);
         Typeface typeface7 = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
         downloadDietPlanButton.setTypeface(typeface7);
-        downloadDietPlanButton.setText(Util.getTextofLanguage(DietPlanActivity.this, Util.DOWNLOAD_BUTTON_TITLE, Util.DEFAULT_DOWNLOAD_BUTTON_TITLE));
+        downloadDietPlanButton.setText(languagePreference.getTextofLanguage(DOWNLOAD_BUTTON_TITLE, DEFAULT_DOWNLOAD_BUTTON_TITLE));
 
         downloadDietPlanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +131,7 @@ public class DietPlanActivity extends AppCompatActivity {
                     }
                 } else {
                     //Call whatever you want
-                    if (Util.checkNetwork(DietPlanActivity.this)) {
+                    if (NetworkStatus.getInstance().isConnected(DietPlanActivity.this)) {
 
 
                         DownloadDocumentDetails downloadDocumentDetails = new DownloadDocumentDetails();
@@ -188,7 +199,7 @@ public class DietPlanActivity extends AppCompatActivity {
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
-               // String strtext = getArguments().getString("item");
+                // String strtext = getArguments().getString("item");
                 httppost.addHeader("permalink","about-us");
                 httppost.addHeader("lang_code",Util.getTextofLanguage(DietPlanActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
                 try {
@@ -240,7 +251,7 @@ public class DietPlanActivity extends AppCompatActivity {
                 httppost.addHeader("authToken", Util.authTokenStr);
 
                 httppost.addHeader("user_id",getSharedPreferences(Util.LOGIN_PREF,0).getString("PREFS_LOGGEDIN_ID_KEY", null));
-               // httppost.addHeader("id", id);
+                // httppost.addHeader("id", id);
                 httppost.addHeader("device_type", "app");
                 httppost.addHeader("lang_code",Util.getTextofLanguage(DietPlanActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
@@ -305,15 +316,15 @@ public class DietPlanActivity extends AppCompatActivity {
                 responseStr = "0";
 
             if ((responseStr.trim().equals("0"))) {
-              //  primary_layout.setVisibility(View.GONE);
-               // noInternet.setVisibility(View.VISIBLE);
+                //  primary_layout.setVisibility(View.GONE);
+                // noInternet.setVisibility(View.VISIBLE);
             } else {
 
                 if (!Download_Url.equals("")) {
                     DownloadTransactionDetails();
                 }
                 else {
-                   // Util.showToast(getApplicationContext(), Util.getTextofLanguage(getApplicationContext(), Util.NO_PDF, Util.DEFAULT_NO_PDF));
+                    // Util.showToast(getApplicationContext(), Util.getTextofLanguage(getApplicationContext(), Util.NO_PDF, Util.DEFAULT_NO_PDF));
                 }
             }
         }
@@ -346,7 +357,7 @@ public class DietPlanActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             // Extract data included in the Intent
             //  Toast.makeText(getApplicationContext(),""+Util.checkNetwork(TransactionDetailsActivity.this),Toast.LENGTH_SHORT).show();
-            if (!Util.checkNetwork(DietPlanActivity.this)) {
+            if (NetworkStatus.getInstance().isConnected(DietPlanActivity.this)) {
                 if (pDialog.isShowing() && pDialog != null) {
 
                     //showDialog(Util.getTextofLanguage(DietPlanActivity.this,Util.DOWNLOAD_INTERRUPTED,Util.DEFAULT_DOWNLOAD_INTERRUPTED), 0);
@@ -436,7 +447,7 @@ public class DietPlanActivity extends AppCompatActivity {
 
             if ((Integer.parseInt(progress[0])) == 100) {
 
-             //   showDialog(Util.getTextofLanguage(DietPlanActivity.this,Util.DOWNLOAD_COMPLETED,Util.DEFAULT_DOWNLOAD_COMPLETED), 1);
+                //   showDialog(Util.getTextofLanguage(DietPlanActivity.this,Util.DOWNLOAD_COMPLETED,Util.DEFAULT_DOWNLOAD_COMPLETED), 1);
 
                 unregisterReceiver(InternetStatus);
                 pDialog.setProgress(0);
@@ -506,7 +517,7 @@ public class DietPlanActivity extends AppCompatActivity {
                             DownloadDocumentDetails downloadDocumentDetails = new DownloadDocumentDetails();
                             downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);
                         } else {
-                           // Util.showToast(getApplicationContext(),Util.getTextofLanguage(getApplicationContext(),Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION));
+                            // Util.showToast(getApplicationContext(),Util.getTextofLanguage(getApplicationContext(),Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION));
 //                            Toast.makeText(getApplicationContext(),Util.getTextofLanguage(TransactionDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
                     } else {

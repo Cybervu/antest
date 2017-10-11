@@ -258,25 +258,15 @@
             android:name=".activity.CastCrewDetailsActivity"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-        <activity
-            android:name=".activity.FavoriteActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.ReviewActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.SeasonActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.ProgrammeActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.DietPlanActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.ProgramDetailsActivity"
-            android:screenOrientation="portrait" />
+            android:theme="@style/MyMaterialTheme"/>
+
+        <activity android:name=".activity.FavoriteActivity"/>
+        <activity android:name=".activity.ReviewActivity"/>
+        <activity android:name=".activity.SeasonActivity"/>
+        <activity android:name=".activity.ProgrammeActivity"/>
+        <activity android:name=".activity.ProgramDetailsActivity"/>
+        <activity android:name=".activity.DietPlanActivity"/>
+        <activity android:name=".activity.Tutorial_List_Activity"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"

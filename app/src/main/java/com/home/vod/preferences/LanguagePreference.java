@@ -401,6 +401,9 @@ public class LanguagePreference {
     public static String DEFAULT_DIFFICULTY_TITLE = "Difficulty";
     public static String DURATION_TITLE = "DURATION_TITLE";
     public static String DEFAULT_DURATION_TITLE = " Duration";
+    public static String VIEW_ALL = "VIEW_ALL";
+    public static String DEFAULT_VIEW_ALL = " View More >>";
+
 
 
     /**

@@ -344,6 +344,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pDialog.hide();
                 onBackPressed();
             }
         });
@@ -364,6 +365,13 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
             }
         });
 
+        dietPlanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(ProgrammeActivity.this,DietPlanActivity.class);
+                startActivity(intent);
+            }
+        });
 
         dietPlanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -424,6 +432,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
                        /* AsynFavoriteDelete asynFavoriteDelete=new AsynFavoriteDelete();
                         asynFavoriteDelete.execute();*/
                     } else {
+
                         LogUtil.showLog("MUVI", "favorite");
                         AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
                         addToFavInputModel.setAuthToken(authTokenStr);
@@ -656,7 +665,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
             _permalink = contentDetailsOutput.getPermalink();
             isFavorite = contentDetailsOutput.getIs_favorite();
             bannerImageId = contentDetailsOutput.getBanner();
-            posterImageId=contentDetailsOutput.getPoster();
+            posterImageId = contentDetailsOutput.getPoster();
             duration = contentDetailsOutput.getDuration();
             repetition = contentDetailsOutput.getRepetition();
             difficulty_level = contentDetailsOutput.getDifficulty_level();
@@ -669,7 +678,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
 
 
                 FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), detailsTextView);
-                detailsTextView.setTypeface(null,Typeface.BOLD);
+                detailsTextView.setTypeface(null, Typeface.BOLD);
                 detailsTextView.setText(name);
             }
 
@@ -677,23 +686,18 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
             durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
             diffcultyTitleTextView.setText(languagePreference.getTextofLanguage(DIFFICULTY_TITLE, DEFAULT_DIFFICULTY_TITLE));
 
-            if (duration.matches("") || duration.matches(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE))) {
-                days.setVisibility(View.GONE);
-            } else {
 
-                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), durationTitleTextView);
-                days.setTypeface(null,Typeface.BOLD);
-                days.setText(duration);
-            }
+            FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), durationTitleTextView);
+            durationTitleTextView.setTypeface(null, Typeface.BOLD);
+            days.setText(duration);
 
-            if (difficulty_level.matches("") || difficulty_level.matches(languagePreference.getTextofLanguage(DIFFICULTY_TITLE, DEFAULT_DIFFICULTY_TITLE))) {
-                difficulty.setVisibility(View.GONE);
-            } else {
 
-                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), diffcultyTitleTextView);
-                difficulty.setTypeface(null,Typeface.BOLD);
-                difficulty.setText(difficulty_level);
-            }
+            FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), diffcultyTitleTextView);
+            diffcultyTitleTextView.setTypeface(null, Typeface.BOLD);
+            difficulty.setText(difficulty_level);
+
+            Util.favorite_clicked=false;
+
 
 
             /***favorite *****/
@@ -872,6 +876,11 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
                 pDialog.hide();
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /*****************
