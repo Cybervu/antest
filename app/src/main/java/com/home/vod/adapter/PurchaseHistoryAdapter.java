@@ -46,48 +46,44 @@ public class PurchaseHistoryAdapter extends RecyclerView.Adapter<PurchaseHistory
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position){
+    public void onBindViewHolder(ViewHolder holder, int position) {
 
         int POSITION = position;
 
-        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.transactionTitleTextView);
+        FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), holder.transactionTitleTextView);
 /*
         Typeface typeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         holder.transactionTitleTextView.setTypeface(typeface);*/
-        holder.transactionTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_TITLE,DEFAULT_TRANSACTION_TITLE));
-        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.transactionInvoiceTitleTextView);
+        holder.transactionTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_TITLE, DEFAULT_TRANSACTION_TITLE));
+        FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), holder.transactionInvoiceTitleTextView);
 /*
         Typeface typeface1 = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         holder.transactionInvoiceTitleTextView.setTypeface(typeface1);*/
-        holder.transactionInvoiceTitleTextView.setText(languagePreference.getTextofLanguage(INVOICE,DEFAULT_INVOICE)+" :");
-        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.transactionOrderTitleTextView);
+        holder.transactionInvoiceTitleTextView.setText(languagePreference.getTextofLanguage(INVOICE, DEFAULT_INVOICE) + " :");
+        FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), holder.transactionOrderTitleTextView);
 
        /* Typeface typeface2 = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         holder.transactionOrderTitleTextView.setTypeface(typeface2);*/
-        holder.transactionOrderTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_ORDER_ID,DEFAULT_TRANSACTION_ORDER_ID)+" :");
-        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.transactionPurchaseDateTitleTextView);
+        holder.transactionOrderTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_ORDER_ID, DEFAULT_TRANSACTION_ORDER_ID) + " :");
+        FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), holder.transactionPurchaseDateTitleTextView);
 
        /* Typeface typeface3 = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         holder.transactionPurchaseDateTitleTextView.setTypeface(typeface3);*/
-        holder.transactionPurchaseDateTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_DETAIL_PURCHASE_DATE,DEFAULT_TRANSACTION_DETAIL_PURCHASE_DATE)+" :");
+        holder.transactionPurchaseDateTitleTextView.setText(languagePreference.getTextofLanguage(TRANSACTION_DETAIL_PURCHASE_DATE, DEFAULT_TRANSACTION_DETAIL_PURCHASE_DATE) + " :");
 
-        if((purchaseData.get(position).getTransctionActiveInactive().contains("Active")) ||(purchaseData.get(position).getTransctionActiveInactive().contains("active")))
-        {
-            holder.activeAlertTextView.setTextColor(Color.parseColor("#197b30"));
-            holder.activeAlertTextView.setText(purchaseData.get(position).getTransctionActiveInactive());
-        }
-        else
-        {
-            if(purchaseData.get(position).getTransctionActiveInactive().contains("N/A"))
-            {
-                holder.activeAlertTextView.setText("Expired");
-            }
-            else
-            {
+        if(purchaseData.get(position).getTransctionActiveInactive()!=null){
+            if ((purchaseData.get(position).getTransctionActiveInactive().contains("Active")) || (purchaseData.get(position).getTransctionActiveInactive().contains("active"))) {
+                holder.activeAlertTextView.setTextColor(Color.parseColor("#197b30"));
                 holder.activeAlertTextView.setText(purchaseData.get(position).getTransctionActiveInactive());
-            }
+            } else {
+                if (purchaseData.get(position).getTransctionActiveInactive().contains("N/A")) {
+                    holder.activeAlertTextView.setText("Expired");
+                } else {
+                    holder.activeAlertTextView.setText(purchaseData.get(position).getTransctionActiveInactive());
+                }
 
-            holder.activeAlertTextView.setTextColor(Color.parseColor("#737373"));
+                holder.activeAlertTextView.setTextColor(Color.parseColor("#737373"));
+            }
         }
 
         FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),holder.transactionInvoicetextView);
