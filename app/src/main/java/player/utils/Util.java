@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.home.vod.BuildConfig;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -141,8 +143,8 @@ public class Util {
     //   public static final String authTokenStr = "e8ae05a2ef3fd0c6688952c8f7557823"; //vishwam.tv
 //    public static final String authTokenStr = "4d4fe07c6d8c8317ab45e6b1a2dff08a"; //monica studio
   // public static final String authTokenStr = "4298851905443517c9f161e6b0471969"; //classic demo
-    //public static final String authTokenStr = "a010d1cef24104ca628a54e3246a8e43";
-    public static final String authTokenStr = "25e74a5c88d19c4b57c8138bf47abdf7";//mymob
+    public static final String authTokenStr = "0c2236eee851357d1fecc01fbba128c5";
+   // public static final String authTokenStr = "25e74a5c88d19c4b57c8138bf47abdf7";//mymob
 
     public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
     public static  boolean Call_API_For_Close_Streming = false;
@@ -170,9 +172,9 @@ public class Util {
 
 
     public static String rootUrl(){
-        //String rootUrl = "https://sonydadc.muvi.com/rest/";
+        String rootUrl = BuildConfig.SERVICE_BASE_PATH;
 //        String rootUrl = "http://muvistudio.edocent.com/rest/";
-        String rootUrl = "http://www.muvi.com/rest/";
+       // String rootUrl = "http://www.muvi.com/rest/";
         //String rootUrl = "https://www.idogic.com/rest/";
         return rootUrl;
 

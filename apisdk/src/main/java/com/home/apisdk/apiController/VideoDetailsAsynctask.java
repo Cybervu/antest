@@ -163,7 +163,11 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                     _video_details_output.setVideoResolution(myJson.optString("videoResolution"));
                     _video_details_output.setVideoUrl(myJson.optString("videoUrl"));
                     _video_details_output.setEmed_url(myJson.optString("emed_url"));
-                    _video_details_output.setPlayed_length(myJson.optString("played_length"));
+                    if ((myJson.has("played_length")) && myJson.getString("played_length").trim() != null && !myJson.getString("played_length").trim().isEmpty() && !myJson.getString("played_length").trim().equals("null") && !myJson.getString("played_length").trim().matches("")) {
+                        _video_details_output.setPlayed_length(myJson.optString("played_length"));
+                    } else {
+                        _video_details_output.setPlayed_length("0");
+                    }
                     _video_details_output.setThirdparty_url(myJson.optString("thirdparty_url"));
                     _video_details_output.setStudio_approved_url(myJson.optString("studio_approved_url"));
                     _video_details_output.setLicenseUrl(myJson.optString("licenseUrl"));

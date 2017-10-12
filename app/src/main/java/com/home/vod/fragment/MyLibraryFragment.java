@@ -30,6 +30,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -390,7 +391,33 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.mylibrary_videos, container, false);
+
         context = getActivity();
+        rootView.setFocusableInTouchMode(true);
+        rootView.requestFocus();
+        rootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+                        final Intent startIntent = new Intent(getActivity(), MainActivity.class);
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                getActivity().startActivity(startIntent);
+
+                                getActivity().finish();
+
+                            }
+                        });
+                    }
+                }
+                return false;
+            }
+        });
         //for search for each activity
         setHasOptionsMenu(true);
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
