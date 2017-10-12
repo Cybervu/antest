@@ -336,4 +336,7 @@
     <dimen name="diet_close_button_width">40dp</dimen>
 
 
+
+    <dimen name="start_program_button">50dp</dimen>
+    <dimen name="programme_duration_padding_left">50dp</dimen>
 </resources>

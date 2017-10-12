@@ -89,7 +89,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     ArrayList<EpisodesListModel> itemData;
     int isFreeContent = 0, isPPV, isConverted, contentTypesId, isAPV;
     PreferenceManager preferenceManager;
-    RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout;
+    RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout,logo_image;
     RecyclerView seasontiveLayout;
     RecyclerView.LayoutManager mLayoutManager;
     Toolbar mActionBarToolbar;
@@ -247,6 +247,8 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
         progressBarHandler = new ProgressBarHandler(ProgramDetailsActivity.this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        logo_image = (RelativeLayout) findViewById(R.id.logo_image);
+        logo_image.bringToFront();
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));

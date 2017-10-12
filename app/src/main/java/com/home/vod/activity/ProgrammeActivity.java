@@ -9,7 +9,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -120,11 +119,12 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     ImageView bannerImageView, playButton, moviePoster, share;
     Button startProgramButton, dietPlanButton;
     ProgressBarHandler pDialog;
-    RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout;
+    RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout,image_logo;
     LinearLayout story_layout;
     String movieUniqueId = "";
     String movieTrailerUrlStr, isEpisode = "";
-    String duration;
+    String duration="";
+    String videoduration = "";
     String[] season;
     String name;
     String difficulty_level;
@@ -336,6 +336,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         favorite_view_episode = (ImageView) findViewById(R.id.favoriteImageView);
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
         share = (ImageView) findViewById(R.id.share);
+        image_logo = (RelativeLayout) findViewById(R.id.logo_image);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
 
         playButton.setVisibility(View.GONE);
@@ -358,6 +359,8 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         isEpisode = dbModel.getEpisode_id();
         lineTextview.setVisibility(View.GONE);
 
+
+        image_logo.bringToFront();
 
         startProgramButton.setOnClickListener(new View.OnClickListener() {
 

@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -86,6 +87,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 public class SeasonActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, GetIpAddressAsynTask.IpAddressListener {
 
     RecyclerView seasonGridView;
+    RelativeLayout image_logo;
     ArrayList<SeasonModel> season;
     SeasonAdapter adapter;
     GetContentDetailsAsynTask asynLoadSeason;
@@ -267,6 +269,8 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
 
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
         useridStr = preferenceManager.getUseridFromPref();
+        image_logo = (RelativeLayout) findViewById(R.id.logo_image);
+        image_logo.bringToFront();
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

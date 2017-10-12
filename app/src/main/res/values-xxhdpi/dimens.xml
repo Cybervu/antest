@@ -103,4 +103,7 @@
     <dimen name="toastmsg_padding">10dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
 
+
+
+
 </resources>
