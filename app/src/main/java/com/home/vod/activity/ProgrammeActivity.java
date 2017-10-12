@@ -124,7 +124,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     LinearLayout story_layout;
     String movieUniqueId = "";
     String movieTrailerUrlStr, isEpisode = "";
-    String duration;
+    String duration="";
     String videoduration = "";
     String name;
     String difficulty_level;
