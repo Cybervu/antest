@@ -18,16 +18,21 @@ repositories {
 android {
     flavorDimensions 'environment', 'vendor'
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.home.vod"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_7
+            targetCompatibility JavaVersion.VERSION_1_7
+    }
+
     buildTypes {
         release {
             minifyEnabled false

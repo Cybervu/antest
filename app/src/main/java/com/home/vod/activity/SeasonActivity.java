@@ -267,8 +267,8 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
 
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
         useridStr = preferenceManager.getUseridFromPref();
-//        image_logo = (RelativeLayout) findViewById(R.id.logo_image);
-//        image_logo.bringToFront();
+        image_logo = (RelativeLayout) findViewById(R.id.logo_image);
+        image_logo.bringToFront();
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

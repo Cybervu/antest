@@ -1,7 +1,6 @@
 package com.home.vod.activity;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +9,8 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,7 +27,6 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 import android.widget.VideoView;
 
 import com.androidquery.AQuery;
@@ -112,7 +112,7 @@ import static player.utils.Util.HAS_FAVORITE;
  * @author Abhishek
  */
 
-public class ProgrammeActivity extends Activity implements GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,
+public class ProgrammeActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,
         GetIpAddressAsynTask.IpAddressListener, GetLanguageListAsynTask.GetLanguageListListener {
 
     TextView detailsTextView, videoStoryTextView, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days;
