@@ -337,6 +337,8 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         share = (ImageView) findViewById(R.id.share);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
 
+        playButton.setVisibility(View.GONE);
+
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
