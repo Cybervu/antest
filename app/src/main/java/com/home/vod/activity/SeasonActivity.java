@@ -75,6 +75,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGU
 import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
+import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 
 /**
@@ -113,6 +114,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
     private TextView mStartText;
     private TextView mEndText;
     private SeekBar mSeekbar;
+    String season_value = "";
     private ImageView mPlayPause;
     private ProgressBar mLoading;
     private View mControllers;
@@ -521,6 +523,8 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
             status = 0;
         }
         if (status == 200) {
+
+
             if (season != null && season.size() > 0) {
                 season.clear();
             }
@@ -529,7 +533,10 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
             if (contentDetailsOutput.getSeason() != null) {
                 for (int j = 0; j < contentDetailsOutput.getSeason().length; j++) {
                     season.add(new SeasonModel(String.valueOf(contentDetailsOutput.getSeason()[j]), imageArr[j], languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + contentDetailsOutput.getSeason()[j]));
+
+
                 }
+
 
                 adapter = new SeasonAdapter(SeasonActivity.this, R.layout.season_card_row, season, new SeasonAdapter.OnItemClickListener() {
                     @Override
@@ -545,11 +552,14 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
                 seasonGridView.setVisibility(View.GONE);
             }
         }
+
+
     }
 
     public void clickItem(SeasonModel item) {
 
         Intent in = new Intent(SeasonActivity.this, ProgramDetailsActivity.class);
+        in.putExtra(SEASON_INTENT_KEY, item.getSeasonId());
         in.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
         startActivity(in);
     }

@@ -81,6 +81,7 @@
                     android:id="@+id/detailsTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAllCaps="true"
                     android:layout_marginLeft="@dimen/story_margin_left"
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/story_title_text_size"
@@ -203,6 +204,7 @@
                 <TextView
                     android:layout_width="@dimen/weight_width"
                     android:layout_height="@dimen/weight_height"
+                    android:id="@+id/lineTextview"
                     android:background="@color/disableTextColor"
                     android:textSize="1dp" />
 
@@ -252,7 +254,6 @@
                     android:id="@+id/benefitsTitleTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Benefits"
                     android:textSize="@dimen/story_title_text_size"
                     android:textColor="@color/videotextColor"
                     android:textStyle="bold" />

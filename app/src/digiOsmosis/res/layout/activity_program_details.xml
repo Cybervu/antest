@@ -167,6 +167,7 @@
                     android:textColor="@color/videotextColor"
                     android:text="14 Days"
                     android:textSize="@dimen/duration" />
+                    android:textSize="12dp" />
 
             </LinearLayout>
 
@@ -194,15 +195,14 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/viewAllTextView"
+                    android:id="@+id/viewAllTextView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="View More>>"
                     android:layout_alignParentEnd="true"
-                    android:clickable="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:text="View All"
                     android:textColor="@color/button_background"
                     android:textSize="@dimen/story_title_text_size" />
 

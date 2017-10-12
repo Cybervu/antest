@@ -2,7 +2,6 @@ package com.home.vod.activity;
 
 /**
  * Created by MUVI on 10/10/2017.
- *
  */
 
 import android.content.Intent;
@@ -66,18 +65,21 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAIL_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DURATION_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_ALL;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TUTORIAL_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DETAIL_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.DURATION_TITLE;
+import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.VIEW_ALL;
-import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.TUTORIAL_TITLE;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
+import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class ProgramDetailsActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener,GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener,GetIpAddressAsynTask.IpAddressListener{
+public class ProgramDetailsActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener, GetIpAddressAsynTask.IpAddressListener {
 
     ImageView bannerImageView, playButton, share;
     TextView detailsTextView, durationTitleTextView, durationTextView, tutorialTextView, viewAllTextView;
@@ -93,6 +95,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     Toolbar mActionBarToolbar;
     String episodeVideoUrlStr;
     String email, id;
+
     EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -102,7 +105,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     String permalinkStr;
     String useridStr;
     String ipAddres;
-    String bannerImageId,posterImageId,duration;
+    String bannerImageId, posterImageId, duration;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     LanguagePreference languagePreference;
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
@@ -237,7 +240,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         durationTitleTextView = (TextView) findViewById(R.id.durationTitleTextView);
         durationTextView = (TextView) findViewById(R.id.durationTextView);
         tutorialTextView = (TextView) findViewById(R.id.tutorialTextView);
-        viewAllTextView = (TextView) findViewById(R.id.viewAllTextView);
+        viewAllTextView = (TextView) findViewById(R.id.viewAllTextView2);
         seasontiveLayout = (RecyclerView) findViewById(R.id.featureContent);
         share = (ImageView) findViewById(R.id.share);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -250,6 +253,10 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        detailsTextView.setText(languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + getIntent().getStringExtra(SEASON_INTENT_KEY));
+
+        viewAllTextView.setVisibility(View.GONE);
+
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -259,7 +266,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         });
         mLayoutManager = new LinearLayoutManager(ProgramDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
 
-        viewAllTextView.setText(languagePreference.getTextofLanguage(VIEW_ALL, DEFAULT_VIEW_ALL));
+
 
 
         /*chromecast-------------------------------------*/
@@ -337,6 +344,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             public void onClick(View v) {
                 final Intent episode = new Intent(ProgramDetailsActivity.this, Tutorial_List_Activity.class);
                 episode.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
+                episode.putExtra(SEASON_INTENT_KEY, getIntent().getStringExtra(SEASON_INTENT_KEY));
                 startActivity(episode);
             }
         });
@@ -344,7 +352,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         dietPlanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(ProgramDetailsActivity.this,DietPlanActivity.class);
+                Intent intent = new Intent(ProgramDetailsActivity.this, DietPlanActivity.class);
                 startActivity(intent);
             }
         });
@@ -377,12 +385,14 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         }
 /*chromecast-------------------------------------*/
 
-        Episode_Details_input episode_details_input=new Episode_Details_input();
+        Episode_Details_input episode_details_input = new Episode_Details_input();
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
         episode_details_input.setAuthtoken(authTokenStr);
         episode_details_input.setPermalink(permalinkStr);
-        episode_details_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-        GetEpisodeDeatailsAsynTask getEpisodeDeatailsAsynTask=new GetEpisodeDeatailsAsynTask(episode_details_input,this,this);
+        episode_details_input.setSeries_number(getIntent().getStringExtra(SEASON_INTENT_KEY));
+
+        episode_details_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        GetEpisodeDeatailsAsynTask getEpisodeDeatailsAsynTask = new GetEpisodeDeatailsAsynTask(episode_details_input, this, this);
         getEpisodeDeatailsAsynTask.executeOnExecutor(threadPoolExecutor);
 
         share.setOnClickListener(new View.OnClickListener() {
@@ -395,7 +405,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         dietPlanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProgramDetailsActivity.this,DietPlanActivity.class);
+                Intent intent = new Intent(ProgramDetailsActivity.this, DietPlanActivity.class);
                 startActivity(intent);
             }
         });
@@ -546,16 +556,22 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         if (status == 200) {
 
             bannerImageId = contentDetailsOutput.getBanner();
-            posterImageId=contentDetailsOutput.getPoster();
+            posterImageId = contentDetailsOutput.getPoster();
             duration = contentDetailsOutput.getDuration();
 
-
+           // viewAllTextView.setText(languagePreference.getTextofLanguage(DETAIL_VIEW_MORE,DEFAULT_DETAIL_VIEW_MORE));
+            viewAllTextView.setVisibility(View.VISIBLE);
+            tutorialTextView.setText(languagePreference.getTextofLanguage(TUTORIAL_TITLE,DEFAULT_TUTORIAL_TITLE));
             durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
 
-            FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.light_fonts), durationTitleTextView);
-            durationTitleTextView.setTypeface(null, Typeface.BOLD);
-            durationTextView.setText(duration);
+            if (duration.matches("")) {
+                durationTitleTextView.setVisibility(View.GONE);
+            } else {
 
+                FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.light_fonts), durationTitleTextView);
+                durationTitleTextView.setTypeface(null, Typeface.BOLD);
+                durationTextView.setText(duration);
+            }
 
             if (TextUtils.isEmpty(bannerImageId)) {
 
@@ -607,7 +623,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
         }
 
-        }
+    }
 
     @Override
     public void onGetEpisodeDetailsPreExecuteStarted() {

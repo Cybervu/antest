@@ -115,7 +115,7 @@ import static player.utils.Util.HAS_FAVORITE;
 public class ProgrammeActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,
         GetIpAddressAsynTask.IpAddressListener, GetLanguageListAsynTask.GetLanguageListListener {
 
-    TextView detailsTextView, videoStoryTextView, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days;
+    TextView detailsTextView, videoStoryTextView, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days, lineTextview;
     ImageView bannerImageView, playButton, moviePoster, share;
     Button startProgramButton, dietPlanButton;
     ProgressBarHandler pDialog;
@@ -125,13 +125,14 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
     String movieTrailerUrlStr, isEpisode = "";
     String duration="";
     String videoduration = "";
+    String[] season;
     String name;
     String difficulty_level;
     String repetition;
     String email, id;
     String ipAddres = "";
     String movieDetailsStr = "";
-    String story;
+    String benefits;
     String useridStr;
     GetContentDetailsAsynTask asynLoadMovieDetails;
     String movieReleaseDateStr = "";
@@ -323,6 +324,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         playButton = (ImageView) findViewById(R.id.playButton);
         detailsTextView = (TextView) findViewById(R.id.detailsTextView);
         difficulty = (TextView) findViewById(R.id.difficulty);
+        lineTextview = (TextView) findViewById(R.id.lineTextview);
         days = (TextView) findViewById(R.id.days);
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         benefitsTitleTextView = (TextView) findViewById(R.id.benefitsTitleTextView);
@@ -336,6 +338,9 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         share = (ImageView) findViewById(R.id.share);
         image_logo = (RelativeLayout) findViewById(R.id.logo_image);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
+
+        playButton.setVisibility(View.GONE);
+        lineTextview.setVisibility(View.GONE);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
@@ -352,6 +357,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         DataModel dbModel = new DataModel();
         movieUniqueId = dbModel.getMovieUniqueId();
         isEpisode = dbModel.getEpisode_id();
+        lineTextview.setVisibility(View.GONE);
 
 
         image_logo.bringToFront();
@@ -370,7 +376,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         dietPlanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(ProgrammeActivity.this,DietPlanActivity.class);
+                Intent intent = new Intent(ProgrammeActivity.this, DietPlanActivity.class);
                 startActivity(intent);
             }
         });
@@ -378,7 +384,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         dietPlanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProgrammeActivity.this,DietPlanActivity.class);
+                Intent intent = new Intent(ProgrammeActivity.this, DietPlanActivity.class);
                 startActivity(intent);
             }
         });
@@ -663,6 +669,9 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
 
         if (status == 200) {
 
+            movieUniqueId = contentDetailsOutput.getMuviUniqId();
+            benefits = contentDetailsOutput.getBenefit();
+            season = contentDetailsOutput.getSeason();
             movieDetailsStr = contentDetailsOutput.getStory();
             _permalink = contentDetailsOutput.getPermalink();
             isFavorite = contentDetailsOutput.getIs_favorite();
@@ -673,8 +682,22 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
             difficulty_level = contentDetailsOutput.getDifficulty_level();
             name = contentDetailsOutput.getName();
 
+            lineTextview.setVisibility(View.VISIBLE);
 
-            if (name.matches("") || name.matches(languagePreference.getTextofLanguage(DETAILS_TITLE, DEFAULT_DETAILS_TITLE))) {
+            benefitsTitleTextView.setText(languagePreference.getTextofLanguage(BENEFIT_TITLE, DEFAULT_BENEFIT_TITLE));
+            durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
+            diffcultyTitleTextView.setText(languagePreference.getTextofLanguage(DIFFICULTY_TITLE, DEFAULT_DIFFICULTY_TITLE));
+
+
+            if (benefits.matches("") || benefits.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
+                benefitsTitleTextView.setVisibility(View.GONE);
+            } else {
+                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), detailsTextView);
+                benefitsTitleTextView.setTypeface(null, Typeface.BOLD);
+                benefitsStoryTextView.setText(benefits.trim());
+            }
+
+            if (name.matches("") || name.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                 detailsTextView.setVisibility(View.GONE);
             } else {
 
@@ -683,23 +706,38 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
                 detailsTextView.setTypeface(null, Typeface.BOLD);
                 detailsTextView.setText(name);
             }
+            if (season != null && season.length > 0) {
+                startProgramButton.setVisibility(View.VISIBLE);
+            } else {
+                startProgramButton.setVisibility(View.GONE);
+            }
+            if (duration.matches("")) {
+                durationTitleTextView.setVisibility(View.GONE);
+                lineTextview.setVisibility(View.GONE);
 
-            benefitsTitleTextView.setText(languagePreference.getTextofLanguage(BENEFIT_TITLE, DEFAULT_BENEFIT_TITLE));
-            durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
-            diffcultyTitleTextView.setText(languagePreference.getTextofLanguage(DIFFICULTY_TITLE, DEFAULT_DIFFICULTY_TITLE));
+            } else {
 
+                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), durationTitleTextView);
+                durationTitleTextView.setTypeface(null, Typeface.BOLD);
+                days.setText(duration);
+            }
+            if (difficulty_level.matches("")) {
+                diffcultyTitleTextView.setVisibility(View.GONE);
+                lineTextview.setVisibility(View.GONE);
+            } else {
+                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), diffcultyTitleTextView);
+                diffcultyTitleTextView.setTypeface(null, Typeface.BOLD);
+                difficulty.setText(difficulty_level);
+            }
 
-            FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), durationTitleTextView);
-            durationTitleTextView.setTypeface(null, Typeface.BOLD);
-            days.setText(duration);
-
-
-            FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), diffcultyTitleTextView);
-            diffcultyTitleTextView.setTypeface(null, Typeface.BOLD);
-            difficulty.setText(difficulty_level);
-
-            Util.favorite_clicked=false;
-
+            if (difficulty_level.matches("") && duration != null) {
+                lineTextview.setVisibility(View.GONE);
+                days.setGravity(Gravity.CENTER);
+            } else if (duration.matches("") && difficulty_level != null) {
+                lineTextview.setVisibility(View.GONE);
+                difficulty.setGravity(Gravity.CENTER);
+            }
+            Util.favorite_clicked = false;
 
 
             /***favorite *****/
