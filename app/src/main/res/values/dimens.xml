@@ -356,7 +356,6 @@
     <dimen name="button_textsize">13sp</dimen>
 
 
-
     <dimen name="episode_card_margin">14dp</dimen>
     <dimen name="card_radius">4dp</dimen>
     <dimen name="season_image_height">200dp</dimen>

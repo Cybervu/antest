@@ -2,13 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.home.vod">
 
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
 
     <!-- Permission to use camera - required -->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -36,7 +35,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
-
         <activity
             android:name=".activity.SplashScreen"
             android:configChanges="orientation|screenSize"
@@ -60,16 +58,15 @@
             android:name=".activity.SearchActivity"
             android:label=""
             android:screenOrientation="portrait" />
-        <activity android:name="player.activity.ExoPlayerActivity"
+        <activity
+            android:name="player.activity.ExoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"
-            />
-
-        <activity android:name=".activity.MyDownloads"
-            android:screenOrientation="portrait"
-            />
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".activity.MyDownloads"
+            android:screenOrientation="portrait" />
         <activity
             android:name="player.activity.ThirdPartyPlayer"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -84,28 +81,26 @@
         <service
             android:name="player.activity.DataConsumptionService"
             android:enabled="true"
-            android:exported="true"></service>
-
+            android:exported="true" />
         <service
             android:name="player.service.PopUpService"
             android:enabled="true"
             android:exported="true" />
+
         <activity
             android:name="player.activity.Subtitle_Resolution"
             android:configChanges="screenSize|orientation"
             android:label=""
             android:screenOrientation="sensor"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name="player.activity.SubtitleList"
             android:configChanges="screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name="player.activity.ResolutionChangeActivity"
             android:configChanges="screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name="player.activity.ResumePopupActivity"
             android:configChanges="screenSize|orientation"
@@ -137,7 +132,7 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity android:name=".activity.PaymentInfoActivity" />
-        <activity android:name=".activity.PPvPaymentInfoActivity"/>
+        <activity android:name=".activity.PPvPaymentInfoActivity" />
         <activity
             android:name=".activity.LoginActivity"
             android:label=""
@@ -150,22 +145,20 @@
             android:name=".activity.CastAndCrewActivity"
             android:label=""
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.FilterActivity"
+        <activity
+            android:name=".activity.FilterActivity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MarlinBroadbandExample"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
-
-
         <activity
             android:name=".activity.TrailerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-
         <activity xmlns:tools="http://schemas.android.com/tools"
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -188,7 +181,7 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <!--chromecast-->
+        <!-- chromecast -->
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
             android:value="com.home.vod.CastOptionsProvider" />
@@ -217,13 +210,11 @@
             </intent-filter>
         </activity>
 
-
         <service android:name=".FCM_Support.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name=".FCM_Support.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -239,24 +230,20 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity android:name=".activity.SubscriptionActivity" />
-
         <activity
             android:name="player.activity.MyLibraryPlayer"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name="player.activity.AdPlayerActivity"
             android:label=""
             android:screenOrientation="portrait" />
-
         <activity
             android:name="player.activity.MyActivity"
             android:label=""
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.MyLibraryResumePopupActivity"
             android:configChanges="screenSize|orientation"
@@ -267,8 +254,6 @@
             android:name=".activity.ManageDevices"
             android:label=""
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".activity.CastCrewDetailsActivity"
             android:label=""
@@ -286,6 +271,8 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="5ade002b6ada291c993af0c4732c69e8034b9e3e" />
+
+        <activity android:name=".activity.ProgramPlayerActivity"></activity>
     </application>
 
 </manifest>
