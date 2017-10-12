@@ -95,6 +95,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     Toolbar mActionBarToolbar;
     String episodeVideoUrlStr;
     String email, id;
+
     EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
