@@ -254,7 +254,6 @@
                     android:id="@+id/benefitsTitleTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Benefits"
                     android:textSize="@dimen/story_title_text_size"
                     android:textColor="@color/videotextColor"
                     android:textStyle="bold" />
