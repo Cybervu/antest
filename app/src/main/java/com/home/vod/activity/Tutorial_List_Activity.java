@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
@@ -31,6 +32,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,7 +40,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -224,26 +229,30 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
     VideoDetailsAsynctask asynLoadVideoUrls;
     GetEpisodeDeatailsAsynTask asynEpisodeDetails;
     GetValidateUserAsynTask asynValidateUserDetails;
+    int videoHeight = 185;
+    int videoWidth = 256;
     EpisodesListModel itemToPlay;
     String permalinkStr;
     ArrayList<EpisodesListModel> itemData = new ArrayList<EpisodesListModel>();
     LinearLayoutManager mLayoutManager;
     boolean firstTime = false;
     private Tutorial_List_Adapter customListAdapter;
+    private int mLastFirstVisibleItem;
+    private boolean mIsScrollingUp;
     public static boolean isLoading = false;
     private String movieVideoUrlStr = "";
     private String videoResolution = "";
 
     private final String KEY_RECYCLER_STATE = "recycler_state";
     private static Bundle mBundleRecyclerViewState;
-    RecyclerView episodelist;
+    GridView episodelist;
     private RelativeLayout noInternetConnectionLayout;
     RelativeLayout noDataLayout;
     TextView noDataTextView;
     TextView noInternetTextView;
     SharedPreferences isLoginPref;
     Player playerModel;
-
+    boolean scrolling;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     int keepAliveTime = 10;
@@ -1238,14 +1247,14 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.episode_listing);
+        setContentView(R.layout.activity_tutorial_list);
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         isLogin = preferenceManager.getLoginFeatureFromPref();
         playerModel = new Player();
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
-        episodeListOptionMenuHandler=new EpisodeListOptionMenuHandler(this);
+        episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
        /* mCastStateListener = new CastStateListener() {
             @Override
             public void onCastStateChanged(int newState) {
@@ -1283,7 +1292,7 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
         FontUtls.loadFont(Tutorial_List_Activity.this, getResources().getString(R.string.regular_fonts), sectionTitle);
         sectionTitle.setText(languagePreference.getTextofLanguage(EPISODE_TITLE, DEFAULT_EPISODE_TITLE));
 
-        episodelist = (RecyclerView) findViewById(R.id.episodelist);
+        episodelist = (GridView) findViewById(R.id.episodelist);
         noInternetConnectionLayout = (RelativeLayout) findViewById(R.id.noInternet);
         noDataLayout = (RelativeLayout) findViewById(R.id.noData);
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
@@ -1304,7 +1313,10 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
         currencymodel = new CurrencyModel();
         PlanId = (languagePreference.getTextofLanguage(PLAN_ID, DEFAULT_PLAN_ID)).trim();
 
+
         resetData();
+
+        episodelist.setVisibility(View.VISIBLE);
 
         boolean isNetwork = NetworkStatus.getInstance().isConnected(Tutorial_List_Activity.this);
         if (isNetwork) {
@@ -1342,59 +1354,141 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
         } else {
             noInternetConnectionLayout.setVisibility(View.VISIBLE);
         }
-
-        episodelist.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        // episodelist.setAdapter(customListAdapter);
+        episodelist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String loggedInStr = preferenceManager.getLoginStatusFromPref();
+                if (isLogin == 1) {
+                    if (loggedInStr != null) {
+                        if (NetworkStatus.getInstance().isConnected(Tutorial_List_Activity.this)) {
+
+                            ValidateUserInput validateUserInput = new ValidateUserInput();
+                            validateUserInput.setAuthToken(authTokenStr);
+                            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
+                            validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
+                            validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
+                            validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
+                            validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
+                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, Tutorial_List_Activity.this, Tutorial_List_Activity.this);
+                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                        } else {
+                            Util.showToast(Tutorial_List_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+                        }
+                    } else {
+
+                        final Intent register = new Intent(Tutorial_List_Activity.this, RegisterActivity.class);
+
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                Util.check_for_subscription = 1;
+                                register.putExtra("PlayerModel", playerModel);
+                                startActivity(register);
+
+
+                            }
+                        });
+                    }
+                } else if (NetworkStatus.getInstance().isConnected(Tutorial_List_Activity.this)) {
+                    // MUVIlaxmi
+
+                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, Tutorial_List_Activity.this, Tutorial_List_Activity.this);
+                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+
+                } else {
+                    Util.showToast(Tutorial_List_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+
+                    //Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
+        episodelist.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                if (episodelist.getLastVisiblePosition() >= itemsInServer - 1) {
+                    footerView.setVisibility(View.GONE);
+                    return;
+
+                }
+
+                if (view.getId() == episodelist.getId()) {
+                    final int currentFirstVisibleItem = episodelist.getFirstVisiblePosition();
+
+                    if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+                        mIsScrollingUp = false;
+
+                    } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+                        mIsScrollingUp = true;
+
+                    }
+
+                    mLastFirstVisibleItem = currentFirstVisibleItem;
+                }
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    scrolling = false;
+
+                } else if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+
+                    scrolling = true;
+
+                }
             }
 
-
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
+                if (scrolling == true && mIsScrollingUp == false) {
 
-                int visibleItemCount = recyclerView.getChildCount();
-                int totalItemCount = mLayoutManager.getItemCount();
-                int firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
+                    if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
-                if (isLoading) {
-                    if (totalItemCount > previousTotal) {
-                        isLoading = false;
-                        previousTotal = totalItemCount;
-                    }
-                }
-                if (!isLoading && (totalItemCount - visibleItemCount)
-                        <= (firstVisibleItem)) {
-                    // End has been reached
-                    listSize = itemData.size();
-                    if (mLayoutManager.findLastVisibleItemPosition() >= itemsInServer - 1) {
-                        isLoading = true;
-                        footerView.setVisibility(View.GONE);
-                        return;
+                        listSize = itemData.size();
+                        if (episodelist.getLastVisiblePosition() >= itemsInServer - 1) {
+                            return;
 
-                    }
-                    offset += 1;
-                    if (NetworkStatus.getInstance().isConnected(Tutorial_List_Activity.this)) {
-                        // default data
-                        Episode_Details_input episodeDetailsInput = new Episode_Details_input();
-                        episodeDetailsInput.setAuthtoken(authTokenStr);
-                        episodeDetailsInput.setPermalink(permalinkStr);
-                        episodeDetailsInput.setSeries_number(getIntent().getStringExtra(SEASON_INTENT_KEY));
-                        episodeDetailsInput.setLimit(String.valueOf(limit));
-                        episodeDetailsInput.setOffset(String.valueOf(offset));
-                        episodeDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-                        episodeDetailsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        }
+                        offset += 1;
+                        if (NetworkStatus.getInstance().isConnected(Tutorial_List_Activity.this)) {
+                            scrolling = false;
 
+                        }
 
-                        asynEpisodeDetails = new GetEpisodeDeatailsAsynTask(episodeDetailsInput, Tutorial_List_Activity.this, Tutorial_List_Activity.this);
-                        asynEpisodeDetails.executeOnExecutor(threadPoolExecutor);
                     }
 
                 }
 
             }
         });
+
+        //Detect Network Connection
+
+        if (!NetworkStatus.getInstance().isConnected(Tutorial_List_Activity.this)) {
+            noInternetConnectionLayout.setVisibility(View.VISIBLE);
+            noDataLayout.setVisibility(View.GONE);
+            episodelist.setVisibility(View.GONE);
+            footerView.setVisibility(View.GONE);
+        }
+
+        ViewGroup.LayoutParams layoutParams = episodelist.getLayoutParams();
+        layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
+        episodelist.setLayoutParams(layoutParams);
+
+
+        firstTime = true;
+
+
+
 
 /*chromecast-------------------------------------*/
 
@@ -1466,7 +1560,9 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
             }*/
 
 
-        if (shouldStartPlayback) {
+        if (shouldStartPlayback)
+
+        {
             // this will be the case only if we are coming from the
             // CastControllerActivity by disconnecting from a device
             mPlaybackState = PlaybackState.PLAYING;
@@ -1477,7 +1573,9 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
             }
             // mVideoView.start();
             //startControllersTimer();
-        } else {
+        } else
+
+        {
             // we should load the video but pause it
             // and show the album art.
             if (mCastSession != null && mCastSession.isConnected()) {
@@ -2364,91 +2462,135 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
         }
 
         protected void onPostExecute(Void result) {
+            float density = getResources().getDisplayMetrics().density;
 
-
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-
-                noDataLayout.setVisibility(View.VISIBLE);
-                noInternetConnectionLayout.setVisibility(View.GONE);
-                episodelist.setVisibility(View.GONE);
-                footerView.setVisibility(View.GONE);
-            }
-
-            if (footerView != null && listSize >= itemsInServer - 1) {
-                footerView.setVisibility(View.GONE);
-            }
             if (firstTime == true) {
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
 
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    episodelist.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
+                }
+                episodelist.setVisibility(View.VISIBLE);
 
                 episodelist.smoothScrollToPosition(0);
                 firstTime = false;
                 ViewGroup.LayoutParams layoutParams = episodelist.getLayoutParams();
                 layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
                 episodelist.setLayoutParams(layoutParams);
+                episodelist.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
+                episodelist.setGravity(Gravity.CENTER_HORIZONTAL);
+
                 if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
-                    mLayoutManager = new GridLayoutManager(Tutorial_List_Activity.this, 1);
-                    episodelist.setLayoutManager(mLayoutManager);
+                    if (videoWidth > videoHeight) {
+                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                    } else {
+                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                    }
 
                 } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
-                    mLayoutManager = new GridLayoutManager(Tutorial_List_Activity.this, 1);
-                    episodelist.setLayoutManager(mLayoutManager);
+                    if (videoWidth > videoHeight) {
+                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                    } else {
+                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                    }
 
                 } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
 
-                    mLayoutManager = new GridLayoutManager(Tutorial_List_Activity.this, 1);
-                    episodelist.setLayoutManager(mLayoutManager);
+                    episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+
 
                 } else {
-                    mLayoutManager = new GridLayoutManager(Tutorial_List_Activity.this, 1);
-                    episodelist.setLayoutManager(mLayoutManager);
-                }
-                customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.list_card_multipart, itemData, new Tutorial_List_Adapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(EpisodesListModel item) {
-                        clickItem(item);
+                    if (videoWidth > videoHeight) {
+                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                    } else {
+                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 5);
                     }
-                });
-                episodelist.setAdapter(customListAdapter);
+
+                }
+                if (videoWidth > videoHeight) {
+                    if (density >= 3.5 && density <= 4.0) {
+                        customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.nexus_videos_grid_layout_land, itemData);
+                    } else {
+                        customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.videos_grid_layout, itemData);
+
+                    }
+                    episodelist.setAdapter(customListAdapter);
+                } else {
+                    if (density >= 3.5 && density <= 4.0) {
+                        customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.nexus_videos_grid_layout, itemData);
+                    } else {
+                        customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.videos_grid_layout, itemData);
+
+                    }
+                    // customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
+                    episodelist.setAdapter(customListAdapter);
+                }
+
+              /*  if (videoWidth > videoHeight) {
+                    customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_280_grid_layout, itemData);
+                    gridView.setAdapter(customGridAdapter);
+                } else {
+                    customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_grid_layout, itemData);
+                    gridView.setAdapter(customGridAdapter);
+                }*/
+
 
             } else {
                 // save RecyclerView state
                 mBundleRecyclerViewState = new Bundle();
-                Parcelable listState = episodelist.getLayoutManager().onSaveInstanceState();
+                Parcelable listState = episodelist.onSaveInstanceState();
                 mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
 
 
-                customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.list_card_multipart, itemData, new Tutorial_List_Adapter.OnItemClickListener() {
+              /*  if (videoWidth > videoHeight) {
+                    customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_280_grid_layout, itemData);
+                    gridView.setAdapter(customGridAdapter);
+                } else {
+                    customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_grid_layout, itemData);
+                    gridView.setAdapter(customGridAdapter);
+                }*/
 
-                    @Override
-                    public void onItemClick(EpisodesListModel item) {
-                        clickItem(item);
+                if (videoWidth > videoHeight) {
+                    if (density >= 3.5 && density <= 4.0) {
+                        customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.nexus_videos_grid_layout_land, itemData);
+                    } else {
+                        customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.videos_280_grid_layout, itemData);
+
                     }
-                });
-                episodelist.setAdapter(customListAdapter);
+                    episodelist.setAdapter(customListAdapter);
+                } else {
+                    if (density >= 3.5 && density <= 4.0) {
+                        customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.nexus_videos_grid_layout, itemData);
+                    } else {
+                        customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.videos_grid_layout, itemData);
 
+                    }
+                    episodelist.setAdapter(customListAdapter);
+                }
 
                 if (mBundleRecyclerViewState != null) {
-                    episodelist.getLayoutManager().onRestoreInstanceState(listState);
+                    episodelist.onRestoreInstanceState(listState);
                 }
-            }
 
+            }
         }
 
 
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         // save RecyclerView state
         mBundleRecyclerViewState = new Bundle();
-        Parcelable listState = episodelist.getLayoutManager().onSaveInstanceState();
+        Parcelable listState = episodelist.onSaveInstanceState();
         mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
     }
 
@@ -2764,7 +2906,7 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
 
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu,preferenceManager,languagePreference);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
 
         return true;
     }

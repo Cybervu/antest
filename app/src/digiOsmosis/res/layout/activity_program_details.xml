@@ -153,7 +153,6 @@
                     android:id="@+id/durationTitleTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DURATION"
                     android:textColor="@color/nav_lineColor"
                     android:textSize="15dp"
                     android:textStyle="bold" />
@@ -163,7 +162,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/videotextColor"
-                    android:text="14 Days"
                     android:textSize="12dp" />
 
             </LinearLayout>
@@ -185,23 +183,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:padding="10dp"
-                    android:text="TUTORIAL"
                     android:textSize="20dp"
                     android:textColor="@color/videotextColor"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/viewAllTextView"
+                    android:id="@+id/viewAllTextView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="View More>>"
                     android:layout_alignParentEnd="true"
-                    android:clickable="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:text="View All"
                     android:textColor="@color/button_background"
-                    android:textSize="18dp" />
+                    android:textSize="15dp" />
 
             </RelativeLayout>
 
