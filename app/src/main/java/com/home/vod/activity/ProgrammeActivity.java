@@ -116,7 +116,7 @@ import static player.utils.Util.HAS_FAVORITE;
 public class ProgrammeActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,
         GetIpAddressAsynTask.IpAddressListener, GetLanguageListAsynTask.GetLanguageListListener {
 
-    TextView detailsTextView, videoStoryTextView, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days;
+    TextView detailsTextView, videoStoryTextView, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days, lineTextview;
     ImageView bannerImageView, playButton, moviePoster, share;
     Button startProgramButton, dietPlanButton;
     ProgressBarHandler pDialog;
@@ -324,6 +324,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         playButton = (ImageView) findViewById(R.id.playButton);
         detailsTextView = (TextView) findViewById(R.id.detailsTextView);
         difficulty = (TextView) findViewById(R.id.difficulty);
+        lineTextview = (TextView) findViewById(R.id.lineTextview);
         days = (TextView) findViewById(R.id.days);
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
         benefitsTitleTextView = (TextView) findViewById(R.id.benefitsTitleTextView);
@@ -338,6 +339,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
 
         playButton.setVisibility(View.GONE);
+        lineTextview.setVisibility(View.GONE);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
@@ -354,6 +356,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         DataModel dbModel = new DataModel();
         movieUniqueId = dbModel.getMovieUniqueId();
         isEpisode = dbModel.getEpisode_id();
+        lineTextview.setVisibility(View.GONE);
 
 
         startProgramButton.setOnClickListener(new View.OnClickListener() {
@@ -662,6 +665,8 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
 
 
         if (status == 200) {
+
+            movieUniqueId = contentDetailsOutput.getMuviUniqId();
             benefits = contentDetailsOutput.getBenefit();
             season = contentDetailsOutput.getSeason();
             movieDetailsStr = contentDetailsOutput.getStory();
@@ -674,15 +679,16 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
             difficulty_level = contentDetailsOutput.getDifficulty_level();
             name = contentDetailsOutput.getName();
 
+            lineTextview.setVisibility(View.VISIBLE);
 
             benefitsTitleTextView.setText(languagePreference.getTextofLanguage(BENEFIT_TITLE, DEFAULT_BENEFIT_TITLE));
             durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
             diffcultyTitleTextView.setText(languagePreference.getTextofLanguage(DIFFICULTY_TITLE, DEFAULT_DIFFICULTY_TITLE));
 
 
-            if (benefits.matches("")||benefits.matches(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){
+            if (benefits.matches("") || benefits.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                 benefitsTitleTextView.setVisibility(View.GONE);
-            }else{
+            } else {
                 FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), detailsTextView);
                 benefitsTitleTextView.setTypeface(null, Typeface.BOLD);
                 benefitsStoryTextView.setText(benefits.trim());
@@ -703,8 +709,8 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
                 startProgramButton.setVisibility(View.GONE);
             }
             if (duration.matches("")) {
-
                 durationTitleTextView.setVisibility(View.GONE);
+                lineTextview.setVisibility(View.GONE);
 
             } else {
 
@@ -714,12 +720,20 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
             }
             if (difficulty_level.matches("")) {
                 diffcultyTitleTextView.setVisibility(View.GONE);
+                lineTextview.setVisibility(View.GONE);
             } else {
                 FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), diffcultyTitleTextView);
                 diffcultyTitleTextView.setTypeface(null, Typeface.BOLD);
                 difficulty.setText(difficulty_level);
             }
 
+            if (difficulty_level.matches("") && duration != null) {
+                lineTextview.setVisibility(View.GONE);
+                days.setGravity(Gravity.CENTER);
+            } else if (duration.matches("") && difficulty_level != null) {
+                lineTextview.setVisibility(View.GONE);
+                difficulty.setGravity(Gravity.CENTER);
+            }
             Util.favorite_clicked = false;
 
 

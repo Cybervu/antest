@@ -76,6 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
+                    android:textAllCaps="true"
                     android:textColor="@color/videotextColor"
                     android:textSize="20dp"
                     android:textStyle="bold" />
@@ -192,6 +193,7 @@
                 <TextView
                     android:layout_width="3dp"
                     android:layout_height="50dp"
+                    android:id="@+id/lineTextview"
                     android:background="@color/disableTextColor"
                     android:textSize="1dp" />
 
@@ -240,7 +242,6 @@
                     android:id="@+id/benefitsTitleTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="BENEFITS"
                     android:textSize="20dp"
                     android:textColor="@color/videotextColor"
                     android:textStyle="bold" />
