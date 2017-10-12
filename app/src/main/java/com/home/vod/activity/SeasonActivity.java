@@ -83,7 +83,7 @@ import static com.home.vod.util.Constant.authTokenStr;
  * @author Abhishek
  */
 
-public class SeasonActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener,GetIpAddressAsynTask.IpAddressListener {
+public class SeasonActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, GetIpAddressAsynTask.IpAddressListener {
 
     RecyclerView seasonGridView;
     RelativeLayout image_logo;
@@ -526,29 +526,31 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
             }
             season = new ArrayList<SeasonModel>();
 
-            for (int j = 0; j < contentDetailsOutput.getSeason().length; j++) {
-                season.add(new SeasonModel(String.valueOf(contentDetailsOutput.getSeason()[j]), imageArr[j], languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + contentDetailsOutput.getSeason()[j]));
-            }
-
-            adapter = new SeasonAdapter(SeasonActivity.this, R.layout.season_card_row, season, new SeasonAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(SeasonModel item) {
-                    clickItem(item);
+            if (contentDetailsOutput.getSeason() != null) {
+                for (int j = 0; j < contentDetailsOutput.getSeason().length; j++) {
+                    season.add(new SeasonModel(String.valueOf(contentDetailsOutput.getSeason()[j]), imageArr[j], languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + contentDetailsOutput.getSeason()[j]));
                 }
-            });
 
-            seasonGridView.setVisibility(View.VISIBLE);
-            seasonGridView.setAdapter(adapter);
+                adapter = new SeasonAdapter(SeasonActivity.this, R.layout.season_card_row, season, new SeasonAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(SeasonModel item) {
+                        clickItem(item);
+                    }
+                });
 
-        } else {
-            seasonGridView.setVisibility(View.GONE);
+                seasonGridView.setVisibility(View.VISIBLE);
+                seasonGridView.setAdapter(adapter);
+
+            } else {
+                seasonGridView.setVisibility(View.GONE);
+            }
         }
     }
 
-    public void clickItem(SeasonModel item){
+    public void clickItem(SeasonModel item) {
 
-        Intent in=new Intent(SeasonActivity.this,ProgramDetailsActivity.class);
-        in.putExtra(PERMALINK_INTENT_KEY,permalinkStr);
+        Intent in = new Intent(SeasonActivity.this, ProgramDetailsActivity.class);
+        in.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
         startActivity(in);
     }
 
@@ -680,6 +682,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
 
     }
 */
+
     /*****************
      * chromecast*-------------------------------------
      */

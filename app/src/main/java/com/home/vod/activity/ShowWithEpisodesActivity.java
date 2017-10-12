@@ -97,6 +97,7 @@ import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.apisdk.apiModel.ViewContentRatingInputModel;
 import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
+import com.home.vod.LoginRegistrationOnContentClickHandler;
 import com.home.vod.R;
 import com.home.vod.BuildConfig;
 import com.home.vod.MonetizationHandler;
@@ -655,6 +656,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         LogUtil.showLog("MUVI", "episode show...");
 
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
+
         if (status == 200) {
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.GONE);
@@ -1873,15 +1875,13 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                     }
                 } else {
                     Util.favorite_clicked = true;
-                    final Intent registerActivity = new Intent(ShowWithEpisodesActivity.this, RegisterActivity.class);
-                    runOnUiThread(new Runnable() {
-                        public void run() {
+                   Intent registerActivity = new LoginRegistrationOnContentClickHandler(ShowWithEpisodesActivity.this).handleClickOnContent();
+
                             registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             registerActivity.putExtra("from", this.getClass().getName());
                             startActivity(registerActivity);
 
-                        }
-                    });
+
 
                 }
 
@@ -2078,17 +2078,12 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 if (isLogin == 1) {
                     String loggedInStr = preferenceManager.getLoginStatusFromPref();
                     if (loggedInStr == null) {
-                        final Intent registerActivity = new Intent(ShowWithEpisodesActivity.this, RegisterActivity.class);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
+                        Intent registerActivity = new LoginRegistrationOnContentClickHandler(ShowWithEpisodesActivity.this).handleClickOnContent();
+
                                 registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 Util.check_for_subscription = 1;
                                 registerActivity.putExtra("PlayerModel", playerModel);
                                 startActivity(registerActivity);
-
-
-                            }
-                        });
 
                         //showLoginDialog();
                     } else {
@@ -2441,18 +2436,12 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             } else {
 
-                final Intent register = new Intent(ShowWithEpisodesActivity.this, RegisterActivity.class);
+                Intent register = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
 
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        Util.check_for_subscription = 1;
-                        register.putExtra("PlayerModel", playerModel);
-                        startActivity(register);
-
-
-                    }
-                });
+                register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                Util.check_for_subscription = 1;
+                register.putExtra("PlayerModel", playerModel);
+                startActivity(register);
             }
         } else {
             if (NetworkStatus.getInstance().isConnected(this)) {
