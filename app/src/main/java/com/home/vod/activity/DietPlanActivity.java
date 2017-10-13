@@ -5,68 +5,80 @@ package com.home.vod.activity;
  */
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.home.apisdk.apiController.DownloadContentAsync;
+import com.home.apisdk.apiController.HeaderConstants;
+import com.home.apisdk.apiModel.DownloadContentInput;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import player.utils.Util;
-
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_PDF;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.NO_PDF;
+import static com.home.vod.util.Constant.authTokenStr;
 
 
-public class DietPlanActivity extends AppCompatActivity {
+public class DietPlanActivity extends AppCompatActivity implements DownloadContentAsync.DownloadContentListener {
     static File mediaStorageDir;
     int progress_bar_type = 0;
     int progressStatus = 0;
-    String dietData;
+    String dietData = "";
     LanguagePreference languagePreference;
     ProgressDialog pDialog;
     String filename;
@@ -75,11 +87,11 @@ public class DietPlanActivity extends AppCompatActivity {
     Context context;
     ProgressBar progresBar;
     WebView dietPlanWebView;
-    AsyncAboutUS asyncAboutUS;
     String Download_Url;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     int keepAliveTime = 10;
+    ProgressBarHandler pHandler;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
@@ -91,9 +103,18 @@ public class DietPlanActivity extends AppCompatActivity {
 
 
         progresBar = (ProgressBar) findViewById(R.id.progress_bar);
+        pHandler = new ProgressBarHandler(DietPlanActivity.this);
+        pHandler.show();
         dietPlanWebView = (WebView) findViewById(R.id.dietPlanWebView);
-        asyncAboutUS = new AsyncAboutUS();
-        asyncAboutUS.execute();
+        dietPlanWebView.setBackgroundColor(getResources().getColor(R.color.appBackgroundColor));
+
+        DownloadContentInput downloadContentInput = new DownloadContentInput();
+        downloadContentInput.setAuthToken(authTokenStr);
+        Log.v("SUBHA","getIntent().getStringExtra(HeaderConstants.VLINK)"+getIntent().getStringExtra(HeaderConstants.VLINK));
+        downloadContentInput.setvLink(getIntent().getStringExtra(HeaderConstants.VLINK));
+        DownloadContentAsync asyndownloadContent = new DownloadContentAsync(downloadContentInput, this, this);
+        asyndownloadContent.executeOnExecutor(threadPoolExecutor);
+
         TextView categoryTitle = (TextView) findViewById(R.id.dietPlanTitle);
         Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         categoryTitle.setTypeface(castDescriptionTypeface);
@@ -130,20 +151,20 @@ public class DietPlanActivity extends AppCompatActivity {
                                 111);
                     }
                 } else {
+
                     //Call whatever you want
                     if (NetworkStatus.getInstance().isConnected(DietPlanActivity.this)) {
+                        if (!dietData.equals("")) {
+                            Log.v("SUBHALAXMI", "CALLED");
+                            DownloadTransactionDetails();
+                        }
+                         else {
+                            com.home.vod.util.Util.showToast(getApplicationContext(), languagePreference.getTextofLanguage(NO_PDF, DEFAULT_NO_PDF));
+                        }
 
-
-                        DownloadDocumentDetails downloadDocumentDetails = new DownloadDocumentDetails();
-                        downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);
-
-
-
-                        // Toast.makeText(getApplicationContext(),Util.getTextofLanguage(TransactionDetailsActivity.this,Util.NO_PDF,Util.DEFAULT_NO_PDF), Toast.LENGTH_LONG).show();
                     } else {
-                        //Util.showToast(getApplicationContext(),Util.getTextofLanguage(getApplicationContext(),Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION));
+                        Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 
-//                        Toast.makeText(getApplicationContext(),Util.getTextofLanguage(TransactionDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -156,215 +177,93 @@ public class DietPlanActivity extends AppCompatActivity {
 
 
     }
-    public class AsyncAboutUS extends AsyncTask<Void, Void, Void> {
-        String responseStr;
 
-        private ProgressBarHandler progressBarHandler = null;
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            progresBar.setVisibility(View.GONE);
-            String bodyData = dietData;
-
-          /*  textView.setMovementMethod(LinkMovementMethod.getInstance());
-            textView.setText(getStyledTextFromHtml(bodyData));*/
-
-            String text = "<html><head>"
-                    + "<style type=\"text/css\" >body{color:#333; background-color: #fff;}"
-                    + "</style></head>"
-                    + "<body style >"
-                    + dietData
-                    + "</body></html>";
-
-            dietPlanWebView.loadData(text, "text/html", "utf-8");
-            dietPlanWebView.getSettings().setJavaScriptEnabled(true);
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-//            String urlRouteList = "https://sonydadc.muvi.com/rest" + "/getStaticPagedetails";
-            String urlRouteList = Util.rootUrl().trim() + Util.AboutUs.trim();
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    progresBar.setVisibility(View.VISIBLE);
-                }
-
-            });
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                // String strtext = getArguments().getString("item");
-                httppost.addHeader("permalink","about-us");
-                httppost.addHeader("lang_code",Util.getTextofLanguage(DietPlanActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-
-                }
-
-            } catch (IOException e) {
-
-                e.printStackTrace();
-            }
-
-            JSONObject myJson = null;
-            if (responseStr != null) {
-                try {
-                    myJson = new JSONObject(responseStr);
-                } catch (JSONException e) {
-
-                    e.printStackTrace();
-                }
-            }
-            try {
-                JSONObject jsonMainNode = myJson.getJSONObject("page_details");
-                dietData = jsonMainNode.optString("content").trim();
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
-    //Asyntask to get Transaction Details.
-
-    private class DownloadDocumentDetails extends AsyncTask<Void, Void, Void> {
-
-        String responseStr = "";
-        int status;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.GetInvoicePDF.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr);
-
-                httppost.addHeader("user_id",getSharedPreferences(Util.LOGIN_PREF,0).getString("PREFS_LOGGEDIN_ID_KEY", null));
-                // httppost.addHeader("id", id);
-                httppost.addHeader("device_type", "app");
-                httppost.addHeader("lang_code",Util.getTextofLanguage(DietPlanActivity.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-                } catch (Exception e) {
-
-                }
-
-                JSONObject myJson = null;
-                if (responseStr != null) {
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                }
-                if (status > 0) {
-                    if (status == 200) {
-
-
-                        Download_Url = myJson.optString("section");
-                        if (Download_Url.equals("") || Download_Url == null || Download_Url.equals("null")) {
-
-                            Download_Url = "";
-                        }
-                    } else {
-                        responseStr = "0";
-                    }
-                } else {
-                    responseStr = "0";
-
-                }
-            } catch (final JSONException e1) {
-                responseStr = "0";
-            } catch (Exception e) {
-                responseStr = "0";
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-
-            try {
-                if (Ph.isShowing())
-                    Ph.hide();
-            } catch (IllegalArgumentException ex) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                       /* primary_layout.setVisibility(View.GONE);
-                        noInternet.setVisibility(View.VISIBLE);*/
-
-                    }
-
-                });
-                responseStr = "0";
-            }
-            if (responseStr == null)
-                responseStr = "0";
-
-            if ((responseStr.trim().equals("0"))) {
-                //  primary_layout.setVisibility(View.GONE);
-                // noInternet.setVisibility(View.VISIBLE);
-            } else {
-
-                if (!Download_Url.equals("")) {
-                    DownloadTransactionDetails();
-                }
-                else {
-                    // Util.showToast(getApplicationContext(), Util.getTextofLanguage(getApplicationContext(), Util.NO_PDF, Util.DEFAULT_NO_PDF));
-                }
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            Ph = new ProgressBarHandler(DietPlanActivity.this);
-            Ph.show();
-
-            /*progressDialog = new ProgressDialog(TransactionDetailsActivity.this,R.style.MyTheme);
-            progressDialog.setCancelable(false);
-            progressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Large_Inverse);
-            progressDialog.setIndeterminate(false);
-            progressDialog.setIndeterminateDrawable(getResources().getDrawable(R.drawable.progress_rawable));
-            progressDialog.show()*/
-            ;
-        }
-    }
     public void DownloadTransactionDetails() {
+        Log.v("SUBHA", "DH" + dietData);
 
-        registerReceiver(InternetStatus, new IntentFilter("android.net.wifi.STATE_CHANGE"));
-        new DownloadFileFromURL().execute(Util.Dwonload_pdf_rootUrl + Download_Url);
+        LocalBroadcastManager.getInstance(DietPlanActivity.this).registerReceiver(InternetStatusforDietPlan, new IntentFilter("android.net.wifi.STATE_CHANGE"));
+        Log.v("SUBHA", "DH1" + dietData);
 
+        new DownloadFileFromURL().execute(dietData);
+        Log.v("SUBHA","DH2"+dietData);
+
+    }
+    @Override
+    public void onDownloadContentPreExecuteStarted() {
+        progresBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDownloadContentPostExecuteCompleted(String filepath,String fileName) {
+      //  progresBar.setVisibility(View.GONE);
+        LogUtil.showLog("SUBHA", "filepath.getPermalink()" + filepath);
+        progresBar.setVisibility(View.VISIBLE);
+        dietData = filepath;
+        filename = fileName;
+        dietPlanWebView.getSettings().setJavaScriptEnabled(true);
+        dietPlanWebView.getSettings().setDomStorageEnabled(true);
+        try {
+            String googledoc="http://docs.google.com/gview?embedded=true&url=";
+            String encodedurl = URLEncoder.encode(filepath, "UTF-8");
+            dietPlanWebView.setWebViewClient(new Callback());
+            dietPlanWebView.loadUrl(googledoc + encodedurl);
+
+           /* try {
+                String encodedurl = URLEncoder.encode(filepath,"UTF-8");
+
+                PdfWebViewClient pdfWebViewClient = new PdfWebViewClient(this, dietPlanWebView);
+                pdfWebViewClient.loadPdfUrl(
+                        "http://docs.google.com/gview?embedded=true&url="+encodedurl);
+
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }*/
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    private BroadcastReceiver InternetStatus = new BroadcastReceiver() {
+    private class Callback extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(
+                WebView view, String url) {
+            return (false);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+
+            super.onPageFinished(view, url);
+            pHandler.hide();
+
+            //progresBar.setVisibility(View.GONE);
+            view.loadUrl("javascript:(function() { " +
+                    "document.querySelector('[role=\"toolbar\"]').remove();})()");
+        }
+    }
+
+    private BroadcastReceiver InternetStatusforDietPlan= new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Extract data included in the Intent
             //  Toast.makeText(getApplicationContext(),""+Util.checkNetwork(TransactionDetailsActivity.this),Toast.LENGTH_SHORT).show();
             if (NetworkStatus.getInstance().isConnected(DietPlanActivity.this)) {
                 if (pDialog.isShowing() && pDialog != null) {
+                    try {
+                        LocalBroadcastManager.getInstance(DietPlanActivity.this).unregisterReceiver(InternetStatusforDietPlan);
+                        pDialog.setProgress(0);
+                        progressStatus = 0;
 
-                    //showDialog(Util.getTextofLanguage(DietPlanActivity.this,Util.DOWNLOAD_INTERRUPTED,Util.DEFAULT_DOWNLOAD_INTERRUPTED), 0);
-                    unregisterReceiver(InternetStatus);
-                    pDialog.setProgress(0);
-                    progressStatus = 0;
-                    dismissDialog(progress_bar_type);
+                        if(pDialog!=null && pDialog.isShowing())
+                            pDialog.dismiss();
+
+                    }catch (Exception e){
+
+                    }
+
+
                 }
             }
         }
@@ -379,7 +278,8 @@ public class DietPlanActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            showDialog(progress_bar_type);
+//            showDialog(progress_bar_type);
+            ShowDownloadStatus();
         }
 
         /**
@@ -391,9 +291,12 @@ public class DietPlanActivity extends AppCompatActivity {
             int count;
 
             try {
+//                URL url = new URL("https://static.pexels.com/photos/242616/pexels-photo-242616.jpeg");
                 URL url = new URL(f_url[0]);
                 String str = f_url[0];
-                filename = str.substring(str.lastIndexOf("/") + 1);
+               // filename = str.substring(str.lastIndexOf("/") + 1);
+                Log.v("SUBHALAXMI","FILE"+filename);
+                Log.v("SUBHALAXMI","FILE"+ f_url[0]);
                 URLConnection conection = url.openConnection();
                 conection.connect();
                 // this will be useful so that you can show a tipical 0-100% progress bar
@@ -431,7 +334,11 @@ public class DietPlanActivity extends AppCompatActivity {
                 input.close();
 
             } catch (Exception e) {
+                Log.v("SUBHALAXMI","Exception"+e.toString());
+
             } catch (Throwable throwable) {
+                Log.v("SUBHALAXMI","throwable"+throwable.toString());
+
                 throwable.printStackTrace();
             }
 
@@ -446,13 +353,20 @@ public class DietPlanActivity extends AppCompatActivity {
             pDialog.setProgress(Integer.parseInt(progress[0]));
 
             if ((Integer.parseInt(progress[0])) == 100) {
+                Log.v("SUBHALAXMI", "Exception" + 100);
 
-                //   showDialog(Util.getTextofLanguage(DietPlanActivity.this,Util.DOWNLOAD_COMPLETED,Util.DEFAULT_DOWNLOAD_COMPLETED), 1);
+                try {
+                   LocalBroadcastManager.getInstance(DietPlanActivity.this).unregisterReceiver(InternetStatusforDietPlan);
+                   pDialog.setProgress(0);
+                   progressStatus = 0;
+//                   dismissDialog(0);
+                   pDialog.dismiss();
+                    showDialog(("Download Completed Successfully."), 1);
 
-                unregisterReceiver(InternetStatus);
-                pDialog.setProgress(0);
-                progressStatus = 0;
-                dismissDialog(progress_bar_type);
+
+                }catch (Exception e){
+                   Log.v("SUBHALAXMI","Exception==1"+e.toString());
+               }
 
                 //Calling Api To Delete Pdf file from the Server.
 
@@ -494,6 +408,17 @@ public class DietPlanActivity extends AppCompatActivity {
         }
     }
 
+    public void ShowDownloadStatus(){
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Downloading file. Please wait...");
+        pDialog.setIndeterminate(false);
+        pDialog.setMax(100);
+        pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        pDialog.setCancelable(false);
+        pDialog.show();
+        progressStatus = 0;
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -509,23 +434,21 @@ public class DietPlanActivity extends AppCompatActivity {
         switch (requestCode) {
             case 111: {
 
-                if(grantResults.length>0)
-                {
+                if (grantResults.length > 0) {
                     if ((grantResults.length > 0) && (grantResults[0]) == PackageManager.PERMISSION_GRANTED) {
                         //Call whatever you want
-                        if (Util.checkNetwork(DietPlanActivity.this)) {
-                            DownloadDocumentDetails downloadDocumentDetails = new DownloadDocumentDetails();
-                            downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);
+                        if (NetworkStatus.getInstance().isConnected(DietPlanActivity.this)) {
+                            if (!dietData.equals(""))
+                                DownloadTransactionDetails();
+                            else
+                                Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_PDF, DEFAULT_NO_PDF), Toast.LENGTH_LONG).show();
                         } else {
-                            // Util.showToast(getApplicationContext(),Util.getTextofLanguage(getApplicationContext(),Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION));
-//                            Toast.makeText(getApplicationContext(),Util.getTextofLanguage(TransactionDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
                     } else {
                         finish();
                     }
-                }
-                else
-                {
+                } else {
                     finish();
                 }
 
@@ -533,4 +456,133 @@ public class DietPlanActivity extends AppCompatActivity {
             }
         }
     }
+
+
+
+    public void showDialog(String msg, final int deletevalue) {
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietPlanActivity.this);
+        dlgAlert.setMessage(msg);
+        dlgAlert.setCancelable(false);
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        dlgAlert.create().show();
+
+    }
+
+
+    class PdfWebViewClient extends WebViewClient {
+        private static final String TAG = "PdfWebViewClient";
+        private static final String PDF_EXTENSION = ".pdf";
+        private static final String PDF_VIEWER_URL = "http://docs.google.com/gview?embedded=true&url=";
+
+        private Context mContext;
+        private WebView mWebView;
+        private ProgressBarHandler mProgressDialog;
+        private boolean isLoadingPdfUrl;
+
+        public PdfWebViewClient(Context context, WebView webView) {
+            mContext = context;
+            mWebView = webView;
+            mWebView.setWebViewClient(this);
+        }
+
+        public void loadPdfUrl(String url) {
+            mWebView.stopLoading();
+
+            if (!TextUtils.isEmpty(url)) {
+                isLoadingPdfUrl = isPdfUrl(url);
+                if (isLoadingPdfUrl) {
+                    mWebView.clearHistory();
+                }
+
+                showProgressDialog();
+            }
+
+            mWebView.loadUrl(url);
+        }
+
+        @SuppressWarnings("deprecation")
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView webView, String url) {
+            return shouldOverrideUrlLoading(url);
+        }
+
+        @SuppressWarnings("deprecation")
+        @Override
+        public void onReceivedError(WebView webView, int errorCode, String description, String failingUrl) {
+            handleError(errorCode, description.toString(), failingUrl);
+        }
+
+
+        @Override
+        public void onReceivedError(final WebView webView, final WebResourceRequest request, final WebResourceError error) {
+            final Uri uri = request.getUrl();
+            handleError(error.getErrorCode(), error.getDescription().toString(), uri.toString());
+        }
+
+        @Override
+        public void onPageFinished(final WebView view, final String url) {
+            Log.i(TAG, "Finished loading. URL : " + url);
+            view.loadUrl("javascript:(function() { " +
+                    "document.querySelector('[role=\"toolbar\"]').remove();})()");
+            dismissProgressDialog();
+
+        }
+
+        private boolean shouldOverrideUrlLoading(final String url) {
+            Log.i(TAG, "shouldOverrideUrlLoading() URL : " + url);
+
+            if (!isLoadingPdfUrl && isPdfUrl(url)) {
+                mWebView.stopLoading();
+
+                final String pdfUrl = PDF_VIEWER_URL + url;
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadPdfUrl(pdfUrl);
+                    }
+                }, 300);
+
+                return true;
+            }
+
+            return false; // Load url in the webView itself
+        }
+
+        private void handleError(final int errorCode, final String description, final String failingUrl) {
+            Log.e(TAG, "Error : " + errorCode + ", " + description + " URL : " + failingUrl);
+        }
+
+        private void showProgressDialog() {
+            dismissProgressDialog();
+            mProgressDialog = new ProgressBarHandler(mContext);
+            mProgressDialog.show();
+
+           // mProgressDialog = ProgressDialog.show(mContext, "", "Loading...");
+        }
+
+        private void dismissProgressDialog() {
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                mProgressDialog.hide();
+                mProgressDialog = null;
+            }
+        }
+
+        private boolean isPdfUrl(String url) {
+            if (!TextUtils.isEmpty(url)) {
+                url = url.trim();
+                int lastIndex = url.toLowerCase().lastIndexOf(PDF_EXTENSION);
+                if (lastIndex != -1) {
+                    return url.substring(lastIndex).equalsIgnoreCase(PDF_EXTENSION);
+                }
+            }
+            return false;
+        }
+    }
+
 }

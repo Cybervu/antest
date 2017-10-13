@@ -1,7 +1,5 @@
 package com.home.apisdk.apiModel;
 
-import java.util.ArrayList;
-
 /**
  * This Model Class Holds All The Output Attributes For GetContentDetailsAsynTask
  *
@@ -9,8 +7,36 @@ import java.util.ArrayList;
  */
 
 public class ContentDetailsOutput {
+    String movieStreamId = "";
 
+    public String getMovieStreamId() {
+        return movieStreamId;
+    }
+
+    public void setMovieStreamId(String movieStreamId) {
+        this.movieStreamId = movieStreamId;
+    }
+
+    public String getMuviId() {
+        return muviId;
+    }
+
+    public void setMuviId(String muviId) {
+        this.muviId = muviId;
+    }
+
+    String muviId = "";
     String movieStreamUniqId = "";
+
+    public String getBenefit() {
+        return Benefit;
+    }
+
+    public void setBenefit(String benefit) {
+        Benefit = benefit;
+    }
+
+    String Benefit="";
     String muviUniqId = "";
     String censorRating = "";
     String releaseDate = "";

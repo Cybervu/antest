@@ -678,7 +678,8 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, DIFFICULTY_TITLE,DEFAULT_DIFFICULTY_TITLE, "difficulty_title",json);
         setTranslationLanguageToPref(languagePreference, DURATION_TITLE,DEFAULT_DURATION_TITLE, "duration_title",json);
         setTranslationLanguageToPref(languagePreference, DIFFICULTY_TITLE,DEFAULT_DIFFICULTY_TITLE, "difficulty_title",json);
-        setTranslationLanguageToPref(languagePreference, VIEW_ALL,DEFAULT_VIEW_ALL, "view_more",json);
+        setTranslationLanguageToPref(languagePreference, DETAIL_VIEW_MORE,DEFAULT_DETAIL_VIEW_MORE, "view_more",json);
+        setTranslationLanguageToPref(languagePreference, TUTORIAL_TITLE,DEFAULT_TUTORIAL_TITLE, "tutorial",json);
 
         setTranslationLanguageToPref(languagePreference, SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE,DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, "simultaneous_logout_message",json);
         setTranslationLanguageToPref(languagePreference, LOGIN_STATUS_MESSAGE,DEFAULT_LOGIN_STATUS_MESSAGE, "login_status_message",json);

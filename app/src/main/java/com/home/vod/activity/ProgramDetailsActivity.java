@@ -133,6 +133,7 @@ import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.VIEW_ALL;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
+import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 
 public class ProgramDetailsActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener,GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener,GetIpAddressAsynTask.IpAddressListener, GetValidateUserAsynTask.GetValidateUserListener,
@@ -148,7 +149,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     ArrayList<EpisodesListModel> itemData;
     int isFreeContent = 0, isPPV, isConverted, contentTypesId, isAPV;
     PreferenceManager preferenceManager;
-    RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout;
+    RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout,logo_image;
     RecyclerView seasontiveLayout;
     Player playerModel;
     String movieUniqueId = "";
@@ -180,7 +181,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     String useridStr;
     EpisodesListModel itemToPlay;
     String ipAddres;
-    String bannerImageId,posterImageId,duration;
+    String bannerImageId, posterImageId, duration;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     LanguagePreference languagePreference;
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
@@ -888,7 +889,7 @@ Log.v("SUBHA","code == player == "+ code);
         durationTitleTextView = (TextView) findViewById(R.id.durationTitleTextView);
         durationTextView = (TextView) findViewById(R.id.durationTextView);
         tutorialTextView = (TextView) findViewById(R.id.tutorialTextView);
-        viewAllTextView = (TextView) findViewById(R.id.viewAllTextView);
+        viewAllTextView = (TextView) findViewById(R.id.viewAllTextView2);
         seasontiveLayout = (RecyclerView) findViewById(R.id.featureContent);
         share = (ImageView) findViewById(R.id.share);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -902,9 +903,18 @@ Log.v("SUBHA","code == player == "+ code);
         itemData = new ArrayList<EpisodesListModel>();
         progressBarHandler = new ProgressBarHandler(ProgramDetailsActivity.this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        logo_image = (RelativeLayout) findViewById(R.id.logo_image);
+        logo_image.bringToFront();
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        detailsTextView.setText(languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + getIntent().getStringExtra(SEASON_INTENT_KEY));
+
+        viewAllTextView.setVisibility(View.GONE);
+        dietPlanButton.setVisibility(View.GONE);
+        playButton.setVisibility(View.GONE);
+
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -915,6 +925,7 @@ Log.v("SUBHA","code == player == "+ code);
         mLayoutManager = new LinearLayoutManager(ProgramDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
 
         viewAllTextView.setText(languagePreference.getTextofLanguage(VIEW_ALL, DEFAULT_VIEW_ALL));
+
 
 
         /*chromecast-------------------------------------*/
@@ -992,6 +1003,7 @@ Log.v("SUBHA","code == player == "+ code);
             public void onClick(View v) {
                 final Intent episode = new Intent(ProgramDetailsActivity.this, Tutorial_List_Activity.class);
                 episode.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
+                episode.putExtra(SEASON_INTENT_KEY, getIntent().getStringExtra(SEASON_INTENT_KEY));
                 startActivity(episode);
             }
         });
@@ -999,7 +1011,7 @@ Log.v("SUBHA","code == player == "+ code);
         dietPlanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(ProgramDetailsActivity.this,DietPlanActivity.class);
+                Intent intent = new Intent(ProgramDetailsActivity.this, DietPlanActivity.class);
                 startActivity(intent);
             }
         });
@@ -1045,7 +1057,7 @@ Log.v("SUBHA","code == player == "+ code);
         }
 /*chromecast-------------------------------------*/
 
-        Episode_Details_input episode_details_input=new Episode_Details_input();
+        Episode_Details_input episode_details_input = new Episode_Details_input();
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
         episode_details_input.setAuthtoken(authTokenStr);
         episode_details_input.setPermalink(permalinkStr);
@@ -1065,7 +1077,7 @@ Log.v("SUBHA","code == player == "+ code);
         dietPlanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProgramDetailsActivity.this,DietPlanActivity.class);
+                Intent intent = new Intent(ProgramDetailsActivity.this, DietPlanActivity.class);
                 startActivity(intent);
             }
         });
@@ -1217,16 +1229,22 @@ Log.v("SUBHA","code == player == "+ code);
 
             movieUniqueId=contentDetailsOutput.getMuviUniqId();
             bannerImageId = contentDetailsOutput.getBanner();
-            posterImageId=contentDetailsOutput.getPoster();
+            posterImageId = contentDetailsOutput.getPoster();
             duration = contentDetailsOutput.getDuration();
 
-
+           // viewAllTextView.setText(languagePreference.getTextofLanguage(DETAIL_VIEW_MORE,DEFAULT_DETAIL_VIEW_MORE));
+            viewAllTextView.setVisibility(View.VISIBLE);
+            tutorialTextView.setText(languagePreference.getTextofLanguage(TUTORIAL_TITLE,DEFAULT_TUTORIAL_TITLE));
             durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
 
-            FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.light_fonts), durationTitleTextView);
-            durationTitleTextView.setTypeface(null, Typeface.BOLD);
-            durationTextView.setText(duration);
+            if (duration.matches("")) {
+                durationTitleTextView.setVisibility(View.GONE);
+            } else {
 
+                FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.light_fonts), durationTitleTextView);
+                durationTitleTextView.setTypeface(null, Typeface.BOLD);
+                durationTextView.setText(duration);
+            }
 
             if (TextUtils.isEmpty(bannerImageId)) {
 
@@ -1278,7 +1296,7 @@ Log.v("SUBHA","code == player == "+ code);
 
         }
 
-        }
+    }
 
     @Override
     public void onGetEpisodeDetailsPreExecuteStarted() {

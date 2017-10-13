@@ -195,6 +195,14 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                             contentDetailsOutput.setDuration("");
 
                         }
+
+                        if ((custom_meta_data.has("benefits")) && custom_meta_data.optString("benefits").trim() != null && !custom_meta_data.optString("benefits").trim().isEmpty() && !custom_meta_data.optString("benefits").trim().equals("null") && !custom_meta_data.optString("benefits").trim().matches("")) {
+                            contentDetailsOutput.setBenefit(custom_meta_data.optString("benefits"));
+                        }
+                        else {
+                            contentDetailsOutput.setBenefit("");
+
+                        }
                         if ((custom_meta_data.has("repetition")) && custom_meta_data.optString("repetition").trim() != null && !custom_meta_data.optString("repetition").trim().isEmpty() && !custom_meta_data.optString("repetition").trim().equals("null") && !custom_meta_data.optString("repetition").trim().matches("")) {
                             contentDetailsOutput.setRepetition(custom_meta_data.optString("repetition"));
                         }
@@ -238,6 +246,19 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                         contentDetailsOutput.setIsEpisode("0");
 
                     }
+                    if ((mainJson.has("id")) && mainJson.optString("id").trim() != null && !mainJson.optString("id").trim().isEmpty() && !mainJson.optString("id").trim().equals("null") && !mainJson.optString("id").trim().matches("")) {
+                        contentDetailsOutput.setId(mainJson.optString("id"));
+                    } else {
+                        contentDetailsOutput.setId("");
+
+                    }
+                    if ((mainJson.has("movie_stream_id")) && mainJson.optString("movie_stream_id").trim() != null && !mainJson.optString("movie_stream_id").trim().isEmpty() && !mainJson.optString("movie_stream_id").trim().equals("null") && !mainJson.optString("movie_stream_id").trim().matches("")) {
+                        contentDetailsOutput.setMovieStreamId(mainJson.optString("movie_stream_id"));
+                    } else {
+                        contentDetailsOutput.setMovieStreamId("");
+
+                    }
+
                     if ((mainJson.has("permalink")) && mainJson.optString("permalink").trim() != null && !mainJson.optString("permalink").trim().isEmpty() && !mainJson.optString("permalink").trim().equals("null") && !mainJson.optString("permalink").trim().matches("")) {
                         contentDetailsOutput.setPermalink(mainJson.optString("permalink"));
 

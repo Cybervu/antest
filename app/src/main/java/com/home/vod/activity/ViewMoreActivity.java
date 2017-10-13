@@ -573,17 +573,9 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 dlgAlert.create().show();
             } else {
 
-                final Intent detailsIntent = new Intent(ViewMoreActivity.this, ShowWithEpisodesActivity.class);
-                detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(detailsIntent);
+                new Episode_Programme_Handler(ViewMoreActivity.this).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
                     }
-                });
             }
-
-        }
 
         // for single clips and movies
         else if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
