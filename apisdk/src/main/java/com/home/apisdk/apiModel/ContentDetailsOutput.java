@@ -27,6 +27,16 @@ public class ContentDetailsOutput {
 
     String muviId = "";
     String movieStreamUniqId = "";
+
+    public String getBenefit() {
+        return Benefit;
+    }
+
+    public void setBenefit(String benefit) {
+        Benefit = benefit;
+    }
+
+    String Benefit="";
     String muviUniqId = "";
     String censorRating = "";
     String releaseDate = "";

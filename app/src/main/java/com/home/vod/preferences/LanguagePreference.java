@@ -396,13 +396,15 @@ public class LanguagePreference {
     public static String DETAILS_TITLE = "DETAILS_TITLE";
     public static String DEFAULT_DETAILS_TITLE = "Details Title";
     public static String BENEFIT_TITLE = "BENEFIT_TITLE";
-    public static String DEFAULT_BENEFIT_TITLE = "Benefits";
+    public static String DEFAULT_BENEFIT_TITLE = "BENEFITS";
     public static String DIFFICULTY_TITLE = "DIFFICULTY_TITLE";
-    public static String DEFAULT_DIFFICULTY_TITLE = "Difficulty";
+    public static String DEFAULT_DIFFICULTY_TITLE = "DIFFICULTY";
     public static String DURATION_TITLE = "DURATION_TITLE";
-    public static String DEFAULT_DURATION_TITLE = " Duration";
-    public static String VIEW_ALL = "VIEW_ALL";
-    public static String DEFAULT_VIEW_ALL = " View More >>";
+    public static String DEFAULT_DURATION_TITLE = "DURATION";
+    public static String DETAIL_VIEW_MORE = "VIEW_MORE";
+    public static String DEFAULT_DETAIL_VIEW_MORE = "View More >>";
+    public static String TUTORIAL_TITLE= "TUTORIAL_TITLE";
+    public static String DEFAULT_TUTORIAL_TITLE = "TUTORIAL";
 
 
 

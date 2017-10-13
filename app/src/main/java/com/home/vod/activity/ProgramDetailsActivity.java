@@ -70,10 +70,8 @@ import java.util.concurrent.TimeUnit;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DURATION_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_ALL;
 import static com.home.vod.preferences.LanguagePreference.DURATION_TITLE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
-import static com.home.vod.preferences.LanguagePreference.VIEW_ALL;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 
@@ -269,7 +267,6 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetRela
         durationTitleTextView = (TextView) findViewById(R.id.durationTitleTextView);
         durationTextView = (TextView) findViewById(R.id.durationTextView);
         tutorialTextView = (TextView) findViewById(R.id.tutorialTextView);
-        viewAllTextView = (TextView) findViewById(R.id.viewAllTextView);
         seasontiveLayout = (RecyclerView) findViewById(R.id.featureContent);
         share = (ImageView) findViewById(R.id.share);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -289,7 +286,6 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetRela
         });
         mLayoutManager = new LinearLayoutManager(ProgramDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
 
-        viewAllTextView.setText(languagePreference.getTextofLanguage(VIEW_ALL, DEFAULT_VIEW_ALL));
 
 
         /*chromecast-------------------------------------*/

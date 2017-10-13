@@ -9,6 +9,10 @@
         layout="@layout/toolbar"
         android:id="@+id/toolbar"/>
 
+    <include
+        layout="@layout/logo_image"
+        android:id="@+id/logo_image"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,7 +33,7 @@
             <RelativeLayout
                 android:id="@+id/bannerImageRelativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/banerimg_height"
                 android:background="@color/appBackgroundColor"
                 android:visibility="visible">
 
@@ -44,8 +48,8 @@
 
                 <ImageView
                     android:id="@+id/playButton"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="@dimen/playbtn_width"
+                    android:layout_height="@dimen/playbtn_height"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:src="@drawable/play" />
@@ -84,10 +88,10 @@
                     android:id="@+id/titleTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="@dimen/marginleft10dp"
                     android:layout_toRightOf="@+id/view"
                     android:textColor="@color/nav_lineColor"
-                    android:textSize="20dp"
+                    android:textSize="@dimen/story_title_text_size"
                     android:textStyle="bold" />
 
                 <ImageView
@@ -106,7 +110,7 @@
 
             <Button
                 android:id="@+id/startWorkoutButton"
-                android:layout_width="200dp"
+                android:layout_width="@dimen/start_program_button"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/titleRelativeLayout"
                 android:layout_centerInParent="true"
@@ -116,12 +120,12 @@
                 android:text="Start Work Out"
                 android:textAllCaps="false"
                 android:textColor="@color/buttonTextColor"
-                android:textSize="14dp"
+                android:textSize="@dimen/program_button_text_size"
                 android:visibility="visible" />
 
             <Button
                 android:id="@+id/dietPlanButton"
-                android:layout_width="200dp"
+                android:layout_width="@dimen/start_program_button"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/startWorkoutButton"
                 android:layout_centerInParent="true"
@@ -132,7 +136,7 @@
                 android:text="Diet Plan"
                 android:textAllCaps="false"
                 android:textColor="@color/buttonTextColor"
-                android:textSize="14dp"
+                android:textSize="@dimen/program_button_text_size"
                 android:visibility="visible" />
 
 
@@ -142,10 +146,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/dietPlanButton"
-                android:layout_gravity="center_vertical|left"
-                android:layout_marginLeft="20dp"
+                android:gravity="center_horizontal"
                 android:layout_marginTop="18dp"
-                android:gravity="center"
                 android:orientation="vertical"
                 android:paddingLeft="10dp">
 
@@ -153,9 +155,9 @@
                     android:id="@+id/durationTitleTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DURATION"
+                    android:text="Duration"
                     android:textColor="@color/nav_lineColor"
-                    android:textSize="15dp"
+                    android:textSize="@dimen/story_title_text_size"
                     android:textStyle="bold" />
 
                 <TextView
@@ -164,6 +166,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/videotextColor"
                     android:text="14 Days"
+                    android:textSize="@dimen/duration" />
                     android:textSize="12dp" />
 
             </LinearLayout>
@@ -177,31 +180,31 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/durationLinearLayout"
-                android:padding="2dp">
+                android:padding="10dp">
+
 
                 <TextView
                     android:id="@+id/tutorialTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="@dimen/marginleft10dp"
                     android:padding="10dp"
-                    android:text="TUTORIAL"
-                    android:textSize="20dp"
+                    android:text="Tutorial"
+                    android:textSize="@dimen/story_title_text_size"
                     android:textColor="@color/videotextColor"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/viewAllTextView"
+                    android:id="@+id/viewAllTextView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="View More>>"
                     android:layout_alignParentEnd="true"
-                    android:clickable="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:text="View All"
                     android:textColor="@color/button_background"
-                    android:textSize="18dp" />
+                    android:textSize="@dimen/story_title_text_size" />
 
             </RelativeLayout>
 

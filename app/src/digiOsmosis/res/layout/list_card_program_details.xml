@@ -40,8 +40,9 @@
             android:ellipsize="end"
             android:gravity="left"
             android:maxLength="18"
+            android:background="@color/button_background"
             android:text=""
-            android:textColor="@color/noInternetColor"
+            android:textColor="@color/white"
             android:textSize="15sp" />
 
     </RelativeLayout>

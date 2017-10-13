@@ -140,5 +140,17 @@
     <dimen name="toastmsg_padding">10dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
 
+
+    <!--//**********program activity*************//-->
+    <dimen name="story_margin_left">10dp</dimen>
+    <dimen name="story_title_text_size">20sp</dimen>
+    <dimen name="program_button_text_size">16sp</dimen>
+    <dimen name="start_program_button">200dp</dimen>
+    <dimen name="duration_title_text">20sp</dimen>
+    <dimen name="duration">12sp</dimen>
+    <dimen name="story_text_size">141sp</dimen>
+    <dimen name="weight_height">60dp</dimen>
+    <dimen name="weight_width">4dp</dimen>
+
     <dimen name="plainrow_text_size">20sp</dimen>
 </resources>

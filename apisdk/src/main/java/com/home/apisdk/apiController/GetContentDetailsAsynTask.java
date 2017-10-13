@@ -195,6 +195,14 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                             contentDetailsOutput.setDuration("");
 
                         }
+
+                        if ((custom_meta_data.has("benefits")) && custom_meta_data.optString("benefits").trim() != null && !custom_meta_data.optString("benefits").trim().isEmpty() && !custom_meta_data.optString("benefits").trim().equals("null") && !custom_meta_data.optString("benefits").trim().matches("")) {
+                            contentDetailsOutput.setBenefit(custom_meta_data.optString("benefits"));
+                        }
+                        else {
+                            contentDetailsOutput.setBenefit("");
+
+                        }
                         if ((custom_meta_data.has("repetition")) && custom_meta_data.optString("repetition").trim() != null && !custom_meta_data.optString("repetition").trim().isEmpty() && !custom_meta_data.optString("repetition").trim().equals("null") && !custom_meta_data.optString("repetition").trim().matches("")) {
                             contentDetailsOutput.setRepetition(custom_meta_data.optString("repetition"));
                         }

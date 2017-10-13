@@ -337,4 +337,7 @@
     <dimen name="download_button_padding">10dp</dimen>
 
 
+
+    <dimen name="start_program_button">50dp</dimen>
+    <dimen name="programme_duration_padding_left">50dp</dimen>
 </resources>

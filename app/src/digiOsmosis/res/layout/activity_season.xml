@@ -13,11 +13,13 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:layout_below="@+id/toolbar"
-        android:background="@color/colorPrimary" />
+    <include
+        android:id="@+id/logo_image"
+        layout="@layout/logo_image"
+        />
+
+
+
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
