@@ -43,7 +43,7 @@ public class DownloadContentInput {
      */
 
     public void setvLink(String vLink) {
-        vLink = vLink;
+        this.vLink = vLink;
     }
 
 

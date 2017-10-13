@@ -37,6 +37,8 @@ public class DownloadContentAsync extends AsyncTask<DownloadContentInput, Void, 
     private String message;
     private String PACKAGE_NAME;
     private String filepath;
+    private String fileName;
+
     private String responseStr;
     private DownloadContentListener listener;
     private Context context;
@@ -60,7 +62,7 @@ public class DownloadContentAsync extends AsyncTask<DownloadContentInput, Void, 
          *
          * @param filepath Holds download file of "filepath"
          */
-        void onDownloadContentPostExecuteCompleted(String filepath);
+        void onDownloadContentPostExecuteCompleted(String filepath,String fileName);
     }
 
 
@@ -80,7 +82,7 @@ public class DownloadContentAsync extends AsyncTask<DownloadContentInput, Void, 
         this.downloadContentInput = downloadContentInput;
         PACKAGE_NAME = context.getPackageName();
         Log.v("MUVISDK", "pkgnm :" + PACKAGE_NAME);
-        Log.v("MUVISDK", "GetUserProfileAsynctask");
+        Log.v("MUVISDK", "this.downloadContentInput"+this.downloadContentInput.getAuthToken());
 
     }
 
@@ -96,11 +98,13 @@ public class DownloadContentAsync extends AsyncTask<DownloadContentInput, Void, 
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.getAboutUs());
+            HttpPost httppost = new HttpPost(APIUrlConstant.getDownloadContent());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
 
             httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.downloadContentInput.getAuthToken());
-            httppost.addHeader(HeaderConstants.PERMALINK, this.downloadContentInput.getvLink());
+            Log.v("MUVISDK", "this.downloadContentInput.getvLink()" + this.downloadContentInput.getvLink());
+
+            httppost.addHeader(HeaderConstants.VLINK, this.downloadContentInput.getvLink());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);
@@ -116,6 +120,8 @@ public class DownloadContentAsync extends AsyncTask<DownloadContentInput, Void, 
                 try {
                     myJson = new JSONObject(responseStr);
                     filepath = myJson.optString("file_path");
+                    fileName = myJson.optString("file_name");
+
 
                 } catch (JSONException e) {
 
@@ -136,7 +142,7 @@ public class DownloadContentAsync extends AsyncTask<DownloadContentInput, Void, 
         super.onPreExecute();
         listener.onDownloadContentPreExecuteStarted();
         status = 0;
-        if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
+        /*if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onDownloadContentPostExecuteCompleted(filepath);
@@ -146,12 +152,12 @@ public class DownloadContentAsync extends AsyncTask<DownloadContentInput, Void, 
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onDownloadContentPostExecuteCompleted(filepath);
-        }
+        }*/
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        listener.onDownloadContentPostExecuteCompleted(filepath);
+        listener.onDownloadContentPostExecuteCompleted(filepath,fileName);
     }
 }
