@@ -118,9 +118,10 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_ALL;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TUTORIAL_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.DURATION_TITLE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
@@ -128,10 +129,10 @@ import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
-import static com.home.vod.preferences.LanguagePreference.VIEW_ALL;
-import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.TUTORIAL_TITLE;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -924,7 +925,7 @@ Log.v("SUBHA","code == player == "+ code);
         });
         mLayoutManager = new LinearLayoutManager(ProgramDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
 
-        viewAllTextView.setText(languagePreference.getTextofLanguage(VIEW_ALL, DEFAULT_VIEW_ALL));
+
 
 
 
