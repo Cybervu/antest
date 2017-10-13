@@ -28,17 +28,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.home.apisdk.apiController.DeleteInvoicePdfAsynTask;
 import com.home.apisdk.apiController.GetInvoicePdfAsynTask;
-import com.home.apisdk.apiController.PurchaseHistoryAsyntask;
 import com.home.apisdk.apiController.TransactionDetailsAsynctask;
 import com.home.apisdk.apiModel.DeleteInvoicePdfInputModel;
 import com.home.apisdk.apiModel.DeleteInvoicePdfOutputModel;
 import com.home.apisdk.apiModel.GetInvoicePdfInputModel;
 import com.home.apisdk.apiModel.GetInvoicePdfOutputModel;
-import com.home.apisdk.apiModel.PurchaseHistoryInputModel;
-import com.home.apisdk.apiModel.PurchaseHistoryOutputModel;
 import com.home.apisdk.apiModel.TransactionInputModel;
 import com.home.apisdk.apiModel.TransactionOutputModel;
 import com.home.vod.R;
@@ -48,6 +44,7 @@ import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -55,7 +52,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -393,6 +389,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         protected void onPreExecute() {
             super.onPreExecute();
             showDialog(progress_bar_type);
+
         }
 
         /**
@@ -588,6 +585,8 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                 return null;
         }
     }
+
+
 
 
     public void GetTransactionDetails() {

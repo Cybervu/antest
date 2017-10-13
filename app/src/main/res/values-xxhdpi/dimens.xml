@@ -16,7 +16,8 @@
     <dimen name="diet_top_padding">10dp</dimen>
     <dimen name="diet_left_padding">10dp</dimen>
     <dimen name="diet_bottom_padding">40dp</dimen>
-    <dimen name="download_button_width">100dp</dimen>
+    <dimen name="download_button_width">150dp</dimen>
+    <dimen name="download_button_padding">10dp</dimen>
     <dimen name="download_button_height">30dp</dimen>
     <dimen name="download_button_text_size">18sp</dimen>
     <dimen name="diet_close_button_width">40dp</dimen>

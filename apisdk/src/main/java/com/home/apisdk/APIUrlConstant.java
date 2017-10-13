@@ -4,8 +4,6 @@
 
 package com.home.apisdk;
 
-import java.util.Date;
-
 /**
  * Created by MUVI on 1/18/2017.
  * Class contains all the APIs end points
@@ -186,6 +184,9 @@ public class APIUrlConstant {
      */
     public static String AboutUs = "getStaticPagedetails";
     public static String GmailRegUrl = "socialAuth";
+    public static String DownloadContent = "DownloadContent";
+    public static String RelatedContent = "RelatedContent";
+
 
     public static String getGmailRegUrl() {
         return BASE_URl + GmailRegUrl;
@@ -352,7 +353,12 @@ public class APIUrlConstant {
     public static String getAboutUs() {
         return BASE_URl + AboutUs;
     }
-
+    public static String getDownloadContent() {
+        return BASE_URl + DownloadContent;
+    }
+    public static String getRelatedContent() {
+        return BASE_URl + RelatedContent;
+    }
 
     public static String getFbUserExistsUrl() {
         return BASE_URl + fbUserExistsUrl;

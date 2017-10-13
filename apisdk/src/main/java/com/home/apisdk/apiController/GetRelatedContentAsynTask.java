@@ -103,7 +103,7 @@ public class GetRelatedContentAsynTask extends AsyncTask<RelatedContentInput, Vo
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(APIUrlConstant.getContentDetailsUrl());
+            HttpPost httppost = new HttpPost(APIUrlConstant.getRelatedContent());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.relatedContentInput.getAuthToken());
             httppost.addHeader(HeaderConstants.CONTENT_ID, this.relatedContentInput.getContentId());
@@ -144,10 +144,11 @@ public class GetRelatedContentAsynTask extends AsyncTask<RelatedContentInput, Vo
 
 
                 if (status == 200) {
+                    JSONObject mainJson = myJson.getJSONArray("contentData").getJSONObject(0);
 
-                    JSONObject mainJson = myJson.getJSONObject("contentData");
-                    if ((mainJson.has("name")) && mainJson.optString("permalink").trim() != null && !mainJson.optString("name").trim().isEmpty() && !mainJson.optString("name").trim().equals("null") && !mainJson.optString("name").trim().matches("")) {
-                        relatedContentOutput.setPermalink(mainJson.optString("name"));
+                   // JSONObject mainJson = myJson.getJSONObject("contentData");
+                    if ((mainJson.has("permalink")) && mainJson.optString("permalink").trim() != null && !mainJson.optString("permalink").trim().isEmpty() && !mainJson.optString("permalink").trim().equals("null") && !mainJson.optString("permalink").trim().matches("")) {
+                        relatedContentOutput.setPermalink(mainJson.optString("permalink"));
                     } else {
                         relatedContentOutput.setPermalink("");
 
@@ -183,7 +184,7 @@ public class GetRelatedContentAsynTask extends AsyncTask<RelatedContentInput, Vo
         listener.onGetRelatedContentPreExecuteStarted();
 
         status = 0;
-       if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
+      /* if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetRelatedContentPostExecuteCompleted(relatedContentOutput, status, message);
@@ -193,7 +194,7 @@ public class GetRelatedContentAsynTask extends AsyncTask<RelatedContentInput, Vo
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onGetRelatedContentPostExecuteCompleted(relatedContentOutput, status, message);
-        }
+        }*/
 
 
     }
