@@ -17,12 +17,12 @@ repositories {
 
 android {
     flavorDimensions 'environment', 'vendor'
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.home.vod"
-        minSdkVersion 21
-        targetSdkVersion 23
+        minSdkVersion 15
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -146,7 +146,7 @@ android {
             minSdkVersion 21
             applicationId 'com.release.teststreamingapp'
             versionCode 11
-            targetSdkVersion 23
+            targetSdkVersion 25
             versionName '2.2.4'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
@@ -167,7 +167,7 @@ android {
             minSdkVersion 21
             applicationId 'com.release.matas'
             versionCode 11
-            targetSdkVersion 23
+            targetSdkVersion 25
             versionName '1.0.1'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"0c2236eee851357d1fecc01fbba128c5\""
