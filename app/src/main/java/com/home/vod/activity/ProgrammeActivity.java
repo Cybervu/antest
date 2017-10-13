@@ -96,18 +96,18 @@ import static player.utils.Util.HAS_FAVORITE;
  * @author Abhishek
  */
 
-public class ProgrammeActivity extends AppCompatActivity implements GetRelatedContentAsynTask.GetRelatedContentListener,GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,
+public class ProgrammeActivity extends AppCompatActivity implements GetRelatedContentAsynTask.GetRelatedContentListener, GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,
         GetIpAddressAsynTask.IpAddressListener, GetLanguageListAsynTask.GetLanguageListListener {
 
     TextView detailsTextView, videoStoryTextView, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days, lineTextview;
     ImageView bannerImageView, playButton, moviePoster, share;
     Button startProgramButton, dietPlanButton;
     ProgressBarHandler pDialog;
-    RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout,image_logo;
+    RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout, image_logo;
     LinearLayout story_layout;
     String movieUniqueId = "";
     String movieTrailerUrlStr, isEpisode = "";
-    String duration="";
+    String duration = "";
     String videoduration = "";
     String[] season;
     String name;
@@ -296,8 +296,8 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
 
 
     MediaInfo mediaInfo;
- /*chromecast-------------------------------------*/
-    String contentId,muviStreamId;
+    /*chromecast-------------------------------------*/
+    String contentId, muviStreamId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -361,7 +361,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
             @Override
             public void onClick(View v) {
                 RelatedContentInput relatedContentInput = new RelatedContentInput();
-                LogUtil.showLog("SUBHA", "conten" + contentId+ "hf"+muviStreamId);
+                LogUtil.showLog("SUBHA", "conten" + contentId + "hf" + muviStreamId);
 
                 relatedContentInput.setAuthToken(authTokenStr);
                 relatedContentInput.setContentId(contentId);
@@ -1213,22 +1213,24 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
             pDialog.hide();
 
         }
-        if (status == 200){
+        if (status == 200) {
             String permalinkStr = relatedContentOutput.getPermalink().substring(relatedContentOutput.getPermalink().lastIndexOf("/") + 1);
-            LogUtil.showLog("SUBHA","getPermalink()"+permalinkStr);
+            LogUtil.showLog("SUBHA", "getPermalink()" + permalinkStr);
 
 
-            Intent intent=new Intent(ProgrammeActivity.this,DietPlanActivity.class);
-            intent.putExtra(HeaderConstants.VLINK,permalinkStr);
+            Intent intent = new Intent(ProgrammeActivity.this, DietPlanActivity.class);
+            intent.putExtra(HeaderConstants.VLINK, permalinkStr);
             startActivity(intent);
 
-        }
+        } else
+            Toast.makeText(ProgrammeActivity.this, "There is No Diet Plan", Toast.LENGTH_SHORT).show();
     }
+
     @Override
     public void onGetRelatedContentPreExecuteStarted() {
         pDialog = new ProgressBarHandler(ProgrammeActivity.this);
         pDialog.show();
-        LogUtil.showLog("SUBHA","onGetRelatedContentPreExecuteStarted");
+        LogUtil.showLog("SUBHA", "onGetRelatedContentPreExecuteStarted");
 
     }
 
