@@ -35,7 +35,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.MediaRouteButton;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -84,23 +83,25 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
+import com.home.apisdk.apiController.GetEpisodeDeatailsAsynTask;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
+import com.home.apisdk.apiModel.Episode_Details_input;
+import com.home.apisdk.apiModel.Episode_Details_output;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.vod.BuildConfig;
-import com.home.vod.MonetizationHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.ProgramDetailsAdapter;
 import com.home.vod.model.EpisodesListModel;
+import com.home.vod.model.SeasonModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.ResizableCustomView;
 import com.intertrust.wasabi.ErrorCodeException;
 import com.intertrust.wasabi.Runtime;
 import com.intertrust.wasabi.media.PlaylistProxy;
@@ -149,7 +150,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
-
 import player.activity.AdPlayerActivity;
 import player.activity.DataConsumptionService;
 import player.activity.Player;
@@ -173,7 +173,6 @@ import player.utils.Util;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
-import static android.support.v7.widget.LinearLayoutManager.HORIZONTAL;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
@@ -185,7 +184,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CO
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
@@ -193,7 +191,7 @@ import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION
 import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
-import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_ARRAY;
 import static com.home.vod.util.Constant.authTokenStr;
 
 
@@ -213,8 +211,8 @@ enum ContentTypes3 {
 }
 
 public class ProgramPlayerActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener, PlaylistProxyListener, AdEvent.AdEventListener, AdErrorEvent.AdErrorListener,
-        GetValidateUserAsynTask.GetValidateUserListener,
-        VideoDetailsAsynctask.VideoDetailsListener{
+        GetValidateUserAsynTask.GetValidateUserListener, GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener,
+        VideoDetailsAsynctask.VideoDetailsListener {
 
     ProgressBarHandler mDialog;
     // private SampleVideoPlayer mVideoPlayer;
@@ -244,6 +242,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     String upStreamUniqueId, upContentUniqueId;
     String Episodeid;
     PreferenceManager preferenceManager;
+    ArrayList<SeasonModel>  totalSeasonModel;
     private static final int MAX_LINES = 2;
     PlaylistProxy playerProxy;
     int played_length = 0;
@@ -253,15 +252,18 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     GetValidateUserAsynTask asynValidateUserDetails;
 
     // ProgramPlayerActivity.this is added for the new video log API;
-
+    String episodeVideoUrlStr;
     int player_start_time = 0;
     int player_end_time = 0;
     String log_temp_id = "0";
     ArrayList<EpisodesListModel> questions;
+    ArrayList<SeasonModel> SeasonModelArrayList;
 
     // ===========End============================//
     ProgressBarHandler progressBarHandler;
-    /***** offline *****/
+    /*****
+     * offline
+     *****/
     DownloadManager downloadManager;
     RelativeLayout download_layout;
     public boolean downloading;
@@ -287,7 +289,13 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     String fileExtenstion;
     int lenghtOfFile;
     int lengthfile;
-    /***** offline *****/
+    ////by nihar
+    int TotalSeason;
+    ImageView next_season, previous_season;
+    String permalinkStr;
+    /*****
+     * offline
+     *****/
 
     Timer timer;
     private Handler threadHandler = new Handler();
@@ -308,12 +316,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     AsynGetIpAddress asynGetIpAddress;
 
     ImageButton back, center_play_pause;
-    ImageView compress_expand,share;
+    ImageView compress_expand, share;
     SeekBar seekBar;
     private Handler mHandler = new Handler();
     Timer center_pause_paly_timer;
     String Current_Time, TotalTime;
-    TextView current_time, total_time;
+    TextView current_time, total_time, season_change_textview;
     ProgressBar progressView;
     LinearLayout primary_ll, last_ll;
     boolean video_completed = false;
@@ -344,7 +352,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     //Toolbar mActionBarToolbar;
     LinearLayout linearLayout1;
 
-    TextView videoTitle, GenreTextView,descriptionDetailsTextView,clocktime,durationTitleTextView,durationTextView,moreVideoTitleTextView,descriptionTitleTextVIew, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView,
+    TextView videoTitle, GenreTextView, descriptionDetailsTextView, clocktime, durationTitleTextView, durationTextView, moreVideoTitleTextView, descriptionTitleTextVIew, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView,
             videoCastCrewTitleTextView;
     TextView story;
     RecyclerView moreVideosRecyclerView;
@@ -373,7 +381,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
     private SubtitleProcessingTask subsFetchTask;
     public TimedTextObject srt;
-    TextView subtitleText,clocktimetv;
+    TextView subtitleText, clocktimetv;
     public Handler subtitleDisplayHandler;
     ImageView subtitle_change_btn;
 
@@ -389,7 +397,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     ArrayList<String> List_Of_FileSize;
     ArrayList<String> List_Of_Resolution_Format;
     ArrayList<String> List_Of_Resolution_Url;
-    ArrayList<String> List_Of_Resolution_Url_Used_For_Download ;
+    ArrayList<String> List_Of_Resolution_Url_Used_For_Download;
     ProgressBarHandler pDialog;
     ProgressBarHandler pDialog_for_gettig_filesize;
     AlertDialog alert;
@@ -398,7 +406,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     int seekBarProgress = 0;
 
     boolean isDrm = false;
- int contentPosition;
+    int contentPosition;
+    int current_season  ;
+    int totalSeason;
     // =====================End==============================//
 
 
@@ -430,7 +440,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         }
 
 
-        Log.v("SUBHA","Validate user");
+        Log.v("SUBHA", "Validate user");
         if (validateUserOutput == null) {
 
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramPlayerActivity.this);
@@ -468,7 +478,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         }
 
         if (status > 0) {
-            Log.v("SUBHA","Validate user"+status);
+            Log.v("SUBHA", "Validate user" + status);
             if (status == 427) {
 
 
@@ -493,7 +503,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             } else if (status == 429 || status == 430) {
                 if (NetworkStatus.getInstance().isConnected(this)) {
 
-                    Log.v("SUBHA","Video PLayer Called 1");
+                    Log.v("SUBHA", "Video PLayer Called 1");
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);
@@ -534,7 +544,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             } else {
                 if (NetworkStatus.getInstance().isConnected(this)) {
 
-                    Log.v("SUBHA","Video PLayer Called 1");
+                    Log.v("SUBHA", "Video PLayer Called 1");
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);
@@ -585,7 +595,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             play_video = true;
         }
 
-        Log.v("SUBHA","play video ==== "+ play_video);
+        Log.v("SUBHA", "play video ==== " + play_video);
         if (!play_video) {
 
             try {
@@ -622,7 +632,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
         }
 
-        Log.v("SUBHA","code == player == "+ code);
+        Log.v("SUBHA", "code == player == " + code);
         if (code == 200) {
             playerModel.setIsOffline(_video_details_output.getIs_offline());
             playerModel.setDownloadStatus(_video_details_output.getDownload_status());
@@ -683,7 +693,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
             //dependency for datamodel
 
-            SubTitleName = new ArrayList<>( _video_details_output.getSubTitleName());
+            SubTitleName = new ArrayList<>(_video_details_output.getSubTitleName());
             SubTitleLanguage = new ArrayList<>(_video_details_output.getSubTitleLanguage());
             ResolutionUrl = new ArrayList<>(_video_details_output.getResolutionUrl());
             ResolutionFormat = new ArrayList<>(_video_details_output.getResolutionFormat());
@@ -711,16 +721,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             }
 
 
-
-
 //            SubTitleName = _video_details_output.getSubTitleName();
 //            SubTitleLanguage = _video_details_output.getSubTitleLanguage();
 
-            if(SubTitlePath.size()>0 || ResolutionUrl.size()>0)
-            {
+            if (SubTitlePath.size() > 0 || ResolutionUrl.size() > 0) {
                 subtitle_change_btn.setVisibility(View.VISIBLE);
             }
-
 
 
             com.home.vod.util.Util.dataModel.setVideoUrl(_video_details_output.getVideoUrl());
@@ -984,10 +990,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
                                 }
                             });
-                        }else{
+                        } else {
 
-                        playerModel.setThirdPartyPlayer(false);
-                        emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
+                            playerModel.setThirdPartyPlayer(false);
+                            emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
                         }
                     }
                 } else {
@@ -997,7 +1003,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
                     playVideoIntent.putExtra("PlayerModel", playerModel);
 //                    playVideoIntent.putExtra("PLAY_LIST",itemData);
-                   // startActivity(playVideoIntent);
+                    // startActivity(playVideoIntent);
                 }
             }
 
@@ -1008,6 +1014,86 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
 
             com.home.vod.util.Util.showNoDataAlert(ProgramPlayerActivity.this);
+        }
+
+    }
+
+    @Override
+    public void onGetEpisodeDetailsPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onGetEpisodeDetailsPostExecuteCompleted(Episode_Details_output episode_details_output, int status, int i, String message, String movieUniqueId) {
+        questions.clear();
+        try {
+            if (progressBarHandler != null && progressBarHandler.isShowing()) {
+                LogUtil.showLog("PINTU", "getepisodedetails pdlog hide");
+                progressBarHandler.hide();
+
+            }
+        } catch (IllegalArgumentException ex) {
+
+        }
+
+
+        LogUtil.showLog("MUVI", "episode show...");
+
+
+        String loggedInStr = preferenceManager.getLoginStatusFromPref();
+        if (status == 200) {
+
+
+            com.home.vod.util.Util.currencyModel = episode_details_output.getCurrencyDetails();
+            com.home.vod.util.Util.apvModel = episode_details_output.getApvDetails();
+            com.home.vod.util.Util.ppvModel = episode_details_output.getPpvDetails();
+//            Util.dataModel.setMovieUniqueId(movieUniqueId);
+            for (int a = 0; a < episode_details_output.getEpisodeArray().size(); a++) {
+
+                String episodeNoStr = episode_details_output.getEpisodeArray().get(a).getEpisode_number();
+                String episodeStoryStr = episode_details_output.getEpisodeArray().get(a).getEpisode_story();
+                String episodeDateStr = episode_details_output.getEpisodeArray().get(a).getEpisode_date();
+                String episodeImageStr = episode_details_output.getEpisodeArray().get(a).getPoster_url();
+                String episodeTitleStr = episode_details_output.getEpisodeArray().get(a).getEpisode_title();
+                String episodeSeriesNoStr = episode_details_output.getEpisodeArray().get(a).getSeries_number();
+                String episodeMovieStreamUniqueIdStr = episode_details_output.getEpisodeArray().get(a).getMovie_stream_uniq_id();
+                String episodeThirdParty = episode_details_output.getEpisodeArray().get(a).getThirdparty_url();
+
+                //int episodeContenTTypesId=episodeArray.get(a).getContent_types_id();
+                String videodurationStr = episode_details_output.getEpisodeArray().get(a).getVideo_duration();
+
+
+                questions.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr, movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, videodurationStr));
+
+            }
+            LogUtil.showLog("MUVI", "episode show...1");
+
+
+            if (questions.size() <= 0) {
+
+
+                //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
+            } else {
+
+
+                LogUtil.showLog("BISHAL", "data show...");
+                moreVideosRecyclerView.setVisibility(View.VISIBLE);
+                moreVideosRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                moreVideosRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                ProgramDetailsAdapter mAdapter = new ProgramDetailsAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions, new ProgramDetailsAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(EpisodesListModel item, int position) {
+                        contentPosition = position;
+                        getData();
+                        Log.v("SUBHA", "data set here");
+
+                    }
+                });
+                contentPosition = 0;
+                getData();
+                moreVideosRecyclerView.setAdapter(mAdapter);
+
+            }
         }
 
     }
@@ -1023,6 +1109,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     public enum PlaybackState {
         PLAYING, PAUSED, BUFFERING, IDLE
     }
+
     String PlanId = "";
     private PlaybackLocation mLocation;
     private PlaybackState mPlaybackState;
@@ -1049,6 +1136,28 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     boolean change_resolution = false;
     boolean is_paused = false;
 
+    public void EpisodeDetails(String season) {
+        next_season.setVisibility(View.VISIBLE);
+        previous_season.setVisibility(View.VISIBLE);
+
+        if (counter == 0) {
+            previous_season.setVisibility(View.GONE);
+        }
+        if (counter >= totalSeason -1) {
+            next_season.setVisibility(View.GONE);
+        }
+        season_change_textview.setText(totalSeasonModel.get(counter).getSeasonName() + " OF "+totalSeason);
+        Episode_Details_input episode_details_input = new Episode_Details_input();
+        permalinkStr = getIntent().getStringExtra("PERMALINK");
+        episode_details_input.setAuthtoken(authTokenStr);
+        episode_details_input.setPermalink(permalinkStr);
+        episode_details_input.setLimit("10");
+        episode_details_input.setOffset("1");
+        episode_details_input.setSeries_number(season);
+        episode_details_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        GetEpisodeDeatailsAsynTask getEpisodeDeatailsAsynTask = new GetEpisodeDeatailsAsynTask(episode_details_input, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
+        getEpisodeDeatailsAsynTask.executeOnExecutor(threadPoolExecutor);
+    }
 
     @Override
     protected void onResume() {
@@ -1059,13 +1168,13 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             @Override
             public void run() {
 
-                Log.v("PINTU","CheckAvailabilityOfChromecast called");
+                Log.v("PINTU", "CheckAvailabilityOfChromecast called");
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
-                        if(video_prepared){
+                        if (video_prepared) {
                             if (mediaRouteButton.isEnabled()) {
                                 mediaRouteButton.setVisibility(View.VISIBLE);
                             } else {
@@ -1075,7 +1184,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                     }
                 });
             }
-        },3000,3000);
+        }, 3000, 3000);
 
         SensorOrientationChangeNotifier.getInstance(ProgramPlayerActivity.this).addListener(this);
 
@@ -1097,30 +1206,27 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         }
     }
 
+    int counter = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_program_player);
-        Log.v("NiharMishra", "OnCreate"+questions);
+        Log.v("NiharMishra", "OnCreate" + questions);
 
         languagePreference = LanguagePreference.getLanguagePreference(this);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
 
 
-
         SubTitleName = new ArrayList<>();
-       SubTitlePath = new ArrayList<>();
+        SubTitlePath = new ArrayList<>();
         ResolutionFormat = new ArrayList<>();
-       ResolutionUrl = new ArrayList<>();
+        ResolutionUrl = new ArrayList<>();
 
 
-       List_Of_FileSize = new ArrayList<>();
-       List_Of_Resolution_Format = new ArrayList<>();
-       List_Of_Resolution_Url = new ArrayList<>();
+        List_Of_FileSize = new ArrayList<>();
+        List_Of_Resolution_Format = new ArrayList<>();
+        List_Of_Resolution_Url = new ArrayList<>();
         List_Of_Resolution_Url_Used_For_Download = new ArrayList<>();
-
-
-
 
 
         if (playerModel.getVideoUrl().contains(".mpd")) {
@@ -1132,15 +1238,65 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         pDialog = new ProgressBarHandler(ProgramPlayerActivity.this);
         ////////////changed by nihar  ///start
         clocktimetv = (TextView) findViewById(R.id.clocktime);
+        RelativeLayout seasonScroller = (RelativeLayout) findViewById(R.id.seasonScroller);
+
+        season_change_textview = (TextView) findViewById(R.id.season_change_textview);
+        if (totalSeason == 1) {
+            seasonScroller.setVisibility(View.GONE);
+        }
+
+        previous_season = (ImageView) findViewById(R.id.previous_season);
+        previous_season.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("Nihar", "previous called ----------------");
+
+                counter = counter -1;
+                EpisodeDetails(totalSeasonModel.get(counter).getSeasonId());
+            }
+        });
+        next_season = (ImageView) findViewById(R.id.next_season);
+        next_season.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("Nihar", "next called ----------------" + totalSeasonModel.get(current_season).getSeasonId());
+                counter = counter +1;
+
+                EpisodeDetails(totalSeasonModel.get(counter).getSeasonId());
+
+               /* if (totalSeason >= current_season) {
+                 *//*   current_season += 1;
+                    EpisodeDetails(totalSeasonModel.get(current_season).getSeasonId());*//*
+
+                }*/
+            }
+        });
         preferenceManager = PreferenceManager.getPreferenceManager(this);
+         totalSeasonModel = (ArrayList<SeasonModel>) getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY);
+        totalSeason = totalSeasonModel.size();
+        current_season = Integer.parseInt(getIntent().getStringExtra("Current_SEASON"));
+        counter = Integer.parseInt(getIntent().getStringExtra("Index"));
+        season_change_textview.setText(totalSeasonModel.get(counter).getSeasonName() + " OF "+totalSeason);
+
+            //something here
+
+
+        Log.v("Nihar", "arraylist player" + totalSeasonModel.size()+"current season : "+current_season);
         try {
+//
+     /*       SeasonModelArrayList = (ArrayList<SeasonModel>) getIntent().getSerializableExtra("SEASON_ARRAY_MODEL");
+            Log.v("Nihar", "array" + SeasonModelArrayList.size());
+            String totalSeason = String.valueOf(SeasonModelArrayList.size());
+            season_change_textview.setText(totalSeason);*/
+
             contentPosition = getIntent().getIntExtra("TAG", 0);
+
             questions = new ArrayList<EpisodesListModel>();
-            Log.v("Nihar", "array" + getIntent().getSerializableExtra("PLAY_LIST"));
+
 
             questions = (ArrayList<EpisodesListModel>) getIntent().getSerializableExtra("PLAY_LIST");
-           // Util.PlayListArrayModel = questions;
-            String clocktext = contentPosition+1 +" to " + String.valueOf(questions.size());
+            // Util.PlayListArrayModel = questions;
+            String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
             clocktimetv.setText(clocktext);
             Log.v("Nihar", "" + questions.size() + "position :" + contentPosition);
         } catch (Exception e) {
@@ -1153,11 +1309,11 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         moreVideosRecyclerView.setItemAnimator(new DefaultItemAnimator());
         ProgramDetailsAdapter mAdapter = new ProgramDetailsAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions, new ProgramDetailsAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(EpisodesListModel item,int position) {
+            public void onItemClick(EpisodesListModel item, int position) {
 //                clickItem(item, position);
                 contentPosition = position;
                 getData();
-                Log.v("SUBHA","data set here");
+                Log.v("SUBHA", "data set here");
 
             }
         });
@@ -1254,16 +1410,15 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
         share.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-               shareVideo(ProgramPlayerActivity.this);
+                shareVideo(ProgramPlayerActivity.this);
             }
         });
-
 
 
         //Check for offline content // Added By sanjay
         mediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
         download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
-        if (content_types_id!=4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
+        if (content_types_id != 4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
             download_layout.setVisibility(View.VISIBLE);
         }
         /*if (content_types_id != 4) {
@@ -1395,10 +1550,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             /**ad **/
 
             if (playerModel.getMidRoll() == 1) {
-                Log.v("SUBHA","adDetails"+playerModel.getAdDetails());
+                Log.v("SUBHA", "adDetails" + playerModel.getAdDetails());
 
                 adDetails = playerModel.getAdDetails().split(",");
-                Log.v("SUBHA","adDetails"+adDetails.length);
+                Log.v("SUBHA", "adDetails" + adDetails.length);
 
             }
 
@@ -1519,8 +1674,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             durationTextView.setVisibility(View.GONE);
         }
 
-        if (playerModel.getVideoStory().trim() != null && !playerModel.getVideoStory().trim().matches(""))
-        {
+        if (playerModel.getVideoStory().trim() != null && !playerModel.getVideoStory().trim().matches("")) {
             story.setText(playerModel.getVideoStory());
             story.setVisibility(View.VISIBLE);
         } else {
@@ -1681,24 +1835,21 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                     } else {
                         primary_ll.setVisibility(View.VISIBLE);
 
-                        if(isDrm)
-                        {
+                        if (isDrm) {
                             if (SubTitlePath.size() > 0) {
                                 subtitle_change_btn.setVisibility(View.VISIBLE);
                             }
-                        }else {
-                            if (SubTitlePath.size() > 0 || ResolutionUrl.size()>0) {
+                        } else {
+                            if (SubTitlePath.size() > 0 || ResolutionUrl.size() > 0) {
                                 subtitle_change_btn.setVisibility(View.VISIBLE);
                             }
                         }
 
                         // This is changed Later
 
-                        if(mediaRouteButton.isEnabled())
-                        {
+                        if (mediaRouteButton.isEnabled()) {
                             mediaRouteButton.setVisibility(View.VISIBLE);
-                        }else
-                        {
+                        } else {
                             mediaRouteButton.setVisibility(View.GONE);
                         }
 
@@ -1836,8 +1987,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                         updateProgressBar();
                     }
 
-                }
-                else{
+                } else {
 
 
                     if (playerModel.getPlayPos() >= emVideoView.getDuration() / 1000) {
@@ -1869,7 +2019,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
                             PreviousUsedDataByApp(false);
                             /**ad **/
-                            if (playerModel.getAdNetworkId() == 3){
+                            if (playerModel.getAdNetworkId() == 3) {
                                 requestAds(playerModel.getChannel_id());
 
                             }
@@ -1889,7 +2039,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
                                 PreviousUsedDataByApp(false);
                                 /**ad **/
-                                if (playerModel.getAdNetworkId() == 3){
+                                if (playerModel.getAdNetworkId() == 3) {
                                     requestAds(playerModel.getChannel_id());
 
                                 }
@@ -1993,7 +2143,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             params.sourceContentType = contentType
                     .getMediaSourceParamsContentType();
             /*
-			 * if the content has separate audio tracks (eg languages) you may
+             * if the content has separate audio tracks (eg languages) you may
 			 * select one using MediaSourceParams, eg params.language="es";
 			 */
             String contentTypeValue = contentType.toString();
@@ -2688,7 +2838,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         public void run() {
 
 
-
             seekBarProgress = emVideoView.getCurrentPosition();
 
             if (emVideoView.getCurrentPosition() % 2 == 0)
@@ -2730,7 +2879,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                 if (content_types_id == 4) {
 
 
-                }  else {
+                } else {
 
                     if (content_types_id == 4) {
 
@@ -2784,17 +2933,14 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                             //======end========//
 
 
+                            int totalsize = questions.size() - 1;
+                            Log.v("Nihar", "" + totalsize);
+                            if (totalsize > contentPosition && contentPosition != questions.size()) {
 
-
-
-                            int totalsize = questions.size()-1;
-                            Log.v("Nihar",""+totalsize);
-                            if ( totalsize > contentPosition && contentPosition != questions.size()) {
-
-                                contentPosition = contentPosition +1;
+                                contentPosition = contentPosition + 1;
                                 stoptimertask();
 
-                                String clocktext = contentPosition+1 +" to " + String.valueOf(questions.size());
+                                String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
                                 clocktimetv.setText(clocktext);
 
 
@@ -2806,7 +2952,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                                 subtitle_change_btn.setVisibility(View.INVISIBLE);
                                 mediaRouteButton.setVisibility(View.INVISIBLE);
                                 End_Timer();
-                                Log.v("Nihar",totalsize+"NextPosition   429  :"+contentPosition);
+                                Log.v("Nihar", totalsize + "NextPosition   429  :" + contentPosition);
                                 EpisodesListModel listModel = questions.get(contentPosition);
                                 durationTextView.setText(listModel.getEpisodeDuration());
                                 playerModel.setVideoDuration(listModel.getEpisodeDuration());
@@ -2829,7 +2975,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                                 content_types_id = playerModel.getContentTypesId();
 
                                 upStreamUniqueId = listModel.getEpisodeStreamUniqueId();
-                                episodeId  = upStreamUniqueId;
+                                episodeId = upStreamUniqueId;
                                 upContentUniqueId = listModel.getEpisodeMuviUniqueId();
                                 movieId = upContentUniqueId;
 
@@ -2840,7 +2986,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                                 validateUserInput.setMuviUniqueId(upContentUniqueId.trim());
                                 validateUserInput.setPurchaseType(com.home.vod.util.Util.dataModel.getPurchase_type());
                                 validateUserInput.setSeasonId(com.home.vod.util.Util.dataModel.getSeason_id());
-                               // validateUserInput.setEpisodeStreamUniqueId(com.home.vod.util.Util.dataModel.getEpisode_id());
+                                // validateUserInput.setEpisodeStreamUniqueId(com.home.vod.util.Util.dataModel.getEpisode_id());
                                 validateUserInput.setEpisodeStreamUniqueId(upStreamUniqueId);
 
                                 validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
@@ -3643,8 +3789,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             if (requestCode == 222) {
 
 
-                if(data.getStringExtra("type").equals("resolution"))
-                {
+                if (data.getStringExtra("type").equals("resolution")) {
 //                Toast.makeText(getApplicationContext(),"resolution == "+data.getStringExtra("position"),Toast.LENGTH_SHORT).show();
                     mHandler.removeCallbacks(updateTimeTask);
                     if (!data.getStringExtra("position").equals("nothing")) {
@@ -3658,8 +3803,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
                     }
 
-                }else
-                {
+                } else {
                     if (mCastSession != null && mCastSession.isConnected()) {
                         Util.call_finish_at_onUserLeaveHint = false;
                     }
@@ -3741,7 +3885,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mCastContext!=null){
+        if (mCastContext != null) {
             mCastContext.getSessionManager().removeSessionManagerListener(mSessionManagerListener, CastSession.class);
         }
 
@@ -3867,7 +4011,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     @Override
     protected void onPause() {
 
-        if(CheckAvailabilityOfChromecast!=null)
+        if (CheckAvailabilityOfChromecast != null)
             CheckAvailabilityOfChromecast.cancel();
 
         Log.v("PINTU", "onPause called");
@@ -4121,8 +4265,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
                 if (videoBufferLogUniqueId.equals("0"))
                     httppost.addHeader("totalBandwidth", "0");
-                else
-                if(isDrm)
+                else if (isDrm)
                     httppost.addHeader("totalBandwidth", "" + (CurrentUsedData + DataUsedByChrmoeCast));
                 else
                     httppost.addHeader("totalBandwidth", "" + CurrentUsedData);
@@ -4201,7 +4344,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     }
 
 
-    /*****offline  *****/
+    /*****
+     * offline
+     *****/
 
     private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
         ProgressBarHandler pDialog;
@@ -4865,8 +5010,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             playerModel.getOfflineUrl().remove(0);
             if (playerModel.getOfflineUrl().size() > 0) {
                 Download_SubTitle(playerModel.getOfflineUrl().get(0).trim());
-            }
-            else{
+            } else {
                 playerModel.setThirdPartyPlayer(false);
                 emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
             }
@@ -4874,7 +5018,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         }
     }
 
-    /*****offline *****/
+    /*****
+     * offline
+     *****/
 
 
     // ProgramPlayerActivity.this added later for chromecast//
@@ -4963,7 +5109,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
                     cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
 
-                    if(isDrm){
+                    if (isDrm) {
 
                         DataUsedByChrmoeCast = Current_Sesion_DataUsedByChrmoeCast + DataUsedByChrmoeCast;
                         Current_Sesion_DataUsedByChrmoeCast = 0;
@@ -4975,8 +5121,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
                     Log.v("BIBHU3", "onSessionEnding===================" + cast_disconnected_position);
                     Log.v("BIBHU3", "onSessionEnding DataUsedByChrmoeCast===================" + DataUsedByChrmoeCast);
-                }
-                catch (Exception e){
+                } catch (Exception e) {
 
                 }
             }
@@ -5024,8 +5169,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                                     JSONObject jsonObject = new JSONObject(s1);
                                     videoLogId = jsonObject.optString("video_log_id");
 
-                                    if(isDrm)
-                                    {
+                                    if (isDrm) {
                                         videoBufferLogId = jsonObject.optString("bandwidth_log_id");
                                         Current_Sesion_DataUsedByChrmoeCast = Long.parseLong(jsonObject.optString("bandwidth"));
                                         Log.v("bibhu", "Current_Sesion_DataUsedByChrmoeCast=*****************=====" + Current_Sesion_DataUsedByChrmoeCast);
@@ -5395,10 +5539,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
             togglePlayback();
 
-        }
-
-        else
-        {
+        } else {
             mediaContentType = "videos/mp4";
             JSONObject jsonObj = null;
             try {
@@ -5445,7 +5586,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                 // This  Code Is Added For Drm BufferLog By Bibhu ...
 
                 jsonObj.put("resolution", "BEST");
-                jsonObj.put("start_time",String.valueOf(playerPosition));
+                jsonObj.put("start_time", String.valueOf(playerPosition));
                 jsonObj.put("end_time", String.valueOf(playerPosition));
 
                 // This ia always "0" for Non DRM play and Cast.
@@ -6224,7 +6365,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         }
     }
 
-    public  void shareVideo(Context context) {
+    public void shareVideo(Context context) {
 //sharing implementation here
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
@@ -6232,7 +6373,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Now Learn Android with AndroidSolved clicke here to visit https://androidsolved.wordpress.com/ ");
         context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
-
 
 
     public void getData() {

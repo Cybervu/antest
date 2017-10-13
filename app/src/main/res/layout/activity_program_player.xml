@@ -488,7 +488,41 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="7dp" />
+            <RelativeLayout
+                android:id="@+id/seasonScroller"
+
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/colorPrimary"
+                >
+                <TextView
+                    android:id="@+id/season_change_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@android:color/white"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:text="DAYS 3 OF 20 "
+                    />
+                <ImageView
+                    android:id="@+id/next_season"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toRightOf="@id/season_change_textview"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_keyboard_arrow_right_white_24px"/>
+                <ImageView
+                    android:id="@+id/previous_season"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toLeftOf="@id/season_change_textview"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_keyboard_arrow_left_white_24px"/>
+            </RelativeLayout>
         </LinearLayout>
+
         </ScrollView>
 
 
@@ -500,5 +534,6 @@
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:layout_alignParentBottom="true" />-->
+
 
     </RelativeLayout>
