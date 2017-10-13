@@ -306,7 +306,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
                                     validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                                     validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                                    GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
+                                    asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
                                     asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 
 
@@ -782,6 +782,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             Intent resumeIntent = new Intent(LoginActivity.this, ResumePopupActivity.class);
                             startActivityForResult(resumeIntent, 1001);
 
+
                         }else
                         {
                             Played_Length = 0;
@@ -1101,6 +1102,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
             togglePlayback();
+
         }
     }
     @Override
@@ -1249,6 +1251,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     private ProgressBarHandler progressDialog;
     private CallbackManager callbackManager;
     CheckFbUserDetailsAsyn asynCheckFbUserDetails;
+    GetValidateUserAsynTask asynValidateUserDetails;
     SocialAuthAsynTask asynFbRegDetails;
 
     /*********fb****/
@@ -1646,6 +1649,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         mCastContext.getSessionManager().addSessionManagerListener(
                 mSessionManagerListener, CastSession.class);
+
 
         /***************chromecast**********************/
 
@@ -2736,9 +2740,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     @Override
     public void onBackPressed() {
-//        if (asynValidateUserDetails!=null){
-//            asynValidateUserDetails.cancel(true);
-//        }
+        if (asynValidateUserDetails!=null){
+            asynValidateUserDetails.cancel(true);
+        }
 
         if (asynCheckFbUserDetails != null) {
             asynCheckFbUserDetails.cancel(true);
@@ -3472,6 +3476,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             }
         });
         remoteMediaClient.load(mSelectedMedia, autoPlay, position);
+        finish();
     }
 
     /***************chromecast**********************/

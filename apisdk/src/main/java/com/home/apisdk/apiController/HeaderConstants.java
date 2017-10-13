@@ -12,10 +12,18 @@ public class HeaderConstants {
      * Constant for Auth Token Header used in API Call
      */
     public static final String AUTH_TOKEN = "authToken";
+
+
+    /**
+     * Constant for VLINK Header used in API Call
+     */
+    public static final String VLINK = "vlink";
+
     /**
      * Constant for Permalink Header used in API Call
      */
     public static final String PERMALINK = "permalink";
+
     /**
      * Constant for Language Code Header used in API Call
      */
@@ -168,6 +176,17 @@ public class HeaderConstants {
      * Constant for Stream ID Header used in API Call
      */
     public static final String STREAM_ID = "stream_id";
+
+    /**
+     * Constant for Content Stream ID Header used in API Call
+     */
+    public static final String LANGUAGE_CODE = "language_code";
+
+    /**
+     * Constant for Content Stream ID Header used in API Call
+     */
+    public static final String CONTENT_STREAM_ID = "content_stream_id";
+
     /**
      * Constant for Card Last Four Digit Header used in API Call
      */
