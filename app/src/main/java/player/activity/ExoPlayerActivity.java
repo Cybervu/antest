@@ -541,80 +541,80 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         percentg = (TextView) findViewById(R.id.percentage);
 
 
-        //Check for offline content // Added By sanjay
-        mediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
-        download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
-        if (content_types_id!=4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
-            download_layout.setVisibility(View.VISIBLE);
-        }
+            //Check for offline content // Added By sanjay
+            mediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
+            download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
+            if (content_types_id!=4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
+                download_layout.setVisibility(View.VISIBLE);
+            }
         /*if (content_types_id != 4) {
             download_layout.setVisibility(View.VISIBLE);
         }*/
 
 
-        /********* Offline ********/
+            /********* Offline ********/
 /***************chromecast**********************/
 
-        mAquery = new AQuery(ExoPlayerActivity.this);
-        setupCastListener();
-        mCastContext = CastContext.getSharedInstance(ExoPlayerActivity.this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(ExoPlayerActivity.this, savedInstanceState);
-        mCastSession = CastContext.getSharedInstance(ExoPlayerActivity.this).getSessionManager().getCurrentCastSession();
-        mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
+            mAquery = new AQuery(ExoPlayerActivity.this);
+            setupCastListener();
+            mCastContext = CastContext.getSharedInstance(ExoPlayerActivity.this);
+            mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(ExoPlayerActivity.this, savedInstanceState);
+            mCastSession = CastContext.getSharedInstance(ExoPlayerActivity.this).getSessionManager().getCurrentCastSession();
+            mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
 
 
-        boolean shouldStartPlayback = false;
-        int startPosition = 0;
+            boolean shouldStartPlayback = false;
+            int startPosition = 0;
 
-        if (shouldStartPlayback) {
-            // ExoPlayerActivity.this will be the case only if we are coming from the
-            // CastControllerActivity by disconnecting from a device
-            mPlaybackState = PlaybackState.PLAYING;
-            updatePlaybackLocation(PlaybackLocation.LOCAL);
-            updatePlayButton(mPlaybackState);
-            if (startPosition > 0) {
-            }
-        } else {
-            // we should load the video but pause it
-            // and show the album art.
-            if (mCastSession != null && mCastSession.isConnected()) {
-                updatePlaybackLocation(PlaybackLocation.REMOTE);
-            } else {
+            if (shouldStartPlayback) {
+                // ExoPlayerActivity.this will be the case only if we are coming from the
+                // CastControllerActivity by disconnecting from a device
+                mPlaybackState = PlaybackState.PLAYING;
                 updatePlaybackLocation(PlaybackLocation.LOCAL);
+                updatePlayButton(mPlaybackState);
+                if (startPosition > 0) {
+                }
+            } else {
+                // we should load the video but pause it
+                // and show the album art.
+                if (mCastSession != null && mCastSession.isConnected()) {
+                    updatePlaybackLocation(PlaybackLocation.REMOTE);
+                } else {
+                    updatePlaybackLocation(PlaybackLocation.LOCAL);
+                }
+                mPlaybackState = PlaybackState.IDLE;
+                updatePlayButton(mPlaybackState);
             }
-            mPlaybackState = PlaybackState.IDLE;
-            updatePlayButton(mPlaybackState);
-        }
 
-        // Added For Chromecast By BIBHU//
+            // Added For Chromecast By BIBHU//
 
 
-        Context castContext = new ContextThemeWrapper(ExoPlayerActivity.this, android.support.v7.mediarouter.R.style.Theme_MediaRouter);
-        Drawable drawable = null;
-        TypedArray a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
-        drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
-        a.recycle();
-        DrawableCompat.setTint(drawable, getResources().getColor(R.color.resumeTitleTextColor));
+            Context castContext = new ContextThemeWrapper(ExoPlayerActivity.this, android.support.v7.mediarouter.R.style.Theme_MediaRouter);
+            Drawable drawable = null;
+            TypedArray a = castContext.obtainStyledAttributes(null, android.support.v7.mediarouter.R.styleable.MediaRouteButton, android.support.v7.mediarouter.R.attr.mediaRouteButtonStyle, 0);
+            drawable = a.getDrawable(android.support.v7.mediarouter.R.styleable.MediaRouteButton_externalRouteEnabledDrawable);
+            a.recycle();
+            DrawableCompat.setTint(drawable, getResources().getColor(R.color.resumeTitleTextColor));
 
 
-        CastButtonFactory.setUpMediaRouteButton(ExoPlayerActivity.this, mediaRouteButton);
-        mediaRouteButton.setRemoteIndicatorDrawable(drawable);
+            CastButtonFactory.setUpMediaRouteButton(ExoPlayerActivity.this, mediaRouteButton);
+            mediaRouteButton.setRemoteIndicatorDrawable(drawable);
 
-        /***************chromecast**********************/
+            /***************chromecast**********************/
 
 
-        if (playerModel.getVideoUrl().matches("")) {
-            backCalled();
-            //onBackPressed();
-        }
-        movieId = playerModel.getMovieUniqueId();
-        episodeId = playerModel.getEpisode_id();
+            if (playerModel.getVideoUrl().matches("")) {
+                backCalled();
+                //onBackPressed();
+            }
+            movieId = playerModel.getMovieUniqueId();
+            episodeId = playerModel.getEpisode_id();
 
-        if (playerModel != null && playerModel.getUserId() != null && !playerModel.getUserId().trim().matches("")) {
-            userIdStr = playerModel.getUserId();
-        }
-        if (playerModel != null && playerModel.getEmailId() != null && !playerModel.getEmailId().trim().matches("")) {
-            emailIdStr = playerModel.getEmailId();
+            if (playerModel != null && playerModel.getUserId() != null && !playerModel.getUserId().trim().matches("")) {
+                userIdStr = playerModel.getUserId();
+            }
+            if (playerModel != null && playerModel.getEmailId() != null && !playerModel.getEmailId().trim().matches("")) {
+                emailIdStr = playerModel.getEmailId();
         }
 
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);

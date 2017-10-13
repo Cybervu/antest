@@ -1,10 +1,12 @@
 package com.home.vod.model;
 
 
+import java.io.Serializable;
+
 /**
  * Created by User on 02-07-2015.
  */
-public class EpisodesListModel {
+public class EpisodesListModel implements Serializable {
 
     private String episodeTitle;
     private String episodeNumber;
@@ -17,7 +19,15 @@ public class EpisodesListModel {
     private String thirdPartyUrl;
     private int episodeContentTypesId;
 
+    int tag ;
 
+    public int getTag() {
+        return tag;
+    }
+
+    public void setTag(int tag) {
+        this.tag = tag;
+    }
     public int getEpisodeContentTypesId() {
         return episodeContentTypesId;
     }
@@ -101,6 +111,26 @@ public class EpisodesListModel {
         this.episodeStreamUniqueId = episodeStreamUniqueId;
         this.thirdPartyUrl = thirdPartyUrl;
         this.episodeDuration = episodeDuration;
+
+
+    }
+
+    public EpisodesListModel(String episodeNumber, String episodeDescription, String episodeTelecastOn,
+                             String episodeThumbnailImageView, String episodeTitle, String episodeVideoUrl,
+                             String episodeSeriesNo, String episodeMuviUniqueId, String episodeStreamUniqueId,
+                             String thirdPartyUrl, int episodeContentTypesId, String episodeDuration,int tag) {
+        this.episodeNumber = episodeNumber;
+        this.episodeDescription = episodeDescription;
+        this.episodeTelecastOn = episodeTelecastOn;
+        this.episodeThumbnailImageView = episodeThumbnailImageView;
+        this.episodeTitle = episodeTitle;
+        this.episodeVideoUrl = episodeVideoUrl;
+        this.episodeSeriesNo = episodeSeriesNo;
+        this.episodeMuviUniqueId = episodeMuviUniqueId;
+        this.episodeStreamUniqueId = episodeStreamUniqueId;
+        this.thirdPartyUrl = thirdPartyUrl;
+        this.episodeDuration = episodeDuration;
+        this.tag = tag ;
 
 
     }

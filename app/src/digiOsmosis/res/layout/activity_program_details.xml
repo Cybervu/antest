@@ -72,7 +72,7 @@
 
                 <View
                     android:id="@+id/view"
-                    android:layout_width="3dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_alignBottom="@+id/titleTextView"
                     android:layout_alignTop="@+id/titleTextView"

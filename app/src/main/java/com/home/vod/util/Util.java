@@ -41,6 +41,7 @@ import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.activity.SplashScreen;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
+import com.home.vod.model.EpisodesListModel;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.preferences.LanguagePreference;
 
@@ -142,7 +143,7 @@ public class Util {
     public static boolean call_finish_at_onUserLeaveHint = true;
 
     public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
-
+    ArrayList<EpisodesListModel>  PlayListArrayModel = new ArrayList<EpisodesListModel>();
    /*public static boolean checkNetwork(Context context) {
       ConnectivityManager cm =
               (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

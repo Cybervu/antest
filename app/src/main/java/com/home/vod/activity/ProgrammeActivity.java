@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -392,6 +393,8 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         useridStr = preferenceManager.getUseridFromPref();
 
         contentDetailsInput.setAuthToken(authTokenStr);
+
+        Log.v("SUBHA","authToken === "+authTokenStr);
         if (preferenceManager != null) {
             String countryPref = preferenceManager.getCountryCodeFromPref();
             contentDetailsInput.setCountry(countryPref);
