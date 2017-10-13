@@ -252,10 +252,13 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         logo_image.bringToFront();
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         detailsTextView.setText(languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + getIntent().getStringExtra(SEASON_INTENT_KEY));
 
         viewAllTextView.setVisibility(View.GONE);
+        dietPlanButton.setVisibility(View.GONE);
+        playButton.setVisibility(View.GONE);
 
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

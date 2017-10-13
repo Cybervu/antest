@@ -339,12 +339,12 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         image_logo = (RelativeLayout) findViewById(R.id.logo_image);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
 
-        playButton.setVisibility(View.GONE);
         lineTextview.setVisibility(View.GONE);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
