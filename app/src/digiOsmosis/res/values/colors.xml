@@ -27,6 +27,8 @@
     <color name="favorite_unselected_color">#a30c0c</color>
     <color name="sign_up_text_color">#ff5a75</color>
     <color name="edit_color">#dadada</color>
+    <color name="duration_color">#a6a6a6</color>
+
     <color name="hint_color">#999</color>
     <color name="edit_color2">#00FFFFFF</color>
     <color name="alreadyMemberTextColor">#757575</color>

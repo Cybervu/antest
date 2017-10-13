@@ -3,10 +3,12 @@ package com.home.vod.adapter;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.home.vod.R;
@@ -19,11 +21,12 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 
-public class ProgramDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ProgramPlayerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-
+    int posT = 0;
     private String bannerImageUrl = "";
     private String showTitle = "";
     private String showStory = "";
@@ -35,6 +38,7 @@ public class ProgramDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private Context context;
     private int layoutResourceId;
     private int isThirdParty = 0;
+    private int pos = 0;
 
 
 
@@ -50,12 +54,13 @@ public class ProgramDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
 
-    public ProgramDetailsAdapter(Context context, int layoutResourceId,
-                                 ArrayList<EpisodesListModel> data) {
+    public ProgramPlayerAdapter(Context context, int layoutResourceId,
+                                ArrayList<EpisodesListModel> data,int pos) {
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
         this.movieUniqueId = movieUniqueId;
+        this.pos = pos;
 
 
     }
@@ -65,10 +70,11 @@ public class ProgramDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public TextView episodeTitleTextView;
         public TextView episodeNameTextView;
         public TextView episodeDateTextView;
-
+        public View iView;
         public ImageView episodeImageView;
         public ViewHolder(View view) {
             super(view);
+            iView = view;
             episodeTitleTextView = (TextView) view.findViewById(R.id.itemTitle);
             FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeTitleTextView);
 
@@ -78,6 +84,7 @@ public class ProgramDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             //episodeDateTextView = (TextView) view.findViewById(R.id.itemImage);
 
             episodeImageView = (ImageView) view.findViewById(R.id.itemImage);
+
             //episodeImageView.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.movieImageView,episodeImageView.getDrawable().getIntrinsicWidth(),episodeImageView.getDrawable().getIntrinsicHeight()));
         }
 
@@ -97,6 +104,7 @@ public class ProgramDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         .load(item.getEpisodeThumbnailImageView()).error(R.drawable.logo).placeholder(R.drawable.logo)
                         .into(episodeImageView);
             }
+
           /*  itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -123,9 +131,28 @@ public class ProgramDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        RecyclerView.LayoutParams param = (RecyclerView.LayoutParams)holder.itemView.getLayoutParams();
 
+            param.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            param.width = LinearLayout.LayoutParams.MATCH_PARENT;
         ViewHolder groupViewHolder = (ViewHolder) holder;
         // groupViewHolder.mImage.setText(labels.get(position - 1));
+        posT = position;
+        Log.v("Subhalaxmi","jf"+pos);
+        Log.v("Subhalaxmi","position"+position);
+
+        if (pos == position) {
+            Log.v("Subhalaxmi","GONE"+position);
+
+            holder.itemView.setVisibility(View.GONE);
+            param.height = 0;
+            param.width = 0;
+        } else {
+            Log.v("Subhalaxmi","VISIBLE"+position);
+
+            holder.itemView.setVisibility(View.VISIBLE);
+        }
+        holder.itemView.setLayoutParams(param);
         groupViewHolder.bind(data.get(position), listener);
     }
 

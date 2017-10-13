@@ -15,7 +15,7 @@
         android:color="#c4c1c1" />
 
     <size
-        android:height="100dp"
-        android:width="100dp" />
+        android:height="70dp"
+        android:width="70dp" />
 
 </shape>
