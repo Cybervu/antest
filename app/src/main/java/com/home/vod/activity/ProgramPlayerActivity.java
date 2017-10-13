@@ -35,11 +35,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.MediaRouteButton;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.Display;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -95,6 +97,7 @@ import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.vod.BuildConfig;
 import com.home.vod.R;
 import com.home.vod.adapter.ProgramDetailsAdapter;
+import com.home.vod.adapter.ProgramPlayerAdapter;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.model.SeasonModel;
 import com.home.vod.network.NetworkStatus;
@@ -211,9 +214,10 @@ enum ContentTypes3 {
 }
 
 public class ProgramPlayerActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener, PlaylistProxyListener, AdEvent.AdEventListener, AdErrorEvent.AdErrorListener,
-        GetValidateUserAsynTask.GetValidateUserListener, GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener,
-        VideoDetailsAsynctask.VideoDetailsListener {
-
+        GetValidateUserAsynTask.GetValidateUserListener,
+        VideoDetailsAsynctask.VideoDetailsListener,GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener{
+    RecyclerView.LayoutManager mLayoutManager;
+    ProgramPlayerAdapter mAdapter;
     ProgressBarHandler mDialog;
     // private SampleVideoPlayer mVideoPlayer;
 
@@ -1302,21 +1306,52 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         } catch (Exception e) {
             Log.v("Nihar", "exception" + e.toString());
         }
+        mLayoutManager = new LinearLayoutManager(ProgramPlayerActivity.this, LinearLayoutManager.HORIZONTAL, false);
 
         moreVideosRecyclerView = (RecyclerView) findViewById(R.id.moreVideosRecyclerView);
-        moreVideosRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        moreVideosRecyclerView.setLayoutManager(mLayoutManager);
 
         moreVideosRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        ProgramDetailsAdapter mAdapter = new ProgramDetailsAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions, new ProgramDetailsAdapter.OnItemClickListener() {
+       /* ProgramDetailsAdapter mAdapter = new ProgramDetailsAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions, new ProgramDetailsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(EpisodesListModel item, int position) {
 //                clickItem(item, position);
+                Log.v("SUBHA","data set here"+contentPosition+position);
+
+                // contentPosition = position;
+                getData();
+
+            }
+        });*/
+      /*  moreVideosRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), moreVideosRecyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Log.v("SUBHA","data set here"+position);
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));*/
+
+        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
+        moreVideosRecyclerView.addOnItemTouchListener(new RecyclerTouchListener1(this, moreVideosRecyclerView, new ClickListener1() {
+            @Override
+            public void onClick(View view, int position) {
+
                 contentPosition = position;
                 getData();
                 Log.v("SUBHA", "data set here");
-
             }
-        });
+
+            @Override
+            public void onLongClick(View view, int position) {
+                return;
+            }
+        }));
+
         moreVideosRecyclerView.setAdapter(mAdapter);
         /////////////end
         if (!playerModel.getVideoUrl().trim().equals("")) {
@@ -2942,7 +2977,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
                                 String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
                                 clocktimetv.setText(clocktext);
+                                mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
 
+                                moreVideosRecyclerView.setAdapter(mAdapter);
 
                                 primary_ll.setVisibility(View.GONE);
                                 last_ll.setVisibility(View.GONE);
@@ -2978,6 +3015,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                                 episodeId = upStreamUniqueId;
                                 upContentUniqueId = listModel.getEpisodeMuviUniqueId();
                                 movieId = upContentUniqueId;
+
 
                                 ValidateUserInput validateUserInput = new ValidateUserInput();
                                 validateUserInput.setAuthToken(authTokenStr);
@@ -5109,7 +5147,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
                     cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
 
-                    if (isDrm) {
+                    if(isDrm){
 
                         DataUsedByChrmoeCast = Current_Sesion_DataUsedByChrmoeCast + DataUsedByChrmoeCast;
                         Current_Sesion_DataUsedByChrmoeCast = 0;
@@ -6377,20 +6415,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
     public void getData() {
         mHandler.removeCallbacks(updateTimeTask);
-        //  pause_play.setImageResource(R.drawable.ic_media_play);
-//                    emVideoView.release();
-//                    emVideoView.reset();
         seekBar.setProgress(0);
-//                    emVideoView.seekTo(0);
         current_time.setText("00:00:00");
         total_time.setText("00:00:00");
         previous_matching_time = 0;
         current_matching_time = 0;
         video_completed = true;
-        //onBackPressed();
-//                        backCalled();
-
-        /////////////////////-------------------//////////////////
         content_types_id = 0;//set
         videoLogId = "0";
         watchStatus = "start";
@@ -6404,10 +6434,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         movieId = "";//set
         episodeId = "0";//set
         selected_download_format = 0;
-//                            center_pause_paly_timer_is_running = false;
         previous_matching_time = 0;
         current_matching_time = 0;
-        /////////////////////////////////////////////////////
         SubTitleName.clear();
         SubTitlePath.clear();
         ResolutionFormat.clear();
@@ -6426,16 +6454,18 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
         int totalsize = questions.size() - 1;
         Log.v("Nihar", "" + contentPosition);
-        if (totalsize > contentPosition && contentPosition != questions.size()) {
+       // if (totalsize > contentPosition && contentPosition != questions.size()) {
 
-            contentPosition = contentPosition + 1;
+           // contentPosition = contentPosition + 1;
             stoptimertask();
 
             String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
             clocktimetv.setText(clocktext);
 
+        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
 
-            primary_ll.setVisibility(View.GONE);
+        moreVideosRecyclerView.setAdapter(mAdapter);
+        primary_ll.setVisibility(View.GONE);
             last_ll.setVisibility(View.GONE);
             center_play_pause.setVisibility(View.GONE);
             latest_center_play_pause.setVisibility(View.GONE);
@@ -6487,7 +6517,56 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                             asynLoadVideoUrls.execute();*/
             previous_matching_time = current_matching_time;
             ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
-        }
+       // }
+    }
+    public static interface ClickListener1{
+        public void onClick(View view,int position);
+        public void onLongClick(View view,int position);
     }
 
+
+    class RecyclerTouchListener1 implements RecyclerView.OnItemTouchListener{
+
+        private ClickListener1 clicklistener;
+        private GestureDetector gestureDetector;
+
+        public RecyclerTouchListener1(Context context, final RecyclerView recycleView, final ClickListener1 clicklistener){
+
+            this.clicklistener=clicklistener;
+            gestureDetector=new GestureDetector(context,new GestureDetector.SimpleOnGestureListener(){
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    View child=recycleView.findChildViewUnder(e.getX(),e.getY());
+                    if(child!=null && clicklistener!=null){
+                        clicklistener.onLongClick(child,recycleView.getChildAdapterPosition(child));
+                    }
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            View child=rv.findChildViewUnder(e.getX(),e.getY());
+            if(child!=null && clicklistener!=null && gestureDetector.onTouchEvent(e)){
+                clicklistener.onClick(child,rv.getChildAdapterPosition(child));
+            }
+
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
+    }
 }

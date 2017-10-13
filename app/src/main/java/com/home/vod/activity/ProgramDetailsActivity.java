@@ -6,6 +6,7 @@ package com.home.vod.activity;
  */
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
@@ -24,9 +25,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -153,6 +156,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     String movieUniqueId = "";
     DataModel dbModel = new DataModel();
     int isLogin = 0;
+
     RecyclerView.LayoutManager mLayoutManager;
     Toolbar mActionBarToolbar;
     String episodeVideoUrlStr;
@@ -1026,7 +1030,21 @@ Log.v("SUBHA","code == player == "+ code);
             }
         });
 
+                seasontiveLayout.addOnItemTouchListener(new RecyclerTouchListener(this,
+                        seasontiveLayout, new ClickListener() {
+                    @Override
+                    public void onClick(View view, final int position) {
+                        //Values are passing to activity & to fragment as well
+                        EpisodesListModel item = itemData.get(position);
+                        clickItem(item, position);
+                    }
 
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                        return;
+                    }
+                }));
         startWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1071,6 +1089,8 @@ Log.v("SUBHA","code == player == "+ code);
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
         episode_details_input.setAuthtoken(authTokenStr);
         episode_details_input.setPermalink(permalinkStr);
+        episode_details_input.setSeries_number(getIntent().getStringExtra(SEASON_INTENT_KEY));
+        Log.v("SUBHA","season number === "+getIntent().getStringExtra(SEASON_INTENT_KEY));
         episode_details_input.setLimit("10");
         episode_details_input.setOffset("1");
         episode_details_input.setSeries_number("1");
@@ -1246,6 +1266,7 @@ Log.v("SUBHA","code == player == "+ code);
             posterImageId = contentDetailsOutput.getPoster();
             duration = contentDetailsOutput.getDuration();
 
+
            // viewAllTextView.setText(languagePreference.getTextofLanguage(DETAIL_VIEW_MORE,DEFAULT_DETAIL_VIEW_MORE));
             viewAllTextView.setVisibility(View.VISIBLE);
             tutorialTextView.setText(languagePreference.getTextofLanguage(TUTORIAL_TITLE,DEFAULT_TUTORIAL_TITLE));
@@ -1380,13 +1401,14 @@ Log.v("SUBHA","code == player == "+ code);
                 seasontiveLayout.setVisibility(View.VISIBLE);
                 seasontiveLayout.setLayoutManager(mLayoutManager);
                 seasontiveLayout.setItemAnimator(new DefaultItemAnimator());
-                ProgramDetailsAdapter mAdapter = new ProgramDetailsAdapter(ProgramDetailsActivity.this, R.layout.list_card_program_details, itemData, new ProgramDetailsAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(EpisodesListModel item,int position) {
-                        clickItem(item, position);
+                ProgramDetailsAdapter mAdapter = new ProgramDetailsAdapter(ProgramDetailsActivity.this, R.layout.list_card_program_details, itemData);
+                  /*  public void onItemClick(EpisodesListModel item,int position) {
+                        LogUtil.showLog("Subhalaxmi","f"+position);
 
+                        clickItem(item, position);
                     }
-                });
+                });*/
+
                 seasontiveLayout.setAdapter(mAdapter);
 
             }
@@ -2252,6 +2274,56 @@ Log.v("SUBHA","code == player == "+ code);
 
                 }
             });
+        }
+    }
+    public static interface ClickListener{
+        public void onClick(View view,int position);
+        public void onLongClick(View view,int position);
+    }
+
+
+    class RecyclerTouchListener implements RecyclerView.OnItemTouchListener{
+
+        private ClickListener clicklistener;
+        private GestureDetector gestureDetector;
+
+        public RecyclerTouchListener(Context context, final RecyclerView recycleView, final ClickListener clicklistener){
+
+            this.clicklistener=clicklistener;
+            gestureDetector=new GestureDetector(context,new GestureDetector.SimpleOnGestureListener(){
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    View child=recycleView.findChildViewUnder(e.getX(),e.getY());
+                    if(child!=null && clicklistener!=null){
+                        clicklistener.onLongClick(child,recycleView.getChildAdapterPosition(child));
+                    }
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            View child=rv.findChildViewUnder(e.getX(),e.getY());
+            if(child!=null && clicklistener!=null && gestureDetector.onTouchEvent(e)){
+                clicklistener.onClick(child,rv.getChildAdapterPosition(child));
+            }
+
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
         }
     }
 }
