@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -1593,7 +1594,14 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
             updatePlayButton(mPlaybackState);
         }
 
+
+
+
     }
+
+
+
+
 /*chromecast-------------------------------------*/
 
     public void clickItem(EpisodesListModel item) {

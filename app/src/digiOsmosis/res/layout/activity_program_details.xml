@@ -165,7 +165,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/videotextColor"
-                    android:text="14 Days"
+                    android:text=""
                     android:textSize="@dimen/duration" />
 
             </LinearLayout>
@@ -214,8 +214,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tutorialRelativeLayout"
                 android:layout_gravity="center_vertical"
+                android:padding="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="7dp" />
+                />
 
         </RelativeLayout>
 

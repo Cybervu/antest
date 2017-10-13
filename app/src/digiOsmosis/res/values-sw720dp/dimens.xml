@@ -83,8 +83,8 @@
     <dimen name="home280_layout_width">157dp</dimen>
     <dimen name="list_singlecard_img_width">108dp</dimen>
     <dimen name="list_singlecard_img_height">154dp</dimen>
-    <dimen name="videogrid_width">140dp</dimen>
-    <dimen name="videogrid_height">200dp</dimen>
+    <dimen name="videogrid_width">180dp</dimen>
+    <dimen name="videogrid_height">180dp</dimen>
     <dimen name="videogrid_land_width">182dp</dimen>
     <dimen name="videogrid_land_height">101dp</dimen>
     <dimen name="plainrowlayout_height">100dp</dimen>
@@ -144,6 +144,12 @@
     <dimen name="duration">12sp</dimen>
     <dimen name="weight_height">60dp</dimen>
     <dimen name="weight_width">5dp</dimen>
+
+    <dimen name="season_image_height">150dp</dimen>
+    <dimen name="season_image_width">150dp</dimen>
+    <dimen name="card_title">23sp</dimen>
+    <dimen name="human_image_height">100dp</dimen>
+    <dimen name="human_image_width">100dp</dimen>
 
 
     <!--//**********logo image*************//-->

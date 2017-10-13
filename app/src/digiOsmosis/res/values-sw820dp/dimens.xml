@@ -156,8 +156,8 @@
     <dimen name="okbtn_width">100dp</dimen>
     <dimen name="okbtn_height">45dp</dimen>
     <dimen name="okbtn_text_size">19sp</dimen>
-    <dimen name="videogrid_width">125dp</dimen>
-    <dimen name="videogrid_height">178dp</dimen>
+    <dimen name="videogrid_width">180dp</dimen>
+    <dimen name="videogrid_height">180dp</dimen>
     <dimen name="videogrid_land_width">190dp</dimen>
     <dimen name="videogrid_land_height">106dp</dimen>
     <dimen name="testview_text_size">36sp</dimen>

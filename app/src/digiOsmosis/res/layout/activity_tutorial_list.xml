@@ -25,25 +25,18 @@
         android:textSize="@dimen/itemtitle_text_size"
         android:textStyle="bold" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
 
-        android:layout_below="@id/sectionTitle">
 
         <GridView
             android:id="@+id/episodelist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/sectionTitle"
             android:layout_gravity="center_horizontal"
-            android:numColumns="3"
-            android:layout_marginBottom="@dimen/pre_order_button_margin"
-            android:layout_marginLeft="@dimen/pre_order_button_margin"
-            android:layout_marginRight="@dimen/pre_order_button_margin"
-            android:layout_marginTop="@dimen/pre_order_button_margin"
-            android:horizontalSpacing="@dimen/pre_order_button_margin"
-            android:verticalSpacing="@dimen/pre_order_button_margin" />
-    </RelativeLayout>
+            android:padding="6dp"
+            android:horizontalSpacing="6dp"
+            android:verticalSpacing="6dp"
+           />
 
     <RelativeLayout
         android:id="@+id/loadingPanel"
