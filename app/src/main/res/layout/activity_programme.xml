@@ -90,6 +90,7 @@
                 android:layout_below="@+id/titleTextView"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
+                android:layout_marginLeft="5dp"
                 android:ellipsize="end"
                 android:padding="10dp"
                 android:text=""

@@ -1,5 +1,6 @@
 
 package com.home.vod.activity;
+
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.DownloadManager;
@@ -9,7 +10,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -34,22 +34,27 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.MediaRouteButton;
 import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.Display;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
-import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -80,8 +85,22 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
+import com.home.apisdk.apiController.GetValidateUserAsynTask;
+import com.home.apisdk.apiController.VideoDetailsAsynctask;
+import com.home.apisdk.apiModel.GetVideoDetailsInput;
+import com.home.apisdk.apiModel.ValidateUserInput;
+import com.home.apisdk.apiModel.ValidateUserOutput;
+import com.home.apisdk.apiModel.Video_Details_Output;
+import com.home.vod.BuildConfig;
+import com.home.vod.MonetizationHandler;
 import com.home.vod.R;
+import com.home.vod.adapter.ProgramDetailsAdapter;
+import com.home.vod.adapter.ProgramPlayerAdapter;
+import com.home.vod.model.EpisodesListModel;
+import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
 import com.intertrust.wasabi.ErrorCodeException;
@@ -132,6 +151,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
+
 import player.activity.AdPlayerActivity;
 import player.activity.DataConsumptionService;
 import player.activity.Player;
@@ -143,7 +163,6 @@ import player.activity.YouTubeAPIActivity;
 import player.adapter.DownloadOptionAdapter;
 import player.model.ContactModel1;
 import player.model.SubtitleModel;
-
 import player.service.PopUpService;
 import player.subtitle_support.Caption;
 import player.subtitle_support.FormatSRT;
@@ -156,10 +175,28 @@ import player.utils.Util;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static android.support.v7.widget.LinearLayoutManager.HORIZONTAL;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.vod.util.Constant.authTokenStr;
 
 
 enum ContentTypes3 {
@@ -177,8 +214,11 @@ enum ContentTypes3 {
     }
 }
 
-public class ProgramPlayerActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener, PlaylistProxyListener, AdEvent.AdEventListener, AdErrorEvent.AdErrorListener {
-
+public class ProgramPlayerActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener, PlaylistProxyListener, AdEvent.AdEventListener, AdErrorEvent.AdErrorListener,
+        GetValidateUserAsynTask.GetValidateUserListener,
+        VideoDetailsAsynctask.VideoDetailsListener{
+    RecyclerView.LayoutManager mLayoutManager;
+    ProgramPlayerAdapter mAdapter;
     ProgressBarHandler mDialog;
     // private SampleVideoPlayer mVideoPlayer;
 
@@ -204,28 +244,32 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     /**
      * ad
      **/
-
+    String upStreamUniqueId, upContentUniqueId;
+    String Episodeid;
+    PreferenceManager preferenceManager;
     private static final int MAX_LINES = 2;
     PlaylistProxy playerProxy;
     int played_length = 0;
     int playerStartPosition = 0;
     boolean censor_layout = true;
-
+    VideoDetailsAsynctask asynLoadVideoUrls;
+    GetValidateUserAsynTask asynValidateUserDetails;
 
     // ProgramPlayerActivity.this is added for the new video log API;
 
     int player_start_time = 0;
     int player_end_time = 0;
     String log_temp_id = "0";
-
+    ArrayList<EpisodesListModel> questions;
 
     // ===========End============================//
-
+    ProgressBarHandler progressBarHandler;
     /***** offline *****/
     DownloadManager downloadManager;
     RelativeLayout download_layout;
     public boolean downloading;
     //Handler mHandler;
+    int selectedPurchaseType = 0;
     static String filename, path;
     ArrayList<ContactModel1> dmanager;
     AsynWithdrm asynWithdrm;
@@ -238,7 +282,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     TextView percentg;
     private static final int REQUEST_STORAGE = 1;
     File mediaStorageDir, mediaStorageDir1;
-
+    ArrayList<String> SubTitleLanguage = new ArrayList<>();
+    ArrayList<String> FakeSubTitlePath = new ArrayList<>();
     String mlvfile = "";
     String token = "";
     String fname;
@@ -266,7 +311,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     AsynGetIpAddress asynGetIpAddress;
 
     ImageButton back, center_play_pause;
-    ImageView compress_expand;
+    ImageView compress_expand,share;
     SeekBar seekBar;
     private Handler mHandler = new Handler();
     Timer center_pause_paly_timer;
@@ -302,10 +347,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     //Toolbar mActionBarToolbar;
     LinearLayout linearLayout1;
 
-    TextView videoTitle, GenreTextView, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView,
+    TextView videoTitle, GenreTextView,descriptionDetailsTextView,clocktime,durationTitleTextView,durationTextView,moreVideoTitleTextView,descriptionTitleTextVIew, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView,
             videoCastCrewTitleTextView;
     TextView story;
-
+    RecyclerView moreVideosRecyclerView;
     private EMVideoView emVideoView;
     int seek_label_pos = 0;
     int content_types_id = 0;
@@ -331,24 +376,24 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
     private SubtitleProcessingTask subsFetchTask;
     public TimedTextObject srt;
-    TextView subtitleText;
+    TextView subtitleText,clocktimetv;
     public Handler subtitleDisplayHandler;
     ImageView subtitle_change_btn;
 
-    ArrayList<String> SubTitleName = new ArrayList<>();
-    ArrayList<String> SubTitlePath = new ArrayList<>();
-    ArrayList<String> ResolutionFormat = new ArrayList<>();
-    ArrayList<String> ResolutionUrl = new ArrayList<>();
+    ArrayList<String> SubTitleName;
+    ArrayList<String> SubTitlePath;
+    ArrayList<String> ResolutionFormat;
+    ArrayList<String> ResolutionUrl;
     boolean callWithoutCaption = true;
     boolean video_completed_at_chromecast = false;
 
     // ProgramPlayerActivity.this is only applicable for multiple download feature
 
-    ArrayList<String> List_Of_FileSize = new ArrayList<>();
-    ArrayList<String> List_Of_Resolution_Format = new ArrayList<>();
-    ArrayList<String> List_Of_Resolution_Url = new ArrayList<>();
-    ArrayList<String> List_Of_Resolution_Url_Used_For_Download = new ArrayList<>();
-
+    ArrayList<String> List_Of_FileSize;
+    ArrayList<String> List_Of_Resolution_Format;
+    ArrayList<String> List_Of_Resolution_Url;
+    ArrayList<String> List_Of_Resolution_Url_Used_For_Download ;
+    ProgressBarHandler pDialog;
     ProgressBarHandler pDialog_for_gettig_filesize;
     AlertDialog alert;
     int selected_download_format = 0;
@@ -356,12 +401,619 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     int seekBarProgress = 0;
 
     boolean isDrm = false;
-
+ int contentPosition;
     // =====================End==============================//
 
 
     /*----------------chromecast-------------------------------------*/
     View view;
+
+    @Override
+    public void onGetValidateUserPreExecuteStarted() {
+        LogUtil.showLog("PINTU", "validateuser pdlog show");
+
+        pDialog.show();
+    }
+
+    @Override
+    public void onGetValidateUserPostExecuteCompleted(ValidateUserOutput validateUserOutput, int status, String message) {
+
+        String subscription_Str = validateUserOutput.getIsMemberSubscribed();
+        preferenceManager.setIsSubscribedToPref(subscription_Str);
+        String validUserStr = validateUserOutput.getValiduser_str();
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                LogUtil.showLog("PINTU", "validate user pdlog hide");
+                pDialog.hide();
+
+            }
+        } catch (IllegalArgumentException ex) {
+            status = 0;
+        }
+
+
+        Log.v("SUBHA","Validate user");
+        if (validateUserOutput == null) {
+
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramPlayerActivity.this);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            Intent in = new Intent(ProgramPlayerActivity.this, MainActivity.class);
+                            startActivity(in);
+
+                        }
+                    });
+            dlgAlert.create().show();
+        } else if (status <= 0) {
+
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramPlayerActivity.this);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            Intent in = new Intent(ProgramPlayerActivity.this, MainActivity.class);
+                            startActivity(in);
+
+                        }
+                    });
+            dlgAlert.create().show();
+        }
+
+        if (status > 0) {
+            Log.v("SUBHA","Validate user"+status);
+            if (status == 427) {
+
+
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramPlayerActivity.this);
+                if (message != null && message.equalsIgnoreCase("")) {
+                    dlgAlert.setMessage(message);
+                } else {
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
+
+                }
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+                            }
+                        });
+                dlgAlert.create().show();
+            } else if (status == 429 || status == 430) {
+                if (NetworkStatus.getInstance().isConnected(this)) {
+
+                    Log.v("SUBHA","Video PLayer Called 1");
+
+                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setContent_uniq_id(upContentUniqueId);
+                    getVideoDetailsInput.setStream_uniq_id(upStreamUniqueId);
+                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+//                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                    getVideoDetailsInput.setUser_id("157218");
+                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
+                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                } else {
+                    Toast.makeText(ProgramPlayerActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+
+                }
+
+
+            } else if (com.home.vod.util.Util.dataModel.getIsAPV() == 1 || com.home.vod.util.Util.dataModel.getIsPPV() == 1) {
+                ShowPpvPopUp();
+            } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+                Intent intent = new Intent(ProgramPlayerActivity.this, SubscriptionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+            } else if (com.home.vod.util.Util.dataModel.getIsConverted() == 0) {
+                com.home.vod.util.Util.showNoDataAlert(ProgramPlayerActivity.this);
+                /*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramDetailsActivity.this);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+                            }
+                        });
+                dlgAlert.create().show();*/
+            } else {
+                if (NetworkStatus.getInstance().isConnected(this)) {
+
+                    Log.v("SUBHA","Video PLayer Called 1");
+
+                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setContent_uniq_id(upContentUniqueId);
+                    getVideoDetailsInput.setStream_uniq_id(upStreamUniqueId);
+                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+//                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                    getVideoDetailsInput.setUser_id("157218");
+                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
+                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                } else {
+                    Toast.makeText(ProgramPlayerActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+
+                }
+            }
+
+        }
+    }
+
+    @Override
+    public void onVideoDetailsPreExecuteStarted() {
+        LogUtil.showLog("PINTU", "videodetails pdlog show");
+
+        pDialog.show();
+    }
+
+    @Override
+    public void onVideoDetailsPostExecuteCompleted(Video_Details_Output _video_details_output, int code, String status, String message) {
+
+
+        // _video_details_output.setThirdparty_url("https://www.youtube.com/watch?v=fqU2FzATTPY&spfreload=10");
+        // _video_details_output.setThirdparty_url("https://player.vimeo.com/video/192417650?color=00ff00&badge=0");
+
+     /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
+        then set thirdpartyurl true here and assign the url to videourl*/
+
+        boolean play_video = true;
+
+        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+
+            if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
+
+                play_video = false;
+            } else {
+                play_video = true;
+            }
+        } else {
+            play_video = true;
+        }
+
+        Log.v("SUBHA","play video ==== "+ play_video);
+        if (!play_video) {
+
+            try {
+                if (pDialog.isShowing())
+                    pDialog.hide();
+            } catch (IllegalArgumentException ex) {
+            }
+
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramPlayerActivity.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(message);
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+
+                        }
+                    });
+            dlgAlert.create().show();
+
+            return;
+        }
+
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                LogUtil.showLog("PINTU", "videodetails pdlog hide");
+                pDialog.hide();
+
+            }
+        } catch (IllegalArgumentException ex) {
+            playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+        }
+
+        Log.v("SUBHA","code == player == "+ code);
+        if (code == 200) {
+            playerModel.setIsOffline(_video_details_output.getIs_offline());
+            playerModel.setDownloadStatus(_video_details_output.getDownload_status());
+            if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
+
+                /**@bishal
+                 * for drm player below condition added
+                 * if studio_approved_url is there in api then set the videourl from this other wise goto 2nd one
+                 */
+
+                if (_video_details_output.getStudio_approved_url() != null &&
+                        !_video_details_output.getStudio_approved_url().isEmpty() &&
+                        !_video_details_output.getStudio_approved_url().equals("null") &&
+                        !_video_details_output.getStudio_approved_url().matches("")) {
+                    LogUtil.showLog("BISHAL", "if called means  studioapproved");
+                    playerModel.setVideoUrl(_video_details_output.getStudio_approved_url());
+                    LogUtil.showLog("BKS", "studipapprovedurl====" + playerModel.getVideoUrl());
+
+
+                    if (_video_details_output.getLicenseUrl().trim() != null && !_video_details_output.getLicenseUrl().trim().isEmpty() && !_video_details_output.getLicenseUrl().trim().equals("null") && !_video_details_output.getLicenseUrl().trim().matches("")) {
+                        playerModel.setLicenseUrl(_video_details_output.getLicenseUrl());
+                    }
+                    if (_video_details_output.getVideoUrl().trim() != null && !_video_details_output.getVideoUrl().isEmpty() && !_video_details_output.getVideoUrl().equals("null") && !_video_details_output.getVideoUrl().trim().matches("")) {
+                        playerModel.setMpdVideoUrl(_video_details_output.getVideoUrl());
+
+                    } else {
+                        playerModel.setMpdVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+                    }
+                } else {
+                    if (_video_details_output.getVideoUrl() != null || !_video_details_output.getVideoUrl().matches("")) {
+                        playerModel.setVideoUrl(_video_details_output.getVideoUrl());
+                        LogUtil.showLog("BISHAL", "videourl===" + playerModel.getVideoUrl());
+                        playerModel.setThirdPartyPlayer(false);
+                    } else {
+                        //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
+                        playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+
+                    }
+                }
+            } else {
+                if (_video_details_output.getThirdparty_url() != null || !_video_details_output.getThirdparty_url().matches("")) {
+                    playerModel.setVideoUrl(_video_details_output.getThirdparty_url());
+                    playerModel.setThirdPartyPlayer(true);
+
+                } else {
+                    //  Util.dataModel.setVideoUrl(translatedLanuage.getNoData());
+                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+
+                }
+            }
+
+            com.home.vod.util.Util.dataModel.setVideoResolution(_video_details_output.getVideoResolution());
+
+            playerModel.setVideoResolution(_video_details_output.getVideoResolution());
+            if (_video_details_output.getPlayed_length() != null && !_video_details_output.getPlayed_length().equals(""))
+                playerModel.setPlayPos((com.home.vod.util.Util.isDouble(_video_details_output.getPlayed_length())));
+
+
+            //dependency for datamodel
+
+            SubTitleName = new ArrayList<>( _video_details_output.getSubTitleName());
+            SubTitleLanguage = new ArrayList<>(_video_details_output.getSubTitleLanguage());
+            ResolutionUrl = new ArrayList<>(_video_details_output.getResolutionUrl());
+            ResolutionFormat = new ArrayList<>(_video_details_output.getResolutionFormat());
+
+            Util.VideoResolution = "Auto";
+
+            if (ResolutionUrl.size() < 1) {
+                Log.v("SUBHA", "resolution image Invisible called");
+            } else {
+                ResolutionUrl.add(playerModel.getVideoUrl().trim());
+                ResolutionFormat.add("Auto");
+            }
+
+            if (ResolutionFormat.size() > 0) {
+                Collections.reverse(ResolutionFormat);
+                for (int m = 0; m < ResolutionFormat.size(); m++) {
+                    Log.v("BIBHU", "RESOLUTION FORMAT======" + ResolutionFormat.get(m));
+                }
+            }
+            if (ResolutionUrl.size() > 0) {
+                Collections.reverse(ResolutionUrl);
+                for (int n = 0; n < ResolutionUrl.size(); n++) {
+                    Log.v("BIBHU", "RESOLUTION URL======" + ResolutionUrl.get(n));
+                }
+            }
+
+
+
+
+//            SubTitleName = _video_details_output.getSubTitleName();
+//            SubTitleLanguage = _video_details_output.getSubTitleLanguage();
+
+            if(SubTitlePath.size()>0 || ResolutionUrl.size()>0)
+            {
+                subtitle_change_btn.setVisibility(View.VISIBLE);
+            }
+
+
+
+            com.home.vod.util.Util.dataModel.setVideoUrl(_video_details_output.getVideoUrl());
+            com.home.vod.util.Util.dataModel.setVideoResolution(_video_details_output.getVideoResolution());
+            com.home.vod.util.Util.dataModel.setThirdPartyUrl(_video_details_output.getThirdparty_url());
+            com.home.vod.util.Util.dataModel.setAdNetworkId(_video_details_output.getAdNetworkId());
+            com.home.vod.util.Util.dataModel.setChannel_id(_video_details_output.getChannel_id());
+            com.home.vod.util.Util.dataModel.setPreRoll(_video_details_output.getPreRoll());
+            com.home.vod.util.Util.dataModel.setPostRoll(_video_details_output.getPostRoll());
+            com.home.vod.util.Util.dataModel.setMidRoll(_video_details_output.getMidRoll());
+            com.home.vod.util.Util.dataModel.setAdDetails(_video_details_output.getAdDetails());
+
+
+            //player model set
+            playerModel.setAdDetails(_video_details_output.getAdDetails());
+            playerModel.setMidRoll(_video_details_output.getMidRoll());
+            playerModel.setPostRoll(_video_details_output.getPostRoll());
+            playerModel.setChannel_id(_video_details_output.getChannel_id());
+            playerModel.setAdNetworkId(_video_details_output.getAdNetworkId());
+            playerModel.setPreRoll(_video_details_output.getPreRoll());
+            playerModel.setSubTitleName(_video_details_output.getSubTitleName());
+            playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
+            playerModel.setResolutionFormat(_video_details_output.getResolutionFormat());
+            playerModel.setResolutionUrl(_video_details_output.getResolutionUrl());
+            playerModel.setFakeSubTitlePath(_video_details_output.getFakeSubTitlePath());
+            playerModel.setVideoResolution(_video_details_output.getVideoResolution());
+            FakeSubTitlePath = _video_details_output.getFakeSubTitlePath();
+            playerModel.setSubTitleLanguage(_video_details_output.getSubTitleLanguage());
+            playerModel.setOfflineUrl(_video_details_output.getOfflineUrl());
+            playerModel.setOfflineLanguage(_video_details_output.getOfflineLanguage());
+
+
+            if (playerModel.getVideoUrl() == null ||
+                    playerModel.getVideoUrl().matches("")) {
+
+                com.home.vod.util.Util.showNoDataAlert(ProgramPlayerActivity.this);
+               /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramDetailsActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                dlgAlert.setCancelable(false);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                dlgAlert.create().show();*/
+            } else {
+
+
+                // condition for checking if the response has third party url or not.
+                if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
+
+
+                    if (mCastSession != null && mCastSession.isConnected()) {
+                        MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+
+                        movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory());
+                        movieMetadata.putString(MediaMetadata.KEY_TITLE, playerModel.getVideoTitle());
+                        movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
+                        movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
+
+
+                        String mediaContentType = "videos/mp4";
+                        if (playerModel.getVideoUrl().contains(".mpd")) {
+                            mediaContentType = "application/dash+xml";
+                            JSONObject jsonObj = null;
+                            try {
+                                jsonObj = new JSONObject();
+                                jsonObj.put("description", playerModel.getVideoTitle());
+                                jsonObj.put("licenseUrl", playerModel.getLicenseUrl());
+
+                                //  This Code Is Added For Video Log By Bibhu..
+
+                                jsonObj.put("authToken", authTokenStr);
+                                jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+//                                jsonObj.put("ip_address", ipAddres.trim());
+                                jsonObj.put("movie_id", playerModel.getMovieUniqueId());
+                                jsonObj.put("episode_id", playerModel.getEpisode_id());
+                                jsonObj.put("watch_status", "start");
+                                jsonObj.put("device_type", "2");
+                                jsonObj.put("log_id", "0");
+                                jsonObj.put("active_track_index", "0");
+
+                                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                                    jsonObj.put("restrict_stream_id", "0");
+                                    jsonObj.put("is_streaming_restriction", "1");
+                                    Log.v("BIBHU4", "restrict_stream_id============1");
+                                } else {
+                                    jsonObj.put("restrict_stream_id", "0");
+                                    jsonObj.put("is_streaming_restriction", "0");
+                                    Log.v("BIBHU4", "restrict_stream_id============0");
+                                }
+
+                                jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                                jsonObj.put("is_log", "1");
+
+                                //=====================End===================//
+
+                                // This code is changed according to new Video log //
+
+                                jsonObj.put("played_length", "0");
+                                jsonObj.put("log_temp_id", "0");
+                                jsonObj.put("resume_time", "0");
+                                jsonObj.put("seek_status", "");
+                                // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                                jsonObj.put("resolution", "BEST");
+                                jsonObj.put("start_time", "0");
+                                jsonObj.put("end_time", "0");
+                                jsonObj.put("log_unique_id", "0");
+                                jsonObj.put("location", "0");
+                                jsonObj.put("bandwidth_log_id", "0");
+                                jsonObj.put("video_type", "mped_dash");
+                                jsonObj.put("drm_bandwidth_by_sender", "0");
+
+                                //====================End=====================//
+
+                            } catch (JSONException e) {
+                            }
+                            List tracks = new ArrayList();
+                            for (int i = 0; i < FakeSubTitlePath.size(); i++) {
+                                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                                        MediaTrack.TYPE_TEXT)
+                                        .setName(SubTitleName.get(0))
+                                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                                        .setContentId(FakeSubTitlePath.get(0))
+                                        .setLanguage(SubTitleLanguage.get(0))
+                                        .setContentType("text/vtt")
+                                        .build();
+                                tracks.add(englishSubtitle);
+                            }
+
+                            mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
+                                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                                    .setContentType(mediaContentType)
+                                    .setMetadata(movieMetadata)
+                                    .setCustomData(jsonObj)
+                                    .setMediaTracks(tracks)
+                                    .build();
+                            mSelectedMedia = mediaInfo;
+
+
+                            togglePlayback();
+                        } else {
+                            JSONObject jsonObj = null;
+                            try {
+                                jsonObj = new JSONObject();
+                                jsonObj.put("description", playerModel.getVideoTitle());
+
+                                //  This Code Is Added For Video Log By Bibhu..
+
+                                jsonObj.put("authToken", authTokenStr);
+                                jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+//                                jsonObj.put("ip_address", ipAddres.trim());
+                                jsonObj.put("movie_id", playerModel.getMovieUniqueId());
+                                jsonObj.put("episode_id", playerModel.getEpisode_id());
+                                jsonObj.put("watch_status", "start");
+                                jsonObj.put("device_type", "2");
+                                jsonObj.put("log_id", "0");
+                                jsonObj.put("active_track_index", "0");
+                                jsonObj.put("seek_status", "");
+
+                                jsonObj.put("played_length", "0");
+                                jsonObj.put("log_temp_id", "0");
+                                jsonObj.put("resume_time", "0");
+                                jsonObj.put("seek_status", "");
+
+
+                                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                                    jsonObj.put("restrict_stream_id", "0");
+                                    jsonObj.put("is_streaming_restriction", "1");
+                                    Log.v("BIBHU4", "restrict_stream_id============1");
+                                } else {
+                                    jsonObj.put("restrict_stream_id", "0");
+                                    jsonObj.put("is_streaming_restriction", "0");
+                                    Log.v("BIBHU4", "restrict_stream_id============0");
+                                }
+
+                                jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                                jsonObj.put("is_log", "1");
+
+                                //=====================End===================//
+
+
+                                // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                                jsonObj.put("resolution", "BEST");
+                                jsonObj.put("start_time", "0");
+                                jsonObj.put("end_time", "0");
+                                jsonObj.put("log_unique_id", "0");
+                                jsonObj.put("location", "0");
+                                jsonObj.put("video_type", "");
+                                jsonObj.put("totalBandwidth", "0");
+
+                                //====================End=====================//
+
+                            } catch (JSONException e) {
+                            }
+
+                            List tracks = new ArrayList();
+                            for (int i = 0; i < FakeSubTitlePath.size(); i++) {
+                                MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                                        MediaTrack.TYPE_TEXT)
+                                        .setName(SubTitleName.get(0))
+                                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                                        .setContentId(FakeSubTitlePath.get(0))
+                                        .setLanguage(SubTitleLanguage.get(0))
+                                        .setContentType("text/vtt")
+                                        .build();
+                                tracks.add(englishSubtitle);
+                            }
+
+                            mediaInfo = new MediaInfo.Builder(com.home.vod.util.Util.dataModel.getVideoUrl().trim())
+                                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                                    .setContentType(mediaContentType)
+                                    .setMetadata(movieMetadata)
+                                    .setStreamDuration(15 * 1000)
+                                    .setCustomData(jsonObj)
+                                    .setMediaTracks(tracks)
+                                    .build();
+                            mSelectedMedia = mediaInfo;
+
+
+                            togglePlayback();
+                        }
+                    } else {
+
+
+//                        playerModel.setThirdPartyPlayer(false);
+//                        emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
+                        if (FakeSubTitlePath.size() > 0) {
+                            final Intent playVideoIntent;
+
+                            playVideoIntent = new Intent(ProgramPlayerActivity.this, ProgramPlayerActivity.class);
+
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    if (FakeSubTitlePath.size() > 0) {
+                                        // This Portion Will Be changed Later.
+
+                                        File dir = new File(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/SubTitleList/");
+                                        if (dir.isDirectory()) {
+                                            String[] children = dir.list();
+                                            for (int i = 0; i < children.length; i++) {
+                                                new File(dir, children[i]).delete();
+                                            }
+                                        }
+
+                                        progressBarHandler = new ProgressBarHandler(ProgramPlayerActivity.this);
+                                        progressBarHandler.show();
+                                        Download_SubTitle(FakeSubTitlePath.get(0).trim());
+                                    } else {
+                                        playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                                        playVideoIntent.putExtra("PlayerModel", playerModel);
+//                                    playVideoIntent.putExtra("PLAY_LIST",itemData);
+                                        //  startActivity(playVideoIntent);
+                                    }
+
+                                }
+                            });
+                        }else{
+
+                        playerModel.setThirdPartyPlayer(false);
+                        emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
+                        }
+                    }
+                } else {
+                    final Intent playVideoIntent = new Intent(ProgramPlayerActivity.this, ProgramPlayerActivity.class);
+//                    final Intent   playVideoIntent = new Intent(ProgramDetailsActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                    playVideoIntent.putExtra("PlayerModel", playerModel);
+//                    playVideoIntent.putExtra("PLAY_LIST",itemData);
+                   // startActivity(playVideoIntent);
+                }
+            }
+
+        } else {
+
+            playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+
+            playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+
+            com.home.vod.util.Util.showNoDataAlert(ProgramPlayerActivity.this);
+        }
+
+    }
 
     public enum PlaybackLocation {
         LOCAL,
@@ -374,13 +1026,14 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     public enum PlaybackState {
         PLAYING, PAUSED, BUFFERING, IDLE
     }
-
+    String PlanId = "";
     private PlaybackLocation mLocation;
     private PlaybackState mPlaybackState;
     private final float mAspectRatio = 72f / 128;
     private AQuery mAquery;
     private MediaInfo mSelectedMedia;
 
+    String priceForUnsubscribedStr, priceFosubscribedStr;
 
     private CastContext mCastContext;
     private SessionManagerListener<CastSession> mSessionManagerListener = null;
@@ -450,17 +1103,99 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_final_exoplayer);
+        setContentView(R.layout.activity_program_player);
+        Log.v("NiharMishra", "OnCreate"+questions);
+
         languagePreference = LanguagePreference.getLanguagePreference(this);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+
+
+
+        SubTitleName = new ArrayList<>();
+       SubTitlePath = new ArrayList<>();
+        ResolutionFormat = new ArrayList<>();
+       ResolutionUrl = new ArrayList<>();
+
+
+       List_Of_FileSize = new ArrayList<>();
+       List_Of_Resolution_Format = new ArrayList<>();
+       List_Of_Resolution_Url = new ArrayList<>();
+        List_Of_Resolution_Url_Used_For_Download = new ArrayList<>();
+
+
+
+
 
         if (playerModel.getVideoUrl().contains(".mpd")) {
             isDrm = true;
         } else {
             isDrm = false;
         }
+        PlanId = (languagePreference.getTextofLanguage(PLAN_ID, DEFAULT_PLAN_ID)).trim();
+        pDialog = new ProgressBarHandler(ProgramPlayerActivity.this);
+        ////////////changed by nihar  ///start
+        clocktimetv = (TextView) findViewById(R.id.clocktime);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
+        try {
+            contentPosition = getIntent().getIntExtra("TAG", 0);
+            questions = new ArrayList<EpisodesListModel>();
+            Log.v("Nihar", "array" + getIntent().getSerializableExtra("PLAY_LIST"));
 
+            questions = (ArrayList<EpisodesListModel>) getIntent().getSerializableExtra("PLAY_LIST");
+           // Util.PlayListArrayModel = questions;
+            String clocktext = contentPosition+1 +" to " + String.valueOf(questions.size());
+            clocktimetv.setText(clocktext);
+            Log.v("Nihar", "" + questions.size() + "position :" + contentPosition);
+        } catch (Exception e) {
+            Log.v("Nihar", "exception" + e.toString());
+        }
+        mLayoutManager = new LinearLayoutManager(ProgramPlayerActivity.this, LinearLayoutManager.HORIZONTAL, false);
 
+        moreVideosRecyclerView = (RecyclerView) findViewById(R.id.moreVideosRecyclerView);
+        moreVideosRecyclerView.setLayoutManager(mLayoutManager);
+
+        moreVideosRecyclerView.setItemAnimator(new DefaultItemAnimator());
+       /* ProgramDetailsAdapter mAdapter = new ProgramDetailsAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions, new ProgramDetailsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(EpisodesListModel item,int position) {
+//                clickItem(item, position);
+                Log.v("SUBHA","data set here"+contentPosition+position);
+
+                // contentPosition = position;
+                getData();
+
+            }
+        });*/
+      /*  moreVideosRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), moreVideosRecyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Log.v("SUBHA","data set here"+position);
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));*/
+
+        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
+        moreVideosRecyclerView.addOnItemTouchListener(new RecyclerTouchListener1(this, moreVideosRecyclerView, new ClickListener1() {
+            @Override
+            public void onClick(View view, int position) {
+
+                contentPosition = position;
+                getData();
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                return;
+            }
+        }));
+
+        moreVideosRecyclerView.setAdapter(mAdapter);
+        /////////////end
         if (!playerModel.getVideoUrl().trim().equals("")) {
             if (playerModel.isThirdPartyPlayer()) {
 
@@ -546,6 +1281,16 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         download = (ImageView) findViewById(R.id.downloadImageView);
         Progress = (ProgressBar) findViewById(R.id.progressBar);
         percentg = (TextView) findViewById(R.id.percentage);
+
+
+        share = (ImageView) findViewById(R.id.share);
+
+        share.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+               shareVideo(ProgramPlayerActivity.this);
+            }
+        });
+
 
 
         //Check for offline content // Added By sanjay
@@ -634,25 +1379,22 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         GenreTextView = (TextView) findViewById(R.id.GenreTextView);
         Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
         GenreTextView.setTypeface(GenreTextViewface);
-        videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
+        descriptionTitleTextVIew = (TextView) findViewById(R.id.descriptionTitleTextVIew);
+        Typeface descriptionTitleTextVIewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        GenreTextView.setTypeface(descriptionTitleTextVIewface);
+        clocktime = (TextView) findViewById(R.id.clocktime);
         Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
-        videoDurationTextView.setTypeface(videoDurationTextViewface);
-        videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
+        clocktime.setTypeface(videoDurationTextViewface);
+        durationTextView = (TextView) findViewById(R.id.durationTextView);
         Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
-        videoCensorRatingTextView.setTypeface(videoCensorRatingTextViewface);
-        videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
+        durationTextView.setTypeface(videoCensorRatingTextViewface);
+        durationTitleTextView = (TextView) findViewById(R.id.durationTitleTextView);
         Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
-        videoCensorRatingTextView1.setTypeface(videoCensorRatingTextView1face);
-        videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
-        Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
-        videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
+        durationTitleTextView.setTypeface(videoCensorRatingTextView1face);
+
         story = (TextView) findViewById(R.id.story);
         Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
         story.setTypeface(storyTypeface);
-        videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
-        Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
-        videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
-        videoCastCrewTitleTextView.setText(Util.getTextofLanguage(ProgramPlayerActivity.this, Util.CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
 
         // ProgramPlayerActivity.this is changed for the new requirement of Offline Viewing.
         startService(new Intent(ProgramPlayerActivity.this, DataConsumptionService.class));
@@ -804,110 +1546,19 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         if (playerModel.getVideoDuration().trim() != null && !playerModel.getVideoDuration().trim().matches(""))
 
         {
-            videoDurationTextView.setText(playerModel.getVideoDuration().trim());
-            videoDurationTextView.setVisibility(View.VISIBLE);
-            censor_layout = false;
+            durationTextView.setText(playerModel.getVideoDuration().trim());
+            durationTextView.setVisibility(View.VISIBLE);
         } else {
-            videoDurationTextView.setVisibility(View.GONE);
-        }
-        if (playerModel.getCensorRating().trim() != null && !playerModel.getCensorRating().trim().matches("")) {
-            if ((playerModel.getCensorRating().trim()).contains("_")) {
-                String Data[] = (playerModel.getCensorRating().trim()).split("-");
-                videoCensorRatingTextView.setVisibility(View.VISIBLE);
-                videoCensorRatingTextView1.setVisibility(View.VISIBLE);
-                videoCensorRatingTextView.setText(Data[0]);
-                videoCensorRatingTextView1.setText(Data[1]);
-                censor_layout = false;
-            } else {
-                censor_layout = false;
-                videoCensorRatingTextView.setVisibility(View.VISIBLE);
-                videoCensorRatingTextView1.setVisibility(View.GONE);
-                videoCensorRatingTextView.setText(playerModel.getCensorRating().trim());
-            }
-        } else {
-            videoCensorRatingTextView.setVisibility(View.GONE);
-            videoCensorRatingTextView1.setVisibility(View.GONE);
-        }
-        if (playerModel.getCensorRating().trim() != null && playerModel.getCensorRating().trim().equalsIgnoreCase(Util.getTextofLanguage(ProgramPlayerActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
-            videoCensorRatingTextView.setVisibility(View.GONE);
-            videoCensorRatingTextView1.setVisibility(View.GONE);
+            durationTextView.setVisibility(View.GONE);
         }
 
-        if (playerModel.getVideoReleaseDate().trim() != null && !playerModel.getVideoReleaseDate().trim().matches(""))
-
-        {
-            videoReleaseDateTextView.setText(playerModel.getVideoReleaseDate().trim());
-            videoReleaseDateTextView.setVisibility(View.VISIBLE);
-            censor_layout = false;
-        } else {
-            videoReleaseDateTextView.setVisibility(View.GONE);
-        }
-
-        if (censor_layout) {
-
-            ((LinearLayout) findViewById(R.id.durationratingLiearLayout)).setVisibility(View.GONE);
-        }
         if (playerModel.getVideoStory().trim() != null && !playerModel.getVideoStory().trim().matches(""))
-
         {
             story.setText(playerModel.getVideoStory());
             story.setVisibility(View.VISIBLE);
-            ResizableCustomView.doResizeTextView(ProgramPlayerActivity.this, story, MAX_LINES, Util.getTextofLanguage(ProgramPlayerActivity.this, Util.VIEW_MORE, Util.DEFAULT_VIEW_MORE), true);
         } else {
             story.setVisibility(View.GONE);
         }
-
-        if (playerModel.isCastCrew() == true)
-
-        {
-            videoCastCrewTitleTextView.setVisibility(View.VISIBLE);
-        } else {
-            videoCastCrewTitleTextView.setVisibility(View.GONE);
-        }
-
-
-        videoCastCrewTitleTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Util.checkNetwork(ProgramPlayerActivity.this)) {
-                    //Will Add Some Data to send
-                    Util.call_finish_at_onUserLeaveHint = false;
-                    Util.hide_pause = true;
-                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
-                    latest_center_play_pause.setVisibility(View.VISIBLE);
-
-                    if (emVideoView.isPlaying()) {
-                        emVideoView.pause();
-                        latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
-                        center_play_pause.setImageResource(R.drawable.ic_media_play);
-                        mHandler.removeCallbacks(updateTimeTask);
-                    }
-
-
-                    if (center_pause_paly_timer_is_running) {
-                        center_pause_paly_timer.cancel();
-                        center_pause_paly_timer_is_running = false;
-                        Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
-
-
-                        subtitle_change_btn.setVisibility(View.INVISIBLE);
-                        primary_ll.setVisibility(View.GONE);
-                        last_ll.setVisibility(View.GONE);
-                        center_play_pause.setVisibility(View.GONE);
-                        current_time.setVisibility(View.GONE);
-                    }
-
-
-                    final Intent detailsIntent = new Intent(ProgramPlayerActivity.this, CastAndCrewActivity.class);
-                    detailsIntent.putExtra("cast_movie_id", movieId.trim());
-                    detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(detailsIntent);
-                } else {
-                    Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ProgramPlayerActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
 
         player_layout = (RelativeLayout) findViewById(R.id.player_layout);
         player_layout_height = player_layout.getHeight();
@@ -2112,95 +2763,146 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                 if (content_types_id == 4) {
 
 
-                } else {
-                    if (current_matching_time >= emVideoView.getDuration()) {
-                        mHandler.removeCallbacks(updateTimeTask);
+                }  else {
 
-                        AsyncVideoBufferLogDetails asyncVideoBufferLogDetails = new AsyncVideoBufferLogDetails();
-                        asyncVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
-                        seekBar.setProgress(0);
-                        current_time.setText("00:00:00");
-                        total_time.setText("00:00:00");
-                        previous_matching_time = 0;
-                        current_matching_time = 0;
-                        video_completed = true;
+                    if (content_types_id == 4) {
 
-                        /**ad **/
-                        if (playerModel.getAdNetworkId() == 3) {
+                    } else {
+                        if (current_matching_time >= emVideoView.getDuration()) {
+                            mHandler.removeCallbacks(updateTimeTask);
+                            //  pause_play.setImageResource(R.drawable.ic_media_play);
+//                    emVideoView.release();
+//                    emVideoView.reset();
+                            seekBar.setProgress(0);
+//                    emVideoView.seekTo(0);
+                            current_time.setText("00:00:00");
+                            total_time.setText("00:00:00");
+                            previous_matching_time = 0;
+                            current_matching_time = 0;
+                            video_completed = true;
+                            //onBackPressed();
+//                        backCalled();
 
-                            if (mAdsLoader != null) {
-                                mAdsLoader.contentComplete();
+                            /////////////////////-------------------//////////////////
+                            content_types_id = 0;//set
+                            videoLogId = "0";
+                            watchStatus = "start";
+                            playerPosition = 0;
+                            videoBufferLogId = "0";
+                            videoBufferLogUniqueId = "0";
+                            Location = "0";
+                            played_length = 0;
+                            playerStartPosition = 0;
+                            restrict_stream_id = "0";
+                            movieId = "";//set
+                            episodeId = "0";//set
+                            selected_download_format = 0;
+//                            center_pause_paly_timer_is_running = false;
+                            previous_matching_time = 0;
+                            current_matching_time = 0;
+                            /////////////////////////////////////////////////////
+                            SubTitleName.clear();
+                            SubTitlePath.clear();
+                            ResolutionFormat.clear();
+                            ResolutionUrl.clear();
+                            callWithoutCaption = true;
+                            censor_layout = true;
+
+                            // This added for resolution Change.
+
+                            seekBarProgress = 0;
+                            change_resolution = false;
+                            is_paused = false;
+
+                            //======end========//
+
+
+
+
+
+                            int totalsize = questions.size()-1;
+                            Log.v("Nihar",""+totalsize);
+                            if ( totalsize > contentPosition && contentPosition != questions.size()) {
+
+                                contentPosition = contentPosition +1;
+                                stoptimertask();
+
+                                String clocktext = contentPosition+1 +" to " + String.valueOf(questions.size());
+                                clocktimetv.setText(clocktext);
+                                mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
+
+                                moreVideosRecyclerView.setAdapter(mAdapter);
+
+                                primary_ll.setVisibility(View.GONE);
+                                last_ll.setVisibility(View.GONE);
+                                center_play_pause.setVisibility(View.GONE);
+                                latest_center_play_pause.setVisibility(View.GONE);
+                                current_time.setVisibility(View.GONE);
+                                subtitle_change_btn.setVisibility(View.INVISIBLE);
+                                mediaRouteButton.setVisibility(View.INVISIBLE);
+                                End_Timer();
+                                Log.v("Nihar",totalsize+"NextPosition   429  :"+contentPosition);
+                                EpisodesListModel listModel = questions.get(contentPosition);
+                                durationTextView.setText(listModel.getEpisodeDuration());
+                                playerModel.setVideoDuration(listModel.getEpisodeDuration());
+
+//                                Util.dataModel.setVideoDuration(listModel.getEpisodeDuration());
+                                /////genere
+                                videoTitle.setText(listModel.getEpisodeTitle());
+//                                Util.dataModel.setEpisode_title(listModel.getEpisodeTitle());
+                                ///video story text view start
+                                story.setText(listModel.getEpisodeDescription());
+//                                Util.dataModel.setVideoStory(listModel.getEpisodeDescription());
+
+                                View decorView = getWindow().getDecorView();
+                                decorView.setSystemUiVisibility(
+                                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+
+                                );
+                                ///end videostory
+                                Episodeid = listModel.getEpisodeMuviUniqueId();
+                                content_types_id = playerModel.getContentTypesId();
+
+                                upStreamUniqueId = listModel.getEpisodeStreamUniqueId();
+                                episodeId  = upStreamUniqueId;
+                                upContentUniqueId = listModel.getEpisodeMuviUniqueId();
+                                movieId = upContentUniqueId;
+
+
+                                ValidateUserInput validateUserInput = new ValidateUserInput();
+                                validateUserInput.setAuthToken(authTokenStr);
+//                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
+                                validateUserInput.setUserId("157218");
+                                validateUserInput.setMuviUniqueId(upContentUniqueId.trim());
+                                validateUserInput.setPurchaseType(com.home.vod.util.Util.dataModel.getPurchase_type());
+                                validateUserInput.setSeasonId(com.home.vod.util.Util.dataModel.getSeason_id());
+                               // validateUserInput.setEpisodeStreamUniqueId(com.home.vod.util.Util.dataModel.getEpisode_id());
+                                validateUserInput.setEpisodeStreamUniqueId(upStreamUniqueId);
+
+                                validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                                asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
+                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                          /*  AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+                            asynLoadVideoUrls.execute();*/
+
+                            } else {
+                                backCalled();
+
                             }
 
-
-                        } else {
-                            backCalled();
                         }
-                        /**ad **/
                     }
+
+                    previous_matching_time = current_matching_time;
+                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+
                 }
 
 
-                previous_matching_time = current_matching_time;
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
-
-                /**ad **/
-
-                if (playerModel.getMidRoll() == 1) {
-                    if (adDetails != null && adDetails.length > 0) {
-                        for (int i = 0; i < adDetails.length; i++) {
-
-                            if ((int) (TimeUnit.MILLISECONDS.toSeconds(emVideoView.getCurrentPosition())) > 0 && ((int) (TimeUnit.MILLISECONDS.toSeconds(emVideoView.getCurrentPosition())) == Integer.parseInt(adDetails[i]))) {
-
-                                if (Util.checkNetwork(ProgramPlayerActivity.this)) {
-                                    Util.call_finish_at_onUserLeaveHint = false;
-                                    Util.hide_pause = true;
-                                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
-                                    latest_center_play_pause.setVisibility(View.VISIBLE);
+             /*   previous_matching_time = current_matching_time;
+                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);*/
 
 
-                                    if (emVideoView.isPlaying()) {
-                                        emVideoView.pause();
-                                        latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
-                                        center_play_pause.setImageResource(R.drawable.ic_media_play);
-                                        mHandler.removeCallbacks(updateTimeTask);
-
-                                    }
-
-                                    if (center_pause_paly_timer_is_running) {
-                                        center_pause_paly_timer.cancel();
-                                        center_pause_paly_timer_is_running = false;
-                                        Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
-
-
-                                        subtitle_change_btn.setVisibility(View.INVISIBLE);
-                                        primary_ll.setVisibility(View.GONE);
-                                        last_ll.setVisibility(View.GONE);
-                                        center_play_pause.setVisibility(View.GONE);
-                                        current_time.setVisibility(View.GONE);
-                                    }
-
-
-                                    /**ad **/
-
-                                    Intent adIntent = new Intent(ProgramPlayerActivity.this, AdPlayerActivity.class);
-                                    adIntent.putExtra("fromAd", "fromAd");
-                                    adIntent.putExtra("PlayerModel", playerModel);
-                                    adIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-                                    startActivityForResult(adIntent, 8001);
-                                    /**ad **/
-
-                                } else {
-                                    Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ProgramPlayerActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                /**ad **/
             }
 
         }
@@ -3294,7 +3996,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
     private void showSystemUI() {
         story.setText(playerModel.getVideoStory());
-        ResizableCustomView.doResizeTextView(ProgramPlayerActivity.this, story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE), true);
 
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
@@ -4200,6 +4901,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             playerModel.getOfflineUrl().remove(0);
             if (playerModel.getOfflineUrl().size() > 0) {
                 Download_SubTitle(playerModel.getOfflineUrl().get(0).trim());
+            }
+            else{
+                playerModel.setThirdPartyPlayer(false);
+                emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
             }
 
         }
@@ -5245,6 +5950,480 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             mDialog.show();
         } else {
             mDialog.hide();
+
+        }
+    }
+
+
+    private void ShowPpvPopUp() {
+        {
+
+
+            try {
+                if (com.home.vod.util.Util.currencyModel.getCurrencySymbol() == null) {
+                    com.home.vod.util.Util.showToast(ProgramPlayerActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+
+                    // Toast.makeText(ProgramDetailsActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
+
+                }
+            } catch (Exception e) {
+                com.home.vod.util.Util.showToast(ProgramPlayerActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+
+                // Toast.makeText(ProgramDetailsActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProgramPlayerActivity.this, R.style.MyAlertDialogStyle);
+            LayoutInflater inflater = (LayoutInflater) ProgramPlayerActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+            View convertView = inflater.inflate(R.layout.activity_ppv_popup, null);
+            alertDialog.setView(convertView);
+            alertDialog.setTitle("");
+
+            final RadioButton completeRadioButton = (RadioButton) convertView.findViewById(R.id.completeRadioButton);
+            final RadioButton seasonRadioButton = (RadioButton) convertView.findViewById(R.id.seasonRadioButton);
+            final RadioButton episodeRadioButton = (RadioButton) convertView.findViewById(R.id.episodeRadioButton);
+            TextView episodePriceTextView = (TextView) convertView.findViewById(R.id.episodePriceTextView);
+            TextView seasonPriceTextView = (TextView) convertView.findViewById(R.id.seasonPriceTextView);
+            TextView completePriceTextView = (TextView) convertView.findViewById(R.id.completePriceTextView);
+            Button payNowButton = (Button) convertView.findViewById(R.id.payNowButton);
+
+
+            if (com.home.vod.util.Util.dataModel.getIsAPV() == 1) {
+                if (com.home.vod.util.Util.apvModel.getIsEpisode() == 1) {
+                    episodeRadioButton.setVisibility(View.VISIBLE);
+                    episodePriceTextView.setVisibility(View.VISIBLE);
+                } else {
+                    episodeRadioButton.setVisibility(View.GONE);
+                    episodePriceTextView.setVisibility(View.GONE);
+                }
+                if (com.home.vod.util.Util.apvModel.getIsSeason() == 1) {
+                    seasonRadioButton.setVisibility(View.VISIBLE);
+                    seasonPriceTextView.setVisibility(View.VISIBLE);
+                } else {
+                    seasonRadioButton.setVisibility(View.GONE);
+                    seasonPriceTextView.setVisibility(View.GONE);
+                }
+                if (com.home.vod.util.Util.apvModel.getIsShow() == 1) {
+                    completeRadioButton.setVisibility(View.VISIBLE);
+                    completePriceTextView.setVisibility(View.VISIBLE);
+                } else {
+                    completeRadioButton.setVisibility(View.GONE);
+                    completePriceTextView.setVisibility(View.GONE);
+                }
+            } else {
+                if (com.home.vod.util.Util.ppvModel.getIsEpisode() == 1) {
+                    episodeRadioButton.setVisibility(View.VISIBLE);
+                    episodePriceTextView.setVisibility(View.VISIBLE);
+                } else {
+                    episodeRadioButton.setVisibility(View.GONE);
+                    episodePriceTextView.setVisibility(View.GONE);
+                }
+                if (com.home.vod.util.Util.ppvModel.getIsSeason() == 1) {
+                    seasonRadioButton.setVisibility(View.VISIBLE);
+                    seasonPriceTextView.setVisibility(View.VISIBLE);
+                } else {
+                    seasonRadioButton.setVisibility(View.GONE);
+                    seasonPriceTextView.setVisibility(View.GONE);
+                }
+                if (com.home.vod.util.Util.ppvModel.getIsShow() == 1) {
+                    completeRadioButton.setVisibility(View.VISIBLE);
+                    completePriceTextView.setVisibility(View.VISIBLE);
+                } else {
+                    completeRadioButton.setVisibility(View.GONE);
+                    completePriceTextView.setVisibility(View.GONE);
+                }
+            }
+
+
+            completeRadioButton.setText("  " + com.home.vod.util.Util.dataModel.getVideoTitle().trim() + " Complete Season ");
+            seasonRadioButton.setText("  " + com.home.vod.util.Util.dataModel.getVideoTitle().trim() + " Season " + com.home.vod.util.Util.dataModel.getEpisode_series_no().trim() + " ");
+            episodeRadioButton.setText("  " + com.home.vod.util.Util.dataModel.getVideoTitle().trim() + " S" + com.home.vod.util.Util.dataModel.getEpisode_series_no().trim() + " E " + com.home.vod.util.Util.dataModel.getEpisode_no().trim() + " ");
+
+            String subscriptionStr = preferenceManager.getIsSubscribedFromPref();
+
+            if (subscriptionStr.trim().equals("1")) {
+                if (com.home.vod.util.Util.dataModel.getIsAPV() == 1) {
+
+                    episodePriceTextView.setText(com.home.vod.util.Util.currencyModel.getCurrencySymbol() + " " + com.home.vod.util.Util.apvModel.getApvEpisodeSubscribedStr());
+                    seasonPriceTextView.setText(com.home.vod.util.Util.currencyModel.getCurrencySymbol() + " " + com.home.vod.util.Util.apvModel.getApvSeasonSubscribedStr());
+                    completePriceTextView.setText(com.home.vod.util.Util.currencyModel.getCurrencySymbol() + " " + com.home.vod.util.Util.apvModel.getApvShowSubscribedStr());
+                } else {
+                    episodePriceTextView.setText(com.home.vod.util.Util.currencyModel.getCurrencySymbol() + " " + com.home.vod.util.Util.ppvModel.getPpvEpisodeSubscribedStr());
+                    seasonPriceTextView.setText(com.home.vod.util.Util.currencyModel.getCurrencySymbol() + " " + com.home.vod.util.Util.ppvModel.getPpvSeasonSubscribedStr());
+                    completePriceTextView.setText(com.home.vod.util.Util.currencyModel.getCurrencySymbol() + " " + com.home.vod.util.Util.ppvModel.getPpvShowSubscribedStr());
+                }
+            } else {
+                if (com.home.vod.util.Util.dataModel.getIsAPV() == 1) {
+
+                    episodePriceTextView.setText(com.home.vod.util.Util.currencyModel.getCurrencySymbol() + " " + com.home.vod.util.Util.apvModel.getApvEpisodeUnsubscribedStr());
+                    seasonPriceTextView.setText(com.home.vod.util.Util.currencyModel.getCurrencySymbol() + " " + com.home.vod.util.Util.apvModel.getApvSeasonUnsubscribedStr());
+                    completePriceTextView.setText(com.home.vod.util.Util.currencyModel.getCurrencySymbol() + " " + com.home.vod.util.Util.apvModel.getApvShowUnsubscribedStr());
+                } else {
+                    episodePriceTextView.setText(com.home.vod.util.Util.currencyModel.getCurrencySymbol() + " " + com.home.vod.util.Util.ppvModel.getPpvEpisodeUnsubscribedStr());
+                    seasonPriceTextView.setText(com.home.vod.util.Util.currencyModel.getCurrencySymbol() + " " + com.home.vod.util.Util.ppvModel.getPpvSeasonUnsubscribedStr());
+                    completePriceTextView.setText(com.home.vod.util.Util.currencyModel.getCurrencySymbol() + " " + com.home.vod.util.Util.ppvModel.getPpvShowUnsubscribedStr());
+                }
+            }
+
+
+            alert = alertDialog.show();
+            completeRadioButton.setChecked(true);
+
+
+        /*if (completeRadioButton.isChecked() == true) {
+            if (Util.dataModel.getIsAPV() == 1) {
+                priceForUnsubscribedStr = Util.apvModel.getApvShowUnsubscribedStr();
+                priceFosubscribedStr = Util.apvModel.getApvShowSubscribedStr();
+
+            } else {
+                priceForUnsubscribedStr = Util.ppvModel.getPpvShowUnsubscribedStr();
+                priceFosubscribedStr = Util.ppvModel.getPpvShowSubscribedStr();
+            }
+        }*/
+
+
+            // Changed later
+
+            if (completeRadioButton.getVisibility() == View.VISIBLE) {
+
+                completeRadioButton.setChecked(true);
+                episodeRadioButton.setChecked(false);
+                seasonRadioButton.setChecked(false);
+
+                if (com.home.vod.util.Util.dataModel.getIsAPV() == 1) {
+                    priceForUnsubscribedStr = com.home.vod.util.Util.apvModel.getApvShowUnsubscribedStr();
+                    priceFosubscribedStr = com.home.vod.util.Util.apvModel.getApvShowSubscribedStr();
+
+                } else {
+                    priceForUnsubscribedStr = com.home.vod.util.Util.ppvModel.getPpvShowUnsubscribedStr();
+                    priceFosubscribedStr = com.home.vod.util.Util.ppvModel.getPpvShowSubscribedStr();
+                }
+
+
+            } else {
+                if (seasonRadioButton.getVisibility() == View.VISIBLE) {
+
+                    completeRadioButton.setChecked(false);
+                    seasonRadioButton.setChecked(true);
+                    episodeRadioButton.setChecked(false);
+
+                    if (com.home.vod.util.Util.dataModel.getIsAPV() == 1) {
+                        priceForUnsubscribedStr = com.home.vod.util.Util.apvModel.getApvSeasonUnsubscribedStr();
+                        priceFosubscribedStr = com.home.vod.util.Util.apvModel.getApvSeasonSubscribedStr();
+
+                    } else {
+                        priceForUnsubscribedStr = com.home.vod.util.Util.ppvModel.getPpvSeasonUnsubscribedStr();
+                        priceFosubscribedStr = com.home.vod.util.Util.ppvModel.getPpvSeasonSubscribedStr();
+                    }
+
+
+                } else {
+                    completeRadioButton.setChecked(false);
+                    seasonRadioButton.setChecked(false);
+                    episodeRadioButton.setChecked(true);
+
+                    if (com.home.vod.util.Util.dataModel.getIsAPV() == 1) {
+                        priceForUnsubscribedStr = com.home.vod.util.Util.apvModel.getApvEpisodeUnsubscribedStr();
+                        priceFosubscribedStr = com.home.vod.util.Util.apvModel.getApvEpisodeSubscribedStr();
+
+                    } else {
+                        priceForUnsubscribedStr = com.home.vod.util.Util.ppvModel.getPpvEpisodeUnsubscribedStr();
+                        priceFosubscribedStr = com.home.vod.util.Util.ppvModel.getPpvEpisodeSubscribedStr();
+                    }
+
+
+                }
+            }
+
+            ///////////////////////=====================////////////////////////
+
+            completeRadioButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    episodeRadioButton.setChecked(false);
+                    seasonRadioButton.setChecked(false);
+                    if (com.home.vod.util.Util.dataModel.getIsAPV() == 1) {
+                        priceForUnsubscribedStr = com.home.vod.util.Util.apvModel.getApvShowUnsubscribedStr();
+                        priceFosubscribedStr = com.home.vod.util.Util.apvModel.getApvShowSubscribedStr();
+
+                    } else {
+                        priceForUnsubscribedStr = com.home.vod.util.Util.ppvModel.getPpvShowUnsubscribedStr();
+                        priceFosubscribedStr = com.home.vod.util.Util.ppvModel.getPpvShowSubscribedStr();
+                    }
+
+
+                }
+
+            });
+
+
+            episodeRadioButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    completeRadioButton.setChecked(false);
+                    seasonRadioButton.setChecked(false);
+
+                    if (com.home.vod.util.Util.dataModel.getIsAPV() == 1) {
+                        priceForUnsubscribedStr = com.home.vod.util.Util.apvModel.getApvEpisodeUnsubscribedStr();
+                        priceFosubscribedStr = com.home.vod.util.Util.apvModel.getApvEpisodeSubscribedStr();
+
+                    } else {
+                        priceForUnsubscribedStr = com.home.vod.util.Util.ppvModel.getPpvEpisodeUnsubscribedStr();
+                        priceFosubscribedStr = com.home.vod.util.Util.ppvModel.getPpvEpisodeSubscribedStr();
+                    }
+
+                }
+            });
+            seasonRadioButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    episodeRadioButton.setChecked(false);
+                    completeRadioButton.setChecked(false);
+                    if (com.home.vod.util.Util.dataModel.getIsAPV() == 1) {
+                        priceForUnsubscribedStr = com.home.vod.util.Util.apvModel.getApvSeasonUnsubscribedStr();
+                        priceFosubscribedStr = com.home.vod.util.Util.apvModel.getApvSeasonSubscribedStr();
+
+                    } else {
+                        priceForUnsubscribedStr = com.home.vod.util.Util.ppvModel.getPpvSeasonUnsubscribedStr();
+                        priceFosubscribedStr = com.home.vod.util.Util.ppvModel.getPpvSeasonSubscribedStr();
+                    }
+
+                }
+            });
+
+            payNowButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    if (completeRadioButton.isChecked()) {
+                        selectedPurchaseType = 1;
+                        com.home.vod.util.Util.selected_episode_id = "0";
+                        com.home.vod.util.Util.selected_season_id = "0";
+                        LogUtil.showLog("MUVI", "called 1");
+                    } else if (seasonRadioButton.isChecked()) {
+                        selectedPurchaseType = 2;
+                        com.home.vod.util.Util.selected_episode_id = "0";
+//                        Util.selected_season_id = "" + spinnerPosition;
+                        LogUtil.showLog("MUVI", "called 2");
+                    } else {
+                        selectedPurchaseType = 3;
+                        com.home.vod.util.Util.selected_episode_id = com.home.vod.util.Util.dataModel.getStreamUniqueId();
+                        com.home.vod.util.Util.selected_season_id = com.home.vod.util.Util.dataModel.getEpisode_series_no();
+                        LogUtil.showLog("MUVI", "called 3");
+                    }
+
+
+                    LogUtil.showLog("MUVI", "Show withepisode  Activity Season Id =" + com.home.vod.util.Util.selected_season_id);
+                    LogUtil.showLog("MUVI", "Show withepisode Activity episode Id =" + com.home.vod.util.Util.selected_episode_id);
+
+                    alert.dismiss();
+                    final Intent showPaymentIntent = new Intent(ProgramPlayerActivity.this, PPvPaymentInfoActivity.class);
+                    showPaymentIntent.putExtra("muviuniqueid", com.home.vod.util.Util.dataModel.getMovieUniqueId().trim());
+                    showPaymentIntent.putExtra("episodeStreamId", com.home.vod.util.Util.dataModel.getStreamUniqueId().trim());
+                    showPaymentIntent.putExtra("contentTypesId", com.home.vod.util.Util.dataModel.getContentTypesId());
+                    showPaymentIntent.putExtra("movieThirdPartyUrl", com.home.vod.util.Util.dataModel.getThirdPartyUrl());
+                    showPaymentIntent.putExtra("planUnSubscribedPrice", priceForUnsubscribedStr);
+                    showPaymentIntent.putExtra("planSubscribedPrice", priceFosubscribedStr);
+                    showPaymentIntent.putExtra("currencyId", com.home.vod.util.Util.currencyModel.getCurrencyId());
+                    showPaymentIntent.putExtra("currencyCountryCode", com.home.vod.util.Util.currencyModel.getCurrencyCode());
+                    showPaymentIntent.putExtra("currencySymbol", com.home.vod.util.Util.currencyModel.getCurrencySymbol());
+                    showPaymentIntent.putExtra("PlayerModel", playerModel);
+
+                    // showPaymentIntent.putExtra("showName", Util.dataModel.getEpisode_title());
+
+
+                    if (selectedPurchaseType == 1)
+                        showPaymentIntent.putExtra("showName", com.home.vod.util.Util.dataModel.getVideoTitle().trim() + " Complete Season ");
+                    if (selectedPurchaseType == 2)
+                        showPaymentIntent.putExtra("showName", com.home.vod.util.Util.dataModel.getVideoTitle().trim() + " Season " + com.home.vod.util.Util.dataModel.getEpisode_series_no().trim());
+                    if (selectedPurchaseType == 3)
+                        showPaymentIntent.putExtra("showName", com.home.vod.util.Util.dataModel.getVideoTitle().trim() + " S" + com.home.vod.util.Util.dataModel.getEpisode_series_no().trim() + " E " + com.home.vod.util.Util.dataModel.getEpisode_no().trim());
+                    showPaymentIntent.putExtra("seriesNumber", com.home.vod.util.Util.dataModel.getEpisode_series_no());
+                    showPaymentIntent.putExtra("isPPV", com.home.vod.util.Util.dataModel.getIsPPV());
+                    showPaymentIntent.putExtra("isAPV", com.home.vod.util.Util.dataModel.getIsAPV());
+                    showPaymentIntent.putExtra("selectedPurchaseType", selectedPurchaseType);
+                    if (com.home.vod.util.Util.dataModel.getIsAPV() == 1) {
+                        showPaymentIntent.putExtra("isConverted", 0);
+                    } else {
+                        showPaymentIntent.putExtra("isConverted", 1);
+
+                    }
+
+                    showPaymentIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(showPaymentIntent);
+
+                }
+            });
+        }
+    }
+
+    public  void shareVideo(Context context) {
+//sharing implementation here
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "AndroidSolved");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Now Learn Android with AndroidSolved clicke here to visit https://androidsolved.wordpress.com/ ");
+        context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
+    }
+
+
+
+    public void getData() {
+        mHandler.removeCallbacks(updateTimeTask);
+        seekBar.setProgress(0);
+        current_time.setText("00:00:00");
+        total_time.setText("00:00:00");
+        previous_matching_time = 0;
+        current_matching_time = 0;
+        video_completed = true;
+        content_types_id = 0;//set
+        videoLogId = "0";
+        watchStatus = "start";
+        playerPosition = 0;
+        videoBufferLogId = "0";
+        videoBufferLogUniqueId = "0";
+        Location = "0";
+        played_length = 0;
+        playerStartPosition = 0;
+        restrict_stream_id = "0";
+        movieId = "";//set
+        episodeId = "0";//set
+        selected_download_format = 0;
+        previous_matching_time = 0;
+        current_matching_time = 0;
+        SubTitleName.clear();
+        SubTitlePath.clear();
+        ResolutionFormat.clear();
+        ResolutionUrl.clear();
+        callWithoutCaption = true;
+        censor_layout = true;
+
+        // This added for resolution Change.
+
+        seekBarProgress = 0;
+        change_resolution = false;
+        is_paused = false;
+
+        //======end========//
+
+
+        int totalsize = questions.size() - 1;
+        Log.v("Nihar", "" + contentPosition);
+       // if (totalsize > contentPosition && contentPosition != questions.size()) {
+
+           // contentPosition = contentPosition + 1;
+            stoptimertask();
+
+            String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
+            clocktimetv.setText(clocktext);
+
+        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
+
+        moreVideosRecyclerView.setAdapter(mAdapter);
+        primary_ll.setVisibility(View.GONE);
+            last_ll.setVisibility(View.GONE);
+            center_play_pause.setVisibility(View.GONE);
+            latest_center_play_pause.setVisibility(View.GONE);
+            current_time.setVisibility(View.GONE);
+            subtitle_change_btn.setVisibility(View.INVISIBLE);
+            mediaRouteButton.setVisibility(View.INVISIBLE);
+            End_Timer();
+            Log.v("Nihar", totalsize + "NextPosition   429  :" + contentPosition);
+            EpisodesListModel listModel = questions.get(contentPosition);
+            durationTextView.setText(listModel.getEpisodeDuration());
+            playerModel.setVideoDuration(listModel.getEpisodeDuration());
+
+//                                Util.dataModel.setVideoDuration(listModel.getEpisodeDuration());
+            /////genere
+            videoTitle.setText(listModel.getEpisodeTitle());
+//                                Util.dataModel.setEpisode_title(listModel.getEpisodeTitle());
+            ///video story text view start
+            story.setText(listModel.getEpisodeDescription());
+//                                Util.dataModel.setVideoStory(listModel.getEpisodeDescription());
+
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+
+            );
+            ///end videostory
+            Episodeid = listModel.getEpisodeMuviUniqueId();
+            content_types_id = playerModel.getContentTypesId();
+
+            upStreamUniqueId = listModel.getEpisodeStreamUniqueId();
+            episodeId = upStreamUniqueId;
+            upContentUniqueId = listModel.getEpisodeMuviUniqueId();
+            movieId = upContentUniqueId;
+
+            ValidateUserInput validateUserInput = new ValidateUserInput();
+            validateUserInput.setAuthToken(authTokenStr);
+//                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
+            validateUserInput.setUserId("157218");
+            validateUserInput.setMuviUniqueId(upContentUniqueId.trim());
+            validateUserInput.setPurchaseType(com.home.vod.util.Util.dataModel.getPurchase_type());
+            validateUserInput.setSeasonId(com.home.vod.util.Util.dataModel.getSeason_id());
+            // validateUserInput.setEpisodeStreamUniqueId(com.home.vod.util.Util.dataModel.getEpisode_id());
+            validateUserInput.setEpisodeStreamUniqueId(upStreamUniqueId);
+
+            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
+            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                          /*  AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+                            asynLoadVideoUrls.execute();*/
+            previous_matching_time = current_matching_time;
+            ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+       // }
+    }
+    public static interface ClickListener1{
+        public void onClick(View view,int position);
+        public void onLongClick(View view,int position);
+    }
+
+
+    class RecyclerTouchListener1 implements RecyclerView.OnItemTouchListener{
+
+        private ClickListener1 clicklistener;
+        private GestureDetector gestureDetector;
+
+        public RecyclerTouchListener1(Context context, final RecyclerView recycleView, final ClickListener1 clicklistener){
+
+            this.clicklistener=clicklistener;
+            gestureDetector=new GestureDetector(context,new GestureDetector.SimpleOnGestureListener(){
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    View child=recycleView.findChildViewUnder(e.getX(),e.getY());
+                    if(child!=null && clicklistener!=null){
+                        clicklistener.onLongClick(child,recycleView.getChildAdapterPosition(child));
+                    }
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            View child=rv.findChildViewUnder(e.getX(),e.getY());
+            if(child!=null && clicklistener!=null && gestureDetector.onTouchEvent(e)){
+                clicklistener.onClick(child,rv.getChildAdapterPosition(child));
+            }
+
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
         }
     }

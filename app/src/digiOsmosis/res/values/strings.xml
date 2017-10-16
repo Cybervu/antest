@@ -2,6 +2,7 @@
     <string name="app_name">Digi Osmosis</string>
     <string name="regular_fonts">fonts/OpenSans-Regular.ttf</string>
     <string name="light_fonts">fonts/OpenSans-Light.ttf</string>
+    <string name="fonts">fonts/Dosis-Bold.ttf</string>
 
     <!--App Drawer-->
     <string name="action_search">Search</string>

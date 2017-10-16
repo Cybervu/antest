@@ -677,7 +677,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 String episodeSeriesNoStr = episode_details_output.getEpisodeArray().get(a).getSeries_number();
                 String episodeMovieStreamUniqueIdStr = episode_details_output.getEpisodeArray().get(a).getMovie_stream_uniq_id();
                 String episodeThirdParty = episode_details_output.getEpisodeArray().get(a).getThirdparty_url();
-                //int episodeContenTTypesId=episodeArray.get(a).getContent_types_id();
                 String videodurationStr = episode_details_output.getEpisodeArray().get(a).getVideo_duration();
 
 

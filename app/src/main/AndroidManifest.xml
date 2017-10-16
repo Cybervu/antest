@@ -279,7 +279,11 @@
             android:name="io.fabric.ApiKey"
             android:value="5ade002b6ada291c993af0c4732c69e8034b9e3e" />
 
-        <activity android:name=".activity.ProgramPlayerActivity"></activity>
+        <activity android:name=".activity.ProgramPlayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>
