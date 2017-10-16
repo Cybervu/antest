@@ -21,7 +21,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
-import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 
 public class ProgramPlayerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -131,28 +130,30 @@ public class ProgramPlayerAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        RecyclerView.LayoutParams param = (RecyclerView.LayoutParams)holder.itemView.getLayoutParams();
 
-            param.height = LinearLayout.LayoutParams.WRAP_CONTENT;
-            param.width = LinearLayout.LayoutParams.MATCH_PARENT;
         ViewHolder groupViewHolder = (ViewHolder) holder;
+        RecyclerView.LayoutParams param = (RecyclerView.LayoutParams)holder.itemView.getLayoutParams();
+        param.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        param.width = LinearLayout.LayoutParams.WRAP_CONTENT;
         // groupViewHolder.mImage.setText(labels.get(position - 1));
         posT = position;
         Log.v("Subhalaxmi","jf"+pos);
-        Log.v("Subhalaxmi","position"+position);
+        Log.v("Subhalaxmi", "position" + position);
 
         if (pos == position) {
-            Log.v("Subhalaxmi","GONE"+position);
-
-            holder.itemView.setVisibility(View.GONE);
+            Log.v("Subhalaxmi", "GONE" + position);
             param.height = 0;
             param.width = 0;
+            holder.itemView.setLayoutParams(param);
+            holder.itemView.setVisibility(View.GONE);
+
         } else {
             Log.v("Subhalaxmi","VISIBLE"+position);
-
+            holder.itemView.setLayoutParams(param);
             holder.itemView.setVisibility(View.VISIBLE);
+
+
         }
-        holder.itemView.setLayoutParams(param);
         groupViewHolder.bind(data.get(position), listener);
     }
 

@@ -35,7 +35,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.MediaRouteButton;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -96,7 +95,6 @@ import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.vod.BuildConfig;
 import com.home.vod.R;
-import com.home.vod.adapter.ProgramDetailsAdapter;
 import com.home.vod.adapter.ProgramPlayerAdapter;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.model.SeasonModel;
@@ -1078,24 +1076,51 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
                 //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
             } else {
-
-
-                LogUtil.showLog("BISHAL", "data show...");
                 moreVideosRecyclerView.setVisibility(View.VISIBLE);
-                moreVideosRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                moreVideosRecyclerView.setLayoutManager(mLayoutManager);
                 moreVideosRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                ProgramDetailsAdapter mAdapter = new ProgramDetailsAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions, new ProgramDetailsAdapter.OnItemClickListener() {
+                mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
+                moreVideosRecyclerView.addOnItemTouchListener(new RecyclerTouchListener1(this, moreVideosRecyclerView, new ClickListener1() {
                     @Override
-                    public void onItemClick(EpisodesListModel item, int position) {
+                    public void onClick(View view, int position) {
+
                         contentPosition = position;
                         getData();
                         Log.v("SUBHA", "data set here");
-
                     }
-                });
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+                        return;
+                    }
+                }));
                 contentPosition = 0;
                 getData();
                 moreVideosRecyclerView.setAdapter(mAdapter);
+                LogUtil.showLog("BISHAL", "data show...");
+
+
+             /*   ProgramDetailsAdapter mAdapter = new ProgramDetailsAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions);
+
+                    moreVideosRecyclerView.addOnItemTouchListener(new RecyclerTouchListener1(this,
+                            moreVideosRecyclerView, new ClickListener1() {
+                        @Override
+                        public void onClick(View view, final int position) {
+                            //Values are passing to activity & to fragment as well
+                            contentPosition = position;
+                            getData();
+                        }
+
+                        @Override
+                        public void onLongClick(View view, int position) {
+
+                            return;
+                        }
+                    }));
+
+                contentPosition = 0;
+                getData();
+                moreVideosRecyclerView.setAdapter(mAdapter);*/
 
             }
         }
@@ -1281,7 +1306,15 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         current_season = Integer.parseInt(getIntent().getStringExtra("Current_SEASON"));
         counter = Integer.parseInt(getIntent().getStringExtra("Index"));
         season_change_textview.setText(totalSeasonModel.get(counter).getSeasonName() + " OF "+totalSeason);
+        next_season.setVisibility(View.VISIBLE);
+        previous_season.setVisibility(View.VISIBLE);
 
+        if (counter == 0) {
+            previous_season.setVisibility(View.GONE);
+        }
+        if (counter >= totalSeason -1) {
+            next_season.setVisibility(View.GONE);
+        }
             //something here
 
 
@@ -6569,4 +6602,5 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
         }
     }
+
 }
