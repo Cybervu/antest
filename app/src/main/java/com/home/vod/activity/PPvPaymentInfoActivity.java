@@ -1453,6 +1453,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                        playVideoIntent.putExtra("PLAY_LIST", questions);
+                        playVideoIntent.putExtra("TAG", contentPosition);
                         playVideoIntent.putExtra("PlayerModel", playerModel);
                         startActivity(playVideoIntent);
                         finish();
@@ -1466,6 +1468,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                    playVideoIntent.putExtra("PLAY_LIST", questions);
+                    playVideoIntent.putExtra("TAG", contentPosition);
                     playVideoIntent.putExtra("PlayerModel", playerModel);
                     startActivity(playVideoIntent);
                     finish();
@@ -3092,6 +3096,8 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 playerModel.setSubTitlePath(SubTitlePath);
                 //Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
                 playVideoIntent.putExtra("PlayerModel", playerModel);
+                playVideoIntent.putExtra("PLAY_LIST", questions);
+                playVideoIntent.putExtra("TAG", contentPosition);
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                 startActivity(playVideoIntent);
