@@ -83,10 +83,10 @@
     <dimen name="contactformtitle_text_size">17sp</dimen>
     <dimen name="editbox_text_size">18dp</dimen>
     <dimen name="home280_layout_width">183dp</dimen>
-    <dimen name="list_singlecard_img_width">102dp</dimen>
-    <dimen name="list_singlecard_img_height">146dp</dimen>
-    <dimen name="videogrid_width">140dp</dimen>
-    <dimen name="videogrid_height">200dp</dimen>
+    <dimen name="list_singlecard_img_width">200dp</dimen>
+    <dimen name="list_singlecard_img_height">200dp</dimen>
+    <dimen name="videogrid_width">150dp</dimen>
+    <dimen name="videogrid_height">150dp</dimen>
     <dimen name="videogrid_land_width">182dp</dimen>
     <dimen name="videogrid_land_height">101dp</dimen>
     <dimen name="plainrowlayout_height">100dp</dimen>
@@ -134,6 +134,29 @@
     <dimen name="review_btn_textsize">14sp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
+
+    <dimen name="season_image_height">250dp</dimen>
+    <dimen name="season_image_width">250dp</dimen>
+    <dimen name="card_title">23sp</dimen>
+    <dimen name="human_image_height">80dp</dimen>
+    <dimen name="human_image_width">80dp</dimen>
+
+
+    <!--//**********program activity*************//-->
+    <dimen name="story_margin_left">10dp</dimen>
+    <dimen name="story_title_text_size">20sp</dimen>
+    <dimen name="program_button_text_size">16sp</dimen>
+    <dimen name="start_program_button">200dp</dimen>
+    <dimen name="duration_title_text">20sp</dimen>
+    <dimen name="duration">12sp</dimen>
+    <dimen name="story_text_size">14sp</dimen>
+    <dimen name="weight_height">60dp</dimen>
+    <dimen name="weight_width">4dp</dimen>
+
+    <!--//**********logo image*************//-->
+
+    <dimen name="logo_height">100dp</dimen>
+    <dimen name="logo_width">100dp</dimen>
 
     <dimen name="plainrow_text_size">20sp</dimen>
 </resources>

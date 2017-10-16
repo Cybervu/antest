@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -20,6 +21,7 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -108,6 +110,10 @@ import java.util.concurrent.TimeUnit;
 import player.activity.AdPlayerActivity;
 import player.activity.Player;
 
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAIL_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
@@ -143,7 +149,6 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     ImageView bannerImageView, playButton, share;
     TextView detailsTextView, durationTitleTextView, durationTextView, tutorialTextView, viewAllTextView;
     Button startWorkoutButton, dietPlanButton;
-    RecyclerView featureContent;
     ProgressBarHandler progressBarHandler;
     GetValidateUserAsynTask asynValidateUserDetails;
     VideoDetailsAsynctask asynLoadVideoUrls;
@@ -938,8 +943,19 @@ Log.v("SUBHA","code == player == "+ code);
         });
         mLayoutManager = new LinearLayoutManager(ProgramDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
 
+        if (((ProgramDetailsActivity.this.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((ProgramDetailsActivity.this.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
 
 
+            seasontiveLayout.addItemDecoration(new SpacesItemDecoration(30));
+
+        }
+
+        else {
+
+            seasontiveLayout.addItemDecoration(new SpacesItemDecoration(50));
+
+
+        }
 
 
         /*chromecast-------------------------------------*/
@@ -1131,6 +1147,30 @@ Log.v("SUBHA","code == player == "+ code);
 
     }
 
+
+
+    public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+
+        private int halfSpace;
+
+        public SpacesItemDecoration(int space) {
+            this.halfSpace = space / 2;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+
+            if (parent.getPaddingLeft() != halfSpace) {
+                parent.setPadding(halfSpace, halfSpace, halfSpace, halfSpace);
+                parent.setClipToPadding(false);
+            }
+
+            outRect.top = halfSpace;
+            outRect.bottom = halfSpace;
+            outRect.left = halfSpace;
+            outRect.right = halfSpace;
+        }
+    }
 
 
 

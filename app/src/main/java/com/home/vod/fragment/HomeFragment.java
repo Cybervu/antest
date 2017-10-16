@@ -362,7 +362,8 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
             }
 
-            LogUtil.showLog("MUVI", "HHH" + videoWidth + videoHeight);
+            LogUtil.showLog("MUVI", "HHH" + videoWidth );
+            LogUtil.showLog("MUVI", "HHH" + videoHeight);
             LogUtil.showLog("MUVI", "vertical" + MainActivity.vertical);
 
             if (getView() != null) {
