@@ -73,10 +73,12 @@ import com.home.apisdk.apiModel.ValidateCouponCodeOutputModel;
 import com.home.apisdk.apiModel.VoucherSubscriptionInputModel;
 import com.home.apisdk.apiModel.VoucherSubscriptionOutputModel;
 import com.home.apisdk.apiModel.WithouPaymentSubscriptionRegDetailsInput;
+import com.home.vod.ProgramPlayerIntentHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.CardModel;
+import com.home.vod.model.EpisodesListModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
@@ -212,6 +214,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
     String loggedInIdStr;
    // ProgressDialog pDialog;
     String existing_card_id = "";
+    ArrayList<EpisodesListModel> questions;
     String isCheckedToSavetheCard = "1";
     private boolean isCastConnected = false;
 
@@ -361,6 +364,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
     String videoPreview;
     String videoName = "No Name";
     int isPPV = 0;
+    int contentPosition;
     int isAPV = 0;
     int isConverted = 0;
     int contentTypesId = 0;
@@ -404,6 +408,16 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
         videoPreview = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
+
+        try {
+            contentPosition = getIntent().getIntExtra("TAG", 0);
+            questions = new ArrayList<EpisodesListModel>();;
+
+            questions = (ArrayList<EpisodesListModel>) getIntent().getSerializableExtra("PLAY_LIST");
+            // Util.PlayListArrayModel = questions;
+        } catch (Exception e) {
+            Log.v("Nihar", "exception" + e.toString());
+        }
 
         //Set toolbar
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -1419,7 +1433,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
                     playerModel.setThirdPartyPlayer(false);
 
-                    final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent = new ProgramPlayerIntentHandler(PPvPaymentInfoActivity.this).handlePlayerIntent();
 
                     if (FakeSubTitlePath.size() > 0) {
                         // This Portion Will Be changed Later.
@@ -1446,7 +1460,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
 
                 } else {
-                    final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent = new ProgramPlayerIntentHandler(PPvPaymentInfoActivity.this).handlePlayerIntent();
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
@@ -3061,17 +3075,17 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 if (Util.dataModel.getAdNetworkId() == 3) {
                     LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                    playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent = new ProgramPlayerIntentHandler(PPvPaymentInfoActivity.this).handlePlayerIntent();
 
                 } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                     if (Util.dataModel.getPlayPos() <= 0) {
                         playVideoIntent = new Intent(PPvPaymentInfoActivity.this, AdPlayerActivity.class);
                     } else {
-                        playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new ProgramPlayerIntentHandler(PPvPaymentInfoActivity.this).handlePlayerIntent();
 
                     }
                 } else {
-                    playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent = new ProgramPlayerIntentHandler(PPvPaymentInfoActivity.this).handlePlayerIntent();
 
                 }
                 /***ad **/

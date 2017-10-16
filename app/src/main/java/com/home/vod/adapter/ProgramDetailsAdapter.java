@@ -140,6 +140,7 @@ public class ProgramDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
         return  itemcount;
     }
+
     public static int calculateInSampleSize(BitmapFactory.Options opt, int reqWidth, int reqHeight){
         final int height = opt.outHeight;
         final int width = opt.outWidth;

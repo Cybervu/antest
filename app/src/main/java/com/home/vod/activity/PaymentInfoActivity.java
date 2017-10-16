@@ -41,6 +41,7 @@ import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.apisdk.apiModel.RegisterUserPaymentInputModel;
 import com.home.apisdk.apiModel.RegisterUserPaymentOutputModel;
+import com.home.vod.ProgramPlayerIntentHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.model.CardModel;
@@ -755,17 +756,17 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     if (Util.dataModel.getAdNetworkId() == 3) {
                         LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                        playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new ProgramPlayerIntentHandler(PaymentInfoActivity.this).handlePlayerIntent();
 
                     } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                         if (Util.dataModel.getPlayPos() <= 0) {
                             playVideoIntent = new Intent(PaymentInfoActivity.this, AdPlayerActivity.class);
                         } else {
-                            playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new ProgramPlayerIntentHandler(PaymentInfoActivity.this).handlePlayerIntent();
 
                         }
                     } else {
-                        playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new ProgramPlayerIntentHandler(PaymentInfoActivity.this).handlePlayerIntent();
 
                     }
                     /***ad **/
@@ -799,7 +800,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                         }
                     });
                 } else {
-                    final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent = new ProgramPlayerIntentHandler(PaymentInfoActivity.this).handlePlayerIntent();
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
@@ -1930,17 +1931,17 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 if (Util.dataModel.getAdNetworkId() == 3) {
                     LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                    playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent = new ProgramPlayerIntentHandler(PaymentInfoActivity.this).handlePlayerIntent();
 
                 } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                     if (Util.dataModel.getPlayPos() <= 0) {
                         playVideoIntent = new Intent(PaymentInfoActivity.this, AdPlayerActivity.class);
                     } else {
-                        playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new ProgramPlayerIntentHandler(PaymentInfoActivity.this).handlePlayerIntent();
 
                     }
                 } else {
-                    playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent = new ProgramPlayerIntentHandler(PaymentInfoActivity.this).handlePlayerIntent();
 
                 }
                 playerModel.setSubTitlePath(SubTitlePath);
