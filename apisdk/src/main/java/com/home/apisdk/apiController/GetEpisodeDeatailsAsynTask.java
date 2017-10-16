@@ -130,7 +130,7 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-
+                Log.v("Nihar", "enter with responce" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
 

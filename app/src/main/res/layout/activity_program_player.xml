@@ -257,13 +257,15 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below = "@+id/player_layout"
+            android:layout_below="@+id/player_layout"
+
             android:fillViewport="true">
 
         <LinearLayout
             android:id="@+id/new_detailsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/bannerImageRelativeLayout"
             android:background="@color/appBackgroundColor"
             android:orientation="vertical"
             android:visibility="visible">
@@ -305,7 +307,7 @@
 
                 <RelativeLayout
                     android:id="@+id/downloadRelativeLayout"
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/downloadwidth"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textlinearlayout"
 
@@ -355,8 +357,8 @@
 
                 <ImageView
                     android:id="@+id/share"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/share" />
 
@@ -488,7 +490,41 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="7dp" />
+            <RelativeLayout
+                android:id="@+id/seasonScroller"
+
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/colorPrimary"
+                >
+                <TextView
+                    android:id="@+id/season_change_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@android:color/white"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:text="DAYS 3 OF 20 "
+                    />
+                <ImageView
+                    android:id="@+id/next_season"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toRightOf="@id/season_change_textview"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_keyboard_arrow_right_white_24px"/>
+                <ImageView
+                    android:id="@+id/previous_season"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toLeftOf="@id/season_change_textview"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_keyboard_arrow_left_white_24px"/>
+            </RelativeLayout>
         </LinearLayout>
+
         </ScrollView>
 
 
@@ -500,5 +536,6 @@
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:layout_alignParentBottom="true" />-->
+
 
     </RelativeLayout>

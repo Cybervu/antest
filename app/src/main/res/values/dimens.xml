@@ -346,6 +346,7 @@
     <dimen name="genre_textsize">14sp</dimen>
     <dimen name="padding_right4dp">4dp</dimen>
     <dimen name="margintop12dp">12dp</dimen>
+    <dimen name="downloadwidth">200dp</dimen>
 
 
     <!--resume_playing dimen-->

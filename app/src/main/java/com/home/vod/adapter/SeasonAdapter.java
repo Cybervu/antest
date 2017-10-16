@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.home.vod.R;
-import com.home.vod.model.EpisodesListModel;
 import com.home.vod.model.SeasonModel;
 
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
     }
 
     public SeasonAdapter(Context context, int layoutResourceId,
-                         ArrayList<SeasonModel> data, OnItemClickListener listener) {
+                         ArrayList<SeasonModel> data) {
         this.layoutResourceId = layoutResourceId;
         this.mContext = context;
         this.data = data;
@@ -48,7 +47,7 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
 
 
     public interface OnItemClickListener {
-        void onItemClick(SeasonModel item );
+        void onItemClick(SeasonModel item,int pos);
 
     }
 
@@ -66,12 +65,12 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
         SeasonModel album = data.get(position);
         holder.title.setText(album.getSeasonName());
         holder.thumbnail.setImageResource(album.getSeasonImage());
-        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+       /* holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(data.get(position));
+                listener.onItemClick(data.get(position),position);
             }
-        });
+        });*/
 
     }
 
