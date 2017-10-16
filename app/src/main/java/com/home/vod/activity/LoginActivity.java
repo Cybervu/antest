@@ -81,8 +81,10 @@ import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.LoginHandler;
 import com.home.vod.MonetizationHandler;
+import com.home.vod.ProgramPlayerIntentHandler;
 import com.home.vod.R;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
+import com.home.vod.model.EpisodesListModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
@@ -186,6 +188,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     String UniversalErrorMessage = "";
     String UniversalIsSubscribed = "";
     String loggedInIdStr;
+    ArrayList<EpisodesListModel> questions;
+    int contentPosition;
     ArrayList<String> SubTitleName = new ArrayList<>();
     ArrayList<String> SubTitlePath = new ArrayList<>();
     ArrayList<String> FakeSubTitlePath = new ArrayList<>();
@@ -520,7 +524,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             } else if (status == 430) {
 
 
-                new MonetizationHandler(LoginActivity.this).handle429OR430statusCod(validUserStr,message,Subscription_Str);
+                new MonetizationHandler(LoginActivity.this).handle429OR430statusCod(validUserStr, message, Subscription_Str);
 
 
             } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
@@ -598,6 +602,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
      /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
         then set thirdpartyurl true here and assign the url to videourl*/
         boolean play_video = true;
+
+        playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
+        playerModel.setUserId(preferenceManager.getUseridFromPref());
 
         if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
 
@@ -770,17 +777,17 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         if (Util.dataModel.getAdNetworkId() == 3) {
                             LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                            playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new ProgramPlayerIntentHandler(LoginActivity.this).handlePlayerIntent();
 
                         } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                             if (Util.dataModel.getPlayPos() <= 0) {
                                 playVideoIntent = new Intent(LoginActivity.this, AdPlayerActivity.class);
                             } else {
-                                playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                                playVideoIntent = new ProgramPlayerIntentHandler(LoginActivity.this).handlePlayerIntent();
 
                             }
                         } else {
-                            playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new ProgramPlayerIntentHandler(LoginActivity.this).handlePlayerIntent();
 
                         }
                         // playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
@@ -808,6 +815,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                                 playVideoIntent.putExtra("PlayerModel", playerModel);
+                                playVideoIntent.putExtra("PLAY_LIST", questions);
+                                playVideoIntent.putExtra("TAG", contentPosition);
                                 startActivity(playVideoIntent);
                                 finish();
                             }
@@ -815,13 +824,15 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         }
                     });
                 } else {
-                    final Intent playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent = new ProgramPlayerIntentHandler(LoginActivity.this).handlePlayerIntent();
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                     playVideoIntent.putExtra("PlayerModel", playerModel);
+                    playVideoIntent.putExtra("PLAY_LIST", questions);
+                    playVideoIntent.putExtra("TAG", contentPosition);
                     startActivity(playVideoIntent);
                     onBackPressed();
 
@@ -1081,6 +1092,15 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         deviceName = myDevice.getName();
 
 
+        try {
+            contentPosition = getIntent().getIntExtra("TAG", 0);
+            questions = new ArrayList<EpisodesListModel>();;
+
+            questions = (ArrayList<EpisodesListModel>) getIntent().getSerializableExtra("PLAY_LIST");
+            // Util.PlayListArrayModel = questions;
+        } catch (Exception e) {
+            Log.v("Nihar", "exception" + e.toString());
+        }
         LogUtil.showLog("MUVI", "Device_Name=" + deviceName);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -1217,6 +1237,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     detailsIntent.putExtra("from", getIntent().getStringExtra("from"));
                 }
                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                detailsIntent.putExtra("PLAY_LIST", questions);
+                detailsIntent.putExtra("TAG", contentPosition);
+                detailsIntent.putExtra("PlayerModel", playerModel);
                 startActivity(detailsIntent);
                 onBackPressed();
             }
@@ -3343,17 +3366,17 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     if (Util.dataModel.getAdNetworkId() == 3) {
                         LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                        playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new ProgramPlayerIntentHandler(LoginActivity.this).handlePlayerIntent();
 
                     } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                         if (Util.dataModel.getPlayPos() <= 0) {
                             playVideoIntent = new Intent(LoginActivity.this, AdPlayerActivity.class);
                         } else {
-                            playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new ProgramPlayerIntentHandler(LoginActivity.this).handlePlayerIntent();
 
                         }
                     } else {
-                        playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new ProgramPlayerIntentHandler(LoginActivity.this).handlePlayerIntent();
 
                     }
                     // playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
@@ -3363,6 +3386,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                playVideoIntent.putExtra("PLAY_LIST", questions);
+                playVideoIntent.putExtra("TAG", contentPosition);
                 playVideoIntent.putExtra("PlayerModel", playerModel);
                 startActivity(playVideoIntent);
                 removeFocusFromViews();
@@ -5253,6 +5278,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             preferenceManager.setIsSubscribedToPref(Integer.toString(gmailLoginOutput.getIsSubscribed()));
             preferenceManager.setLoginHistIdPref(gmailLoginOutput.getLogin_history_id());
 
+            playerModel.setEmailId(gmailLoginOutput.getEmail());
+            playerModel.setUserId(gmailLoginOutput.getId());
             /*Date todayDate = new Date();
             String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
             editor.putString("date", todayStr.trim());

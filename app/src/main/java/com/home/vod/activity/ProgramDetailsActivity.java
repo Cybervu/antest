@@ -2,7 +2,6 @@ package com.home.vod.activity;
 
 /**
  * Created by MUVI on 10/10/2017.
- *
  */
 
 import android.annotation.TargetApi;
@@ -141,8 +140,8 @@ import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class ProgramDetailsActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener,GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener,GetIpAddressAsynTask.IpAddressListener, GetValidateUserAsynTask.GetValidateUserListener,
-        VideoDetailsAsynctask.VideoDetailsListener{
+public class ProgramDetailsActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener, GetIpAddressAsynTask.IpAddressListener, GetValidateUserAsynTask.GetValidateUserListener,
+        VideoDetailsAsynctask.VideoDetailsListener {
 
     ImageView bannerImageView, playButton, share;
     TextView detailsTextView, durationTitleTextView, durationTextView, tutorialTextView, viewAllTextView;
@@ -153,7 +152,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     ArrayList<EpisodesListModel> itemData;
     int isFreeContent = 0, isPPV, isConverted, contentTypesId, isAPV;
     PreferenceManager preferenceManager;
-    RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout,logo_image;
+    RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout, logo_image;
     RecyclerView seasontiveLayout;
     Player playerModel;
     String movieUniqueId = "";
@@ -318,7 +317,40 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                         });
                 dlgAlert.create().show();
             } else if (status == 429 || status == 430) {
-                new MonetizationHandler(ProgramDetailsActivity.this).handle429OR430statusCod(validUserStr, message, subscription_Str);
+
+                if (validUserStr != null) {
+
+
+                    if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
+                        if (NetworkStatus.getInstance().isConnected(this)) {
+                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                            getVideoDetailsInput.setAuthToken(authTokenStr);
+                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                            asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgramDetailsActivity.this, ProgramDetailsActivity.this);
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                        } else {
+                            Toast.makeText(ProgramDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+
+                        }
+                    } else {
+
+                        if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
+                            if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                                ShowPpvPopUp();
+                            } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+                                Intent intent = new Intent(ProgramDetailsActivity.this, SubscriptionActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                            } else {
+                                ShowPpvPopUp();
+                            }
+                        }
+
+                    }
+                }
 
 
             } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
@@ -345,7 +377,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             } else {
                 if (NetworkStatus.getInstance().isConnected(this)) {
 
-                    Log.v("SUBHA","Video PLayer Called 1");
+                    Log.v("SUBHA", "Video PLayer Called 1");
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);
@@ -396,7 +428,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             play_video = true;
         }
 
-        Log.v("SUBHA","play video ==== "+ play_video);
+        Log.v("SUBHA", "play video ==== " + play_video);
         if (!play_video) {
 
             try {
@@ -433,7 +465,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
         }
 
-Log.v("SUBHA","code == player == "+ code);
+        Log.v("SUBHA", "code == player == " + code);
         if (code == 200) {
             playerModel.setIsOffline(_video_details_output.getIs_offline());
             playerModel.setDownloadStatus(_video_details_output.getDownload_status());
@@ -931,6 +963,7 @@ Log.v("SUBHA","code == player == "+ code);
         viewAllTextView.setVisibility(View.GONE);
         dietPlanButton.setVisibility(View.GONE);
         playButton.setVisibility(View.GONE);
+        isLogin = preferenceManager.getLoginFeatureFromPref();
 
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -1030,6 +1063,10 @@ Log.v("SUBHA","code == player == "+ code);
             @Override
             public void onClick(View v) {
                 final Intent episode = new Intent(ProgramDetailsActivity.this, Tutorial_List_Activity.class);
+                episode.putExtra("movieUniqueId", movieUniqueId);
+                episode.putExtra("contentTypesId", contentTypesId);
+                episode.putExtra("PLAY_LIST", itemData);
+                episode.putExtra("TAG", ItemClickedPosition);
                 episode.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
                 episode.putExtra(SEASON_INTENT_KEY, getIntent().getStringExtra(SEASON_INTENT_KEY));
                 startActivity(episode);
@@ -1062,7 +1099,9 @@ Log.v("SUBHA","code == player == "+ code);
         startWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                clickItem(itemData.get(0),0);
+                clickItem(itemData.get(0), 0);
+
+
                /* Intent  playVideoIntent = new Intent(ProgramDetailsActivity.this, ProgramPlayerActivity.class);
                 playVideoIntent.putExtra("PlayerModel", playerModel);
                 playVideoIntent.putExtra("PLAY_LIST",itemData);
@@ -1298,8 +1337,8 @@ Log.v("SUBHA","code == player == "+ code);
             ///by nihar
            season =   contentDetailsOutput.getSeason();
 
-            ////
-            movieUniqueId=contentDetailsOutput.getMuviUniqId();
+            contentTypesId = contentDetailsOutput.getContentTypesId();
+            movieUniqueId = contentDetailsOutput.getMuviUniqId();
             bannerImageId = contentDetailsOutput.getBanner();
             posterImageId = contentDetailsOutput.getPoster();
             duration = contentDetailsOutput.getDuration();
@@ -1307,7 +1346,7 @@ Log.v("SUBHA","code == player == "+ code);
 
            // viewAllTextView.setText(languagePreference.getTextofLanguage(DETAIL_VIEW_MORE,DEFAULT_DETAIL_VIEW_MORE));
             viewAllTextView.setVisibility(View.VISIBLE);
-            tutorialTextView.setText(languagePreference.getTextofLanguage(TUTORIAL_TITLE,DEFAULT_TUTORIAL_TITLE));
+            tutorialTextView.setText(languagePreference.getTextofLanguage(TUTORIAL_TITLE, DEFAULT_TUTORIAL_TITLE));
             durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
 
             if (duration.matches("")) {
@@ -1393,14 +1432,12 @@ Log.v("SUBHA","code == player == "+ code);
         LogUtil.showLog("MUVI", "episode show...");
 
 
-
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
         if (status == 200) {
 
 
             isAPV = episode_details_output.getIsAPV();
             isPPV = episode_details_output.getIs_ppv();
-
 
 
             Util.currencyModel = episode_details_output.getCurrencyDetails();
@@ -1454,14 +1491,14 @@ Log.v("SUBHA","code == player == "+ code);
 
     }
 
-    public void clickItem (EpisodesListModel item , int position ){
+    public void clickItem(EpisodesListModel item, int position) {
 
        /* Intent intent=new Intent(ProgramDetailsActivity.this,ProgramPlayerActivity.class);
         startActivity(intent);*/
 
 
         itemToPlay = item;
-        ItemClickedPosition = position ;
+        ItemClickedPosition = position;
 
         dbModel.setIsFreeContent(isFreeContent);
         dbModel.setIsAPV(isAPV);
@@ -1502,7 +1539,7 @@ Log.v("SUBHA","code == player == "+ code);
         Util.offline_language.clear();*/
 
 
-        Log.v("SUBHA","stream id === "+ item.getEpisodeStreamUniqueId());
+        Log.v("SUBHA", "stream id === " + item.getEpisodeStreamUniqueId());
 
         //edit by bishal
         //set the required data in playermodel
@@ -1549,22 +1586,20 @@ Log.v("SUBHA","code == player == "+ code);
 
                 final Intent register = new Intent(ProgramDetailsActivity.this, RegisterActivity.class);
 
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        Util.check_for_subscription = 1;
-                        register.putExtra("PlayerModel", playerModel);
-                        startActivity(register);
+                register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                Util.check_for_subscription = 1;
+                register.putExtra("PLAY_LIST", itemData);
+                register.putExtra("TAG", ItemClickedPosition);
+                register.putExtra("PlayerModel", playerModel);
+                startActivity(register);
 
 
-                    }
-                });
             }
         } else {
             if (NetworkStatus.getInstance().isConnected(this)) {
                 // MUVIlaxmi
 
-                Log.v("SUBHA","Video PLayer Called 2");
+                Log.v("SUBHA", "Video PLayer Called 2");
 
                 GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                 getVideoDetailsInput.setAuthToken(authTokenStr);
@@ -1574,13 +1609,11 @@ Log.v("SUBHA","code == player == "+ code);
                 getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
 
 
-                LogUtil.showLog("SUBHA","Video PLayer Called authTokenStr 2 "+authTokenStr);
-                Log.v("SUBHA","Video PLayer Called movie uniqueid 2 "+dbModel.getMovieUniqueId().trim());
-                Log.v("SUBHA","Video PLayer Called movie StreamUniqueid 2 "+dbModel.getStreamUniqueId().trim());
-                Log.v("SUBHA","Video PLayer Called inyternet speed 2 "+MainActivity.internetSpeed.trim());
-                Log.v("SUBHA","Video PLayer Called  user id 2 "+preferenceManager.getUseridFromPref());
-
-
+                LogUtil.showLog("SUBHA", "Video PLayer Called authTokenStr 2 " + authTokenStr);
+                Log.v("SUBHA", "Video PLayer Called movie uniqueid 2 " + dbModel.getMovieUniqueId().trim());
+                Log.v("SUBHA", "Video PLayer Called movie StreamUniqueid 2 " + dbModel.getStreamUniqueId().trim());
+                Log.v("SUBHA", "Video PLayer Called inyternet speed 2 " + MainActivity.internetSpeed.trim());
+                Log.v("SUBHA", "Video PLayer Called  user id 2 " + preferenceManager.getUseridFromPref());
 
 
                 asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgramDetailsActivity.this, ProgramDetailsActivity.this);

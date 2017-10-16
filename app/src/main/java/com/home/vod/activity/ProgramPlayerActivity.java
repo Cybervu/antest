@@ -6408,6 +6408,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                     showPaymentIntent.putExtra("currencyCountryCode", com.home.vod.util.Util.currencyModel.getCurrencyCode());
                     showPaymentIntent.putExtra("currencySymbol", com.home.vod.util.Util.currencyModel.getCurrencySymbol());
                     showPaymentIntent.putExtra("PlayerModel", playerModel);
+                    showPaymentIntent.putExtra("PLAY_LIST", questions);
+                    showPaymentIntent.putExtra("TAG", contentPosition);
 
                     // showPaymentIntent.putExtra("showName", Util.dataModel.getEpisode_title());
 
