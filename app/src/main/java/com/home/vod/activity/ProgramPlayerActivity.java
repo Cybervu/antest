@@ -1273,14 +1273,15 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         if (totalSeason == 1) {
             seasonScroller.setVisibility(View.GONE);
         }
+        Log.v("Nihar", "called ----------------"+counter);
 
         previous_season = (ImageView) findViewById(R.id.previous_season);
         previous_season.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("Nihar", "previous called ----------------");
+                Log.v("Nihar", "previous called ----------------"+counter);
 
-                counter = counter -1;
+                counter = counter - 1;
                 EpisodeDetails(totalSeasonModel.get(counter).getSeasonId());
             }
         });
@@ -1288,8 +1289,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         next_season.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("Nihar", "next called ----------------" + totalSeasonModel.get(current_season).getSeasonId());
-                counter = counter +1;
+                Log.v("Nihar", "next called ----------------" + counter);
+                counter = counter + 1;
 
                 EpisodeDetails(totalSeasonModel.get(counter).getSeasonId());
 
@@ -6440,8 +6441,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 //sharing implementation here
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "AndroidSolved");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Now Learn Android with AndroidSolved clicke here to visit https://androidsolved.wordpress.com/ ");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Digi Osmosis");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Digi Osmosis click here to visit https://theshilpashetty.muvi.com");
         context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 

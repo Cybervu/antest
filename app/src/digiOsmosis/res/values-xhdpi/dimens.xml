@@ -120,5 +120,6 @@
 
     <dimen name="logo_height">80dp</dimen>
     <dimen name="logo_width">80dp</dimen>
+    <dimen name="downloadwidth">200dp</dimen>
 
 </resources>

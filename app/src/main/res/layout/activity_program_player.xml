@@ -258,7 +258,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/player_layout"
-            
+
             android:fillViewport="true">
 
         <LinearLayout
@@ -306,7 +306,7 @@
 
                 <RelativeLayout
                     android:id="@+id/downloadRelativeLayout"
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/downloadwidth"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textlinearlayout"
 
@@ -353,11 +353,21 @@
                         android:visibility="gone" />
 
                 </RelativeLayout>
-
-                <ImageView
+              <!--  <ImageView
                     android:id="@+id/share"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="13dp"
+                    android:layout_marginRight="13dp"
+                    android:src="@drawable/share" />-->
+               <ImageView
+                    android:id="@+id/share"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/share" />
 

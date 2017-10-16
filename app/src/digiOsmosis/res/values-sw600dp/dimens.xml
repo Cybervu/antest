@@ -155,5 +155,6 @@
     <dimen name="logo_width">100dp</dimen>
 
     <dimen name="plainrow_text_size">20sp</dimen>
+    <dimen name="downloadwidth">200dp</dimen>
 
 </resources>
