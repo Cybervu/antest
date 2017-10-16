@@ -66,6 +66,7 @@ import com.home.vod.model.ListItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
@@ -397,6 +398,7 @@ public class VideosListFragment extends Fragment   {
         noDataLayout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
         gridView.setVisibility(View.VISIBLE);
+
 
         gridView.setAdapter(customGridAdapter);
 
@@ -1606,6 +1608,7 @@ public class VideosListFragment extends Fragment   {
 
         protected void onPostExecute(Void result) {
             float density = context.getResources().getDisplayMetrics().density;
+            Log.v("ANU","density====="+density);
             if (firstTime == true) {
                 try {
                     if (videoPDialog != null && videoPDialog.isShowing()) {
@@ -1690,6 +1693,7 @@ public class VideosListFragment extends Fragment   {
 
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
+
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.nexus_videos_grid_layout_land, itemData);
                     }else{
                         customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_280_grid_layout, itemData);

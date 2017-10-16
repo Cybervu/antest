@@ -1,9 +1,8 @@
 package com.home.vod.activity;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Point;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +10,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,10 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 import android.widget.VideoView;
-
 
 import com.androidquery.AQuery;
 import com.google.android.gms.cast.MediaInfo;
@@ -47,18 +45,7 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -74,6 +61,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_ARRAY;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -537,14 +525,30 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
 
 
                 }
+                adapter = new SeasonAdapter(SeasonActivity.this, R.layout.season_card_row, season) ;
 
-
-                adapter = new SeasonAdapter(SeasonActivity.this, R.layout.season_card_row, season, new SeasonAdapter.OnItemClickListener() {
+                seasonGridView.addOnItemTouchListener(new RecyclerTouchListener2(this,
+                        seasonGridView, new ClickListener2() {
                     @Override
-                    public void onItemClick(SeasonModel item) {
-                        clickItem(item);
+                    public void onClick(View view, final int position) {
+                        //Values are passing to activity & to fragment as well
+                       // clickItem(item, position);
+                        clickItem(season.get(position),position);
+
                     }
-                });
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                        return;
+                    }
+                }));
+               /* adapter = new SeasonAdapter(SeasonActivity.this, R.layout.season_card_row, season, new SeasonAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(SeasonModel item,int pos) {
+                        clickItem(item,pos);
+                    }
+                });*/
 
                 seasonGridView.setVisibility(View.VISIBLE);
                 seasonGridView.setAdapter(adapter);
@@ -556,12 +560,62 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
 
 
     }
+    public static interface ClickListener2{
+        public void onClick(View view,int position);
+        public void onLongClick(View view,int position);
+    }
+    class RecyclerTouchListener2 implements RecyclerView.OnItemTouchListener{
 
-    public void clickItem(SeasonModel item) {
+        private ClickListener2 clicklistener;
+        private GestureDetector gestureDetector;
+
+        public RecyclerTouchListener2(Context context, final RecyclerView recycleView, final ClickListener2 clicklistener){
+
+            this.clicklistener=clicklistener;
+            gestureDetector=new GestureDetector(context,new GestureDetector.SimpleOnGestureListener(){
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    View child=recycleView.findChildViewUnder(e.getX(),e.getY());
+                    if(child!=null && clicklistener!=null){
+                        clicklistener.onLongClick(child,recycleView.getChildAdapterPosition(child));
+                    }
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            View child=rv.findChildViewUnder(e.getX(),e.getY());
+            if(child!=null && clicklistener!=null && gestureDetector.onTouchEvent(e)){
+                clicklistener.onClick(child,rv.getChildAdapterPosition(child));
+            }
+
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
+    }
+    public void clickItem(SeasonModel item,int pos) {
 
         Intent in = new Intent(SeasonActivity.this, ProgramDetailsActivity.class);
         in.putExtra(SEASON_INTENT_KEY, item.getSeasonId());
         in.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
+        in.putExtra(PERMALINK_INTENT_ARRAY, season);
+        in.putExtra("Index",String.valueOf(pos));
+
         startActivity(in);
     }
 

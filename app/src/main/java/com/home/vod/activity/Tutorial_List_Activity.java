@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -283,6 +284,7 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
     String priceForUnsubscribedStr, priceFosubscribedStr;
     private boolean loading = true;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
+    RelativeLayout image_logo;
 
 
     PPVModel ppvmodel;
@@ -1274,6 +1276,8 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
         FontUtls.loadFont(Tutorial_List_Activity.this, getResources().getString(R.string.regular_fonts), sectionTitle);
         sectionTitle.setText(languagePreference.getTextofLanguage(EPISODE_TITLE, DEFAULT_EPISODE_TITLE));
 
+        image_logo = (RelativeLayout) findViewById(R.id.logo_image);
+        image_logo.bringToFront();
         episodelist = (GridView) findViewById(R.id.episodelist);
         noInternetConnectionLayout = (RelativeLayout) findViewById(R.id.noInternet);
         noDataLayout = (RelativeLayout) findViewById(R.id.noData);
@@ -1523,7 +1527,14 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
             updatePlayButton(mPlaybackState);
         }
 
+
+
+
     }
+
+
+
+
 /*chromecast-------------------------------------*/
 
     public void clickItem(EpisodesListModel item, int position) {

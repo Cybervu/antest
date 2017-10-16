@@ -33,14 +33,14 @@
             <RelativeLayout
                 android:id="@+id/bannerImageRelativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/banerimg_height"
+                android:layout_height="wrap_content"
                 android:background="@color/appBackgroundColor"
                 android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/bannerImageView"
                     android:layout_width="match_parent"
-                    android:layout_height="210dp"
+                    android:layout_height="@dimen/banerimg_height"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:adjustViewBounds="true"
@@ -76,7 +76,7 @@
 
                 <View
                     android:id="@+id/view"
-                    android:layout_width="5dp"
+                    android:layout_width="3dp"
                     android:layout_height="15dp"
                     android:layout_alignBottom="@+id/titleTextView"
                     android:layout_alignTop="@+id/titleTextView"
@@ -165,7 +165,6 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/duration" />
-                    android:textSize="12dp" />
 
             </LinearLayout>
 
@@ -203,6 +202,7 @@
                     android:textColor="@color/button_background"
                     android:textSize="@dimen/story_title_text_size" />
 
+
             </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
@@ -211,8 +211,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tutorialRelativeLayout"
                 android:layout_gravity="center_vertical"
+                android:padding="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="7dp" />
+                />
 
         </RelativeLayout>
 
