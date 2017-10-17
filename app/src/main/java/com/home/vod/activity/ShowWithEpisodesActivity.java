@@ -2100,13 +2100,34 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 if (isLogin == 1) {
                     String loggedInStr = preferenceManager.getLoginStatusFromPref();
                     if (loggedInStr == null) {
-                        Intent registerActivity = new LoginRegistrationOnContentClickHandler(ShowWithEpisodesActivity.this).handleClickOnContent();
 
-                                registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                Util.check_for_subscription = 1;
-                                registerActivity.putExtra("PlayerModel", playerModel);
-                                startActivity(registerActivity);
+                        if (mCastSession != null && mCastSession.isConnected()){
 
+
+                            Toast.makeText(ShowWithEpisodesActivity.this, "chromecast connected and not logegd in", Toast.LENGTH_SHORT).show();
+
+                            final Intent resumeCast= new LoginRegistrationOnContentClickHandler(ShowWithEpisodesActivity.this).handleClickOnContent();
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    resumeCast.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    Util.check_for_subscription = 1;
+                                    resumeCast.putExtra("PlayerModel", playerModel);
+                                    startActivityForResult(resumeCast,2001);
+
+//                                        startActivity(resumeCast);
+
+                                }
+                            });
+
+                        }
+                        else {
+                            Intent registerActivity = new LoginRegistrationOnContentClickHandler(ShowWithEpisodesActivity.this).handleClickOnContent();
+
+                            registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            Util.check_for_subscription = 1;
+                            registerActivity.putExtra("PlayerModel", playerModel);
+                            startActivity(registerActivity);
+                        }
                         //showLoginDialog();
                     } else {
                         if (NetworkStatus.getInstance().isConnected(ShowWithEpisodesActivity.this)) {
@@ -2457,13 +2478,32 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 }
 
             } else {
+                if (mCastSession != null && mCastSession.isConnected()) {
 
-                Intent register = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
 
-                register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                Util.check_for_subscription = 1;
-                register.putExtra("PlayerModel", playerModel);
-                startActivity(register);
+                    Toast.makeText(ShowWithEpisodesActivity.this, "chromecast connected and not logegd in", Toast.LENGTH_SHORT).show();
+
+                    final Intent resumeCast = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            resumeCast.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            Util.check_for_subscription = 1;
+                            resumeCast.putExtra("PlayerModel", playerModel);
+                            startActivityForResult(resumeCast, 2001);
+
+//                                        startActivity(resumeCast);
+
+                        }
+                    });
+
+                } else {
+                    Intent register = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
+
+                    register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    Util.check_for_subscription = 1;
+                    register.putExtra("PlayerModel", playerModel);
+                    startActivity(register);
+                }
             }
         } else {
             if (NetworkStatus.getInstance().isConnected(this)) {
@@ -5114,11 +5154,47 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 PlayThroughChromeCast();
             }
         }
+        else if(resultCode == RESULT_OK && requestCode == 2001){
+            if (data.getStringExtra("yes").equals("2002")){
+
+                mSelectedMedia=Util.mSendingMedia;
+
+
+//                Toast.makeText(this, "Now again in details", Toast.LENGTH_SHORT).show();
+             /*   Log.v("bijay",""+mReceivedMedia.getStreamType());
+                Log.v("bijay",""+mReceivedMedia.getContentId());
+                Log.v("bijay",""+mReceivedMedia.getStreamDuration());*/
+
+                Intent resumeIntent = new Intent(ShowWithEpisodesActivity.this, ResumePopupActivity.class);
+                startActivityForResult(resumeIntent, 1007);
+
+            }
+        }
+        else if(resultCode == RESULT_OK && requestCode == 1007)
+        {
+
+            if (data.getStringExtra("yes").equals("1002")) {
+
+                Log.v("pratik","resumed...");
+                watch_status_String = "halfplay";
+                seek_status = "first_time";
+                Played_Length = Util.dataModel.getPlayPos()*1000;
+                togglePlayback();
+
+            } else {
+                watch_status_String = "strat";
+                Played_Length = 0;
+                togglePlayback();
+            }
+        }
         else
         {
-            watch_status_String = "strat";
-            Played_Length = 0;
-            PlayThroughChromeCast();
+            if(requestCode != 1007 && requestCode!=2001){
+                Log.v("pratik","else conditn called");
+                watch_status_String = "strat";
+                Played_Length = 0;
+                PlayThroughChromeCast();
+            }
         }
        /* loginresultcode = requestCode;
         if (requestCode == 40500) {

@@ -8,6 +8,8 @@
     <color name="videotitleColor">#ff2c54</color>
     <color name="savecardtextcolor">#fff</color>
     <color name="loginTextViewColor">#ff2c54</color>
+    <color name="toolbarTitleColor">#fff</color>
+    <color name="aboutustestcolor">#f5e85a</color>
     <color name="buttonTextColor">#fff</color>
     <color name="forgotPasswordTextViewColor">#ff2c54</color>
     <color name="fb_text_color">#fff</color>

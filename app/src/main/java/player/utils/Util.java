@@ -20,6 +20,8 @@ import java.util.regex.Pattern;
 import player.model.DataModel;
 import player.model.LanguageModel;
 
+import static com.home.vod.util.Constant.authTokenStr;
+
 /**
  * Created by User on 24-07-2015.
  */
@@ -143,7 +145,7 @@ public class Util {
     //   public static final String authTokenStr = "e8ae05a2ef3fd0c6688952c8f7557823"; //vishwam.tv
 //    public static final String authTokenStr = "4d4fe07c6d8c8317ab45e6b1a2dff08a"; //monica studio
   // public static final String authTokenStr = "4298851905443517c9f161e6b0471969"; //classic demo
-    public static final String authTokenStr = "0c2236eee851357d1fecc01fbba128c5";
+    public static final String authTokenStr = BuildConfig.AUTH_TOKEN;
    // public static final String authTokenStr = "25e74a5c88d19c4b57c8138bf47abdf7";//mymob
 
     public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";

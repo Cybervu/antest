@@ -871,14 +871,33 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         String loggedInStr = preferenceManager.getUseridFromPref();
 
                         if (loggedInStr == null) {
+                            if (mCastSession != null && mCastSession.isConnected()){
 
-                            Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
 
-                                    registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    Util.check_for_subscription = 1;
-                                    registerActivity.putExtra("PlayerModel", playerModel);
-                                    startActivity(registerActivity);
+                                Toast.makeText(MovieDetailsActivity.this, "chromecast connected and not logegd in", Toast.LENGTH_SHORT).show();
 
+                                final Intent resumeCast= new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        resumeCast.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        Util.check_for_subscription = 1;
+                                        resumeCast.putExtra("PlayerModel", playerModel);
+                                        startActivityForResult(resumeCast,2001);
+
+//                                        startActivity(resumeCast);
+
+                                    }
+                                });
+
+                            }
+                            else {
+                                Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
+
+                                registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                Util.check_for_subscription = 1;
+                                registerActivity.putExtra("PlayerModel", playerModel);
+                                startActivity(registerActivity);
+                            }
                             //showLoginDialog();
                         } else {
 
@@ -989,15 +1008,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                         if (loggedInStr == null) {
 
-                            final Intent registerActivity =new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    Util.check_for_subscription = 1;
-                                    startActivity(registerActivity);
 
-                                }
-                            });
+                                final Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        Util.check_for_subscription = 1;
+                                        registerActivity.putExtra("PlayerModel", playerModel);
+                                        startActivity(registerActivity);
+
+                                    }
+                                });
                             //showLoginDialog();
                         } else {
                             //String loggedinDateStr = pref.getString("date", null);
@@ -3651,11 +3672,47 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 PlayThroughChromeCast();
             }
         }
+        else if(resultCode == RESULT_OK && requestCode == 2001){
+            if (data.getStringExtra("yes").equals("2002")){
+
+                mSelectedMedia=Util.mSendingMedia;
+
+
+//                Toast.makeText(this, "Now again in details", Toast.LENGTH_SHORT).show();
+             /*   Log.v("bijay",""+mReceivedMedia.getStreamType());
+                Log.v("bijay",""+mReceivedMedia.getContentId());
+                Log.v("bijay",""+mReceivedMedia.getStreamDuration());*/
+
+                Intent resumeIntent = new Intent(MovieDetailsActivity.this, ResumePopupActivity.class);
+                startActivityForResult(resumeIntent, 1007);
+
+            }
+        }
+        else if(resultCode == RESULT_OK && requestCode == 1007)
+        {
+
+            if (data.getStringExtra("yes").equals("1002")) {
+
+                Log.v("pratik","resumed...");
+                watch_status_String = "halfplay";
+                seek_status = "first_time";
+                Played_Length = Util.dataModel.getPlayPos()*1000;
+                togglePlayback();
+
+            } else {
+                watch_status_String = "strat";
+                Played_Length = 0;
+                togglePlayback();
+            }
+        }
         else
         {
-            watch_status_String = "strat";
-            Played_Length = 0;
-            PlayThroughChromeCast();
+            if(requestCode != 1007 && requestCode!=2001){
+                Log.v("pratik","else conditn called");
+                watch_status_String = "strat";
+                Played_Length = 0;
+                PlayThroughChromeCast();
+            }
         }
         /*loginresultcode = requestCode;
         if (requestCode == 40500) {

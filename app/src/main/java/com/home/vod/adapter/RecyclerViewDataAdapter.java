@@ -273,10 +273,10 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
             if(!firstTime){
                 firstTime = true;
                 //for dynamic banner
-               loadDynamicBanners(mDemoSlider,view,this);
+               //loadDynamicBanners(mDemoSlider,view,this);
 
                // for static banner
-              // loadStaticBanners(mDemoSlider,view,this);
+               loadStaticBanners(mDemoSlider,view,this);
 
             }
 

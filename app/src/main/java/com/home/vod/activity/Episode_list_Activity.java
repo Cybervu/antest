@@ -1605,18 +1605,36 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
             } else {
 
-                final Intent register =new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
-
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        Util.check_for_subscription = 1;
-                        register.putExtra("PlayerModel", playerModel);
-                        startActivity(register);
+                if (mCastSession != null && mCastSession.isConnected()) {
 
 
-                    }
-                });
+                    Toast.makeText(Episode_list_Activity.this, "chromecast connected and not logegd in", Toast.LENGTH_SHORT).show();
+
+                    final Intent resumeCast = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            resumeCast.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            Util.check_for_subscription = 1;
+                            resumeCast.putExtra("PlayerModel", playerModel);
+                            startActivityForResult(resumeCast, 2001);
+
+//                                        startActivity(resumeCast);
+
+                        }
+                    });
+
+                } else {
+                    final Intent register = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            Util.check_for_subscription = 1;
+                            register.putExtra("PlayerModel", playerModel);
+                            startActivity(register);
+                        }
+                    });
+                }
             }
         } else {
             if (NetworkStatus.getInstance().isConnected(this)) {
@@ -3469,11 +3487,47 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 PlayThroughChromeCast();
             }
         }
+        else if(resultCode == RESULT_OK && requestCode == 2001){
+            if (data.getStringExtra("yes").equals("2002")){
+
+                mSelectedMedia=Util.mSendingMedia;
+
+
+//                Toast.makeText(this, "Now again in details", Toast.LENGTH_SHORT).show();
+             /*   Log.v("bijay",""+mReceivedMedia.getStreamType());
+                Log.v("bijay",""+mReceivedMedia.getContentId());
+                Log.v("bijay",""+mReceivedMedia.getStreamDuration());*/
+
+                Intent resumeIntent = new Intent(Episode_list_Activity.this, ResumePopupActivity.class);
+                startActivityForResult(resumeIntent, 1007);
+
+            }
+        }
+        else if(resultCode == RESULT_OK && requestCode == 1007)
+        {
+
+            if (data.getStringExtra("yes").equals("1002")) {
+
+                Log.v("pratik","resumed...");
+                watch_status_String = "halfplay";
+                seek_status = "first_time";
+                Played_Length = Util.dataModel.getPlayPos()*1000;
+                togglePlayback();
+
+            } else {
+                watch_status_String = "strat";
+                Played_Length = 0;
+                togglePlayback();
+            }
+        }
         else
         {
-            watch_status_String = "strat";
-            Played_Length = 0;
-            PlayThroughChromeCast();
+            if(requestCode != 1007 && requestCode!=2001){
+                Log.v("pratik","else conditn called");
+                watch_status_String = "strat";
+                Played_Length = 0;
+                PlayThroughChromeCast();
+            }
         }
     }
 

@@ -106,7 +106,7 @@ import static com.home.vod.preferences.LanguagePreference.YES;
  */
 public class Util {
 
-
+    public static MediaInfo mSendingMedia;
     public static boolean drawer_line_visibility = true;
     public static boolean itemclicked = false;
     public static String DEFAULT_IS_ONE_STEP_REGISTRATION = "0";

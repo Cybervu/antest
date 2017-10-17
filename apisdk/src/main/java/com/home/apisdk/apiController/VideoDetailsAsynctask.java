@@ -171,7 +171,11 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                     _video_details_output.setThirdparty_url(myJson.optString("thirdparty_url"));
                     _video_details_output.setStudio_approved_url(myJson.optString("studio_approved_url"));
                     _video_details_output.setLicenseUrl(myJson.optString("licenseUrl"));
-                    _video_details_output.setIs_offline(myJson.optString("is_offline"));
+                    if ((myJson.has("is_offline")) && myJson.getString("is_offline").trim() != null && !myJson.getString("is_offline").trim().isEmpty() && !myJson.getString("is_offline").trim().equals("null") && !myJson.getString("is_offline").trim().matches("")) {
+                        _video_details_output.setIs_offline(myJson.optString("is_offline"));
+                    } else {
+                        _video_details_output.setIs_offline("");
+                    }
                     _video_details_output.setStreaming_restriction(myJson.optString("streaming_restriction"));
                     _video_details_output.setEmbedTrailerUrl(myJson.optString("embedTrailerUrl"));
                     _video_details_output.setEmed_url(myJson.optString("emed_url"));

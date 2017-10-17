@@ -140,13 +140,14 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
             textView.setText(getStyledTextFromHtml(bodyData));*/
 
         String text = "<html><head>"
-                + "<style type=\"text/css\" >body{color:#333; background-color: #fff;}"
+                + "<style type=\"text/css\" >body{color:#333;}"
                 + "</style></head>"
                 + "<body style >"
                 + about
                 + "</body></html>";
 
         webView.loadData(text, "text/html", "utf-8");
+        webView.setBackgroundColor(getResources().getColor(R.color.aboutustestcolor));
         webView.getSettings().setJavaScriptEnabled(true);
     }
 
