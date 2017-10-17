@@ -8,14 +8,14 @@ package com.home.apisdk.apiModel;
 
 public class PurchaseHistoryOutputModel {
 
-    String invoice_id;
-    String id;
-    String transaction_date;
-    String transaction_status;
-    String statusppv;
-    String currency_symbol;
-    String currency_code;
-    String amount;
+    String invoice_id="";
+    String id="";
+    String transaction_date="";
+    String transaction_status="";
+    String statusppv="";
+    String currency_symbol="";
+    String currency_code="";
+    String amount="";
 
     /**
      * This Method is use to Get the Amount

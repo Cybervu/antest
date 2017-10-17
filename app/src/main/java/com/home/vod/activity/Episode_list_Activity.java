@@ -79,6 +79,7 @@ import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.BuildConfig;
 import com.home.vod.EpisodeListOptionMenuHandler;
+import com.home.vod.LoginRegistrationOnContentClickHandler;
 import com.home.vod.MonetizationHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.EpisodesListViewMoreAdapter;
@@ -1581,7 +1582,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
             } else {
 
-                final Intent register = new Intent(Episode_list_Activity.this, RegisterActivity.class);
+                final Intent register =new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
 
                 runOnUiThread(new Runnable() {
                     public void run() {

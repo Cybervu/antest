@@ -5,6 +5,7 @@
     <color name="disableTextColor">#50757575</color>
     <color name="OsTextColor">#757575</color>
     <color name="colorPrimary">#1e292d</color>
+    <color name="navlogobackgroundcolor">#1e292d</color>
     <color name="colorPrimaryDark">#1e292d</color>
     <color name="appBackgroundColor">#fff</color>
     <color name="cast_crew_titleCololr">#2acb99</color>

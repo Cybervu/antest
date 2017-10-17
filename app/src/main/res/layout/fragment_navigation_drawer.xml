@@ -71,7 +71,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/navlogobackgroundcolor"
         android:minHeight="?attr/actionBarSize"
         local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -80,9 +80,14 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/fragmentlogoimg_height"
             android:layout_gravity="center"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo"
+            />
 
     </android.support.v7.widget.Toolbar>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/nav_drawer_lineColor"
+        android:layout_below="@id/toolbar"/>
 </RelativeLayout>
 
