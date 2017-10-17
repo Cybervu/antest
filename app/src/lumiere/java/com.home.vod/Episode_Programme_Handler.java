@@ -1,12 +1,15 @@
 package com.home.vod;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import com.home.vod.activity.ProgrammeActivity;
+import com.home.vod.activity.ShowWithEpisodesActivity;
 
 /**
- * Created by MUVI on 10/6/2017.
+ * Created by Abhishek on 10/6/2017.
+ *
  */
 
 public class Episode_Programme_Handler {
@@ -18,10 +21,10 @@ public class Episode_Programme_Handler {
     }
 
     public void handleIntent(String key,String permalink){
-        Intent detailsIntent = new Intent(context, ShowWithEpisodesActivity.class);
-        detailsIntent.putExtra(key,moviePermalink);
+        Intent detailsIntent = new Intent(activity, ShowWithEpisodesActivity.class);
+        detailsIntent.putExtra(key,permalink);
         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        context.startActivity(detailsIntent);
+        activity.startActivity(detailsIntent);
 
     }
 

@@ -24,13 +24,14 @@
     <dimen name="forgot_text_size">16sp</dimen>
     <dimen name="pass_text_size">16sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>
+    <dimen name="cancelbtn_text_size">13sp</dimen>
     <dimen name="episode_listing_section_textview">22sp</dimen>
     <dimen name="submit_text_size">12sp</dimen>
-    <dimen name="sliderLayout_height">330dp</dimen>
+    <dimen name="sliderLayout_height">230dp</dimen>
     <dimen name="listitemlayout_height">200dp</dimen>
     <dimen name="logout_text_size">19sp</dimen>
-    <dimen name="slider_height">330dp</dimen>
-    <dimen name="banner_image_height">300dp</dimen>
+    <dimen name="slider_height">200dp</dimen>
+    <dimen name="banner_image_height">210dp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
     <dimen name="submit_height_size">45dp</dimen>
     <dimen name="left_padding">10dp</dimen>
@@ -39,11 +40,11 @@
     <dimen name="list_card_single_width">140dp</dimen>
     <dimen name="submit_width_size">170dp</dimen>
     <dimen name="login_padding">10dp</dimen>
-    <dimen name="videoTitle_textview">19sp</dimen>
+    <dimen name="videoTitle_textview">15sp</dimen>
     <dimen name="episodelayout_width">175dp</dimen>
     <dimen name="itemTitle_widht">140dp</dimen>
     <dimen name="episodelayout_height">120dp</dimen>
-    <dimen name="user_text_size">40sp</dimen>
+    <dimen name="user_text_size">34sp</dimen>
     <dimen name="forgotlayout_margin">10dp</dimen>
     <dimen name="registerlayout_padding">10dp</dimen>
     <dimen name="movieimg_width">108dp</dimen>
@@ -89,6 +90,8 @@
     <dimen name="plainrow_mrgin_top">25dp</dimen>
     <dimen name="preorderbtn_padding">14dp</dimen>
     <dimen name="cast_description_text">15sp</dimen>
+    <dimen name="btnmore_width">90dp</dimen>
+    <dimen name="btnmore_height">40dp</dimen>
 
 
     <dimen name="cast_details_width">200dp</dimen>
@@ -99,8 +102,8 @@
     <dimen name="review_text_size">18sp</dimen>
     <dimen name="review_edittext_size">16sp</dimen>
     <dimen name="review_btn_width">90dp</dimen>
-    <dimen name="review_btn_height">40dp</dimen>
-    <dimen name="review_btn_textsize">14sp</dimen>
+    <dimen name="review_btn_height">38dp</dimen>
+    <dimen name="review_btn_textsize">12sp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
 

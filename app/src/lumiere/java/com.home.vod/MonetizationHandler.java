@@ -10,7 +10,8 @@ import com.home.vod.activity.ShowWithEpisodesActivity;
 import static com.home.vod.util.Util.showActivateSubscriptionWatchVideoAleart;
 
 /**
- * Created by MUVI on 10/3/2017.
+ * Created by Abhishek on 10/3/2017.
+ *
  */
 
 public class MonetizationHandler {

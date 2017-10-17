@@ -85,7 +85,7 @@
                     android:textColor="@color/forgotPasswordTextColor"
                     android:gravity="center"
                     android:maxLines="4"
-                    android:textSize="@dimen/email_text_size" />
+                    android:textSize="@dimen/login_text_size" />
 
                 <Button
                     android:id="@+id/loginButton"
