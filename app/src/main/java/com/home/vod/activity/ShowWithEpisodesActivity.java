@@ -390,7 +390,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         } catch (IllegalArgumentException ex) {
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.VISIBLE);
-            Log.v("BKS", "exception==" + ex);
+            LogUtil.showLog("BKS", "exception==" + ex);
         }
 
 
@@ -657,7 +657,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         } catch (IllegalArgumentException ex) {
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.VISIBLE);
-            Log.v("BKS", "exception==" + ex);
+            LogUtil.showLog("BKS", "exception==" + ex);
         }
 
 
@@ -1370,11 +1370,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
-                    Log.v("BIBHU4", "restrict_stream_id============1");
+                    LogUtil.showLog("Muvi", "restrict_stream_id============1");
                 } else {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "0");
-                    Log.v("BIBHU4", "restrict_stream_id============0");
+                    LogUtil.showLog("Muvi", "restrict_stream_id============0");
                 }
 
                 jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
@@ -1454,11 +1454,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
-                    Log.v("BIBHU4", "restrict_stream_id============1");
+                    LogUtil.showLog("Muvi", "restrict_stream_id============1");
                 } else {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "0");
-                    Log.v("BIBHU4", "restrict_stream_id============0");
+                    LogUtil.showLog("Muvi", "restrict_stream_id============0");
                 }
 
                 jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
@@ -4169,7 +4169,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
 
     public void GetVoucherPlan() {
-        LogUtil.showLog("BIBHU", "get voucher plan called");
+        LogUtil.showLog("Muvi", "get voucher plan called");
 
       /*  AsynGetVoucherPlan getVoucherPlan = new AsynGetVoucherPlan();
         getVoucherPlan.executeOnExecutor(threadPoolExecutor);*/
@@ -5173,7 +5173,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             if (data.getStringExtra("yes").equals("1002")) {
 
-                Log.v("pratik", "resumed...");
+                LogUtil.showLog("Muvi", "resumed...");
                 watch_status_String = "halfplay";
                 seek_status = "first_time";
                 Played_Length = Util.dataModel.getPlayPos() * 1000;
@@ -5201,7 +5201,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             }
         } else {
             if (requestCode != 1007 && requestCode != 2001) {
-                Log.v("pratik", "else conditn called");
+                LogUtil.showLog("Muvi", "else conditn called");
                 watch_status_String = "start";
                 Played_Length = 0;
                 PlayThroughChromeCast();
@@ -5299,7 +5299,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
                 if (NetworkStatus.getInstance().isConnected(ShowWithEpisodesActivity.this)) {
-                    Log.v("MUVI", "VV VV VV");
+                    LogUtil.showLog("MUVI", "VV VV VV");
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);

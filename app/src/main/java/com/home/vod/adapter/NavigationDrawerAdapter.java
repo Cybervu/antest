@@ -2,6 +2,7 @@ package com.home.vod.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         NavDrawerItem current = data.get(position);
-        holder.title.setText(current.getTitle().toString().toLowerCase());
+        holder.title.setText(Html.fromHtml(current.getTitle().toString().toLowerCase()));
         LogUtil.showLog("Alok ::",current.getTitle());
 
 /*

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -62,18 +63,18 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         languagePreference = LanguagePreference.getLanguagePreference(context);
         progresBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         webView = (WebView) view.findViewById(R.id.aboutUsWebView);
-        AboutUsInput aboutUsInput=new AboutUsInput();
+        AboutUsInput aboutUsInput = new AboutUsInput();
         aboutUsInput.setAuthToken(authTokenStr);
-        aboutUsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+        aboutUsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         String strtext = getArguments().getString("item");
         aboutUsInput.setPermalink(strtext);
-        asyncAboutUS = new AboutUsAsync(aboutUsInput,this,context);
+        asyncAboutUS = new AboutUsAsync(aboutUsInput, this, context);
         asyncAboutUS.execute();
         TextView categoryTitle = (TextView) view.findViewById(R.id.categoryTitle);
-        FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),categoryTitle);
+        FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), categoryTitle);
         /*Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         categoryTitle.setTypeface(castDescriptionTypeface);*/
-        categoryTitle.setText(getArguments().getString("title"));
+        categoryTitle.setText(Html.fromHtml(getArguments().getString("title")));
 
         view.setFocusableInTouchMode(true);
         view.requestFocus();
@@ -129,7 +130,7 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
                 pDialog.hide();
                 pDialog = null;
             }
-        }catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
 
         }
 
