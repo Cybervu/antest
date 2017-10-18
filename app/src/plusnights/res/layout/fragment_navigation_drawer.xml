@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/drawerList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="#ffffff"
+        />
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:local="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/leftMenuBgColor"
+        local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fragmentlogoimg_height"
+            android:layout_marginRight="@dimen/payment_relative_margin"
+            android:src="@drawable/fragment_logo"
+            />
+
+    </android.support.v7.widget.Toolbar>
+
+
+</RelativeLayout>
+
