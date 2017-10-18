@@ -179,6 +179,7 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
+        /*Structuring Monetizer flavour with dimension*/
         monetizer {
             dimension 'vendor'
             minSdkVersion 21
@@ -197,6 +198,7 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
+
     }
 }
 

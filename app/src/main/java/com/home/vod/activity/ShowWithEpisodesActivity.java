@@ -390,6 +390,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         } catch (IllegalArgumentException ex) {
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.VISIBLE);
+            Log.v("BKS","exception=="+ex);
         }
 
 
@@ -656,6 +657,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         } catch (IllegalArgumentException ex) {
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.VISIBLE);
+            Log.v("BKS","exception=="+ex);
         }
 
 
@@ -819,6 +821,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             }
         } catch (IllegalArgumentException ex) {
+
             status = 0;
         }
 
@@ -936,9 +939,16 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
     @Override
     public void onAddToFavPostExecuteCompleted(AddToFavOutputModel addToFavOutputModel, int status, String sucessMsg) {
-
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
+            noInternetConnectionLayout.setVisibility(View.GONE);
+            noDataLayout.setVisibility(View.VISIBLE);
+        }
         if (status == 200) {
-
 
             //pref = getSharedPreferences(Util.LOGIN_PREF, 0);
             ShowWithEpisodesActivity.this.sucessMsg = sucessMsg;
@@ -948,10 +958,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             isFavorite = 1;
 
             showToast();
-            if (pDialog.isShowing() && pDialog != null) {
-                LogUtil.showLog("PINTU", "addd fav pdlog hide");
-                pDialog.hide();
-            }
+
         }
 
     }
@@ -1818,7 +1825,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         seasontiveLayout = (RecyclerView) findViewById(R.id.featureContent);
         noInternetConnectionLayout = (RelativeLayout) findViewById(R.id.noInternet);
         noDataLayout = (RelativeLayout) findViewById(R.id.noData);
-        noDataLayout.setVisibility(View.GONE);
+        //noDataLayout.setVisibility(View.GONE);
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
         noDataTextView = (TextView) findViewById(R.id.noDataTextView);
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
