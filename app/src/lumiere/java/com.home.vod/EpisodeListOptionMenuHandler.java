@@ -105,8 +105,7 @@ public class EpisodeListOptionMenuHandler{
         profile_menu.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
         purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
         logout_menu.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
-        purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
-
+        purchage_menu.setVisible(false);
         filter_menu.setVisible(false);
         if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1"))
             mediaRouteMenuItem.setVisible(true);
@@ -122,7 +121,7 @@ public class EpisodeListOptionMenuHandler{
             profile_menu.setVisible(true);
 
 
-            purchage_menu.setVisible(true);
+
 
             logout_menu.setVisible(true);
 
@@ -141,7 +140,7 @@ public class EpisodeListOptionMenuHandler{
             }
 
             profile_menu.setVisible(false);
-            purchage_menu.setVisible(false);
+
             logout_menu = menu.findItem(R.id.action_logout);
             logout_menu.setVisible(false);
 

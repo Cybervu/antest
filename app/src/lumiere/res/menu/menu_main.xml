@@ -65,6 +65,7 @@
             <item
                 android:id="@+id/action_purchage"
                 android:icon="@drawable/purchase_history"
+                android:visible="false"
                 android:title="Purchase History"/>
             <item
                 android:id="@+id/action_logout"
