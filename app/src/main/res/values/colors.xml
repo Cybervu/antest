@@ -7,6 +7,7 @@
  <color name="videotitleColor">#000000</color>
  <color name="loginTextViewColor">#b70000</color>
  <color name="checkboxcolor">#fff</color>
+ <color name="navlogobackgroundcolor">#fff</color>
  <color name="buttonTextColor">#fff</color>
  <color name="forgotPasswordTextViewColor">#b70000</color>
  <color name="fb_text_color">#fff</color>
@@ -90,7 +91,7 @@
  <color name="alertPopupColor">#fff</color>
  <color name="contactFormTitle">#333</color>
  <color name="btnmoretextcolor">#FFF</color>
-
+ <color name="aboutustestcolor">#fff</color>
  <color name="subtitle_list_textcolor">#808080</color>
  <color name="spinnerbackground">#e2e1e1</color>
  <color name="cast_crew_textcolor">#000000</color>

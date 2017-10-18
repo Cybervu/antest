@@ -396,6 +396,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     @Override
     protected void onResume() {
         super.onResume();
+        AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
+        asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
         CheckAvailabilityOfChromecast = new Timer();
         CheckAvailabilityOfChromecast.schedule(new TimerTask() {

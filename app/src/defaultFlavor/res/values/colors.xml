@@ -12,10 +12,10 @@
  <color name="sign_up_text_color">#b70000</color>
  <color name="hint_color">#737373</color>
  <color name="alreadyMemberTextColor">#757575</color>
-
+ <color name="toolbarTitleColor">#fff</color>
  <color name="disableTextColor">#50757575</color>
  <color name="OsTextColor">#757575</color>
-
+ <color name="aboutustestcolor">#f5e85a</color>
  <color name="alreadyHaveALoginButtonTextColor">#b70000</color>
  <color name="border_color">#b70000</color>
  <color name="cancel_button_text_color">#b70000</color>

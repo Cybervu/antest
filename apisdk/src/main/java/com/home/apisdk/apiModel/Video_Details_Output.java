@@ -251,7 +251,7 @@ public class Video_Details_Output {
     }
 
     String thirdparty_url;
-    String played_length;
+    String played_length="";
     public void setVideoResolution(String videoResolution){
         this.videoResolution = videoResolution;
     }

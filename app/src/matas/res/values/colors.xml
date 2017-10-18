@@ -26,6 +26,7 @@
  <color name="leftMenuBackground">#fff</color>
  <color name="colorPrimary">#D60080</color>
  <color name="navlogobackgroundcolor">#fff</color>
+ <color name="toolbarTitleColor">#fff</color>
  <color name="colorPrimaryDark">#D60080</color>
  <color name="languagePopupColor">#fff</color>
  <color name="languagePopupFadeColor">#50696969</color>
@@ -72,5 +73,5 @@
  <color name="teal_500">#F44336</color>
  <color name="disableTextColor">#50757575</color>
  <color name="OsTextColor">#757575</color>
-
+ <color name="aboutustestcolor">#fff</color>
 </resources>

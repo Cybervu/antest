@@ -1375,7 +1375,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
             Util.dataModel.setPostRoll(_video_details_output.getPostRoll());
             Util.dataModel.setMidRoll(_video_details_output.getMidRoll());
             Util.dataModel.setAdDetails(_video_details_output.getAdDetails());
-
+            Util.dataModel.setPlayPos(Integer.parseInt(_video_details_output.getPlayed_length()));
 
             //player model set
             playerModel.setAdDetails(_video_details_output.getAdDetails());
