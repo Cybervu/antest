@@ -331,7 +331,7 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                                 fdomain = jsonFooterMenu.getJSONObject(i).optString("domain").toString().trim();
                                 footerMenu.setDomain(fdomain);
                                 flink_type = jsonFooterMenu.getJSONObject(i).optString("link_type").toString().trim();
-                                footerMenu.setLink_type(Permalink);
+                                footerMenu.setLink_type(flink_type);
                                 fid = jsonFooterMenu.getJSONObject(i).optString("id").toString().trim();
                                 footerMenu.setId(fid);
                                 fdisplay_name = jsonFooterMenu.getJSONObject(i).optString("display_name").toString().trim();

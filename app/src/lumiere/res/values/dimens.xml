@@ -91,7 +91,7 @@
     <dimen name="submit_height_size">45dp</dimen>
     <dimen name="device_name_height">25dp</dimen>
     <dimen name="ppv_margin">10dp</dimen>
-    <dimen name="submit_text_size">18sp</dimen>
+    <dimen name="submit_text_size">16sp</dimen>
     <dimen name="castcrew_text">20sp</dimen>
     <dimen name="cast_width_icon">80dp</dimen>
     <dimen name="cast_height_icon">100dp</dimen>
@@ -149,6 +149,7 @@
     <dimen name="vdiotitle1_text_size">19sp</dimen>
     <dimen name="homefrag_height">160dp</dimen>
     <dimen name="slider_height">200dp</dimen>
+
     <dimen name="list_card_single_height">178dp</dimen>
     <dimen name="list_card_single_width">125dp</dimen>
     <dimen name="catlist_text_size">22sp</dimen>

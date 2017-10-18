@@ -61,9 +61,9 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_above="@+id/cast_mini_controller"
+        android:fillViewport="true"
         android:layout_below="@+id/toolbar"
-        android:fillViewport="true">
+        android:layout_toEndOf="@+id/noInternet">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -163,11 +163,12 @@
 
                         <Button
                             android:id="@+id/viewTrailerButton"
-                            android:layout_width="@dimen/review_btn_width"
-                            android:layout_height="@dimen/review_btn_height"
+                            android:layout_width="@dimen/btnmore_width"
+                            android:layout_height="@dimen/btnmore_height"
                             android:layout_alignParentRight="true"
                             android:background="@drawable/button_radious"
                             android:padding="@dimen/payment_spinner_padding"
+                            android:maxLines="1"
                             android:stateListAnimator="@null"
                             android:textAllCaps="false"
                             android:textColor="@color/buttonTextColor"

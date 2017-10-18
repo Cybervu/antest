@@ -154,7 +154,7 @@ public class FragmentDrawer extends Fragment {
                             {
                                 if(!mylibrary_title_added) {
                                     if (languagePreference.getTextofLanguage( IS_MYLIBRARY, DEFAULT_IS_MYLIBRARY).equals("1") && loggedInStr != null) {
-                                        titles.add(i,new NavDrawerItem(languagePreference.getTextofLanguage( MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
+                                        titles.add(i,new NavDrawerItem(languagePreference.getTextofLanguage( MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102",""));
                                         mylibrary_title_added = true;
                                         LogUtil.showLog("MUVI", "My lib added");
                                     }

@@ -34,14 +34,17 @@
     <dimen name="user_text_size">40sp</dimen>
     <dimen name="preorderbtn_width">98dp</dimen>
     <dimen name="preorderbtn_height">40dp</dimen>
-    <dimen name="videoTitle_textview">21sp</dimen>
+    <dimen name="videoTitle_textview">17sp</dimen>
     <dimen name="trailerbtn_text_size">16sp</dimen>
     <dimen name="vdioduration_text_size">16sp</dimen>
     <dimen name="vdiogenere_text_size">17sp</dimen>
     <dimen name="vdiotitle_text_size">17sp</dimen>
     <dimen name="sectionTitle_textsize">22sp</dimen>
+    <dimen name="submit_height_size">45sp</dimen>
+    <dimen name="submit_width_size">170dp</dimen>
     <dimen name="vdiocast_text_size">18sp</dimen>
     <dimen name="btnmore_width">98dp</dimen>
+    <dimen name="castcrew_text">21sp</dimen>
     <dimen name="btnmore_height">40dp</dimen>
     <dimen name="btnmore_text_size">13sp</dimen>
     <dimen name="banerimg_height">300dp</dimen>
@@ -130,7 +133,8 @@
     <dimen name="registerbtn_height">40dp</dimen>
     <dimen name="okbtn_width">150dp</dimen>
     <dimen name="okbtn_height">40dp</dimen>
-    <dimen name="submit_width_size">170dp</dimen>
+    <dimen name="cancelbtn_text_size">18sp</dimen>
+
 
     <dimen name="cast_details_width">200dp</dimen>
     <dimen name="cast_details_height">200dp</dimen>

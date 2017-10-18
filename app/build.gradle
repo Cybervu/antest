@@ -90,13 +90,13 @@ android {
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //            buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
-            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
+            buildConfigField "String", "AUTH_TOKEN", "\"a4c8b7229946cf0e551aca87147194fd\""//mob
             // buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
             // buildConfigField "String", "AUTH_TOKEN", "\"49c5986b92785b2ea7cdea83487dbaf8\""
         }
         newthoughtchannel_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
         }
         newthoughtchannel_Prod_ {
             dimension 'environment'

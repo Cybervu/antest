@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -625,13 +626,22 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             } else {
 
 
-                fragment = new AboutUsFragment();
-                bundle.putString("item", str);
-                bundle.putString("title", titleStr);
+                if (menuList.get(position).getLinkType().trim().equalsIgnoreCase("external")) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menuList.get(position).getUrl().trim()));
+                    browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(browserIntent);
+                    return;
+                } else {
+
+
+                    fragment = new AboutUsFragment();
+                    bundle.putString("item", str);
+                    bundle.putString("title", titleStr);
+
+                }
+
 
             }
-
-
         } else if (menuList.get(position).getIsEnabled() == true) {
 
             fragment = new VideosListFragment();
@@ -789,26 +799,26 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
         } else {
-            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME), "-101", true, "-101"));
+            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME), "-101", true, "-101",""));
 
             if (menusOutputModel.getMainMenuModel() != null && menusOutputModel.getMainMenuModel().size() > 0) {
 
                 for (MenusOutputModel.MainMenu menuListOutput : menusOutputModel.getMainMenuModel()) {
                     LogUtil.showLog("Alok", "menuListOutputList ::" + menuListOutput.getPermalink());
                     if (menuListOutput.getLink_type() != null && !menuListOutput.getLink_type().equalsIgnoreCase("") && menuListOutput.getLink_type().equalsIgnoreCase("0")) {
-                        menuList.add(new NavDrawerItem(menuListOutput.getTitle(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getLink_type()));
+                        menuList.add(new NavDrawerItem(menuListOutput.getTitle(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getLink_type(),""));
                     }
                 }
             }
 
-            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
+            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102",""));
             LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
 
             if (menusOutputModel.getFooterMenuModel() != null && menusOutputModel.getFooterMenuModel().size() > 0) {
                 for (MenusOutputModel.FooterMenu menuListOutput : menusOutputModel.getFooterMenuModel()) {
                     LogUtil.showLog("Alok", "footermenuListOutputList ::" + menuListOutput.getPermalink());
                     if (menuListOutput.getUrl() != null && !menuListOutput.getUrl().equalsIgnoreCase("")) {
-                        menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getUrl()));
+                        menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getLink_type(),menuListOutput.getUrl()));
                     }
                 }
             }

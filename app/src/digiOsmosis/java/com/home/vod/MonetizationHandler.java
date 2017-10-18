@@ -6,7 +6,7 @@ import com.home.vod.activity.Episode_list_Activity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 
 /**
- * Created by MUVI on 10/3/2017.
+ * Created by Abhishek on 10/3/2017.
  */
 
 public class MonetizationHandler {
