@@ -3705,6 +3705,23 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 togglePlayback();
             }
         }
+        else if (resultCode == RESULT_OK && requestCode == 30060) {
+            if (NetworkStatus.getInstance().isConnected(this)) {
+                ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
+                contentDetailsInput.setAuthToken(authTokenStr);
+                contentDetailsInput.setPermalink(permalinkStr);
+                contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
+                contentDetailsInput.setLanguage(preferenceManager.getLanguageListFromPref());
+
+                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
+                asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+
+            } else {
+                Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
         else
         {
             if(requestCode != 1007 && requestCode!=2001){
@@ -3729,26 +3746,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             }
 
         }*/
-//
-        if (requestCode == 30060) {
-            if (NetworkStatus.getInstance().isConnected(this)) {
-                ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                contentDetailsInput.setAuthToken(authTokenStr);
-                contentDetailsInput.setPermalink(permalinkStr);
-                contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-                contentDetailsInput.setLanguage(preferenceManager.getLanguageListFromPref());
-
-                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
-                asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
-
-            } else {
-                Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                finish();
-            }
-
-        }
-
 
     }
 

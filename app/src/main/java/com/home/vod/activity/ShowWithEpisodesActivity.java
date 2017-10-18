@@ -390,7 +390,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         } catch (IllegalArgumentException ex) {
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.VISIBLE);
-            Log.v("BKS","exception=="+ex);
+            Log.v("BKS", "exception==" + ex);
         }
 
 
@@ -657,7 +657,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         } catch (IllegalArgumentException ex) {
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.VISIBLE);
-            Log.v("BKS","exception=="+ex);
+            Log.v("BKS", "exception==" + ex);
         }
 
 
@@ -1255,20 +1255,18 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
                     if (mCastSession != null && mCastSession.isConnected()) {
                         ///Added for resume cast watch
-                        if((Util.dataModel.getPlayPos() * 1000)>0)
-                        {
+                        if ((Util.dataModel.getPlayPos() * 1000) > 0) {
                             Util.dataModel.setPlayPos(Util.dataModel.getPlayPos());
                             Intent resumeIntent = new Intent(ShowWithEpisodesActivity.this, ResumePopupActivity.class);
                             startActivityForResult(resumeIntent, 1001);
 
-                        }else
-                        {
+                        } else {
                             Played_Length = 0;
                             watch_status_String = "start";
 
                             PlayThroughChromeCast();
                         }
-                       } else {
+                    } else {
 
 
                         playerModel.setThirdPartyPlayer(false);
@@ -1389,7 +1387,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
                 jsonObj.put("resume_time", "0");
-                jsonObj.put("seek_status",seek_status);
+                jsonObj.put("seek_status", seek_status);
                 // This  Code Is Added For Drm BufferLog By Bibhu ...
 
                 jsonObj.put("resolution", "BEST");
@@ -1451,7 +1449,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
                 jsonObj.put("resume_time", "0");
-
 
 
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
@@ -1904,12 +1901,11 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                     }
                 } else {
                     Util.favorite_clicked = true;
-                   Intent registerActivity = new LoginRegistrationOnContentClickHandler(ShowWithEpisodesActivity.this).handleClickOnContent();
+                    Intent registerActivity = new LoginRegistrationOnContentClickHandler(ShowWithEpisodesActivity.this).handleClickOnContent();
 
-                            registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            registerActivity.putExtra("from", this.getClass().getName());
-                            startActivity(registerActivity);
-
+                    registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    registerActivity.putExtra("from", this.getClass().getName());
+                    startActivity(registerActivity);
 
 
                 }
@@ -2108,26 +2104,25 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                     String loggedInStr = preferenceManager.getLoginStatusFromPref();
                     if (loggedInStr == null) {
 
-                        if (mCastSession != null && mCastSession.isConnected()){
+                        if (mCastSession != null && mCastSession.isConnected()) {
 
 
                             Toast.makeText(ShowWithEpisodesActivity.this, "chromecast connected and not logegd in", Toast.LENGTH_SHORT).show();
 
-                            final Intent resumeCast= new LoginRegistrationOnContentClickHandler(ShowWithEpisodesActivity.this).handleClickOnContent();
+                            final Intent resumeCast = new LoginRegistrationOnContentClickHandler(ShowWithEpisodesActivity.this).handleClickOnContent();
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     resumeCast.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     Util.check_for_subscription = 1;
                                     resumeCast.putExtra("PlayerModel", playerModel);
-                                    startActivityForResult(resumeCast,2001);
+                                    startActivityForResult(resumeCast, 2001);
 
 //                                        startActivity(resumeCast);
 
                                 }
                             });
 
-                        }
-                        else {
+                        } else {
                             Intent registerActivity = new LoginRegistrationOnContentClickHandler(ShowWithEpisodesActivity.this).handleClickOnContent();
 
                             registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -5147,24 +5142,22 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
 
-        if(resultCode == RESULT_OK && requestCode == 1001)
-        {
+        if (resultCode == RESULT_OK && requestCode == 1001) {
             if (data.getStringExtra("yes").equals("1002")) {
                 watch_status_String = "halfplay";
                 seek_status = "first_time";
-                Played_Length = Util.dataModel.getPlayPos()*1000;
+                Played_Length = Util.dataModel.getPlayPos() * 1000;
                 PlayThroughChromeCast();
 
             } else {
-                watch_status_String = "strat";
+                watch_status_String = "start";
                 Played_Length = 0;
                 PlayThroughChromeCast();
             }
-        }
-        else if(resultCode == RESULT_OK && requestCode == 2001){
-            if (data.getStringExtra("yes").equals("2002")){
+        } else if (resultCode == RESULT_OK && requestCode == 2001) {
+            if (data.getStringExtra("yes").equals("2002")) {
 
-                mSelectedMedia=Util.mSendingMedia;
+                mSelectedMedia = Util.mSendingMedia;
 
 
 //                Toast.makeText(this, "Now again in details", Toast.LENGTH_SHORT).show();
@@ -5176,29 +5169,40 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 startActivityForResult(resumeIntent, 1007);
 
             }
-        }
-        else if(resultCode == RESULT_OK && requestCode == 1007)
-        {
+        } else if (resultCode == RESULT_OK && requestCode == 1007) {
 
             if (data.getStringExtra("yes").equals("1002")) {
 
-                Log.v("pratik","resumed...");
+                Log.v("pratik", "resumed...");
                 watch_status_String = "halfplay";
                 seek_status = "first_time";
-                Played_Length = Util.dataModel.getPlayPos()*1000;
+                Played_Length = Util.dataModel.getPlayPos() * 1000;
                 togglePlayback();
 
             } else {
-                watch_status_String = "strat";
+                watch_status_String = "start";
                 Played_Length = 0;
                 togglePlayback();
             }
-        }
-        else
-        {
-            if(requestCode != 1007 && requestCode!=2001){
-                Log.v("pratik","else conditn called");
-                watch_status_String = "strat";
+        } else if (resultCode == RESULT_OK && requestCode == 30060) {
+            if (NetworkStatus.getInstance().isConnected(this)) {
+
+                LogUtil.showLog("MUVI", "CODE");
+                ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
+                contentDetailsInput.setAuthToken(authTokenStr);
+                contentDetailsInput.setPermalink(permalinkStr);
+
+                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
+                asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+
+            } else {
+                Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                finish();
+            }
+        } else {
+            if (requestCode != 1007 && requestCode != 2001) {
+                Log.v("pratik", "else conditn called");
+                watch_status_String = "start";
                 Played_Length = 0;
                 PlayThroughChromeCast();
             }
@@ -5224,23 +5228,6 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         }
 //*/
-        if (requestCode == 30060) {
-            if (NetworkStatus.getInstance().isConnected(this)) {
-
-                LogUtil.showLog("MUVI", "CODE");
-                ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                contentDetailsInput.setAuthToken(authTokenStr);
-                contentDetailsInput.setPermalink(permalinkStr);
-
-                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
-                asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
-
-            } else {
-                Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                finish();
-            }
-
-        }
 
 
     }
