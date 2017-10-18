@@ -122,7 +122,7 @@ public class EpisodeListOptionMenuHandler{
             profile_menu.setVisible(true);
 
 
-            purchage_menu.setVisible(true);
+            purchage_menu.setVisible(false);
 
             logout_menu.setVisible(true);
 

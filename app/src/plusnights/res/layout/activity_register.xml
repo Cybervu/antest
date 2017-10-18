@@ -132,7 +132,7 @@
                     android:singleLine="false"
                     android:text="terms"
                     android:textColor="@color/termsTextColor"
-                    android:textSize="@dimen/email_text_size" />
+                    android:textSize="@dimen/cancelbtn_text_size" />
             </RelativeLayout>
 
             <Button
