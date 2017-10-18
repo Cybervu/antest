@@ -8,6 +8,16 @@ public class NavDrawerItem {
     private boolean isEnabled;
     private String linkType;
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    private String url;
+
     public String getLinkType() {
         return linkType;
     }
@@ -46,11 +56,12 @@ public class NavDrawerItem {
         this.permalink = permalink;
     }
 
-    public NavDrawerItem(String title, String permalink, boolean isEnabled, String linkType) {
+    public NavDrawerItem(String title, String permalink, boolean isEnabled, String linkType,String url) {
         this.title = title;
         this.permalink = permalink;
         this.isEnabled = isEnabled;
         this.linkType = linkType;
+        this.url=url;
 
     }
 
