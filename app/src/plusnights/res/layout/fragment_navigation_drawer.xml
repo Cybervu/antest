@@ -20,7 +20,9 @@
         android:minHeight="?attr/actionBarSize"
         android:background="@color/leftMenuBgColor"
         local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        local:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+        local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <ImageView
             android:layout_width="match_parent"
