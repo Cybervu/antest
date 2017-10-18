@@ -199,7 +199,7 @@
                         android:layout_below="@+id/videoGenreTextView"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:text=""
-                        android:textColor="@color/detailsPageTextColor"
+                        android:textColor="@color/movieTitleColor"
                         android:textSize="@dimen/vdioduration_text_size" />
 
                     <TextView
@@ -211,7 +211,7 @@
                         android:background="@drawable/button_bg_orange"
                         android:paddingLeft="@dimen/videoCensorRatingTextView_padding"
                         android:paddingRight="@dimen/videoCensorRatingTextView_padding"
-                        android:textColor="@color/detailsPageTextColor"
+                        android:textColor="@color/movieTitleColor"
                         android:textSize="@dimen/preorderbtn_text_size"
                         android:visibility="gone" />
 
@@ -221,7 +221,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/videoGenreTextView"
                         android:layout_marginLeft="@dimen/name_user_margin_bottom"
-                        android:textColor="@color/detailsPageTextColor"
+                        android:textColor="@color/movieTitleColor"
                         android:textSize="@dimen/preorderbtn_text_size" />
 
 
@@ -231,7 +231,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/videoGenreTextView"
                         android:layout_marginLeft="@dimen/ppv_margin"
-                        android:textColor="@color/detailsPageTextColor"
+                        android:textColor="@color/movieTitleColor"
                         android:textSize="@dimen/preorderbtn_text_size" />
 
                 </LinearLayout>
@@ -253,7 +253,7 @@
                     android:layout_alignParentStart="true"
                     android:paddingLeft="@dimen/Login_drawing_padding"
                     android:text=""
-                    android:textColor="@color/detailsPageTextColor"
+                    android:textColor="@color/movieTitleColor"
                     android:textSize="@dimen/preorderbtn_text_size" />
 
                 <TextView

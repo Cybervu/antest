@@ -6,13 +6,14 @@
     <color name="OsTextColor">#757575</color>
     <color name="colorPrimary">#87005F</color>
     <color name="navlogobackgroundcolor">#1e292d</color>
+    <color name="castCrewTitleTextColor">#C81E6E </color>
     <color name="colorPrimaryDark">#87005F</color>
     <color name="appBackgroundColor">#fff</color>
     <color name="cast_crew_titleCololr">#C81E6E</color>
     <color name="no_internet_textColor">#000</color>
     <color name="toolbarTitleColor">#fff</color>
     <color name="unSelectedHintColor">#eee</color>
-    <color name="selectedHintColor">#0b8f66</color>
+    <color name="selectedHintColor">#C81E6E</color>
     <color name="hintTextColor">#999</color>
     <color name="editTexColor">#666</color>
     <color name="buttonTextColor">#fff</color>
@@ -28,8 +29,9 @@
     <color name="resumeCancelButtonTextColor">#000000</color>
     <color name="resumeTitleTextColor">#ffffff</color>
     <color name="resumeCancelButtonBackgroundColor">#DDD</color>
-    <color name="dividerColor">#0b8f66</color>
+    <color name="dividerColor">#C81E6E</color>
     <color name="borderColor">#C81E6E</color>
+    <color name="button_background">#C81E6E </color>
     <color name="videoTitleTextColor">#C81E6E</color>
     <color name="detailsPageTextColor">#666</color>
     <color name="subtitleListBgColor">#fff</color>
