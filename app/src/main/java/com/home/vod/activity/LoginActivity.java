@@ -478,61 +478,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             }
                         });
                 dlgAlert.create().show();
-            } else if (status == 429) {
-
-                if (validateUserOutput.getValiduser_str() != null) {
-
-
-                    if ((validateUserOutput.getValiduser_str().trim().equalsIgnoreCase("OK")) || (validateUserOutput.getValiduser_str().trim().matches("OK")) || (validateUserOutput.getValiduser_str().trim().equals("OK"))) {
-                        if (NetworkStatus.getInstance().isConnected(this)) {
-                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                            getVideoDetailsInput.setAuthToken(authTokenStr);
-                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this, this);
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                        } else {
-                            Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                            onBackPressed();
-                        }
-                    } else {
-
-                        if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
-                            if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
-                                if (Util.dataModel.getContentTypesId() == 3) {
-                                    // Show Popup
-                                    ShowPpvPopUp();
-                                } else {
-                                    // Go to ppv Payment
-                                    payment_for_single_part();
-                                }
-                            } else if (PlanId.equals("1") && validateUserOutput.getIsMemberSubscribed().equals("0")) {
-                                Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(intent);
-                                finish();
-                                overridePendingTransition(0, 0);
-                            } else {
-                                if (Util.dataModel.getContentTypesId() == 3) {
-                                    // Show Popup
-                                    ShowPpvPopUp();
-                                } else {
-                                    // Go to ppv Payment
-                                    payment_for_single_part();
-                                }
-                            }
-                        }
-
-                    }
-                }
-
-            } else if (status == 430) {
-
+            } else if (status == 429 || status == 430) {
 
                 new MonetizationHandler(LoginActivity.this).handle429OR430statusCod(validUserStr,message,Subscription_Str);
-
 
             } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
                 if (Util.dataModel.getContentTypesId() == 3) {
@@ -1440,7 +1388,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     /*********fb****/
     //AsynLogInDetails asyncReg;
-    GetValidateUserAsynTask asynLoadVideoUrls;
+    VideoDetailsAsynctask asynLoadVideoUrls;
     EditText editEmailStr, editPasswordStr;
     TextView forgotPassword, loginNewUser, signUpTextView;
     Button loginButton;
@@ -5779,5 +5727,83 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         asynCheckFbUserDetails = new CheckFbUserDetailsAsyn(checkFbUserDetailsInput, LoginActivity.this, LoginActivity.this);
         asynCheckFbUserDetails.executeOnExecutor(threadPoolExecutor);
 
+    }
+    public void handleActionForValidateUserPayment(String validUserStr, String message, String Subscription_Str){
+        if (validUserStr != null) {
+
+
+            if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
+                if (NetworkStatus.getInstance().isConnected(this)) {
+                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this, this);
+                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                } else {
+                    Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    onBackPressed();
+                }
+            } else {
+
+                if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
+                    if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                        if (Util.dataModel.getContentTypesId() == 3) {
+                            // Show Popup
+                            ShowPpvPopUp();
+                        } else {
+                            // Go to ppv Payment
+                            payment_for_single_part();
+                        }
+                    } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
+                        Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(intent);
+                        finish();
+                        overridePendingTransition(0, 0);
+                    } else {
+                        if (Util.dataModel.getContentTypesId() == 3) {
+                            // Show Popup
+                            ShowPpvPopUp();
+                        } else {
+                            // Go to ppv Payment
+                            payment_for_single_part();
+                        }
+                    }
+                }
+
+            }
+        }
+
+    }
+    public void handleActionForValidateSonyUserPayment(String validUserStr, String message, String subscription_Str) {
+        if (validUserStr != null) {
+
+
+            if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
+                if (NetworkStatus.getInstance().isConnected(LoginActivity.this)) {
+                    Log.v("MUVI", "VV VV VV");
+
+                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,this, this);
+                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                } else {
+                    Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                }
+            } else {
+
+                if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
+                    Util.showActivateSubscriptionWatchVideoAleart(this);
+                }
+
+            }
+        }
     }
 }

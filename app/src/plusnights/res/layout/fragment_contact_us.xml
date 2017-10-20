@@ -33,7 +33,7 @@
                 android:paddingBottom="@dimen/Login_drawing_padding"
                 android:paddingTop="@dimen/Login_drawing_padding"
                 android:text=""
-                android:textColor="@color/pageTitleTextColor"
+                android:textColor="@color/pageTitleColor"
                 android:textSize="@dimen/sectiontitle_text_size"
                 android:textStyle="normal" />
 
@@ -47,8 +47,8 @@
                 android:paddingLeft="@dimen/login_new_user_padding"
                 android:paddingTop="@dimen/Login_drawing_padding"
                 android:text=""
-                android:textColor="@color/pageTitleTextColor"
-                android:textSize="@dimen/contactformtitle_text_size" />
+                android:textColor="@color/contactFormTitle"
+                android:textSize="@dimen/vdiotitle1_text_size" />
 
             <EditText
                 android:id="@+id/contact_name"
@@ -58,29 +58,29 @@
                 android:layout_marginLeft="@dimen/ppv_margin"
                 android:layout_marginRight="@dimen/ppv_margin"
                 android:hint=""
-                android:imeOptions="actionNext"
+                android:imeOptions="actionDone"
                 android:inputType="textPersonName"
                 android:paddingBottom="@dimen/Login_drawing_padding"
                 android:paddingTop="@dimen/Login_drawing_padding"
-                android:textColor="@color/editTexColor"
-                android:textColorHint="@color/hintTextColor"
-                android:textSize="@dimen/edit_text_size" />
+                android:textColor="@color/editTextColor"
+                android:textColorHint="@color/hint_color"
+                android:textSize="@dimen/editbox_text_size" />
 
             <EditText
                 android:id="@+id/contact_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="22dp"
-                android:layout_marginLeft="@dimen/ppv_margin"
-                android:layout_marginRight="@dimen/ppv_margin"
+                android:layout_marginBottom="@dimen/contact_name_margin"
+                android:layout_marginLeft="@dimen/Login_drawing_padding"
+                android:layout_marginRight="@dimen/Login_drawing_padding"
                 android:hint=""
-                android:imeOptions="actionNext"
+                android:imeOptions="actionDone"
                 android:inputType="textEmailAddress"
                 android:paddingBottom="@dimen/Login_drawing_padding"
                 android:paddingTop="@dimen/Login_drawing_padding"
-                android:textColor="@color/editTexColor"
-                android:textColorHint="@color/hintTextColor"
-                android:textSize="@dimen/edit_text_size" />
+                android:textColor="@color/editTextColor"
+                android:textColorHint="@color/hint_color"
+                android:textSize="@dimen/editbox_text_size" />
 
             <EditText
                 android:id="@+id/contact_msg"
@@ -95,15 +95,15 @@
                 android:inputType="textMultiLine"
                 android:paddingBottom="@dimen/Login_drawing_padding"
                 android:paddingTop="@dimen/Login_drawing_padding"
-                android:textColor="@color/editTexColor"
-                android:textColorHint="@color/hintTextColor"
-                android:textSize="@dimen/edit_text_size" />
+                android:textColor="@color/editTextColor"
+                android:textColorHint="@color/hint_color"
+                android:textSize="@dimen/editbox_text_size" />
 
             <Button
                 android:id="@+id/submit_cont"
                 android:layout_width="@dimen/submitcontact_width"
                 android:layout_height="@dimen/submitcontact_height"
-                android:layout_gravity="end"
+                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/ppv_margin"
                 android:layout_marginRight="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/payment_margin_btn_top"

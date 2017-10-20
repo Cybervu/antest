@@ -65,6 +65,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVA
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEARCH_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEARCH_PLACEHOLDER;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_SEARCH_PLACEHOLDER;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
@@ -73,6 +74,7 @@ import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.SEARCH_ALERT;
 import static com.home.vod.preferences.LanguagePreference.SEARCH_PLACEHOLDER;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.TEXT_SEARCH_PLACEHOLDER;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
@@ -366,6 +368,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             } else {
                                 search_data_input.setCountry("IN");
                             }
+                            search_data_input.setLanguage_code( languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input, SearchActivity.this, SearchActivity.this);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 

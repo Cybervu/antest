@@ -118,7 +118,7 @@
         <!-- Used for the title and text -->
         <item name="android:textColorPrimary">@color/appBackgroundColor</item>
         <!-- Used for the background -->
-        <item name="android:background">@color/genreTextColor</item>
+        <item name="android:background">@color/navlogobackgroundcolor</item>
     </style>
 
 

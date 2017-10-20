@@ -229,6 +229,6 @@ public class LoadRegisteredDevicesAsync extends AsyncTask<LoadRegisteredDevicesI
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
 
-        listener.onLoadRegisteredDevicesPostExecuteCompleted(loadRegisteredDevicesOutputArrayList, status, responseStr);
+        listener.onLoadRegisteredDevicesPostExecuteCompleted(loadRegisteredDevicesOutputArrayList, status, message);
     }
 }

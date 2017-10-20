@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@color/appBackgroundColor"
     android:orientation="vertical"
-    android:padding="@dimen/login_new_user_padding">
+    >
 
     <RelativeLayout
         android:id="@+id/sliderRelativeLayout"
@@ -17,7 +17,7 @@
         <com.daimajia.slider.library.SliderLayout
             android:id="@+id/sliderLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/slider_height"
+            android:layout_height="@dimen/listitemlayout_height"
             custom:auto_cycle="true"
             custom:indicator_visibility="visible"
             custom:pager_animation_span="1100" />
@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/pop_up_view_height"
             android:layout_below="@+id/sliderLayout"
-            android:background="@color/borderColor" />
+            android:background="@color/border_color" />
 
     </RelativeLayout>
 
@@ -86,19 +86,23 @@
             android:layout_gravity="center_vertical"
             android:layout_toLeftOf="@+id/btnMore"
             android:text="Sample title"
-            android:textColor="@color/pageTitleTextColor"
-            android:textSize="@dimen/vdiotitle1_text_size" />
+            android:textAllCaps="true"
+            android:textColor="@color/videotextColor"
+            android:textSize="@dimen/email_text_size" />
 
         <Button
             android:id="@+id/btnMore"
-            android:layout_width="@dimen/review_btn_width"
-            android:layout_height="@dimen/review_btn_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/button_radious"
+            android:background="@drawable/view_more_button_background"
+            android:minHeight="@dimen/btnMore_min_height"
+            android:padding="@dimen/Login_drawing_padding"
             android:stateListAnimator="@null"
-            android:textColor="@color/buttonTextColor" />
+            android:textAllCaps="false"
+            android:textColor="@color/buttonTextColor"
+            android:textSize="@dimen/email_text_size" />
 
 
     </RelativeLayout>

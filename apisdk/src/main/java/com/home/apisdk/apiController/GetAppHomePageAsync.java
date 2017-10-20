@@ -160,20 +160,25 @@ public class GetAppHomePageAsync extends AsyncTask<HomePageInputModel, Void, Voi
                 if (myJson.has("BannerSectionList")) {
                     JSONArray jsonMainNode = myJson.getJSONArray("BannerSectionList");
                     int lengthJsonArr = jsonMainNode.length();
-                    for (int i = 0; i < lengthJsonArr; i++) {
+                    if (lengthJsonArr > 0) {
+                        for (int i = 0; i < lengthJsonArr; i++) {
 
-                        JSONObject jsonChildNode= jsonMainNode.getJSONObject(i);
-                        image_path = jsonChildNode.optString("image_path");
-                        banner_url = jsonChildNode.getString("banner_url");
+                            JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
+                            image_path = jsonChildNode.optString("image_path");
+                            banner_url = jsonChildNode.getString("banner_url");
+                            homePageBannerModel = new HomePageBannerModel();
+                            homePageBannerModel.setImage_path(image_path);
+                            homePageBannerModel.setBanner_url(banner_url);
+                            homePageBannerModelArrayList.add(homePageBannerModel);
+                        }
+                    } else {
                         homePageBannerModel = new HomePageBannerModel();
-                        homePageBannerModel.setBanner_url(banner_url);
-                        homePageBannerModel.setImage_path(image_path);
+                        homePageBannerModel.setImage_path("https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png");
                         homePageBannerModelArrayList.add(homePageBannerModel);
                     }
-
-
-
                 }
+
+
                 if (myJson.has("SectionName")) {
 
                         JSONArray jsonMainNode = myJson.getJSONArray("SectionName");

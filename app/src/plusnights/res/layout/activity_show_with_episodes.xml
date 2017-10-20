@@ -27,7 +27,7 @@
             android:gravity="center"
             android:maxLines="4"
             android:singleLine="false"
-            android:textColor="@color/no_internet_textColor"
+            android:textColor="@color/noInternetColor"
             android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
@@ -51,7 +51,7 @@
             android:gravity="center"
             android:maxLines="4"
             android:singleLine="false"
-            android:textColor="@color/no_internet_textColor"
+            android:textColor="@color/noInternetColor"
             android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
@@ -63,6 +63,7 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:layout_below="@+id/toolbar"
+        android:layout_toRightOf="@+id/noInternet"
         android:layout_toEndOf="@+id/noInternet">
 
         <RelativeLayout
@@ -78,7 +79,8 @@
                 android:id="@+id/detailsRelativeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/appBackgroundColor">
+                android:background="@color/appBackgroundColor"
+                >
 
 
                 <RelativeLayout
@@ -109,24 +111,22 @@
                         android:scaleType="centerCrop"
 
                         />
-
                     <RelativeLayout
-                        android:id="@+id/favorite"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignRight="@+id/bannerImageView"
-                        android:layout_alignTop="@+id/bannerImageView"
-                        android:layout_marginTop="@dimen/payment_relative_margin"
+                        android:id="@+id/favorite"
                         android:gravity="right"
-                        android:visibility="gone">
+                        >
 
                         <ImageView
                             android:id="@+id/favorite_view_episode"
+                            android:visibility="visible"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/payment_relative_margin"
                             android:src="@drawable/favorite_unselected"
-                            android:visibility="visible" />
+                            android:layout_marginRight="@dimen/payment_relative_margin"
+                            android:layout_marginTop="@dimen/ppv_margin"
+                            />
 
                     </RelativeLayout>
 
@@ -144,49 +144,52 @@
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/Login_drawing_padding"
                         android:paddingRight="@dimen/Login_drawing_padding"
+                        android:paddingBottom="@dimen/Login_drawing_padding"
                         android:paddingTop="@dimen/Login_drawing_padding">
 
                         <Button
                             android:id="@+id/preOrderButton"
-                            android:layout_width="@dimen/review_btn_width"
-                            android:layout_height="@dimen/review_btn_height"
-                            android:layout_marginRight="@dimen/pre_order_button_margin"
-                            android:layout_toLeftOf="@+id/viewTrailerButton"
-                            android:background="@drawable/button_radious"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/preorder_button"
                             android:padding="@dimen/payment_spinner_padding"
-                            android:stateListAnimator="@null"
+                            android:layout_toLeftOf="@+id/viewTrailerButton"
                             android:textAllCaps="false"
-                            android:textColor="@color/buttonTextColor"
+                            android:stateListAnimator="@null"
+                            android:textColor="@color/preOrderButtonTextColor"
                             android:textSize="@dimen/review_btn_textsize"
-                            android:visibility="gone" />
+                            android:layout_marginRight="@dimen/pre_order_button_margin"
+                            android:visibility="gone"
+                            />
 
 
                         <Button
                             android:id="@+id/viewTrailerButton"
-                            android:layout_width="@dimen/btnmore_width"
-                            android:layout_height="@dimen/btnmore_height"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:background="@drawable/button_radious"
+                            android:background="@drawable/view_more_button_background"
                             android:padding="@dimen/payment_spinner_padding"
-                            android:maxLines="1"
                             android:stateListAnimator="@null"
                             android:textAllCaps="false"
                             android:textColor="@color/buttonTextColor"
-                            android:textSize="@dimen/review_btn_textsize"
+                            android:textSize="@dimen/email_text_size"
                             android:visibility="gone"
 
                             />
                     </RelativeLayout>
 
 
+
+
                     <LinearLayout
-                        android:id="@+id/durationcensorLinearlayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/bannerImageView"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:layout_marginBottom="10dp"
+                        android:id="@+id/durationcensorLinearlayout"
+                        android:layout_marginBottom="@dimen/ppv_margin"
                         android:orientation="horizontal">
 
                         <TextView
@@ -195,8 +198,8 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/videoGenreTextView"
                             android:layout_marginLeft="@dimen/ppv_margin"
+                            android:textColor="@color/movieTitleColor"
                             android:text=""
-                            android:textColor="@color/detailsPageTextColor"
                             android:textSize="@dimen/review_btn_textsize" />
 
                         <TextView
@@ -205,10 +208,10 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/videoGenreTextView"
                             android:layout_marginLeft="@dimen/ppv_margin"
-                            android:background="@drawable/button_bg_orange"
+                            android:background="@color/censorRatingBackground"
                             android:paddingLeft="@dimen/videoCensorRatingTextView_padding"
                             android:paddingRight="@dimen/videoCensorRatingTextView_padding"
-                            android:textColor="@color/detailsPageTextColor"
+                            android:textColor="@color/movieTitleColor"
                             android:textSize="@dimen/review_btn_textsize"
                             android:visibility="gone" />
 
@@ -218,7 +221,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/videoGenreTextView"
                             android:layout_marginLeft="@dimen/name_user_margin_bottom"
-                            android:textColor="@color/detailsPageTextColor"
+                            android:textColor="@color/movieTitleColor"
                             android:textSize="@dimen/review_btn_textsize" />
 
 
@@ -228,7 +231,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/videoGenreTextView"
                             android:layout_marginLeft="@dimen/ppv_margin"
-                            android:textColor="@color/detailsPageTextColor"
+                            android:textColor="@color/movieTitleColor"
                             android:textSize="@dimen/review_btn_textsize" />
 
                     </LinearLayout>
@@ -237,83 +240,125 @@
                         android:id="@+id/playButton"
                         android:layout_width="@dimen/playbtn_width"
                         android:layout_height="@dimen/playbtn_height"
-                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/play"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/play" />
+                        android:layout_centerHorizontal="true" />
 
                     <TextView
                         android:id="@+id/videoGenreTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_above="@+id/durationcensorLinearlayout"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginBottom="@dimen/ppv_margin"
                         android:paddingLeft="@dimen/Login_drawing_padding"
                         android:text=""
-                        android:textColor="@color/detailsPageTextColor"
-                        android:textSize="@dimen/review_btn_textsize" />
+                        android:textColor="@color/movieTitleColor"
+                        android:textSize="@dimen/review_btn_textsize"
+                        android:padding="@dimen/Login_drawing_padding"
+                        android:layout_marginRight="@dimen/videoGenreTextView_margin"
+                        android:layout_above="@+id/durationcensorLinearlayout"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
 
                     <TextView
                         android:id="@+id/videoTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_above="@+id/videoGenreTextView"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginLeft="@dimen/ppv_margin"
-                        android:ellipsize="end"
                         android:maxLines="1"
+                        android:ellipsize="end"
                         android:text=""
-                        android:textColor="@color/videoTitleTextColor"
+                        android:textColor="@color/movieTitleColor"
                         android:textSize="@dimen/forgot_text_size"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
+                        android:layout_marginLeft="@dimen/ppv_margin"
+                        android:visibility="gone"
+                        android:layout_above="@+id/videoGenreTextView"
+                        android:layout_toLeftOf="@+id/playButton"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
 
                 </RelativeLayout>
-
-                <LinearLayout
-                    android:id="@+id/story_layout"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/iconImageRelativeLayout"
-                    android:background="@color/transparent"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
+                    android:orientation="horizontal"
+                    android:id="@+id/rating"
+                    android:layout_below="@+id/iconImageRelativeLayout">
                     <RatingBar
                         android:id="@+id/ratingBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ppv_margin"
-                        android:visibility="gone" />
-
+                        style="@style/customRatingBar"
+                        android:focusable="false"
+                        android:visibility="visible" />
                     <TextView
-                        android:id="@+id/viewRatingTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/textColor_margin"
-                        android:clickable="true"
-                        android:gravity="center"
                         android:text=""
-                        android:textColor="@color/pageTitleColor"
-                        android:textSize="@dimen/review_btn_textsize"
+                        android:textColor="@color/textColor"
+                        android:gravity="center"
+                        android:id="@+id/viewRatingTextView"
+                        android:clickable="true"
                         android:textStyle="bold"
-                        android:visibility="gone" />
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/textColor_margin"
+                        android:layout_centerVertical="true"
+                        android:textSize="@dimen/review_btn_textsize"
+                        />
+                </RelativeLayout>
+                <LinearLayout
+                    android:id="@+id/story_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rating"
+                    android:background="@color/transparent"
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
-                    <TextView
-                        android:id="@+id/videoStoryTextView"
+
+
+                    <RelativeLayout
+                        android:id="@+id/story"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/name_user_margin_bottom"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:layout_marginRight="@dimen/ppv_margin"
                         android:layout_marginTop="@dimen/terms_text_view_margin_right"
+                        >
 
-                        android:textColor="@color/detailsPageTextColor"
-                        android:textSize="@dimen/review_btn_textsize" />
+                        <TextView
+                            android:id="@+id/videoStoryTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/login_linear_margin_top"
+                            android:layout_toLeftOf="@+id/storyViewMoreButton"
+                            android:ellipsize="end"
+                            android:textColor="@color/videotextColor"
+                            android:textSize="@dimen/review_btn_textsize"
+                            />
+                        <Button
+                            android:id="@id/storyViewMoreButton"
+                            android:layout_alignParentRight="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View More"
+                            android:visibility="gone"
+                            android:textSize="@dimen/email_text_size"
+                            android:background="@color/transparent"
+                            android:textColor="@color/button_background"
+                            android:layout_centerVertical="true"/>
+                    </RelativeLayout>
+                   <!-- <com.release.cube.utils.ExpandableTextView
+                        android:id="@+id/videoStoryTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="7dp"
+
+                        android:textColor="@color/videotextColor"
+                        android:textSize="14dp" />-->
 
                     <TextView
                         android:id="@+id/videoCastCrewTitleTextView"
@@ -322,11 +367,13 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:layout_marginTop="@dimen/textColor_margin"
-                        android:textColor="@color/cast_crew_titleCololr"
+                        android:textColor="@color/castCrewTitleTextColor"
                         android:textSize="@dimen/forgot_text_size"
                         android:textStyle="bold" />
 
                 </LinearLayout>
+
+
 
 
                 <RelativeLayout
@@ -352,6 +399,8 @@
             </RelativeLayout>
 
 
+
+
             <RelativeLayout
                 android:id="@+id/seasonRelativeLayout"
                 android:layout_width="match_parent"
@@ -359,17 +408,17 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/detailsRelativeLayout"
-                android:padding="@dimen/itemTitle_padding">
+                android:padding="2dp">
 
 
                 <Spinner
                     android:id="@+id/seasonSpinner"
                     android:layout_width="@dimen/forgot_logo_width"
                     android:layout_height="@dimen/preorderbtn_height"
-                    android:layout_marginBottom="@dimen/ppv_margin"
-                    android:layout_marginLeft="@dimen/seasonSpinner_margin"
                     android:layout_marginRight="@dimen/ppv_margin"
+                    android:layout_marginBottom="@dimen/ppv_margin"
                     android:layout_marginTop="@dimen/ppv_margin"
+                    android:layout_marginLeft="@dimen/seasonSpinner_margin"
                     android:background="@drawable/spinner_theme"
                     android:overlapAnchor="false"
                     android:paddingRight="0dip"
@@ -381,17 +430,18 @@
 
                 <Button
                     android:id="@+id/btnMore"
-                    android:layout_width="@dimen/review_btn_width"
-                    android:layout_height="@dimen/review_btn_height"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/ppv_margin"
-                    android:background="@drawable/button_radious"
                     android:stateListAnimator="@null"
+                    android:padding="@dimen/payment_spinner_padding"
+                    android:layout_marginRight="@dimen/ppv_margin"
+                    android:background="@color/button_background"
                     android:textAllCaps="false"
-                    android:textColor="#FFF"
-                    android:textSize="@dimen/trailerbtn_text_size" />
+                    android:textColor="@color/buttonTextColor"
+                    android:textSize="@dimen/email_text_size" />
 
 
             </RelativeLayout>
@@ -407,15 +457,12 @@
                 />
         </RelativeLayout>
 
-
     </ScrollView>
-
     <fragment
         android:id="@+id/cast_mini_controller"
-        class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
-
+        android:layout_alignParentBottom="true"
+        class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"/>
 </RelativeLayout>
 

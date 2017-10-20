@@ -45,11 +45,11 @@
                         android:layout_alignParentTop="true"
                         android:layout_below="@+id/iconImageViewLayout"
                         android:layout_centerHorizontal="true"
-
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜáíóúñÑñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜãÃÐðÊËÈıÍÎÏÌÓßÔÒÒõÕµþÞÚÛÙýÝ "
                         android:drawablePadding="@dimen/Login_drawing_padding"
                         android:padding="@dimen/login_padding_bottom"
-                        android:textColor="@color/editTexColor"
-                        android:textColorHint="@color/hintTextColor"
+                        android:textColor="@color/editTextColor"
+                        android:textColorHint="@color/hint_color"
                         android:textSize="@dimen/edit_text_size" />
 
                     <EditText
@@ -68,8 +68,8 @@
                         android:imeOptions="actionNext"
                         android:inputType="textEmailAddress"
                         android:padding="@dimen/login_padding_bottom"
-                        android:textColor="@color/editTexColor"
-                        android:textColorHint="@color/hintTextColor"
+                        android:textColor="@color/editTextColor"
+                        android:textColorHint="@color/hint_color"
                         android:textSize="@dimen/edit_text_size" />
 
                     <Spinner
@@ -82,7 +82,6 @@
                         android:layout_marginTop="@dimen/profile_spinner_margin"
                         android:popupBackground="#ffffff"
                         android:spinnerMode="dropdown"
-                        android:visibility="gone"
                         android:theme="@style/ThemeOverlay.AppCompat.Light" />
 
 
@@ -95,11 +94,10 @@
                         android:layout_marginTop="@dimen/profile_spinner_margin"
                         android:popupBackground="#ffffff"
                         android:spinnerMode="dropdown"
-                        android:visibility="gone"
                         android:theme="@style/ThemeOverlay.AppCompat.Light" />
 
                     <EditText
-                        android:id="@+id/editConfirmPassword"
+                        android:id="@+id/editNewPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/countrySpinner"
@@ -114,32 +112,17 @@
                         android:visibility="gone" />
 
                     <EditText
-                        android:id="@+id/editOldPassword"
+                        android:id="@+id/editConfirmPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/emailAddressEditText"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/login_maring_top"
-                        android:drawablePadding="@dimen/Login_drawing_padding"
-                        android:inputType="textPassword"
-                        android:padding="@dimen/profile_new_passwd_editText_padding"
-                        android:textColor="@color/editTexColor"
-                        android:textColorHint="@color/hintTextColor"
-                        android:textSize="@dimen/edit_text_size"
-                        android:visibility="gone" />
-
-                    <EditText
-                        android:id="@+id/editNewPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/editOldPassword"
+                        android:layout_below="@+id/editNewPassword"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
                         android:drawablePadding="@dimen/Login_drawing_padding"
                         android:inputType="textPassword"
                         android:padding="@dimen/profile_new_passwd_editText_padding"
-                        android:textColor="@color/editTexColor"
-                        android:textColorHint="@color/hintTextColor"
+                        android:textColor="@color/editTextColor"
+                        android:textColorHint="@color/hint_color"
                         android:textSize="@dimen/changepas_edittest"
                         android:visibility="gone" />
 
@@ -147,11 +130,11 @@
                         android:id="@+id/update_profile"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/changepas_height"
-                        android:layout_below="@+id/editNewPasswordStr"
+                        android:layout_below="@+id/editConfirmPassword"
                         android:layout_marginTop="@dimen/login_maring_top"
                         android:background="@drawable/button_radious"
-                        android:textAllCaps="false"
                         android:stateListAnimator="@null"
+                        android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="@dimen/login_text_size"
 
@@ -161,11 +144,11 @@
                         android:id="@+id/changePasswordButton"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/changepas_height"
-                        android:layout_below="@+id/editNewPasswordStr"
+                        android:layout_below="@+id/editConfirmPassword"
                         android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
                         android:background="@drawable/button_radious"
-                        android:textAllCaps="false"
                         android:stateListAnimator="@null"
+                        android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="@dimen/login_text_size"
 
@@ -175,17 +158,15 @@
                         android:id="@+id/manage_devices"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/changepas_height"
-                        android:layout_below="@+id/editNewPasswordStr"
+                        android:layout_below="@+id/editConfirmPassword"
                         android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
                         android:background="@drawable/button_radious"
-                        android:textAllCaps="false"
                         android:stateListAnimator="@null"
+                        android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="@dimen/changepas_edittest"
 
                         />
-
-
 
 
                 </LinearLayout>
@@ -216,8 +197,7 @@
                             android:background="#ffffff"
                             android:padding="@dimen/pop_up_view_height"
                             android:scaleType="fitXY"
-                            android:src="@drawable/demo_image"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
 
                         <ImageView
                             android:id="@+id/edit"
@@ -229,10 +209,9 @@
                             android:layout_marginEnd="@dimen/profile_image_view_margin_end"
                             android:layout_marginRight="@dimen/forgotlayout_margin"
                             android:layout_marginTop="@dimen/profile_image_view_margin_top"
-                            android:visibility="visible"
                             android:padding="@dimen/pop_up_view_height"
                             android:scaleType="fitXY"
-                            android:src="@drawable/edit_final" />
+                            android:visibility="visible" />
                     </RelativeLayout>
 
                     <TextView
@@ -242,10 +221,11 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="@dimen/name_user_margin_bottom"
                         android:layout_marginTop="@dimen/forgotlayout_margin"
+                        android:text=""
                         android:textAllCaps="false"
-                        android:textColor="@color/userNameTextColor"
+                        android:textColor="@color/textColor"
                         android:textSize="@dimen/user_text_size"
-                        android:text=""/>
+                        android:textStyle="bold" />
 
 
                     <ImageView

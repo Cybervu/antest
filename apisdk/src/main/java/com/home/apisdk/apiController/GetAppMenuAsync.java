@@ -340,7 +340,8 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                                 footerMenu.setPermalink(fpermalink);
                                 furl = jsonFooterMenu.getJSONObject(i).optString("url").toString().trim();
                                 footerMenu.setUrl(furl);
-                                footerMenuArrayList.add(footerMenu);
+
+                                    footerMenuArrayList.add(footerMenu);
 
                             }
 
