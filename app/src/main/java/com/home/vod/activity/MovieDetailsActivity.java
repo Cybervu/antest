@@ -76,6 +76,7 @@ import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.BuildConfig;
 import com.home.vod.EpisodeListOptionMenuHandler;
+import com.home.vod.HandleRatingbar;
 import com.home.vod.LoginRegistrationOnContentClickHandler;
 import com.home.vod.MonetizationHandler;
 import com.home.vod.R;
@@ -316,6 +317,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     LanguageCustomAdapter languageCustomAdapter;
     AlertDialog alert;
     String isMemberSubscribed, loggedInStr;
+    HandleRatingbar handleRatingbar;
 
     // Added For The Voucher
 
@@ -654,6 +656,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         setContentView(R.layout.details_layout);
         playerModel = new Player();
+        handleRatingbar=new HandleRatingbar(this);
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(DELETE_ACTION, new IntentFilter("ITEM_STATUS"));
         // _video_details_output = new Video_Details_Output();
         languagePreference = LanguagePreference.getLanguagePreference(this);
@@ -5041,14 +5044,21 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 viewRatingTextView.setVisibility(View.GONE);
 
             } else {
-                ratingBar.setVisibility(View.VISIBLE);
+                //here handler is calling for visible and gone for sony app it should be gone thats why we create handler
+               /* ratingBar.setVisibility(View.VISIBLE);
+                ratingBar.setRating(Float.parseFloat(rating));*/
+               handleRatingbar.handleVisibleUnvisibleRating(ratingBar);
                 ratingBar.setRating(Float.parseFloat(rating));
             }
             if (rating.equalsIgnoreCase("")) {
                 ratingBar.setVisibility(View.GONE);
             } else {
                 Log.v("MUVI", "rating ==== " + rating);
-                viewRatingTextView.setVisibility(View.VISIBLE);
+                //here handler is calling for visible and gone for sony app it should be gone thats why we create handler
+
+                handleRatingbar.handleVisibleUnvisibleRatingTextView(viewRatingTextView);
+                //viewRatingTextView.setVisibility(View.VISIBLE);
+
 
                 if (preferenceManager.getLoginFeatureFromPref() == 1) {
 

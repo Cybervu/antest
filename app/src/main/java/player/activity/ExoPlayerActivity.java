@@ -81,6 +81,7 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
+import com.home.vod.HandleOfflineInExoplayer;
 import com.home.vod.R;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
@@ -203,6 +204,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     int played_length = 0;
     int playerStartPosition = 0;
     boolean censor_layout = true;
+    HandleOfflineInExoplayer handleOfflineInExoplayer;
 
 
     // ExoPlayerActivity.this is added for the new video log API;
@@ -448,6 +450,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         setContentView(R.layout.activity_final_exoplayer);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+        handleOfflineInExoplayer=new HandleOfflineInExoplayer(this);
 
         if (playerModel.getVideoUrl().contains(".mpd")) {
             isDrm = true;
@@ -547,7 +550,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         mediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
         download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
         if (content_types_id!=4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
-            download_layout.setVisibility(View.VISIBLE);
+            //download_layout.setVisibility(View.VISIBLE);
+            handleOfflineInExoplayer.handleVisibelUnvisibleDownload(download_layout);
         }
         /*if (content_types_id != 4) {
             download_layout.setVisibility(View.VISIBLE);

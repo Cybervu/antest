@@ -97,6 +97,7 @@ import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.apisdk.apiModel.ViewContentRatingInputModel;
 import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
+import com.home.vod.HandleRatingbar;
 import com.home.vod.LoginRegistrationOnContentClickHandler;
 import com.home.vod.R;
 import com.home.vod.BuildConfig;
@@ -230,6 +231,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
     // ProgressBarHandler pDialog;
     ProgressBarHandler pDialog;
+    HandleRatingbar handleRatingbar;
     ///****rating****///
 
 
@@ -1022,14 +1024,19 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 viewRatingTextView.setVisibility(View.GONE);
 
             } else {
-                ratingBar.setVisibility(View.VISIBLE);
+               // ratingBar.setVisibility(View.VISIBLE);
+                //here handler is calling for visible and gone for sony app it should be gone thats why we create handler
+                handleRatingbar.handleVisibleUnvisibleRating(ratingBar);
                 ratingBar.setRating(Float.parseFloat(rating));
             }
             if (rating.equalsIgnoreCase("")) {
                 ratingBar.setVisibility(View.GONE);
             } else {
                 LogUtil.showLog("BISHAL", "rating ==== " + rating);
-                viewRatingTextView.setVisibility(View.VISIBLE);
+                //here handler is calling for visible and gone for sony app it should be gone thats why we create handler
+
+                handleRatingbar.handleVisibleUnvisibleRatingTextView(viewRatingTextView);
+            //    viewRatingTextView.setVisibility(View.VISIBLE);
                 if (loggedInStr == null) {
                     viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, DEFAULT_ADD_A_REVIEW));
                     LogUtil.showLog("BISHAL", "rating 0 ==== " + viewContentRatingOutputModel.getShowrating());
@@ -1720,6 +1727,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         languagePreference = LanguagePreference.getLanguagePreference(ShowWithEpisodesActivity.this);
         playerModel = new Player();
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
+        handleRatingbar=new HandleRatingbar(this);
         //playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
         isLogin = preferenceManager.getLoginFeatureFromPref();
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -127,11 +127,46 @@
                     android:layout_centerHorizontal="true"
                     android:clickable="true"
                     android:maxLines="3"
-                    android:singleLine="false"
-                    android:text="terms"
+                    android:text="terms "
                     android:textColor="@color/button_background"
                     android:textSize="@dimen/applybtn_text_size" />
             </LinearLayout>
+           <!-- <RelativeLayout
+                android:id="@+id/ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editConfirmPasswordStr"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingBottom="5dp">
+
+                <TextView
+                    android:id="@+id/termsTextView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="by clicking register , i agree to "
+                    android:textColor="@color/alreadyMemberTextColor"
+                    android:textSize="13dp"
+                    />
+
+                <TextView
+                    android:id="@+id/termsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/termsTextView1"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:maxLines="3"
+                    android:singleLine="false"
+                    android:text="terms"
+                    android:textColor="@color/termsTextColor"
+                    android:textSize="16dp" />
+            </RelativeLayout>-->
 
             <Button
                 android:id="@+id/registerButton"

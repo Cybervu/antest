@@ -23,6 +23,6 @@
         />
     <stroke
         android:width="3dp"
-        android:color="@color/languagePopupColor"
+        android:color="@color/resumePopupColor"
         />
 </shape>

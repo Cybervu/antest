@@ -1245,6 +1245,16 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     @Override
     public void onLogoutPostExecuteCompleted(int code, String status, String message) {
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+
+            }
+        } catch (IllegalArgumentException ex) {
+            Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+
+        }
         if (status == null) {
             Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
@@ -1258,7 +1268,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 preferenceManager.clearLoginPref();
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(UniversalErrorMessage);
+                dlgAlert.setMessage(message);
                 dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
                 dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
@@ -5162,10 +5172,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //    }
 
     public void LogOut() {
+        String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
         LogUtil.showLog("MUVI3", "logout Called");
         LogoutInput logoutInput = new LogoutInput();
         logoutInput.setAuthToken(authTokenStr);
-        logoutInput.setLogin_history_id(logoutInput.getLogin_history_id());
+        logoutInput.setLogin_history_id(loginHistoryIdStr);
         logoutInput.setLang_code(logoutInput.getLang_code());
         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, this, this);
         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);

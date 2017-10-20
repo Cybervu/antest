@@ -4,6 +4,7 @@
     <color name="teal_500">#F44336</color>
     <color name="disableTextColor">#50757575</color>
     <color name="OsTextColor">#757575</color>
+    <color name="resumepopupcolor">#fff</color>
     <color name="colorPrimary">#87005F</color>
     <color name="navlogobackgroundcolor">#1e292d</color>
     <color name="castCrewTitleTextColor">#C81E6E </color>
