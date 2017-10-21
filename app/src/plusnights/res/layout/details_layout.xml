@@ -345,7 +345,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/iconImageRelativeLayout"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <RatingBar
                     android:id="@+id/ratingBar"
