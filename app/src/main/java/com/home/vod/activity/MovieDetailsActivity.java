@@ -835,6 +835,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 playerModel.setCensorRating(censorRatingStr);
                 playerModel.setContentTypesId(contentTypesId);
                 playerModel.setPosterImageId(posterImageId);
+                playerModel.setCastCrew(castStr);
 
                 Log.v("BKS", "stramid=" + playerModel.getStreamUniqueId());
                 Log.v("BKS", "movieID=" + playerModel.getMovieUniqueId());

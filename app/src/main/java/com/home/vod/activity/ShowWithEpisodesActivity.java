@@ -421,7 +421,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             isConverted = contentDetailsOutput.getIsConverted();
             contentTypesId = contentDetailsOutput.getContentTypesId();
             isAPV = contentDetailsOutput.getIsApv();
-            castStr = contentDetailsOutput.getCastStr();
+
             try {
                 isFreeContent = Integer.parseInt(contentDetailsOutput.getIsFreeContent());
             } catch (NumberFormatException e) {
@@ -2463,6 +2463,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         playerModel.setCensorRating(censorRatingStr);
         playerModel.setContentTypesId(contentTypesId);
         playerModel.setPosterImageId(posterImageId);
+        playerModel.setCastCrew(castStr);
 
         LogUtil.showLog("MUVI", "content typesid = " + contentTypesId);
         String loggedInStr = preferenceManager.getLoginStatusFromPref();

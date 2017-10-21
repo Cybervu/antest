@@ -856,7 +856,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             story.setVisibility(View.GONE);
         }
 
-        if (playerModel.isCastCrew() == true)
+        if (playerModel.isCastCrew())
 
         {
             videoCastCrewTitleTextView.setVisibility(View.VISIBLE);

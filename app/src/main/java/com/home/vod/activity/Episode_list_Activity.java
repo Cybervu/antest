@@ -1564,6 +1564,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         playerModel.setVideoDuration(item.getEpisodeDuration());
         playerModel.setVideoReleaseDate("");
         playerModel.setCensorRating(getIntent().getStringExtra(CENSOR_RATING_INTENT_KEY));
+        playerModel.setCastCrew(getIntent().getBooleanExtra(CAST_INTENT_KEY, false));
 
 
         if (!getIntent().getStringExtra(SEASON_INTENT_KEY).equals("")) {
