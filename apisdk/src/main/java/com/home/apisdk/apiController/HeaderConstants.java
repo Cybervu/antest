@@ -89,6 +89,11 @@ public class HeaderConstants {
      */
     public static final String MESSAGE = "message";
     /**
+     * Constant for Image Header used in API Call
+     */
+    public static final String IMAGE = "image";
+
+    /**
      * Constant for File Path Header used in API Call
      */
     public static final String FILE_PATH = "filepath";

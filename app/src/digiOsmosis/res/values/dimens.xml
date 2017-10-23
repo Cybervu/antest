@@ -22,7 +22,7 @@
     <dimen name="select_planMark_margin">135dp</dimen>
     <dimen name="planPurchaseMonthTextView_padding">18dp</dimen>
     <dimen name="itemTitle_padding">2dp</dimen>
-    <dimen name="textColor_margin">8dp</dimen>
+    <dimen name="textColor_margin">15dp</dimen>
     <dimen name="select_planMark_margin2">95dp</dimen>
     <dimen name="arrowIv_margin">108dp</dimen>
     <dimen name="demoListView_padding">14dp</dimen>

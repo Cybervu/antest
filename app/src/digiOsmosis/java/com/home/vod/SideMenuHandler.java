@@ -1,12 +1,24 @@
 package com.home.vod;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.v7.graphics.Palette;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.home.vod.activity.DigiOsmosisProfileActivity;
 import com.home.vod.activity.MainActivity;
+import com.home.vod.activity.ProfileActivity;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -30,7 +42,7 @@ import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 public class SideMenuHandler {
 
 
-    Activity activity;
+    Activity context;
     MainActivity mainActivity;
     boolean value = true;
     boolean login_value = false;
@@ -40,8 +52,34 @@ public class SideMenuHandler {
     String login_menu,register_menu,profile_menu,mydownload_menu,purchase_menu,logout_menu,login_menuPermalink,register_menuPermalink,profile_menuPermalink,mydownload_menuPermalink,purchase_menuPermalink,logout_menuPermalink;
 
 
-    public SideMenuHandler(Activity activity) {
-        this.activity = activity;
+    TextView nameText;
+    ImageView editPen,profile_image,bannerImageView;
+
+    public SideMenuHandler(Activity context) {
+        this.context = context;
+    }
+
+    public SideMenuHandler(Activity activity, PreferenceManager preferenceManager) {
+        this.context = activity;
+
+        editPen = (ImageView) context.findViewById(R.id.edit_profile);
+        nameText = (TextView) context.findViewById(R.id.edit_name);
+        profile_image = (ImageView) context.findViewById(R.id.logo);
+        bannerImageView = (ImageView) context.findViewById(R.id.bannerImageView);
+       Log.v("BKS","profile=="+preferenceManager.getDispNameFromPref());
+        nameText.setText(preferenceManager.getDispNameFromPref());
+
+
+        editPen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent navIntent = new ProfileHandler(context).handleClickOnEditProfile();
+                context.startActivity(navIntent);
+
+
+            }
+        });
 
     }
 //    login_menu= (languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
@@ -107,6 +145,49 @@ public class SideMenuHandler {
 
 
 
+        if (loggedInStr!= null) {
+            Log.v("ANU","loggedInStr===="+loggedInStr);
+            String PIMG = preferenceManager.getLoginProfImgFromPref();
+            Log.v("ANU","getLoginProfImgFromPref===="+PIMG);
+
+            if (preferenceManager.getLoginProfImgFromPref() != null && !(preferenceManager.getLoginProfImgFromPref().equalsIgnoreCase("https://d1yjifjuhwl7lc.cloudfront.net/public/no-user.png"))) {
+                Log.v("ANU","sidemenu  if not null====");
+
+                Picasso.with(context)
+                        .load(preferenceManager.getLoginProfImgFromPref())
+                        .into(profile_image);
+
+            }
+            else {
+                Log.v("ANU","sidemenu else====");
+
+                Picasso.with(context)
+                        .load(R.drawable.profile)
+                        .into(profile_image);
+
+            }
+
+
+            editPen.setVisibility(View.VISIBLE);
+            nameText.setVisibility(View.VISIBLE);
+        }
+
+        else {
+
+
+            Picasso.with(context)
+                    .load(R.drawable.profile)
+                    .into(profile_image);
+
+
+            editPen.setVisibility(View.INVISIBLE);
+            nameText.setVisibility(View.INVISIBLE);
+        }
+
+
+
+
+
     }
 
     public void addLogoutMenu( LanguagePreference languagePreference, ArrayList<NavDrawerItem> menuList, PreferenceManager preferenceManager,int position) {
@@ -119,6 +200,13 @@ public class SideMenuHandler {
         }
 
 
+    }
+
+
+    public void sendBroadCast()
+    {
+        Intent Sintent = new Intent("LOGIN_SUCCESS");
+        context.sendBroadcast(Sintent);
     }
 
 }

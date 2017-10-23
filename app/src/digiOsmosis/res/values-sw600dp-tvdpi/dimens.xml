@@ -9,6 +9,7 @@
     <dimen name="imgwidth">300dp</dimen>
     <dimen name="toolbarheight">70dp</dimen>
     <dimen name="navwide">400dp</dimen>
+    <dimen name="nav_drawer_width">300dp</dimen>
 
     <dimen name="trailer_btn_text_size">14sp</dimen>
     <dimen name="singleimgwidth">170dp</dimen>
@@ -159,4 +160,14 @@
     <dimen name="logo_width">100dp</dimen>
 
     <dimen name="plainrow_text_size">20sp</dimen>
+
+    <!--//**********profile picture*************//-->
+
+    <dimen name="profile_image_height">120dp</dimen>
+    <dimen name="profile_image_width">120dp</dimen>
+    <dimen name="profile_margin_right">1dp</dimen>
+    <dimen name="profile_padding_top">80dp</dimen>
+    <dimen name="layout2_padding_top">80dp</dimen>
+
+
 </resources>
