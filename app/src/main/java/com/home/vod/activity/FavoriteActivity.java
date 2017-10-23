@@ -248,7 +248,6 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
         gridView = (GridView) findViewById(R.id.imagesGridView);
         footerView = (RelativeLayout) findViewById(R.id.loadingPanel);
-        gridView.setNumColumns(1);
         mLayoutManager = new LinearLayoutManager(FavoriteActivity.this, LinearLayoutManager.VERTICAL, false);
 
         noInternetConnectionLayout = (RelativeLayout) findViewById(R.id.noInternet);
@@ -759,7 +758,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
                 layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
                 gridView.setLayoutParams(layoutParams);
-
+/*
                 if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     mLayoutManager = new GridLayoutManager(FavoriteActivity.this, 1);
 
@@ -774,9 +773,9 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 } else {
                     mLayoutManager = new GridLayoutManager(FavoriteActivity.this, 1);
 
-                }
+                }*/
 
-               /* if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+                if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     if (videoWidth > videoHeight) {
                         gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     } else {
@@ -802,11 +801,11 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                         gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 5);
                     }
 
-                }*/
+                }
 
-                customGridAdapter = new FavoriteAdapter(FavoriteActivity.this, R.layout.favorite_listing, itemData);
-                gridView.setAdapter(customGridAdapter);
-              /*  if (videoWidth > videoHeight) {
+             /*   customGridAdapter = new FavoriteAdapter(FavoriteActivity.this, R.layout.favorite_listing, itemData);
+                gridView.setAdapter(customGridAdapter);*/
+                if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new FavoriteAdapter(FavoriteActivity.this, R.layout.nexus_videos_grid_layout_land, itemData);
                     } else {
@@ -823,7 +822,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                     }
                     // customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
                     gridView.setAdapter(customGridAdapter);
-                }*/
+                }
 
               /*  if (videoWidth > videoHeight) {
                     customGridAdapter = new VideoFilterAdapter(FavoriteActivity.this, R.layout.videos_280_grid_layout, itemData);
@@ -841,10 +840,10 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
 
 
-                customGridAdapter = new FavoriteAdapter(FavoriteActivity.this, R.layout.favorite_listing, itemData);
+               /* customGridAdapter = new FavoriteAdapter(FavoriteActivity.this, R.layout.favorite_listing, itemData);
                 gridView.setAdapter(customGridAdapter);
-
-               /* if (videoWidth > videoHeight) {
+*/
+                if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new FavoriteAdapter(FavoriteActivity.this, R.layout.nexus_videos_grid_layout_land, itemData);
                     } else {
@@ -861,7 +860,6 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                     }
                     gridView.setAdapter(customGridAdapter);
                 }
-*/
                 if (mBundleRecyclerViewState != null) {
                     gridView.onRestoreInstanceState(listState);
                 }
