@@ -203,7 +203,7 @@ public class Util {
         return (dateLater.getTime() - dateEarly.getTime()) / (24 * 60 * 60 * 1000);
     }
 
-    //Email Validation for login
+    //Email Validation for activity_login
     public static boolean isValidMail(String email2) {
         boolean check;
         Pattern p;
@@ -574,7 +574,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED, "sort_last_uploaded", json);
 
         setTranslationLanguageToPref(languagePreference, LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN, "language_popup_login", json);
-        setTranslationLanguageToPref(languagePreference, LOGIN, DEFAULT_LOGIN, "login", json);
+        setTranslationLanguageToPref(languagePreference, LOGIN, DEFAULT_LOGIN, "activity_login", json);
         setTranslationLanguageToPref(languagePreference, LOGOUT, DEFAULT_LOGOUT, "logout", json);
         setTranslationLanguageToPref(languagePreference, LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS, "logout_success", json);
         setTranslationLanguageToPref(languagePreference, MY_FAVOURITE, DEFAULT_MY_FAVOURITE, "my_favourite", json);

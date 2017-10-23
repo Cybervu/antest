@@ -87,6 +87,7 @@ import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.BuildConfig;
 import com.home.vod.LoginHandler;
 import com.home.vod.MonetizationHandler;
+
 import com.home.vod.R;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.network.NetworkStatus;
@@ -1841,7 +1842,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 boolean isValidEmail = Util.isValidMail(regEmailStr);
                 if (isValidEmail == true) {
 
-                    LogUtil.showLog("MUVI", "login valid");
+                    LogUtil.showLog("MUVI", "activity_login valid");
                     Login_input login_input = new Login_input();
                     login_input.setAuthToken(authTokenStr);
                     login_input.setEmail(regEmailStr);
@@ -4511,7 +4512,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             progressDialog1 = null;
         }
         if (code == 200) {
-            // Allow the user to login
+            // Allow the user to activity_login
             if (logout_alert.isShowing()) {
                 logout_alert.dismiss();
             }
@@ -4574,7 +4575,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                progressDialog1 = null;
 //            }
 //            if (statusCode == 200) {
-//                // Allow the user to login
+//                // Allow the user to activity_login
 //                if (logout_alert.isShowing()) {
 //                    logout_alert.dismiss();
 //                }

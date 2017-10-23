@@ -6,9 +6,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.facebook.CallbackManager;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
@@ -18,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
-import static xdroid.core.Global.getResources;
+
 
 /**
  * Created by BISHAL on 21-08-2017.
@@ -38,23 +40,23 @@ public class RegisterUIHandler {
     }
     public void setCountryList(PreferenceManager preferenceManager){
 
-        country_List = Arrays.asList (getResources().getStringArray(R.array.country));
-        country_Code_List = Arrays.asList(getResources().getStringArray(R.array.countrycode));
-        language_List = Arrays.asList(getResources().getStringArray(R.array.languages));
-        language_Code_List = Arrays.asList(getResources().getStringArray(R.array.languagesCode));
+        country_List = Arrays.asList (context.getResources().getStringArray(R.array.country));
+        country_Code_List = Arrays.asList(context.getResources().getStringArray(R.array.countrycode));
+        language_List = Arrays.asList(context.getResources().getStringArray(R.array.languages));
+        language_Code_List = Arrays.asList(context.getResources().getStringArray(R.array.languagesCode));
 
 
         Language_arrayAdapter = new ArrayAdapter<String>(context, R.layout.country_language_spinner, language_List) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
-                FontUtls.loadFont(context,getResources().getString(R.string.light_fonts),(TextView) v);
+                FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),(TextView) v);
 
                 return v;
             }
 
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View v = super.getDropDownView(position, convertView, parent);
-                FontUtls.loadFont(context,getResources().getString(R.string.light_fonts),(TextView) v);
+                FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),(TextView) v);
 
 
                 return v;
@@ -67,14 +69,14 @@ public class RegisterUIHandler {
         Country_arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.country_language_spinner, country_List) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
-                FontUtls.loadFont(context,getResources().getString(R.string.light_fonts),(TextView) v);
+                FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),(TextView) v);
                 return v;
             }
 
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View v = super.getDropDownView(position, convertView, parent);
 
-                FontUtls.loadFont(context,getResources().getString(R.string.light_fonts),(TextView) v);
+                FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),(TextView) v);
 
                 return v;
             }
@@ -140,6 +142,13 @@ public class RegisterUIHandler {
 
 
     public void setTermsTextView(LanguagePreference languagePreference) {
+    }
+    public void callFblogin(final CallbackManager callbackManager, Button loginButton, LanguagePreference languagePreference){
+
+    }
+
+    public void callSignin(LanguagePreference languagePreference){
+
     }
 
 }

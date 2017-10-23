@@ -192,14 +192,14 @@ public class LanguagePreference {
     public static final String DEFAULT_YOUR_DEVICE = "Your Devices";
 
     public static String DEFAULT_VIDEO_ISSUE = "There's a problem with a video or Internet connection";
-    public static final String DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE = "Logout process has been successfully completed. Now you are authorized to login.";
+    public static final String DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE = "Logout process has been successfully completed. Now you are authorized to activity_login.";
     public static final String DEFAULT_LOGIN_STATUS_MESSAGE = "You are no longer logged in . Please log in again.";
 
     public static final String DEFAULT_TRANSACTION_STATUS_ACTIVE = "Transcation status active";
     public static final String DEFAULT_IS_ONE_STEP_REGISTRATION = "0";
     public static String DEFAULT_FREE_FOR_COUPON = "You can watch the video at free of cost.";
     //ADD LATER FOR PURCHASE AND TRANSACTION DETAILS
-    public static final String DEFAULT_NEED_LOGIN_TO_REVIEW = "You need to login to add your review.";
+    public static final String DEFAULT_NEED_LOGIN_TO_REVIEW = "You need to activity_login to add your review.";
     public static final String NEED_LOGIN_TO_REVIEW = "NEED_LOGIN_TO_REVIEW";
     public static final String DEFAULT_ENTER_REVIEW_HERE = "Enter your Review here...max 50 characters";
     public static final String ENTER_REVIEW_HERE = "ENTER_REVIEW_HERE";
@@ -259,7 +259,7 @@ public class LanguagePreference {
 
     public static String DEFAULT_TERMS = "terms";
     public static String DEFAULT_AGREE_TERMS = "By Clicking on Register,I agree to";
-    public static final String DEFAULT_TO_LOGIN = "to login.";
+    public static final String DEFAULT_TO_LOGIN = "to activity_login.";
     public static final String DEFAULT_CLICK_HERE = "Click here";
     public static final String DEFAULT_IS_MYLIBRARY = "0";
     public static final String DEFAULT_IS_RESTRICT_DEVICE = "0";

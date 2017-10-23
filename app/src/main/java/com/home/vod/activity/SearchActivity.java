@@ -1304,7 +1304,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
     }*/
 /*
-    //Verify the login
+    //Verify the activity_login
     private class AsynLogInDetails extends AsyncTask<Void, Void, Void> {
         ProgressDialog pDialog;
         int statusCode;

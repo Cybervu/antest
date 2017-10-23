@@ -2463,7 +2463,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
 //                        Util.setLanguageSharedPrefernce(ViewMoreActivity.this,Util.SORT_LAST_UPLOADED,json.optString("sort_last_uploaded").trim());
 //
 //                        Util.setLanguageSharedPrefernce(ViewMoreActivity.this,Util.LANGUAGE_POPUP_LOGIN,json.optString("language_popup_login").trim());
-//                        Util.setLanguageSharedPrefernce(ViewMoreActivity.this,Util.LOGIN,json.optString("login").trim());
+//                        Util.setLanguageSharedPrefernce(ViewMoreActivity.this,Util.LOGIN,json.optString("activity_login").trim());
 //                        Util.setLanguageSharedPrefernce(ViewMoreActivity.this,Util.LOGOUT,json.optString("logout").trim());
 //                        Util.setLanguageSharedPrefernce(ViewMoreActivity.this,Util.LOGOUT_SUCCESS,json.optString("logout_success").trim());
 //                        Util.setLanguageSharedPrefernce(ViewMoreActivity.this,Util.MY_FAVOURITE,json.optString("my_favourite").trim());

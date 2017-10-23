@@ -2543,7 +2543,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         ProgressBarHandler pDialog;
         String responseStr;
         int statusCode;
-        // This is added because of change in simultaneous login feature
+        // This is added because of change in simultaneous activity_login feature
         String message;
         boolean play_video = true;
 
@@ -2613,7 +2613,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                     SubtitleJosnArray = myJson.optJSONArray("subTitle");
                     ResolutionJosnArray = myJson.optJSONArray("videoDetails");
                     statusCode = Integer.parseInt(myJson.optString("code"));
-                    // This is added because of change in simultaneous login feature
+                    // This is added because of change in simultaneous activity_login feature
                     message = myJson.optString("msg");
 
                     LogUtil.showLog("BIBHU", "video stream msg" + message);
@@ -2694,7 +2694,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                                 }
                             }
                         }
-                        // This is added because of change in simultaneous login feature
+                        // This is added because of change in simultaneous activity_login feature
                         if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, Util.DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
 
                             LogUtil.showLog("BIBHU", "streaming_restriction============" + myJson.optString("streaming_restriction").toString().trim());
@@ -2741,7 +2741,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         protected void onPostExecute(Void result) {
 
-            // This is added because of change in simultaneous login feature //
+            // This is added because of change in simultaneous activity_login feature //
 
             if (!play_video) {
 
@@ -4985,7 +4985,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 httppost.addHeader("user_id", loggedInIdStr);
                 LogUtil.showLog("ANU","SHOWTOAST h......isepisode"+isEpisode);
                 LogUtil.showLog("ANU","Value......."+movieUniqueId);
-                LogUtil.showLog("ANU","login data"+loggedInIdStr.trim());
+                LogUtil.showLog("ANU","activity_login data"+loggedInIdStr.trim());
 
 
                 try {

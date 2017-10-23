@@ -236,6 +236,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         finish();
         overridePendingTransition(0, 0);
         super.onBackPressed();
+
     }
 
     public void ShowDialog(String Title, String msg)
