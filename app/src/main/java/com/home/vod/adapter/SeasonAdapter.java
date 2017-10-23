@@ -14,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.home.vod.R;
+import com.home.vod.activity.ProgrammeActivity;
 import com.home.vod.model.SeasonModel;
+import com.home.vod.util.FontUtls;
 
 import java.util.ArrayList;
 
@@ -33,6 +35,7 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
             super(view);
 
             title = (TextView) view.findViewById(R.id.seasonTitle);
+            FontUtls.loadFont(mContext, mContext.getResources().getString(R.string.regular_fonts), title);
             thumbnail = (ImageView) view.findViewById(R.id.seasonImageView);
         }
     }

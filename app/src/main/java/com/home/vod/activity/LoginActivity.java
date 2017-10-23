@@ -17,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,11 +117,13 @@ import player.activity.MyLibraryPlayer;
 import player.activity.Player;
 
 import static com.home.vod.preferences.LanguagePreference.ANDROID_VERSION;
+import static com.home.vod.preferences.LanguagePreference.BTN_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEAFULT_CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ANDROID_VERSION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
@@ -169,6 +172,8 @@ import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_ARRAY;
+import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 
 public class LoginActivity extends AppCompatActivity implements LoginAsynTask.LoinDetailsListener, GoogleApiClient.OnConnectionFailedListener,
@@ -311,6 +316,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             } else {
                                 if (PlanId.equals("1") && login_output.getIsSubscribed().equals("0")) {
                                     Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                    intent.putExtra("PlayerModel", playerModel);
+                                    intent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                                    intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                                    intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                    intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                    intent.putExtra("Index",getIntent().getStringExtra("Index"));
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     startActivity(intent);
                                     finish();
@@ -503,6 +514,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 }
                             } else if (PlanId.equals("1") && validateUserOutput.getIsMemberSubscribed().equals("0")) {
                                 Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                intent.putExtra("PlayerModel", playerModel);
+                                intent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                                intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                                intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                intent.putExtra("Index",getIntent().getStringExtra("Index"));
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(intent);
                                 finish();
@@ -537,6 +554,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 }
             } else if (PlanId.equals("1") && validateUserOutput.getIsMemberSubscribed().equals("0")) {
                 Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                intent.putExtra("PlayerModel", playerModel);
+                intent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                intent.putExtra("Index",getIntent().getStringExtra("Index"));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
                 finish();
@@ -814,9 +837,15 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
-                                playVideoIntent.putExtra("PlayerModel", playerModel);
                                 playVideoIntent.putExtra("PLAY_LIST", questions);
                                 playVideoIntent.putExtra("TAG", contentPosition);
+                                playVideoIntent.putExtra("PlayerModel", playerModel);
+                                playVideoIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                                playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                                playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                                playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
+
                                 startActivity(playVideoIntent);
                                 finish();
                             }
@@ -830,9 +859,14 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
-                    playVideoIntent.putExtra("PlayerModel", playerModel);
                     playVideoIntent.putExtra("PLAY_LIST", questions);
                     playVideoIntent.putExtra("TAG", contentPosition);
+                    playVideoIntent.putExtra("PlayerModel", playerModel);
+                    playVideoIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                    playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                    playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                    playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                    playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                     startActivity(playVideoIntent);
                     onBackPressed();
 
@@ -1105,8 +1139,10 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
-        playerModel = new Player();
-        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
+        playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+        if (playerModel != null)
+
+            playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
 
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
@@ -1180,13 +1216,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         signUpTextView = (TextView) findViewById(R.id.signUpTextView);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), signUpTextView);
 
-        signUpTextView.setText(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE));
-
-
+        signUpTextView.setText(Html.fromHtml(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE)));
         loginButton = (Button) findViewById(R.id.loginButton);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), loginButton);
 
-        loginButton.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
+        loginButton.setText(languagePreference.getTextofLanguage(BTN_LOGIN, DEFAULT_BTN_LOGIN));
 
 
        /* Toolbar mActionBarToolbar= (Toolbar) findViewById(R.id.toolbar);
@@ -1240,6 +1274,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 detailsIntent.putExtra("PLAY_LIST", questions);
                 detailsIntent.putExtra("TAG", contentPosition);
                 detailsIntent.putExtra("PlayerModel", playerModel);
+
+                detailsIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                detailsIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                detailsIntent.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                detailsIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                detailsIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                 startActivity(detailsIntent);
                 onBackPressed();
             }
@@ -1252,7 +1292,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         btnLogin= (LinearLayout) findViewById(R.id.btnLogin);*/
         TextView fbLoginTextView = (TextView) findViewById(R.id.fbLoginTextView);
+        TextView googleTextView = (TextView) findViewById(R.id.googleTextView);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), fbLoginTextView);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), googleTextView);
 
      /*   btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3389,6 +3431,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 playVideoIntent.putExtra("PLAY_LIST", questions);
                 playVideoIntent.putExtra("TAG", contentPosition);
                 playVideoIntent.putExtra("PlayerModel", playerModel);
+                playVideoIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
+
                 startActivity(playVideoIntent);
                 removeFocusFromViews();
                 finish();
@@ -4528,6 +4576,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 showPaymentIntent.putExtra("isPPV", Util.dataModel.getIsPPV());
                 showPaymentIntent.putExtra("isAPV", Util.dataModel.getIsAPV());
                 showPaymentIntent.putExtra("PlayerModel", playerModel);
+                showPaymentIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK")  );
+                showPaymentIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON")  );
+                showPaymentIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                showPaymentIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                showPaymentIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                 if (Util.dataModel.getIsAPV() == 1) {
                     showPaymentIntent.putExtra("isConverted", 0);
                 } else {
@@ -4646,6 +4699,13 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 } else {
                     if (PlanId.equals("1") && UniversalIsSubscribed.equals("0")) {
                         Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                        intent.putExtra("PlayerModel", playerModel);
+                        intent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                        intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                        intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                        intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                        intent.putExtra("Index",getIntent().getStringExtra("Index"));
+
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
                         finish();
@@ -5329,6 +5389,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         } else {
                             if (PlanId.equals("1") && preferenceManager.getIsSubscribedFromPref().equals("0")) {
                                 Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                intent.putExtra("PlayerModel", playerModel);
+                                intent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                                intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                                intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                intent.putExtra("Index",getIntent().getStringExtra("Index"));
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(intent);
                                /* if (RegisterActivity.fa != null) {

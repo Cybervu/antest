@@ -18,8 +18,8 @@
 
 
         <RelativeLayout
-            android:layout_width="@dimen/season_image_width"
-            android:layout_height="@dimen/season_image_height"
+            android:layout_width="@dimen/season_card_width"
+            android:layout_height="@dimen/season_card_height"
             android:gravity="center">
 
             <ImageView

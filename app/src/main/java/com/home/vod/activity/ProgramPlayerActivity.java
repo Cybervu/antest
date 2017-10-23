@@ -101,6 +101,7 @@ import com.home.vod.model.SeasonModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.intertrust.wasabi.ErrorCodeException;
@@ -179,6 +180,7 @@ import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MORE_VIDEOS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
@@ -186,6 +188,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.MORE_VIDEOS;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
@@ -1270,6 +1273,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         RelativeLayout seasonScroller = (RelativeLayout) findViewById(R.id.seasonScroller);
 
         season_change_textview = (TextView) findViewById(R.id.season_change_textview);
+        FontUtls.loadFont(ProgramPlayerActivity.this, getResources().getString(R.string.regular_fonts), season_change_textview);
         if (totalSeason == 1) {
             seasonScroller.setVisibility(View.GONE);
         }
@@ -1565,26 +1569,30 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
         videoTitle = (TextView) findViewById(R.id.videoTitle);
-        Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts_regular));
+        moreVideoTitleTextView = (TextView) findViewById(R.id.moreVideoTitleTextView);
+        moreVideoTitleTextView.setText(languagePreference.getTextofLanguage(MORE_VIDEOS,DEFAULT_MORE_VIDEOS));
+
+        Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         videoTitle.setTypeface(videoTitleface);
+        moreVideoTitleTextView.setTypeface(videoTitleface);
         GenreTextView = (TextView) findViewById(R.id.GenreTextView);
-        Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         GenreTextView.setTypeface(GenreTextViewface);
         descriptionTitleTextVIew = (TextView) findViewById(R.id.descriptionTitleTextVIew);
-        Typeface descriptionTitleTextVIewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface descriptionTitleTextVIewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         GenreTextView.setTypeface(descriptionTitleTextVIewface);
         clocktime = (TextView) findViewById(R.id.clocktime);
         Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
         clocktime.setTypeface(videoDurationTextViewface);
         durationTextView = (TextView) findViewById(R.id.durationTextView);
-        Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         durationTextView.setTypeface(videoCensorRatingTextViewface);
         durationTitleTextView = (TextView) findViewById(R.id.durationTitleTextView);
-        Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         durationTitleTextView.setTypeface(videoCensorRatingTextView1face);
 
         story = (TextView) findViewById(R.id.story);
-        Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
+        Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
         story.setTypeface(storyTypeface);
 
         // ProgramPlayerActivity.this is changed for the new requirement of Offline Viewing.

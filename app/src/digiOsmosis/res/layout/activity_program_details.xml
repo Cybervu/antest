@@ -59,9 +59,9 @@
             <TextView
                 android:id="@+id/viewLine"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="3dp"
                 android:layout_below="@+id/bannerImageRelativeLayout"
-                android:background="@color/textColor" />
+                android:background="@color/exercise_imagecolor" />
 
 
 
@@ -76,7 +76,7 @@
 
                 <View
                     android:id="@+id/view"
-                    android:layout_width="3dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_alignBottom="@+id/titleTextView"
                     android:layout_alignTop="@+id/titleTextView"
@@ -89,8 +89,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/marginleft10dp"
+                    android:text=""
                     android:layout_toRightOf="@+id/view"
-                    android:textColor="@color/nav_lineColor"
+                    android:textColor="@color/videotextColor"
                     android:textSize="@dimen/story_title_text_size"
                     android:textStyle="bold" />
 
@@ -115,9 +116,9 @@
                 android:layout_below="@+id/titleRelativeLayout"
                 android:layout_centerInParent="true"
                 android:background="@drawable/my_button"
-                android:padding="6dp"
+                android:padding="@dimen/button_padding"
                 android:stateListAnimator="@null"
-                android:text="Start Work Out"
+                android:text=""
                 android:textAllCaps="false"
                 android:textColor="@color/buttonTextColor"
                 android:textSize="@dimen/program_button_text_size"
@@ -133,7 +134,7 @@
                 android:background="@drawable/my_button"
                 android:padding="6dp"
                 android:stateListAnimator="@null"
-                android:text="Diet Plan"
+                android:text=""
                 android:textAllCaps="false"
                 android:textColor="@color/buttonTextColor"
                 android:textSize="@dimen/program_button_text_size"
@@ -156,7 +157,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/nav_lineColor"
-                    android:textSize="@dimen/story_title_text_size"
+                    android:textSize="@dimen/duration_title_text"
                     android:textStyle="bold" />
 
                 <TextView
@@ -179,14 +180,26 @@
                 android:layout_below="@+id/durationLinearLayout"
                 android:padding="10dp">
 
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="5dp"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/tutorialTextView"
+                    android:layout_alignTop="@+id/tutorialTextView"
+                    android:layout_marginLeft="8dp"
+
+                    android:background="@color/colorPrimary"
+                    android:paddingLeft="10dp" />
+
 
                 <TextView
                     android:id="@+id/tutorialTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/marginleft10dp"
-                    android:padding="10dp"
                     android:textSize="@dimen/story_title_text_size"
+                    android:text=""
+                    android:layout_toRightOf="@+id/view1"
                     android:textColor="@color/videotextColor"
                     android:textStyle="bold" />
 
@@ -194,7 +207,7 @@
                     android:id="@+id/viewAllTextView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View More>>"
+                    android:text=""
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"

@@ -13,7 +13,7 @@
         />-->
 
     <solid
-        android:color="@color/button_background"/>
+        android:color="@color/transparent"/>
 
     <padding
         android:left="0dp"
@@ -26,6 +26,6 @@
         android:width="50dp" />-->
     <stroke
         android:width="3dp"
-        android:color="@color/button_background"
+        android:color="@color/transparent"
         />
 </shape>

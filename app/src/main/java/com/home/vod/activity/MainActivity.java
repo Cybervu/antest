@@ -2584,7 +2584,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         if (as != null) {
             as.cancel(true);
         }
-        if (isNavigated == 0) {
+       /* if (isNavigated == 0) {
             if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
                 internetSpeedDialog.hide();
                 internetSpeedDialog = null;
@@ -2595,7 +2595,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             finish();
             System.exit(0);
         }
-
+*/
 
 
 

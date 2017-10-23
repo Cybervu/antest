@@ -7,6 +7,16 @@
     android:clickable="false"
     android:focusable="false">
 
+    <android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/transparent"
+        app:cardCornerRadius="7dp"
+        app:cardElevation="3dp"
+
+        >
+
     <RelativeLayout
         android:layout_width="@dimen/videogrid_width"
         android:layout_height="wrap_content"
@@ -35,29 +45,29 @@
 
         <TextView
             android:id="@+id/movieTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/movieImageOverlay"
             android:layout_alignBottom="@+id/movieImageOverlay"
             android:layout_alignLeft="@+id/movieImageView"
             android:layout_alignRight="@+id/movieImageView"
-            android:layout_gravity="left"
-            android:layout_marginBottom="@dimen/pre_order_button_margin"
+
             android:clickable="false"
             android:ellipsize="end"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:gravity="left"
+            android:gravity="center_horizontal"
             android:maxLines="1"
             android:padding="@dimen/loginImageViewMarging_top_padding"
             android:text=""
-
+            android:background="@color/button_background"
             android:textColor="@color/contentTitleColor"
             android:textSize="@dimen/itemtitle1_text_size"
             android:textStyle="normal" />
 
 
     </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
     <ImageView
         android:id="@+id/close_album_art"

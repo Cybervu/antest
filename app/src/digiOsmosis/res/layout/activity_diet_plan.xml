@@ -12,15 +12,17 @@
     <RelativeLayout
         android:id="@+id/dietProgressLinearLayout"
         android:layout_width="match_parent"
+        android:background="@color/exercise_imagecolor"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/dietPlanTitle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/diet_close_button_width"
-            android:gravity="center"
+            android:gravity="center_horizontal|center_vertical"
             android:text="DIET PLAN"
-            android:textColor="@color/pageTitleColor"
+            android:textColor="@color/contentTitleColor"
+            android:layout_marginRight="@dimen/dietmarginRight20dp"
             android:textSize="@dimen/header_text_size"
             android:textStyle="normal" />
 

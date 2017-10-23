@@ -45,6 +45,8 @@ public class LanguagePreference {
     public static final String SORT_BY = "SORT_BY";
     public static final String FORGOT_PASSWORD = "FORGOT_PASSWORD";
     public static final String LOGIN = "LOGIN";
+    public static final String BTN_LOGIN = "BTN_LOGIN";
+    public static final String LOGIN_HERE = "LOGIN_HERE";
     public static final String CONFIRM_PASSWORD = "CONFIRM_PASSWORD";
     public static final String UPDATE_PROFILE = "UPDATE_PROFILE";
     public static final String APP_ON = "APP_ON";
@@ -295,6 +297,8 @@ public class LanguagePreference {
     public static final String DEFAULT_SORT_BY = "Sort By";
     public static final String DEFAULT_FORGOT_PASSWORD = "Forgot Password?";
     public static final String DEFAULT_LOGIN = "Login";
+    public static final String DEFAULT_LOGIN_HERE = "LOG IN NOW";
+    public static final String DEFAULT_BTN_LOGIN = "LOGIN";
     public static final String DEFAULT_CONFIRM_PASSWORD = "Confirm Password";
     public static final String DEFAULT_PROFILE = "Profile";
     public static final String DEFAULT_PURCHASE_HISTORY = "Purchase History";
@@ -398,12 +402,20 @@ public class LanguagePreference {
     public static String BENEFIT_TITLE = "BENEFIT_TITLE";
     public static String DEFAULT_BENEFIT_TITLE = "BENEFITS";
     public static String DIFFICULTY_TITLE = "DIFFICULTY_TITLE";
+    public static String PROGRAM_BUTTON = "PROGRAM_BUTTON";
+    public static String WORKOUT_BUTTON = "WORKOUT_BUTTON";
+    public static String DIET_BUTTON = "DIET_BUTTON";
     public static String DEFAULT_DIFFICULTY_TITLE = "DIFFICULTY";
+    public static String DEFAULT_PROGRAM_BUTTON = "Start programme";
+    public static String DEFAULT_DIET_BUTTON = "Diet Plan";
+    public static String DEFAULT_WORKOUT_BUTTON = "Start Workout";
     public static String DURATION_TITLE = "DURATION_TITLE";
     public static String DEFAULT_DURATION_TITLE = "DURATION";
     public static String DETAIL_VIEW_MORE = "VIEW_MORE";
     public static String DEFAULT_DETAIL_VIEW_MORE = "View More >>";
     public static String TUTORIAL_TITLE= "TUTORIAL_TITLE";
+    public static String MORE_VIDEOS= "MORE_VIDEOS";
+    public static String DEFAULT_MORE_VIDEOS = "MORE VIDEOS";
     public static String DEFAULT_TUTORIAL_TITLE = "TUTORIAL";
 
 

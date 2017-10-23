@@ -14,6 +14,16 @@ public class ViewFavouriteOutputModel {
     String poster;
     String isEpisodeStr;
 
+    public String getStory() {
+        return story;
+    }
+
+    public void setStory(String story) {
+        this.story = story;
+    }
+
+    String story;
+
     /**
      * This Method is use to Get the Is Episode Details
      *

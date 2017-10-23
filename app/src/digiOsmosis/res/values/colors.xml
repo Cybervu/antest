@@ -15,7 +15,7 @@
     <color name="style_circular_color">#999999</color>
     <color name="style_circular_color_2">#ff0400</color>
     <color name="spinner_card_color2">#FAFAFA</color>
-    <color name="forgotPasswordTextViewColor">#ff5a75</color>
+    <color name="forgotPasswordTextViewColor">#ffffff</color>
     <color name="iv_check_box_default_color">#5c6873</color>
     <color name="fb_text_color">#fff</color>
     <color name="layout_background_color">#fdf3f3</color>
@@ -29,11 +29,11 @@
     <color name="edit_color">#dadada</color>
     <color name="duration_color">#a6a6a6</color>
 
-    <color name="hint_color">#999</color>
+    <color name="hint_color">#dddddd</color>
     <color name="edit_color2">#00FFFFFF</color>
-    <color name="alreadyMemberTextColor">#757575</color>
-    <color name="alreadyHaveALoginButtonTextColor">#ff5a75</color>
-    <color name="border_color">#ff5a75</color>
+    <color name="alreadyMemberTextColor">#ffffff</color>
+    <color name="alreadyHaveALoginButtonTextColor">#ffffff</color>
+    <color name="border_color">#4cbfb8</color>
     <color name="cancel_button_text_color">#ff5a75</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="castCrewTitleTextColor">#ff5a75</color>
@@ -58,7 +58,7 @@
     <color name="cancel_button_background">#DDD</color>
     <color name="pre_order_button_background">#fff</color>
     <color name="color_card_background">#000</color>
-    <color name="fb_button_background">#3b5998</color>
+    <color name="fb_button_background">#3f548e</color>
     <color name="colorAccent">#ff5a75</color>
     <color name="textColorPrimary">#3b5998</color>
     <color name="windowBackground">#000</color>
@@ -71,7 +71,7 @@
     <color name="loader_color">#ff5a75</color>
     <color name="hint_background">#ff5a75</color>
     <color name="noInternetColor">#5c6873</color>
-    <color name="editTextColor">#5c6873</color>
+    <color name="editTextColor">#dddddd</color>
     <color name="voucher_inactive_button">#c3c3c3</color>
     <color name="movieTitleColor">#fff</color>
     <color name="videomovieTitleColor">#3f444a</color>
@@ -95,5 +95,9 @@
     <color name="OsTextColor">#757575</color>
     <color name="cast_crew_textcolor">#ff5a75</color>
     <color name="difficulty_color">#66e066</color>
+
+    <color name="start_color">#d64b62</color>
+    <color name="end_color">#ff5a75</color>
+    <color name="google_signup_color">#942c27</color>
 
 </resources>
