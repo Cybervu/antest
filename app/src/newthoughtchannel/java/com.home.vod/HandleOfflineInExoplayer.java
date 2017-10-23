@@ -17,4 +17,7 @@ public class HandleOfflineInExoplayer {
 
         download_layout.setVisibility(View.VISIBLE);
     }
+    public void handleVisibleUnvisibleChromcast(MediaRouteButton mediaRouteButton){
+        mediaRouteButton.setVisibility(View.VISIBLE);
+    }
 }

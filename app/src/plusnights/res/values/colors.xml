@@ -10,10 +10,16 @@
     <color name="castCrewTitleTextColor">#C81E6E </color>
     <color name="colorPrimaryDark">#87005F</color>
     <color name="appBackgroundColor">#fff</color>
+
+
     <color name="cast_crew_titleCololr">#676D70</color>
-    <color name="forgotPasswordTextViewColor">#C81E6E</color>
-    <color name="sign_up_text_color">#C81E6E</color>
-    <color name="loginTextViewColor">#C81E6E</color>
+    <color name="forgotPasswordTextViewColor">#676D70</color>
+    <color name="sign_up_text_color">#676D70</color>
+    <color name="Login_text_color">#676D70</color>
+    <color name="terms_text_color">#676D70</color>
+    <color name="loginTextViewColor">#676D70</color>
+    <color name="textColor">#C81E6E</color>
+
     <color name="no_internet_textColor">#000</color>
     <color name="toolbarTitleColor">#fff</color>
     <color name="unSelectedHintColor">#eee</color>
