@@ -1902,7 +1902,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         ProgressBarHandler pDialog;
         String responseStr;
         int statusCode;
-        // This is added because of change in simultaneous login feature
+        // This is added because of change in simultaneous activity_login feature
         String message;
         boolean play_video = true;
         @Override
@@ -1961,7 +1961,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     SubtitleJosnArray = myJson.optJSONArray("subTitle");
                     ResolutionJosnArray = myJson.optJSONArray("videoDetails");
                     statusCode = Integer.parseInt(myJson.optString("code"));
-                    // This is added because of change in simultaneous login feature
+                    // This is added because of change in simultaneous activity_login feature
                     message = myJson.optString("msg");
 
                     Log.v("BIBHU","video stream msg"+message);
@@ -2072,7 +2072,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         protected void onPostExecute(Void result) {
 
-            // This is added because of change in simultaneous login feature //
+            // This is added because of change in simultaneous activity_login feature //
 
             if (!play_video) {
 

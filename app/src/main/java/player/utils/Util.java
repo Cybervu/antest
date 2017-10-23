@@ -60,7 +60,7 @@ public class Util {
     public static String GENRE_ARRAY_PREF_KEY = "genreArray";
     public static String GENRE_VALUES_ARRAY_PREF_KEY = "genreValueArray";
 
-    public static final String loginUrl = "login";
+    public static final String loginUrl = "activity_login";
     public static final String forgotpasswordUrl = "forgotPassword";
     public static final String registrationUrl = "registerUser";
     public static final String detailsUrl = "getContentDetails";
@@ -214,7 +214,7 @@ public class Util {
         return (dateLater.getTime() - dateEarly.getTime()) / (24 * 60 * 60 * 1000);
     }
 
-    //Email Validation for login
+    //Email Validation for activity_login
     public static boolean isValidMail(String email2)
     {
         boolean check;
@@ -465,16 +465,16 @@ public class Util {
 
 // ======================= Constants For The Language Default Key =========================//
 
-    public static String DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE = "Logout process has been successfully completed. Now you are authorized to login.";
+    public static String DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE = "Logout process has been successfully completed. Now you are authorized to activity_login.";
     public static String DEFAULT_LOGIN_STATUS_MESSAGE = "You are no longer logged in . Please log in again.";
 
 
-    public static String DEFAULT_NEED_LOGIN_TO_REVIEW = "You need to login to add your review.";
+    public static String DEFAULT_NEED_LOGIN_TO_REVIEW = "You need to activity_login to add your review.";
     public static String DEFAULT_BTN_POST_REVIEW = "Post Review";
     public static String DEFAULT_ENTER_REVIEW_HERE = "Enter your Review here...max 50 characters";
     public static String DEFAULT_SUBMIT_YOUR_RATING_TITLE = "Submit Your Rating";
     public static String DEFAULT_CLICK_HERE = "Click here";
-    public static String DEFAULT_TO_LOGIN = "to login.";
+    public static String DEFAULT_TO_LOGIN = "to activity_login.";
     public static String DEFAULT_ADD_A_REVIEW = "Add a Review";
     public static String DEFAULT_REVIEWS = "Reviews";
 

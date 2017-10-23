@@ -2278,7 +2278,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //                        Util.setLanguageSharedPrefernce(MainActivity.this, Util.SORT_LAST_UPLOADED, json.optString("sort_last_uploaded").trim());
 //
 //                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.LANGUAGE_POPUP_LOGIN,json.optString("language_popup_login").trim());
-//                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.LOGIN,json.optString("login").trim());
+//                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.LOGIN,json.optString("activity_login").trim());
 //                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.LOGOUT,json.optString("logout").trim());
 //                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.LOGOUT_SUCCESS,json.optString("logout_success").trim());
 //                        Util.setLanguageSharedPrefernce(MainActivity.this,Util.MY_FAVOURITE,json.optString("my_favourite").trim());

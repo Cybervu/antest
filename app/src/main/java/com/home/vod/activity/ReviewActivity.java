@@ -307,7 +307,7 @@ public class ReviewActivity extends AppCompatActivity implements
                         reviewsItem.add(reviewItem);
                     }
                 }*/
-                //LogUtil.showLog("MUVI", "Review activity login featrure ::"+preferenceManager.getLoginFeatureFromPref());
+                //LogUtil.showLog("MUVI", "Review activity activity_login featrure ::"+preferenceManager.getLoginFeatureFromPref());
                     if (preferenceManager.getLoginFeatureFromPref() == 1) {
 
                         String loggedInStr = preferenceManager.getLoginStatusFromPref();
