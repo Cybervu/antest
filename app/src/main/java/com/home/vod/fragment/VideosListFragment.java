@@ -1638,31 +1638,28 @@ public class VideosListFragment extends Fragment   {
 
                 if (getActivity()!=null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_large_3) : (int) context.getResources().getDimension(R.dimen.configuration_large_3));
                     } else {
-
-                        Log.v("SUBHA","DATA here");
-
-                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_xlarge_4) : (int) context.getResources().getDimension(R.dimen.configuration_xlarge_4));
                     }
 
                 } else if (getActivity() !=null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
+                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_normal_2) : (int) context.getResources().getDimension(R.dimen.configuration_normal_2));
                     } else {
-                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_large_3) : (int) context.getResources().getDimension(R.dimen.configuration_large_3));
                     }
 
                 } else if (getActivity()!=null && (context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
 
-                    gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
+                    gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_normal_2) : (int) context.getResources().getDimension(R.dimen.configuration_normal_2));
 
 
                 } else {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_xlarge_4) : (int) context.getResources().getDimension(R.dimen.configuration_xlarge_4));
                     } else {
-                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_xlarge_5) : (int) context.getResources().getDimension(R.dimen.configuration_xlarge_5));
                     }
 
                 }
