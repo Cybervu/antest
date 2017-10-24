@@ -124,9 +124,13 @@ public class GetVideoLogsAsynTask extends AsyncTask<VideoLogsInputModel, Void, V
                         .appendQueryParameter(HeaderConstants.PLAYED_LENGTH, this.videoLogsInputModel.getPlayedLength())
                         .appendQueryParameter(HeaderConstants.WATCH_STATUS, this.videoLogsInputModel.getWatchStatus())
                         .appendQueryParameter(HeaderConstants.DEVICE_TYPE, this.videoLogsInputModel.getDeviceType())
+                        .appendQueryParameter(HeaderConstants.LOG_TEMP_ID, this.videoLogsInputModel.getLogTemId())
+                        .appendQueryParameter(HeaderConstants.RESUME_TIME, this.videoLogsInputModel.getResumeTime())
+                        .appendQueryParameter(HeaderConstants.CONTENT_TYPE_ID, this.videoLogsInputModel.getContentTypeId())
                         .appendQueryParameter(HeaderConstants.LOG_ID, this.videoLogsInputModel.getVideoLogId())
                         .appendQueryParameter(HeaderConstants.IS_STREAMING_RESTRICTION, this.videoLogsInputModel.getIs_streaming_restriction())
                         .appendQueryParameter(HeaderConstants.RESTRICT_STREAM_ID, this.videoLogsInputModel.getRestrict_stream_id());
+
                 String query = builder.build().getEncodedQuery();
 
                 OutputStream os = conn.getOutputStream();
@@ -168,13 +172,19 @@ public class GetVideoLogsAsynTask extends AsyncTask<VideoLogsInputModel, Void, V
                 status = Integer.parseInt(mainJson.optString("code"));
 
                 if (status == 200) {
-
+                   String log_temp_id = mainJson.optString("log_temp_id");
+                    video_log_output_model.setLogTempId(log_temp_id);
                     video_log_output_model.setRestrict_stream_id(mainJson.optString("restrict_stream_id"));
                     video_log_output_model.setVideoLogId(mainJson.optString("log_id"));
 
+                }else {
+                    video_log_output_model.setLogTempId("0");
+                    video_log_output_model.setRestrict_stream_id("0");
+                    video_log_output_model.setVideoLogId("0");
                 }
 
             } else {
+
                 responseStr = "0";
                 status = 0;
                 message = "Error";

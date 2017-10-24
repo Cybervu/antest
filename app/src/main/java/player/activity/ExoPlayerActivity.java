@@ -1709,9 +1709,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     public void run() {
                         if (emVideoView != null) {
 
-                            //  Log.v("BIBHU","===================****====================initializeTimerTask caled===============**==================");
-
-
                             int currentPositionStr = millisecondsToString(emVideoView.getCurrentPosition());
                             playerPosition = currentPositionStr;
 
