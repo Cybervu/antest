@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -15,6 +14,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 
 import org.apache.http.HttpResponse;
@@ -33,8 +33,14 @@ import player.utils.Util;
 
 public class DataConsumptionService extends Service {
 
-    String Email_Id = "";
-    SharedPreferences loginPref;
+    String email_Id = "";
+    PreferenceManager preferenceManager;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -51,16 +57,15 @@ public class DataConsumptionService extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private BroadcastReceiver BandwidthLogReceiver = new BroadcastReceiver() {
+    public BroadcastReceiver BandwidthLogReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Extract data included in the Intent
-            LogUtil.showLog("BIBHU17", "Receiver called");
+            Log.v("BIBHU17", "Receiver called");
 
-            loginPref = getSharedPreferences(Util.LOGIN_PREF, 0);
-            if (loginPref != null) {
-                Email_Id = loginPref.getString("PREFS_LOGIN_EMAIL_ID_KEY", null);
 
+            if (preferenceManager != null) {
+                    email_Id = preferenceManager.getEmailIdFromPref();
                 try
                 {
                     Util.timer.cancel();
@@ -81,7 +86,7 @@ public class DataConsumptionService extends Service {
         Util.timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                GetTotalUsedData(Email_Id);
+                GetTotalUsedData(email_Id);
                 LogUtil.showLog("BIBHU17", "*****************************************************==============Timer Called");
             }
         },0,60000);

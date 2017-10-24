@@ -249,7 +249,6 @@ public class TrailerActivity extends AppCompatActivity implements
 
 
         if (Util.dataModel.getVideoDuration().trim() != null && !Util.dataModel.getVideoDuration().trim().matches(""))
-
         {
             videoDurationTextView.setText(Util.dataModel.getVideoDuration().trim());
             videoDurationTextView.setVisibility(View.VISIBLE);
@@ -863,7 +862,6 @@ public class TrailerActivity extends AppCompatActivity implements
             timer.cancel();
             timer = null;
         }
-
     }
 
     public void initializeTimerTask() {
@@ -881,7 +879,6 @@ public class TrailerActivity extends AppCompatActivity implements
 
                             if (isFastForward == true) {
                                 isFastForward = false;
-
 
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
