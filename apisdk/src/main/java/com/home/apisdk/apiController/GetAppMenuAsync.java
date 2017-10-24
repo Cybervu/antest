@@ -198,29 +198,50 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                         for (int i = 0; i < jsonMainMenu.length(); i++) {
                             mainMenu = new MenusOutputModel().new MainMenu();
                             mainMenu.setEnable(true);
-                            title = jsonMainMenu.getJSONObject(i).optString("title").toString().trim();
-                            mainMenu.setTitle(title);
-                            Permalink = jsonMainMenu.getJSONObject(i).optString("permalink").toString().trim();
-                            mainMenu.setPermalink(Permalink);
-                            ID = jsonMainMenu.getJSONObject(i).optString("id").toString().trim();
-                            mainMenu.setId(ID);
-                            ParentId = jsonMainMenu.getJSONObject(i).optString("parent_id").toString().trim();
-                            mainMenu.setParent_id(ParentId);
-                            LinkType = jsonMainMenu.getJSONObject(i).optString("link_type").toString().trim();
-                            mainMenu.setLink_type(LinkType);
-                            value = jsonMainMenu.getJSONObject(i).getString("value").toString().trim();
-                            mainMenu.setValue(value);
-                            id_seq = jsonMainMenu.getJSONObject(i).getString("id_seq").toString().trim();
-                            mainMenu.setId_seq(id_seq);
-                            language_id = jsonMainMenu.getJSONObject(i).getString("language_id").toString().trim();
-                            mainMenu.setLanguage_id(language_id);
-                            language_parent_id = jsonMainMenu.getJSONObject(i).getString("language_parent_id").toString().trim();
-                            mainMenu.setLanguage_parent_id(language_parent_id);
-                            category_id = jsonMainMenu.getJSONObject(i).getString("category_id").toString().trim();
-                            mainMenu.setCategory_id(category_id);
-                            isSubcategoryPresent = jsonMainMenu.getJSONObject(i).getString("isSubcategoryPresent").toString().trim();
-                            mainMenu.setIsSubcategoryPresent(isSubcategoryPresent);
-
+                            if (jsonMainMenu.getJSONObject(i).has("title")) {
+                                title = jsonMainMenu.getJSONObject(i).optString("title").toString().trim();
+                                mainMenu.setTitle(title);
+                            }
+                            if (jsonMainMenu.getJSONObject(i).has("permalink")) {
+                                Permalink = jsonMainMenu.getJSONObject(i).optString("permalink").toString().trim();
+                                mainMenu.setPermalink(Permalink);
+                            }
+                            if (jsonMainMenu.getJSONObject(i).has("id")) {
+                                ID = jsonMainMenu.getJSONObject(i).optString("id").toString().trim();
+                                mainMenu.setId(ID);
+                            }
+                            if (jsonMainMenu.getJSONObject(i).has("parent_id")) {
+                                ParentId = jsonMainMenu.getJSONObject(i).optString("parent_id").toString().trim();
+                                mainMenu.setParent_id(ParentId);
+                            }
+                            if (jsonMainMenu.getJSONObject(i).has("link_type")) {
+                                LinkType = jsonMainMenu.getJSONObject(i).optString("link_type").toString().trim();
+                                mainMenu.setLink_type(LinkType);
+                            }
+                            if (jsonMainMenu.getJSONObject(i).has("value")) {
+                                value = jsonMainMenu.getJSONObject(i).getString("value").toString().trim();
+                                mainMenu.setValue(value);
+                            }
+                            if (jsonMainMenu.getJSONObject(i).has("id_seq")) {
+                                id_seq = jsonMainMenu.getJSONObject(i).getString("id_seq").toString().trim();
+                                mainMenu.setId_seq(id_seq);
+                            }
+                            if (jsonMainMenu.getJSONObject(i).has("language_id")) {
+                                language_id = jsonMainMenu.getJSONObject(i).getString("language_id").toString().trim();
+                                mainMenu.setLanguage_id(language_id);
+                            }
+                            if (jsonMainMenu.getJSONObject(i).has("language_parent_id")) {
+                                language_parent_id = jsonMainMenu.getJSONObject(i).getString("language_parent_id").toString().trim();
+                                mainMenu.setLanguage_parent_id(language_parent_id);
+                            }
+                            if (jsonMainMenu.getJSONObject(i).has("category_id")) {
+                                category_id = jsonMainMenu.getJSONObject(i).getString("category_id").toString().trim();
+                                mainMenu.setCategory_id(category_id);
+                            }
+                            if (jsonMainMenu.getJSONObject(i).has("isSubcategoryPresent")) {
+                                isSubcategoryPresent = jsonMainMenu.getJSONObject(i).getString("isSubcategoryPresent").toString().trim();
+                                mainMenu.setIsSubcategoryPresent(isSubcategoryPresent);
+                            }
                             mainMenuArrayList.add(mainMenu);
                             menusOutputModel.setMainMenuModel(mainMenuArrayList);
 
@@ -234,24 +255,42 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                                     for (int j = 0; j < jsonChildNode.length(); j++) {
 
                                         mainMenuChild = mainMenu.new MainMenuChild();
-                                        TitleChild = jsonChildNode.getJSONObject(j).optString("title").toString().trim();
-                                        mainMenuChild.setTitle(TitleChild);
-                                        PermalinkChild = jsonChildNode.getJSONObject(j).optString("permalink").toString().trim();
-                                        mainMenuChild.setPermalink(PermalinkChild);
-                                        IDChild = jsonChildNode.getJSONObject(j).optString("id").toString().trim();
-                                        mainMenuChild.setId(IDChild);
-                                        ParentIdChild = jsonChildNode.getJSONObject(j).optString("parent_id").toString().trim();
-                                        mainMenuChild.setParent_id(ParentIdChild);
-                                        LinkTypeChild = jsonChildNode.getJSONObject(j).optString("link_type").toString().trim();
-                                        mainMenuChild.setLink_type(LinkTypeChild);
-                                        child_value = jsonChildNode.getJSONObject(i).getString("value").toString().trim();
-                                        mainMenuChild.setValue(child_value);
-                                        child_id_seq = jsonChildNode.getJSONObject(i).getString("id_seq").toString().trim();
-                                        mainMenuChild.setId_seq(child_id_seq);
-                                        child_language_id = jsonChildNode.getJSONObject(i).getString("language_id").toString().trim();
-                                        mainMenuChild.setLanguage_id(child_language_id);
-                                        child_language_parent_id = jsonChildNode.getJSONObject(i).getString("language_parent_id").toString().trim();
-                                        mainMenuChild.setLanguage_parent_id(child_language_parent_id);
+                                        if (jsonChildNode.getJSONObject(j).has("title")) {
+                                            TitleChild = jsonChildNode.getJSONObject(j).optString("title").toString().trim();
+                                            mainMenuChild.setTitle(TitleChild);
+                                        }
+                                        if (jsonChildNode.getJSONObject(j).has("permalink")) {
+                                            PermalinkChild = jsonChildNode.getJSONObject(j).optString("permalink").toString().trim();
+                                            mainMenuChild.setPermalink(PermalinkChild);
+                                        }
+                                        if (jsonChildNode.getJSONObject(j).has("id")) {
+                                            IDChild = jsonChildNode.getJSONObject(j).optString("id").toString().trim();
+                                            mainMenuChild.setId(IDChild);
+                                        }
+                                        if (jsonChildNode.getJSONObject(j).has("parent_id")) {
+                                            ParentIdChild = jsonChildNode.getJSONObject(j).optString("parent_id").toString().trim();
+                                            mainMenuChild.setParent_id(ParentIdChild);
+                                        }
+                                        if (jsonChildNode.getJSONObject(j).has("link_type")) {
+                                            LinkTypeChild = jsonChildNode.getJSONObject(j).optString("link_type").toString().trim();
+                                            mainMenuChild.setLink_type(LinkTypeChild);
+                                        }
+                                        if (jsonChildNode.getJSONObject(j).has("value")) {
+                                            child_value = jsonChildNode.getJSONObject(i).getString("value").toString().trim();
+                                            mainMenuChild.setValue(child_value);
+                                        }
+                                        if (jsonChildNode.getJSONObject(j).has("id_seq")) {
+                                            child_id_seq = jsonChildNode.getJSONObject(i).getString("id_seq").toString().trim();
+                                            mainMenuChild.setId_seq(child_id_seq);
+                                        }
+                                        if (jsonChildNode.getJSONObject(j).has("language_id")) {
+                                            child_language_id = jsonChildNode.getJSONObject(i).getString("language_id").toString().trim();
+                                            mainMenuChild.setLanguage_id(child_language_id);
+                                        }
+                                        if (jsonChildNode.getJSONObject(j).has("language_parent_id")) {
+                                            child_language_parent_id = jsonChildNode.getJSONObject(i).getString("language_parent_id").toString().trim();
+                                            mainMenuChild.setLanguage_parent_id(child_language_parent_id);
+                                        }
                                         mainMenuChildArrayList.add(mainMenuChild);
 
 
@@ -271,13 +310,18 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                         try {
                             for (int i = 0; i < jsonUserMenu.length(); i++) {
                                 userMenu = new MenusOutputModel().new UserMenu();
-                                UserTitle = jsonUserMenu.optJSONObject(i).optString("title").toString().trim();
-                                userMenu.setTitle(UserTitle);
-                                UserPermalink = jsonUserMenu.optJSONObject(i).optString("permalink").toString().trim();
-                                userMenu.setPermalink(UserPermalink);
-
-                                UserParentId = jsonUserMenu.optJSONObject(i).optString("parent_id").toString().trim();
-                                userMenu.setParent_id(UserParentId);
+                                if (jsonUserMenu.optJSONObject(i).has("title")) {
+                                    UserTitle = jsonUserMenu.optJSONObject(i).optString("title").toString().trim();
+                                    userMenu.setTitle(UserTitle);
+                                }
+                                if (jsonUserMenu.optJSONObject(i).has("permalink")) {
+                                    UserPermalink = jsonUserMenu.optJSONObject(i).optString("permalink").toString().trim();
+                                    userMenu.setPermalink(UserPermalink);
+                                }
+                                if (jsonUserMenu.optJSONObject(i).has("parent_id")) {
+                                    UserParentId = jsonUserMenu.optJSONObject(i).optString("parent_id").toString().trim();
+                                    userMenu.setParent_id(UserParentId);
+                                }
 
 
                                 if (UserPermalink.equals(str)) {
@@ -328,18 +372,31 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                             for (int i = 0; i < jsonFooterMenu.length(); i++) {
                                 footerMenu = new MenusOutputModel().new FooterMenu();
                                 footerMenu.setEnable(false);
-                                fdomain = jsonFooterMenu.getJSONObject(i).optString("domain").toString().trim();
-                                footerMenu.setDomain(fdomain);
-                                flink_type = jsonFooterMenu.getJSONObject(i).optString("link_type").toString().trim();
-                                footerMenu.setLink_type(flink_type);
-                                fid = jsonFooterMenu.getJSONObject(i).optString("id").toString().trim();
-                                footerMenu.setId(fid);
-                                fdisplay_name = jsonFooterMenu.getJSONObject(i).optString("display_name").toString().trim();
-                                footerMenu.setDisplay_name(fdisplay_name);
-                                fpermalink = jsonFooterMenu.getJSONObject(i).optString("permalink").toString().trim();
-                                footerMenu.setPermalink(fpermalink);
-                                furl = jsonFooterMenu.getJSONObject(i).optString("url").toString().trim();
-                                footerMenu.setUrl(furl);
+
+                                if (jsonFooterMenu.getJSONObject(i).has("domain")) {
+                                    fdomain = jsonFooterMenu.getJSONObject(i).optString("domain").toString().trim();
+                                    footerMenu.setDomain(fdomain);
+                                }
+                                if (jsonFooterMenu.getJSONObject(i).has("link_type")) {
+                                    flink_type = jsonFooterMenu.getJSONObject(i).optString("link_type").toString().trim();
+                                    footerMenu.setLink_type(flink_type);
+                                }
+                                if (jsonFooterMenu.getJSONObject(i).has("id")) {
+                                    fid = jsonFooterMenu.getJSONObject(i).optString("id").toString().trim();
+                                    footerMenu.setId(fid);
+                                }
+                                if (jsonFooterMenu.getJSONObject(i).has("display_name")) {
+                                    fdisplay_name = jsonFooterMenu.getJSONObject(i).optString("display_name").toString().trim();
+                                    footerMenu.setDisplay_name(fdisplay_name);
+                                }
+                                if (jsonFooterMenu.getJSONObject(i).has("permalink")) {
+                                    fpermalink = jsonFooterMenu.getJSONObject(i).optString("permalink").toString().trim();
+                                    footerMenu.setPermalink(fpermalink);
+                                }
+                                if (jsonFooterMenu.getJSONObject(i).has("url")) {
+                                    furl = jsonFooterMenu.getJSONObject(i).optString("url").toString().trim();
+                                    footerMenu.setUrl(furl);
+                                }
 
                                     footerMenuArrayList.add(footerMenu);
 

@@ -63,7 +63,7 @@
                 android:padding="@dimen/padding7dp"
                 android:stateListAnimator="@null"
                 android:textAllCaps="false"
-                android:textColor="#fff"
+                android:textColor="#000"
                 android:textSize="@dimen/button_textsize"
 
                 />

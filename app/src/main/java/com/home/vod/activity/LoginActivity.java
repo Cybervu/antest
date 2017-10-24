@@ -220,6 +220,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     private static final int RC_SIGN_IN = 9001;
     Button signout;
     private String AuthImageUrl;
+    String deviceRestrictionMessage = "";
     /////////////////////end//////////////////
 
     @Override
@@ -261,9 +262,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         pDialog.hide();
                         pDialog = null;
                     }
+                    LogUtil.showLog("MUVI", "isRestrictDevice called==="+(languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE)));
 
-
-                    if (languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
+                    if ((languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE)).trim().equals("1")) {
 
                         LogUtil.showLog("MUVI", "isRestrictDevice called");
                         // Call For Check Api.
@@ -1269,7 +1270,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 preferenceManager.clearLoginPref();
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(LoginActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(message);
+                dlgAlert.setMessage(deviceRestrictionMessage);
                 dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
                 dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
@@ -4968,6 +4969,16 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     @Override
     public void onCheckDevicePostExecuteCompleted(CheckDeviceOutput checkDeviceOutput, int code, String message) {
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+
+            }
+        } catch (IllegalArgumentException ex) {
+        }
+        deviceRestrictionMessage = message;
 
         if (code > 0) {
             if (code == 200) {
