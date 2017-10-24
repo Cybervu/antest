@@ -499,8 +499,8 @@ public class Util {
 
     public static void parseLanguage(LanguagePreference languagePreference, String jsonResponse,String default_Language) throws JSONException {
         JSONObject json = new JSONObject(jsonResponse);
-        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNIN,DEFAULT_GMAIL_SIGNIN,"gmail_signin",json);
-        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNUP,DEFAULT_GMAIL_SIGNUP,"gmail_signup",json);
+        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNIN,DEFAULT_GMAIL_SIGNIN,"google_signin",json);
+        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNUP,DEFAULT_GMAIL_SIGNUP,"google_signup",json);
         setTranslationLanguageToPref(languagePreference,SIGN_UP_WITH_EMAIL,DEFAULT_SIGN_UP_WITH_EMAIL,"signup_with_email",json);
         setTranslationLanguageToPref(languagePreference, VIEW_LESS, DEFAULT_VIEW_LESS,"view_less",json);
         setTranslationLanguageToPref(languagePreference, LOGIN_FACEBOOK,DEFAULT_LOGIN_FACEBOOK,"login_facebook",json);
@@ -580,6 +580,8 @@ public class Util {
 
         setTranslationLanguageToPref(languagePreference, LANGUAGE_POPUP_LOGIN,DEFAULT_LANGUAGE_POPUP_LOGIN     ,"language_popup_login",json);
         setTranslationLanguageToPref(languagePreference, LOGIN,DEFAULT_LOGIN     ,"login",json);
+        setTranslationLanguageToPref(languagePreference, BTN_LOGIN,DEFAULT_BTN_LOGIN     ,"btn_login",json);
+        setTranslationLanguageToPref(languagePreference, LOGIN_HERE,DEFAULT_LOGIN_HERE     ,"login_here",json);
         setTranslationLanguageToPref(languagePreference, LOGOUT,DEFAULT_LOGOUT     ,"logout",json);
         setTranslationLanguageToPref(languagePreference, LOGOUT_SUCCESS,DEFAULT_LOGOUT_SUCCESS     ,"logout_success",json);
         setTranslationLanguageToPref(languagePreference, MY_FAVOURITE,DEFAULT_MY_FAVOURITE     ,"my_favourite",json);
@@ -680,6 +682,10 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, DIFFICULTY_TITLE,DEFAULT_DIFFICULTY_TITLE, "difficulty_title",json);
         setTranslationLanguageToPref(languagePreference, DETAIL_VIEW_MORE,DEFAULT_DETAIL_VIEW_MORE, "view_more",json);
         setTranslationLanguageToPref(languagePreference, TUTORIAL_TITLE,DEFAULT_TUTORIAL_TITLE, "tutorial",json);
+        setTranslationLanguageToPref(languagePreference, PROGRAM_BUTTON,DEFAULT_PROGRAM_BUTTON, "program_button",json);
+        setTranslationLanguageToPref(languagePreference, DIET_BUTTON,DEFAULT_DIET_BUTTON, "diet_button",json);
+        setTranslationLanguageToPref(languagePreference, WORKOUT_BUTTON,DEFAULT_WORKOUT_BUTTON, "workout_button",json);
+        setTranslationLanguageToPref(languagePreference, MORE_VIDEOS,DEFAULT_MORE_VIDEOS, "more_videos",json);
 
         setTranslationLanguageToPref(languagePreference, SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE,DEFAULT_SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, "simultaneous_logout_message",json);
         setTranslationLanguageToPref(languagePreference, LOGIN_STATUS_MESSAGE,DEFAULT_LOGIN_STATUS_MESSAGE, "login_status_message",json);

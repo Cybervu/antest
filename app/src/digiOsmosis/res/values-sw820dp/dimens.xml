@@ -206,6 +206,7 @@
     <dimen name="review_btn_textsize">14sp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>v
-
+    <dimen name="downloadwidth">200dp</dimen>
+    <dimen name="button_padding">6dp</dimen>
 
 </resources>

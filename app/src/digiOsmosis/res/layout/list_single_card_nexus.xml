@@ -14,10 +14,10 @@
         android:layout_width="@dimen/list_singlecard_img_width"
         android:id="@+id/card_view"
         android:layout_height="wrap_content"
-        android:padding="4dp"
+        android:padding="@dimen/card_padding"
         app:cardBackgroundColor="@color/transparent"
-        app:cardCornerRadius="3dp"
-        app:cardElevation="3dp"
+        app:cardCornerRadius="@dimen/card_radius"
+        app:cardElevation="@dimen/card_elevation"
 
         >
 
@@ -53,7 +53,6 @@
             android:layout_width="@dimen/itemTitle_widht"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:background="@color/transparent"
             android:clickable="false"
             android:ellipsize="end"
             android:focusable="false"
@@ -61,9 +60,10 @@
             android:gravity="left"
             android:maxLines="1"
             android:text=""
-            android:padding="@dimen/itemTitle_padding"
+            android:padding="@dimen/loginImageViewMarging_top_padding"
             android:textColor="@color/contentTitleColor"
             android:textSize="@dimen/itemtitle1_text_size"
+            android:background="@color/button_background"
             android:textStyle="bold"
             android:layout_alignBottom="@+id/itemImage"
             android:layout_alignLeft="@+id/movieImageOverlay"

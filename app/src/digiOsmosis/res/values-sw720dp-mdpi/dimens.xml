@@ -15,8 +15,10 @@
     <dimen name="singleimgheight">216dp</dimen>
     <dimen name="buttonheight">47dp</dimen>
     <dimen name="titletxt">24sp</dimen>
-
-
+    <dimen name="list_singlecard_img_width">170dp</dimen>
+    <dimen name="list_singlecard_img_height">243dp</dimen>
+    <dimen name="videogrid_width">220dp</dimen>
+    <dimen name="videogrid_height">314dp</dimen>
     <dimen name="forgot_logo_width">200dp</dimen>
     <dimen name="forgot_logo_height">200dp</dimen>
     <dimen name="email_text_size">18sp</dimen>
@@ -87,6 +89,8 @@
     <dimen name="fragmentlogoimg_height">100dp</dimen>
     <dimen name="videogrid_width">180dp</dimen>
     <dimen name="videogrid_height">180dp</dimen>
+
+
     <dimen name="videogrid_land_width">182dp</dimen>
     <dimen name="videogrid_land_height">101dp</dimen>
     <dimen name="plainrowlayout_height">100dp</dimen>
@@ -162,6 +166,32 @@
     <dimen name="logo_width">100dp</dimen>
 
     <dimen name="plainrow_text_size">20sp</dimen>
+    <dimen name="downloadwidth">200dp</dimen>
+    <dimen name="button_padding">6dp</dimen>
+
+    <dimen name="player_season_height">70dp</dimen>
+    <dimen name="marginLeft15dp">15dp</dimen>
+    <dimen name="dietmarginRight20dp">20dp</dimen>
+    <dimen name="submitcontact_width">220dp</dimen>
+    <dimen name="loginImageViewMarging_top">120dp</dimen>
+    <dimen name="alreadyMember_Relative_Height">50dp</dimen>
+    <dimen name="login_new_user_margin_top">150dp</dimen>
+    <dimen name="list_itemmarginTop">10dp</dimen>
+    <dimen name="card_padding">4dp</dimen>
+    <dimen name="card_radius">9dp</dimen>
+    <dimen name="card_elevation">9dp</dimen>
+    <dimen name="sideTitle_line_height">18dp</dimen>
+    <dimen name="sideTitle_line_width">5dp</dimen>
+    <dimen name="sideTitle_line_marginleft">15dp</dimen>
+    <dimen name="season_card_width">300dp</dimen>
+    <dimen name="season_card_height">300dp</dimen>
+    <dimen name="fav_title_textsize">25dp</dimen>
+    <dimen name="fav_des_textsize">15dp</dimen>
+
+    <dimen name="fav_img_width">150dp</dimen>
+    <dimen name="fav_img_height">214dp</dimen>
+    <dimen name="close_album_img_width">20dp</dimen>
+    <dimen name="close_album_img_height">20dp</dimen>
 
 
     <!--//**********profile picture*************//-->

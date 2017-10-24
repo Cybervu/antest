@@ -2,7 +2,6 @@ package com.home.vod.activity;
 
 /**
  * Created by MUVI on 10/10/2017.
- *
  */
 
 import android.annotation.TargetApi;
@@ -15,13 +14,12 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -75,7 +73,6 @@ import com.home.vod.BuildConfig;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.MonetizationHandler;
 import com.home.vod.R;
-
 import com.home.vod.adapter.ProgramDetailsAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
@@ -91,7 +88,6 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -110,13 +106,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
 import player.activity.Player;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAIL_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
@@ -132,6 +126,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGU
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TUTORIAL_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_WORKOUT_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DURATION_TITLE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
@@ -142,12 +137,15 @@ import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.TUTORIAL_TITLE;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.WORKOUT_BUTTON;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_ARRAY;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 
-public class ProgramDetailsActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener,GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener,GetIpAddressAsynTask.IpAddressListener, GetValidateUserAsynTask.GetValidateUserListener,
-        VideoDetailsAsynctask.VideoDetailsListener{
+public class ProgramDetailsActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener, GetIpAddressAsynTask.IpAddressListener, GetValidateUserAsynTask.GetValidateUserListener,
+        VideoDetailsAsynctask.VideoDetailsListener {
 
     ImageView bannerImageView, playButton, share;
     TextView detailsTextView, durationTitleTextView, durationTextView, tutorialTextView, viewAllTextView;
@@ -158,7 +156,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     ArrayList<EpisodesListModel> itemData;
     int isFreeContent = 0, isPPV, isConverted, contentTypesId, isAPV;
     PreferenceManager preferenceManager;
-    RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout,logo_image;
+    RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout, logo_image;
     RecyclerView seasontiveLayout;
     Player playerModel;
     String movieUniqueId = "";
@@ -195,7 +193,8 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     LanguagePreference languagePreference;
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-
+        /////by nihar
+        String[] season ;
     /*chromecast-------------------------------------*/
     private VideoView mVideoView;
     private TextView mTitleView;
@@ -322,13 +321,58 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                         });
                 dlgAlert.create().show();
             } else if (status == 429 || status == 430) {
-                new MonetizationHandler(ProgramDetailsActivity.this).handle429OR430statusCod(validUserStr, message, subscription_Str);
+
+                if (validUserStr != null) {
+
+
+                    if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
+                        if (NetworkStatus.getInstance().isConnected(this)) {
+                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                            getVideoDetailsInput.setAuthToken(authTokenStr);
+                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                            asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgramDetailsActivity.this, ProgramDetailsActivity.this);
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                        } else {
+                            Toast.makeText(ProgramDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+
+                        }
+                    } else {
+
+                        if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
+                            if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                                ShowPpvPopUp();
+                            } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+                                Intent intent = new Intent(ProgramDetailsActivity.this, SubscriptionActivity.class);
+                                intent.putExtra("PlayerModel", playerModel);
+                                intent.putExtra("PERMALINK", permalinkStr );
+                                intent.putExtra("SEASON", season.length );
+                                intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                intent.putExtra("Index",getIntent().getStringExtra("Index"));
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                            } else {
+                                ShowPpvPopUp();
+                            }
+                        }
+
+                    }
+                }
 
 
             } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
                 ShowPpvPopUp();
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                 Intent intent = new Intent(ProgramDetailsActivity.this, SubscriptionActivity.class);
+                intent.putExtra("PlayerModel", playerModel);
+                intent.putExtra("PERMALINK", permalinkStr );
+                intent.putExtra("SEASON", season.length );
+                intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                intent.putExtra("Index",getIntent().getStringExtra("Index"));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             } else if (Util.dataModel.getIsConverted() == 0) {
@@ -349,7 +393,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             } else {
                 if (NetworkStatus.getInstance().isConnected(this)) {
 
-                    Log.v("SUBHA","Video PLayer Called 1");
+                    Log.v("SUBHA", "Video PLayer Called 1");
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);
@@ -400,7 +444,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             play_video = true;
         }
 
-        Log.v("SUBHA","play video ==== "+ play_video);
+        Log.v("SUBHA", "play video ==== " + play_video);
         if (!play_video) {
 
             try {
@@ -437,7 +481,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
         }
 
-Log.v("SUBHA","code == player == "+ code);
+        Log.v("SUBHA", "code == player == " + code);
         if (code == 200) {
             playerModel.setIsOffline(_video_details_output.getIs_offline());
             playerModel.setDownloadStatus(_video_details_output.getDownload_status());
@@ -774,6 +818,12 @@ Log.v("SUBHA","code == player == "+ code);
 
                                     playVideoIntent.putExtra("PlayerModel", playerModel);
                                     playVideoIntent.putExtra("PLAY_LIST",itemData);
+                                    playVideoIntent.putExtra("SEASON", season.length );
+                                    playVideoIntent.putExtra("PERMALINK", permalinkStr );
+                                    playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                    playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                    playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
+                                    Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
                                     playVideoIntent.putExtra("TAG",ItemClickedPosition);
                                     startActivity(playVideoIntent);
                                 }
@@ -787,9 +837,16 @@ Log.v("SUBHA","code == player == "+ code);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                     playVideoIntent.putExtra("PlayerModel", playerModel);
-                    Log.v("Nihar","==================="+itemData.size());
-                    playVideoIntent.putExtra("PLAY_LIST",itemData);
+                    playVideoIntent.putExtra("PLAY_LIST", itemData);
+                    playVideoIntent.putExtra("SEASON", season.length );
+                    playVideoIntent.putExtra("PERMALINK", permalinkStr );
+                    playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+
+                    Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                    playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
                     playVideoIntent.putExtra("TAG",ItemClickedPosition);
+                    playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
+
                     startActivity(playVideoIntent);
                 }
             }
@@ -919,11 +976,15 @@ Log.v("SUBHA","code == player == "+ code);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), detailsTextView);
+        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), viewAllTextView);
+        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), startWorkoutButton);
         detailsTextView.setText(languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + getIntent().getStringExtra(SEASON_INTENT_KEY));
-
+        viewAllTextView.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
         viewAllTextView.setVisibility(View.GONE);
         dietPlanButton.setVisibility(View.GONE);
         playButton.setVisibility(View.GONE);
+        isLogin = preferenceManager.getLoginFeatureFromPref();
 
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -1023,8 +1084,17 @@ Log.v("SUBHA","code == player == "+ code);
             @Override
             public void onClick(View v) {
                 final Intent episode = new Intent(ProgramDetailsActivity.this, Tutorial_List_Activity.class);
+                episode.putExtra("movieUniqueId", movieUniqueId);
+                episode.putExtra("contentTypesId", contentTypesId);
+                episode.putExtra("PLAY_LIST", itemData);
+                episode.putExtra("TAG", ItemClickedPosition);
+                episode.putExtra("SEASON", season.length );
                 episode.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
                 episode.putExtra(SEASON_INTENT_KEY, getIntent().getStringExtra(SEASON_INTENT_KEY));
+                episode.putExtra("Index",getIntent().getStringExtra("Index"));
+
+
+                episode.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
                 startActivity(episode);
             }
         });
@@ -1055,7 +1125,9 @@ Log.v("SUBHA","code == player == "+ code);
         startWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                clickItem(itemData.get(0),0);
+                clickItem(itemData.get(0), 0);
+
+
                /* Intent  playVideoIntent = new Intent(ProgramDetailsActivity.this, ProgramPlayerActivity.class);
                 playVideoIntent.putExtra("PlayerModel", playerModel);
                 playVideoIntent.putExtra("PLAY_LIST",itemData);
@@ -1100,6 +1172,7 @@ Log.v("SUBHA","code == player == "+ code);
         Log.v("SUBHA","season number === "+getIntent().getStringExtra(SEASON_INTENT_KEY));
         episode_details_input.setLimit("10");
         episode_details_input.setOffset("1");
+       // episode_details_input.setSeries_number("1");
         episode_details_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
         GetEpisodeDeatailsAsynTask getEpisodeDeatailsAsynTask=new GetEpisodeDeatailsAsynTask(episode_details_input,this,this);
         getEpisodeDeatailsAsynTask.executeOnExecutor(threadPoolExecutor);
@@ -1287,8 +1360,11 @@ Log.v("SUBHA","code == player == "+ code);
 
         }
         if (status == 200) {
+            ///by nihar
+           season =   contentDetailsOutput.getSeason();
 
-            movieUniqueId=contentDetailsOutput.getMuviUniqId();
+            contentTypesId = contentDetailsOutput.getContentTypesId();
+            movieUniqueId = contentDetailsOutput.getMuviUniqId();
             bannerImageId = contentDetailsOutput.getBanner();
             posterImageId = contentDetailsOutput.getPoster();
             duration = contentDetailsOutput.getDuration();
@@ -1296,15 +1372,17 @@ Log.v("SUBHA","code == player == "+ code);
 
            // viewAllTextView.setText(languagePreference.getTextofLanguage(DETAIL_VIEW_MORE,DEFAULT_DETAIL_VIEW_MORE));
             viewAllTextView.setVisibility(View.VISIBLE);
-            tutorialTextView.setText(languagePreference.getTextofLanguage(TUTORIAL_TITLE,DEFAULT_TUTORIAL_TITLE));
+            tutorialTextView.setText(languagePreference.getTextofLanguage(TUTORIAL_TITLE, DEFAULT_TUTORIAL_TITLE));
             durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
+            startWorkoutButton.setText(languagePreference.getTextofLanguage(WORKOUT_BUTTON, DEFAULT_WORKOUT_BUTTON));
+            FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), tutorialTextView);
+            FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
 
             if (duration.matches("")) {
                 durationTitleTextView.setVisibility(View.GONE);
             } else {
 
-                FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.light_fonts), durationTitleTextView);
-                durationTitleTextView.setTypeface(null, Typeface.BOLD);
+                FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
                 durationTextView.setText(duration);
             }
 
@@ -1382,14 +1460,12 @@ Log.v("SUBHA","code == player == "+ code);
         LogUtil.showLog("MUVI", "episode show...");
 
 
-
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
         if (status == 200) {
 
 
             isAPV = episode_details_output.getIsAPV();
             isPPV = episode_details_output.getIs_ppv();
-
 
 
             Util.currencyModel = episode_details_output.getCurrencyDetails();
@@ -1443,14 +1519,14 @@ Log.v("SUBHA","code == player == "+ code);
 
     }
 
-    public void clickItem (EpisodesListModel item , int position ){
+    public void clickItem(EpisodesListModel item, int position) {
 
        /* Intent intent=new Intent(ProgramDetailsActivity.this,ProgramPlayerActivity.class);
         startActivity(intent);*/
 
 
         itemToPlay = item;
-        ItemClickedPosition = position ;
+        ItemClickedPosition = position;
 
         dbModel.setIsFreeContent(isFreeContent);
         dbModel.setIsAPV(isAPV);
@@ -1491,7 +1567,7 @@ Log.v("SUBHA","code == player == "+ code);
         Util.offline_language.clear();*/
 
 
-        Log.v("SUBHA","stream id === "+ item.getEpisodeStreamUniqueId());
+        Log.v("SUBHA", "stream id === " + item.getEpisodeStreamUniqueId());
 
         //edit by bishal
         //set the required data in playermodel
@@ -1538,22 +1614,27 @@ Log.v("SUBHA","code == player == "+ code);
 
                 final Intent register = new Intent(ProgramDetailsActivity.this, RegisterActivity.class);
 
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        Util.check_for_subscription = 1;
-                        register.putExtra("PlayerModel", playerModel);
-                        startActivity(register);
+                register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                Util.check_for_subscription = 1;
+                register.putExtra("PLAY_LIST", itemData);
+                register.putExtra("TAG", ItemClickedPosition);
+                register.putExtra("PlayerModel", playerModel);
+
+                register.putExtra("PERMALINK", permalinkStr );
+                register.putExtra("SEASON", season.length );
+                register.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                register.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                register.putExtra("Index",getIntent().getStringExtra("Index"));
+                startActivity(register);
 
 
-                    }
-                });
             }
         } else {
             if (NetworkStatus.getInstance().isConnected(this)) {
                 // MUVIlaxmi
 
-                Log.v("SUBHA","Video PLayer Called 2");
+                Log.v("SUBHA", "Video PLayer Called 2");
 
                 GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                 getVideoDetailsInput.setAuthToken(authTokenStr);
@@ -1563,13 +1644,11 @@ Log.v("SUBHA","code == player == "+ code);
                 getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
 
 
-                LogUtil.showLog("SUBHA","Video PLayer Called authTokenStr 2 "+authTokenStr);
-                Log.v("SUBHA","Video PLayer Called movie uniqueid 2 "+dbModel.getMovieUniqueId().trim());
-                Log.v("SUBHA","Video PLayer Called movie StreamUniqueid 2 "+dbModel.getStreamUniqueId().trim());
-                Log.v("SUBHA","Video PLayer Called inyternet speed 2 "+MainActivity.internetSpeed.trim());
-                Log.v("SUBHA","Video PLayer Called  user id 2 "+preferenceManager.getUseridFromPref());
-
-
+                LogUtil.showLog("SUBHA", "Video PLayer Called authTokenStr 2 " + authTokenStr);
+                Log.v("SUBHA", "Video PLayer Called movie uniqueid 2 " + dbModel.getMovieUniqueId().trim());
+                Log.v("SUBHA", "Video PLayer Called movie StreamUniqueid 2 " + dbModel.getStreamUniqueId().trim());
+                Log.v("SUBHA", "Video PLayer Called inyternet speed 2 " + MainActivity.internetSpeed.trim());
+                Log.v("SUBHA", "Video PLayer Called  user id 2 " + preferenceManager.getUseridFromPref());
 
 
                 asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgramDetailsActivity.this, ProgramDetailsActivity.this);
@@ -1978,7 +2057,19 @@ Log.v("SUBHA","code == player == "+ code);
                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                 playVideoIntent.putExtra("PlayerModel", playerModel);
                 playVideoIntent.putExtra("PLAY_LIST",itemData);
-                Log.v("Nihar","==================="+itemData.size());
+                playVideoIntent.putExtra("PERMALINK", permalinkStr );
+                playVideoIntent.putExtra("SEASON", season.length );
+                playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
+
+               // ArrayList<SeasonModel> b =(ArrayList<SeasonModel>) getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY);
+
+              //  playVideoIntent.putExtra("SEASON_ARRAY_MODEL", b );
+
+
+               // Log.v("Nihar","==================="+b.size());
                 playVideoIntent.putExtra("TAG",ItemClickedPosition);
 //                playVideoIntent.putExtra("PLAY_LIST",itemData);
                 startActivity(playVideoIntent);
@@ -2264,6 +2355,11 @@ Log.v("SUBHA","code == player == "+ code);
                     showPaymentIntent.putExtra("currencyCountryCode", Util.currencyModel.getCurrencyCode());
                     showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getCurrencySymbol());
                     showPaymentIntent.putExtra("PlayerModel", playerModel);
+                    showPaymentIntent.putExtra("PERMALINK", permalinkStr );
+                    showPaymentIntent.putExtra("SEASON", season.length );
+                    showPaymentIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                    showPaymentIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                    showPaymentIntent.putExtra("Index",getIntent().getStringExtra("Index"));
 
                     // showPaymentIntent.putExtra("showName", Util.dataModel.getEpisode_title());
 

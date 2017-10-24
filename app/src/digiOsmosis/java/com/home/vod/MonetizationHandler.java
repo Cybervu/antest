@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.home.vod.activity.Episode_list_Activity;
 import com.home.vod.activity.MovieDetailsActivity;
+import com.home.vod.activity.ProgramDetailsActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 
 /**
@@ -25,8 +26,6 @@ public class MonetizationHandler {
                 ((ShowWithEpisodesActivity) activity).handleActionForValidateUserPayment(validUserStr, message, subscription_Str);
             if (activity instanceof Episode_list_Activity)
                 ((Episode_list_Activity) activity).handleActionForValidateUserPayment(validUserStr, message, subscription_Str);
-
-
         } catch (ClassCastException e){
             e.printStackTrace();
         } catch (Exception e){

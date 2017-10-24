@@ -90,6 +90,7 @@ import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.BuildConfig;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.MonetizationHandler;
+import com.home.vod.ProgramPlayerIntentHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.EpisodesListViewMoreAdapter;
 import com.home.vod.adapter.LanguageCustomAdapter;
@@ -195,6 +196,7 @@ import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.CAST_INTENT_KEY;
 import static com.home.vod.util.Constant.CENSOR_RATING_INTENT_KEY;
 import static com.home.vod.util.Constant.GENRE_INTENT_KEY;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_ARRAY;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -223,16 +225,19 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
     ArrayList<String> ResolutionFormat = new ArrayList<>();
     ArrayList<String> ResolutionUrl = new ArrayList<>();
     ArrayList<String> SubTitleLanguage = new ArrayList<>();
-
+    DataModel dbModel = new DataModel();
     // ProgressBarHandler loadEpisodedetailspDialog;
+    ArrayList<EpisodesListModel> questions;
     SharedPreferences pref;
     int previousTotal = 0;
     VideoDetailsAsynctask asynLoadVideoUrls;
     GetEpisodeDeatailsAsynTask asynEpisodeDetails;
     GetValidateUserAsynTask asynValidateUserDetails;
+    int contentPosition;
     int videoHeight = 185;
     int videoWidth = 256;
     EpisodesListModel itemToPlay;
+    String movieUniqueId = "";
     String permalinkStr;
     ArrayList<EpisodesListModel> itemData = new ArrayList<EpisodesListModel>();
     LinearLayoutManager mLayoutManager;
@@ -275,7 +280,8 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
     RelativeLayout footerView;
     private PreferenceManager preferenceManager;
     String PlanId = "";
-    String videoUrlStr = "";
+    int contentTypesId;
+    int ItemClickedPosition = 0;
     String priceForUnsubscribedStr, priceFosubscribedStr;
     private boolean loading = true;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
@@ -286,7 +292,7 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
     APVModel advmodel;
     CurrencyModel currencymodel;
 
-    String email, id;
+    String email, id, posterImageId;
     LanguageCustomAdapter languageCustomAdapter;
     AlertDialog alert;
     String default_Language = "";
@@ -329,11 +335,7 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
 
     @Override
     public void onVideoDetailsPostExecuteCompleted(Video_Details_Output _video_details_output, int statusCode, String stus, String message) {
-        // _video_details_output.setThirdparty_url("https://www.youtube.com/watch?v=fqU2FzATTPY&spfreload=10");
-        // _video_details_output.setThirdparty_url("https://player.vimeo.com/video/192417650?color=00ff00&badge=0");
 
-     /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
-        then set thirdpartyurl true here and assign the url to videourl*/
         boolean play_video = true;
 
         if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
@@ -347,6 +349,8 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
         } else {
             play_video = true;
         }
+
+        Log.v("SUBHA", "play video ==== " + play_video);
         if (!play_video) {
 
             try {
@@ -373,6 +377,17 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
         }
 
 
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                LogUtil.showLog("PINTU", "videodetails pdlog hide");
+                pDialog.hide();
+
+            }
+        } catch (IllegalArgumentException ex) {
+            playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+        }
+
+        Log.v("SUBHA", "code == player == " + statusCode);
         if (statusCode == 200) {
             playerModel.setIsOffline(_video_details_output.getIs_offline());
             playerModel.setDownloadStatus(_video_details_output.getDownload_status());
@@ -389,7 +404,7 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                         !_video_details_output.getStudio_approved_url().matches("")) {
                     LogUtil.showLog("BISHAL", "if called means  studioapproved");
                     playerModel.setVideoUrl(_video_details_output.getStudio_approved_url());
-                    LogUtil.showLog("BS", "studipapprovedurl====" + playerModel.getVideoUrl());
+                    LogUtil.showLog("BKS", "studipapprovedurl====" + playerModel.getVideoUrl());
 
 
                     if (_video_details_output.getLicenseUrl().trim() != null && !_video_details_output.getLicenseUrl().trim().isEmpty() && !_video_details_output.getLicenseUrl().trim().equals("null") && !_video_details_output.getLicenseUrl().trim().matches("")) {
@@ -430,10 +445,12 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
             if (_video_details_output.getPlayed_length() != null && !_video_details_output.getPlayed_length().equals(""))
                 playerModel.setPlayPos((Util.isDouble(_video_details_output.getPlayed_length())));
 
+
+            //dependency for datamodel
+
             SubTitleName = _video_details_output.getSubTitleName();
             SubTitleLanguage = _video_details_output.getSubTitleLanguage();
 
-            //dependency for datamodel
             Util.dataModel.setVideoUrl(_video_details_output.getVideoUrl());
             Util.dataModel.setVideoResolution(_video_details_output.getVideoResolution());
             Util.dataModel.setThirdPartyUrl(_video_details_output.getThirdparty_url());
@@ -454,7 +471,6 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
             playerModel.setPreRoll(_video_details_output.getPreRoll());
             playerModel.setSubTitleName(_video_details_output.getSubTitleName());
             playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
-            playerModel.setSubTitleLanguage(_video_details_output.getSubTitleLanguage());
             playerModel.setResolutionFormat(_video_details_output.getResolutionFormat());
             playerModel.setResolutionUrl(_video_details_output.getResolutionUrl());
             playerModel.setFakeSubTitlePath(_video_details_output.getFakeSubTitlePath());
@@ -464,23 +480,17 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
             playerModel.setOfflineUrl(_video_details_output.getOfflineUrl());
             playerModel.setOfflineLanguage(_video_details_output.getOfflineLanguage());
 
+
             if (playerModel.getVideoUrl() == null ||
                     playerModel.getVideoUrl().matches("")) {
-                try {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                } catch (IllegalArgumentException ex) {
-                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
-                }
+
                 Util.showNoDataAlert(Tutorial_List_Activity.this);
-              /*  AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(languagePreference.getTextofLanguage( Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
+               /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramDetailsActivity.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -488,20 +498,11 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                         });
                 dlgAlert.create().show();*/
             } else {
-                try {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                } catch (IllegalArgumentException ex) {
-                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
-                }
 
 
                 // condition for checking if the response has third party url or not.
-                if (_video_details_output.getThirdparty_url() == null ||
-                        _video_details_output.getThirdparty_url().matches("")
-                        ) {
+                if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
+
 
                     if (mCastSession != null && mCastSession.isConnected()) {
                         MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
@@ -677,33 +678,31 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                         }
                     } else {
 
+
                         playerModel.setThirdPartyPlayer(false);
+
                         final Intent playVideoIntent;
-                        //edit by bishal for player
+                        if (Util.dataModel.getAdNetworkId() == 3) {
+                            LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                        if (Util.goToLibraryplayer) {
-                            playVideoIntent = new Intent(Tutorial_List_Activity.this, MyLibraryPlayer.class);
+                            playVideoIntent = new Intent(Tutorial_List_Activity.this, ProgramPlayerActivity.class);
+//                            playVideoIntent = new Intent(ProgramDetailsActivity.this, ExoPlayerActivity.class);
 
-                        } else {
-                            if (Util.dataModel.getAdNetworkId() == 3) {
-                                LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
-
-                                playVideoIntent = new Intent(Tutorial_List_Activity.this, ExoPlayerActivity.class);
-
-                            } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
-                                if (Util.dataModel.getPlayPos() <= 0) {
-                                    playVideoIntent = new Intent(Tutorial_List_Activity.this, AdPlayerActivity.class);
-                                } else {
-                                    playVideoIntent = new Intent(Tutorial_List_Activity.this, ExoPlayerActivity.class);
-
-                                }
-
+                        } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
+                            if (Util.dataModel.getPlayPos() <= 0) {
+                                playVideoIntent = new Intent(Tutorial_List_Activity.this, AdPlayerActivity.class);
                             } else {
-                                playVideoIntent = new Intent(Tutorial_List_Activity.this, ExoPlayerActivity.class);
+                                playVideoIntent = new Intent(Tutorial_List_Activity.this, ProgramPlayerActivity.class);
+//                                playVideoIntent = new Intent(ProgramDetailsActivity.this, ExoPlayerActivity.class);
 
                             }
+
+
+                        } else {
+                            playVideoIntent = new Intent(Tutorial_List_Activity.this, ProgramPlayerActivity.class);
+//                            playVideoIntent = new Intent(ProgramDetailsActivity.this, ExoPlayerActivity.class);
                         }
-                        //final Intent playVideoIntent = new Intent(Episode_list_Activity.this, ExoPlayerActivity.class);
+                        /***ad **/
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 if (FakeSubTitlePath.size() > 0) {
@@ -717,16 +716,24 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                                         }
                                     }
 
-                                    /*progressBarHandler = new ProgressBarHandler(Episode_list_Activity.this);
-                                    progressBarHandler.show();*/
+                                    progressBarHandler = new ProgressBarHandler(Tutorial_List_Activity.this);
+                                    progressBarHandler.show();
                                     Download_SubTitle(FakeSubTitlePath.get(0).trim());
                                 } else {
                                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
-                                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-                                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+
                                     playVideoIntent.putExtra("PlayerModel", playerModel);
+                                    playVideoIntent.putExtra("PLAY_LIST", itemData);
+                                    playVideoIntent.putExtra("TAG", ItemClickedPosition);
+
+
+
+                                    playVideoIntent.putExtra("PERMALINK", permalinkStr );
+                                    playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                                    playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                    Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                    playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                    playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                                     startActivity(playVideoIntent);
                                 }
 
@@ -734,87 +741,34 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                         });
                     }
                 } else {
-                    final Intent playVideoIntent = new Intent(Tutorial_List_Activity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent = new Intent(Tutorial_List_Activity.this, ProgramPlayerActivity.class);
+//                    final Intent   playVideoIntent = new Intent(ProgramDetailsActivity.this, ExoPlayerActivity.class);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
-                                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-                                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+
                     playVideoIntent.putExtra("PlayerModel", playerModel);
+                    playVideoIntent.putExtra("PLAY_LIST", itemData);
+                    playVideoIntent.putExtra("TAG", ItemClickedPosition);
+
+
+
+                    playVideoIntent.putExtra("PERMALINK", permalinkStr );
+                    playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                    playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                    Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                    playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                    playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                     startActivity(playVideoIntent);
-
-                    //below part  checked at exoplayer thats why no need of checking here
-
-                   /* playerModel.setThirdPartyPlayer(true);
-                    if (playerModel.getVideoUrl().contains("://www.youtube") ||
-                            playerModel.getVideoUrl().contains("://www.youtu.be")) {
-                        if (playerModel.getVideoUrl().contains("live_stream?channel")) {
-                            final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ThirdPartyPlayer.class);
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    playVideoIntent.putExtra("PlayerModel",playerModel);
-                                    startActivity(playVideoIntent);
-
-                                }
-                            });
-                        } else {
-
-                            final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, YouTubeAPIActivity.class);
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    playVideoIntent.putExtra("PlayerModel",playerModel);
-                                    startActivity(playVideoIntent);
-
-
-                                }
-                            });
-
-                        }
-                    } else {
-                        final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ThirdPartyPlayer.class);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                playVideoIntent.putExtra("PlayerModel",playerModel);
-                                startActivity(playVideoIntent);
-
-                            }
-                        });
-                    }*/
                 }
             }
 
         } else {
 
             playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
-                // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
-            }
+
             playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
-            //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
-          /*  AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this, R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(languagePreference.getTextofLanguage( Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-            dlgAlert.setTitle(languagePreference.getTextofLanguage( SORRY, DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK), null);
-            dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage( BUTTON_OK, DEFAULT_BUTTON_OK),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-            dlgAlert.create().show();*/
+
             Util.showNoDataAlert(Tutorial_List_Activity.this);
         }
-
 
     }
 
@@ -826,6 +780,10 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
 
     @Override
     public void onGetValidateUserPostExecuteCompleted(ValidateUserOutput validateUserOutput, int status, String message) {
+
+        String Subscription_Str = preferenceManager.getIsSubscribedFromPref();
+        String validUserStr = validateUserOutput.getValiduser_str();
+
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
@@ -834,8 +792,7 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
         } catch (IllegalArgumentException ex) {
             status = 0;
         }
-        String Subscription_Str = preferenceManager.getIsSubscribedFromPref();
-        String validUserStr = validateUserOutput.getValiduser_str();
+
         if (validateUserOutput == null) {
 
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Tutorial_List_Activity.this);
@@ -896,13 +853,69 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                 dlgAlert.create().show();
             } else if (status == 429 || status == 430) {
 
-                new MonetizationHandler(Tutorial_List_Activity.this).handle429OR430statusCod(validUserStr, message, Subscription_Str);
+                if (validUserStr != null) {
+
+
+                    if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
+                        if (NetworkStatus.getInstance().isConnected(Tutorial_List_Activity.this)) {
+                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                            getVideoDetailsInput.setAuthToken(authTokenStr);
+                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                            asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, Tutorial_List_Activity.this, Tutorial_List_Activity.this);
+                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                        } else {
+                            Toast.makeText(Tutorial_List_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+
+                        }
+                    } else {
+
+                        if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
+                            if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+                                ShowPpvPopUp();
+                            } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
+                                Intent intent = new Intent(Tutorial_List_Activity.this, SubscriptionActivity.class);
+                                intent.putExtra("PlayerModel", playerModel);
+                                intent.putExtra("PLAY_LIST", itemData);
+                                intent.putExtra("TAG", ItemClickedPosition);
+
+
+
+                                intent.putExtra("PERMALINK", permalinkStr );
+                                intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                                intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                intent.putExtra("Index",getIntent().getStringExtra("Index"));
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                            } else {
+                                ShowPpvPopUp();
+                            }
+                        }
+
+                    }
+                }
 
 
             } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
                 ShowPpvPopUp();
             } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
                 Intent intent = new Intent(Tutorial_List_Activity.this, SubscriptionActivity.class);
+                intent.putExtra("PlayerModel", playerModel);
+                intent.putExtra("PLAY_LIST", itemData);
+                intent.putExtra("TAG", ItemClickedPosition);
+
+
+
+                intent.putExtra("PERMALINK", permalinkStr );
+                intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                intent.putExtra("Index",getIntent().getStringExtra("Index"));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             } else if (Util.dataModel.getIsConverted() == 0) {
@@ -1251,6 +1264,15 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial_list);
 
+        try {
+            contentPosition = getIntent().getIntExtra("TAG", 0);
+            questions = new ArrayList<EpisodesListModel>();;
+
+            questions = (ArrayList<EpisodesListModel>) getIntent().getSerializableExtra("PLAY_LIST");
+            // Util.PlayListArrayModel = questions;
+        } catch (Exception e) {
+            Log.v("Nihar", "exception" + e.toString());
+        }
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         isLogin = preferenceManager.getLoginFeatureFromPref();
@@ -1279,17 +1301,21 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
 
 
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        movieUniqueId=getIntent().getStringExtra("movieUniqueId");
+        contentTypesId=getIntent().getIntExtra("contentTypesId",0);
         // setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
 
         mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON).toString() + " " + getIntent().getStringExtra(SEASON_INTENT_KEY));
         mActionBarToolbar.setTitleTextColor(Color.WHITE);
+//        FontUtls.loadFont(Tutorial_List_Activity.this, getResources().getString(R.string.regular_fonts), );
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
+
         TextView sectionTitle = (TextView) findViewById(R.id.sectionTitle);
         FontUtls.loadFont(Tutorial_List_Activity.this, getResources().getString(R.string.regular_fonts), sectionTitle);
         sectionTitle.setText(languagePreference.getTextofLanguage(EPISODE_TITLE, DEFAULT_EPISODE_TITLE));
@@ -1363,56 +1389,7 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String loggedInStr = preferenceManager.getLoginStatusFromPref();
-                if (isLogin == 1) {
-                    if (loggedInStr != null) {
-                        if (NetworkStatus.getInstance().isConnected(Tutorial_List_Activity.this)) {
-
-                            ValidateUserInput validateUserInput = new ValidateUserInput();
-                            validateUserInput.setAuthToken(authTokenStr);
-                            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                            validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                            validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                            validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                            validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                            asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, Tutorial_List_Activity.this, Tutorial_List_Activity.this);
-                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                        } else {
-                            Util.showToast(Tutorial_List_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
-                        }
-                    } else {
-
-                        final Intent register = new Intent(Tutorial_List_Activity.this, RegisterActivity.class);
-
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                Util.check_for_subscription = 1;
-                                register.putExtra("PlayerModel", playerModel);
-                                startActivity(register);
-
-
-                            }
-                        });
-                    }
-                } else if (NetworkStatus.getInstance().isConnected(Tutorial_List_Activity.this)) {
-                    // MUVIlaxmi
-
-                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
-                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, Tutorial_List_Activity.this, Tutorial_List_Activity.this);
-                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-
-                } else {
-                    Util.showToast(Tutorial_List_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
-
-                    //Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
-                }
+                clickItem(itemData.get(0),0);
             }
         });
 
@@ -1604,74 +1581,74 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
 
 /*chromecast-------------------------------------*/
 
-    public void clickItem(EpisodesListModel item) {
+    public void clickItem(EpisodesListModel item, int position) {
 
+       /* Intent intent=new Intent(ProgramDetailsActivity.this,ProgramPlayerActivity.class);
+        startActivity(intent);*/
 
-        Util.check_for_subscription = 1;
 
         itemToPlay = item;
-        DataModel dbModel = new DataModel();
+        ItemClickedPosition = position;
+
         dbModel.setIsFreeContent(isFreeContent);
         dbModel.setIsAPV(isAPV);
         dbModel.setIsPPV(isPPV);
         dbModel.setIsConverted(1);
-        dbModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
+        dbModel.setMovieUniqueId(movieUniqueId);
         dbModel.setStreamUniqueId(item.getEpisodeStreamUniqueId());
         dbModel.setThirdPartyUrl(item.getEpisodeThirdPartyUrl());
         dbModel.setVideoTitle(item.getEpisodeTitle());
-        // dbModel.setVideoStory(getIntent().getStringExtra(Util.STORY_INTENT_KEY));
         dbModel.setVideoStory(item.getEpisodeDescription());
-
-        dbModel.setVideoGenre(getIntent().getStringExtra(GENRE_INTENT_KEY));
+//        dbModel.setVideoGenre(videoGenreTextView.getText().toString());
         dbModel.setVideoDuration(item.getEpisodeDuration());
         // dbModel.setVideoReleaseDate(item.getEpisodeTelecastOn());
         dbModel.setVideoReleaseDate("");
 
-        dbModel.setCensorRating(getIntent().getStringExtra(CENSOR_RATING_INTENT_KEY));
-        dbModel.setCastCrew(getIntent().getBooleanExtra(CAST_INTENT_KEY, false));
-        dbModel.setEpisode_id(item.getEpisodeStreamUniqueId());
-        dbModel.setPosterImageId(item.getEpisodeThumbnailImageView());
 
-        dbModel.setContentTypesId(Integer.parseInt(getIntent().getStringExtra("content_types_id")));
+//        dbModel.setEpisode_id(item.getEpisodeStreamUniqueId());
+//        dbModel.setSeason_id(Season_Value);
+        dbModel.setPurchase_type("episode");
+        dbModel.setPosterImageId(item.getEpisodeThumbnailImageView());
+        dbModel.setContentTypesId(contentTypesId);
 
         dbModel.setEpisode_series_no(item.getEpisodeSeriesNo());
         dbModel.setEpisode_no(item.getEpisodeNumber());
         dbModel.setEpisode_title(item.getEpisodeTitle());
 
+        // dbModel.setParentTitle(movieNameStr);
 
-//edit by bishal
+
+        Util.dataModel = dbModel;
+        SubTitleName.clear();
+        SubTitlePath.clear();
+        ResolutionUrl.clear();
+        ResolutionFormat.clear();
+        SubTitleLanguage.clear();
+      /*  Util.offline_url.clear();
+        Util.offline_language.clear();*/
+
+
+        Log.v("SUBHA", "stream id === " + item.getEpisodeStreamUniqueId());
+
+        //edit by bishal
         //set the required data in playermodel
-
         playerModel.setStreamUniqueId(item.getEpisodeStreamUniqueId());
         playerModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
         playerModel.setUserId(preferenceManager.getUseridFromPref());
         playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
         playerModel.setAuthTokenStr(authTokenStr.trim());
-        playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH);
-        playerModel.setEpisode_id(item.getEpisodeStreamUniqueId());
+        playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH.trim());
+//        playerModel.setEpisode_id(item.getEpisodeNumber());
         playerModel.setVideoTitle(item.getEpisodeTitle());
         playerModel.setVideoStory(item.getEpisodeDescription());
-        playerModel.setVideoGenre(getIntent().getStringExtra(GENRE_INTENT_KEY));
+//        playerModel.setVideoGenre(videoGenreTextView.getText().toString());
         playerModel.setVideoDuration(item.getEpisodeDuration());
         playerModel.setVideoReleaseDate("");
-        playerModel.setCensorRating(getIntent().getStringExtra(CENSOR_RATING_INTENT_KEY));
+//        playerModel.setCensorRating(censorRatingStr);
+        playerModel.setContentTypesId(contentTypesId);
+        playerModel.setPosterImageId(posterImageId);
 
-
-        if (!getIntent().getStringExtra(SEASON_INTENT_KEY).equals("")) {
-            dbModel.setSeason_id(getIntent().getStringExtra(SEASON_INTENT_KEY));
-
-        } else {
-            dbModel.setSeason_id("0");
-
-        }
-        dbModel.setPurchase_type("episode");
-        Util.dataModel = dbModel;
-
-
-        SubTitleName.clear();
-        SubTitlePath.clear();
-        ResolutionUrl.clear();
-        ResolutionFormat.clear();
+        LogUtil.showLog("MUVI", "content typesid = " + contentTypesId);
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
         if (isLogin == 1) {
             if (loggedInStr != null) {
@@ -1680,7 +1657,7 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                     ValidateUserInput validateUserInput = new ValidateUserInput();
                     validateUserInput.setAuthToken(authTokenStr);
                     validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                    validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
+                    validateUserInput.setMuviUniqueId(movieUniqueId.trim());
                     validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                     validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
                     validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
@@ -1691,7 +1668,7 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                 } else {
                     Util.showToast(Tutorial_List_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
 
-                    //  Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
+                    //  Toast.makeText(ProgramDetailsActivity.this,Util.getTextofLanguage(ProgramDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
                 }
 
             } else {
@@ -1703,6 +1680,17 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                         register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         Util.check_for_subscription = 1;
                         register.putExtra("PlayerModel", playerModel);
+                        register.putExtra("PLAY_LIST", itemData);
+                        register.putExtra("TAG", ItemClickedPosition);
+
+
+
+                        register.putExtra("PERMALINK", permalinkStr );
+                        register.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                        register.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                        Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                        register.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                        register.putExtra("Index",getIntent().getStringExtra("Index"));
                         startActivity(register);
 
 
@@ -1713,21 +1701,33 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
             if (NetworkStatus.getInstance().isConnected(this)) {
                 // MUVIlaxmi
 
+                Log.v("SUBHA", "Video PLayer Called 2");
+
                 GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                 getVideoDetailsInput.setAuthToken(authTokenStr);
                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                 getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+
+
+                LogUtil.showLog("SUBHA", "Video PLayer Called authTokenStr 2 " + authTokenStr);
+                Log.v("SUBHA", "Video PLayer Called movie uniqueid 2 " + dbModel.getMovieUniqueId().trim());
+                Log.v("SUBHA", "Video PLayer Called movie StreamUniqueid 2 " + dbModel.getStreamUniqueId().trim());
+                Log.v("SUBHA", "Video PLayer Called inyternet speed 2 " + MainActivity.internetSpeed.trim());
+                Log.v("SUBHA", "Video PLayer Called  user id 2 " + preferenceManager.getUseridFromPref());
+
+
                 asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, Tutorial_List_Activity.this, Tutorial_List_Activity.this);
                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
             } else {
                 Util.showToast(Tutorial_List_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
 
-                //Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
+                //Toast.makeText(ProgramDetailsActivity.this,Util.getTextofLanguage(ProgramDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
             }
         }
+
 
    /*     String loggedInStr = preferenceManager.getLoginStatusFromPref();
         if (isLogin == 1) {
@@ -2498,30 +2498,33 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                 episodelist.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
                 episodelist.setGravity(Gravity.CENTER_HORIZONTAL);
 
-                if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+                if ( (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     if (videoWidth > videoHeight) {
                         episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     } else {
-                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+
+                        Log.v("SUBHA","DATA here");
+
+                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     }
 
-                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
+                } else if ( (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
                     if (videoWidth > videoHeight) {
-                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
                     } else {
                         episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     }
 
-                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
+                } else if ( (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
 
-                    episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                    episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
 
 
                 } else {
                     if (videoWidth > videoHeight) {
-                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     } else {
-                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 5);
+                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     }
 
                 }
@@ -2529,7 +2532,7 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                     if (density >= 3.5 && density <= 4.0) {
                         customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.nexus_videos_grid_layout_land, itemData);
                     } else {
-                        customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.videos_grid_layout, itemData);
+                        customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.videos_280_grid_layout, itemData);
 
                     }
                     episodelist.setAdapter(customListAdapter);
@@ -2540,17 +2543,10 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                         customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.videos_grid_layout, itemData);
 
                     }
-                    // customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
                     episodelist.setAdapter(customListAdapter);
                 }
 
-              /*  if (videoWidth > videoHeight) {
-                    customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_280_grid_layout, itemData);
-                    gridView.setAdapter(customGridAdapter);
-                } else {
-                    customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_grid_layout, itemData);
-                    gridView.setAdapter(customGridAdapter);
-                }*/
+
 
 
             } else {
@@ -2886,18 +2882,29 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                 final Intent showPaymentIntent = new Intent(Tutorial_List_Activity.this, PPvPaymentInfoActivity.class);
                 showPaymentIntent.putExtra("muviuniqueid", Util.dataModel.getMovieUniqueId().trim());
                 showPaymentIntent.putExtra("episodeStreamId", Util.dataModel.getStreamUniqueId().trim());
-                showPaymentIntent.putExtra("content_types_id", Util.dataModel.getContentTypesId());
+                showPaymentIntent.putExtra("contentTypesId", Util.dataModel.getContentTypesId());
                 showPaymentIntent.putExtra("movieThirdPartyUrl", Util.dataModel.getThirdPartyUrl());
                 showPaymentIntent.putExtra("planUnSubscribedPrice", priceForUnsubscribedStr);
                 showPaymentIntent.putExtra("planSubscribedPrice", priceFosubscribedStr);
                 showPaymentIntent.putExtra("currencyId", Util.currencyModel.getCurrencyId());
                 showPaymentIntent.putExtra("currencyCountryCode", Util.currencyModel.getCurrencyCode());
                 showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getCurrencySymbol());
+                showPaymentIntent.putExtra("PlayerModel", playerModel);
+                showPaymentIntent.putExtra("PLAY_LIST", itemData);
+                showPaymentIntent.putExtra("TAG", ItemClickedPosition);
+
+
+
+                showPaymentIntent.putExtra("PERMALINK", permalinkStr );
+                showPaymentIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                showPaymentIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                showPaymentIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                showPaymentIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                 showPaymentIntent.putExtra("showName", Util.dataModel.getEpisode_title());
                 showPaymentIntent.putExtra("seriesNumber", Util.dataModel.getEpisode_series_no());
                 showPaymentIntent.putExtra("isPPV", Util.dataModel.getIsPPV());
                 showPaymentIntent.putExtra("isAPV", Util.dataModel.getIsAPV());
-                showPaymentIntent.putExtra("PlayerModel", playerModel);
                 if (Util.dataModel.getIsAPV() == 1) {
                     showPaymentIntent.putExtra("isConverted", 0);
                 } else {
@@ -3683,17 +3690,17 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                     if (Util.dataModel.getAdNetworkId() == 3) {
                         LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                        playVideoIntent = new Intent(Tutorial_List_Activity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new ProgramPlayerIntentHandler(Tutorial_List_Activity.this).handlePlayerIntent();
 
                     } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                         if (Util.dataModel.getPlayPos() <= 0) {
                             playVideoIntent = new Intent(Tutorial_List_Activity.this, AdPlayerActivity.class);
                         } else {
-                            playVideoIntent = new Intent(Tutorial_List_Activity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new ProgramPlayerIntentHandler(Tutorial_List_Activity.this).handlePlayerIntent();
 
                         }
                     } else {
-                        playVideoIntent = new Intent(Tutorial_List_Activity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new ProgramPlayerIntentHandler(Tutorial_List_Activity.this).handlePlayerIntent();
 
                     }
                     // playVideoIntent = new Intent(Episode_list_Activity.this, ExoPlayerActivity.class);
@@ -3704,6 +3711,8 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                playVideoIntent.putExtra("PLAY_LIST", itemData);
+                playVideoIntent.putExtra("TAG", ItemClickedPosition);
                 playVideoIntent.putExtra("PlayerModel", playerModel);
                 startActivity(playVideoIntent);
             }
@@ -3737,6 +3746,18 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                         ShowPpvPopUp();
                     } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                         Intent intent = new Intent(Tutorial_List_Activity.this, SubscriptionActivity.class);
+                        intent.putExtra("PlayerModel", playerModel);
+                        intent.putExtra("PLAY_LIST", itemData);
+                        intent.putExtra("TAG", ItemClickedPosition);
+
+
+
+                        intent.putExtra("PERMALINK", permalinkStr );
+                        intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                        intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                        Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                        intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                        intent.putExtra("Index",getIntent().getStringExtra("Index"));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
                     } else {

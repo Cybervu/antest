@@ -184,6 +184,11 @@ public class ViewFavouriteAsynTask extends AsyncTask<ViewFavouriteInputModel, Vo
                             content.setIsEpisodeStr(jsonChildNode.optString("is_episode"));
 
                         }
+                        if ((jsonChildNode.has("story")) && jsonChildNode.optString("story").trim() != null && !jsonChildNode.optString("story").trim().isEmpty() && !jsonChildNode.optString("story").trim().equals("null") && !jsonChildNode.optString("story").trim().matches("")) {
+                            content.setStory(jsonChildNode.optString("story"));
+
+                        }
+
 
                         Log.v("SUBHA", "is_episode " + jsonChildNode.optString("is_episode"));
                         viewFavouriteOutputModel.add(content);

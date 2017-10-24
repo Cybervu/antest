@@ -11,21 +11,52 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <TextView
-        android:id="@+id/sectionTitle"
-        android:layout_width="wrap_content"
+
+    <RelativeLayout
+        android:id="@+id/categoryTitleRelativeLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/toolbar"
-        android:padding="@dimen/payment_spinner_padding"
-        android:textColor="@color/pageTitleColor"
-        android:textSize="@dimen/itemtitle_text_size"
-        android:textStyle="normal" />
+        android:layout_alignParentStart="true"
+        android:padding="@dimen/marginleft10dp">
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="@dimen/sideTitle_line_width"
+            android:layout_height="@dimen/sideTitle_line_height"
+            android:layout_alignBottom="@+id/sectionTitle"
+            android:layout_alignTop="@+id/sectionTitle"
+            android:layout_marginLeft="@dimen/sideTitle_line_marginleft"
+
+            android:background="@color/colorPrimary"
+            android:paddingLeft="@dimen/marginleft10dp" />
+
+
+
+
+
+        <TextView
+            android:id="@+id/sectionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="true"
+            android:layout_toRightOf="@+id/view1"
+            android:padding="@dimen/payment_spinner_padding"
+            android:textColor="@color/pageTitleColor"
+            android:textSize="@dimen/itemtitle_text_size"
+            android:textStyle="normal" />
+
+    </RelativeLayout>
+
+
+
 
     <GridView
         android:id="@+id/imagesGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/sectionTitle"
+        android:layout_below="@+id/categoryTitleRelativeLayout"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/pre_order_button_margin"
         android:layout_marginLeft="@dimen/pre_order_button_margin"

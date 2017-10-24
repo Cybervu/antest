@@ -1,10 +1,12 @@
 package com.home.vod.model;
 
+import java.io.Serializable;
+
 /**
  * Created by MUVI on 10/6/2017.
  */
 
-public class SeasonModel {
+public class SeasonModel implements Serializable {
     private String seasonId = "";
     private int seasonImage ;
     private String seasonName = "";

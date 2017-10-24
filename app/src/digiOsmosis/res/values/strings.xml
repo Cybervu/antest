@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Digi Osmosis</string>
-    <string name="regular_fonts">fonts/OpenSans-Regular.ttf</string>
-    <string name="light_fonts">fonts/OpenSans-Light.ttf</string>
+    <string name="regular_fonts">fonts/Dosis-Book.ttf</string>
+    <string name="light_fonts">fonts/Dosis-Light.ttf</string>
     <string name="fonts">fonts/Dosis-Bold.ttf</string>
 
     <!--App Drawer-->
@@ -13,7 +13,9 @@
     <string name="facebook_app_id">132601487469050</string>
     <string name="fb_login_protocol_scheme">fb132601487469050</string>
     <string name="fb_login_text">Login With Facebook</string>
+    <string name="google_login_text">Login With Google</string>
     <string name="fb_registration_text">Register With Facebook</string>
+    <string name="google_registration_text"> Register With Google</string>
 
     <!--
         <string name="facebook_app_id">143293746197101</string>

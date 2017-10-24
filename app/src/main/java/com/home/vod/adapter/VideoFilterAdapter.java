@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.home.vod.R;
 import com.home.vod.model.GridItem;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
@@ -51,6 +52,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.title = (TextView) row.findViewById(R.id.movieTitle);
+            FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), holder.title );
             holder.videoImageview = (ImageView) row.findViewById(R.id.movieImageView);
 
            /* int height = holder.videoImageview.getDrawable().getIntrinsicHeight();

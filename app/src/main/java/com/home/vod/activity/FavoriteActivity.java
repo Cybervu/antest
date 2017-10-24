@@ -133,7 +133,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     int videoWidth = 256;
     GridItem itemToPlay;
     Toolbar mActionBarToolbar;
-    GridLayoutManager mLayoutManager;
+    LinearLayoutManager mLayoutManager;
 
     private TextView sectionTitle;
     //Register Dialog
@@ -234,18 +234,21 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
         sectionTitle = (TextView) findViewById(R.id.sectionTitle);
         FontUtls.loadFont(FavoriteActivity.this, getResources().getString(R.string.regular_fonts),sectionTitle);
-        if (getIntent().getStringExtra("sectionName") != null) {
+        sectionTitle.setText(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE));
+
+      /*  if (getIntent().getStringExtra("sectionName") != null) {
             sectionName = getIntent().getStringExtra("sectionName");
             sectionTitle.setText(sectionName);
         } else {
             sectionTitle.setText("");
 
         }
-
+*/
         posterUrl = Util.getTextofLanguage(FavoriteActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
 
         gridView = (GridView) findViewById(R.id.imagesGridView);
         footerView = (RelativeLayout) findViewById(R.id.loadingPanel);
+        mLayoutManager = new LinearLayoutManager(FavoriteActivity.this, LinearLayoutManager.VERTICAL, false);
 
         noInternetConnectionLayout = (RelativeLayout) findViewById(R.id.noInternet);
         noDataLayout = (RelativeLayout) findViewById(R.id.noData);
@@ -625,12 +628,13 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         for (int i = 0; i < viewFavouriteOutputModelArray.size(); i++) {
 
             String movieName = viewFavouriteOutputModelArray.get(i).getTitle();
+            String movieDescription = viewFavouriteOutputModelArray.get(i).getStory();
             String contentTypesId = viewFavouriteOutputModelArray.get(i).getContentTypesId();
             movieImageStr = viewFavouriteOutputModelArray.get(i).getPoster();
             String moviePermalinkStr = viewFavouriteOutputModelArray.get(i).getPermalink();
             isEpisodeStr = viewFavouriteOutputModelArray.get(i).getIsEpisodeStr();
             movieUniqueId = viewFavouriteOutputModelArray.get(i).getMovieId();
-            itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, "", "", moviePermalinkStr,isEpisodeStr,movieUniqueId,"",0,0,0));
+            itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, "", "", moviePermalinkStr,isEpisodeStr,movieUniqueId,"",0,0,0,movieDescription));
             LogUtil.showLog("MUVI","item data =="+ itemData);
 
         }
@@ -754,36 +758,53 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
                 layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
                 gridView.setLayoutParams(layoutParams);
-                gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
-                gridView.setGravity(Gravity.CENTER_HORIZONTAL);
+/*
+                if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+                    mLayoutManager = new GridLayoutManager(FavoriteActivity.this, 1);
+
+
+                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
+                    mLayoutManager = new GridLayoutManager(FavoriteActivity.this, 1);
+
+                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
+
+                    mLayoutManager = new GridLayoutManager(FavoriteActivity.this, 1);
+
+                } else {
+                    mLayoutManager = new GridLayoutManager(FavoriteActivity.this, 1);
+
+                }*/
 
                 if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getDimension(R.dimen.fav_configuration_large_3) : (int) getResources().getDimension(R.dimen.fav_configuration_large_3));
                     } else {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getDimension(R.dimen.fav_configuration_xlarge_4) : (int) getResources().getDimension(R.dimen.fav_configuration_xlarge_4));
                     }
 
                 } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getDimension(R.dimen.fav_configuration_normal_2) : (int) getResources().getDimension(R.dimen.fav_configuration_normal_2));
                     } else {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getDimension(R.dimen.fav_configuration_large_3) : (int) getResources().getDimension(R.dimen.fav_configuration_large_3));
                     }
 
                 } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
 
-                    gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
+                    gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getDimension(R.dimen.fav_configuration_normal_2) : (int) getResources().getDimension(R.dimen.fav_configuration_normal_2));
 
 
                 } else {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getDimension(R.dimen.fav_configuration_xlarge_4) : (int) getResources().getDimension(R.dimen.fav_configuration_xlarge_4));
                     } else {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 5);
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getDimension(R.dimen.fav_configuration_xlarge_5) : (int) getResources().getDimension(R.dimen.fav_configuration_xlarge_5));
                     }
 
                 }
+
+             /*   customGridAdapter = new FavoriteAdapter(FavoriteActivity.this, R.layout.favorite_listing, itemData);
+                gridView.setAdapter(customGridAdapter);*/
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new FavoriteAdapter(FavoriteActivity.this, R.layout.nexus_videos_grid_layout_land, itemData);
@@ -819,14 +840,9 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
 
 
-              /*  if (videoWidth > videoHeight) {
-                    customGridAdapter = new VideoFilterAdapter(FavoriteActivity.this, R.layout.videos_280_grid_layout, itemData);
-                    gridView.setAdapter(customGridAdapter);
-                } else {
-                    customGridAdapter = new VideoFilterAdapter(FavoriteActivity.this, R.layout.videos_grid_layout, itemData);
-                    gridView.setAdapter(customGridAdapter);
-                }*/
-
+               /* customGridAdapter = new FavoriteAdapter(FavoriteActivity.this, R.layout.favorite_listing, itemData);
+                gridView.setAdapter(customGridAdapter);
+*/
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new FavoriteAdapter(FavoriteActivity.this, R.layout.nexus_videos_grid_layout_land, itemData);
@@ -844,7 +860,6 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                     }
                     gridView.setAdapter(customGridAdapter);
                 }
-
                 if (mBundleRecyclerViewState != null) {
                     gridView.onRestoreInstanceState(listState);
                 }

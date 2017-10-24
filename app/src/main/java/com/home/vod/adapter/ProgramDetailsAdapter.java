@@ -65,17 +65,16 @@ public class ProgramDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public TextView episodeTitleTextView;
         public TextView episodeNameTextView;
         public TextView episodeDateTextView;
+        public ImageView playButton;
 
         public ImageView episodeImageView;
         public ViewHolder(View view) {
             super(view);
             episodeTitleTextView = (TextView) view.findViewById(R.id.itemTitle);
+            playButton = (ImageView) view.findViewById(R.id.playButton);
+            playButton.setVisibility(View.VISIBLE);
             FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeTitleTextView);
 
-           /* Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
-            episodeTitleTextView.setTypeface(castDescriptionTypeface);*/
-            //  episodeNameTextView = (TextView) view.findViewById(R.id.episodeNameTextView);
-            //episodeDateTextView = (TextView) view.findViewById(R.id.itemImage);
 
             episodeImageView = (ImageView) view.findViewById(R.id.itemImage);
             //episodeImageView.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.movieImageView,episodeImageView.getDrawable().getIntrinsicWidth(),episodeImageView.getDrawable().getIntrinsicHeight()));
@@ -140,6 +139,7 @@ public class ProgramDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
         return  itemcount;
     }
+
     public static int calculateInSampleSize(BitmapFactory.Options opt, int reqWidth, int reqHeight){
         final int height = opt.outHeight;
         final int width = opt.outWidth;

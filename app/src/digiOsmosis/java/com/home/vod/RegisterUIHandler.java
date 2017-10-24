@@ -22,6 +22,7 @@ import com.facebook.login.widget.LoginButton;
 import com.home.vod.activity.RegisterActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.FontUtls;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,7 +71,7 @@ public class RegisterUIHandler {
 
     public RegisterUIHandler(Activity context,LanguagePreference languagePreference){
         this.context=context;
-        gmailTest=(TextView) context.findViewById(R.id.textView);
+        gmailTest=(TextView) context.findViewById(R.id.googleTextView);
         googleSignView = (LinearLayout) context.findViewById(R.id.sign_in_button);
 //        termsTextView = (TextView) context.findViewById(R.id.termsTextView);
 //        termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
@@ -82,7 +83,7 @@ public class RegisterUIHandler {
         registerPage2 = (RelativeLayout) context.findViewById(R.id.registerPage2);
         regtisterEmailButton = (Button) context.findViewById(R.id.regtisterEmailButton);
 
-
+        FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts),regtisterEmailButton);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
 
 

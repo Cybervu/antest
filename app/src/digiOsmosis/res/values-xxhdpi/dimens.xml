@@ -12,8 +12,8 @@
 
     <dimen name="singleimgwidth">90dp</dimen>
     <dimen name="singleimgheight">146dp</dimen>
-    <dimen name="list_singlecard_img_width">150dp</dimen>
-    <dimen name="list_singlecard_img_height">150dp</dimen>
+    <dimen name="list_singlecard_img_width">130dp</dimen>
+    <dimen name="list_singlecard_img_height">186dp</dimen>
     <dimen name="trailer_btn_text_size">14sp</dimen>
     <dimen name="buttonheight">39dp</dimen>
     <dimen name="titletxt">14sp</dimen>
@@ -37,8 +37,8 @@
     <dimen name="movieimg_width">100dp</dimen>
     <dimen name="movieimg_height">100dp</dimen>
     <dimen name="video280_width">170dp</dimen>
-    <dimen name="videogrid_width">125dp</dimen>
-    <dimen name="videogrid_height">125dp</dimen>
+    <dimen name="videogrid_width">140dp</dimen>
+    <dimen name="videogrid_height">200dp</dimen>
     <dimen name="video280_height">95dp</dimen>
     <dimen name="testview2_text_size">18sp</dimen>
     <dimen name="episodelayout_width">151dp</dimen>
@@ -95,8 +95,8 @@
     <dimen name="user_review_textsize">14sp</dimen>
 
 
-    <dimen name="season_image_height">150dp</dimen>
-    <dimen name="season_image_width">150dp</dimen>
+    <dimen name="season_image_height">186dp</dimen>
+    <dimen name="season_image_width">130dp</dimen>
     <dimen name="card_title">23sp</dimen>
     <dimen name="card_title_padding">2dp</dimen>
     <dimen name="human_image_height">80dp</dimen>
@@ -119,7 +119,23 @@
 
     <dimen name="logo_height">80dp</dimen>
     <dimen name="logo_width">80dp</dimen>
+    <dimen name="downloadwidth">200dp</dimen>
+    <dimen name="loginImageViewMarging_top">120dp</dimen>
+    <dimen name="loginRelativeLayoutMarging_top">90dp</dimen>
+    <dimen name="contactUs_Heading">10dp</dimen>
+    <dimen name="list_itemmarginTop">10dp</dimen>
+    <dimen name="login_new_user_padding">5dp</dimen>
+    <dimen name="marginleft10dp">10dp</dimen>
+    <dimen name="card_padding">4dp</dimen>
+    <dimen name="card_radius">7dp</dimen>
+    <dimen name="card_elevation">7dp</dimen>
+    <dimen name="loginImageViewMarging_top_padding">7dp</dimen>
+    <dimen name="sideTitle_line_height">18dp</dimen>
+    <dimen name="sideTitle_line_width">5dp</dimen>
+    <dimen name="sideTitle_line_marginleft">10dp</dimen>
 
+    <dimen name="season_card_width">150dp</dimen>
+    <dimen name="season_card_height">150dp</dimen>
 
     <!--//**********profile picture*************//-->
 
@@ -129,4 +145,11 @@
     <dimen name="profile_padding_top">50dp</dimen>
     <dimen name="layout2_padding_top">0dp</dimen>
 
+    <dimen name="fav_img_height">157dp</dimen>
+    <dimen name="fav_img_width">110dp</dimen>
+    <dimen name="fav_title_textsize">20dp</dimen>
+    <dimen name="fav_des_textsize">15dp</dimen>
+    <dimen name="fav_card_elevation">10dp</dimen>
+    <dimen name="close_album_img_width">20dp</dimen>
+    <dimen name="close_album_img_height">20dp</dimen>
 </resources>

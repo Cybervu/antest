@@ -14,8 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.home.vod.R;
-import com.home.vod.model.EpisodesListModel;
+import com.home.vod.activity.ProgrammeActivity;
 import com.home.vod.model.SeasonModel;
+import com.home.vod.util.FontUtls;
 
 import java.util.ArrayList;
 
@@ -34,12 +35,13 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
             super(view);
 
             title = (TextView) view.findViewById(R.id.seasonTitle);
+            FontUtls.loadFont(mContext, mContext.getResources().getString(R.string.regular_fonts), title);
             thumbnail = (ImageView) view.findViewById(R.id.seasonImageView);
         }
     }
 
     public SeasonAdapter(Context context, int layoutResourceId,
-                         ArrayList<SeasonModel> data, OnItemClickListener listener) {
+                         ArrayList<SeasonModel> data) {
         this.layoutResourceId = layoutResourceId;
         this.mContext = context;
         this.data = data;
@@ -48,7 +50,7 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
 
 
     public interface OnItemClickListener {
-        void onItemClick(SeasonModel item );
+        void onItemClick(SeasonModel item,int pos);
 
     }
 
@@ -66,12 +68,12 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
         SeasonModel album = data.get(position);
         holder.title.setText(album.getSeasonName());
         holder.thumbnail.setImageResource(album.getSeasonImage());
-        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+       /* holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(data.get(position));
+                listener.onItemClick(data.get(position),position);
             }
-        });
+        });*/
 
     }
 

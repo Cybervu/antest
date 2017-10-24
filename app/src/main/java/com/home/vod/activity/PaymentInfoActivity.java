@@ -41,9 +41,11 @@ import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.apisdk.apiModel.RegisterUserPaymentInputModel;
 import com.home.apisdk.apiModel.RegisterUserPaymentOutputModel;
+import com.home.vod.ProgramPlayerIntentHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.model.CardModel;
+import com.home.vod.model.EpisodesListModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
@@ -101,6 +103,7 @@ import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.SUBSCRIPTION_COMPLETED;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_ARRAY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 
@@ -155,12 +158,14 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
     private RadioGroup paymentOptionsRadioGroup;
     private RadioButton payWithCreditCardRadioButton;
     private RadioButton payByPalRadioButton;
-    Player playerModel;
 
     private LinearLayout paymentOptionLinearLayout;
 
     private TextView paymentOptionsTitle;
 
+    int contentPosition;
+    ArrayList<EpisodesListModel> questions;
+    Player playerModel;
 
     private Button applyButton;
     private EditText couponCodeEditText;
@@ -237,9 +242,17 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
         videoPreview = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         creditCardDetailsTitleTextView = (TextView) findViewById(R.id.creditCardDetailsTitleTextView);
 
-        playerModel = new Player();
+        playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
+        try {
+            contentPosition = getIntent().getIntExtra("TAG", 0);
+            questions = new ArrayList<EpisodesListModel>();;
 
+            questions = (ArrayList<EpisodesListModel>) getIntent().getSerializableExtra("PLAY_LIST");
+            // Util.PlayListArrayModel = questions;
+        } catch (Exception e) {
+            Log.v("Nihar", "exception" + e.toString());
+        }
 
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
@@ -755,17 +768,17 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     if (Util.dataModel.getAdNetworkId() == 3) {
                         LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                        playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new ProgramPlayerIntentHandler(PaymentInfoActivity.this).handlePlayerIntent();
 
                     } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                         if (Util.dataModel.getPlayPos() <= 0) {
                             playVideoIntent = new Intent(PaymentInfoActivity.this, AdPlayerActivity.class);
                         } else {
-                            playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new ProgramPlayerIntentHandler(PaymentInfoActivity.this).handlePlayerIntent();
 
                         }
                     } else {
-                        playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new ProgramPlayerIntentHandler(PaymentInfoActivity.this).handlePlayerIntent();
 
                     }
                     /***ad **/
@@ -792,6 +805,13 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                                 playVideoIntent.putExtra("PlayerModel", playerModel);
+                                playVideoIntent.putExtra("PLAY_LIST", questions);
+                                playVideoIntent.putExtra("TAG", contentPosition);
+                                playVideoIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                                playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                                playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                                playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                                 startActivity(playVideoIntent);
                                 finish();
                             }
@@ -799,13 +819,20 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                         }
                     });
                 } else {
-                    final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent = new ProgramPlayerIntentHandler(PaymentInfoActivity.this).handlePlayerIntent();
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                     playVideoIntent.putExtra("PlayerModel", playerModel);
+                    playVideoIntent.putExtra("PLAY_LIST", questions);
+                    playVideoIntent.putExtra("TAG", contentPosition);
+                    playVideoIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                    playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                    playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                    playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                    playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                     startActivity(playVideoIntent);
                     finish();
 
@@ -1930,22 +1957,29 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 if (Util.dataModel.getAdNetworkId() == 3) {
                     LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                    playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent = new ProgramPlayerIntentHandler(PaymentInfoActivity.this).handlePlayerIntent();
 
                 } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                     if (Util.dataModel.getPlayPos() <= 0) {
                         playVideoIntent = new Intent(PaymentInfoActivity.this, AdPlayerActivity.class);
                     } else {
-                        playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new ProgramPlayerIntentHandler(PaymentInfoActivity.this).handlePlayerIntent();
 
                     }
                 } else {
-                    playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent = new ProgramPlayerIntentHandler(PaymentInfoActivity.this).handlePlayerIntent();
 
                 }
                 playerModel.setSubTitlePath(SubTitlePath);
                 //Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
                 playVideoIntent.putExtra("PlayerModel", playerModel);
+                playVideoIntent.putExtra("PLAY_LIST", questions);
+                playVideoIntent.putExtra("TAG", contentPosition);
+                playVideoIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                 startActivity(playVideoIntent);

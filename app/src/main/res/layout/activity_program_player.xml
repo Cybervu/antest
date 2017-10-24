@@ -257,14 +257,16 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/player_layout"
+
             android:fillViewport="true">
 
         <LinearLayout
             android:id="@+id/new_detailsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/bannerImageRelativeLayout"
             android:background="@color/appBackgroundColor"
+            android:layout_marginTop="@dimen/marginLeft15dp"
             android:orientation="vertical"
             android:visibility="visible">
 
@@ -272,40 +274,45 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+
+                android:layout_marginLeft="@dimen/marginleft10dp"
                 android:weightSum="1">
 
 
                 <View
                     android:id="@+id/view"
-                    android:layout_width="3dp"
-                    android:layout_height="20dp"
-
-                    android:layout_alignParentStart="true"
+                    android:layout_width="5dp"
+                    android:layout_height="35dp"
+                    android:layout_alignBottom="@+id/videoTitle"
                     android:layout_alignTop="@+id/videoTitle"
-                    android:layout_marginLeft="@dimen/marginleft10dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="@dimen/margintop8dp"
+                    android:layout_marginLeft="8dp"
+
                     android:background="@color/colorPrimary"
                     android:paddingLeft="10dp" />
+
+
+
 
 
                 <TextView
                     android:id="@+id/videoTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/relativeOverlayLayout"
                     android:layout_marginLeft="@dimen/marginleft10dp"
                     android:layout_marginTop="@dimen/margintop8dp"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="Day 3"
-                    android:textColor="@color/textColorAll"
-                    android:textSize="@dimen/videotitle_text_size"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/story_title_text_size"
+                    android:layout_toRightOf="@+id/view"
+                    android:textColor="@color/videotextColor"
+                    />
+
+
 
                 <RelativeLayout
                     android:id="@+id/downloadRelativeLayout"
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/downloadwidth"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textlinearlayout"
 
@@ -355,8 +362,8 @@
 
                 <ImageView
                     android:id="@+id/share"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/share" />
 
@@ -372,6 +379,8 @@
                 android:layout_marginLeft="@dimen/marginleft10dp"
                 android:layout_marginRight="@dimen/marginright10dp"
                 android:layout_marginTop="@dimen/margintop8dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:text="Hot Yoga"
                 android:textColor="@color/exercise_imagecolor"
                 android:textSize="@dimen/genre_textsize" />
@@ -381,6 +390,9 @@
                 android:id="@+id/descriptionDetailsTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="@dimen/marginleft10dp"
                 android:layout_below="@+id/videoTitle">
 
                 <TextView
@@ -429,8 +441,7 @@
                     android:background="@drawable/player_circle"
                     android:elevation="4dp"
                     android:gravity="center"
-                    android:paddingBottom="10dp"
-
+                    android:padding="10dp"
                     android:text="10 to 15"
                     android:textAppearance="?android:textAppearanceMedium"
                     android:textColor="@color/appBackgroundColor" />
@@ -444,10 +455,11 @@
                     android:layout_marginTop="20dp"
                     android:gravity="center"
                     android:paddingTop="10dp"
+                    android:textSize="@dimen/duration_title_text"
                     android:text="DURATION"
                     android:textAppearance="?android:textAppearanceMedium"
                     android:textColor="@color/textColorAll"
-                    android:textStyle="bold" />
+                     />
 
                 <TextView
                     android:id="@+id/durationTextView"
@@ -460,35 +472,119 @@
                     android:text="09:21"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/duration_color"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/duration"
+                     />
 
             </RelativeLayout>
 
 
-            <TextView
-                android:id="@+id/moreVideoTitleTextView"
-                android:layout_width="wrap_content"
+
+
+
+
+            <RelativeLayout
+                android:id="@+id/moreVideosRelativeLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/marginleft10dp"
-                android:layout_marginTop="@dimen/margintop8dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="MORE VIDEOS"
-                android:textColor="@color/textColorAll"
-                android:textSize="@dimen/videotitle_text_size"
-                android:textStyle="bold" />
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/durationLinearLayout"
+                android:padding="10dp">
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="5dp"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@+id/moreVideoTitleTextView"
+                    android:layout_alignTop="@+id/moreVideoTitleTextView"
+                    android:layout_marginLeft="8dp"
+
+                    android:background="@color/colorPrimary"
+                    android:paddingLeft="10dp" />
+
+
+
+
+
+                <TextView
+                    android:id="@+id/moreVideoTitleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/marginleft10dp"
+                    android:layout_marginTop="@dimen/margintop8dp"
+                    android:ellipsize="end"
+                    android:layout_toRightOf="@+id/view1"
+                    android:maxLines="1"
+                    android:text="MORE VIDEOS"
+                    android:textSize="@dimen/story_title_text_size"
+                    android:textColor="@color/videotextColor"
+                     />
+
+
+
+            </RelativeLayout>
+
+
+
+
+
+
 
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/moreVideosRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tutorialRelativeLayout"
+                android:layout_below="@+id/moreVideosRelativeLayout"
                 android:layout_gravity="center_vertical"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="7dp" />
+                android:layout_marginLeft="@dimen/marginleft10dp" />
+            <RelativeLayout
+                android:id="@+id/seasonScroller"
+
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/player_season_height"
+                android:background="@color/colorPrimary"
+                >
+                <TextView
+                    android:id="@+id/season_change_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/player_season_height"
+                    android:gravity="center_horizontal"
+                    android:textAllCaps="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="@dimen/marginLeft15dp"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@android:color/white"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:text="DAYS 3 OF 20 "
+                    />
+                <ImageView
+                    android:id="@+id/next_season"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center_horizontal"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@id/season_change_textview"
+                    android:layout_marginLeft="@dimen/marginLeft15dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/next"/>
+                <ImageView
+                    android:id="@+id/previous_season"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="@dimen/marginLeft15dp"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center_horizontal"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toLeftOf="@id/season_change_textview"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/previous"/>
+            </RelativeLayout>
         </LinearLayout>
+
         </ScrollView>
 
 
@@ -500,5 +596,6 @@
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:layout_alignParentBottom="true" />-->
+
 
     </RelativeLayout>

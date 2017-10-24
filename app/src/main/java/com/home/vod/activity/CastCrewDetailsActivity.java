@@ -284,7 +284,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                     isPPV=getCastDetailsOutputModelArray.getCastdetails().get(i).getIsPPV();
                     isAPV=getCastDetailsOutputModelArray.getCastdetails().get(i).getIsAdvance();
 
-                    filmogrpahyItems.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+                    filmogrpahyItems.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV,""));
 /*
                     filmogrpahyItems.add(new GridItem(getCastDetailsOutputModelArray.getCastdetails().get(i).getPosterUrl()
                             , getCastDetailsOutputModelArray.getCastdetails().get(i).getName()

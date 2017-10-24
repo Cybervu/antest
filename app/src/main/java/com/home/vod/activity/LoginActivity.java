@@ -17,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,8 +82,10 @@ import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.LoginHandler;
 import com.home.vod.MonetizationHandler;
+import com.home.vod.ProgramPlayerIntentHandler;
 import com.home.vod.R;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
+import com.home.vod.model.EpisodesListModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
@@ -114,11 +117,13 @@ import player.activity.MyLibraryPlayer;
 import player.activity.Player;
 
 import static com.home.vod.preferences.LanguagePreference.ANDROID_VERSION;
+import static com.home.vod.preferences.LanguagePreference.BTN_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEAFULT_CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ANDROID_VERSION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
@@ -167,6 +172,8 @@ import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.TRY_AGAIN;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_ARRAY;
+import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 
 public class LoginActivity extends AppCompatActivity implements LoginAsynTask.LoinDetailsListener, GoogleApiClient.OnConnectionFailedListener,
@@ -186,6 +193,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     String UniversalErrorMessage = "";
     String UniversalIsSubscribed = "";
     String loggedInIdStr;
+    ArrayList<EpisodesListModel> questions;
+    int contentPosition;
     ArrayList<String> SubTitleName = new ArrayList<>();
     ArrayList<String> SubTitlePath = new ArrayList<>();
     ArrayList<String> FakeSubTitlePath = new ArrayList<>();
@@ -307,6 +316,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             } else {
                                 if (PlanId.equals("1") && login_output.getIsSubscribed().equals("0")) {
                                     Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                    intent.putExtra("PlayerModel", playerModel);
+                                    intent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                                    intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                                    intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                    intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                    intent.putExtra("Index",getIntent().getStringExtra("Index"));
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     startActivity(intent);
                                     finish();
@@ -499,6 +514,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 }
                             } else if (PlanId.equals("1") && validateUserOutput.getIsMemberSubscribed().equals("0")) {
                                 Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                intent.putExtra("PlayerModel", playerModel);
+                                intent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                                intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                                intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                intent.putExtra("Index",getIntent().getStringExtra("Index"));
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(intent);
                                 finish();
@@ -520,7 +541,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             } else if (status == 430) {
 
 
-                new MonetizationHandler(LoginActivity.this).handle429OR430statusCod(validUserStr,message,Subscription_Str);
+                new MonetizationHandler(LoginActivity.this).handle429OR430statusCod(validUserStr, message, Subscription_Str);
 
 
             } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
@@ -533,6 +554,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 }
             } else if (PlanId.equals("1") && validateUserOutput.getIsMemberSubscribed().equals("0")) {
                 Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                intent.putExtra("PlayerModel", playerModel);
+                intent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                intent.putExtra("Index",getIntent().getStringExtra("Index"));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
                 finish();
@@ -598,6 +625,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
      /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
         then set thirdpartyurl true here and assign the url to videourl*/
         boolean play_video = true;
+
+        playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
+        playerModel.setUserId(preferenceManager.getUseridFromPref());
 
         if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
 
@@ -770,17 +800,17 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         if (Util.dataModel.getAdNetworkId() == 3) {
                             LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                            playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new ProgramPlayerIntentHandler(LoginActivity.this).handlePlayerIntent();
 
                         } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                             if (Util.dataModel.getPlayPos() <= 0) {
                                 playVideoIntent = new Intent(LoginActivity.this, AdPlayerActivity.class);
                             } else {
-                                playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                                playVideoIntent = new ProgramPlayerIntentHandler(LoginActivity.this).handlePlayerIntent();
 
                             }
                         } else {
-                            playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new ProgramPlayerIntentHandler(LoginActivity.this).handlePlayerIntent();
 
                         }
                         // playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
@@ -807,7 +837,15 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                                playVideoIntent.putExtra("PLAY_LIST", questions);
+                                playVideoIntent.putExtra("TAG", contentPosition);
                                 playVideoIntent.putExtra("PlayerModel", playerModel);
+                                playVideoIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                                playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                                playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                                playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
+
                                 startActivity(playVideoIntent);
                                 finish();
                             }
@@ -815,13 +853,20 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         }
                     });
                 } else {
-                    final Intent playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent = new ProgramPlayerIntentHandler(LoginActivity.this).handlePlayerIntent();
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                    playVideoIntent.putExtra("PLAY_LIST", questions);
+                    playVideoIntent.putExtra("TAG", contentPosition);
                     playVideoIntent.putExtra("PlayerModel", playerModel);
+                    playVideoIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                    playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                    playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                    playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                    playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                     startActivity(playVideoIntent);
                     onBackPressed();
 
@@ -1081,12 +1126,23 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         deviceName = myDevice.getName();
 
 
+        try {
+            contentPosition = getIntent().getIntExtra("TAG", 0);
+            questions = new ArrayList<EpisodesListModel>();;
+
+            questions = (ArrayList<EpisodesListModel>) getIntent().getSerializableExtra("PLAY_LIST");
+            // Util.PlayListArrayModel = questions;
+        } catch (Exception e) {
+            Log.v("Nihar", "exception" + e.toString());
+        }
         LogUtil.showLog("MUVI", "Device_Name=" + deviceName);
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
-        playerModel = new Player();
-        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
+        playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+        if (playerModel != null)
+
+            playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
 
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
@@ -1160,13 +1216,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         signUpTextView = (TextView) findViewById(R.id.signUpTextView);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), signUpTextView);
 
-        signUpTextView.setText(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE));
-
-
+        signUpTextView.setText(Html.fromHtml(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE)));
         loginButton = (Button) findViewById(R.id.loginButton);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), loginButton);
 
-        loginButton.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
+        loginButton.setText(languagePreference.getTextofLanguage(BTN_LOGIN, DEFAULT_BTN_LOGIN));
 
 
        /* Toolbar mActionBarToolbar= (Toolbar) findViewById(R.id.toolbar);
@@ -1217,6 +1271,15 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     detailsIntent.putExtra("from", getIntent().getStringExtra("from"));
                 }
                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                detailsIntent.putExtra("PLAY_LIST", questions);
+                detailsIntent.putExtra("TAG", contentPosition);
+                detailsIntent.putExtra("PlayerModel", playerModel);
+
+                detailsIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                detailsIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                detailsIntent.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                detailsIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                detailsIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                 startActivity(detailsIntent);
                 onBackPressed();
             }
@@ -1229,7 +1292,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         btnLogin= (LinearLayout) findViewById(R.id.btnLogin);*/
         TextView fbLoginTextView = (TextView) findViewById(R.id.fbLoginTextView);
+        TextView googleTextView = (TextView) findViewById(R.id.googleTextView);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), fbLoginTextView);
+        FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), googleTextView);
 
      /*   btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3343,17 +3408,17 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     if (Util.dataModel.getAdNetworkId() == 3) {
                         LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                        playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new ProgramPlayerIntentHandler(LoginActivity.this).handlePlayerIntent();
 
                     } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                         if (Util.dataModel.getPlayPos() <= 0) {
                             playVideoIntent = new Intent(LoginActivity.this, AdPlayerActivity.class);
                         } else {
-                            playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new ProgramPlayerIntentHandler(LoginActivity.this).handlePlayerIntent();
 
                         }
                     } else {
-                        playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new ProgramPlayerIntentHandler(LoginActivity.this).handlePlayerIntent();
 
                     }
                     // playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
@@ -3363,7 +3428,15 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                playVideoIntent.putExtra("PLAY_LIST", questions);
+                playVideoIntent.putExtra("TAG", contentPosition);
                 playVideoIntent.putExtra("PlayerModel", playerModel);
+                playVideoIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
+
                 startActivity(playVideoIntent);
                 removeFocusFromViews();
                 finish();
@@ -4503,6 +4576,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 showPaymentIntent.putExtra("isPPV", Util.dataModel.getIsPPV());
                 showPaymentIntent.putExtra("isAPV", Util.dataModel.getIsAPV());
                 showPaymentIntent.putExtra("PlayerModel", playerModel);
+                showPaymentIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK")  );
+                showPaymentIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON")  );
+                showPaymentIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                showPaymentIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                showPaymentIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                 if (Util.dataModel.getIsAPV() == 1) {
                     showPaymentIntent.putExtra("isConverted", 0);
                 } else {
@@ -4621,6 +4699,13 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 } else {
                     if (PlanId.equals("1") && UniversalIsSubscribed.equals("0")) {
                         Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                        intent.putExtra("PlayerModel", playerModel);
+                        intent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                        intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                        intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                        intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                        intent.putExtra("Index",getIntent().getStringExtra("Index"));
+
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
                         finish();
@@ -5252,6 +5337,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             preferenceManager.setIsSubscribedToPref(Integer.toString(gmailLoginOutput.getIsSubscribed()));
             preferenceManager.setLoginHistIdPref(gmailLoginOutput.getLogin_history_id());
 
+            playerModel.setEmailId(gmailLoginOutput.getEmail());
+            playerModel.setUserId(gmailLoginOutput.getId());
             /*Date todayDate = new Date();
             String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
             editor.putString("date", todayStr.trim());
@@ -5301,6 +5388,12 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         } else {
                             if (PlanId.equals("1") && preferenceManager.getIsSubscribedFromPref().equals("0")) {
                                 Intent intent = new Intent(LoginActivity.this, SubscriptionActivity.class);
+                                intent.putExtra("PlayerModel", playerModel);
+                                intent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                                intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                                intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                intent.putExtra("Index",getIntent().getStringExtra("Index"));
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(intent);
                                /* if (RegisterActivity.fa != null) {

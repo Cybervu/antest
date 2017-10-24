@@ -172,4 +172,6 @@
     <dimen name="profile_padding_top">80dp</dimen>
     <dimen name="layout2_padding_top">80dp</dimen>
 
+    <dimen name="downloadwidth">200dp</dimen>
+    <dimen name="button_padding">6dp</dimen>
 </resources>

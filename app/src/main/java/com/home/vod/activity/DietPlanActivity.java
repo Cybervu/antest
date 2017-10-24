@@ -65,9 +65,11 @@ import java.util.concurrent.TimeUnit;
 
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIET_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_PDF;
+import static com.home.vod.preferences.LanguagePreference.DIET_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_PDF;
@@ -118,7 +120,8 @@ public class DietPlanActivity extends AppCompatActivity implements DownloadConte
         TextView categoryTitle = (TextView) findViewById(R.id.dietPlanTitle);
         Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
         categoryTitle.setTypeface(castDescriptionTypeface);
-        categoryTitle.setText("DIET PLAN");
+//        categoryTitle.setText(languagePreference.getTextofLanguage(DIET_BUTTON,DEFAULT_DIET_BUTTON));
+        categoryTitle.setText("Diet Plan");
 
         languagePreference = LanguagePreference.getLanguagePreference(DietPlanActivity.this);
 

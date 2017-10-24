@@ -269,7 +269,8 @@
             android:theme="@style/MyMaterialTheme"/>
 
         <activity android:name=".activity.FavoriteActivity"
-                  android:screenOrientation="portrait"/>
+                  android:screenOrientation="portrait"
+                  android:theme="@style/MyMaterialTheme"/>
         <activity android:name=".activity.ReviewActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.SeasonActivity"

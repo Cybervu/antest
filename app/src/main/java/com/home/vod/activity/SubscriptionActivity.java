@@ -20,6 +20,7 @@ import com.home.apisdk.apiModel.SubscriptionPlanOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.PlanAdapter;
 import com.home.vod.fragment.VideosListFragment;
+import com.home.vod.model.EpisodesListModel;
 import com.home.vod.model.PlanModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
@@ -37,6 +38,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import player.activity.Player;
+
 import static com.home.vod.preferences.LanguagePreference.ACTIAVTE_PLAN_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIAVTE_PLAN_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
@@ -50,6 +53,7 @@ import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SELECT_PLAN;
 import static com.home.vod.preferences.LanguagePreference.SKIP_BUTTON_TITLE;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_ARRAY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 
@@ -82,6 +86,11 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
     int selected_subscription_plan = 0 ;
     ProgressBarHandler progressBarHandler;
     int prevPosition = 0;
+
+    int contentPosition;
+    ArrayList<EpisodesListModel> questions;
+    Player playerModel;
+
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
     @Override
@@ -105,6 +114,18 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
             toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }
 
+        playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+        playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
+
+        try {
+            contentPosition = getIntent().getIntExtra("TAG", 0);
+            questions = new ArrayList<EpisodesListModel>();;
+
+            questions = (ArrayList<EpisodesListModel>) getIntent().getSerializableExtra("PLAY_LIST");
+            // Util.PlayListArrayModel = questions;
+        } catch (Exception e) {
+            Log.v("Nihar", "exception" + e.toString());
+        }
 
 
 
@@ -148,6 +169,16 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
                 intentpayment.putExtra("currencySymbol",movieList.get(selected_subscription_plan).getPlanCurrencySymbolstr());
                 intentpayment.putExtra("price",movieList.get(selected_subscription_plan).getPurchaseValueStr());
                 intentpayment.putExtra("selected_plan_id",movieList.get(selected_subscription_plan).getPlanIdStr());
+
+                intentpayment.putExtra("PlayerModel", playerModel);
+                intentpayment.putExtra("PLAY_LIST", questions);
+                intentpayment.putExtra("TAG", contentPosition);
+                intentpayment.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                intentpayment.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                intentpayment.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                intentpayment.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                intentpayment.putExtra("Index",getIntent().getStringExtra("Index"));
+
                 startActivity(intentpayment);
                 finish();
             }

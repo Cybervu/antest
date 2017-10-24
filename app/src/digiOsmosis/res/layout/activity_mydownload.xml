@@ -17,7 +17,7 @@
         android:visibility="gone"
         android:id="@+id/noData"
         android:layout_below="@+id/toolbar"
-       >
+        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,11 +31,11 @@
             android:gravity="center"
             android:textSize="@dimen/my_download_textsize"/>
     </RelativeLayout>
-
-    <ListView
+    <include layout="@layout/line_layout" />
+    <GridView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
+        android:id="@+id/gridView"
         android:dividerHeight="@dimen/manage_device_padding"
         android:layout_marginLeft="@dimen/my_download_margin"
         android:layout_marginRight="@dimen/my_download_margin"
