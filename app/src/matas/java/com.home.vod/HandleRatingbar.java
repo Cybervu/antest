@@ -2,6 +2,7 @@ package com.home.vod;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -16,10 +17,14 @@ public class HandleRatingbar {
         this.context=context;
     }
     public void handleVisibleUnvisibleRating(RatingBar ratingBar){
-        ratingBar.setVisibility(View.VISIBLE);
+        ratingBar.setVisibility(View.GONE);
 
     }
     public void handleVisibleUnvisibleRatingTextView(TextView viewRatingTextView){
-        viewRatingTextView.setVisibility(View.VISIBLE);
+        viewRatingTextView.setVisibility(View.GONE);
     }
+    public void handleVisibleUnvisibleFavicon(ImageView favorite_view){
+        favorite_view.setVisibility(View.GONE);
+    }
+
 }

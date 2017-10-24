@@ -4840,7 +4840,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             /***favorite *****/
 
             if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
-                favorite_view.setVisibility(View.VISIBLE);
+              //  favorite_view.setVisibility(View.VISIBLE);
+                handleRatingbar.handleVisibleUnvisibleFavicon(favorite_view);
             }
             /***favorite *****/
 

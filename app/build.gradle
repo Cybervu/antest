@@ -97,7 +97,7 @@ android {
         }
         newthoughtchannel_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         newthoughtchannel_Prod_ {
             dimension 'environment'

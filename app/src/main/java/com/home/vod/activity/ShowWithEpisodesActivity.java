@@ -438,7 +438,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
             if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE)
                     .trim()).equals("1")) {
-                favorite_view_episode.setVisibility(View.VISIBLE);
+                //favorite_view_episode.setVisibility(View.VISIBLE);
+                handleRatingbar.handleVisibleUnvisibleFavicon(favorite_view_episode);
             } else {
                 favorite_view_episode.setVisibility(View.GONE);
             }

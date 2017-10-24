@@ -81,6 +81,7 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
 import com.home.vod.R;
+import com.home.vod.activity.CastAndCrewActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
