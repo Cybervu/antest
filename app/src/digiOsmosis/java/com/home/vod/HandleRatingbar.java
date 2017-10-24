@@ -17,7 +17,7 @@ public class HandleRatingbar {
         this.context=context;
     }
     public void handleVisibleUnvisibleRating(RatingBar ratingBar){
-        ratingBar.setVisibility(View.GONE);
+        ratingBar.setVisibility(View.VISIBLE);
 
     }
     public void handleVisibleUnvisibleRatingTextView(TextView viewRatingTextView){
