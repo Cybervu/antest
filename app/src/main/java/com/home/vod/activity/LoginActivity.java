@@ -5242,7 +5242,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
             loginHandler.sendBroadCast();
 
-            loginHandler.sendBroadCast();
 
             preferenceManager.setLogInStatusToPref("1");
             preferenceManager.setUserIdToPref(gmailLoginOutput.getId());
