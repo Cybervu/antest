@@ -113,7 +113,7 @@
             android:configChanges="screenSize|orientation"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
             android:name=".activity.MovieDetailsActivity"
             android:label=""

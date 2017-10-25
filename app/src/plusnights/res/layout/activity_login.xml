@@ -17,7 +17,8 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:background="@color/appBackgroundColor"
-        android:layout_below="@+id/toolbar">
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
 
 
         <LinearLayout
@@ -191,7 +192,8 @@
                 android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:paddingBottom="@dimen/login_new_user_padding">
+                android:paddingBottom="@dimen/login_new_user_padding"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/loginNewUser"
