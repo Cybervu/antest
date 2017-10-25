@@ -220,7 +220,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     //public static ProgressBarHandler progressBarHandler;
     int prevPosition = 0;
     PreferenceManager preferenceManager;
-    private static final int MAX_LINES = 2;
+    private static final int MAX_LINES = 3;
    //ProgressBarHandler loadMovieDetailspDialog;
     ProgressBarHandler pDialog;
     int ratingAddedByUser = 1;
@@ -4840,7 +4840,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             /***favorite *****/
 
             if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
-                favorite_view.setVisibility(View.VISIBLE);
+              //  favorite_view.setVisibility(View.VISIBLE);
+                handleRatingbar.handleVisibleUnvisibleFavicon(favorite_view);
             }
             /***favorite *****/
 
@@ -4848,7 +4849,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 playButton.setVisibility(View.INVISIBLE);
                 preorderButton.setText(languagePreference.getTextofLanguage(ADVANCE_PURCHASE, DEFAULT_ADVANCE_PURCHASE));
                 preorderButton.setVisibility(View.VISIBLE);
-            } else if (contentDetailsOutput.getIsApv() == 0 && contentDetailsOutput.getIsPpv() == 0 && contentDetailsOutput.getIsConverted() == 0) {
+            } else if (contentDetailsOutput.getIsApv() == 0 && contentDetailsOutput.getIsPpv() == 0
+                    && contentDetailsOutput.getIsConverted() == 0) {
                 if (contentDetailsOutput.getContentTypesId() == 4) {
                     playButton.setVisibility(View.VISIBLE);
                     preorderButton.setVisibility(View.GONE);

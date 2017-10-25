@@ -9,6 +9,34 @@ package com.home.apisdk.apiModel;
 public class VideoLogsInputModel {
 
     String authToken;
+    String contentTypeId;
+    String resumeTime;
+
+    public String getContentTypeId() {
+        return contentTypeId;
+    }
+
+    public void setContentTypeId(String contentTypeId) {
+        this.contentTypeId = contentTypeId;
+    }
+
+    public String getResumeTime() {
+        return resumeTime;
+    }
+
+    public void setResumeTime(String resumeTime) {
+        this.resumeTime = resumeTime;
+    }
+
+    public String getLogTemId() {
+        return logTemId;
+    }
+
+    public void setLogTemId(String logTemId) {
+        this.logTemId = logTemId;
+    }
+
+    String logTemId;
     String userId;
     String ipAddress;
     String muviUniqueId;

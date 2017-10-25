@@ -178,12 +178,12 @@ public class GetAppHomePageAsync extends AsyncTask<HomePageInputModel, Void, Voi
                     }
                 }
 
-
+                JSONArray jsonMainNode = null;
                 if (myJson.has("SectionName")) {
 
-                        JSONArray jsonMainNode = myJson.getJSONArray("SectionName");
-                        int lengthJsonArr = jsonMainNode.length();
-                        for (int i = 0; i < lengthJsonArr; i++) {
+                        jsonMainNode = myJson.optJSONArray("SectionName");
+                    if (jsonMainNode!=null && jsonMainNode.length()>0) {
+                        for (int i = 0; i < jsonMainNode.length(); i++) {
 
                             JSONObject jsonChildNode;
                             try {
@@ -225,12 +225,14 @@ public class GetAppHomePageAsync extends AsyncTask<HomePageInputModel, Void, Voi
                                 e.printStackTrace();
                             }
                         }
+                    }else {
+                        status = 0;
+                    }
 
                         Log.v("MUVISDK", "response123 = " + responseStr);
 
-
-
-
+                }else {
+                    status = 0;
                 }
 
                 appHomePageOutput.setHomePageBannerModels(homePageBannerModelArrayList);
@@ -239,20 +241,7 @@ public class GetAppHomePageAsync extends AsyncTask<HomePageInputModel, Void, Voi
                 appHomePageOutput.setIs_featured(is_featured);
             }
 
-        } catch (
-                final JSONException e1
-                )
-
-        {
-
-            responseStr = "0";
-            status = 0;
-            message = "Error";
-        } catch (
-                Exception e
-                )
-
-        {
+        } catch (Exception e) {
 
             responseStr = "0";
             status = 0;

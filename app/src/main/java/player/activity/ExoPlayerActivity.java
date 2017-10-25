@@ -83,6 +83,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
 import com.home.vod.HandleOfflineInExoplayer;
 import com.home.vod.R;
+import com.home.vod.activity.CastAndCrewActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
@@ -414,7 +415,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                         if(video_prepared){
                             if (mediaRouteButton.isEnabled()) {
-                                mediaRouteButton.setVisibility(View.VISIBLE);
+                              //  mediaRouteButton.setVisibility(View.VISIBLE);
+                                handleOfflineInExoplayer.handleVisibleUnvisibleChromcast(mediaRouteButton);
                             } else {
                                 mediaRouteButton.setVisibility(View.GONE);
                             }
@@ -1077,7 +1079,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                         if(mediaRouteButton.isEnabled())
                         {
-                            mediaRouteButton.setVisibility(View.VISIBLE);
+                            //mediaRouteButton.setVisibility(View.VISIBLE);
+                            handleOfflineInExoplayer.handleVisibleUnvisibleChromcast(mediaRouteButton);
                         }else
                         {
                             mediaRouteButton.setVisibility(View.GONE);
@@ -1705,9 +1708,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 threadHandler.post(new Runnable() {
                     public void run() {
                         if (emVideoView != null) {
-
-                            //  Log.v("BIBHU","===================****====================initializeTimerTask caled===============**==================");
-
 
                             int currentPositionStr = millisecondsToString(emVideoView.getCurrentPosition());
                             playerPosition = currentPositionStr;

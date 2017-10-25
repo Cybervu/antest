@@ -15,6 +15,7 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -473,12 +474,12 @@ public class Util {
 
         try {
             PackageInfo info = mContext.getPackageManager().getPackageInfo(
-                    "com.release.cmaxtv",  // replace with your unique package name
+                    mContext.getPackageName(),  // replace with your unique package name
                     PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                //  LogUtil.showLog("MUVI:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                 LogUtil.showLog("MUVI:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
 
             }
         } catch (PackageManager.NameNotFoundException e) {

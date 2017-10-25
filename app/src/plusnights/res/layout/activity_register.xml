@@ -13,9 +13,10 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
         android:background="@color/appBackgroundColor"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:layout_below="@+id/toolbar"
+       >
 
 
         <LinearLayout
@@ -128,7 +129,7 @@
                     android:clickable="true"
                     android:maxLines="3"
                     android:text="terms "
-                    android:textColor="@color/button_background"
+                    android:textColor="@color/terms_text_color"
                     android:textSize="@dimen/applybtn_text_size" />
             </LinearLayout>
            <!-- <RelativeLayout
@@ -271,7 +272,7 @@
                     android:maxLines="3"
                     android:singleLine="false"
                     android:text="Login"
-                    android:textColor="@color/alreadyHaveALoginButtonTextColor"
+                    android:textColor="@color/Login_text_color"
                     android:textSize="@dimen/already_login_size"
                     android:textStyle="bold" />
 

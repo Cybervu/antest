@@ -97,7 +97,7 @@ android {
         }
         newthoughtchannel_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         newthoughtchannel_Prod_ {
             dimension 'environment'
@@ -219,6 +219,28 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
+
+        metrox {
+            dimension 'vendor'
+            minSdkVersion 21
+            applicationId 'com.release.metrox'
+            versionCode 1
+            targetSdkVersion 25
+            versionName "1.0"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"97082c300cc83c4f0234f61ae50ff336\""
+//            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
+
+        }
+        metrox_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        metrox_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+
     }
 }
 
@@ -352,6 +374,21 @@ android.variantFilter { variant ->
     if (vendor.equals('defaultFlavor') && environment.equals('plusnights_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+    /*Avoid defaultFlavor to Metrox combination for both debug & release mode.*/
+
+    if (vendor.equals('defaultFlavor') && environment.equals('metrox_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('metrox_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('metrox_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('metrox_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered vishwamtv variant.
      */
@@ -463,6 +500,22 @@ android.variantFilter { variant ->
     if (vendor.equals('vishwamtv') && environment.equals('plusnights_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
+/*Avoid vishwam to metrox combination for both debug & release mode.*/
+
+    if (vendor.equals('vishwamtv') && environment.equals('metrox_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('metrox_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('metrox_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('metrox_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered newthoughtchannel variant.
      */
@@ -571,6 +624,22 @@ android.variantFilter { variant ->
     if (vendor.equals('newthoughtchannel') && environment.equals('plusnights_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
+/*Avoid newthoughtchannel to metrox combination for both debug & release mode.*/
+
+    if (vendor.equals('newthoughtchannel') && environment.equals('metrox_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('metrox_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('metrox_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('metrox_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered aattoo variant.
      */
@@ -677,6 +746,22 @@ android.variantFilter { variant ->
     if (vendor.equals('aatto') && environment.equals('plusnights_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
+/*Avoid aatto to metrox combination for both debug & release mode.*/
+
+    if (vendor.equals('aatto') && environment.equals('metrox_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('metrox_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('metrox_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('metrox_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered digiosmosis variant.
      */
@@ -784,6 +869,22 @@ android.variantFilter { variant ->
     if (vendor.equals('digiOsmosis') && environment.equals('plusnights_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
+/*Avoid digiosmosis to metrox combination for both debug & release mode.*/
+
+    if (vendor.equals('digiOsmosis') && environment.equals('metrox_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('metrox_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('metrox_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('metrox_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered Lumiere variant.
      */
@@ -890,6 +991,22 @@ android.variantFilter { variant ->
     if (vendor.equals('lumiere') && environment.equals('plusnights_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
+    /*Avoid lumiere to metrox combination for both debug & release mode.*/
+
+    if (vendor.equals('lumiere') && environment.equals('metrox_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('metrox_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('metrox_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('metrox_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered Matas variant.
      */
@@ -992,6 +1109,20 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     if (vendor.equals('matas') && environment.equals('plusnights_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+
+    if (vendor.equals('matas') && environment.equals('metrox_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('metrox_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('metrox_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('metrox_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
 
@@ -1100,6 +1231,19 @@ android.variantFilter { variant ->
     }
 
 
+    if (vendor.equals('monetizer') && environment.equals('metrox_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('monetizer') && environment.equals('metrox_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('monetizer') && environment.equals('metrox_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('monetizer') && environment.equals('metrox_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
 
 /**
  * Filtered Plushnights variant.
@@ -1204,6 +1348,124 @@ android.variantFilter { variant ->
     if (vendor.equals('plusnights') && environment.equals('monetizer_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
+    if (vendor.equals('plusnights') && environment.equals('metrox_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('plusnights') && environment.equals('metrox_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('plusnights') && environment.equals('metrox_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('plusnights') && environment.equals('metrox_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+/**
+ * Filtered metrox variant.
+ */
+    if (vendor.equals('metrox') && environment.equals('defaultFlavor_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('defaultFlavor_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('metrox') && environment.equals('defaultFlavor_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('defaultFlavor_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('vishwamtv_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('vishwamtv_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('vishwamtv_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('vishwamtv_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('newthoughtchannel_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('newthoughtchannel_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('newthoughtchannel_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('aatto_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('aatto_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('aatto_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('aatto_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('digiOsmosis_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('digiOsmosis_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('digiOsmosis_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('digiOsmosis_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('metrox') && environment.equals('lumiere_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('lumiere_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('lumiere_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('lumiere_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('metrox') && environment.equals('matas_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('matas_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('matas_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('matas_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('metrox') && environment.equals('monetizer_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('monetizer_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('monetizer_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('monetizer_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+
 }
 
 
