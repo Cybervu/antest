@@ -52,11 +52,12 @@ android {
             versionCode 1
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            buildConfigField "String", "AUTH_TOKEN", "\"e8ae05a2ef3fd0c6688952c8f7557823\""
+            //buildConfigField "String", "AUTH_TOKEN", "\"e8ae05a2ef3fd0c6688952c8f7557823\""
+            buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//mob
         }
         defaultFlavor_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.idogic.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
         }
         defaultFlavor_Prod_ {
             dimension 'environment'

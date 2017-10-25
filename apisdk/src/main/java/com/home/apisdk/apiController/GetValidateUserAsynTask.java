@@ -15,6 +15,12 @@ import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -108,84 +114,23 @@ public class GetValidateUserAsynTask extends AsyncTask<ValidateUserInput, Void, 
 
         try {
 
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(APIUrlConstant.getValidateUserForContentUrl());
+            httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.validateUserInput.getAuthToken());
+            httppost.addHeader(HeaderConstants.USER_ID, this.validateUserInput.getUserId());
+            httppost.addHeader(HeaderConstants.MOVIE_ID, this.validateUserInput.getMuviUniqueId());
+            httppost.addHeader(HeaderConstants.EPISODE_ID, this.validateUserInput.getEpisodeStreamUniqueId());
+            httppost.addHeader(HeaderConstants.SEASON_ID, this.validateUserInput.getSeasonId());
+            httppost.addHeader(HeaderConstants.LANG_CODE, this.validateUserInput.getLanguageCode());
+            httppost.addHeader(HeaderConstants.PURCHASE_TYPE, this.validateUserInput.getPurchaseType());
             // Execute HTTP Post Request
+
             try {
-                URL url = new URL(APIUrlConstant.getValidateUserForContentUrl());
-                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-                conn.setReadTimeout(10000);
-                conn.setConnectTimeout(20000);
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Accept", "application/json");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                Log.v("MUVISDK", "this.validateUserInput.getUserId()" + this.validateUserInput.getUserId());
-                Log.v("MUVISDK", "this.validateUserInput.getUserId()" + this.validateUserInput.getMuviUniqueId());
-                Log.v("MUVISDK", "this.validateUserInput.getUserId()" + this.validateUserInput.getAuthToken());
-
-                Log.v("MUVISDK", "this.validateUserInput.getUserId()" + this.validateUserInput.getEpisodeStreamUniqueId());
-                Log.v("MUVISDK", "this.validateUserInput.getUserId()" + this.validateUserInput.getSeasonId());
-                Log.v("MUVISDK", "this.validateUserInput.getUserId()" + this.validateUserInput.getLanguageCode());
-                Log.v("MUVISDK", "this.validateUserInput.getUserId()" + this.validateUserInput.getPurchaseType());
-
-                Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.validateUserInput.getAuthToken())
-                        .appendQueryParameter(HeaderConstants.USER_ID, this.validateUserInput.getUserId())
-                        .appendQueryParameter(HeaderConstants.MOVIE_ID, this.validateUserInput.getMuviUniqueId())
-                        .appendQueryParameter(HeaderConstants.EPISODE_ID, this.validateUserInput.getEpisodeStreamUniqueId())
-                        .appendQueryParameter(HeaderConstants.SEASON_ID, this.validateUserInput.getSeasonId())
-                        .appendQueryParameter(HeaderConstants.LANG_CODE, this.validateUserInput.getLanguageCode())
-                        .appendQueryParameter(HeaderConstants.PURCHASE_TYPE, this.validateUserInput.getPurchaseType());
-                String query = builder.build().getEncodedQuery();
-
-                Log.v("MUVISDK", "authToken" + this.validateUserInput.getAuthToken());
-                Log.v("MUVISDK", "user_id" + this.validateUserInput.getUserId());
-                Log.v("MUVISDK", "movie_id" + this.validateUserInput.getMuviUniqueId());
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(query);
-                writer.flush();
-                writer.close();
-                os.close();
-
-
-                int responseCode = conn.getResponseCode();
-                if (responseCode != HttpsURLConnection.HTTP_OK) {
-                    final InputStream err = conn.getErrorStream();
-                    try {
-                    } finally {
-
-                        InputStreamReader isr = new InputStreamReader(err);
-                        BufferedReader in = new BufferedReader(isr);
-
-                        String inputLine;
-
-                        while ((inputLine = in.readLine()) != null) {
-                            System.out.println(inputLine);
-                            responseStr = inputLine;
-                            Log.v("MUVISDK", "responseStr" + responseStr);
-
-                        }
-                        in.close();
-                        err.close();
-                    }
-                } else {
-                    InputStream ins = conn.getInputStream();
-
-                    InputStreamReader isr = new InputStreamReader(ins);
-                    BufferedReader in = new BufferedReader(isr);
-
-                    String inputLine;
-
-                    while ((inputLine = in.readLine()) != null) {
-                        System.out.println(inputLine);
-                        responseStr = inputLine;
-                        Log.v("MUVISDK", "responseStr" + responseStr);
-
-                    }
-                    in.close();
-                }
-
+                HttpResponse response = httpclient.execute(httppost);
+                responseStr = EntityUtils.toString(response.getEntity());
+                Log.v("MUVISDK", "RES" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
 
