@@ -72,7 +72,7 @@ import static com.home.vod.util.Constant.authTokenStr;
  */
 public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVideosAsyncListener, GetAppHomePageAsync.HomePageListener {
 
-    int bannerArray[] = {R.drawable.banner1};
+//    int bannerArray[] = {R.drawable.banner1};
     int videoHeight = 185;
     int videoWidth = 256;
 
@@ -543,17 +543,21 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
             }
 
         } else {
-            url_maps.add("https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png");
+//            url_maps.add("https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png");
+
+            for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
+                url_maps.add(model.getImage_path());
+            }
 
             if (firstTime == false) {
                 firstTime = true;
 
                 if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                    for (int j = 0; j < bannerArray.length; j++) {
+                    for (int j = 0; j < url_maps.size(); j++) {
                         DefaultSliderView textSliderView = new DefaultSliderView(context);
                         textSliderView
                                 .description("")
-                                .image(bannerArray[j])
+                                .image(url_maps.get(j))
                                 .setScaleType(BaseSliderView.ScaleType.Fit);
                         // .setOnSliderClickListener(this);
                         textSliderView.bundle(new Bundle());
@@ -563,11 +567,11 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
                         mDemoSlider.addSlider(textSliderView);
                     }
                 } else {
-                    for (int j = 0; j < bannerArray.length; j++) {
+                    for (int j = 0; j < url_maps.size(); j++) {
                         DefaultSliderView textSliderView = new DefaultSliderView(context);
                         textSliderView
                                 .description("")
-                                .image(bannerArray[j])
+                                .image(url_maps.get(j))
                                 .setScaleType(BaseSliderView.ScaleType.Fit);
                         // .setOnSliderClickListener(this);
                         textSliderView.bundle(new Bundle());
