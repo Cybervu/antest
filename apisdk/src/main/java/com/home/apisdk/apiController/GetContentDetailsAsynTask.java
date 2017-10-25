@@ -116,7 +116,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
             httppost.addHeader(HeaderConstants.PERMALINK, this.contentDetailsInput.getPermalink());
             httppost.addHeader(HeaderConstants.USER_ID, this.contentDetailsInput.getUser_id());
             httppost.addHeader("country", this.contentDetailsInput.getCountry());
-            httppost.addHeader("lang_code",this.contentDetailsInput.getLanguage());
+            httppost.addHeader("lang_code", this.contentDetailsInput.getLanguage());
 
             // Execute HTTP Post Request
             try {
@@ -191,8 +191,8 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                     if ((mainJson.has("genre")) && mainJson.optString("genre").trim() != null && !mainJson.optString("genre").trim().isEmpty() && !mainJson.optString("genre").trim().equals("null") && !mainJson.optString("genre").trim().matches("")) {
                         movieTypeStr = mainJson.getString("genre");
                         movieTypeStr = movieTypeStr.replaceAll("\\[", "");
-                        movieTypeStr = movieTypeStr.replaceAll("\\]","");
-                        movieTypeStr = movieTypeStr.replaceAll(","," , ");
+                        movieTypeStr = movieTypeStr.replaceAll("\\]", "");
+                        movieTypeStr = movieTypeStr.replaceAll(",", " , ");
                         movieTypeStr = movieTypeStr.replaceAll("\"", "");
                         contentDetailsOutput.setGenre(movieTypeStr);
 
@@ -215,10 +215,10 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
 
                     }
                     if ((mainJson.has("censor_rating")) && mainJson.optString("censor_rating").trim() != null && !mainJson.optString("censor_rating").trim().isEmpty() && !mainJson.optString("censor_rating").trim().equals("null") && !mainJson.optString("censor_rating").trim().matches("")) {
-                        String  censorRatingStr = mainJson.getString("censor_rating");
+                        String censorRatingStr = mainJson.getString("censor_rating");
                         censorRatingStr = censorRatingStr.replaceAll("\\[", "");
-                        censorRatingStr = censorRatingStr.replaceAll("\\]","");
-                        censorRatingStr = censorRatingStr.replaceAll(","," ");
+                        censorRatingStr = censorRatingStr.replaceAll("\\]", "");
+                        censorRatingStr = censorRatingStr.replaceAll(",", " ");
                         censorRatingStr = censorRatingStr.replaceAll("\"", "");
                         contentDetailsOutput.setCensorRating(censorRatingStr);
 
@@ -441,7 +441,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
         listener.onGetContentDetailsPreExecuteStarted();
 
         status = 0;
-       if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
+        if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetContentDetailsPostExecuteCompleted(contentDetailsOutput, status, message);

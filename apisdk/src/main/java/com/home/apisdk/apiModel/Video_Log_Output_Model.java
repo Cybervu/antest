@@ -8,6 +8,16 @@ public class Video_Log_Output_Model {
 
     String videoLogId;
 
+    public String getLogTempId() {
+        return logTempId;
+    }
+
+    public void setLogTempId(String logTempId) {
+        this.logTempId = logTempId;
+    }
+
+    String logTempId;
+
     public String getVideoLogId() {
         return videoLogId;
     }

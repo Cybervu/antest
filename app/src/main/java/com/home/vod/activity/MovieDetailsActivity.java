@@ -4849,7 +4849,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 playButton.setVisibility(View.INVISIBLE);
                 preorderButton.setText(languagePreference.getTextofLanguage(ADVANCE_PURCHASE, DEFAULT_ADVANCE_PURCHASE));
                 preorderButton.setVisibility(View.VISIBLE);
-            } else if (contentDetailsOutput.getIsApv() == 0 && contentDetailsOutput.getIsPpv() == 0 && contentDetailsOutput.getIsConverted() == 0) {
+            } else if (contentDetailsOutput.getIsApv() == 0 && contentDetailsOutput.getIsPpv() == 0
+                    && contentDetailsOutput.getIsConverted() == 0) {
                 if (contentDetailsOutput.getContentTypesId() == 4) {
                     playButton.setVisibility(View.VISIBLE);
                     preorderButton.setVisibility(View.GONE);

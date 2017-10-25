@@ -1,10 +1,18 @@
-
 package com.home.vod.activity;
 
+import android.app.DownloadManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
+import android.net.TrafficStats;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -24,25 +32,33 @@ import android.widget.Toast;
 
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
-import com.home.apisdk.apiController.GetFFVideoLogDetailsAsync;
-import com.home.apisdk.apiController.GetIpAddressAsynTask;
-import com.home.apisdk.apiController.GetVideoLogsAsynTask;
-import com.home.apisdk.apiController.ResumeVideoLogDetailsAsync;
-import com.home.apisdk.apiModel.FFVideoLogDetailsInput;
-import com.home.apisdk.apiModel.ResumeVideoLogDetailsInput;
-import com.home.apisdk.apiModel.VideoLogsInputModel;
-import com.home.apisdk.apiModel.Video_Log_Output_Model;
+import com.home.apisdk.APIUrlConstant;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
-import com.home.vod.util.ExpandableTextView;
-import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ResizableCustomView;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
 
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -51,18 +67,22 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.HttpsURLConnection;
+
+import player.utils.DBHelper;
+
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.util.Constant.authTokenStr;
+import static player.utils.Util.DEFAULT_NO_INTERNET_CONNECTION;
+import static player.utils.Util.VIEW_MORE;
 
 
 /*enum ContentTypes1 {
@@ -79,39 +99,38 @@ import static com.home.vod.util.Constant.authTokenStr;
         return mediaSourceParamsContentType;
     }
 }*/
+public class TrailerActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener  {
 
-public class TrailerActivity extends AppCompatActivity implements
-        SensorOrientationChangeNotifier.Listener,
-        GetVideoLogsAsynTask.GetVideoLogsListener,GetIpAddressAsynTask.IpAddressListener,
-        GetFFVideoLogDetailsAsync.GetFFVideoLogsListener,ResumeVideoLogDetailsAsync.ResumeVideoLogDetailsListener{
-   // int played_length = 0;
     int playerStartPosition = 0;
-    ImageView subtitle_change_btn;
-    private static final int MAX_LINES = 2;
+    private static final int MAX_LINES = 3;
+
+
+    // Added For Buffer Log
+    long PreviousUsedData = 0;
+    long CurrentUsedData = 0;
 
     Timer timer;
     private Handler threadHandler = new Handler();
     String videoLogId = "0";
     String watchStatus = "start";
     int playerPosition = 0;
-    String watchSt = "halfplay";
-    public boolean isFastForward = false;
-    public int playerPreviousPosition = 0;
+    public  boolean isFastForward = false;
+    public  int playerPreviousPosition = 0;
     TimerTask timerTask;
     String emailIdStr = "";
     String userIdStr = "";
     String movieId = "";
     String episodeId = "0";
-    GetVideoLogsAsynTask asyncVideoLogDetails;
-    GetFFVideoLogDetailsAsync asyncFFVideoLogDetails;
+    AsyncVideoLogDetails asyncVideoLogDetails;
+    AsyncFFVideoLogDetails asyncFFVideoLogDetails;
 
-    GetIpAddressAsynTask asynGetIpAddress;
+    AsynGetIpAddress asynGetIpAddress;
 
-    ImageButton back, center_play_pause;
+    ImageButton  back, center_play_pause;
     ImageView compress_expand;
     SeekBar seekBar;
     private Handler mHandler = new Handler();
-    Timer center_pause_paly_timer;
+    Timer  center_pause_paly_timer;
     String Current_Time, TotalTime;
     TextView current_time, total_time;
     ProgressBar progressView;
@@ -127,10 +146,12 @@ public class TrailerActivity extends AppCompatActivity implements
 
 
     boolean compressed = true;
-    int player_layout_height, player_layout_width;
-    int screenWidth, screenHeight;
+    int player_layout_height,player_layout_width;
+    int screenWidth,screenHeight;
     ImageButton latest_center_play_pause;
-
+    String videoBufferLogId = "0";
+    String videoBufferLogUniqueId = "0";
+    String Location = "0";
 
     String resolution = "BEST";
 
@@ -141,38 +162,49 @@ public class TrailerActivity extends AppCompatActivity implements
     int keepAliveTime = 10;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-    PreferenceManager preferenceManager;
+    SharedPreferences pref;
     //Toolbar mActionBarToolbar;
     LinearLayout linearLayout1;
 
-    TextView videoTitle, GenreTextView, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView,
-             videoCastCrewTitleTextView;
-    TextView story;
+    TextView videoTitle,GenreTextView,videoDurationTextView,videoCensorRatingTextView,videoCensorRatingTextView1,videoReleaseDateTextView,
+            videoStoryTextView,videoCastCrewTitleTextView;
+
     private EMVideoView emVideoView;
     int seek_label_pos = 0;
     int content_types_id = 0;
     boolean censor_layout = true;
+    PreferenceManager preferenceManager;
     LanguagePreference languagePreference;
-    
+
+    int player_start_time = 0;
+    int player_end_time = 0;
+    String log_temp_id = "0";
+
     @Override
     protected void onResume() {
         super.onResume();
         SensorOrientationChangeNotifier.getInstance(TrailerActivity.this).addListener(this);
+        AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
+        asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
+        content_types_id = Util.dataModel.getContentTypesId();
+
+        PreviousUsedDataByApp(true);
+
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
-        content_types_id = Util.dataModel.getContentTypesId();
-       // played_length = Util.dataModel.getPlayPos() * 1000;
 
+        //commented by me
 
-        if (Util.dataModel.getVideoUrl().matches("")) {
+        if (Util.dataModel.getVideoUrl().matches("")){
+            // onBackPressed();
             backCalled();
-            //onBackPressed();
         }
         movieId = Util.dataModel.getMovieUniqueId();
         episodeId = Util.dataModel.getEpisode_id();
@@ -193,43 +225,43 @@ public class TrailerActivity extends AppCompatActivity implements
             userIdStr = "";
         }
 
+        ((ImageView) findViewById(R.id.subtitle_change_btn)).setVisibility(View.INVISIBLE);
 
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
-        subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
-        subtitle_change_btn.setVisibility(View.GONE);
-
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
         videoTitle = (TextView) findViewById(R.id.videoTitle);
-
-        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.regular_fonts),videoTitle);
+        Typeface videoTitleface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        videoTitle.setTypeface(videoTitleface);
         GenreTextView = (TextView) findViewById(R.id.GenreTextView);
-        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.light_fonts),GenreTextView);
-
+        Typeface GenreTextViewface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        GenreTextView.setTypeface(GenreTextViewface);
         videoDurationTextView = (TextView) findViewById(R.id.videoDurationTextView);
-        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.light_fonts),videoDurationTextView);
-
+        Typeface videoDurationTextViewface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        videoDurationTextView.setTypeface(videoDurationTextViewface);
         videoCensorRatingTextView = (TextView) findViewById(R.id.videoCensorRatingTextView);
-        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.light_fonts),videoCensorRatingTextView);
+        Typeface videoCensorRatingTextViewface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        videoCensorRatingTextView.setTypeface(videoCensorRatingTextViewface);
         videoCensorRatingTextView1 = (TextView) findViewById(R.id.videoCensorRatingTextView1);
-        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.light_fonts),videoCensorRatingTextView1);
+        Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        videoCensorRatingTextView1.setTypeface(videoCensorRatingTextView1face);
         videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
-        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.light_fonts),videoReleaseDateTextView);
+        Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.light_fonts));
+        videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
 
-        story = (TextView) findViewById(R.id.videoStoryTextView);
-        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.light_fonts),story);
+        videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
+        Typeface videoStoryTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
+        videoStoryTextView.setTypeface(videoStoryTextViewTypeface);
+        //storyViewMoreButton = (Button) findViewById(R.id.storyViewMoreButton);
+
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
-        FontUtls.loadFont(TrailerActivity.this, getResources().getString(R.string.light_fonts),videoCastCrewTitleTextView);
-
+        Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
+        videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
         videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE,DEFAULT_CAST_CREW_BUTTON_TITLE));
-
-        //Call For Subtitle Loading // Added By Bibhu
-
 
 
 
 
         if (Util.dataModel.getVideoTitle().trim() != null)
-
         {
             videoTitle.setText(Util.dataModel.getVideoTitle().trim());
             videoTitle.setVisibility(View.VISIBLE);
@@ -303,12 +335,12 @@ public class TrailerActivity extends AppCompatActivity implements
         if (Util.dataModel.getVideoStory().trim() != null && !Util.dataModel.getVideoStory().trim().matches(""))
 
         {
-            story.setText(Util.dataModel.getVideoStory());
-            story.setVisibility(View.VISIBLE);
-            ResizableCustomView.doResizeTextView(TrailerActivity.this,story,MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE), true);
+            videoStoryTextView.setText(Util.dataModel.getVideoStory());
+            videoStoryTextView.setVisibility(View.VISIBLE);
+            ResizableCustomView.doResizeTextView(TrailerActivity.this,videoStoryTextView,MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE), true);
 
         } else {
-            story.setVisibility(View.GONE);
+            videoStoryTextView.setVisibility(View.GONE);
         }
 
         if (Util.dataModel.isCastCrew() == true)
@@ -349,6 +381,7 @@ public class TrailerActivity extends AppCompatActivity implements
         });
 
 
+
         player_layout = (RelativeLayout) findViewById(R.id.player_layout);
         player_layout_height = player_layout.getHeight();
         player_layout_width = player_layout.getWidth();
@@ -368,21 +401,6 @@ public class TrailerActivity extends AppCompatActivity implements
 
         compress_expand = (ImageView) findViewById(R.id.compress_expand);
         back = (ImageButton) findViewById(R.id.back);
-       /* back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ExoPlayerActivity.this, "test", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-        //   back.setOnClickListener(ExoPlayerActivity.this);
-      /*  back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogUtil.showLog("MUVI","CHFHFH");
-               // onBackPressed();
-                backCalled();
-            }
-        });*/
         // pause_play = (ImageButton) findViewById(R.id.pause_play);
         seekBar = (SeekBar) findViewById(R.id.progress);
         center_play_pause = (ImageButton) findViewById(R.id.center_play_pause);
@@ -395,6 +413,7 @@ public class TrailerActivity extends AppCompatActivity implements
         Display display = getWindowManager().getDefaultDisplay();
         screenWidth = display.getWidth();
         screenHeight = display.getHeight();
+
 
         LinearLayout.LayoutParams params1 = null;
         if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
@@ -422,10 +441,10 @@ public class TrailerActivity extends AppCompatActivity implements
         }
         player_layout.setLayoutParams(params1);
 
-        if (content_types_id == 4) {
+        if (content_types_id== 4){
             seekBar.setEnabled(false);
             seekBar.setProgress(0);
-        } else {
+        }else{
             seekBar.setEnabled(true);
             seekBar.setProgress(0);
         }
@@ -441,6 +460,11 @@ public class TrailerActivity extends AppCompatActivity implements
                 mHandler.removeCallbacks(updateTimeTask);
                 playerStartPosition = emVideoView.getCurrentPosition();
 
+                // Call New Video Log Api.
+
+                asyncVideoLogDetails = new AsyncVideoLogDetails();
+                asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+
             }
 
             @Override
@@ -452,17 +476,20 @@ public class TrailerActivity extends AppCompatActivity implements
                 showCurrentTime();
                 current_time.setVisibility(View.VISIBLE);
                 updateProgressBar();
-                if (playerPreviousPosition == 0) {
-                    if (playerStartPosition < emVideoView.getCurrentPosition()) {
-                        isFastForward = true;
-                        playerPreviousPosition = playerStartPosition;
 
-                    } else {
-                        playerPreviousPosition = playerStartPosition;
-                        isFastForward = false;
+                Log.v("BIBHU11", "stop tracking called");
 
-                    }
-                }
+                // Changed due to New VoideoLogApi
+
+                isFastForward = true;
+                playerPreviousPosition = playerStartPosition;
+
+                log_temp_id = "0";
+                player_start_time = millisecondsToString(emVideoView.getCurrentPosition());
+                playerPosition = player_start_time;
+
+                // ============End=====================//
+
             }
         });
 
@@ -482,12 +509,11 @@ public class TrailerActivity extends AppCompatActivity implements
         emVideoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (findViewById(R.id.progress_view).getVisibility() == View.VISIBLE) {
+                if (progressView.getVisibility() == View.VISIBLE) {
                     primary_ll.setVisibility(View.VISIBLE);
                     center_play_pause.setVisibility(View.GONE);
                     latest_center_play_pause.setVisibility(View.GONE);
                     current_time.setVisibility(View.GONE);
-
 
                 } else {
                     if (primary_ll.getVisibility() == View.VISIBLE) {
@@ -496,16 +522,9 @@ public class TrailerActivity extends AppCompatActivity implements
                         center_play_pause.setVisibility(View.GONE);
                         latest_center_play_pause.setVisibility(View.GONE);
                         current_time.setVisibility(View.GONE);
-
                         End_Timer();
                     } else {
-
-
                         primary_ll.setVisibility(View.VISIBLE);
-
-
-
-
                         last_ll.setVisibility(View.VISIBLE);
                         center_play_pause.setVisibility(View.VISIBLE);
                         latest_center_play_pause.setVisibility(View.VISIBLE);
@@ -596,52 +615,30 @@ public class TrailerActivity extends AppCompatActivity implements
         latest_center_play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (Util.hide_pause) {
-                    Util.hide_pause = false;
-                    Start_Timer();
-                }
-
                 Execute_Pause_Play();
             }
         });
 
-       /* back.setOnTouchListener(new View.OnTouchListener() {
+        back.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+
                     back.setImageResource(R.drawable.ic_back);
+
                 } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                 }
                 return false;
             }
-        });*/
+        });
 
         emVideoView.setOnPreparedListener(new OnPreparedListener() {
             @Override
             public void onPrepared() {
-
-
-
-               /* LogUtil.showLog("MUVI","played_length"+played_length);
-                LogUtil.showLog("MUVI","emVideoView.getDuration()"+emVideoView.getDuration());
-                int duration=emVideoView.getDuration()/1000;
-                int hours = duration / 3600;
-                int minutes = (duration / 60) - (hours * 60);
-                int seconds = duration - (hours * 3600) - (minutes * 60) ;
-                String formatted = String.format("%d:%02d:%02d", hours, minutes, seconds);
-                Toast.makeText(getApplicationContext(), "duration is " + duration ,  Toast.LENGTH_LONG).show();*/
-
-             /*   if (Util.dataModel.getPlayPos() >= emVideoView.getDuration() / 1000) {
-                    played_length = 0;
-                }
-*/
                 video_completed = false;
                 progressView.setVisibility(View.VISIBLE);
                 center_play_pause.setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.GONE);
-
-
                 try {
                   /*  if (emailIdStr != null && !emailIdStr.equalsIgnoreCase("")) {
                         emailAddressTextView.setVisibility(View.VISIBLE);
@@ -649,9 +646,9 @@ public class TrailerActivity extends AppCompatActivity implements
                     } else {
                         emailAddressTextView.setVisibility(View.GONE);
                     }
-                    if (ipAddres!=null){
+                    if (ipAddressStr!=null){
                         ipAddressTextView.setVisibility(View.VISIBLE);
-                        ipAddressTextView.setText(ipAddres);
+                        ipAddressTextView.setText(ipAddressStr);
                     }else{
                         ipAddressTextView.setVisibility(View.GONE);
                     }
@@ -664,66 +661,20 @@ public class TrailerActivity extends AppCompatActivity implements
                     }*/
 
                     //video log
-                    if (content_types_id == 4) {
-
-
-                        VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
-                        videoLogsInputModel.setAuthToken(authTokenStr);
-                        videoLogsInputModel.setIpAddress(ipAddressStr.trim());
-                        videoLogsInputModel.setMuviUniqueId(movieId.trim());
-                        videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
-                        videoLogsInputModel.setPlayedLength(String.valueOf(playerPosition));
-                        videoLogsInputModel.setWatchStatus(watchStatus);
-                        videoLogsInputModel.setDeviceType("2");
-                        videoLogsInputModel.setVideoLogId(videoLogId);
-                        videoLogsInputModel.setUserId(userIdStr.trim());
-                        asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,TrailerActivity.this,TrailerActivity.this);
+                    if (content_types_id== 4){
+                        asyncVideoLogDetails = new AsyncVideoLogDetails();
                         asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+
 
                         emVideoView.start();
                         updateProgressBar();
-                    } else {
+                    }else{
                         startTimer();
 
-                      /*  if (played_length > 0) {
-                            ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
-                            Intent resumeIntent = new Intent(ExoPlayerActivity.this, ResumePopupActivity.class);
-                            startActivityForResult(resumeIntent, 1001);
-                        } else {*/
-
-
-                            emVideoView.start();
-                            seekBar.setProgress(emVideoView.getCurrentPosition());
-                            updateProgressBar();
-
-
-                        VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
-                        videoLogsInputModel.setAuthToken(authTokenStr);
-                        videoLogsInputModel.setIpAddress(ipAddressStr.trim());
-                        videoLogsInputModel.setMuviUniqueId(movieId.trim());
-                        videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
-                        videoLogsInputModel.setPlayedLength(String.valueOf(playerPosition));
-                        videoLogsInputModel.setWatchStatus(watchStatus);
-                        videoLogsInputModel.setDeviceType("2");
-                        videoLogsInputModel.setVideoLogId(videoLogId);
-                        videoLogsInputModel.setUserId(userIdStr.trim());
-                        asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,TrailerActivity.this,TrailerActivity.this);
+                        asyncVideoLogDetails = new AsyncVideoLogDetails();
                         asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-
-
-
-                       // }
-                      /*  emVideoView.start();
-                        seekBar.setProgress(emVideoView.getCurrentPosition());
-                        updateProgressBar();*/
-
-                       /* if (played_length > 0) {
-                            emVideoView.seekTo(played_length);
-                            seekBar.setProgress(played_length);
-                        }else {
-                            seekBar.setProgress(emVideoView.getCurrentPosition());
-                        }
-                        updateProgressBar();*/
+                        emVideoView.start();
+                        updateProgressBar();
                     }
                 } catch (Exception e) {
                 }
@@ -742,113 +693,273 @@ public class TrailerActivity extends AppCompatActivity implements
         });
 
 
+
+
+//commented by me
         emVideoView.setVideoURI(Uri.parse(Util.dataModel.getVideoUrl()));
+       /* try {
+			*//*
+			 * Initialize the Wasabi Runtime (necessary only once for each
+			 * instantiation of the application)
+			 *
+			 * ** Note: Set Runtime Properties as needed for your environment
+			 *//*
+            Runtime.initialize(getDir("wasabi", MODE_PRIVATE).getAbsolutePath());
+			*//*
+			 * Personalize the application (acquire DRM keys). This is only
+			 * necessary once each time the application is freshly installed
+			 *
+			 * ** Note: personalize() is a blocking call and may take long
+			 * enough to complete to trigger ANR (Application Not Responding)
+			 * errors. In a production application this should be called in a
+			 * background thread.
+			 *//*
+            if (!Runtime.isPersonalized())
+                Runtime.personalize();
 
+        } catch (NullPointerException e) {
+            onBackPressed();
+
+            return;
+        } catch (ErrorCodeException e) {
+            // Consult WasabiErrors.txt for resolution of the error codes
+            onBackPressed();
+
+            return;
+        }
+
+        try {
+            EnumSet<PlaylistProxy.Flags> flags = EnumSet.noneOf(PlaylistProxy.Flags.class);
+            playerProxy = new PlaylistProxy(flags, this, new Handler());
+            playerProxy.start();
+        } catch (ErrorCodeException e) {
+            // Consult WasabiErrors.txt for resolution of the error codes
+            onBackPressed();
+
+            return;
+        }
+
+
+
+        	*//*
+		 * create a playlist proxy url and pass it to the native player
+		 *//*
+        try {
+			*//*
+			 * Note that the MediaSourceType must be adapted to the stream type
+			 * (DASH or HLS). Similarly,
+			 * the MediaSourceParams need to be set according to the media type
+			 * if MediaSourceType is SINGLE_FILE
+			 *//*
+
+            ContentTypes1 contentType = ContentTypes1.DASH;
+            PlaylistProxy.MediaSourceParams params = new PlaylistProxy.MediaSourceParams();
+            params.sourceContentType = contentType
+                    .getMediaSourceParamsContentType();
+			*//*
+			 * if the content has separate audio tracks (eg languages) you may
+			 * select one using MediaSourceParams, eg params.language="es";
+			 *//*
+            String contentTypeValue = contentType.toString();
+                if (Util.dataModel.getVideoUrl().contains(".mpd")) {
+                    String url = playerProxy.makeUrl(Util.dataModel.getVideoUrl(), PlaylistProxy.MediaSourceType.valueOf((contentTypeValue == "MP4" || contentTypeValue == "HLS" || contentTypeValue == "DASH") ? contentTypeValue : "SINGLE_FILE"), params);
+                    emVideoView.setVideoURI(Uri.parse(url));
+
+                } else {
+                    emVideoView.setVideoURI(Uri.parse(Util.dataModel.getVideoUrl()));
+                }
+
+
+
+
+        } catch (ErrorCodeException e) {
+            // Consult WasabiErrors.txt for resolution of the error codes
+            onBackPressed();
+
+            return;
+        }
+
+        catch (IllegalArgumentException e) {
+            onBackPressed();
+
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            onBackPressed();
+
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            onBackPressed();
+
+            e.printStackTrace();
+        }
+
+        emVideoView.setVideoURI(Uri.parse("https://r12---sn-p5qlsnss.googlevideo.com/videoplayback?beids=%5B9452306%5D&itag=17&ipbits=0&sparams=clen%2Cdur%2Cei%2Cgir%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Crequiressl%2Csource%2Cupn%2Cexpire&lmt=1463866613479313&ei=Pj2sWL37McaT1gL91JLABQ&source=youtube&initcwndbps=5327500&requiressl=yes&dur=393.113&clen=2692773&mime=video%2F3gpp&key=yt6&gir=yes&pl=24&expire=1487704478&mm=31&ip=159.253.144.86&mn=sn-p5qlsnss&ms=au&mt=1487682748&upn=K6r9nWryb4Q&mv=m&id=o-AOjCnfCLnuL36xAojs4SvpH3RDLZfV-BtQfQnJPSO1r3&signature=46D104B20C417DED2A65B9F155F4512B2518A56A.55B6B4AFF163BA21B5C7E6BDA06737972B7657B6&title=Jarvis+for+Windows+7%2F8%2F8.1%2F10.3gp"));
+
+*/
     }
 
-    @Override
-    public void onGetVideoLogsPreExecuteStarted() {
-        stoptimertask();
+
+    public void backCalled(){
+
+        if (asynGetIpAddress!=null){
+            asynGetIpAddress.cancel(true);
+        }
+        if (asyncVideoLogDetails!=null){
+            asyncVideoLogDetails.cancel(true);
+        }
+        if (asyncFFVideoLogDetails!=null){
+            asyncFFVideoLogDetails.cancel(true);
+        }
+        if (progressView!=null && progressView.isShown()){
+            progressView = null;
+        }
+        if (timer!=null){
+            stoptimertask();
+            timer = null;
+        }
+
+        if (video_completed == false){
+
+            AsyncResumeVideoLogDetails  asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+            asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            return;
+        }
+        mHandler.removeCallbacks(updateTimeTask);
+        if (emVideoView!=null) {
+            emVideoView.release();
+        }
+        finish();
+        overridePendingTransition(0, 0);
     }
 
-    @Override
-    public void onGetVideoLogsPostExecuteCompleted(Video_Log_Output_Model video_log_output_model, int status, String message) {
-        startTimer();
-        return;
+    private class AsyncVideoLogDetails extends AsyncTask<Void, Void, Void> {
+        //  ProgressDialog pDialog;
+        String responseStr;
+        int statusCode = 0;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            String urlRouteList = APIUrlConstant.getVideoLogsUrl();
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost(urlRouteList);
+                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+                httppost.addHeader("authToken", authTokenStr.trim());
+                httppost.addHeader("user_id", userIdStr.trim());
+                httppost.addHeader("ip_address", ipAddressStr.trim());
+                httppost.addHeader("movie_id", movieId.trim());
+                httppost.addHeader("episode_id", episodeId.trim());
+                httppost.addHeader("watch_status", watchStatus);
+                httppost.addHeader("device_type", "2");
+                httppost.addHeader("content_type", "2");
+                httppost.addHeader("log_id", videoLogId);
+
+                Log.v("BIBHU6", "authToken=" + authTokenStr.trim());
+                Log.v("BIBHU6", "user_id=" + userIdStr.trim());
+                Log.v("BIBHU6", "ip_address=" + ipAddressStr.trim());
+                Log.v("BIBHU6", "movie_id=" + movieId.trim());
+                Log.v("BIBHU6", "episode_id=" + episodeId.trim());
+                Log.v("BIBHU6", "played_length=" + String.valueOf(playerPosition));
+                Log.v("BIBHU6", "watch_status=" + watchStatus);
+                Log.v("BIBHU6", "device_type=" + "2");
+                Log.v("BIBHU6", "log_id=" + videoLogId);
+
+
+
+                // Following code is changed due to NewVideoLog API ;
+
+                httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
+                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("resume_time", "" + (playerPosition));
+
+                Log.v("BIBHU", "player_start_time===*****************=========" + player_start_time);
+                Log.v("BIBHU", "playerPosition======***************8======" + playerPosition);
+
+
+                Log.v("BIBHU", "played_length============" + (playerPosition - player_start_time));
+                Log.v("BIBHU", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU", "resume_time============" + (playerPosition));
+                Log.v("BIBHU", "playerPosition============" + playerPosition);
+                Log.v("BIBHU", "log_id============" + videoLogId);
+
+                Log.v("BIBHU", "user_id============" + userIdStr.trim());
+                Log.v("BIBHU", "movieId.trim()============" + movieId.trim());
+                Log.v("BIBHU", "episodeId.trim()============" + episodeId.trim());
+                Log.v("BIBHU", "watchStatus============" + watchStatus);
+
+
+                //===============End=============================//
+
+
+                // Execute HTTP Post Request
+                try {
+                    HttpResponse response = httpclient.execute(httppost);
+                    responseStr = EntityUtils.toString(response.getEntity());
+
+                    Log.v("BIBHU6", "responseStr of videolog============" + responseStr);
+
+
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            videoLogId = "0";
+
+                        }
+
+                    });
+
+                } catch (Exception e) {
+                    videoLogId = "0";
+                    e.printStackTrace();
+
+                    Log.v("BIBHU6", "responseStr of videolog Exception============" + e.toString());
+
+                }
+                if (responseStr != null) {
+                    JSONObject myJson = new JSONObject(responseStr);
+                    statusCode = Integer.parseInt(myJson.optString("code"));
+                    if (statusCode == 200) {
+                        videoLogId = myJson.optString("log_id");
+                        log_temp_id = myJson.optString("log_temp_id");
+
+
+                    } else {
+                        videoLogId = "0";
+                        log_temp_id = "0";
+                    }
+
+                }
+
+            } catch (Exception e) {
+                videoLogId = "0";
+                log_temp_id = "0";
+
+            }
+
+            return null;
+        }
+
+
+        protected void onPostExecute(Void result) {
+
+            if (responseStr == null) {
+                videoLogId = "0";
+                log_temp_id = "0";
+            }
+
+            AsyncVideoBufferLogDetails asyncVideoBufferLogDetails = new AsyncVideoBufferLogDetails();
+            asyncVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            stoptimertask();
+        }
+
+
     }
-
-
-//    private class AsyncVideoLogDetails extends AsyncTask<Void, Void, Void> {
-//        //  ProgressDialog pDialog;
-//        String responseStr;
-//        int statusCode = 0;
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//
-//            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
-//            try {
-//                HttpClient httpclient = new DefaultHttpClient();
-//                HttpPost httppost = new HttpPost(urlRouteList);
-//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", authTokenStr.trim());
-//                httppost.addHeader("user_id", userIdStr.trim());
-//                httppost.addHeader("ip_address", ipAddres.trim());
-//                httppost.addHeader("movie_id", movieId.trim());
-//                httppost.addHeader("episode_id", episodeId.trim());
-//                httppost.addHeader("played_length", String.valueOf(playerPosition));
-//                httppost.addHeader("watch_status", watchStatus);
-//                httppost.addHeader("device_type", "2");
-//                httppost.addHeader("log_id", videoLogId);
-//
-//
-//                // Execute HTTP Post Request
-//                try {
-//                    HttpResponse response = httpclient.execute(httppost);
-//                    responseStr = EntityUtils.toString(response.getEntity());
-//
-//
-//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            videoLogId = "0";
-//
-//                        }
-//
-//                    });
-//
-//                } catch (Exception e) {
-//                    videoLogId = "0";
-//                    e.printStackTrace();
-//
-//                }
-//                if (responseStr != null) {
-//                    JSONObject myJson = new JSONObject(responseStr);
-//                    statusCode = Integer.parseInt(myJson.optString("code"));
-//                    if (statusCode == 200) {
-//                        videoLogId = myJson.optString("log_id");
-//                    } else {
-//                        videoLogId = "0";
-//                    }
-//
-//                }
-//
-//            } catch (Exception e) {
-//                videoLogId = "0";
-//
-//            }
-//
-//            return null;
-//        }
-//
-//
-//        protected void onPostExecute(Void result) {
-//         /*   try {
-//                if (pDialog.isShowing())
-//                    pDialog.dismiss();
-//            } catch (IllegalArgumentException ex) {
-//                videoLogId = "0";
-//            }*/
-//            if (responseStr == null) {
-//                videoLogId = "0";
-//
-//            }
-//            startTimer();
-//            return;
-//
-//
-//        }
-
-//        @Override
-//        protected void onPreExecute() {
-//            stoptimertask();
-//        }
-//
-//
-//    }
-
-
     public void startTimer() {
         //set a new Timer
         timer = new Timer();
@@ -856,7 +967,6 @@ public class TrailerActivity extends AppCompatActivity implements
         initializeTimerTask();
         timer.schedule(timerTask, 1000, 1000); //
     }
-
     public void stoptimertask() {
         //stop the timer, if it's not already null
         if (timer != null) {
@@ -865,7 +975,6 @@ public class TrailerActivity extends AppCompatActivity implements
         }
 
     }
-
     public void initializeTimerTask() {
 
         timerTask = new TimerTask() {
@@ -875,41 +984,23 @@ public class TrailerActivity extends AppCompatActivity implements
                 threadHandler.post(new Runnable() {
                     public void run() {
                         if (emVideoView != null) {
+
                             int currentPositionStr = millisecondsToString(emVideoView.getCurrentPosition());
                             playerPosition = currentPositionStr;
 
 
                             if (isFastForward == true) {
                                 isFastForward = false;
+                                log_temp_id = "0";
 
 
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
-                                    FFVideoLogDetailsInput ffVideoLogDetailsInput=new FFVideoLogDetailsInput();
-                                    ffVideoLogDetailsInput.setAuthToken(authTokenStr);
-                                    ffVideoLogDetailsInput.setUser_id(userIdStr);
-                                    ffVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
-                                    ffVideoLogDetailsInput.setMovie_id(movieId.trim());
-                                    ffVideoLogDetailsInput.setEpisode_id(episodeId.trim());
-                                    ffVideoLogDetailsInput.setPlayed_length(String.valueOf(playerPosition));
-                                    ffVideoLogDetailsInput.setWatch_status(watchStatus);
-                                    ffVideoLogDetailsInput.setDevice_type("2");
-                                    ffVideoLogDetailsInput.setLog_id(videoLogId);
-                                    asyncFFVideoLogDetails = new GetFFVideoLogDetailsAsync(ffVideoLogDetailsInput,TrailerActivity.this,TrailerActivity.this);
+                                    asyncFFVideoLogDetails = new AsyncFFVideoLogDetails();
                                     watchStatus = "complete";
                                     asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else {
-                                    FFVideoLogDetailsInput ffVideoLogDetailsInput=new FFVideoLogDetailsInput();
-                                    ffVideoLogDetailsInput.setAuthToken(authTokenStr);
-                                    ffVideoLogDetailsInput.setUser_id(userIdStr);
-                                    ffVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
-                                    ffVideoLogDetailsInput.setMovie_id(movieId.trim());
-                                    ffVideoLogDetailsInput.setEpisode_id(episodeId.trim());
-                                    ffVideoLogDetailsInput.setPlayed_length(String.valueOf(playerPosition));
-                                    ffVideoLogDetailsInput.setWatch_status(watchStatus);
-                                    ffVideoLogDetailsInput.setDevice_type("2");
-                                    ffVideoLogDetailsInput.setLog_id(videoLogId);
-                                    asyncFFVideoLogDetails = new GetFFVideoLogDetailsAsync(ffVideoLogDetailsInput,TrailerActivity.this,TrailerActivity.this);
+                                    asyncFFVideoLogDetails = new AsyncFFVideoLogDetails();
                                     watchStatus = "halfplay";
                                     asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
@@ -920,31 +1011,11 @@ public class TrailerActivity extends AppCompatActivity implements
 
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
-                                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
-                                    videoLogsInputModel.setAuthToken(authTokenStr);
-                                    videoLogsInputModel.setIpAddress(ipAddressStr.trim());
-                                    videoLogsInputModel.setMuviUniqueId(movieId.trim());
-                                    videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
-                                    videoLogsInputModel.setPlayedLength(String.valueOf(playerPosition));
-                                    videoLogsInputModel.setWatchStatus(watchStatus);
-                                    videoLogsInputModel.setDeviceType("2");
-                                    videoLogsInputModel.setVideoLogId(videoLogId);
-                                    videoLogsInputModel.setUserId(userIdStr.trim());
-                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,TrailerActivity.this,TrailerActivity.this);
+                                    asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     watchStatus = "complete";
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 } else if (currentPositionStr > 0 && currentPositionStr % 60 == 0) {
-                                    VideoLogsInputModel videoLogsInputModel = new VideoLogsInputModel();
-                                    videoLogsInputModel.setAuthToken(authTokenStr);
-                                    videoLogsInputModel.setIpAddress(ipAddressStr.trim());
-                                    videoLogsInputModel.setMuviUniqueId(movieId.trim());
-                                    videoLogsInputModel.setEpisodeStreamUniqueId(episodeId.trim());
-                                    videoLogsInputModel.setPlayedLength(String.valueOf(playerPosition));
-                                    videoLogsInputModel.setWatchStatus(watchStatus);
-                                    videoLogsInputModel.setDeviceType("2");
-                                    videoLogsInputModel.setVideoLogId(videoLogId);
-                                    videoLogsInputModel.setUserId(userIdStr.trim());
-                                    asyncVideoLogDetails = new GetVideoLogsAsynTask(videoLogsInputModel,TrailerActivity.this,TrailerActivity.this);
+                                    asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     watchStatus = "halfplay";
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -957,115 +1028,116 @@ public class TrailerActivity extends AppCompatActivity implements
             }
         };
     }
+    private class AsyncFFVideoLogDetails extends AsyncTask<Void, Void, Void> {
+        String responseStr;
+        int statusCode = 0;
 
-    @Override
-    public void onIPAddressPreExecuteStarted() {
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            String urlRouteList = APIUrlConstant.getVideoLogsUrl();
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost(urlRouteList);
+                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+                httppost.addHeader("authToken", authTokenStr.trim());
+                httppost.addHeader("user_id", userIdStr);
+                httppost.addHeader("ip_address", ipAddressStr.trim());
+                httppost.addHeader("movie_id", movieId.trim());
+                httppost.addHeader("episode_id", episodeId.trim());
+                httppost.addHeader("content_type", "2");
+                httppost.addHeader("watch_status", watchStatus);
+
+                httppost.addHeader("device_type", "2");
+                httppost.addHeader("log_id", videoLogId);
+
+
+                // Following code is changed due to NewVideoLog API ;
+
+                httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
+                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("resume_time", "" + (playerPosition));
+
+
+                Log.v("BIBHU11", "played_length============" + (playerPosition - player_start_time));
+
+
+                Log.v("BIBHU11", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU11", "resume_time============" + (playerPosition));
+                Log.v("BIBHU11", "log_id============" + videoLogId);
+
+                //===============End=============================//
+
+                // Execute HTTP Post Request
+                try {
+                    HttpResponse response = httpclient.execute(httppost);
+                    responseStr = EntityUtils.toString(response.getEntity());
+
+                    Log.v("BIBHU", "responseStr of responseStr ff ============" + responseStr);
+
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            videoLogId = "0";
+
+                        }
+
+                    });
+
+                } catch (IOException e) {
+                    videoLogId = "0";
+
+                    e.printStackTrace();
+                }
+                if (responseStr != null) {
+                    JSONObject myJson = new JSONObject(responseStr);
+                    statusCode = Integer.parseInt(myJson.optString("code"));
+                    if (statusCode == 200) {
+                        videoLogId = myJson.optString("log_id");
+                        log_temp_id = myJson.optString("log_temp_id");
+
+//                        Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
+                    } else {
+                        videoLogId = "0";
+                        log_temp_id = "0";
+                    }
+
+                }
+
+            } catch (Exception e) {
+                videoLogId = "0";
+                log_temp_id = "0";
+
+            }
+
+            return null;
+        }
+
+
+        protected void onPostExecute(Void result) {
+            if (responseStr == null) {
+                videoLogId = "0";
+                log_temp_id = "0";
+            }
+            AsyncVideoBufferLogDetails asyncVideoBufferLogDetails = new AsyncVideoBufferLogDetails();
+            asyncVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // updateSeekBarThread.stop();
+            stoptimertask();
+
+        }
+
 
     }
 
-    @Override
-    public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
-
-        return;
-    }
-
-    @Override
-    public void onGetFFVideoLogsPreExecuteStarted() {
-        stoptimertask();
-    }
-
-    @Override
-    public void onGetFFVideoLogsPostExecuteCompleted(int code, String status, String videoLogId) {
-        startTimer();
-        return;
-    }
-
-//    private class AsyncFFVideoLogDetails extends AsyncTask<Void, Void, Void> {
-//        String responseStr;
-//        int statusCode = 0;
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//
-//            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
-//            try {
-//                HttpClient httpclient = new DefaultHttpClient();
-//                HttpPost httppost = new HttpPost(urlRouteList);
-//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", authTokenStr.trim());
-//                httppost.addHeader("user_id", userIdStr);
-//                httppost.addHeader("ip_address", ipAddres.trim());
-//                httppost.addHeader("movie_id", movieId.trim());
-//                httppost.addHeader("episode_id", episodeId.trim());
-//
-//                httppost.addHeader("played_length", String.valueOf(playerPosition));
-//                httppost.addHeader("watch_status", watchStatus);
-//
-//                httppost.addHeader("device_type", "2");
-//                httppost.addHeader("log_id", videoLogId);
-//
-//                // Execute HTTP Post Request
-//                try {
-//                    HttpResponse response = httpclient.execute(httppost);
-//                    responseStr = EntityUtils.toString(response.getEntity());
-//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            videoLogId = "0";
-//
-//                        }
-//
-//                    });
-//
-//                } catch (IOException e) {
-//                    videoLogId = "0";
-//
-//                    e.printStackTrace();
-//                }
-//                if (responseStr != null) {
-//                    JSONObject myJson = new JSONObject(responseStr);
-//                    statusCode = Integer.parseInt(myJson.optString("code"));
-//                    if (statusCode == 200) {
-//                        videoLogId = myJson.optString("log_id");
-//                    } else {
-//                        videoLogId = "0";
-//                    }
-//
-//                }
-//
-//            } catch (Exception e) {
-//                videoLogId = "0";
-//
-//            }
-//
-//            return null;
-//        }
-//
-//
-//        protected void onPostExecute(Void result) {
-//            if (responseStr == null) {
-//                videoLogId = "0";
-//
-//            }
-//            startTimer();
-//            return;
-//
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            // updateSeekBarThread.stop();
-//            stoptimertask();
-//
-//        }
-//
-//
-//    }
-
-    private int millisecondsToString(int milliseconds) {
+    private int millisecondsToString(int milliseconds)  {
         // int seconds = (int) (milliseconds / 1000) % 60 ;
-        int seconds = milliseconds / 1000;
+        int seconds = (int) (milliseconds / 1000);
 
         return seconds;
     }
@@ -1074,7 +1146,8 @@ public class TrailerActivity extends AppCompatActivity implements
     public void onOrientationChange(int orientation) {
 
 
-        if (orientation == 90) {
+
+        if (orientation == 90){
 
 
             compressed = false;
@@ -1092,7 +1165,8 @@ public class TrailerActivity extends AppCompatActivity implements
             hideSystemUI();
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
             //current_time.setVisibility(View.GONE);
-        } else if (orientation == 270) {
+        }
+        else if (orientation == 270){
 
 
             compressed = false;
@@ -1112,7 +1186,7 @@ public class TrailerActivity extends AppCompatActivity implements
             //current_time.setVisibility(View.GONE);
 
             // Do some landscape stuff
-        } else if (orientation == 180) {
+        } else if (orientation == 180){
 
             LinearLayout.LayoutParams params1 = null;
             if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
@@ -1196,75 +1270,78 @@ public class TrailerActivity extends AppCompatActivity implements
 
     }
 
-//
-//    private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
-//        String responseStr;
-//
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//
-//            try {
-//
-//                // Execute HTTP Post Request
-//                try {
-//                    URL myurl = new URL(Util.loadIPUrl);
-//                    HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
-//                    InputStream ins = con.getInputStream();
-//                    InputStreamReader isr = new InputStreamReader(ins);
-//                    BufferedReader in = new BufferedReader(isr);
-//
-//                    String inputLine;
-//
-//                    while ((inputLine = in.readLine()) != null) {
-//                        System.out.println(inputLine);
-//                        responseStr = inputLine;
-//                    }
-//
-//                    in.close();
-//
-//
-//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-//                    ipAddres = "";
-//
-//                } catch (UnsupportedEncodingException e) {
-//
-//                    ipAddres = "";
-//
-//                } catch (IOException e) {
-//                    ipAddres = "";
-//
-//                }
-//                if (responseStr != null) {
-//                    Object json = new JSONTokener(responseStr).nextValue();
-//                    if (json instanceof JSONObject) {
-//                        ipAddres = ((JSONObject) json).getString("ip");
-//
-//                    }
-//
-//                }
-//
-//            } catch (Exception e) {
-//                ipAddres = "";
-//
-//            }
-//
-//            return null;
-//        }
-//
-//
-//        protected void onPostExecute(Void result) {
-//
-//            if (responseStr == null) {
-//                ipAddres = "";
-//            }
-//            return;
-//        }
-//
-//        protected void onPreExecute() {
-//
-//        }
-//    }
+
+
+    private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
+        String responseStr;
+
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            try {
+
+                // Execute HTTP Post Request
+                try {
+                    URL myurl = new URL(APIUrlConstant.IP_ADDRESS_URL);
+                    HttpsURLConnection con = (HttpsURLConnection)myurl.openConnection();
+                    InputStream ins = con.getInputStream();
+                    InputStreamReader isr = new InputStreamReader(ins);
+                    BufferedReader in = new BufferedReader(isr);
+
+                    String inputLine;
+
+                    while ((inputLine = in.readLine()) != null)
+                    {
+                        System.out.println(inputLine);
+                        responseStr = inputLine;
+                    }
+
+                    in.close();
+
+
+                } catch (org.apache.http.conn.ConnectTimeoutException e){
+                    ipAddressStr = "";
+
+                } catch (UnsupportedEncodingException e) {
+
+                    ipAddressStr = "";
+
+                }catch (IOException e) {
+                    ipAddressStr = "";
+
+                }
+                if(responseStr!=null){
+                    Object json = new JSONTokener(responseStr).nextValue();
+                    if (json instanceof JSONObject){
+                        ipAddressStr = ((JSONObject) json).getString("ip");
+
+                    }
+
+                }
+
+            }
+            catch (Exception e) {
+                ipAddressStr = "";
+
+            }
+
+            return null;
+        }
+
+
+        protected void onPostExecute(Void result) {
+
+            if(responseStr == null){
+                ipAddressStr = "";
+            }
+            return;
+        }
+
+        protected void onPreExecute() {
+
+        }
+    }
 
 
     private void updateProgressBar() {
@@ -1273,17 +1350,17 @@ public class TrailerActivity extends AppCompatActivity implements
 
     private Runnable updateTimeTask = new Runnable() {
         public void run() {
-          /*  if (played_length > 0) {
-                emVideoView.seekTo(34000);
-                seekBar.setProgress(34000);
-            }else {*/
+
+            if (emVideoView.getCurrentPosition() % 2 == 0)
+                BufferBandWidth();
+
+
             seekBar.setProgress(emVideoView.getCurrentPosition());
-//            }
             seekBar.setMax(emVideoView.getDuration());
             Calcute_Currenttime_With_TotalTime();
             mHandler.postDelayed(this, 1000);
 
-            if (content_types_id != 4) {
+            if (content_types_id!= 4){
                 seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
             }
 
@@ -1291,16 +1368,18 @@ public class TrailerActivity extends AppCompatActivity implements
 
 
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
-                findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
+                progressView.setVisibility(View.VISIBLE);
                 center_play_pause.setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.GONE);
                 previous_matching_time = current_matching_time;
             } else {
 
-                if (content_types_id == 4) {
+                if (content_types_id== 4){
 
 
-                } else {
+                }
+                else
+                {
                     if (current_matching_time >= emVideoView.getDuration()) {
                         mHandler.removeCallbacks(updateTimeTask);
                         //  pause_play.setImageResource(R.drawable.ic_media_play);
@@ -1320,7 +1399,7 @@ public class TrailerActivity extends AppCompatActivity implements
 
 
                 previous_matching_time = current_matching_time;
-                findViewById(R.id.progress_view).setVisibility(View.GONE);
+                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
             }
 
         }
@@ -1345,179 +1424,57 @@ public class TrailerActivity extends AppCompatActivity implements
         current_time.setText(Current_Time);
     }
 
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (asynGetIpAddress != null) {
+        if (asynGetIpAddress!=null){
             asynGetIpAddress.cancel(true);
         }
-        if (asyncVideoLogDetails != null) {
+        if (asyncVideoLogDetails!=null){
             asyncVideoLogDetails.cancel(true);
         }
-        if (asyncFFVideoLogDetails != null) {
+        if (asyncFFVideoLogDetails!=null){
             asyncFFVideoLogDetails.cancel(true);
         }
-        if (progressView != null && progressView.isShown()) {
+        if (progressView!=null && progressView.isShown()){
             progressView = null;
         }
-        if (timer != null) {
+        if (timer!=null){
             stoptimertask();
             timer = null;
         }
-
-        if (video_completed == false) {
-
-            ResumeVideoLogDetailsInput resumeVideoLogDetailsInput=new ResumeVideoLogDetailsInput();
-            resumeVideoLogDetailsInput.setAuthToken(authTokenStr);
-            resumeVideoLogDetailsInput.setUser_id(userIdStr.trim());
-            resumeVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
-            resumeVideoLogDetailsInput.setMovie_id(movieId.trim());
-            resumeVideoLogDetailsInput.setEpisode_id(episodeId.trim());
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (current_matching_time >= emVideoView.getDuration()) {
-                        watchSt = "complete";
-                    }
-
-                }
-
-            });
-            resumeVideoLogDetailsInput.setPlayed_length(String.valueOf(playerPosition));
-            resumeVideoLogDetailsInput.setWatch_status(watchSt);
-            ResumeVideoLogDetailsAsync asyncResumeVideoLogDetails = new ResumeVideoLogDetailsAsync(resumeVideoLogDetailsInput,this,this);
-            asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-            return;
-        }
-        mHandler.removeCallbacks(updateTimeTask);
-        if (emVideoView != null) {
-            emVideoView.release();
-        }
-        finish();
-        overridePendingTransition(0, 0);
-    }
-
-    public void backCalled() {
-
-        if (asynGetIpAddress != null) {
-            asynGetIpAddress.cancel(true);
-        }
-        if (asyncVideoLogDetails != null) {
-            asyncVideoLogDetails.cancel(true);
-        }
-        if (asyncFFVideoLogDetails != null) {
-            asyncFFVideoLogDetails.cancel(true);
-        }
-        if (progressView != null && progressView.isShown()) {
-            progressView = null;
-        }
-        if (timer != null) {
-            stoptimertask();
-            timer = null;
-        }
-        ResumeVideoLogDetailsInput resumeVideoLogDetailsInput=new ResumeVideoLogDetailsInput();
-        resumeVideoLogDetailsInput.setAuthToken(authTokenStr);
-        resumeVideoLogDetailsInput.setUser_id(userIdStr.trim());
-        resumeVideoLogDetailsInput.setIp_address(ipAddressStr.trim());
-        resumeVideoLogDetailsInput.setMovie_id(movieId.trim());
-        resumeVideoLogDetailsInput.setEpisode_id(episodeId.trim());
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (current_matching_time >= emVideoView.getDuration()) {
-                    watchSt = "complete";
-                }
-
-            }
-
-        });
-        resumeVideoLogDetailsInput.setPlayed_length(String.valueOf(playerPosition));
-        resumeVideoLogDetailsInput.setWatch_status(watchSt);
-        ResumeVideoLogDetailsAsync asyncResumeVideoLogDetails = new ResumeVideoLogDetailsAsync(resumeVideoLogDetailsInput,this,this);
-        asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-        return;
-      /*  if (video_completed == false){
-
-            AsyncResumeVideoLogDetails  asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
-            asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-            return;
-        }*//*else{
-            watchStatus = "com"
-            asyncVideoLogDetails = new AsyncVideoLogDetails();
-            asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-        }*//*
         mHandler.removeCallbacks(updateTimeTask);
         if (emVideoView!=null) {
             emVideoView.release();
         }
         finish();
-        overridePendingTransition(0, 0);*/
+        overridePendingTransition(0, 0);
     }
-
-    /* public void onBackPressed() {
-         super.onBackPressed();
-         LogUtil.showLog("MUVI","HHVID"+videoLogId);
-         if (asynGetIpAddress!=null){
-             asynGetIpAddress.cancel(true);
-         }
-         if (asyncVideoLogDetails!=null){
-             asyncVideoLogDetails.cancel(true);
-         }
-         if (asyncFFVideoLogDetails!=null){
-             asyncFFVideoLogDetails.cancel(true);
-         }
-         if (progressView!=null && progressView.isShown()){
-             progressView = null;
-         }
-         if (timer!=null){
-             stoptimertask();
-             timer = null;
-         }
-         mHandler.removeCallbacks(updateTimeTask);
-         if (emVideoView!=null) {
-             emVideoView.release();
-         }
-         finish();
-         overridePendingTransition(0, 0);
-     }*/
     @Override
-    protected void onUserLeaveHint() {
-
-       // if (played_length <= 0) {
-            if (asynGetIpAddress != null) {
-                asynGetIpAddress.cancel(true);
-            }
-            if (asyncVideoLogDetails != null) {
-                asyncVideoLogDetails.cancel(true);
-            }
-            if (asyncFFVideoLogDetails != null) {
-                asyncFFVideoLogDetails.cancel(true);
-            }
-            if (progressView != null && progressView.isShown()) {
-                progressView = null;
-            }
-            if (timer != null) {
-                stoptimertask();
-                timer = null;
-            }
-
-
-
-
-            if(Util.call_finish_at_onUserLeaveHint) {
-
-                Util.call_finish_at_onUserLeaveHint = true;
-
-                mHandler.removeCallbacks(updateTimeTask);
-                if (emVideoView != null) {
-                    emVideoView.release();
-                }
-
-                finish();
-                overridePendingTransition(0, 0);
-                super.onUserLeaveHint();
-            }
-       // }
+    protected void onUserLeaveHint()
+    {
+        if (asynGetIpAddress!=null){
+            asynGetIpAddress.cancel(true);
+        }
+        if (asyncVideoLogDetails!=null){
+            asyncVideoLogDetails.cancel(true);
+        }
+        if (asyncFFVideoLogDetails!=null){
+            asyncFFVideoLogDetails.cancel(true);
+        }
+        if (progressView!=null && progressView.isShown()){
+            progressView = null;
+        }
+        if (timer!=null){
+            stoptimertask();
+            timer = null;
+        }
+        mHandler.removeCallbacks(updateTimeTask);
+        if (emVideoView!=null) {
+            emVideoView.release();
+        }
+        finish();
+        overridePendingTransition(0, 0);
+        super.onUserLeaveHint();
     }
 
 
@@ -1530,7 +1487,7 @@ public class TrailerActivity extends AppCompatActivity implements
         } else {
             if (video_completed) {
 
-                if (content_types_id != 4) {
+                if (content_types_id!= 4){
                     // onBackPressed();
                     backCalled();
                 }
@@ -1591,7 +1548,8 @@ public class TrailerActivity extends AppCompatActivity implements
 
     }
 
-    public void showCurrentTime() {
+    public void showCurrentTime ()
+    {
 
         current_time.setText(Current_Time);
         current_time_position_timer();
@@ -1605,6 +1563,7 @@ public class TrailerActivity extends AppCompatActivity implements
             seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
             current_time.setX(seek_label_pos - current_time.getWidth() / 2);
         }
+
        *//* if (progresss <=9)
         {
             current_time.setX(seek_label_pos -6);
@@ -1617,15 +1576,16 @@ public class TrailerActivity extends AppCompatActivity implements
 
     }
 
-    public void current_time_position_timer() {
-        final Timer timer = new Timer();
+    public void current_time_position_timer()
+    {
+        final Timer timer  = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (content_types_id != 4) {
+                        if (content_types_id!= 4){
 
                             seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
                             current_time.setX(seek_label_pos - current_time.getWidth() / 2);
@@ -1634,192 +1594,7 @@ public class TrailerActivity extends AppCompatActivity implements
                     }
                 });
             }
-        }, 0, 100);
-    }
-
-   /* @Override
-    public boolean onKeyDown(int keyCode, KeyEvent objEvent) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            LogUtil.showLog("MUVI","FHFHFHCALLED");
-            return true;
-        }
-        return super.onKeyUp(keyCode, objEvent);
-    }
-*/
-   @Override
-   public void onGetResumeVideoLogDetailsPreExecuteStarted() {
-
-       stoptimertask();
-   }
-
-    @Override
-    public void onGetResumeVideoLogDetailsPostExecuteCompleted(int status, String message, String videoLogId) {
-
-        if (message == null) {
-            videoLogId = "0";
-
-        }
-        mHandler.removeCallbacks(updateTimeTask);
-        if (emVideoView != null) {
-            emVideoView.release();
-        }
-        finish();
-        overridePendingTransition(0, 0);
-        //startTimer();
-        return;
-    }
-
-//    private class AsyncResumeVideoLogDetails extends AsyncTask<Void, Void, Void> {
-//        //  ProgressDialog pDialog;
-//        String responseStr;
-//        int statusCode = 0;
-//        String watchSt = "halfplay";
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//
-//            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
-//            try {
-//                HttpClient httpclient = new DefaultHttpClient();
-//                HttpPost httppost = new HttpPost(urlRouteList);
-//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", authTokenStr.trim());
-//                httppost.addHeader("user_id", userIdStr.trim());
-//                httppost.addHeader("ip_address", ipAddres.trim());
-//                httppost.addHeader("movie_id", movieId.trim());
-//                httppost.addHeader("episode_id", episodeId.trim());
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (current_matching_time >= emVideoView.getDuration()) {
-//                            watchSt = "complete";
-//                        }
-//
-//                    }
-//
-//                });
-//                httppost.addHeader("played_length", String.valueOf(playerPosition));
-//                httppost.addHeader("watch_status", watchSt);
-//              /*  runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (current_matching_time >= emVideoView.getDuration()) {
-//
-//                            httppost.addHeader("watch_status", "complete");
-//                        }else{
-//                            httppost.addHeader("watch_status", "halfplay");
-//
-//                        }
-//
-//                    }
-//
-//                });*/
-//
-//                httppost.addHeader("device_type", "2");
-//                httppost.addHeader("log_id", videoLogId);
-//
-//
-//                // Execute HTTP Post Request
-//                try {
-//                    HttpResponse response = httpclient.execute(httppost);
-//                    responseStr = EntityUtils.toString(response.getEntity());
-//
-//
-//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            videoLogId = "0";
-//
-//                        }
-//
-//                    });
-//
-//                } catch (IOException e) {
-//                    videoLogId = "0";
-//
-//                    e.printStackTrace();
-//                }
-//                if (responseStr != null) {
-//                    JSONObject myJson = new JSONObject(responseStr);
-//                    statusCode = Integer.parseInt(myJson.optString("code"));
-//                    if (statusCode == 200) {
-//                        videoLogId = myJson.optString("log_id");
-//                    } else {
-//                        videoLogId = "0";
-//                    }
-//
-//                }
-//
-//            } catch (Exception e) {
-//                videoLogId = "0";
-//
-//            }
-//
-//            return null;
-//        }
-//
-//
-//        protected void onPostExecute(Void result) {
-//         /*   try {
-//                if (pDialog.isShowing())
-//                    pDialog.dismiss();
-//            } catch (IllegalArgumentException ex) {
-//                videoLogId = "0";
-//            }*/
-//            if (responseStr == null) {
-//                videoLogId = "0";
-//
-//            }
-//            mHandler.removeCallbacks(updateTimeTask);
-//            if (emVideoView != null) {
-//                emVideoView.release();
-//            }
-//            finish();
-//            overridePendingTransition(0, 0);
-//            //startTimer();
-//            return;
-//
-//
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            stoptimertask();
-//
-//        }
-
-
-  //  }
-
-
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Util.hide_pause = false;
-    }
-
-    // Added Later By Bibhu For Subtitle Feature.
-
-
-    @Override
-    public void finish() {
-        super.finish();
-    }
-
-
-
-    @Override
-    protected void onPause() {
-        /*if (subtitleDisplayHandler != null) {
-            subtitleDisplayHandler.removeCallbacks(subtitleProcessesor);
-            subtitleDisplayHandler = null;
-            if (subsFetchTask != null)
-                subsFetchTask.cancel(true);
-        }*/
-        super.onPause();
+        },0,100);
     }
 
     private void hideSystemUI() {
@@ -1837,17 +1612,358 @@ public class TrailerActivity extends AppCompatActivity implements
     }
 
     private void showSystemUI() {
+
         if (Util.dataModel.getVideoStory().trim() != null && !Util.dataModel.getVideoStory().trim().matches("")){
-            story.setText(Util.dataModel.getVideoStory());
-            story.setVisibility(View.VISIBLE);
-            ResizableCustomView.doResizeTextView(TrailerActivity.this,story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
+            videoStoryTextView.setText(Util.dataModel.getVideoStory());
+            videoStoryTextView.setVisibility(View.VISIBLE);
+            ResizableCustomView.doResizeTextView(TrailerActivity.this,videoStoryTextView, MAX_LINES, languagePreference.getTextofLanguage( VIEW_MORE, DEFAULT_VIEW_MORE), true);
 
         } else {
-            story.setVisibility(View.GONE);
+            videoStoryTextView.setVisibility(View.GONE);
         }
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        );
+
+        );
     }
+
+
+    private class AsyncResumeVideoLogDetails extends AsyncTask<Void, Void, Void> {
+        //  ProgressDialog pDialog;
+        String responseStr;
+        int statusCode = 0;
+        String watchSt = "halfplay";
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            String urlRouteList = APIUrlConstant.getVideoLogsUrl();
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost(urlRouteList);
+                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+                httppost.addHeader("authToken", authTokenStr.trim());
+                httppost.addHeader("user_id", userIdStr.trim());
+                httppost.addHeader("ip_address", ipAddressStr.trim());
+                httppost.addHeader("movie_id", movieId.trim());
+                httppost.addHeader("episode_id", episodeId.trim());
+                httppost.addHeader("content_type", "2");
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (current_matching_time >= emVideoView.getDuration()) {
+                            watchSt = "complete";
+                        }
+
+                    }
+
+                });
+                httppost.addHeader("watch_status", watchSt);
+
+
+                // Following code is changed due to NewVideoLog API ;
+
+                httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
+                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("resume_time", "" + (playerPosition));
+
+                Log.v("BIBHU11", "played_length============" + (playerPosition - player_start_time));
+                Log.v("BIBHU11", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU11", "resume_time============" + (playerPosition));
+                Log.v("BIBHU11", "log_id============" + videoLogId);
+
+                //===============End=============================//
+
+
+                httppost.addHeader("device_type", "2");
+                httppost.addHeader("log_id", videoLogId);
+
+
+                // Execute HTTP Post Request
+                try {
+                    HttpResponse response = httpclient.execute(httppost);
+                    responseStr = EntityUtils.toString(response.getEntity());
+                    Log.v("BIBHU", "responseStr of responseStr============" + responseStr);
+
+
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            videoLogId = "0";
+
+                        }
+
+                    });
+
+                } catch (IOException e) {
+                    videoLogId = "0";
+
+                    e.printStackTrace();
+                }
+                if (responseStr != null) {
+                    JSONObject myJson = new JSONObject(responseStr);
+                    statusCode = Integer.parseInt(myJson.optString("code"));
+                    if (statusCode == 200) {
+                        videoLogId = myJson.optString("log_id");
+                        log_temp_id = myJson.optString("log_temp_id");
+                    } else {
+                        videoLogId = "0";
+                        log_temp_id = "0";
+                    }
+
+                }
+
+            } catch (Exception e) {
+                videoLogId = "0";
+                log_temp_id = "0";
+
+            }
+
+            return null;
+        }
+
+
+        protected void onPostExecute(Void result) {
+         /*   try {
+                if (pDialog.isShowing())
+                    pDialog.dismiss();
+            } catch (IllegalArgumentException ex) {
+                videoLogId = "0";
+            }*/
+            if (responseStr == null) {
+                videoLogId = "0";
+                log_temp_id = "0";
+
+            }
+            mHandler.removeCallbacks(updateTimeTask);
+            if (emVideoView != null) {
+                emVideoView.release();
+            }
+
+            finish();
+            overridePendingTransition(0, 0);
+            //startTimer();
+            return;
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            stoptimertask();
+        }
+    }
+
+
+    private class AsyncVideoBufferLogDetails extends AsyncTask<Void, Void, Void> {
+        //  ProgressDialog pDialog;
+        String responseStr;
+        int statusCode = 0;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            String urlRouteList = APIUrlConstant.getVideoBufferLogsUrl();
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost(urlRouteList);
+                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+                httppost.addHeader("authToken", authTokenStr.trim());
+                httppost.addHeader("user_id", userIdStr);
+                httppost.addHeader("ip_address", ipAddressStr.trim());
+                httppost.addHeader("movie_id", movieId.trim());
+                httppost.addHeader("episode_id", episodeId.trim());
+                httppost.addHeader("content_type", "2");
+                httppost.addHeader("device_type", "2");
+                httppost.addHeader("log_id", videoBufferLogId);
+                httppost.addHeader("resolution", resolution.trim());
+                httppost.addHeader("start_time", String.valueOf(playerPosition));
+                httppost.addHeader("end_time", String.valueOf(playerPosition));
+                httppost.addHeader("log_unique_id", videoBufferLogUniqueId);
+                httppost.addHeader("location", Location);
+                httppost.addHeader("video_type", "mped_dash");
+
+                if (videoBufferLogUniqueId.equals("0"))
+                    httppost.addHeader("totalBandwidth", "0");
+                else
+                    httppost.addHeader("totalBandwidth", "" + CurrentUsedData);
+
+                Log.v("BIBHU", "Response of the bufferlog CurrentUsedData======#############=" + CurrentUsedData);
+
+                // Execute HTTP Post Request
+                try {
+                    HttpResponse response = httpclient.execute(httppost);
+                    responseStr = EntityUtils.toString(response.getEntity());
+
+                    Log.v("BIBHU", "Response of the bufferlog =" + responseStr);
+
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            videoBufferLogId = "0";
+                            videoBufferLogUniqueId = "0";
+                            Location = "0";
+                        }
+                    });
+
+                } catch (IOException e) {
+                    videoBufferLogId = "0";
+                    videoBufferLogUniqueId = "0";
+                    Location = "0";
+                    e.printStackTrace();
+                }
+                if (responseStr != null) {
+                    JSONObject myJson = new JSONObject(responseStr);
+                    statusCode = Integer.parseInt(myJson.optString("code"));
+                    if (statusCode == 200) {
+                        videoBufferLogId = myJson.optString("log_id");
+                        videoBufferLogUniqueId = myJson.optString("log_unique_id");
+                        Location = myJson.optString("location");
+
+                    } else {
+                        videoBufferLogId = "0";
+                        videoBufferLogUniqueId = "0";
+                        Location = "0";
+                    }
+                }
+            } catch (Exception e) {
+                videoBufferLogId = "0";
+                videoBufferLogUniqueId = "0";
+                Location = "0";
+            }
+
+            return null;
+        }
+
+
+        protected void onPostExecute(Void result) {
+
+            if (responseStr == null) {
+
+                videoBufferLogId = "0";
+                videoBufferLogUniqueId = "0";
+                Location = "0";
+            }
+            if (!watchStatus.equals("complete"))
+                startTimer();
+
+            return;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+    }
+
+    public void PreviousUsedDataByApp(boolean status) {
+
+        try {
+            long prev_data = 0;
+            PackageManager pm = getPackageManager();
+            List<PackageInfo> listPackages = pm.getInstalledPackages(0);
+            for (PackageInfo pi : listPackages) {
+                String appName = (String) pi.applicationInfo.loadLabel(pm);
+                if (appName != null && appName.trim().equals(getResources().getString(R.string.app_name))) {
+                    int uid = pi.applicationInfo.uid;
+                    prev_data = (TrafficStats.getUidRxBytes(uid) + TrafficStats.getUidTxBytes(uid)) / 1024;
+                    PreviousUsedData = prev_data;
+                }
+            }
+
+        } catch (Exception e) {
+
+        }
+    }
+
+
+    public void BufferBandWidth() {
+        DataAsynTask dataAsynTask = new DataAsynTask();
+        dataAsynTask.execute();
+    }
+
+    private class DataAsynTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+
+            try {
+                long total = 0;
+                PackageManager pm = getPackageManager();
+                List<PackageInfo> listPackages = pm.getInstalledPackages(0);
+                for (PackageInfo pi : listPackages) {
+                    String appName = (String) pi.applicationInfo.loadLabel(pm);
+                    if (appName != null && appName.trim().equals(getResources().getString(R.string.app_name))) {
+                        int uid = pi.applicationInfo.uid;
+                        total = (TrafficStats.getUidRxBytes(uid) + TrafficStats.getUidTxBytes(uid)) / 1024;
+
+                        CurrentUsedData = total - PreviousUsedData;
+                        CurrentUsedData = CurrentUsedData - (DataUsedByDownloadContent());
+
+                        Log.v("BIBHU", "Current_total_UsedData==================" + total + " KB");
+                        Log.v("BIBHU", "CurrentUsedData==================" + CurrentUsedData + " KB");
+
+                    }
+                }
+            } catch (Exception e) {
+
+            }
+
+            return null;
+        }
+    }
+
+
+    public long DataUsedByDownloadContent() {
+
+        try {
+
+            SQLiteDatabase DB = TrailerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
+            Cursor cursor = DB.rawQuery("SELECT " + DBHelper.COLUMN_DOWNLOADID + " FROM " + DBHelper.TABLE_NAME + " ", null);
+            int count = cursor.getCount();
+
+            long Total = 0;
+
+            if (count > 0) {
+                if (cursor.moveToFirst()) {
+                    do {
+                        DownloadManager downloadManager1 = (DownloadManager) TrailerActivity.this.getSystemService(DOWNLOAD_SERVICE);
+                        DownloadManager.Query download_id_query = new DownloadManager.Query();
+                        download_id_query.setFilterById(Long.parseLong(cursor.getString(0).trim())); //filter by id which you have receieved when reqesting download from download manager
+                        Cursor id_cursor = downloadManager1.query(download_id_query);
+
+
+                        if (id_cursor != null && id_cursor.getCount() > 0) {
+                            if (id_cursor.moveToFirst()) {
+                                int columnIndex = id_cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
+                                int status = id_cursor.getInt(columnIndex);
+
+                                int sizeIndex = id_cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES);
+                                int downloadedIndex = id_cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
+                                long size = id_cursor.getInt(sizeIndex);
+                                long downloaded = id_cursor.getInt(downloadedIndex);
+
+                                Total = Total + downloaded / 1024;
+                            }
+                        }
+
+                        Log.v("BIBHU11", "  TotalUsedData Download size============" + Total + "KB");
+
+                    } while (cursor.moveToNext());
+                }
+                return Total;
+            } else {
+                return Total;
+            }
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+
 }
