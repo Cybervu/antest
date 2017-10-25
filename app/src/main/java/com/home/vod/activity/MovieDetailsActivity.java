@@ -220,7 +220,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     //public static ProgressBarHandler progressBarHandler;
     int prevPosition = 0;
     PreferenceManager preferenceManager;
-    private static final int MAX_LINES = 2;
+    private static final int MAX_LINES = 3;
    //ProgressBarHandler loadMovieDetailspDialog;
     ProgressBarHandler pDialog;
     int ratingAddedByUser = 1;
