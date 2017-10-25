@@ -4,6 +4,7 @@
  <color name="appBackgroundColor">#fff</color>
  <color name="textColor">#eee</color>
  <color name="videotextColor">#000000</color>
+ <color name="videotitleColor">#000000</color>
  <color name="loginTextViewColor">#b70000</color>
  <color name="buttonTextColor">#fff</color>
  <color name="forgotPasswordTextViewColor">#b70000</color>
@@ -15,7 +16,7 @@
  <color name="toolbarTitleColor">#fff</color>
  <color name="disableTextColor">#50757575</color>
  <color name="OsTextColor">#757575</color>
- <color name="aboutustestcolor">#f5e85a</color>
+ <color name="aboutustestcolor">#fff</color>
  <color name="alreadyHaveALoginButtonTextColor">#b70000</color>
  <color name="border_color">#b70000</color>
  <color name="cancel_button_text_color">#b70000</color>
@@ -26,12 +27,14 @@
  <color name="preOrderButtonTextColor">#DDD</color>
  <color name="spinnerDropDownListColor">#000</color>
  <color name="leftMenuBackground">#fff</color>
- <color name="colorPrimary">#629de0</color>
- <color name="colorPrimaryDark">#4573A8</color>
+ <color name="colorPrimary">#b2423a</color>
+ <color name="navlogobackgroundcolor">#df5349</color>
+ <color name="colorPrimaryDark">#c84a41</color>
  <color name="languagePopupColor">#fff</color>
  <color name="languagePopupFadeColor">#50696969</color>
  <color name="filterTextColor">#5c6873</color>
  <color name="nav_drawer_lineColor">#000</color>
+ <color name="nav_lineColor">#000</color>
  <color name="nav_drawer_text_Color">#000000</color>
  <color name="button_background">#b70000</color>
  <color name="cancel_button_background">#DDD</color>

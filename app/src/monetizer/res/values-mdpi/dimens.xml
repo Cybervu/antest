@@ -48,7 +48,7 @@
     <dimen name="layout_padding_right">20dp</dimen>
     <dimen name="register_edittext_padding">17dp</dimen>
     <dimen name="register_margin_top">20dp</dimen>
-    <dimen name="listitemlayout_height">158dp</dimen>
+    <dimen name="listitemlayout_height">200dp</dimen>
     <dimen name="contactformtitle_text_size">15sp</dimen>
     <dimen name="slider_height">160dp</dimen>
     <dimen name="fragment_text_size">18sp</dimen>

@@ -656,7 +656,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         videoCastCrewTitleTextView.setText(Util.getTextofLanguage(ExoPlayerActivity.this, Util.CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
 
         // ExoPlayerActivity.this is changed for the new requirement of Offline Viewing.
-        startService(new Intent(ExoPlayerActivity.this, DataConsumptionService.class));
+        ExoPlayerActivity.this.startService(new Intent(ExoPlayerActivity.this, DataConsumptionService.class));
+
+
+
         registerReceiver(SelectedUrl, new IntentFilter("UrlPosition"));
 
         //Call For Subtitle Loading // Added By Bibhu
@@ -4052,7 +4055,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         // Send BroadCast to start sending Download content bandwidth .
 
         Intent intent = new Intent("BnadwidthLog");
-        sendBroadcast(intent);
+        ExoPlayerActivity.this.sendBroadcast(intent);
 
         //---------------------- End ---------------------------------//
 

@@ -49,7 +49,6 @@ public class LanguagePreference {
     public static final String UPDATE_PROFILE = "UPDATE_PROFILE";
     public static final String APP_ON = "APP_ON";
     public static final String APP_SELECT_LANGUAGE = "APP_SELECT_LANGUAGE";
-    public static final String RESUME_MESSAGE = "RESUME_MESSAGE";
     public static final String PROFILE = "PROFILE";
     public static final String PURCHASE_HISTORY = "PURCHASE_HISTORY";
     public static final String LOGOUT = "LOGOUT";
@@ -359,7 +358,6 @@ public class LanguagePreference {
     public static final String DEFAULT_TEXT_SEARCH_PLACEHOLDER = "Search";
     public static final String DEFAULT_SIGN_OUT_ERROR = "Sorry, we can not be able to log out. Try again!.";
     public static final String DEFAULT_BTN_SUBMIT = "Submit";
-    public static final String DEFAULT_RESUME_MESSAGE = "Continue watching where you left?";
     public static final String DEAFULT_CANCEL_BUTTON = "Cancel";
     public static final String DEAFULT_CONTINUE_BUTTON = "Continue";
 
@@ -394,6 +392,8 @@ public class LanguagePreference {
     public static String DEFAULT_DIFFICULTY_TITLE = "Difficulty";
     public static String DURATION_TITLE = "DURATION_TITLE";
     public static String DEFAULT_DURATION_TITLE = " Duration";
+    public static String RESUME_MESSAGE = "RESUME_MESSAGE";
+    public static String DEFAULT_RESUME_MESSAGE = "Continue watching where you left?";
 
 
     /**

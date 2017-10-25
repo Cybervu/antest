@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.androidquery.AQuery;
 import com.google.android.gms.cast.MediaInfo;
+import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.CastState;
@@ -265,7 +266,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         if (menuList != null && menuList.size() > 0) {
             menuList.clear();
         }
-        fooerMenuHandler=new FooterMenuHandler(this);
+        fooerMenuHandler = new FooterMenuHandler(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
 
@@ -378,6 +379,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
         episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
+/************chromecast***********/
+        mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
+                R.id.media_route_menu_item);
+
+       /* MenuItemCompat.setActionProvider(mediaRouteMenuItem, new MediaRouteActionProvider(new ContextThemeWrapper(this, R.style.Theme_CastVideosDark)));
+        mediaRouteMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);*/
+        showIntroductoryOverlay();
+
+        /************chromecast***********/
 
         return true;
     }
@@ -777,19 +787,19 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
         } else {
-            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME), "-101", true, "-101",""));
+            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME), "-101", true, "-101", ""));
 
             if (menusOutputModel.getMainMenuModel() != null && menusOutputModel.getMainMenuModel().size() > 0) {
 
                 for (MenusOutputModel.MainMenu menuListOutput : menusOutputModel.getMainMenuModel()) {
                     LogUtil.showLog("Alok", "menuListOutputList ::" + menuListOutput.getPermalink());
                     if (menuListOutput.getLink_type() != null && !menuListOutput.getLink_type().equalsIgnoreCase("") && menuListOutput.getLink_type().equalsIgnoreCase("0")) {
-                        menuList.add(new NavDrawerItem(menuListOutput.getTitle(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getLink_type(),""));
+                        menuList.add(new NavDrawerItem(menuListOutput.getTitle(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getLink_type(), ""));
                     }
                 }
             }
 
-            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102",""));
+            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102", ""));
             LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
 
             if (menusOutputModel.getFooterMenuModel() != null && menusOutputModel.getFooterMenuModel().size() > 0) {
@@ -802,7 +812,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                     }
                 }
 */
-                fooerMenuHandler.addFooterMenu(menusOutputModel,menuList);
+                fooerMenuHandler.addFooterMenu(menusOutputModel, menuList);
             }
 
 
