@@ -40,6 +40,7 @@
     <dimen name="vdiotitle_text_size">17sp</dimen>
     <dimen name="vdiocast_text_size">18sp</dimen>
     <dimen name="btnmore_width">98dp</dimen>
+    <dimen name="trailer_btn_text_size">14sp</dimen>
     <dimen name="btnmore_height">40dp</dimen>
     <dimen name="btnmore_text_size">13sp</dimen>
     <dimen name="banerimg_height">300dp</dimen>

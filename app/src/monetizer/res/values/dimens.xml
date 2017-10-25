@@ -136,6 +136,7 @@
     <dimen name="spinner_width">150dp</dimen>
     <dimen name="spinner_height">38dp</dimen>
     <dimen name="btnmore_width">90dp</dimen>
+    <dimen name="trailer_btn_text_size">14sp</dimen>
     <dimen name="btnmore_height">38dp</dimen>
     <dimen name="payment_watch_now_height">45dp</dimen>
     <dimen name="banerimg_height">210dp</dimen>

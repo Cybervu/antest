@@ -15,7 +15,7 @@
     <dimen name="buttonheight">37dp</dimen>
     <dimen name="titletxt">13sp</dimen>
     <dimen name="indicatorheight">130dp</dimen>
-
+    <dimen name="trailer_btn_text_size">14sp</dimen>
 
     <dimen name="forgot_logo_width">120dp</dimen>
     <dimen name="filter_marginLeft">50dp</dimen>
