@@ -13,7 +13,7 @@
     <dimen name="okbtn_width">150dp</dimen>
     <dimen name="okbtn_height">40dp</dimen>
     <dimen name="cancelbtn_text_size">18sp</dimen>
-    <dimen name="loginImageViewMarging_top">20dp</dimen>
+    <dimen name="loginImageViewMarging_top">10dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="txt">26sp</dimen>
