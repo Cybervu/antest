@@ -44,14 +44,16 @@
     <color name="spinnerDropDownListColor">#000</color>
     <color name="leftMenuBackground">#fff</color>
     <color name="colorPrimary">#4cbfb8</color>
-    <color name="exercise_imagecolor">#4cbfb8</color>
     <color name="navlogobackgroundcolor">#4cbfb8</color>
     <color name="colorPrimaryDark">#4cbfb8</color>
+    <color name="exercise_imagecolor">#4cbfb8</color>
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#50696969</color>
     <color name="filterTextColor">#5c6873</color>
     <color name="nav_drawer_lineColor">#000</color>
     <color name="nav_lineColor">#60c6c0</color>
+    <color name="sidemenu_notification_Color">#60c6c0</color>
+    <color name="sidemenu_logout_color">#61aba6</color>
     <color name="nav_drawer_text_Color">#ffffff</color>
     <color name="button_background">#ff5a75</color>
     <color name="button_background_plan_textview">#ff5a75</color>

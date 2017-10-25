@@ -686,7 +686,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             fragment = null;
         }
 
-        else  if (menuList.get(position).getPermalink().equals("logout_Permalink")) {
+       /* else  if (menuList.get(position).getPermalink().equals("logout_Permalink")) {
             fragment = null;
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
@@ -727,9 +727,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
             dlgAlert.create().show();
 
-        }
-
-
+        }*/
         else {
 
             fragment = new VideosListFragment();
@@ -3056,6 +3054,49 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         final Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
         searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(searchIntent);
+    }
+
+    public  void logout() {
+
+
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
+        dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
+        dlgAlert.setTitle("");
+
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing but close the dialog
+
+                // dialog.cancel();
+                LogoutInput logoutInput = new LogoutInput();
+                logoutInput.setAuthToken(authTokenStr);
+                LogUtil.showLog("Abhi", authTokenStr);
+                String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
+                logoutInput.setLogin_history_id(loginHistoryIdStr);
+                logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                LogUtil.showLog("Abhi", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MainActivity.this, MainActivity.this);
+                asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
+
+
+                dialog.dismiss();
+            }
+        });
+
+        dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
+        // dlgAlert.setPositiveButton(getResources().getString(R.string.yes_str), null);
+        dlgAlert.setCancelable(false);
+
+        dlgAlert.create().show();
     }
 
 }

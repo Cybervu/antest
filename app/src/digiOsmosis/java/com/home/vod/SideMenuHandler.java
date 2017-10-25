@@ -9,14 +9,19 @@ import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.vod.activity.DigiOsmosisProfileActivity;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.activity.ProfileActivity;
+import com.home.vod.activity.ProgramDetailsActivity;
+import com.home.vod.activity.ProgrammeActivity;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.LogUtil;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -29,11 +34,15 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
+import static player.utils.Util.DEFAULT_SIGN_OUT_WARNING;
 
 /**
  * Created by Android on 10/5/2017.
@@ -43,7 +52,7 @@ public class SideMenuHandler {
 
 
     Activity context;
-    MainActivity mainActivity;
+
     boolean value = true;
     boolean login_value = false;
     int adding_position ;
@@ -54,6 +63,7 @@ public class SideMenuHandler {
 
     TextView nameText;
     ImageView editPen,profile_image,bannerImageView;
+    LinearLayout layout1,layout2,notification,logout;
 
     public SideMenuHandler(Activity context) {
         this.context = context;
@@ -68,6 +78,10 @@ public class SideMenuHandler {
         bannerImageView = (ImageView) context.findViewById(R.id.bannerImageView);
        Log.v("BKS","profile=="+preferenceManager.getDispNameFromPref());
         nameText.setText(preferenceManager.getDispNameFromPref());
+        layout1 = (LinearLayout) context.findViewById(R.id.layout_1);
+        layout2 = (LinearLayout) context.findViewById(R.id.layout_2);
+        notification = (LinearLayout) context.findViewById(R.id.notification);
+        logout = (LinearLayout) context.findViewById(R.id.logout);
 
 
         editPen.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +92,29 @@ public class SideMenuHandler {
                 context.startActivity(navIntent);
 
 
+            }
+        });
+
+        layout2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,ProfileActivity.class);
+                context.startActivity(intent);
+            }
+        });
+
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Intent intent = new Intent(context, ProgrammeActivity.class);
+                context.startActivity(intent);
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)context).logout();
             }
         });
 
@@ -131,7 +168,7 @@ public class SideMenuHandler {
                     menuList.add(adding_position,new NavDrawerItem(profile_menu, profile_menuPermalink, true, "internal"));
                     menuList.add(adding_position+1,new NavDrawerItem(purchase_menu, purchase_menuPermalink, true, "internal"));
                     menuList.add(adding_position+2,new NavDrawerItem(mydownload_menu, mydownload_menuPermalink, true, "internal"));
-                    menuList.add(new NavDrawerItem(logout_menu, logout_menuPermalink, true, "internal"));
+//                    menuList.add(new NavDrawerItem(logout_menu, logout_menuPermalink, true, "internal"));
             }
 
         else{
@@ -146,6 +183,9 @@ public class SideMenuHandler {
 
 
         if (loggedInStr!= null) {
+
+            layout1.setVisibility(View.VISIBLE);
+            layout2.setVisibility(View.GONE);
             Log.v("ANU","loggedInStr===="+loggedInStr);
             String PIMG = preferenceManager.getLoginProfImgFromPref();
             Log.v("ANU","getLoginProfImgFromPref===="+PIMG);
@@ -174,7 +214,8 @@ public class SideMenuHandler {
 
         else {
 
-
+            layout1.setVisibility(View.GONE);
+            layout2.setVisibility(View.VISIBLE);
             Picasso.with(context)
                     .load(R.drawable.profile)
                     .into(profile_image);
@@ -183,6 +224,8 @@ public class SideMenuHandler {
             editPen.setVisibility(View.INVISIBLE);
             nameText.setVisibility(View.INVISIBLE);
         }
+
+
 
 
 

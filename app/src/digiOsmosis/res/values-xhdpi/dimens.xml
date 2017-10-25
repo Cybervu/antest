@@ -129,5 +129,6 @@
     <dimen name="profile_margin_right">20dp</dimen>
     <dimen name="profile_padding_top">50dp</dimen>
     <dimen name="layout2_padding_top">30dp</dimen>
+    <dimen name="sidemenu_padding_bottom">80dp</dimen>
 
 </resources>

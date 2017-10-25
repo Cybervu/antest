@@ -356,4 +356,10 @@
     <dimen name="fav_configuration_large_3">3dp</dimen>
     <dimen name="fav_configuration_xlarge_5">5dp</dimen>
 
+
+
+    <dimen name="sideTitle_line_height">18dp</dimen>
+    <dimen name="sideTitle_line_width">5dp</dimen>
+    <dimen name="sideTitle_line_marginleft">10dp</dimen>
+
 </resources>
