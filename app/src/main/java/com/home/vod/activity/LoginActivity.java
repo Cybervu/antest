@@ -1564,7 +1564,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             public void onClick(View v) {
                 final Intent detailsIntent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
+                detailsIntent.putExtra("PlayerModel", playerModel);
                 startActivity(detailsIntent);
                 finish();
             }
@@ -1579,6 +1579,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 if (getIntent().getStringExtra("from") != null) {
                     detailsIntent.putExtra("from", getIntent().getStringExtra("from"));
                 }
+                detailsIntent.putExtra("PlayerModel", playerModel);
                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(detailsIntent);
                 onBackPressed();
