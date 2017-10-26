@@ -149,7 +149,7 @@
 
                         <Button
                             android:id="@+id/preOrderButton"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/btnmore_width"
                             android:layout_height="wrap_content"
                             android:background="@drawable/preorder_button"
                             android:padding="@dimen/payment_spinner_padding"
@@ -165,7 +165,7 @@
 
                         <Button
                             android:id="@+id/viewTrailerButton"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/btnmore_width"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:background="@drawable/view_more_button_background"
@@ -430,7 +430,7 @@
 
                 <Button
                     android:id="@+id/btnMore"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/btnmore_width"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"

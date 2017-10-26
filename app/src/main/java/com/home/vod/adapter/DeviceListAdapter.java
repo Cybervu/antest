@@ -21,6 +21,7 @@ import com.home.apisdk.apiController.RemoveDeviceAsynTask;
 import com.home.apisdk.apiModel.RemoveDeviceInputModel;
 import com.home.apisdk.apiModel.RemoveDeviceOutputModel;
 import com.home.vod.R;
+import com.home.vod.activity.LoginActivity;
 import com.home.vod.activity.ManageDevices;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
@@ -64,7 +65,7 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
     ArrayList<String> deviceFlag = new ArrayList<>();
 
     String devie_id="";
-
+    ProgressBarHandler pDialog;
     PreferenceManager preferenceManager;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -156,7 +157,7 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
                         removeDeviceInputModel.setDevice(devie_id);
                         removeDeviceInputModel.setUser_id(preferenceManager.getUseridFromPref());
                         removeDeviceInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-                        RemoveDeviceAsynTask asynGetPlanid = new RemoveDeviceAsynTask(removeDeviceInputModel, (RemoveDeviceAsynTask.RemoveDeviceListener) mContext, mContext);
+                        RemoveDeviceAsynTask asynGetPlanid = new RemoveDeviceAsynTask(removeDeviceInputModel,DeviceListAdapter.this, mContext);
                         asynGetPlanid.executeOnExecutor(threadPoolExecutor);
 
                       /*  AsynDeleteDevices asynDeleteDevices = new AsynDeleteDevices();
@@ -175,12 +176,20 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
 
     @Override
     public void onRemoveDevicePreExecuteStarted() {
-
+        pDialog = new ProgressBarHandler(mContext);
+        pDialog.show();
     }
 
     @Override
     public void onRemoveDevicePostExecuteCompleted(RemoveDeviceOutputModel removeDeviceOutputModel, int status, String message) {
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
 
+        }
 
         if (status==200) {
             // Show Success Message

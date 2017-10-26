@@ -25,6 +25,8 @@
     </style>
 
 
+
+
     <style name="Widget.App.EditText" parent="Widget.AppCompat.EditText">
 
         <item name="colorControlNormal">@color/unSelectedHintColor</item>

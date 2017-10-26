@@ -12,7 +12,8 @@
 
     <dimen name="singleimgwidth">90dp</dimen>
     <dimen name="singleimgheight">146dp</dimen>
-
+    <dimen name="viewmore_btn_width">90dp</dimen>
+    <dimen name="viewmore_btn_height">40dp</dimen>
     <dimen name="buttonheight">39dp</dimen>
     <dimen name="okbtn_width">150dp</dimen>
     <dimen name="okbtn_height">40dp</dimen>
