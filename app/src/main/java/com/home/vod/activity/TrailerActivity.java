@@ -281,7 +281,6 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
 
         if (Util.dataModel.getVideoDuration().trim() != null && !Util.dataModel.getVideoDuration().trim().matches(""))
-
         {
             videoDurationTextView.setText(Util.dataModel.getVideoDuration().trim());
             videoDurationTextView.setVisibility(View.VISIBLE);
@@ -973,7 +972,6 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
             timer.cancel();
             timer = null;
         }
-
     }
     public void initializeTimerTask() {
 
@@ -992,7 +990,6 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                             if (isFastForward == true) {
                                 isFastForward = false;
                                 log_temp_id = "0";
-
 
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {

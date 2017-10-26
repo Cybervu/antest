@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/videoGenreTextView_padding"
                     android:text="$ "
-                    android:textColor="#ddd"
+                    android:textColor="#000"
                     android:textSize="@dimen/plainrow_text_size" />
 
                 <TextView
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/planPurchaseMonthTextView_padding"
                     android:text="(3 months )"
-                    android:textColor="#ddd"
+                    android:textColor="#000"
                     android:textSize="@dimen/itemtitle1_text_size" />
 
             </LinearLayout>

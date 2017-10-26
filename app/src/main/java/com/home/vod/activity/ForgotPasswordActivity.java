@@ -31,6 +31,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import player.activity.Player;
+
 import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_SUBMIT;
@@ -68,6 +70,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
     String loginEmailStr = "";
     boolean navigation=false;
     ForgotpassAsynTask asyncPasswordForgot;
+    Player playerModel;
     // load asynctask
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -83,8 +86,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         setContentView(R.layout.activity_forgot_password);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-
-
+        playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
 
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
@@ -131,6 +133,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
             @Override
             public void onClick(View v) {
                 final Intent detailsIntent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+                detailsIntent.putExtra("PlayerModel", playerModel);
                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(detailsIntent);
                 finish();

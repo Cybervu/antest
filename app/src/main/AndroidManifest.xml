@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.home.vod">
 
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -32,11 +32,11 @@
     <application
         android:name=".VodApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:largeHeap="true"
-        android:hardwareAccelerated="true"
+        android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
 
         <activity
@@ -62,16 +62,16 @@
             android:name=".activity.SearchActivity"
             android:label=""
             android:screenOrientation="portrait" />
-        <activity android:name="player.activity.ExoPlayerActivity"
+        <activity
+            android:name="player.activity.ExoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"
-            />
+            android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name=".activity.MyDownloads"
-            android:screenOrientation="portrait"
-            />
+        <activity
+            android:name=".activity.MyDownloads"
+            android:screenOrientation="portrait" />
         <activity
             android:name="player.activity.ThirdPartyPlayer"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -92,16 +92,17 @@
             android:name="player.service.PopUpService"
             android:enabled="true"
             android:exported="true" />
+
         <activity
             android:name="player.activity.Subtitle_Resolution"
             android:configChanges="screenSize|orientation"
             android:label=""
             android:screenOrientation="sensor"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name="player.activity.SubtitleList"
             android:configChanges="screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity
             android:name="player.activity.ResolutionChangeActivity"
@@ -113,7 +114,7 @@
             android:configChanges="screenSize|orientation"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
             android:name=".activity.MovieDetailsActivity"
             android:label=""
@@ -139,7 +140,7 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity android:name=".activity.PaymentInfoActivity" />
-        <activity android:name=".activity.PPvPaymentInfoActivity"/>
+        <activity android:name=".activity.PPvPaymentInfoActivity" />
         <activity
             android:name=".activity.LoginActivity"
             android:label=""
@@ -152,7 +153,8 @@
             android:name=".activity.CastAndCrewActivity"
             android:label=""
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.FilterActivity"
+        <activity
+            android:name=".activity.FilterActivity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
@@ -275,12 +277,12 @@
             android:name=".activity.CastCrewDetailsActivity"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme"/>
+            android:theme="@style/MyMaterialTheme" />
 
-        <activity android:name=".activity.FavoriteActivity"/>
-        <activity android:name=".activity.ReviewActivity"/>
-        <activity android:name=".activity.SeasonActivity"/>
-        <activity android:name=".activity.ProgrammeActivity"/>
+        <activity android:name=".activity.FavoriteActivity" />
+        <activity android:name=".activity.ReviewActivity" />
+        <activity android:name=".activity.SeasonActivity" />
+        <activity android:name=".activity.ProgrammeActivity" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

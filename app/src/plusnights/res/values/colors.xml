@@ -10,8 +10,8 @@
     <color name="castCrewTitleTextColor">#C81E6E </color>
     <color name="colorPrimaryDark">#87005F</color>
     <color name="appBackgroundColor">#fff</color>
-
-
+    <color name="border_color">#C81E6E</color>
+    <color name="videomovieTitleColor">#C81E6E </color>
     <color name="cast_crew_titleCololr">#676D70</color>
     <color name="forgotPasswordTextViewColor">#676D70</color>
     <color name="sign_up_text_color">#676D70</color>
