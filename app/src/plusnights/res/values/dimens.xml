@@ -71,6 +71,7 @@
     <dimen name="layout_padding_left">40dp</dimen>
     <dimen name="payment_margin_top">0dp</dimen>
     <dimen name="Login_drawing_padding">10dp</dimen>
+    <dimen name="detailspage_padding">2dp</dimen>
     <dimen name="review_edit_text_margin">28dp</dimen>
     <dimen name="current_time_margin_bottom">40dp</dimen>
     <dimen name="arrowIv_imageview_margin">47dp</dimen>
