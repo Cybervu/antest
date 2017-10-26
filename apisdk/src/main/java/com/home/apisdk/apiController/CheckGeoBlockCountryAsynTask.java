@@ -20,6 +20,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -61,8 +62,8 @@ public class CheckGeoBlockCountryAsynTask extends AsyncTask<CheckGeoBlockInputMo
          * This method to handle post-execution work.
          *
          * @param checkGeoBlockOutputModel A Model Class which contain responses. To get that responses we need to call the respective getter methods.
-         * @param status Response Code From The Server
-         * @param message On Success Message
+         * @param status                   Response Code From The Server
+         * @param message                  On Success Message
          */
 
         void onCheckGeoBlockCountryPostExecuteCompleted(CheckGeoBlockOutputModel checkGeoBlockOutputModel, int status, String message);
@@ -95,8 +96,8 @@ public class CheckGeoBlockCountryAsynTask extends AsyncTask<CheckGeoBlockInputMo
     /**
      * Background thread to execute.
      *
-     * @param params
-     * @return
+     * @return null
+     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
      */
 
     @Override
@@ -158,20 +159,18 @@ public class CheckGeoBlockCountryAsynTask extends AsyncTask<CheckGeoBlockInputMo
         super.onPreExecute();
         listener.onCheckGeoBlockCountryPreExecuteStarted();
         responseStr = "0";
-            status = 0;
-            if(!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context)))
-            {
-                this.cancel(true);
-                message = "Packge Name Not Matched";
-                listener.onCheckGeoBlockCountryPostExecuteCompleted(checkGeoBlockOutputModel,status,message);
-                return;
-            }
-            if(SDKInitializer.getHashKey(context).equals(""))
-            {
-                this.cancel(true);
-                message = "Hash Key Is Not Available. Please Initialize The SDK";
-                listener.onCheckGeoBlockCountryPostExecuteCompleted(checkGeoBlockOutputModel,status,message);
-            }
+        status = 0;
+        if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
+            this.cancel(true);
+            message = "Packge Name Not Matched";
+            listener.onCheckGeoBlockCountryPostExecuteCompleted(checkGeoBlockOutputModel, status, message);
+            return;
+        }
+        if (SDKInitializer.getHashKey(context).equals("")) {
+            this.cancel(true);
+            message = "Hash Key Is Not Available. Please Initialize The SDK";
+            listener.onCheckGeoBlockCountryPostExecuteCompleted(checkGeoBlockOutputModel, status, message);
+        }
 
     }
 

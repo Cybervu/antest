@@ -15,6 +15,7 @@ import com.home.apisdk.apiModel.LoadRegisteredDevicesInput;
 import com.home.apisdk.apiModel.LoadRegisteredDevicesOutput;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -99,6 +100,7 @@ public class LoadRegisteredDevicesAsync extends AsyncTask<LoadRegisteredDevicesI
      * Background thread to execute.
      *
      * @return null
+     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
      */
 
     @Override

@@ -34,6 +34,7 @@ public class RelatedContentInput {
      *
      * @return Stream Id
      */
+
     public String getContent_stream_id() {
         return content_stream_id;
     }
@@ -43,20 +44,31 @@ public class RelatedContentInput {
      *
      * @param content_stream_id For Setting The Stream Id
      */
+
     public void setContent_stream_id(String content_stream_id) {
         this.content_stream_id = content_stream_id;
     }
 
+    /**
+     * This Method is use to Get the Language
+     *
+     * @return language
+     */
     public String getLanguage() {
         return language;
     }
+
+    /**
+     * This Method is use to Set the Language
+     *
+     * @param language For Setting The Language
+     */
 
     public void setLanguage(String language) {
         this.language = language;
     }
 
     String language;
-
 
 
     /**

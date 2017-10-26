@@ -100,6 +100,7 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
      * Background thread to execute.
      *
      * @return null
+     * @throws org.apache.http.conn.ConnectTimeoutException,IOException
      */
 
     @Override
