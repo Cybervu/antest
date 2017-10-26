@@ -232,6 +232,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
         final Intent detailsIntent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+        detailsIntent.putExtra("PlayerModel", playerModel);
         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(detailsIntent);
         finish();
@@ -252,7 +253,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
                     public void onClick(DialogInterface dialog, int id) {
                         if (navigation) {
                             Intent in = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+                            in.putExtra("PlayerModel", playerModel);
                             startActivity(in);
+                            finish();
                             dialog.cancel();
                         } else {
                             dialog.cancel();
