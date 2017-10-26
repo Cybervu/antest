@@ -13,21 +13,40 @@ public class CelibrityOutputModel {
     String celebrity_image;
 
     /**
-     * This Method is use to Get the Celebrity Image
+     * This Method is use to Get the Summary
      *
-     * @return celebrity_image
+     * @return summary
      */
+
     public String getSummary() {
         return summary;
     }
+
+    /**
+     * This Method is use to Set the Summary
+     *
+     * @param summary For Setting The Summary
+     */
 
     public void setSummary(String summary) {
         this.summary = summary;
     }
 
+    /**
+     * This Method is use to Get the Permalink
+     *
+     * @return permalink
+     */
+
     public String getPermalink() {
         return permalink;
     }
+
+    /**
+     * This Method is use to Set the Permalink
+     *
+     * @param permalink For Setting The Permalink
+     */
 
     public void setPermalink(String permalink) {
         this.permalink = permalink;
@@ -36,6 +55,11 @@ public class CelibrityOutputModel {
     String summary;
     String permalink;
 
+    /**
+     * This Method is use to Get the Celebrity Image
+     *
+     * @return celebrity_image
+     */
 
     public String getCelebrity_image() {
         return celebrity_image;

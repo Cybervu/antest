@@ -140,6 +140,7 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
      * Background thread to execute.
      *
      * @return null
+     * @throws org.apache.http.conn.ConnectTimeoutException,IOException
      */
 
     @Override
@@ -192,7 +193,7 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                     try {
 
                         JSONArray jsonMainMenu = myJson.optJSONArray("menu_items");
-                         mainMenuArrayList = new ArrayList<>();
+                        mainMenuArrayList = new ArrayList<>();
 
 
                         for (int i = 0; i < jsonMainMenu.length(); i++) {
@@ -299,7 +300,6 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                                     mainMenu.setMainMenuChildModel(mainMenuChildArrayList);
 
 
-
                                 } catch (Exception e) {
                                 }
                             }
@@ -398,7 +398,7 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                                     footerMenu.setUrl(furl);
                                 }
 
-                                    footerMenuArrayList.add(footerMenu);
+                                footerMenuArrayList.add(footerMenu);
 
                             }
 

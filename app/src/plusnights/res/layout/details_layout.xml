@@ -263,7 +263,6 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/durationcensorLinearlayout"
                     android:maxLines="1"
-                    android:padding="@dimen/Login_drawing_padding"
                     android:paddingLeft="@dimen/Login_drawing_padding"
                     android:text=""
                     android:textColor="@color/detailsPageTextColor"

@@ -3,7 +3,7 @@ package com.home.apisdk.apiModel;
 /**
  * This Model Class Holds All The Input Attributes For DeleteFavAsync
  *
- * @author MUVI
+ * @author Abhishek
  */
 
 public class DeleteFavInputModel {

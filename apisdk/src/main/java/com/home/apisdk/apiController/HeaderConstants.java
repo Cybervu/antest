@@ -164,8 +164,17 @@ public class HeaderConstants {
      * Constant for Watch Status Header used in API Call
      */
     public static final String WATCH_STATUS = "watch_status";
+    /**
+     * Constant for Log Temporary Id Header used in API Call
+     */
     public static final String LOG_TEMP_ID = "log_temp_id";
+    /**
+     * Constant for Resume Time Header used in API Call
+     */
     public static final String RESUME_TIME = "resume_time";
+    /**
+     * Constant for Content Type Id Header used in API Call
+     */
     public static final String CONTENT_TYPE_ID = "content_type";
     /**
      * Constant for ID Header used in API Call
