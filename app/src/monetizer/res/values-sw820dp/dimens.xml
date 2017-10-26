@@ -147,8 +147,6 @@
     <dimen name="language_text_size">17sp</dimen>
     <dimen name="listcard_width">171dp</dimen>
     <dimen name="listcard_height">93dp</dimen>
-    <dimen name="list_singlecard_img_width">108dp</dimen>
-    <dimen name="list_singlecard_img_height">154dp</dimen>
     <dimen name="listview_img_width">18dp</dimen>
     <dimen name="listview_img_height">18dp</dimen>
     <dimen name="logouttext_height">110dp</dimen>
@@ -205,7 +203,15 @@
     <dimen name="review_btn_height">38dp</dimen>
     <dimen name="review_btn_textsize">14sp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
-    <dimen name="user_review_textsize">14sp</dimen>v
+    <dimen name="user_review_textsize">14sp</dimen>
+
+    <!--new dimen optimization for layouts-->
+    <dimen name="viewmore_btn_width">95dp</dimen>
+    <dimen name="viewmore_btn_height">40dp</dimen>
+    <dimen name="viewmore_text_size">13sp</dimen>
+    <dimen name="homescreen_title_text_size">15sp</dimen>
+    <dimen name="list_singlecard_img_width">140dp</dimen>
+    <dimen name="list_singlecard_img_height">200dp</dimen>
 
 
 </resources>

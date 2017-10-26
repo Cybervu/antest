@@ -3,8 +3,9 @@ package com.home.apisdk.apiModel;
 /**
  * This Model Class Holds All The Input Attributes For GetContentListAsynTask
  *
- * @author MUVI
+ * @author Abhishek
  */
+
 public class ContentListInput {
     String limit = "10", offset = "0";
     String orderby;

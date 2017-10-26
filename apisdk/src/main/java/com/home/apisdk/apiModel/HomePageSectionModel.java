@@ -14,17 +14,41 @@ public class HomePageSectionModel {
     private String language_id;
 
 
+    /**
+     * This Method is use to Get the Section Type
+     *
+     * @return section_type
+     */
+
     public String getSection_type() {
         return section_type;
     }
+
+    /**
+     * This Method is use to Set the Section Type
+     *
+     * @param section_type For Setting The Section Type
+     */
 
     public void setSection_type(String section_type) {
         this.section_type = section_type;
     }
 
+    /**
+     * This Method is use to Get the Total
+     *
+     * @return total
+     */
+
     public String getTotal() {
         return total;
     }
+
+    /**
+     * This Method is use to Set the Total
+     *
+     * @param total For Setting The Total
+     */
 
     public void setTotal(String total) {
         this.total = total;

@@ -1,7 +1,9 @@
 package com.home.apisdk.apiModel;
 
 /**
- * Created by Muvi on 9/21/2016.
+ * This Model Class Holds All The Input Attributes For GetCastDetailsAsynTask
+ *
+ * @author Abhishek
  */
 public class GetCastDetailsInput {
     String limit = "10", offset = "0";

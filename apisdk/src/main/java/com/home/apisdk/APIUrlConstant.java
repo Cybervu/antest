@@ -185,6 +185,10 @@ public class APIUrlConstant {
      * endpoint to get About Us Details API
      */
     public static String AboutUs = "getStaticPagedetails";
+
+    /**
+     * endpoint to get Gmail Registration Details API
+     */
     public static String GmailRegUrl = "socialAuth";
 
     public static String getGmailRegUrl() {

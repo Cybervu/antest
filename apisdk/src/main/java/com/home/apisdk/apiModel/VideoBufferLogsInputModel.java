@@ -61,33 +61,80 @@ public class VideoBufferLogsInputModel {
         this.bufferLogId = bufferLogId;
     }
 
+    /**
+     * This Method is use to Get the Location
+     *
+     * @return location
+     */
+
     public String getLocation() {
         return location;
     }
+
+    /**
+     * This Method is use to Set the Location
+     *
+     * @param location For Setting The Location
+     */
 
     public void setLocation(String location) {
         this.location = location;
     }
 
+    /**
+     * This Method is use to Get the Buffer Start Time
+     *
+     * @return bufferStartTime
+     */
+
     public String getBufferStartTime() {
         return bufferStartTime;
     }
+
+    /**
+     * This Method is use to Set the Buffer Start Time
+     *
+     * @param bufferStartTime For Setting The Buffer Start Time
+     */
 
     public void setBufferStartTime(String bufferStartTime) {
         this.bufferStartTime = bufferStartTime;
     }
 
+    /**
+     * This Method is use to Get the Buffer End Time
+     *
+     * @return bufferEndTime
+     */
     public String getBufferEndTime() {
         return bufferEndTime;
     }
+
+    /**
+     * This Method is use to Set the Buffer End Time
+     *
+     * @param bufferEndTime For Setting The Buffer End Time
+     */
 
     public void setBufferEndTime(String bufferEndTime) {
         this.bufferEndTime = bufferEndTime;
     }
 
+    /**
+     * This Method is use to Get the Video Resolution
+     *
+     * @return videoResolution
+     */
+
     public String getVideoResolution() {
         return videoResolution;
     }
+
+    /**
+     * This Method is use to Set the Video Resolution
+     *
+     * @param videoResolution For Settig The Video Resolution
+     */
 
     public void setVideoResolution(String videoResolution) {
         this.videoResolution = videoResolution;
@@ -112,43 +159,101 @@ public class VideoBufferLogsInputModel {
         this.authToken = authToken;
     }
 
+    /**
+     * This Method is use to Get the User Id
+     *
+     * @return userId
+     */
+
     public String getUserId() {
         return userId;
     }
+
+    /**
+     * This Method is use to Set the User Id
+     *
+     * @param userId For Setting The User Id
+     */
 
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
+    /**
+     * This Method is use to Get the IP Address
+     *
+     * @return ipAddress
+     */
+
     public String getIpAddress() {
         return ipAddress;
     }
+
+    /**
+     * This Method is use to Set the IP Address
+     *
+     * @param ipAddress For Setting The IP Address
+     */
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
 
+    /**
+     * This Method is use to Get the Muvi Unique Id
+     *
+     * @return muviUniqueId
+     */
+
     public String getMuviUniqueId() {
         return muviUniqueId;
     }
+
+    /**
+     * This Method is use to Set the Muvi Unique Id
+     *
+     * @param muviUniqueId For Setting The Muvi Unique Id
+     */
 
     public void setMuviUniqueId(String muviUniqueId) {
         this.muviUniqueId = muviUniqueId;
     }
 
+    /**
+     * This Method is use to Get the Episode Stream Unique Id
+     *
+     * @return episodeStreamUniqueId
+     */
+
     public String getEpisodeStreamUniqueId() {
         return episodeStreamUniqueId;
     }
+
+    /**
+     * This Method is use to Set the Episode Stream Unique Id
+     *
+     * @param episodeStreamUniqueId For Setting The Episode Stream Unique Id
+     */
 
     public void setEpisodeStreamUniqueId(String episodeStreamUniqueId) {
         this.episodeStreamUniqueId = episodeStreamUniqueId;
     }
 
+    /**
+     * This Method is use to Get the Device Type
+     *
+     * @return deviceType
+     */
 
     public String getDeviceType() {
         return deviceType;
     }
 
+    /**
+     * This Method is use to Set the Device Type
+     *
+     * @param deviceType For Setting The Device Type
+     */
     public void setDeviceType(String deviceType) {
         this.deviceType = deviceType;
     }

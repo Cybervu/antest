@@ -34,17 +34,41 @@ public class Update_UserProfile_Input {
         this.lang_code = lang_code;
     }
 
+    /**
+     * This Method is use to Get the Custom Country
+     *
+     * @return custom_country
+     */
+
     public String getCustom_country() {
         return custom_country;
     }
+
+    /**
+     * This Method is use to Set the Custom Country
+     *
+     * @param custom_country For Setting The Custom Country
+     */
 
     public void setCustom_country(String custom_country) {
         this.custom_country = custom_country;
     }
 
+    /**
+     * This Method is use to Get the Custom Language
+     *
+     * @return custom_languages
+     */
+
     public String getCustom_languages() {
         return custom_languages;
     }
+
+    /**
+     * This Method is use to Set the Custom Language
+     *
+     * @param custom_languages For Setting The Custom Language
+     */
 
     public void setCustom_languages(String custom_languages) {
         this.custom_languages = custom_languages;
@@ -53,9 +77,21 @@ public class Update_UserProfile_Input {
     String custom_country;
     String custom_languages;
 
+    /**
+     * This Method is use to Set the Name
+     *
+     * @param name For Setting The Name
+     */
+
     public void setName(String name) {
         this.name = name;
     }
+
+    /**
+     * This Method is use to Get the Name
+     *
+     * @return name
+     */
 
     public String getName() {
         return name;
@@ -81,10 +117,20 @@ public class Update_UserProfile_Input {
         return authToken;
     }
 
+    /**
+     * This Method is use to Set the User Id
+     *
+     * @param user_id For Setting The User Id
+     */
+
     public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
 
+    /**
+     * This Method is use to Get the User Id
+     * @return user_id
+     */
     public String getUser_id() {
         return user_id;
     }

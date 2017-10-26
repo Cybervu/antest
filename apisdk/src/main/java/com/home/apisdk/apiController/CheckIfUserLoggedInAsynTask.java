@@ -19,6 +19,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -93,6 +94,7 @@ public class CheckIfUserLoggedInAsynTask extends AsyncTask<CheckIfUserLoggedInIn
      * Background thread to execute.
      *
      * @return null
+     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
      */
 
     @Override

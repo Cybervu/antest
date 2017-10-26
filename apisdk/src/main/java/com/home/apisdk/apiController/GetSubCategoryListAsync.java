@@ -88,6 +88,7 @@ public class GetSubCategoryListAsync extends AsyncTask<SubCategoryListInput, Voi
      * Background thread to execute.
      *
      * @return Null
+     * @throws org.apache.http.conn.ConnectTimeoutException,IOException
      */
 
     @Override

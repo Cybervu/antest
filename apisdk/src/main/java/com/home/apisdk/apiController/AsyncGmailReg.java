@@ -20,10 +20,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 /**
- * Created by Android on 9/21/2017.
+ * This Class is used for the login details of the users who all are login using Gmail account
+ *
+ * @author MUVI
  */
 
-public class AsyncGmailReg extends AsyncTask<GmailLoginInput,Void,Void> {
+
+public class AsyncGmailReg extends AsyncTask<GmailLoginInput, Void, Void> {
     private GmailLoginInput gmailLoginInput;
     private int status;
     private String message;
@@ -32,15 +35,44 @@ public class AsyncGmailReg extends AsyncTask<GmailLoginInput,Void,Void> {
     private AsyncGmailReg.AsyncGmailListener listener;
     private Context context;
 
+    /**
+     * Interface used to allow the caller of a AsyncGmailReg to run some code when get
+     * responses.
+     */
+
+
     public interface AsyncGmailListener {
 
+        /**
+         * This method will be invoked before controller start execution.
+         * This method to handle pre-execution work.
+         */
+
         void onGmailRegPreExecuteStarted();
+
+        /**
+         * This method will be invoked after controller complete execution.
+         * This method to handle post-execution work.
+         *
+         * @param gmailLoginOutput A Model Class which contain responses. To get that responses we need to call the respective getter methods.
+         * @param status           Response Code From The Server
+         * @param message          On Success Message
+         */
 
         void onGmailRegPostExecuteCompleted(GmailLoginOutput gmailLoginOutput, int status, String message);
     }
 
-    GmailLoginOutput gmailLoginOutput=new GmailLoginOutput();
+    GmailLoginOutput gmailLoginOutput = new GmailLoginOutput();
 
+    /**
+     * Constructor to initialise the private data members.
+     *
+     * @param gmailLoginInput A Model Class which is use for background task, we need to set all the attributes through setter methods of input model class,
+     *                        For Example: to use this API we have to set following attributes:
+     *                        setAuthToken(),setMovie_id() etc.
+     * @param listener        AsyncGmailListener
+     * @param context         android.content.Context
+     */
 
     public AsyncGmailReg(GmailLoginInput gmailLoginInput, AsyncGmailReg.AsyncGmailListener listener, Context context) {
         this.listener = listener;
@@ -53,16 +85,23 @@ public class AsyncGmailReg extends AsyncTask<GmailLoginInput,Void,Void> {
 
     }
 
+    /**
+     * Background thread to execute.
+     *
+     * @return null
+     * @throws org.apache.http.conn.ConnectTimeoutException,IOException
+     */
+
     @Override
     protected Void doInBackground(GmailLoginInput... params) {
 //            String urlRouteList = "https://www.muvi.com/rest/socialAuth";
         try {
-            HttpClient httpclient=new DefaultHttpClient();
+            HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(APIUrlConstant.getGmailRegUrl());
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader("name", this.gmailLoginInput.getName());
             httppost.addHeader("email", this.gmailLoginInput.getEmail());
-            httppost.addHeader("password","");
+            httppost.addHeader("password", "");
             httppost.addHeader("authToken", this.gmailLoginInput.getAuthToken());
             httppost.addHeader("gplus_userid", this.gmailLoginInput.getGmail_userid());
 //            httppost.addHeader("fb_userid", this.gmailLoginInput.getGmail_userid());
@@ -70,8 +109,8 @@ public class AsyncGmailReg extends AsyncTask<GmailLoginInput,Void,Void> {
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("Nihar",responseStr);
-            } catch (org.apache.http.conn.ConnectTimeoutException e){
+                Log.v("Nihar", responseStr);
+            } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 status = 0;
                 message = "Error";
 
@@ -81,17 +120,16 @@ public class AsyncGmailReg extends AsyncTask<GmailLoginInput,Void,Void> {
             }
 
             JSONObject myJson = null;
-            if(responseStr!=null){
+            if (responseStr != null) {
                 myJson = new JSONObject(responseStr);
                 status = Integer.parseInt(myJson.optString("code"));
                 message = myJson.optString("status");
 
-                if (status==200){
+                if (status == 200) {
 
                     if ((myJson.has("id")) && myJson.optString("id").trim() != null && !myJson.optString("id").trim().isEmpty() && !myJson.optString("id").trim().equals("null") && !myJson.optString("id").trim().matches("")) {
                         gmailLoginOutput.setId(myJson.optString("id"));
-                    }
-                    else {
+                    } else {
                         gmailLoginOutput.setId("");
 
                     }
@@ -101,8 +139,7 @@ public class AsyncGmailReg extends AsyncTask<GmailLoginInput,Void,Void> {
 
                     if ((myJson.has("login_history_id")) && myJson.optString("login_history_id").trim() != null && !myJson.optString("login_history_id").trim().isEmpty() && !myJson.optString("login_history_id").trim().equals("null") && !myJson.optString("login_history_id").trim().matches("")) {
                         gmailLoginOutput.setLogin_history_id(myJson.optString("login_history_id"));
-                    }
-                    else {
+                    } else {
                         gmailLoginOutput.setLogin_history_id("");
 
                     }
@@ -130,7 +167,7 @@ public class AsyncGmailReg extends AsyncTask<GmailLoginInput,Void,Void> {
 
                     }
 
-                    }else {
+                } else {
 
                     responseStr = "";
                     status = 0;
@@ -145,8 +182,7 @@ public class AsyncGmailReg extends AsyncTask<GmailLoginInput,Void,Void> {
 
             }
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             responseStr = "";
             status = 0;
             message = "Error";
