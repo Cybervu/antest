@@ -25,7 +25,7 @@
     <dimen name="edit_text_size">16sp</dimen>
     <dimen name="cancelbtn_text_size">13sp</dimen>
     <dimen name="episode_listing_section_textview">22sp</dimen>
-    <dimen name="submit_text_size">12sp</dimen>
+    <dimen name="submit_text_size">16sp</dimen>
     <dimen name="sliderLayout_height">230dp</dimen>
     <dimen name="listitemlayout_height">200dp</dimen>
     <dimen name="logout_text_size">19sp</dimen>
