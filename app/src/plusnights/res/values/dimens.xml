@@ -7,8 +7,6 @@
     <dimen name="card_margin">16dp</dimen>
     <dimen name="recy_margin">8dp</dimen>
 
-    <dimen name="viewmore_btn_width">90dp</dimen>
-    <dimen name="viewmore_btn_height">40dp</dimen>
     <dimen name="castnointernet_text">36sp</dimen>
     <dimen name="transactionDetailLayout_padding">7dp</dimen>
     <dimen name="listViewLayout_height">102dp</dimen>
@@ -246,8 +244,6 @@
     <dimen name="language_text_size">17sp</dimen>
     <dimen name="listcard_width">171dp</dimen>
     <dimen name="listcard_height">93dp</dimen>
-    <dimen name="list_singlecard_img_width">108dp</dimen>
-    <dimen name="list_singlecard_img_height">154dp</dimen>
     <dimen name="listview_img_width">18dp</dimen>
     <dimen name="listview_img_height">18dp</dimen>
     <dimen name="logouttext_height">110dp</dimen>
@@ -324,4 +320,12 @@
     <dimen name="nav_drawer_text_size">18sp</dimen>
 
 
+
+    <!--new dimen optimization for layouts-->
+    <dimen name="viewmore_btn_width">90dp</dimen>
+    <dimen name="viewmore_btn_height">40dp</dimen>
+    <dimen name="viewmore_text_size">14sp</dimen>
+    <dimen name="homescreen_title_text_size">16sp</dimen>
+    <dimen name="list_singlecard_img_width">108dp</dimen>
+    <dimen name="list_singlecard_img_height">154dp</dimen>
 </resources>

@@ -9,8 +9,6 @@
     <dimen name="imgwidth">300dp</dimen>
     <dimen name="toolbarheight">70dp</dimen>
     <dimen name="navwide">400dp</dimen>
-    <dimen name="viewmore_btn_width">120dp</dimen>
-    <dimen name="viewmore_btn_height">50dp</dimen>
     <dimen name="singleimgwidth">170dp</dimen>
     <dimen name="singleimgheight">216dp</dimen>
     <dimen name="buttonheight">47dp</dimen>
@@ -97,8 +95,6 @@
     <dimen name="contactformtitle_text_size">17sp</dimen>
     <dimen name="editbox_text_size">18sp</dimen>
     <dimen name="home280_layout_width">157dp</dimen>
-    <dimen name="list_singlecard_img_width">108dp</dimen>
-    <dimen name="list_singlecard_img_height">154dp</dimen>
     <dimen name="videogrid_width">140dp</dimen>
     <dimen name="videogrid_height">200dp</dimen>
     <dimen name="videogrid_land_width">182dp</dimen>
@@ -154,5 +150,18 @@
     <dimen name="user_review_textsize">14sp</dimen>
 
     <dimen name="plainrow_text_size">20sp</dimen>
+
+
+
+
+
+
+    <!--new dimen optimization for layouts-->
+    <dimen name="viewmore_btn_width">95dp</dimen>
+    <dimen name="viewmore_btn_height">40dp</dimen>
+    <dimen name="viewmore_text_size">13sp</dimen>
+    <dimen name="homescreen_title_text_size">15sp</dimen>
+    <dimen name="list_singlecard_img_width">140dp</dimen>
+    <dimen name="list_singlecard_img_height">200dp</dimen>
 
 </resources>
