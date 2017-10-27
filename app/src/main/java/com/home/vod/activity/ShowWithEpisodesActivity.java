@@ -5168,18 +5168,17 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             if (data.getStringExtra("yes").equals("2002")) {
 
                 mSelectedMedia = Util.mSendingMedia;
-
-
-//                Toast.makeText(this, "Now again in details", Toast.LENGTH_SHORT).show();
-             /*   Log.v("bijay",""+mReceivedMedia.getStreamType());
-                Log.v("bijay",""+mReceivedMedia.getContentId());
-                Log.v("bijay",""+mReceivedMedia.getStreamDuration());*/
-
                 Intent resumeIntent = new Intent(ShowWithEpisodesActivity.this, ResumePopupActivity.class);
                 startActivityForResult(resumeIntent, 1007);
-
             }
-        } else if (resultCode == RESULT_OK && requestCode == 1007) {
+        }
+        else if (requestCode == 2001) {
+            LogUtil.showLog("Muvi", "else conditn called");
+            watch_status_String = "start";
+            Played_Length = 0;
+            PlayThroughChromeCast();
+
+        }else if (resultCode == RESULT_OK && requestCode == 1007) {
 
             if (data.getStringExtra("yes").equals("1002")) {
 
@@ -5209,36 +5208,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 finish();
             }
-        } else {
-            if (requestCode != 1007 && requestCode != 2001) {
-                LogUtil.showLog("Muvi", "else conditn called");
-                watch_status_String = "start";
-                Played_Length = 0;
-                PlayThroughChromeCast();
-            }
         }
-       /* loginresultcode = requestCode;
-        if (requestCode == 40500) {
-            if (resultCode == RESULT_OK) {
-                Util.favorite_clicked = false;
-                LogUtil.showLog("BKS", "ifclickedddddd");
-//            call feb Api
-                loggedInStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-
-//            AsynFavoriteAdd asynFavoriteAdd =new AsynFavoriteAdd();
-//            asynFavoriteAdd.execute();
-                AsynLoadMovieDetails asyncLoadVideos = new AsynLoadMovieDetails();
-                asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
-            } else {
-                LogUtil.showLog("BKS", "elseclickedddddd");
-                Util.favorite_clicked = false;
-//            AsynFavoriteDelete asynFavoriteDelete=new AsynFavoriteDelete();
-//            asynFavoriteDelete.execute();
-            }
-
-        }
-//*/
-
 
     }
 

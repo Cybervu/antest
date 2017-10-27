@@ -17,6 +17,12 @@ public class LanguagePreference {
      * Language Constant default Key
      */
     public static String DEFAULT_DELETE_BTN = "Delete";
+    public static final String LOGIN_FACEBOOK = "LOGIN_FACEBOOK";
+    public static final String DEFAULT_LOGIN_FACEBOOK = "Login with Facebook";
+    public static final String DEFAULT_REGISTER_FACEBOOK = "Register with Facebook";
+    public static final String SIGN_UP_WITH_EMAIL = "SIGN_UP_WITH_EMAIL";
+    public static final String DEFAULT_SIGN_UP_WITH_EMAIL = "Sign Up with Email";
+    public static final String REGISTER_FACEBOOK = "REGISTER_FACEBOOK";
     public static String DELETE_BTN = "DELETE_BTN";
     public static String DEFAULT_WANT_TO_DELETE = "Want to Delete";
     public static String WANT_TO_DELETE = "WANT_TO_DELETE";

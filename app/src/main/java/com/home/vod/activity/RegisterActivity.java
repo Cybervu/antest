@@ -281,8 +281,9 @@ public class RegisterActivity extends AppCompatActivity implements
                     // Call For Check Api.
                     CheckDeviceInput checkDeviceInput = new CheckDeviceInput();
                     checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                    checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+                    checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
                     checkDeviceInput.setAuthToken(authTokenStr);
+                    checkDeviceInput.setUser_id(preferenceManager.getUseridFromPref());
                     checkDeviceInput.setDevice_type("1");
                     checkDeviceInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     checkDeviceInput.setDevice_info(deviceName + "," + languagePreference.getTextofLanguage(ANDROID_VERSION, DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
@@ -634,9 +635,9 @@ public class RegisterActivity extends AppCompatActivity implements
         /************fb************/
         callbackManager = CallbackManager.Factory.create();
 
-        registerUIHandler = new RegisterUIHandler(this);
+        registerUIHandler = new RegisterUIHandler(this,languagePreference);
         registerUIHandler.setCountryList(preferenceManager);
-        registerUIHandler.setTermsTextView(languagePreference);
+        //registerUIHandler.setTermsTextView(languagePreference);
         //registerUIHandler.setEmailText(languagePreference);
         registerUIHandler.callFblogin(callbackManager, registerButton, languagePreference);
         registerUIHandler.callSignin(languagePreference);
@@ -4201,9 +4202,11 @@ public class RegisterActivity extends AppCompatActivity implements
         }
         else
         {
-            watch_status_String = "strat";
-            Played_Length = 0;
-            PlayThroughChromeCast();
+            if(requestCode == 1001) {
+                watch_status_String = "strat";
+                Played_Length = 0;
+                PlayThroughChromeCast();
+            }
         }
 
         if (requestCode == RC_SIGN_IN) {

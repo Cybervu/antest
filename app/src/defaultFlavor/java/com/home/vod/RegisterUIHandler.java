@@ -1,25 +1,48 @@
 package com.home.vod;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.home.vod.activity.RegisterActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Arrays;
 import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNUP;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_REGISTER_FACEBOOK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_UP_WITH_EMAIL;
+import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALERT;
+import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNUP;
+import static com.home.vod.preferences.LanguagePreference.REGISTER_FACEBOOK;
+import static com.home.vod.preferences.LanguagePreference.SIGN_UP_WITH_EMAIL;
 
 
 /**
@@ -28,127 +51,187 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class RegisterUIHandler {
     private Activity context;
-    List<String> country_List, country_Code_List,language_List,language_Code_List;
-    Spinner country_spinner, language_spinner;
-    ArrayAdapter<String> Language_arrayAdapter, Country_arrayAdapter;
+    private TextView termsTextView,termsTextView1,gmailTest;
+    private Button loginButton;
+    private LinearLayout btnLogin;
+    LoginButton loginWithFacebookButton;
+    private RelativeLayout googleSignView;
+    private LanguagePreference languagePreference;
     public  String selected_Language_Id="", selected_Country_Id="";
+    private Button registerButton;
+    TextView fbLoginTextView;
 
-    public RegisterUIHandler(Activity context){
+    String fbUserId = "";
+    String fbEmail = "";
+    String fbName = "";
+
+    public RegisterUIHandler(Activity context,LanguagePreference languagePreference){
         this.context=context;
-        country_spinner = (Spinner) context.findViewById(R.id.countrySpinner);
-        language_spinner = (Spinner) context.findViewById(R.id.languageSpinner);
+        gmailTest=(TextView) context.findViewById(R.id.textView);
+        googleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
+//        termsTextView = (TextView) context.findViewById(R.id.termsTextView);
+//        termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
+        btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
+        loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
+        loginWithFacebookButton.setVisibility(View.GONE);
+        fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
+
+        loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
+
+
+
+
     }
     public void setCountryList(PreferenceManager preferenceManager){
 
-        country_List = Arrays.asList (context.getResources().getStringArray(R.array.country));
-        country_Code_List = Arrays.asList(context.getResources().getStringArray(R.array.countrycode));
-        language_List = Arrays.asList(context.getResources().getStringArray(R.array.languages));
-        language_Code_List = Arrays.asList(context.getResources().getStringArray(R.array.languagesCode));
+
+    }
+   /* public void setTermsTextView(LanguagePreference languagePreference){
+        termsTextView1.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
+        termsTextView.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
 
 
-        Language_arrayAdapter = new ArrayAdapter<String>(context, R.layout.country_language_spinner, language_List) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-                FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),(TextView) v);
-
-                return v;
+        termsTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://theshilpashetty.muvi.com/page/terms-privacy-policy"));
+                browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                context.startActivity(browserIntent);
             }
-
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v = super.getDropDownView(position, convertView, parent);
-                FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),(TextView) v);
+        });
+   }*/
 
 
-                return v;
+
+
+    public void callFblogin(final CallbackManager callbackManager,Button registerButton,LanguagePreference languagePreference){
+
+        this.registerButton=registerButton;
+        this.languagePreference=languagePreference;
+        fbLoginTextView.setText(languagePreference.getTextofLanguage(REGISTER_FACEBOOK,DEFAULT_REGISTER_FACEBOOK));
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                loginWithFacebookButton.performClick();
+
+                loginWithFacebookButton.setPressed(true);
+
+                loginWithFacebookButton.invalidate();
+
+                loginWithFacebookButton.registerCallback(callbackManager, mCallBack);
+
+                loginWithFacebookButton.setPressed(false);
+
+                loginWithFacebookButton.invalidate();
+
             }
+        });
+    }
 
-        };
 
-        language_spinner.setAdapter(Language_arrayAdapter);
+    private FacebookCallback<LoginResult> mCallBack = new FacebookCallback<LoginResult>() {
+        @Override
+        public void onSuccess(LoginResult loginResult) {
 
-        Country_arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.country_language_spinner, country_List) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-                FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),(TextView) v);
-                return v;
-            }
+            //progressDialog.dismiss();
 
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v = super.getDropDownView(position, convertView, parent);
+            // App code
+            GraphRequest request = GraphRequest.newMeRequest(
+                    loginResult.getAccessToken(),
+                    new GraphRequest.GraphJSONObjectCallback() {
+                        @Override
+                        public void onCompleted(
+                                JSONObject object,
+                                GraphResponse response) {
 
-                FontUtls.loadFont(context,context.getResources().getString(R.string.light_fonts),(TextView) v);
 
-                return v;
-            }
+                            JSONObject json = response.getJSONObject();
+                            try {
+                                if (json != null) {
 
-        };
 
-        country_spinner.setAdapter(Country_arrayAdapter);
+                                    if ((json.has("name")) && json.getString("name").trim() != null && !json.getString("name").trim().isEmpty() && !json.getString("name").trim().equals("null") && !json.getString("name").trim().matches("")) {
 
-        selected_Country_Id =
-                preferenceManager.getCountryCodeFromPref();
-        LogUtil.showLog("MUVI", "primary Selected_Country_Id=" + selected_Country_Id);
-        if (selected_Country_Id.equals("0")) {
-            country_spinner.setSelection(224);
-            selected_Country_Id = country_Code_List.get(224);
-            LogUtil.showLog("MUVI", "country not  matche" + "==" + selected_Country_Id);
-        } else {
-            for (int i = 0; i < country_Code_List.size(); i++) {
+                                        fbName = json.getString("name");
 
-                LogUtil.showLog("MUVI", "Country names =" + country_Code_List.get(i));
+                                    }
+                                    if ((json.has("email")) && json.getString("email").trim() != null && !json.getString("email").trim().isEmpty() && !json.getString("email").trim().equals("null") && !json.getString("email").trim().matches("")) {
+                                        fbEmail = json.getString("email");
+                                    } else {
+                                        fbEmail = fbName + "@facebook.com";
 
-                if (selected_Country_Id.trim().equals(country_Code_List.get(i))) {
-                    country_spinner.setSelection(i);
-                    selected_Country_Id = country_Code_List.get(i);
+                                    }
+                                    if ((json.has("id")) && json.optString("id").trim() != null && !json.optString("id").trim().isEmpty() && !json.optString("id").trim().equals("null") && !json.optString("id").trim().matches("")) {
+                                        fbUserId = json.optString("id");
+                                    }
+                                    registerButton.setVisibility(View.GONE);
+                                    loginWithFacebookButton.setVisibility(View.GONE);
+                                    btnLogin.setVisibility(View.GONE);
+                                    ((RegisterActivity)context).handleFbUserDetails(fbUserId,fbEmail,fbName);
+//
+                                }
 
-                    LogUtil.showLog("MUVI", "country  matched =" + selected_Country_Id);
-                }
-            }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+//
+                        }
+
+                    });
+
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "id,name,email,gender, birthday");
+            request.setParameters(parameters);
+            request.executeAsync();
         }
 
-        Country_arrayAdapter.notifyDataSetChanged();
+        @Override
+        public void onCancel() {
 
+            registerButton.setVisibility(View.VISIBLE);
+            loginWithFacebookButton.setVisibility(View.GONE);
+            btnLogin.setVisibility(View.VISIBLE);
+            Toast.makeText(context, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
+            //progressDialog.dismiss();
+        }
 
-        country_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        @Override
+        public void onError(FacebookException e) {
 
-                context.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                selected_Country_Id = country_Code_List.get(position);
+            registerButton.setVisibility(View.VISIBLE);
+            loginWithFacebookButton.setVisibility(View.GONE);
+            btnLogin.setVisibility(View.VISIBLE);
+            Toast.makeText(context, languagePreference.getTextofLanguage(DETAILS_NOT_FOUND_ALERT, DEFAULT_DETAILS_NOT_FOUND_ALERT), Toast.LENGTH_LONG).show();
 
-            }
+            //progressDialog.dismiss();
+        }
+    };
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
-        language_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                context.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                selected_Language_Id = language_Code_List.get(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-
-
-    public void setTermsTextView(LanguagePreference languagePreference) {
-    }
-    public void callFblogin(final CallbackManager callbackManager, Button loginButton, LanguagePreference languagePreference){
-
-    }
 
     public void callSignin(LanguagePreference languagePreference){
+        gmailTest.setText(languagePreference.getTextofLanguage(GMAIL_SIGNUP, DEFAULT_GMAIL_SIGNUP));
+        googleSignView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                ((RegisterActivity)context).signIn();
+            }
+        });
+    }
+
+   /* public void setEmailText(LanguagePreference languagePreference){
+        gmailTest.setText(languagePreference.getTextofLanguage(GMAIL_SIGNUP, DEFAULT_GMAIL_SIGNUP));
+
+    }*/
+
+    public void sendBroadCast()
+    {
+        Intent Sintent = new Intent("LOGIN_SUCCESS");
+        context.sendBroadcast(Sintent);
     }
 
 }
