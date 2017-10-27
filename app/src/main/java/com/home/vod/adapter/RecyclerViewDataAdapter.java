@@ -108,7 +108,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
 //            if (MainActivity.vertical == 1) {
 
 
-        if (Util.image_orentiation.get(i) == 1) {
+        if (Util.image_orentiation == 1) {
             float density = mContext.getResources().getDisplayMetrics().density;
             if (density >= 3.5 && density <= 4.0) {
                 itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);

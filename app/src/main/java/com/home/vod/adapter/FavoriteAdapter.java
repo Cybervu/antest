@@ -114,7 +114,7 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
 
                    LogUtil.showLog("ANU","movieUniqueId  ========"+item.getMovieUniqueId());
 
-                   mActivity.removeFavorite(item);
+                   mActivity.removeFavorite(item,position);
 
                }
 

@@ -1097,6 +1097,16 @@ public class VideosListFragment extends Fragment   {
 
 
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (videoPDialog != null && videoPDialog.isShowing()) {
+            videoPDialog.hide();
+            videoPDialog = null;
+        }
+
+
+    }
     // on device configuration change , the grid numbers need to be changed
 
     public void onResume() {
