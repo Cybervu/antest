@@ -19,6 +19,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -93,6 +94,7 @@ public class RemoveDeviceAsynTask extends AsyncTask<RemoveDeviceInputModel, Void
      * Background thread to execute.
      *
      * @return null
+     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
      */
 
     @Override
@@ -104,7 +106,7 @@ public class RemoveDeviceAsynTask extends AsyncTask<RemoveDeviceInputModel, Void
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
             httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.removeDeviceInputModel.getAuthToken());
             httppost.addHeader(HeaderConstants.LANG_CODE, this.removeDeviceInputModel.getLang_code());
-            httppost.addHeader(HeaderConstants.DEVICE_ID, this.removeDeviceInputModel.getDevice());
+            httppost.addHeader(HeaderConstants.DEVICE, this.removeDeviceInputModel.getDevice());
             httppost.addHeader(HeaderConstants.USER_ID, this.removeDeviceInputModel.getUser_id());
 
 
@@ -129,7 +131,7 @@ public class RemoveDeviceAsynTask extends AsyncTask<RemoveDeviceInputModel, Void
             if (responseStr != null) {
                 myJson = new JSONObject(responseStr);
                 status = Integer.parseInt(myJson.optString("code"));
-                message = myJson.optString("status");
+                message = myJson.optString("msg");
             }
 
 

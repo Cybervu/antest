@@ -27,6 +27,7 @@ public class Search_Data_input {
      *
      * @param language_code For Setting The Language Code
      */
+
     public void setLanguage_code(String language_code) {
         this.language_code = language_code;
     }
@@ -35,32 +36,40 @@ public class Search_Data_input {
 
     /**
      * This Method is use to Get the Country
+     *
      * @return country
      */
+
     public String getCountry() {
         return country;
     }
 
     /**
      * This Method is use to Set the Country
+     *
      * @param country For Setting The Country
      */
+
     public void setCountry(String country) {
         this.country = country;
     }
 
     String country;
 
-   /* public Search_Data_input(String limit, String authToken, String offset, String q) {
-        this.limit = limit;
-        this.authToken = authToken;
-        this.offset = offset;
-        this.q = q;
-    }*/
-
+    /**
+     * This Method  is use to Get the Limit
+     *
+     * @return limit
+     */
     public String getLimit() {
         return limit;
     }
+
+    /**
+     * This Method  is use to Set the Limit
+     *
+     * @param limit For Setting The Limit
+     */
 
     public void setLimit(String limit) {
         this.limit = limit;
@@ -86,17 +95,41 @@ public class Search_Data_input {
         this.authToken = authToken;
     }
 
+    /**
+     * This Method is use to Get the OffSet
+     *
+     * @return offset
+     */
+
     public String getOffset() {
         return offset;
     }
+
+    /**
+     * This Method is use to Set the OffSet
+     *
+     * @param offset For Setting The Offset
+     */
 
     public void setOffset(String offset) {
         this.offset = offset;
     }
 
+    /**
+     * This Method is use to Get the Q
+     *
+     * @return q
+     */
+
     public String getQ() {
         return q;
     }
+
+    /**
+     * This Method is use to Set the Q
+     *
+     * @param q For Setting The Q
+     */
 
     public void setQ(String q) {
         this.q = q;

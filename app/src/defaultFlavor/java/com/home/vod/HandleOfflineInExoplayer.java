@@ -1,6 +1,7 @@
 package com.home.vod;
 
 import android.app.Activity;
+import android.support.v7.app.MediaRouteButton;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -16,5 +17,8 @@ public class HandleOfflineInExoplayer {
     public void handleVisibelUnvisibleDownload(RelativeLayout download_layout){
 
         download_layout.setVisibility(View.VISIBLE);
+    }
+    public void handleVisibleUnvisibleChromcast(MediaRouteButton mediaRouteButton){
+        mediaRouteButton.setVisibility(View.VISIBLE);
     }
 }

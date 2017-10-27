@@ -18,7 +18,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 /**
  * This Class Translate the language according to the user's choice.
@@ -87,6 +90,7 @@ public class GetTranslateLanguageAsync extends AsyncTask<Void, Void, String> {
      * Background thread to execute.
      *
      * @return resultJsonString
+     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
      */
 
     @Override

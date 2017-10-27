@@ -68,6 +68,7 @@ import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
@@ -1262,7 +1263,7 @@ public class VideosListFragment extends Fragment   {
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-
+                    LogUtil.showLog("Videolist Fragment","responseStr  ::"+responseStr);
                 } catch (org.apache.http.conn.ConnectTimeoutException e){
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -1416,8 +1417,7 @@ public class VideosListFragment extends Fragment   {
         protected void onPostExecute(Void result) {
 
 
-
-
+            LogUtil.showLog("Videolist Fragment","onPostExecute  ::");
 
             if(responseStr == null)
                 responseStr = "0";
@@ -1505,6 +1505,8 @@ public class VideosListFragment extends Fragment   {
 
         @Override
         protected void onPreExecute() {
+
+            LogUtil.showLog("Videolist Fragment","load video called");
             if (MainActivity.internetSpeedDialog != null && MainActivity.internetSpeedDialog.isShowing()){
                 videoPDialog = MainActivity.internetSpeedDialog;
                 footerView.setVisibility(View.GONE);
@@ -1591,7 +1593,7 @@ public class VideosListFragment extends Fragment   {
 
         MenuItem item,item1;
         item= menu.findItem(R.id.action_filter);
-        item.setVisible(true);
+       // item.setVisible(true);
 
     /*    item1= menu.findItem(R.id.action_notifications);
         item1.setVisible(false);*/

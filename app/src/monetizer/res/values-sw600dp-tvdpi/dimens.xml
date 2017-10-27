@@ -40,6 +40,7 @@
     <dimen name="vdiotitle_text_size">17sp</dimen>
     <dimen name="vdiocast_text_size">18sp</dimen>
     <dimen name="btnmore_width">98dp</dimen>
+    <dimen name="trailer_btn_text_size">14sp</dimen>
     <dimen name="btnmore_height">40dp</dimen>
     <dimen name="btnmore_text_size">13sp</dimen>
     <dimen name="banerimg_height">300dp</dimen>
@@ -82,8 +83,6 @@
     <dimen name="contactformtitle_text_size">17sp</dimen>
     <dimen name="editbox_text_size">18dp</dimen>
     <dimen name="home280_layout_width">183dp</dimen>
-    <dimen name="list_singlecard_img_width">102dp</dimen>
-    <dimen name="list_singlecard_img_height">146dp</dimen>
     <dimen name="videogrid_width">140dp</dimen>
     <dimen name="videogrid_height">200dp</dimen>
     <dimen name="videogrid_land_width">182dp</dimen>
@@ -135,4 +134,13 @@
     <dimen name="user_review_textsize">14sp</dimen>
 
     <dimen name="plainrow_text_size">20sp</dimen>
+
+    <!--new dimen optimization for layouts-->
+    <dimen name="viewmore_btn_width">100dp</dimen>
+    <dimen name="viewmore_btn_height">40dp</dimen>
+    <dimen name="viewmore_text_size">14sp</dimen>
+    <dimen name="homescreen_title_text_size">14sp</dimen>
+    <dimen name="list_singlecard_img_width">102dp</dimen>
+    <dimen name="list_singlecard_img_height">146dp</dimen>
+
 </resources>

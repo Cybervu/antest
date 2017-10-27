@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * This Model Class Holds All The Output Attributes For The Currency Details
  *
- * @author MUVI
+ * @author Abhishek
  */
 
 public class CurrencyModel implements Serializable {

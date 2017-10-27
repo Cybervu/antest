@@ -4,7 +4,7 @@ package com.home.apisdk.apiModel;
 /**
  * This Model Class Holds All The Input Attributes For GetEpisodeDeatailsAsynTask
  *
- * @author MUVI
+ * @author Abhishek
  */
 public class Episode_Details_input {
     String permalink, authtoken, limit = "10", offset = "0";

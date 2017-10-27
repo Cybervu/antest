@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * This Model Class Holds All The Output Attributes For GetContentDetailsAsynTask
  *
- * @author MUVI
+ * @author Abhishek
  */
 
 public class ContentDetailsOutput {

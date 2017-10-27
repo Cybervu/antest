@@ -135,7 +135,7 @@ public class EpisodeListOptionMenuHandler{
 
 
             if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1"))
-                favorite_menu.setVisible(true);
+                favorite_menu.setVisible(false);
             else
                 favorite_menu.setVisible(false);
 
@@ -143,11 +143,11 @@ public class EpisodeListOptionMenuHandler{
 
             logout_menu.setVisible(true);
 
-            /*if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
+            if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
                     .trim()).equals("1"))
                 mydownload_menu.setVisible(true);
             else
-                mydownload_menu.setVisible(false);*/
+                mydownload_menu.setVisible(false);
 
 
         } else if (loggedInStr == null) {

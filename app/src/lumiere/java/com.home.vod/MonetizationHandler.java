@@ -33,6 +33,10 @@ public class MonetizationHandler {
                 ((Episode_list_Activity) activity).handleActionForValidateSonyUserPayment(validUserStr, message, subscription_Str);
             if (activity instanceof MovieDetailsActivity)
                 ((MovieDetailsActivity) activity).handleActionForValidateSonyUserPayment(validUserStr, message, subscription_Str);
+            if (activity instanceof RegisterActivity)
+                ((RegisterActivity) activity).handleActionForValidateSonyUserPayment(validUserStr, message, subscription_Str);
+            if (activity instanceof LoginActivity)
+                ((LoginActivity) activity).handleActionForValidateSonyUserPayment(validUserStr, message, subscription_Str);
 
         } catch (ClassCastException e){
             e.printStackTrace();

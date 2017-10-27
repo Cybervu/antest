@@ -656,7 +656,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         videoCastCrewTitleTextView.setText(Util.getTextofLanguage(ExoPlayerActivity.this, Util.CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
 
         // ExoPlayerActivity.this is changed for the new requirement of Offline Viewing.
-        startService(new Intent(ExoPlayerActivity.this, DataConsumptionService.class));
+        ExoPlayerActivity.this.startService(new Intent(ExoPlayerActivity.this, DataConsumptionService.class));
+
+
+
         registerReceiver(SelectedUrl, new IntentFilter("UrlPosition"));
 
         //Call For Subtitle Loading // Added By Bibhu
@@ -1174,17 +1177,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onClick(View view) {
 
-                if (mCastSession != null && mCastSession.isConnected()) {
                     if (Util.hide_pause) {
                         Util.hide_pause = false;
                         latest_center_play_pause.setVisibility(View.GONE);
                     }
                     Execute_Pause_Play();
 
-                } else {
-                    Execute_Pause_Play();
 
-                }
 
             }
         });
@@ -3344,38 +3343,45 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         }
     }
 
-    public void PreviousUsedDataByApp(boolean status) {
+    public void PreviousUsedDataByApp(final boolean status) {
 
-        try {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
 
-            long prev_data = 0;
-            PackageManager pm = getPackageManager();
-            List<PackageInfo> listPackages = pm.getInstalledPackages(0);
-            for (PackageInfo pi : listPackages) {
-                String appName = (String) pi.applicationInfo.loadLabel(pm);
-                if (appName != null && appName.trim().equals(getResources().getString(R.string.app_name))) {
-                    int uid = pi.applicationInfo.uid;
-                    prev_data = (TrafficStats.getUidRxBytes(uid) + TrafficStats.getUidTxBytes(uid)) / 1024;
+                    long prev_data = 0;
+                    PackageManager pm = getPackageManager();
+                    List<PackageInfo> listPackages = pm.getInstalledPackages(0);
+                    for (PackageInfo pi : listPackages) {
+                        String appName = (String) pi.applicationInfo.loadLabel(pm);
+                        if (appName != null && appName.trim().equals(getResources().getString(R.string.app_name))) {
+                            int uid = pi.applicationInfo.uid;
+                            prev_data = (TrafficStats.getUidRxBytes(uid) + TrafficStats.getUidTxBytes(uid)) / 1024;
 
-                    if (status) {
-                        PreviousUsedData = prev_data;
-                        Log.v("BIBHU", "PreviousUsedDataByApp  true===========================" + (appName + " : " + PreviousUsedData + "KB"));
+                            if (status) {
+                                PreviousUsedData = prev_data;
+                                Log.v("BIBHU", "PreviousUsedDataByApp  true===========================" + (appName + " : " + PreviousUsedData + "KB"));
 
-                    } else {
-                        Log.v("BIBHU", "*************** false===========================prev_data= " + prev_data + " KB==========CurrentUsedData= " + CurrentUsedData + " KB");
+                            } else {
+                                Log.v("BIBHU", "*************** false===========================prev_data= " + prev_data + " KB==========CurrentUsedData= " + CurrentUsedData + " KB");
 
 
-                        PreviousUsedData = ((prev_data - PreviousUsedData) - CurrentUsedData) + PreviousUsedData;
-                        Log.v("BIBHU", "PreviousUsedDataByApp false===========================" + (appName + " : " + PreviousUsedData + "KB"));
+                                PreviousUsedData = ((prev_data - PreviousUsedData) - CurrentUsedData) + PreviousUsedData;
+                                Log.v("BIBHU", "PreviousUsedDataByApp false===========================" + (appName + " : " + PreviousUsedData + "KB"));
 
+                            }
+
+                        }
                     }
+
+                } catch (Exception e) {
 
                 }
             }
+        }).start();
 
-        } catch (Exception e) {
 
-        }
 
     }
 
@@ -4049,7 +4055,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         // Send BroadCast to start sending Download content bandwidth .
 
         Intent intent = new Intent("BnadwidthLog");
-        sendBroadcast(intent);
+        ExoPlayerActivity.this.sendBroadcast(intent);
 
         //---------------------- End ---------------------------------//
 

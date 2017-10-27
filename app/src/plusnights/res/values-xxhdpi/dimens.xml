@@ -12,7 +12,6 @@
 
     <dimen name="singleimgwidth">90dp</dimen>
     <dimen name="singleimgheight">146dp</dimen>
-
     <dimen name="buttonheight">39dp</dimen>
     <dimen name="okbtn_width">150dp</dimen>
     <dimen name="okbtn_height">40dp</dimen>
@@ -26,7 +25,7 @@
     <dimen name="edit_text_size">16sp</dimen>
     <dimen name="cancelbtn_text_size">13sp</dimen>
     <dimen name="episode_listing_section_textview">22sp</dimen>
-    <dimen name="submit_text_size">12sp</dimen>
+    <dimen name="submit_text_size">16sp</dimen>
     <dimen name="sliderLayout_height">230dp</dimen>
     <dimen name="listitemlayout_height">200dp</dimen>
     <dimen name="logout_text_size">19sp</dimen>
@@ -107,4 +106,13 @@
     <dimen name="toastmsg_padding">10dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
 
+
+
+    <!--new dimen optimization for layouts-->
+    <dimen name="viewmore_btn_width">90dp</dimen>
+    <dimen name="viewmore_btn_height">40dp</dimen>
+    <dimen name="viewmore_text_size">13sp</dimen>
+    <dimen name="homescreen_title_text_size">13sp</dimen>
+    <dimen name="list_singlecard_img_width">108dp</dimen>
+    <dimen name="list_singlecard_img_height">154dp</dimen>
 </resources>

@@ -3,7 +3,7 @@ package com.home.apisdk.apiModel;
 /**
  * This Model Class Holds All The Output Attributes For DeleteInvoicePdfAsynTask
  *
- * @author MUVI
+ * @author Abhishek
  */
 public class DeleteInvoicePdfOutputModel {
     String msg;

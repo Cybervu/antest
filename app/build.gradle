@@ -52,7 +52,10 @@ android {
             versionCode 1
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            buildConfigField "String", "AUTH_TOKEN", "\"e8ae05a2ef3fd0c6688952c8f7557823\""
+            //buildConfigField "String", "AUTH_TOKEN", "\"e8ae05a2ef3fd0c6688952c8f7557823\""
+           // buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//mob
+            buildConfigField "String", "AUTH_TOKEN", "\"d2d529d95240ed416ead6684bd888c0f\""//idogic test
+
         }
         defaultFlavor_staging_ {
             dimension 'environment'
@@ -90,8 +93,8 @@ android {
             versionCode 1
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-//            buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
-            buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//mob
+            buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
+           // buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//mob
             // buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
             // buildConfigField "String", "AUTH_TOKEN", "\"49c5986b92785b2ea7cdea83487dbaf8\""
         }
@@ -204,12 +207,14 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.plusnights'
-            versionCode 1
+            versionCode 2
             targetSdkVersion 25
-            versionName "1.0"
+            versionName "1.01"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"0831fbbacf89caf9d32aca43e21665b8\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
+           // buildConfigField "String", "AUTH_TOKEN", "\"a5bdd73811b3ff6bd7a5f9f0e86af23d\""
+
         }
         plusnights_staging_ {
             dimension 'environment'
@@ -1462,6 +1467,19 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     if (vendor.equals('metrox') && environment.equals('monetizer_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('metrox') && environment.equals('plusnights_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('plusnights_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('plusnights_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('plusnights_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
 

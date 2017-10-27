@@ -149,8 +149,8 @@
 
                     <Button
                         android:id="@+id/preOrderButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/viewmore_btn_width"
+                        android:layout_height="@dimen/viewmore_btn_width"
                         android:layout_marginRight="@dimen/pre_order_button_margin"
                         android:layout_toLeftOf="@+id/viewTrailerButton"
                         android:background="@drawable/preorder_button"
@@ -164,8 +164,8 @@
 
                     <Button
                         android:id="@+id/viewTrailerButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/viewmore_btn_width"
+                        android:layout_height="@dimen/viewmore_btn_height"
                         android:layout_alignParentRight="true"
                         android:background="@drawable/view_more_button_background"
                         android:padding="@dimen/payment_spinner_padding"
@@ -263,7 +263,6 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/durationcensorLinearlayout"
                     android:maxLines="1"
-                    android:padding="@dimen/Login_drawing_padding"
                     android:paddingLeft="@dimen/Login_drawing_padding"
                     android:text=""
                     android:textColor="@color/detailsPageTextColor"

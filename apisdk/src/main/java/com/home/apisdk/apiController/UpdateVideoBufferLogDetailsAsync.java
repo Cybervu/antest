@@ -14,6 +14,7 @@ import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiModel.VideoBufferLogsInputModel;
 import com.home.apisdk.apiModel.VideoBufferLogsOutputModel;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -96,6 +97,7 @@ public class UpdateVideoBufferLogDetailsAsync extends AsyncTask<VideoBufferLogsI
      * Background thread to execute.
      *
      * @return null
+     * @throws org.apache.http.conn.ConnectTimeoutException,IOException,JSONException
      */
     @Override
     protected Void doInBackground(VideoBufferLogsInputModel... params) {

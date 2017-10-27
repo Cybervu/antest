@@ -71,6 +71,7 @@
     <dimen name="layout_padding_left">40dp</dimen>
     <dimen name="payment_margin_top">0dp</dimen>
     <dimen name="Login_drawing_padding">10dp</dimen>
+    <dimen name="detailspage_padding">2dp</dimen>
     <dimen name="review_edit_text_margin">28dp</dimen>
     <dimen name="current_time_margin_bottom">40dp</dimen>
     <dimen name="arrowIv_imageview_margin">47dp</dimen>
@@ -83,7 +84,7 @@
     <dimen name="login_padding_bottom">17dp</dimen>
     <dimen name="pop_up_view_height">3dp</dimen>
     <dimen name="relative_margin_top">20dp</dimen>
-    <dimen name="login_text_height">100dp</dimen>
+    <dimen name="login_text_height">120dp</dimen>
     <dimen name="forgot_logo_width">150dp</dimen>
     <dimen name="forgotlayout_margin">10dp</dimen>
     <dimen name="terms_text_view_margin_right">7dp</dimen>
@@ -244,8 +245,6 @@
     <dimen name="language_text_size">17sp</dimen>
     <dimen name="listcard_width">171dp</dimen>
     <dimen name="listcard_height">93dp</dimen>
-    <dimen name="list_singlecard_img_width">108dp</dimen>
-    <dimen name="list_singlecard_img_height">154dp</dimen>
     <dimen name="listview_img_width">18dp</dimen>
     <dimen name="listview_img_height">18dp</dimen>
     <dimen name="logouttext_height">110dp</dimen>
@@ -322,4 +321,12 @@
     <dimen name="nav_drawer_text_size">18sp</dimen>
 
 
+
+    <!--new dimen optimization for layouts-->
+    <dimen name="viewmore_btn_width">90dp</dimen>
+    <dimen name="viewmore_btn_height">40dp</dimen>
+    <dimen name="viewmore_text_size">14sp</dimen>
+    <dimen name="homescreen_title_text_size">16sp</dimen>
+    <dimen name="list_singlecard_img_width">108dp</dimen>
+    <dimen name="list_singlecard_img_height">154dp</dimen>
 </resources>

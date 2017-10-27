@@ -70,8 +70,8 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
     String loginEmailStr = "";
     boolean navigation=false;
     ForgotpassAsynTask asyncPasswordForgot;
-    // load asynctask
     Player playerModel;
+    // load asynctask
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     int keepAliveTime = 10;
@@ -87,7 +87,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
-
 
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
                 .trim()).equals("1")) {
@@ -233,6 +232,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
         final Intent detailsIntent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+        detailsIntent.putExtra("PlayerModel", playerModel);
         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(detailsIntent);
         finish();
