@@ -1777,7 +1777,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             int isFreeContent = myLibraryOutputModelArray.get(i).getIsfreeContent();
             int season_id = myLibraryOutputModelArray.get(i).getSeason_id();
 
-            itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, movieUniqueId, movieStreamUniqueId, isConverted, isFreeContent, season_id));
+            itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, movieUniqueId, movieStreamUniqueId, isConverted, isFreeContent, season_id,""));
         }
 
         if (message == null)

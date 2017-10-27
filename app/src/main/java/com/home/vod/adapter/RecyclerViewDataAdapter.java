@@ -99,7 +99,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
         /*for (int j = 0; j > bannerUrls.size(); j++) {
             //image = bannerUrls.get(j);
         }*/
-        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.regular_fonts),itemRowHolder.itemTitle);
+        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.fonts),itemRowHolder.itemTitle);
 
        /* Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
         itemRowHolder.itemTitle.setTypeface(castDescriptionTypeface);*/
@@ -149,6 +149,8 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
         }
         LogUtil.showLog("SUBHA","hggf"+singleSectionItems.size());
         //  itemRowHolder.btnMore.setVisibility(View.VISIBLE);
+
+        Log.v("SUBHA","item size === "+ singleSectionItems.size());
 
         if (singleSectionItems.size() <= 0) {
             itemRowHolder.itemTitle.setVisibility(View.GONE);
@@ -260,7 +262,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
             this.itemTitle = (TextView) view.findViewById(R.id.itemTitle);
             this.recycler_view_list = (RecyclerView) view.findViewById(R.id.featureContent);
             this.btnMore= (Button) view.findViewById(R.id.btnMore);
-            FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.regular_fonts),this.btnMore);
+            FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.fonts),this.btnMore);
 
 /*
             Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));

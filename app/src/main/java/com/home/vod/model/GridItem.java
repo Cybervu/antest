@@ -6,6 +6,16 @@ public class GridItem {
 	private String videoType;
 	private String imageId;
 	private String permalink;
+
+	public String getStory() {
+		return story;
+	}
+
+	public void setStory(String story) {
+		this.story = story;
+	}
+
+	private String story;
 	private int isConverted;
 	private int isPPV;
 	private int isAPV;
@@ -136,7 +146,7 @@ public class GridItem {
 //		this.title = title;
 //		this.rating = rating;
 //	}
-public GridItem(String imageId, String title, String videoType, String videoTypeId, String movieGenre, String videoUrl, String permalink, String isEpisode, String movieUniqueId, String movieStreamUniqueId, int isConverted, int isPPV, int isAPV) {
+public GridItem(String imageId, String title, String videoType, String videoTypeId, String movieGenre, String videoUrl, String permalink, String isEpisode, String movieUniqueId, String movieStreamUniqueId, int isConverted, int isPPV, int isAPV, String story) {
 	super();
 	this.imageId = imageId;
 	this.title = title;
@@ -151,6 +161,7 @@ public GridItem(String imageId, String title, String videoType, String videoType
 	this.isConverted = isConverted;
 	this.isPPV = isPPV;
 	this.isAPV = isAPV;
+	this.story = story;
 
 
 }

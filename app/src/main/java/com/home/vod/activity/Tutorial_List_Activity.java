@@ -196,6 +196,7 @@ import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.CAST_INTENT_KEY;
 import static com.home.vod.util.Constant.CENSOR_RATING_INTENT_KEY;
 import static com.home.vod.util.Constant.GENRE_INTENT_KEY;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_ARRAY;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -724,6 +725,15 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                                     playVideoIntent.putExtra("PlayerModel", playerModel);
                                     playVideoIntent.putExtra("PLAY_LIST", itemData);
                                     playVideoIntent.putExtra("TAG", ItemClickedPosition);
+
+
+
+                                    playVideoIntent.putExtra("PERMALINK", permalinkStr );
+                                    playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                                    playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                    Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                    playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                    playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                                     startActivity(playVideoIntent);
                                 }
 
@@ -736,9 +746,17 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                     playVideoIntent.putExtra("PlayerModel", playerModel);
-                    Log.v("Nihar", "===================" + itemData.size());
                     playVideoIntent.putExtra("PLAY_LIST", itemData);
                     playVideoIntent.putExtra("TAG", ItemClickedPosition);
+
+
+
+                    playVideoIntent.putExtra("PERMALINK", permalinkStr );
+                    playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                    playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                    Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                    playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                    playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                     startActivity(playVideoIntent);
                 }
             }
@@ -859,6 +877,18 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                                 ShowPpvPopUp();
                             } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
                                 Intent intent = new Intent(Tutorial_List_Activity.this, SubscriptionActivity.class);
+                                intent.putExtra("PlayerModel", playerModel);
+                                intent.putExtra("PLAY_LIST", itemData);
+                                intent.putExtra("TAG", ItemClickedPosition);
+
+
+
+                                intent.putExtra("PERMALINK", permalinkStr );
+                                intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                                intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                intent.putExtra("Index",getIntent().getStringExtra("Index"));
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(intent);
                             } else {
@@ -874,6 +904,18 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                 ShowPpvPopUp();
             } else if (PlanId.equals("1") && Subscription_Str.equals("0")) {
                 Intent intent = new Intent(Tutorial_List_Activity.this, SubscriptionActivity.class);
+                intent.putExtra("PlayerModel", playerModel);
+                intent.putExtra("PLAY_LIST", itemData);
+                intent.putExtra("TAG", ItemClickedPosition);
+
+
+
+                intent.putExtra("PERMALINK", permalinkStr );
+                intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                intent.putExtra("Index",getIntent().getStringExtra("Index"));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             } else if (Util.dataModel.getIsConverted() == 0) {
@@ -1266,12 +1308,14 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
 
         mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON).toString() + " " + getIntent().getStringExtra(SEASON_INTENT_KEY));
         mActionBarToolbar.setTitleTextColor(Color.WHITE);
+//        FontUtls.loadFont(Tutorial_List_Activity.this, getResources().getString(R.string.regular_fonts), );
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
+
         TextView sectionTitle = (TextView) findViewById(R.id.sectionTitle);
         FontUtls.loadFont(Tutorial_List_Activity.this, getResources().getString(R.string.regular_fonts), sectionTitle);
         sectionTitle.setText(languagePreference.getTextofLanguage(EPISODE_TITLE, DEFAULT_EPISODE_TITLE));
@@ -1636,8 +1680,17 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                         register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         Util.check_for_subscription = 1;
                         register.putExtra("PlayerModel", playerModel);
-                        register.putExtra("PLAY_LIST", questions);
-                        register.putExtra("TAG", contentPosition);
+                        register.putExtra("PLAY_LIST", itemData);
+                        register.putExtra("TAG", ItemClickedPosition);
+
+
+
+                        register.putExtra("PERMALINK", permalinkStr );
+                        register.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                        register.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                        Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                        register.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                        register.putExtra("Index",getIntent().getStringExtra("Index"));
                         startActivity(register);
 
 
@@ -2445,30 +2498,33 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                 episodelist.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
                 episodelist.setGravity(Gravity.CENTER_HORIZONTAL);
 
-                if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+                if ( (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     if (videoWidth > videoHeight) {
                         episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     } else {
-                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+
+                        Log.v("SUBHA","DATA here");
+
+                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     }
 
-                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
+                } else if ( (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
                     if (videoWidth > videoHeight) {
-                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
                     } else {
                         episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     }
 
-                } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
+                } else if ( (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
 
-                    episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
+                    episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 2);
 
 
                 } else {
                     if (videoWidth > videoHeight) {
-                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 4);
+                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     } else {
-                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 5);
+                        episodelist.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 3);
                     }
 
                 }
@@ -2476,7 +2532,7 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                     if (density >= 3.5 && density <= 4.0) {
                         customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.nexus_videos_grid_layout_land, itemData);
                     } else {
-                        customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.videos_grid_layout, itemData);
+                        customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.videos_280_grid_layout, itemData);
 
                     }
                     episodelist.setAdapter(customListAdapter);
@@ -2487,17 +2543,10 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                         customListAdapter = new Tutorial_List_Adapter(Tutorial_List_Activity.this, R.layout.videos_grid_layout, itemData);
 
                     }
-                    // customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);
                     episodelist.setAdapter(customListAdapter);
                 }
 
-              /*  if (videoWidth > videoHeight) {
-                    customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_280_grid_layout, itemData);
-                    gridView.setAdapter(customGridAdapter);
-                } else {
-                    customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_grid_layout, itemData);
-                    gridView.setAdapter(customGridAdapter);
-                }*/
+
 
 
             } else {
@@ -2840,13 +2889,22 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                 showPaymentIntent.putExtra("currencyId", Util.currencyModel.getCurrencyId());
                 showPaymentIntent.putExtra("currencyCountryCode", Util.currencyModel.getCurrencyCode());
                 showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getCurrencySymbol());
-                showPaymentIntent.putExtra("PLAY_LIST", questions);
-                showPaymentIntent.putExtra("TAG", contentPosition);
+                showPaymentIntent.putExtra("PlayerModel", playerModel);
+                showPaymentIntent.putExtra("PLAY_LIST", itemData);
+                showPaymentIntent.putExtra("TAG", ItemClickedPosition);
+
+
+
+                showPaymentIntent.putExtra("PERMALINK", permalinkStr );
+                showPaymentIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                showPaymentIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                showPaymentIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                showPaymentIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                 showPaymentIntent.putExtra("showName", Util.dataModel.getEpisode_title());
                 showPaymentIntent.putExtra("seriesNumber", Util.dataModel.getEpisode_series_no());
                 showPaymentIntent.putExtra("isPPV", Util.dataModel.getIsPPV());
                 showPaymentIntent.putExtra("isAPV", Util.dataModel.getIsAPV());
-                showPaymentIntent.putExtra("PlayerModel", playerModel);
                 if (Util.dataModel.getIsAPV() == 1) {
                     showPaymentIntent.putExtra("isConverted", 0);
                 } else {
@@ -3688,6 +3746,18 @@ public class Tutorial_List_Activity extends AppCompatActivity implements VideoDe
                         ShowPpvPopUp();
                     } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                         Intent intent = new Intent(Tutorial_List_Activity.this, SubscriptionActivity.class);
+                        intent.putExtra("PlayerModel", playerModel);
+                        intent.putExtra("PLAY_LIST", itemData);
+                        intent.putExtra("TAG", ItemClickedPosition);
+
+
+
+                        intent.putExtra("PERMALINK", permalinkStr );
+                        intent.putExtra("SEASON", getIntent().getStringExtra("SEASON"));
+                        intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                        Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                        intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                        intent.putExtra("Index",getIntent().getStringExtra("Index"));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
                     } else {

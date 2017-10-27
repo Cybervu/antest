@@ -29,7 +29,7 @@
     <dimen name="purchasevalue_text_size">45sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>
     <dimen name="submit_text_size">16sp</dimen>
-    <dimen name="listitemlayout_height">330dp</dimen>
+    <dimen name="listitemlayout_height">220dp</dimen>
     <dimen name="slider_height">210dp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
     <dimen name="banner_image_height">210dp</dimen>
@@ -57,8 +57,8 @@
     <dimen name="fragmentimgview_height">120dp</dimen>
     <dimen name="view_margin_top">10dp</dimen>
     <dimen name="registerimg_margin_top">300dp</dimen>
-    <dimen name="layout_padding_left">25dp</dimen>
-    <dimen name="layout_padding_right">25dp</dimen>
+    <dimen name="layout_padding_left">40dp</dimen>
+    <dimen name="layout_padding_right">40dp</dimen>
     <dimen name="register_edittext_padding">17dp</dimen>
     <dimen name="register_margin_top">40dp</dimen>
     <dimen name="login_butn_width">100dp</dimen>
@@ -121,5 +121,14 @@
     <dimen name="logo_height">80dp</dimen>
     <dimen name="logo_width">80dp</dimen>
     <dimen name="downloadwidth">200dp</dimen>
+
+    <!--//**********profile picture*************//-->
+
+    <dimen name="profile_image_height">100dp</dimen>
+    <dimen name="profile_image_width">100dp</dimen>
+    <dimen name="profile_margin_right">20dp</dimen>
+    <dimen name="profile_padding_top">50dp</dimen>
+    <dimen name="layout2_padding_top">30dp</dimen>
+    <dimen name="sidemenu_padding_bottom">80dp</dimen>
 
 </resources>

@@ -56,15 +56,17 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.title = (TextView) row.findViewById(R.id.movieTitle);
+            holder.movieDescription = (TextView) row.findViewById(R.id.movieDescription);
             holder.videoImageview = (ImageView) row.findViewById(R.id.movieImageView);
             holder.closeAlbumArt = (ImageView) row.findViewById(R.id.close_album_art);
-
+            holder.closeAlbumArt.setVisibility(View.VISIBLE);
 
 
 
 
 
             FontUtls.loadFont(mActivity,mActivity.getResources().getString(R.string.regular_fonts),holder.title);
+            FontUtls.loadFont(mActivity,mActivity.getResources().getString(R.string.regular_fonts),holder.movieDescription);
 /*
             Typeface castDescriptionTypeface = Typeface.createFromAsset(mActivity.getAssets(),mActivity.getResources().getString(R.string.regular_fonts));
             holder.title.setTypeface(castDescriptionTypeface);*/
@@ -101,6 +103,7 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
 
         final GridItem item = data.get(position);
         holder.title.setText(item.getTitle());
+        holder.movieDescription.setText(item.getStory());
         String imageId = item.getImage();
         LogUtil.showLog("Nihar_feb",""+imageId);
 
@@ -109,6 +112,7 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
         holder.closeAlbumArt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LogUtil.showLog("Nihar_fev","clicked ");
                 close=true;
                if (data.get(position).isClicked()){
 
@@ -164,7 +168,7 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
     }
 
     static class ViewHolder {
-        public TextView title;
+        public TextView title,movieDescription;
         public ImageView videoImageview,closeAlbumArt;
 
 

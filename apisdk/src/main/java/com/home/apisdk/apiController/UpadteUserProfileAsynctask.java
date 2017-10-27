@@ -106,6 +106,7 @@ public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Inp
             httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.update_userProfile_input.getAuthToken());
             httppost.addHeader(HeaderConstants.USER_ID, this.update_userProfile_input.getUser_id());
             httppost.addHeader(HeaderConstants.NAME, this.update_userProfile_input.getName());
+            httppost.addHeader(HeaderConstants.IMAGE, this.update_userProfile_input.getDisplay_image());
             httppost.addHeader(HeaderConstants.PASSWORD, this.update_userProfile_input.getPassword());
             httppost.addHeader(HeaderConstants.CUSTOM_LANGUAGES, this.update_userProfile_input.getCustom_languages());
             httppost.addHeader(HeaderConstants.CUSTOM_COUNTRY, this.update_userProfile_input.getCustom_country());

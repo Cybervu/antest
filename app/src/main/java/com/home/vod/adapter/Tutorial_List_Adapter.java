@@ -80,6 +80,7 @@ public class Tutorial_List_Adapter extends ArrayAdapter<EpisodesListModel> {
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.movieTitle = (TextView) row.findViewById(R.id.movieTitle);
+            FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), holder.movieTitle );
             holder.movieImageView = (ImageView) row.findViewById(R.id.movieImageView);
 
            /* int height = holder.videoImageview.getDrawable().getIntrinsicHeight();

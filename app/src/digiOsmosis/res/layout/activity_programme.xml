@@ -57,16 +57,19 @@
                     android:layout_height="@dimen/playbtn_height"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
+                    android:visibility="gone"
                     android:src="@drawable/play" />
 
             </RelativeLayout>
 
+
+
             <TextView
                 android:id="@+id/viewLine"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="3dp"
                 android:layout_below="@+id/bannerImageRelativeLayout"
-                android:background="@color/textColor" />
+                android:background="@color/exercise_imagecolor" />
 
 
 
@@ -78,28 +81,20 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:layout_width="3dp"
+                    android:layout_width="5dp"
                     android:layout_height="18dp"
+                    android:id="@+id/colortitle"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
                     android:background="@color/colorPrimary"
-                    android:layout_marginTop="4dp"
                     android:layout_marginLeft="@dimen/marginleft10dp"
                     />
 
 
-                <TextView
-                    android:id="@+id/detailsTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    android:layout_marginLeft="20dp"
-                    android:textColor="@color/videotextColor"
-                    android:textSize="@dimen/story_title_text_size"
-                    android:textStyle="bold" />
-
                 <ImageView
                     android:id="@+id/favoriteImageView"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentBottom="true"
                     android:layout_gravity="right"
                     android:layout_marginEnd="9dp"
@@ -119,6 +114,18 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:src="@drawable/share" />
+
+                <TextView
+                    android:id="@+id/detailsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:text=""
+                    android:layout_marginLeft="@dimen/marginRight20dp"
+                    android:textColor="@color/videotextColor"
+                    android:textSize="@dimen/story_title_text_size"
+
+                     />
 
             </RelativeLayout>
 
@@ -196,7 +203,7 @@
                         android:id="@+id/durationTitleTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
+
                         android:textColor="@color/nav_lineColor"
                         android:textSize="@dimen/duration_title_text"
                        />
@@ -205,6 +212,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/days"
+                        android:textAllCaps="true"
                         android:textColor="@color/videotextColor"
                         android:textSize="@dimen/duration" />
 
@@ -233,7 +241,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textStyle="bold"
+
                         android:textColor="@color/nav_lineColor"
                         android:textSize="@dimen/duration_title_text"
                         />
@@ -242,6 +250,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/difficulty"
+                        android:textAllCaps="true"
                         android:textColor="@color/videotextColor"
                         android:textSize="@dimen/duration" />
 
@@ -261,10 +270,11 @@
 
 
                 <TextView
-                    android:layout_width="3dp"
+                    android:layout_width="5dp"
                     android:layout_height="18dp"
+                    android:id="@+id/colortitle1"
                     android:background="@color/colorPrimary"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginRight="@dimen/marginleft10dp"
                     android:layout_marginLeft="@dimen/marginleft10dp"
                     />
@@ -274,9 +284,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/story_title_text_size"
+                    android:text=""
+                    android:textAllCaps="true"
+
                     android:layout_marginLeft="20dp"
                     android:textColor="@color/videotextColor"
-                    android:textStyle="bold" />
+                    />
 
                 <TextView
                     android:id="@+id/benefitsStoryTextView"

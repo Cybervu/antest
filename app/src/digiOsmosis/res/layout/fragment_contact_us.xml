@@ -27,12 +27,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/toolbar"
                 android:layout_marginBottom="@dimen/categoryTitle_margin"
-                android:layout_marginLeft="@dimen/loginImageViewMarging_top"
-                android:layout_marginTop="@dimen/loginImageViewMarging_top"
+                android:layout_marginLeft="@dimen/contactUs_Heading"
+                android:layout_marginTop="@dimen/contactUs_Heading"
 
                 android:paddingBottom="@dimen/Login_drawing_padding"
                 android:paddingTop="@dimen/Login_drawing_padding"
-                android:text=""
+                android:text="CONTACT US"
                 android:textColor="@color/pageTitleColor"
                 android:textSize="@dimen/sectiontitle_text_size"
                 android:textStyle="normal" />
@@ -58,10 +58,12 @@
                 android:layout_marginLeft="@dimen/ppv_margin"
                 android:layout_marginRight="@dimen/ppv_margin"
                 android:hint=""
+                android:drawableLeft="@drawable/contact_name"
                 android:imeOptions="actionDone"
                 android:inputType="textPersonName"
                 android:paddingBottom="@dimen/Login_drawing_padding"
                 android:paddingTop="@dimen/Login_drawing_padding"
+                android:drawablePadding="@dimen/Login_drawing_padding"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
                 android:textSize="@dimen/editbox_text_size" />
@@ -74,6 +76,8 @@
                 android:layout_marginLeft="@dimen/Login_drawing_padding"
                 android:layout_marginRight="@dimen/Login_drawing_padding"
                 android:hint=""
+                android:drawableLeft="@drawable/contact_mail"
+                android:drawablePadding="@dimen/Login_drawing_padding"
                 android:imeOptions="actionDone"
                 android:inputType="textEmailAddress"
                 android:paddingBottom="@dimen/Login_drawing_padding"
@@ -91,6 +95,8 @@
                 android:layout_marginRight="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/review_edit_text_margin"
                 android:hint=""
+                android:drawablePadding="@dimen/Login_drawing_padding"
+                android:drawableLeft="@drawable/contact_msg"
                 android:imeOptions="actionDone"
                 android:inputType="textMultiLine"
                 android:paddingBottom="@dimen/Login_drawing_padding"
@@ -101,23 +107,21 @@
 
             <Button
                 android:id="@+id/submit_cont"
-                android:layout_width="@dimen/submitcontact_width"
-                android:layout_height="@dimen/submitcontact_height"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/ppv_margin"
                 android:layout_marginRight="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/payment_margin_btn_top"
-                android:background="@drawable/button_radious"
+                android:background="@drawable/my_button"
                 android:text=""
+                android:padding="@dimen/loginImageViewMarging_top_padding"
                 android:textColor="@color/buttonTextColor"
                 android:textSize="@dimen/submitcontact_text_size" />
         </LinearLayout>
     </ScrollView>
 
 
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
+
 
 </LinearLayout>

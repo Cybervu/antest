@@ -125,6 +125,8 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SEASON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TUTORIAL_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_WORKOUT_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DURATION_TITLE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
@@ -135,6 +137,8 @@ import static com.home.vod.preferences.LanguagePreference.SEASON;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.TUTORIAL_TITLE;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.WORKOUT_BUTTON;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_ARRAY;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
@@ -342,6 +346,12 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                                 ShowPpvPopUp();
                             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                                 Intent intent = new Intent(ProgramDetailsActivity.this, SubscriptionActivity.class);
+                                intent.putExtra("PlayerModel", playerModel);
+                                intent.putExtra("PERMALINK", permalinkStr );
+                                intent.putExtra("SEASON", season.length );
+                                intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                                intent.putExtra("Index",getIntent().getStringExtra("Index"));
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(intent);
                             } else {
@@ -357,6 +367,12 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 ShowPpvPopUp();
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                 Intent intent = new Intent(ProgramDetailsActivity.this, SubscriptionActivity.class);
+                intent.putExtra("PlayerModel", playerModel);
+                intent.putExtra("PERMALINK", permalinkStr );
+                intent.putExtra("SEASON", season.length );
+                intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                intent.putExtra("Index",getIntent().getStringExtra("Index"));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             } else if (Util.dataModel.getIsConverted() == 0) {
@@ -807,7 +823,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                                     playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
                                     playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
                                     playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
-
+                                    Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
                                     playVideoIntent.putExtra("TAG",ItemClickedPosition);
                                     startActivity(playVideoIntent);
                                 }
@@ -825,6 +841,8 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                     playVideoIntent.putExtra("SEASON", season.length );
                     playVideoIntent.putExtra("PERMALINK", permalinkStr );
                     playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+
+                    Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
                     playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
                     playVideoIntent.putExtra("TAG",ItemClickedPosition);
                     playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
@@ -958,8 +976,11 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), detailsTextView);
+        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), viewAllTextView);
+        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), startWorkoutButton);
         detailsTextView.setText(languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + getIntent().getStringExtra(SEASON_INTENT_KEY));
-
+        viewAllTextView.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
         viewAllTextView.setVisibility(View.GONE);
         dietPlanButton.setVisibility(View.GONE);
         playButton.setVisibility(View.GONE);
@@ -1067,8 +1088,13 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 episode.putExtra("contentTypesId", contentTypesId);
                 episode.putExtra("PLAY_LIST", itemData);
                 episode.putExtra("TAG", ItemClickedPosition);
+                episode.putExtra("SEASON", season.length );
                 episode.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
                 episode.putExtra(SEASON_INTENT_KEY, getIntent().getStringExtra(SEASON_INTENT_KEY));
+                episode.putExtra("Index",getIntent().getStringExtra("Index"));
+
+
+                episode.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
                 startActivity(episode);
             }
         });
@@ -1348,13 +1374,15 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             viewAllTextView.setVisibility(View.VISIBLE);
             tutorialTextView.setText(languagePreference.getTextofLanguage(TUTORIAL_TITLE, DEFAULT_TUTORIAL_TITLE));
             durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
+            startWorkoutButton.setText(languagePreference.getTextofLanguage(WORKOUT_BUTTON, DEFAULT_WORKOUT_BUTTON));
+            FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), tutorialTextView);
+            FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
 
             if (duration.matches("")) {
                 durationTitleTextView.setVisibility(View.GONE);
             } else {
 
-                FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.light_fonts), durationTitleTextView);
-                durationTitleTextView.setTypeface(null, Typeface.BOLD);
+                FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
                 durationTextView.setText(duration);
             }
 
@@ -1591,6 +1619,13 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 register.putExtra("PLAY_LIST", itemData);
                 register.putExtra("TAG", ItemClickedPosition);
                 register.putExtra("PlayerModel", playerModel);
+
+                register.putExtra("PERMALINK", permalinkStr );
+                register.putExtra("SEASON", season.length );
+                register.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                register.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                register.putExtra("Index",getIntent().getStringExtra("Index"));
                 startActivity(register);
 
 
@@ -2025,6 +2060,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 playVideoIntent.putExtra("PERMALINK", permalinkStr );
                 playVideoIntent.putExtra("SEASON", season.length );
                 playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
                 playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
                 playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
 
@@ -2319,6 +2355,11 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                     showPaymentIntent.putExtra("currencyCountryCode", Util.currencyModel.getCurrencyCode());
                     showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getCurrencySymbol());
                     showPaymentIntent.putExtra("PlayerModel", playerModel);
+                    showPaymentIntent.putExtra("PERMALINK", permalinkStr );
+                    showPaymentIntent.putExtra("SEASON", season.length );
+                    showPaymentIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                    showPaymentIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                    showPaymentIntent.putExtra("Index",getIntent().getStringExtra("Index"));
 
                     // showPaymentIntent.putExtra("showName", Util.dataModel.getEpisode_title());
 

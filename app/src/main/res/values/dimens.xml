@@ -21,7 +21,7 @@
     <dimen name="voucher_pop_up_margin">0dp</dimen>
     <dimen name="select_planMark_margin2">95dp</dimen>
     <dimen name="list_single_card_small_height">140dp</dimen>
-    <dimen name="textColor_margin">8dp</dimen>
+    <dimen name="textColor_margin">12dp</dimen>
     <dimen name="select_planMark_margin">135dp</dimen>
     <dimen name="planPurchaseMonthTextView_padding">18dp</dimen>
     <dimen name="compress_expand_margin">7dp</dimen>
@@ -91,7 +91,7 @@
     <dimen name="login_padding_bottom">17dp</dimen>
     <dimen name="contact_name_margin">22dp</dimen>
     <dimen name="itemTitle_widht">98dp</dimen>
-    <dimen name="loginImageViewMarging_top">15dp</dimen>
+    <dimen name="loginImageViewMarging_top">100dp</dimen>
     <dimen name="Login_drawing_padding">10dp</dimen>
     <dimen name="castnointernet_text">18sp</dimen>
     <dimen name="cast_width_icon">80dp</dimen>
@@ -347,6 +347,8 @@
     <dimen name="padding_right4dp">4dp</dimen>
     <dimen name="margintop12dp">12dp</dimen>
     <dimen name="downloadwidth">200dp</dimen>
+    <dimen name="login_line_width">30dp</dimen>
+    <dimen name="login_line_gap">10dp</dimen>
 
 
     <!--resume_playing dimen-->
@@ -362,5 +364,16 @@
     <dimen name="season_image_height">200dp</dimen>
     <dimen name="card_title_padding">10dp</dimen>
     <dimen name="card_title">23sp</dimen>
+    <dimen name="alreadyMember_Relative_Height">50dp</dimen>
+    
+    <dimen name="configuration_xlarge_4">4dp</dimen>
+    <dimen name="configuration_normal_2">2dp</dimen>
+    <dimen name="configuration_large_3">3dp</dimen>
+    <dimen name="configuration_xlarge_5">5dp</dimen>
+
+    <dimen name="fav_configuration_xlarge_4">4dp</dimen>
+    <dimen name="fav_configuration_normal_2">2dp</dimen>
+    <dimen name="fav_configuration_large_3">3dp</dimen>
+    <dimen name="fav_configuration_xlarge_5">5dp</dimen>
 
 </resources>

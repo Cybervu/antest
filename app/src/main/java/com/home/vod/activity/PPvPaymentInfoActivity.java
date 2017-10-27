@@ -191,6 +191,7 @@ import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.USE_NEW_CARD;
 import static com.home.vod.preferences.LanguagePreference.VOUCHER_BLANK_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.WATCH_NOW;
+import static com.home.vod.util.Constant.PERMALINK_INTENT_ARRAY;
 import static com.home.vod.util.Constant.authTokenStr;
 
 public class PPvPaymentInfoActivity extends ActionBarActivity implements
@@ -1453,9 +1454,14 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                        playVideoIntent.putExtra("PlayerModel", playerModel);
                         playVideoIntent.putExtra("PLAY_LIST", questions);
                         playVideoIntent.putExtra("TAG", contentPosition);
-                        playVideoIntent.putExtra("PlayerModel", playerModel);
+                        playVideoIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                        playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                        playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                        playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                        playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                         startActivity(playVideoIntent);
                         finish();
                     }
@@ -1468,9 +1474,14 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
                                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
+                    playVideoIntent.putExtra("PlayerModel", playerModel);
                     playVideoIntent.putExtra("PLAY_LIST", questions);
                     playVideoIntent.putExtra("TAG", contentPosition);
-                    playVideoIntent.putExtra("PlayerModel", playerModel);
+                    playVideoIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                    playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                    playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                    playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                    playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                     startActivity(playVideoIntent);
                     finish();
 
@@ -3098,6 +3109,11 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 playVideoIntent.putExtra("PlayerModel", playerModel);
                 playVideoIntent.putExtra("PLAY_LIST", questions);
                 playVideoIntent.putExtra("TAG", contentPosition);
+                playVideoIntent.putExtra("PERMALINK", getIntent().getStringExtra("PERMALINK") );
+                playVideoIntent.putExtra("SEASON", getIntent().getStringExtra("SEASON") );
+                playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra("Current_SEASON"));
+                playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                 startActivity(playVideoIntent);

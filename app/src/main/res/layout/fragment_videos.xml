@@ -22,6 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/categoryTitle"
         android:layout_gravity="center_horizontal"
+
+        android:padding="@dimen/pre_order_button_margin"
         android:layout_marginBottom="@dimen/pre_order_button_margin"
         android:layout_marginLeft="@dimen/pre_order_button_margin"
         android:layout_marginRight="@dimen/pre_order_button_margin"

@@ -42,7 +42,7 @@ import static player.utils.Util.DETAILS_NOT_FOUND_ALERT;
 public class LoginHandler {
     LoginActivity context;
     TextView gmailTest;
-    private RelativeLayout googleSignView;
+    private LinearLayout googleSignView;
     private LinearLayout btnLogin;
     private Button loginButton;
     private Button registerButton;
@@ -57,8 +57,8 @@ public class LoginHandler {
 
     public LoginHandler(LoginActivity context){
         this.context=context;
-        gmailTest=(TextView) context.findViewById(R.id.textView);
-        googleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
+        gmailTest=(TextView) context.findViewById(R.id.googleTextView);
+        googleSignView = (LinearLayout) context.findViewById(R.id.sign_in_button);
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
         loginWithFacebookButton.setVisibility(View.GONE);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");

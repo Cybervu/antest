@@ -67,7 +67,8 @@
                     android:layout_marginLeft="5dp"
                     android:text="DETAILS TITLE"
                     android:textSize="20dp"
-                    android:textStyle="bold" />
+
+                   />
 
                 <ImageView
                     android:id="@+id/favoriteImageView"
@@ -154,7 +155,7 @@
                         android:layout_height="wrap_content"
                         android:text="DURATION"
                         android:textSize="15dp"
-                        android:textStyle="bold" />
+                         />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -187,7 +188,7 @@
                         android:layout_height="wrap_content"
                         android:text="DIFFCULTY"
                         android:textSize="15dp"
-                        android:textStyle="bold" />
+                         />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -214,7 +215,8 @@
                     android:layout_height="wrap_content"
                     android:text="BENEFITS"
                     android:textSize="20dp"
-                    android:textStyle="bold" />
+
+                    />
 
                 <TextView
                     android:id="@+id/benefitsStoryTextView"
