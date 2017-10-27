@@ -103,7 +103,7 @@
                 android:id="@+id/submit_cont"
                 android:layout_width="@dimen/submitcontact_width"
                 android:layout_height="@dimen/submitcontact_height"
-                android:layout_gravity="center"
+                android:layout_gravity="right"
                 android:layout_marginLeft="@dimen/ppv_margin"
                 android:layout_marginRight="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/payment_margin_btn_top"

@@ -16,7 +16,7 @@
         <gradient
             android:centerColor="@color/transparent"
             android:centerY="0.5"
-            android:endColor="@color/loader_color"
+            android:endColor="@color/progressbarEndColor"
             android:startColor="@color/transparent"
             android:type="sweep"
             android:useLevel="false" />

@@ -25,7 +25,7 @@
             android:layout_below="@+id/toolbar"
             android:layout_margin="@dimen/ppv_margin"
             android:padding="@dimen/Login_drawing_padding"
-            android:textColor="@color/castCrewTitleTextColor"
+            android:textColor="@color/castCrewTitleTextColor1"
             android:textSize="@dimen/castcrew_text"
             android:textStyle="bold" />
 

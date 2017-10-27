@@ -7,7 +7,7 @@
         <size android:width="60dip" android:height="60dip" />
         <gradient android:type="sweep" android:useLevel="false"
             android:startColor="@color/transparent"
-            android:endColor="@color/button_background"
+            android:endColor="@color/buttonBackgroundColor"
             android:angle="0"
             />
     </shape>

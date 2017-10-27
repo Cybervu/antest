@@ -16,6 +16,10 @@ public class LanguagePreference {
     /**
      * Language Constant default Key
      */
+    public static String DEFAULT_FIRST_NAME = "First Name";
+    public static String DEFAULT_LAST_NAME = "Last Name";
+    public static String FIRST_NAME = "FIRST_NAME";
+    public static String LAST_NAME = "LAST_NAME";
     public static String DEFAULT_DELETE_BTN = "Delete";
     public static String DELETE_BTN = "DELETE_BTN";
     public static String DEFAULT_WANT_TO_DELETE = "Want to Delete";
