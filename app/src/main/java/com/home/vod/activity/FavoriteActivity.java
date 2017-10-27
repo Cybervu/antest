@@ -865,7 +865,9 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
         episodeListOptionMenuHandler.createOptionMenu(menu,preferenceManager,languagePreference);
-
+        MenuItem favorite_menu;
+        favorite_menu = menu.findItem(R.id.menu_item_favorite);
+        favorite_menu.setVisible(false);
         return true;
     }
     /*chromecast-------------------------------------*/
@@ -1256,7 +1258,8 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
 
 
-    public  void removeFavorite(GridItem gridItem){
+    public  void removeFavorite(GridItem gridItem,int pos){
+        index = pos;
         movieUniqueId = gridItem.getMovieUniqueId();
 
         DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();

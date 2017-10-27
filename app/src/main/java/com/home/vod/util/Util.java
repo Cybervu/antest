@@ -123,7 +123,7 @@ public class Util {
     public static boolean goToLibraryplayer = false;
     public static boolean my_library_visibility = false;
 
-    public static ArrayList<Integer> image_orentiation = new ArrayList<>();
+    public static int image_orentiation;
 
     public static String GOOGLE_FCM_TOKEN = "GOOGLE_FCM_TOKEN";
     public static String DEFAULT_GOOGLE_FCM_TOKEN = "0";

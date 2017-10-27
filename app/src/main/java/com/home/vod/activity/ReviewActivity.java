@@ -609,7 +609,7 @@ public class ReviewActivity extends AppCompatActivity implements
             ShowDialog(message);
         }else{
             Intent intent=new Intent();
-            setResult(30060,intent);
+            setResult(RESULT_OK,intent);
             finish();
             overridePendingTransition(0,0);
 
