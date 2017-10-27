@@ -143,6 +143,7 @@ public class Util {
     public static boolean call_finish_at_onUserLeaveHint = true;
 
     public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
+    public static boolean app_is_in_player_context = false;
 
    /*public static boolean checkNetwork(Context context) {
       ConnectivityManager cm =

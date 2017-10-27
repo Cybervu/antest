@@ -192,7 +192,7 @@ android {
             targetSdkVersion 25
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            buildConfigField "String", "AUTH_TOKEN", "\"a5bdd73811b3ff6bd7a5f9f0e86af23d\""
+            buildConfigField "String", "AUTH_TOKEN", "\"d3c3848c41852daea8f707a7b1b14230\""
         }
         monetizer_staging_ {
             dimension 'environment'

@@ -7,6 +7,7 @@
  <color name="videotextColor">#000</color>
  <color name="loginTextViewColor">#eda3b0 </color>
  <color name="buttonTextColor">#000000</color>
+ <color name="resumeTextColor">#ffffff</color>
  <color name="toolbarTitleColor">#000000</color>
  <color name="castandcrewbackground">#d1c664</color>
  <color name="navlogobackgroundcolor">#f5e85a</color>

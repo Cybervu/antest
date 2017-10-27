@@ -21,7 +21,6 @@
     <item
         android:id="@+id/media_route_menu_item"
         android:title="@string/media_route_menu_title"
-        android:icon="@drawable/search"
         app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
         android:orderInCategory="102"
         app:showAsAction="always" />
@@ -41,6 +40,7 @@
         />
 
     <item
+        android:id="@+id/submenu"
         android:title=""
         android:icon="@drawable/optionmanu"
         android:orderInCategory="105"
