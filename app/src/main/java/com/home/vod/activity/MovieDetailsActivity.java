@@ -702,7 +702,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
         videoCastCrewTitleTextView.setVisibility(View.GONE);
 
-        playButton.setVisibility(View.GONE);
 
         // *** rating***////
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
