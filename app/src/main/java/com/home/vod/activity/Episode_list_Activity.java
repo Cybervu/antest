@@ -87,6 +87,7 @@ import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.EpisodesListModel;
+import com.home.vod.model.LanguageModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
@@ -190,6 +191,7 @@ import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.util.Util.languageModel;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
 import static player.utils.Util.DEFAULT_IS_CHROMECAST;
 import static player.utils.Util.DEFAULT_IS_OFFLINE;
@@ -214,7 +216,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     ArrayList<String> ResolutionUrl = new ArrayList<>();
     ArrayList<String> SubTitleLanguage = new ArrayList<>();
 
-   // ProgressBarHandler loadEpisodedetailspDialog;
+    // ProgressBarHandler loadEpisodedetailspDialog;
     SharedPreferences pref;
     int previousTotal = 0;
     VideoDetailsAsynctask asynLoadVideoUrls;
@@ -322,7 +324,14 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         // _video_details_output.setThirdparty_url("https://player.vimeo.com/video/192417650?color=00ff00&badge=0");
 
      /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
+
         then set thirdpartyurl true here and assign the url to videourl*/
+
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+        }
+
         boolean play_video = true;
 
         if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
@@ -495,20 +504,18 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                     if (mCastSession != null && mCastSession.isConnected()) {
                         ///Added for resume cast watch
-                        if((Util.dataModel.getPlayPos() * 1000)>0)
-                        {
+                        if ((Util.dataModel.getPlayPos() * 1000) > 0) {
                             Util.dataModel.setPlayPos(Util.dataModel.getPlayPos());
                             Intent resumeIntent = new Intent(Episode_list_Activity.this, ResumePopupActivity.class);
                             startActivityForResult(resumeIntent, 1001);
 
-                        }else
-                        {
+                        } else {
                             Played_Length = 0;
                             watch_status_String = "start";
 
                             PlayThroughChromeCast();
                         }
-                      } else {
+                    } else {
 
                         playerModel.setThirdPartyPlayer(false);
                         final Intent playVideoIntent;
@@ -701,7 +708,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
                 jsonObj.put("resume_time", "0");
-                jsonObj.put("seek_status",seek_status);
+                jsonObj.put("seek_status", seek_status);
                 // This  Code Is Added For Drm BufferLog By Bibhu ...
 
                 jsonObj.put("resolution", "BEST");
@@ -763,7 +770,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
                 jsonObj.put("resume_time", "0");
-
 
 
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
@@ -1091,6 +1097,28 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             pDialog = null;
 
         }
+
+        ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
+
+        for (int i = 0; i < languageListOutputArray.size(); i++) {
+            String language_id = languageListOutputArray.get(i).getLanguageCode();
+            String language_name = languageListOutputArray.get(i).getLanguageName();
+
+
+            LanguageModel languageModel = new LanguageModel();
+            languageModel.setLanguageId(language_id);
+            languageModel.setLanguageName(language_name);
+
+            if (default_Language.equalsIgnoreCase(language_id)) {
+                languageModel.setIsSelected(true);
+            } else {
+                languageModel.setIsSelected(false);
+            }
+            languageModels.add(languageModel);
+        }
+
+        languageModel = languageModels;
+        ShowLanguagePopup();
     }
 
     @Override
@@ -1101,6 +1129,12 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
     @Override
     public void onLogoutPostExecuteCompleted(int code, String status, String message) {
+
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+        }
+
         if (status == null) {
             Toast.makeText(Episode_list_Activity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
@@ -1263,7 +1297,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         isLogin = preferenceManager.getLoginFeatureFromPref();
         playerModel = new Player();
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
-        episodeListOptionMenuHandler=new EpisodeListOptionMenuHandler(this);
+        episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
        /* mCastStateListener = new CastStateListener() {
             @Override
             public void onCastStateChanged(int newState) {
@@ -2801,7 +2835,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu,preferenceManager,languagePreference);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
 
         return true;
     }
@@ -3474,12 +3508,11 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && requestCode == 1001)
-        {
+        if (resultCode == RESULT_OK && requestCode == 1001) {
             if (data.getStringExtra("yes").equals("1002")) {
                 watch_status_String = "halfplay";
                 seek_status = "first_time";
-                Played_Length = Util.dataModel.getPlayPos()*1000;
+                Played_Length = Util.dataModel.getPlayPos() * 1000;
                 PlayThroughChromeCast();
 
             } else {
@@ -3487,11 +3520,10 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 Played_Length = 0;
                 PlayThroughChromeCast();
             }
-        }
-        else if(resultCode == RESULT_OK && requestCode == 2001){
-            if (data.getStringExtra("yes").equals("2002")){
+        } else if (resultCode == RESULT_OK && requestCode == 2001) {
+            if (data.getStringExtra("yes").equals("2002")) {
 
-                mSelectedMedia=Util.mSendingMedia;
+                mSelectedMedia = Util.mSendingMedia;
 
 
 //                Toast.makeText(this, "Now again in details", Toast.LENGTH_SHORT).show();
@@ -3503,16 +3535,14 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 startActivityForResult(resumeIntent, 1007);
 
             }
-        }
-        else if(resultCode == RESULT_OK && requestCode == 1007)
-        {
+        } else if (resultCode == RESULT_OK && requestCode == 1007) {
 
             if (data.getStringExtra("yes").equals("1002")) {
 
-                Log.v("pratik","resumed...");
+                Log.v("pratik", "resumed...");
                 watch_status_String = "halfplay";
                 seek_status = "first_time";
-                Played_Length = Util.dataModel.getPlayPos()*1000;
+                Played_Length = Util.dataModel.getPlayPos() * 1000;
                 togglePlayback();
 
             } else {
@@ -3520,11 +3550,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 Played_Length = 0;
                 togglePlayback();
             }
-        }
-        else
-        {
-            if(requestCode != 1007 && requestCode!=2001){
-                Log.v("pratik","else conditn called");
+        } else {
+            if (requestCode != 1007 && requestCode != 2001) {
+                Log.v("pratik", "else conditn called");
                 watch_status_String = "strat";
                 Played_Length = 0;
                 PlayThroughChromeCast();
@@ -3692,6 +3720,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             }
         }
     }
+
     public void handleActionForValidateSonyUserPayment(String validUserStr, String message, String subscription_Str) {
         if (validUserStr != null) {
 

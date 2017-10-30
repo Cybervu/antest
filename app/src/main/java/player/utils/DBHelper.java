@@ -162,47 +162,52 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public ContactModel1 getContact(String id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        ContactModel1 contactModel= null;
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = null;
-
-
-        cursor = db.query(TABLE_NAME, new String[]{COLUMN_ID,
-                        COLUMN_MUVI_ID,
-                        COLUMN_DOWNLOADID,
-                        COLUMN_DOWNLOAD_PROGRESS,COLUMN_DOWNLOAD_USERNAME,COLUMN_DOWNLOAD_UNIQUEID, COLUMN_DOWNLOAD_STATUS,
-
-                        COLUMN_POSTER,COLUMN_MUVI_TOKEN,COLUMN_FILE_PATH,COLUMN_CONTENT_ID,COLUMN_GENERE,COLUMN_MUVIID,COLUMN_DURATION,COLUMN_STREAMID,
+            Cursor cursor = null;
 
 
+            cursor = db.query(TABLE_NAME, new String[]{COLUMN_ID,
+                            COLUMN_MUVI_ID,
+                            COLUMN_DOWNLOADID,
+                            COLUMN_DOWNLOAD_PROGRESS,COLUMN_DOWNLOAD_USERNAME,COLUMN_DOWNLOAD_UNIQUEID, COLUMN_DOWNLOAD_STATUS,
 
-                }, COLUMN_DOWNLOAD_UNIQUEID + "=?",
-                new String[]{id}, null, null, null, null);
-
-        ContactModel1 contactModel=null;
-
-        if (cursor != null && cursor.moveToFirst()) {
-
-
-            contactModel = new ContactModel1();
-            contactModel.setID(cursor.getString(0));
-            contactModel.setMUVIID(cursor.getString(1));
-            contactModel.setDOWNLOADID(cursor.getInt(2));
-            contactModel.setProgress(cursor.getInt(3));
-            contactModel.setUSERNAME(cursor.getString(4));
-            contactModel.setUniqueId(cursor.getString(5));
-            contactModel.setDSTATUS(cursor.getInt(6));
+                            COLUMN_POSTER,COLUMN_MUVI_TOKEN,COLUMN_FILE_PATH,COLUMN_CONTENT_ID,COLUMN_GENERE,COLUMN_MUVIID,COLUMN_DURATION,COLUMN_STREAMID,
 
 
-            contactModel.setPoster(cursor.getString(7));
-            contactModel.setToken(cursor.getString(8));
-            contactModel.setPath(cursor.getString(9));
-            contactModel.setContentid(cursor.getString(10));
-            contactModel.setGenere(cursor.getString(11));
-            contactModel.setMuviid(cursor.getString(12));
-            contactModel.setDuration(cursor.getString(13));
-            contactModel.setStreamId(cursor.getString(14));
 
+                    }, COLUMN_DOWNLOAD_UNIQUEID + "=?",
+                    new String[]{id}, null, null, null, null);
+
+            contactModel = null;
+
+            if (cursor != null && cursor.moveToFirst()) {
+
+
+                contactModel = new ContactModel1();
+                contactModel.setID(cursor.getString(0));
+                contactModel.setMUVIID(cursor.getString(1));
+                contactModel.setDOWNLOADID(cursor.getInt(2));
+                contactModel.setProgress(cursor.getInt(3));
+                contactModel.setUSERNAME(cursor.getString(4));
+                contactModel.setUniqueId(cursor.getString(5));
+                contactModel.setDSTATUS(cursor.getInt(6));
+
+
+                contactModel.setPoster(cursor.getString(7));
+                contactModel.setToken(cursor.getString(8));
+                contactModel.setPath(cursor.getString(9));
+                contactModel.setContentid(cursor.getString(10));
+                contactModel.setGenere(cursor.getString(11));
+                contactModel.setMuviid(cursor.getString(12));
+                contactModel.setDuration(cursor.getString(13));
+                contactModel.setStreamId(cursor.getString(14));
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return contactModel;
