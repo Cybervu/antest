@@ -89,6 +89,7 @@ public class EpisodeListOptionMenuHandler{
                 login_menu, register_menu, mydownload_menu, favorite_menu, mediaRouteMenuItem, menu_language,action_searchmenu;
 
         filter_menu = menu.findItem(R.id.action_filter);
+        filter_menu.setVisible(true);
         menu_language = menu.findItem(R.id.menu_item_language);
         login_menu = menu.findItem(R.id.action_login);
         profile_menu = menu.findItem(R.id.menu_item_profile);

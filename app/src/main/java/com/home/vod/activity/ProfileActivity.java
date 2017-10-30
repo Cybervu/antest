@@ -30,6 +30,7 @@ import com.home.apisdk.apiModel.Get_UserProfile_Input;
 import com.home.apisdk.apiModel.Get_UserProfile_Output;
 import com.home.apisdk.apiModel.Update_UserProfile_Input;
 import com.home.apisdk.apiModel.Update_UserProfile_Output;
+import com.home.vod.ProfileHandler;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
@@ -89,7 +90,8 @@ public class ProfileActivity extends AppCompatActivity implements
     SharedPreferences loginPref;
 
     ImageView bannerImageView;
-    EditText editConfirmPassword, editNewPassword, editProfileNameEditText;
+    ProfileHandler profileHandler;
+    EditText editConfirmPassword, editNewPassword;
     EditText emailAddressEditText;
     Button changePassword, update_profile, manage_devices;
 
@@ -129,7 +131,9 @@ public class ProfileActivity extends AppCompatActivity implements
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         editNewPassword = (EditText) findViewById(R.id.editNewPassword);
         editConfirmPassword = (EditText) findViewById(R.id.editConfirmPassword);
-        editProfileNameEditText = (EditText) findViewById(R.id.editProfileNameEditText);
+        profileHandler=new ProfileHandler(this);
+        // editProfileNameEditText = (EditText) findViewById(R.id.editProfileNameEditText);
+
         emailAddressEditText = (EditText) findViewById(R.id.emailAddressEditText);
         changePassword = (Button) findViewById(R.id.changePasswordButton);
         update_profile = (Button) findViewById(R.id.update_profile);
@@ -148,7 +152,7 @@ public class ProfileActivity extends AppCompatActivity implements
         language_spinner = (Spinner) findViewById(R.id.languageSpinner);
         country_spinner.setVisibility(View.GONE);
         language_spinner.setVisibility(View.GONE);
-        FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), editProfileNameEditText);
+        // FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), editProfileNameEditText);
         FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), editConfirmPassword);
 
         FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.light_fonts), editNewPassword);
@@ -156,7 +160,7 @@ public class ProfileActivity extends AppCompatActivity implements
         FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts), update_profile);
         FontUtls.loadFont(ProfileActivity.this, getResources().getString(R.string.regular_fonts), manage_devices);
 
-        editProfileNameEditText.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
+        //  editProfileNameEditText.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
         editConfirmPassword.setHint(languagePreference.getTextofLanguage(CONFIRM_PASSWORD, DEFAULT_CONFIRM_PASSWORD));
         editNewPassword.setHint(languagePreference.getTextofLanguage(NEW_PASSWORD, DEFAULT_NEW_PASSWORD));
         changePassword.setText(languagePreference.getTextofLanguage(CHANGE_PASSWORD, DEFAULT_CHANGE_PASSWORD));
@@ -323,7 +327,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
                         } else {
                             if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
-                                UpdateProfile();
+                                UpdateProfile(profileHandler.final_name);
                                 editConfirmPassword.setText("");
                                 editNewPassword.setText("");
                                 editConfirmPassword.setVisibility(View.GONE);
@@ -338,7 +342,7 @@ public class ProfileActivity extends AppCompatActivity implements
                         editNewPassword.setText("");
                         editConfirmPassword.setVisibility(View.GONE);
                         editNewPassword.setVisibility(View.GONE);
-                        editProfileNameEditText.requestFocus();
+                        // editProfileNameEditText.requestFocus();
                     }
                     /*editOldPassword.setText("");
                     editNewPassword.setText("");*/
@@ -364,28 +368,18 @@ public class ProfileActivity extends AppCompatActivity implements
             }
         });
 
+
+
+
+
+
+
         update_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (editProfileNameEditText.getText().toString().matches("")) {
-                    ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
+                profileHandler.updateProfileHandler();
 
-                } else if (!editConfirmPassword.getText().toString().matches(editNewPassword.getText().toString().trim())) {
-                    ShowDialog(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE), languagePreference.getTextofLanguage(PASSWORDS_DO_NOT_MATCH, DEFAULT_PASSWORDS_DO_NOT_MATCH));
-
-                } else {
-                    if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
-
-                        InputMethodManager inputManager = (InputMethodManager)
-                                getSystemService(Context.INPUT_METHOD_SERVICE);
-
-                        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                                InputMethodManager.HIDE_NOT_ALWAYS);
-
-                        UpdateProfile();
-                    }
-                }
               /*  boolean isNetwork = Util.checkNetwork(ProfileActivity.this);
 
                 if (isNetwork) {
@@ -444,12 +438,12 @@ public class ProfileActivity extends AppCompatActivity implements
         dlgAlert.create().show();
     }
 
-    public void UpdateProfile() {
+    public void UpdateProfile(String name) {
 
         Update_UserProfile_Input update_userProfile_input = new Update_UserProfile_Input();
         update_userProfile_input.setAuthToken(authTokenStr);
         update_userProfile_input.setUser_id(preferenceManager.getUseridFromPref().trim());
-        update_userProfile_input.setName(editProfileNameEditText.getText().toString().trim());
+        update_userProfile_input.setName(name);
         String confirmPasswordStr = editNewPassword.getText().toString().trim();
         if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")) {
             update_userProfile_input.setPassword(confirmPasswordStr.trim());
@@ -482,7 +476,7 @@ public class ProfileActivity extends AppCompatActivity implements
         if (code > 0) {
             if (code == 200) {
                 String confirmPasswordStr = editNewPassword.getText().toString().trim();
-                name_of_user.setText(editProfileNameEditText.getText().toString().trim());
+                name_of_user.setText(profileHandler.final_name);
                 if (!confirmPasswordStr.trim().equalsIgnoreCase("") &&
                         !confirmPasswordStr.isEmpty() &&
                         !confirmPasswordStr.equalsIgnoreCase("null") &&
@@ -796,7 +790,7 @@ public class ProfileActivity extends AppCompatActivity implements
         Language_arrayAdapter.notifyDataSetChanged();
 
 
-        editProfileNameEditText.setText(get_userProfile_output.getDisplay_name());
+        profileHandler.setNameTxt(get_userProfile_output.getDisplay_name());
         name_of_user.setText(get_userProfile_output.getDisplay_name());
         emailAddressEditText.setText(get_userProfile_output.getEmail());
         if (get_userProfile_output.getProfile_image().matches(NO_DATA)) {
@@ -1138,5 +1132,10 @@ public class ProfileActivity extends AppCompatActivity implements
 
         removeFocusFromViews();
 
+    }
+
+
+    public boolean passwordMatchValidation(){
+        return editConfirmPassword.getText().toString().matches(editNewPassword.getText().toString().trim());
     }
 }

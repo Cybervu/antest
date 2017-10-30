@@ -131,9 +131,11 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FIRST_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GOOGLE_FCM_TOKEN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_RESTRICT_DEVICE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LAST_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
@@ -153,10 +155,12 @@ import static com.home.vod.preferences.LanguagePreference.EMAIL_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
+import static com.home.vod.preferences.LanguagePreference.FIRST_NAME;
 import static com.home.vod.preferences.LanguagePreference.GOOGLE_FCM_TOKEN;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.LAST_NAME;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
@@ -465,10 +469,10 @@ public class RegisterActivity extends AppCompatActivity implements
     GetValidateUserAsynTask asynValidateUserDetails;
     String movieVideoUrlStr = "";
     private ImageView registerImageView;
-    private EditText editEmail, editName, editPassword, editConfirmPassword;
+    private EditText editEmail, editName, editPassword, editConfirmPassword,editName_first,editName_last;
     private Button registerButton;
     private TextView alreadyMemmberText, loginTextView;
-    String regNameStr, regEmailStr, regPasswordStr, regConfirmPasswordStr;
+    String  regEmailStr, regPasswordStr, regConfirmPasswordStr;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     String registrationIdStr;
@@ -543,7 +547,11 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
         registerImageView = (ImageView) findViewById(R.id.registerImageView);
-        editName = (EditText) findViewById(R.id.editNameStr);
+        /*editName = (EditText) findViewById(R.id.editNameStr);
+
+        editName_first = (EditText) findViewById(R.id.editNameStr_first);
+        editName_last = (EditText) findViewById(R.id.editNameStr_last);*/
+
         editEmail = (EditText) findViewById(R.id.editEmailStr);
         editPassword = (EditText) findViewById(R.id.editPasswordStr);
         editConfirmPassword = (EditText) findViewById(R.id.editConfirmPasswordStr);
@@ -551,7 +559,11 @@ public class RegisterActivity extends AppCompatActivity implements
         alreadyMemmberText = (TextView) findViewById(R.id.alreadyMemberText);
         loginTextView = (TextView) findViewById(R.id.alreadyHaveALoginButton);
 
-        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName);
+        /*FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName_first);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName_last);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName);*/
+
+
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editEmail);
 
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editPassword);
@@ -560,7 +572,12 @@ public class RegisterActivity extends AppCompatActivity implements
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), alreadyMemmberText);
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), loginTextView);
 
-        editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
+
+        /*editName_first.setHint(languagePreference.getTextofLanguage(FIRST_NAME,DEFAULT_FIRST_NAME));
+        editName_last.setHint(languagePreference.getTextofLanguage(LAST_NAME,DEFAULT_LAST_NAME));
+        editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));*/
+
+
         editEmail.setHint(languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
         editPassword.setHint(languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD));
         editConfirmPassword.setHint(languagePreference.getTextofLanguage(CONFIRM_PASSWORD, DEFAULT_CONFIRM_PASSWORD));
@@ -626,7 +643,8 @@ public class RegisterActivity extends AppCompatActivity implements
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                registerButtonClicked();
+                registerUIHandler.getRegisterName();
+               // registerButtonClicked();
             }
         });
 
@@ -770,15 +788,20 @@ public class RegisterActivity extends AppCompatActivity implements
     }
 
 
-    public void registerButtonClicked() {
+    public void registerButtonClicked(String name) {
 
-        regNameStr = editName.getText().toString().trim();
+     /*   regNameStr_first = editName_first.getText().toString().trim();
+        regNameStr_last = editName_last.getText().toString().trim();
+        regNameStr = editName.getText().toString().trim();*/
+
+
         regEmailStr = editEmail.getText().toString();
         regPasswordStr = editPassword.getText().toString();
         regConfirmPasswordStr = editConfirmPassword.getText().toString();
 
         if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
-            if (!regNameStr.matches("") && (!regEmailStr.matches("")) && (!regPasswordStr.matches("")) && !regNameStr.equals("")) {
+           // if (!regNameStr.matches("") && (!regEmailStr.matches("")) && (!regPasswordStr.matches("")) && !regNameStr.equals("")) {
+            if ((!regEmailStr.matches("")) && (!regPasswordStr.matches(""))){
                 boolean isValidEmail = Util.isValidMail(regEmailStr);
                 if (isValidEmail) {
                     if (regPasswordStr.equals(regConfirmPasswordStr)) {
@@ -786,7 +809,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
                         Registration_input registration_input = new Registration_input();
                         registration_input.setAuthToken(authTokenStr);
-                        registration_input.setName(regNameStr);
+                        registration_input.setName(name);
                         registration_input.setEmail(regEmailStr);
                         registration_input.setPassword(regPasswordStr);
                         registration_input.setCustom_country(registerUIHandler.selected_Country_Id);

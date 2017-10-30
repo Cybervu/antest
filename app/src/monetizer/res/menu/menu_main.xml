@@ -37,6 +37,7 @@
         android:icon="@drawable/filter"
         android:orderInCategory="101"
         app:showAsAction="always|never"
+        android:visible="true"
         />
 
     <item

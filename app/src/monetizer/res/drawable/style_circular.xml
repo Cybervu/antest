@@ -32,9 +32,9 @@
                     android:toDegrees="360" />
 
                 <gradient
-                    android:centerColor="#ff0400"
-                    android:endColor="#ff0400"
-                    android:startColor="#ff0400"
+                    android:centerColor="@color/buttonBackgroundColor"
+                    android:endColor="@color/buttonBackgroundColor"
+                    android:startColor="@color/buttonBackgroundColor"
                     android:type="sweep" />
             </shape>
         </rotate>
