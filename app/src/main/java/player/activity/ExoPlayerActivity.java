@@ -562,12 +562,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         //Check for offline content // Added By sanjay
         mediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
         download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
-        if (content_types_id!=4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
+        if (content_types_id!=4 && playerModel.getIsOffline().equals("1")  && playerModel.getDownloadStatus().equals("1")) {
             //download_layout.setVisibility(View.VISIBLE);
             handleOfflineInExoplayer.handleVisibelUnvisibleDownload(download_layout);
         }
         /*if (content_types_id != 4) {
             download_layout.setVisibility(View.VISIBLE);
+
         }*/
 
 

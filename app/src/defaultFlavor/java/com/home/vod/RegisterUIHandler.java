@@ -31,12 +31,16 @@ public class RegisterUIHandler {
     List<String> country_List, country_Code_List,language_List,language_Code_List;
     Spinner country_spinner, language_spinner;
     ArrayAdapter<String> Language_arrayAdapter, Country_arrayAdapter;
-    public  String selected_Language_Id="", selected_Country_Id="";
+    public  String selected_Language_Id="", selected_Country_Id="",regNameStr;
+    private EditText editName;
+    private LanguagePreference languagePreference;
 
     public RegisterUIHandler(Activity context){
         this.context=context;
         country_spinner = (Spinner) context.findViewById(R.id.countrySpinner);
         language_spinner = (Spinner) context.findViewById(R.id.languageSpinner);
+        editName = (EditText) context.findViewById(R.id.editNameStr);
+        languagePreference = LanguagePreference.getLanguagePreference(context);
     }
     public void setCountryList(PreferenceManager preferenceManager){
 
@@ -142,7 +146,19 @@ public class RegisterUIHandler {
 
 
     public void setTermsTextView(LanguagePreference languagePreference) {
+        FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName);
+        editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
+
     }
+    public void getRegisterName(){
+        regNameStr = editName.getText().toString().trim();
+        if (!regNameStr.equals("")) {
+            ((RegisterActivity) context).registerButtonClicked(regNameStr);
+        }else {
+            Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void callFblogin(final CallbackManager callbackManager, Button loginButton, LanguagePreference languagePreference){
 
     }

@@ -38,7 +38,7 @@
             android:layout_below="@id/imageView"
             android:layout_marginBottom="@dimen/name_user_margin_bottom"
             android:layout_marginTop="@dimen/payment_relative_margin"
-            android:background="@color/textColor" />
+            android:background="@color/borderColor" />
 
 
     </LinearLayout>

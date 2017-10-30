@@ -12,7 +12,7 @@
         android:layout_height="35dp"
         android:button="@drawable/radiobutton_style"
         android:text="720p "
-        android:textColor="@color/resumeTextColor"
+        android:textColor="@color/downloadresolutionTextColor"
         android:textSize="15dp" />
 
 

@@ -266,7 +266,7 @@
                         android:ellipsize="end"
                         android:text=""
                         android:textColor="@color/movieTitleColor"
-                        android:textSize="@dimen/forgot_text_size"
+                        android:textSize="@dimen/movie_videotitle_size"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:visibility="gone"
                         android:layout_above="@+id/videoGenreTextView"

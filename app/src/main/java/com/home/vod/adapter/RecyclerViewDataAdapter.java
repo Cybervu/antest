@@ -42,7 +42,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
     private  boolean firstTime;
     private ArrayList<String> bannerUrls = new ArrayList<String>();
     String pemalink;
-   // String image;
+    // String image;
     int vertical = 0;
     boolean loaded = false;
     //int counter=0;
@@ -108,21 +108,24 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
 //            if (MainActivity.vertical == 1) {
 
 
-        if (Util.image_orentiation == 1) {
-            float density = mContext.getResources().getDisplayMetrics().density;
-            if (density >= 3.5 && density <= 4.0) {
-                itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);
-            }else  if (density <= 1.5) {
-                itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card_small);
+        try {
+            if (Util.image_orentiation == 1) {
+                float density = mContext.getResources().getDisplayMetrics().density;
+                if (density >= 3.5 && density <= 4.0) {
+                    itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);
+                }else  if (density <= 1.5) {
+                    itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card_small);
+                }else{
+                    itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card_nexus);
+                }
+                //  itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);
+
             }else{
-                itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card_nexus);
+                itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.home_280_card);
+
             }
-            //  itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);
+        }catch (Exception e){e.printStackTrace();}
 
-        }else{
-            itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.home_280_card);
-
-        }
 
         itemRowHolder.recycler_view_list.setHasFixedSize(true);
         itemRowHolder.recycler_view_list.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
@@ -273,10 +276,10 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
             if(!firstTime){
                 firstTime = true;
                 //for dynamic banner
-               loadDynamicBanners(mDemoSlider,view,this);
+                loadDynamicBanners(mDemoSlider,view,this);
 
-               // for static banner
-              // loadStaticBanners(mDemoSlider,view,this);
+                // for static banner
+                // loadStaticBanners(mDemoSlider,view,this);
 
             }
 

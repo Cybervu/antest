@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 import com.home.vod.activity.Episode_list_Activity;
+import com.home.vod.activity.LoginActivity;
 import com.home.vod.activity.MovieDetailsActivity;
+import com.home.vod.activity.RegisterActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 
 import static com.home.vod.util.Util.showActivateSubscriptionWatchVideoAleart;
