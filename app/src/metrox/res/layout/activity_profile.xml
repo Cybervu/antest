@@ -123,7 +123,7 @@
                         android:padding="@dimen/profile_new_passwd_editText_padding"
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
-                        android:textSize="@dimen/changepas_edittest"
+                        android:textSize="@dimen/edit_text_size"
                         android:visibility="gone" />
 
                     <Button

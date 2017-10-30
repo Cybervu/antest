@@ -10,6 +10,16 @@ public class ContactModel1 {
     private String release_date;
     private String story;
 
+    private String SreamId="";
+
+    public String getStreamId() {
+        return SreamId;
+    }
+
+    public void setStreamId(String SreamId) {
+        this.SreamId = SreamId;
+    }
+
     public String getCensor_rating() {
         return censor_rating;
     }
@@ -104,6 +114,16 @@ public class ContactModel1 {
     private String genere;
     private String muviid;
     private String duration;
+
+    private String download_content_type="";
+
+    public String getDownloadContentType() {
+        return download_content_type;
+    }
+
+    public void setDownloadContentType(String download_content_type) {
+        this.download_content_type = download_content_type;
+    }
 
     public String getUniqueId() {
         return UniqueId;

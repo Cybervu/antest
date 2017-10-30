@@ -44,10 +44,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editNameStr"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/login_maring_top"
+                android:layout_margin="@dimen/login_maring_top"
                 android:drawablePadding="@dimen/Login_drawing_padding"
                 android:paddingBottom="@dimen/login_padding_bottom"
                 android:paddingTop="@dimen/login_padding_bottom"
+
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
                 android:textSize="@dimen/email_text_size"/>
@@ -58,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editEmailStr"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/login_maring_top"
+                android:layout_margin="@dimen/login_maring_top"
                 android:drawablePadding="@dimen/login_padding"
                 android:inputType="textPassword"
                 android:paddingBottom="@dimen/login_padding_bottom"
@@ -76,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editPasswordStr"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="@dimen/relative_margin_top"
+                android:layout_margin="@dimen/relative_margin_top"
                 android:orientation="horizontal">
 
                 <TextView
@@ -118,7 +119,7 @@
                 android:background="@drawable/fbbg"
                 android:clickable="true"
                 android:padding="@dimen/login_linear_padding"
-                android:layout_marginTop="@dimen/login_linear_margin_top"
+                android:layout_margin="@dimen/login_linear_margin_top"
                 android:gravity="center_horizontal"
                 android:visibility="visible"
                 android:layout_below="@+id/alreadyLoginLinearLayout"

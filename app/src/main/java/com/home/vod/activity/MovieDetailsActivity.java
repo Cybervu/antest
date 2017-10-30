@@ -702,6 +702,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
         videoCastCrewTitleTextView.setVisibility(View.GONE);
 
+        playButton.setVisibility(View.GONE);
 
         // *** rating***////
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
@@ -4750,14 +4751,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 tracks.add(englishSubtitle);
             }
 
-            mediaInfo = new MediaInfo.Builder(Util.dataModel.getVideoUrl().trim())
-                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-                    .setContentType(mediaContentType)
-                    .setMetadata(movieMetadata)
-                    .setStreamDuration(15 * 1000)
-                    .setCustomData(jsonObj)
-                    .setMediaTracks(tracks)
-                    .build();
+            if (Util.dataModel!=null) {
+                mediaInfo = new MediaInfo.Builder(Util.dataModel.getVideoUrl().trim())
+                        .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                        .setContentType(mediaContentType)
+                        .setMetadata(movieMetadata)
+                        .setStreamDuration(15 * 1000)
+                        .setCustomData(jsonObj)
+                        .setMediaTracks(tracks)
+                        .build();
+            }
             mSelectedMedia = mediaInfo;
 
 
@@ -4767,8 +4770,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
     @Override
     public void onAddToFavPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(MovieDetailsActivity.this);
-        pDialog.show();
+        if (pDialog!=null && pDialog.isShowing()) {
+        }else {
+            pDialog = new ProgressBarHandler(MovieDetailsActivity.this);
+            pDialog.show();
+        }
     }
 
     @Override
@@ -4777,7 +4783,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         isFavorite = 1;
         MovieDetailsActivity.this.sucessMsg = sucessMsg;
         showToast();
-        if (pDialog.isShowing() && pDialog != null) {
+        if (pDialog != null && pDialog.isShowing()) {
             pDialog.hide();
         }
     }
@@ -5111,8 +5117,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
     @Override
     public void onDeleteFavPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(MovieDetailsActivity.this);
-        pDialog.show();
+      /*  pDialog = new ProgressBarHandler(MovieDetailsActivity.this);
+        pDialog.show();*/
+        if (pDialog!=null && pDialog.isShowing()) {
+        }else {
+            pDialog = new ProgressBarHandler(MovieDetailsActivity.this);
+            pDialog.show();
+        }
 
     }
 
@@ -5122,7 +5133,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         MovieDetailsActivity.this.sucessMsg = sucessMsg;
         showToast();
         isFavorite = 0;
-        if (pDialog.isShowing() && pDialog != null) {
+        if (pDialog != null && pDialog.isShowing()) {
             pDialog.hide();
         }
     }
