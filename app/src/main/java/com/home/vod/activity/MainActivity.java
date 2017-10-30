@@ -11,11 +11,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
@@ -36,10 +34,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.androidquery.AQuery;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.cast.MediaInfo;
-import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.CastState;
@@ -50,7 +47,6 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.apiController.GetAppMenuAsync;
 import com.home.apisdk.apiController.GetImageForDownloadAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
-import com.home.apisdk.apiController.GetMenuListAsynctask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiController.SDKInitializer;
@@ -58,11 +54,13 @@ import com.home.apisdk.apiModel.GetMenusInputModel;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
-import com.home.apisdk.apiModel.MenuListInput;
-import com.home.apisdk.apiModel.MenuListOutput;
 import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
+import com.home.vod.MainActivityHeaderHandler;
+import com.home.vod.MyDownloadIntentHandler;
+import com.home.vod.ProfileHandler;
 import com.home.vod.R;
+import com.home.vod.SearchIntentHandler;
 import com.home.vod.SideMenuHandler;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -76,8 +74,8 @@ import com.home.vod.model.LanguageModel;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
-import com.home.vod.util.LogUtil;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -99,53 +97,34 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import io.fabric.sdk.android.Fabric;
+
 import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.HOME;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
-import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
-import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
-import static com.home.vod.preferences.LanguagePreference.LOGIN;
-import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
-import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
-import static com.home.vod.preferences.LanguagePreference.PROFILE;
-import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
-import static player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static player.utils.Util.DEFAULT_IS_CHROMECAST;
-import static player.utils.Util.DEFAULT_IS_OFFLINE;
-import static player.utils.Util.HAS_FAVORITE;
-import static player.utils.Util.IS_CHROMECAST;
-import static player.utils.Util.IS_OFFLINE;
 
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,
@@ -296,6 +275,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         registerReceiver(SUCCESS, new IntentFilter("LOGIN_SUCCESS"));
@@ -312,7 +292,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         /*Set Toolbar*/
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        MainActivityHeaderHandler mainActivityHeaderHandler = new MainActivityHeaderHandler(MainActivity.this);
+        mainActivityHeaderHandler.handleTitle();
         LogUtil.showLog("Abhishek", "Toolbar");
 
         //**** chromecast*************//*
@@ -415,7 +396,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            sideMenuHandler = new SideMenuHandler(MainActivity.this);
+            sideMenuHandler = new SideMenuHandler(MainActivity.this,preferenceManager);
             sideMenuHandler.staticSideMenu(languagePreference,menuList,originalMenuList,preferenceManager,adding_position);
             //sideMenuHandler.addLogoutMenu(languagePreference,menuList,preferenceManager);
 
@@ -438,7 +419,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         switch (item.getItemId()) {
 
             case R.id.action_search:
-                final Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
+                final Intent searchIntent = new SearchIntentHandler(MainActivity.this).handleSearchIntent();
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
                 // Not implemented here
@@ -471,9 +452,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 // Not implemented here
                 return false;
             case R.id.action_mydownload:
-
-                Intent mydownload = new Intent(MainActivity.this, MyDownloads.class);
+                final Intent mydownload = new MyDownloadIntentHandler(MainActivity.this).handleDownloadIntent();
+                mydownload.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(mydownload);
+               /* Intent mydownload = new Intent(MainActivity.this, MyDownloads.class);
+                startActivity(mydownload);*/
                 // Not implemented here
                 return false;
             case R.id.menu_item_language:
@@ -496,7 +479,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 return false;
             case R.id.menu_item_profile:
 
-                Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+                Intent profileIntent = new ProfileHandler(MainActivity.this).handleClickOnEditProfile();
                 profileIntent.putExtra("EMAIL", email);
                 profileIntent.putExtra("LOGID", id);
                 startActivity(profileIntent);
@@ -682,7 +665,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
         else  if (menuList.get(position).getPermalink().equals("profile_Permalink")){
-            Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+            Intent profileIntent = new ProfileHandler(MainActivity.this).handleClickOnEditProfile();
             profileIntent.putExtra("EMAIL", email);
             profileIntent.putExtra("LOGID", id);
             startActivity(profileIntent);
@@ -691,7 +674,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
         else  if (menuList.get(position).getPermalink().equals("mydownload_Permalink")){
-            Intent mydownload = new Intent(MainActivity.this, MyDownloads.class);
+           /* Intent mydownload = new Intent(MainActivity.this, MyDownloads.class);
+            startActivity(mydownload);*/
+            Intent mydownload = new MyDownloadIntentHandler(MainActivity.this).handleDownloadIntent();
             startActivity(mydownload);
             fragment = null;
         }
@@ -700,9 +685,14 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         else  if (menuList.get(position).getPermalink().equals("purchase_Permalink")) {
             Intent purchaseintent = new Intent(MainActivity.this, PurchaseHistoryActivity.class);
             startActivity(purchaseintent);
+
             fragment = null;
         }
-
+        else if(menuList.get(position).getPermalink().equals("favourite_Permalink")){
+            Intent favouriteintent = new Intent(MainActivity.this, FavoriteActivity.class);
+            startActivity(favouriteintent);
+            fragment = null;
+        }
         else  if (menuList.get(position).getPermalink().equals("logout_Permalink")) {
             fragment = null;
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
@@ -944,7 +934,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             Log.v("BIBHU1","menuList size="+adding_position);
             Log.v("BIBHU1","originalMenuList size="+originalMenuList.size());
 
-            sideMenuHandler = new SideMenuHandler(this);
+            sideMenuHandler = new SideMenuHandler(this,preferenceManager);
             sideMenuHandler.staticSideMenu(languagePreference,menuList,originalMenuList,preferenceManager,adding_position);
 
 
@@ -2594,8 +2584,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             ActivityCompat.finishAffinity(this);
             finish();
             System.exit(0);
-        }
-*/
+        }*/
+
 
 
 

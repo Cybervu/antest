@@ -8,14 +8,14 @@
     >
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
 
         >
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/container_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,16 +24,23 @@
             <include
                 android:id="@+id/toolbar"
                 layout="@layout/toolbar" />
-        </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/container_body"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/main_frame_height"
-            android:layout_weight="1" />
 
 
-    </LinearLayout>
+            <FrameLayout
+                android:id="@+id/container_body"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/toolbar"
+                android:layout_weight="1" />
+            <include
+                android:id="@+id/logo_image"
+                layout="@layout/logo_image"
+                />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
 
 
     <fragment

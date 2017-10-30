@@ -54,6 +54,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.androidquery.AQuery;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaTrack;
@@ -197,6 +198,7 @@ import static player.utils.Util.REVIEWS;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
+import io.fabric.sdk.android.Fabric;
 import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
 import player.activity.Player;
@@ -1679,7 +1681,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Fabric.with(this, new Crashlytics());
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
         setContentView(R.layout.activity_show_with_episodes);

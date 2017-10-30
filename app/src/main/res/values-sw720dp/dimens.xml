@@ -140,4 +140,6 @@
     <dimen name="trailer_btn_text_size">18sp</dimen>
 
     <dimen name="plainrow_text_size">20sp</dimen>
+
+
 </resources>

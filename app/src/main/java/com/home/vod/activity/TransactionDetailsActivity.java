@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.home.apisdk.apiController.DeleteInvoicePdfAsynTask;
 import com.home.apisdk.apiController.GetInvoicePdfAsynTask;
 import com.home.apisdk.apiController.TransactionDetailsAsynctask;
@@ -57,6 +58,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import io.fabric.sdk.android.Fabric;
 
 import static com.home.vod.preferences.LanguagePreference.AMOUNT;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
@@ -138,6 +141,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_transaction_details);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);

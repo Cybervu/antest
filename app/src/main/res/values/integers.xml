@@ -17,5 +17,33 @@
 <resources>
 
     <integer name="column_count">3</integer>
+   <!-- <integer name="configuration_xlarge_4">3</integer>
+    <integer name="configuration_normal_2">2</integer>
+    <integer name="configuration_large_3">3</integer>
+    <integer name="configuration_xlarge_5">4</integer>
 
+-->
+    <integer name="configuration_xlarge_horizontal">3</integer>
+    <integer name="configuration_normal_horizontal">2</integer>
+    <integer name="configuration_large_horizontal">3</integer>
+    <integer name="configuration_small_horizontal">4</integer>
+
+    <integer name="tutorial_configuration_large_3">3</integer>
+    <integer name="tutorial_configuration_xlarge_4">3</integer>
+
+
+    <integer name="configuration_xlarge_vertical">3</integer>
+    <integer name="configuration_normal_vertical">2</integer>
+    <integer name="configuration_large_vertical">3</integer>
+    <integer name="configuration_small_vertical">4</integer>
+
+    <integer name="fav_configuration_xlarge_horizontal">3</integer>
+    <integer name="fav_configuration_normal_horizontal">2</integer>
+    <integer name="fav_configuration_large_horizontal">3</integer>
+    <integer name="fav_configuration_small_horizontal">4</integer>
+
+    <integer name="fav_configuration_xlarge_vertical">3</integer>
+    <integer name="fav_configuration_normal_vertical">2</integer>
+    <integer name="fav_configuration_large_vertical">3</integer>
+    <integer name="fav_configuration_small_vertical">4</integer>
 </resources>

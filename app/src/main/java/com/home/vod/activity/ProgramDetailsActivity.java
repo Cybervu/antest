@@ -43,6 +43,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.androidquery.AQuery;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaTrack;
@@ -72,7 +73,9 @@ import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.vod.BuildConfig;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.MonetizationHandler;
+import com.home.vod.MyDownloadIntentHandler;
 import com.home.vod.R;
+import com.home.vod.SearchIntentHandler;
 import com.home.vod.adapter.ProgramDetailsAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
@@ -105,6 +108,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import io.fabric.sdk.android.Fabric;
 import player.activity.AdPlayerActivity;
 import player.activity.Player;
 
@@ -946,7 +950,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_program_details);
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         playButton = (ImageView) findViewById(R.id.playButton);
@@ -1252,7 +1256,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         switch (item.getItemId()) {
 
             case R.id.action_search:
-                final Intent searchIntent = new Intent(ProgramDetailsActivity.this, SearchActivity.class);
+                final Intent searchIntent = new SearchIntentHandler(ProgramDetailsActivity.this).handleSearchIntent();
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
                 // Not implemented here
@@ -1286,7 +1290,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 return false;
             case R.id.action_mydownload:
 
-                Intent mydownload = new Intent(ProgramDetailsActivity.this, MyDownloads.class);
+                final Intent mydownload = new MyDownloadIntentHandler(ProgramDetailsActivity.this).handleDownloadIntent();
                 startActivity(mydownload);
                 // Not implemented here
                 return false;

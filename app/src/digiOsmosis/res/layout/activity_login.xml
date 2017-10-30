@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_centerInParent="true"
-    android:background="@drawable/register_background"
-   >
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true">
 
-    <include android:id="@+id/toolbar"
-        layout="@layout/toolbar"/>
+    <include
+        android:id="@+id/toolbar"
+        android:visibility="gone"
+        layout="@layout/toolbar" />
 
     <ScrollView
+        android:id="@+id/loginScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:background="@color/transparent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="17dp">
+        android:background="@color/transparent"
+        android:fillViewport="true">
 
 
         <LinearLayout
+            android:id="@+id/loginParentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/login_padding"
-            android:gravity="center"
-            android:layout_gravity="center"
             android:layout_marginLeft="@dimen/layout_padding_left"
             android:layout_marginRight="@dimen/layout_padding_right"
             android:background="@color/transparent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/login_padding"
 
             >
 
@@ -37,9 +37,10 @@
                 android:layout_width="@dimen/forgot_logo_width"
                 android:layout_height="@dimen/forgot_logo_height"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/loginImageViewMarging_top"
+                android:layout_marginTop="@dimen/loginMarging_top"
                 android:background="@drawable/logo"
                 android:paddingTop="@dimen/login_padding" />
+
             <EditText
                 android:id="@+id/editEmailStr"
                 android:layout_width="match_parent"
@@ -47,25 +48,26 @@
                 android:layout_below="@+id/editNameStr"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/login_maring_top"
+                android:drawableLeft="@drawable/name"
                 android:drawablePadding="@dimen/Login_drawing_padding"
+                android:hint="Enter your eMAIL aDDRESS"
                 android:paddingBottom="@dimen/login_padding_bottom"
                 android:paddingTop="@dimen/login_padding_bottom"
-                android:drawableLeft="@drawable/name"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
-                android:hint="Enter your eMAIL aDDRESS"
                 android:textSize="@dimen/email_text_size" />
+
             <EditText
                 android:id="@+id/editPasswordStr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter your pASSWORD"
-
                 android:layout_below="@+id/editEmailStr"
+
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/login_maring_top"
-                android:drawablePadding="@dimen/login_padding"
                 android:drawableLeft="@drawable/pwd"
+                android:drawablePadding="@dimen/login_padding"
+                android:hint="Enter your pASSWORD"
                 android:inputType="textPassword"
                 android:paddingBottom="@dimen/login_padding_bottom"
                 android:paddingTop="@dimen/login_padding_bottom"
@@ -79,70 +81,64 @@
                 android:id="@+id/loginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/marginLeft15dp"
                 android:background="@drawable/my_button"
-                android:textColor="@color/buttonTextColor"
-                android:textSize="@dimen/submit_text_size"
+                android:ellipsize="end"
                 android:gravity="center"
                 android:padding="@dimen/button_padding"
                 android:stateListAnimator="@null"
                 android:textAllCaps="true"
-                android:layout_marginTop="@dimen/marginLeft15dp"
-                android:ellipsize="end"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-
-
-
+                android:textColor="@color/buttonTextColor"
+                android:textSize="@dimen/submit_text_size" />
 
 
             <TextView
                 android:id="@+id/forgotPasswordTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/forgotPasswordTextViewColor"
-                android:maxLines="4"
-                android:gravity="right"
                 android:layout_marginTop="@dimen/marginLeft15dp"
+                android:gravity="right"
+                android:maxLines="4"
+                android:textColor="@color/forgotPasswordTextViewColor"
                 android:textSize="@dimen/forgot_text_size" />
 
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/marginLeft15dp"
                 android:layout_gravity="center_horizontal"
-                android:gravity="center">
-
+                android:layout_marginTop="@dimen/marginLeft15dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
 
                 <TextView
                     android:layout_width="@dimen/login_line_width"
                     android:layout_height="1dp"
-                    android:gravity="center"
-                    android:textSize="15dp"
                     android:background="@color/appBackgroundColor"
-                    />
+                    android:gravity="center"
+                    android:textSize="15dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/login_line_gap"
+                    android:layout_marginRight="@dimen/login_line_gap"
                     android:gravity="center"
                     android:text="OR"
                     android:textColor="@color/hint_color"
                     android:textSize="10dp"
-                    android:layout_marginLeft="@dimen/login_line_gap"
-                    android:layout_marginRight="@dimen/login_line_gap"
 
                     />
 
                 <TextView
                     android:layout_width="@dimen/login_line_width"
                     android:layout_height="1dp"
-                    android:gravity="center"
-                    android:textSize="15dp"
                     android:background="@color/appBackgroundColor"
-                    />
+                    android:gravity="center"
+                    android:textSize="15dp" />
 
             </LinearLayout>
 
@@ -150,51 +146,15 @@
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/alreadyLoginLinearLayout"
+                android:layout_marginTop="@dimen/login_linear_margin_top"
                 android:background="@drawable/fbbg"
                 android:clickable="true"
-                android:padding="@dimen/login_linear_padding"
-                android:layout_marginTop="@dimen/login_linear_margin_top"
                 android:gravity="center_horizontal"
-                android:visibility="visible"
-                android:layout_below="@+id/alreadyLoginLinearLayout"
                 android:orientation="horizontal"
-                android:weightSum="1">
-
-                <ImageView
-                    android:id="@+id/fbIcon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/fb_icon"
-                    />
-
-                <TextView
-                    android:id="@+id/fbLoginTextView"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/linear_text_margin"
-                    android:gravity="center"
-                    android:textColor="@color/fb_text_color"
-                    android:textSize="@dimen/fb_text_size"
-                    android:layout_marginLeft="@dimen/linear_text_margin"
-
-                    android:text="@string/fb_login_text"
-                    android:layout_weight="0.11" />
-            </LinearLayout>
-
-           <!-- <LinearLayout
-                android:id="@+id/btnLogin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/fbbg"
-                android:clickable="true"
                 android:padding="@dimen/login_linear_padding"
-                android:layout_marginTop="@dimen/login_linear_margin_top"
-                android:gravity="center_horizontal"
                 android:visibility="visible"
-                android:layout_below="@+id/alreadyLoginLinearLayout"
-                android:orientation="horizontal" >
+                android:weightSum="1">
 
                 <ImageView
                     android:id="@+id/fbIcon"
@@ -209,12 +169,47 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="@dimen/linear_text_margin"
-                    android:gravity="center"
-                    android:textColor="@color/fb_text_color"
-                    android:textSize="@dimen/fb_text_size"
+                    android:layout_marginLeft="@dimen/linear_text_margin"
                     android:layout_weight="0.11"
-                    android:text="@string/fb_login_text" />
-            </LinearLayout>-->
+                    android:gravity="center"
+                    android:text="@string/fb_login_text"
+
+                    android:textColor="@color/fb_text_color"
+                    android:textSize="@dimen/fb_text_size" />
+            </LinearLayout>
+
+            <!-- <LinearLayout
+                 android:id="@+id/btnLogin"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:background="@drawable/fbbg"
+                 android:clickable="true"
+                 android:padding="@dimen/login_linear_padding"
+                 android:layout_marginTop="@dimen/login_linear_margin_top"
+                 android:gravity="center_horizontal"
+                 android:visibility="visible"
+                 android:layout_below="@+id/alreadyLoginLinearLayout"
+                 android:orientation="horizontal" >
+
+                 <ImageView
+                     android:id="@+id/fbIcon"
+                     android:layout_width="18dp"
+                     android:layout_height="18dp"
+                     android:layout_gravity="center_vertical"
+                     android:src="@drawable/fb_icon" />
+
+                 <TextView
+                     android:id="@+id/fbLoginTextView"
+                     android:layout_width="150dp"
+                     android:layout_height="wrap_content"
+                     android:layout_gravity="center_vertical"
+                     android:layout_margin="@dimen/linear_text_margin"
+                     android:gravity="center"
+                     android:textColor="@color/fb_text_color"
+                     android:textSize="@dimen/fb_text_size"
+                     android:layout_weight="0.11"
+                     android:text="@string/fb_login_text" />
+             </LinearLayout>-->
 
             <!--    <TextView android:text="Login With Facebook"
                     android:id="@+id/btnLogin"
@@ -232,15 +227,14 @@
                     android:layout_height="wrap_content" />-->
 
 
-
             <com.facebook.login.widget.LoginButton
-                android:visibility="gone"
                 android:id="@+id/loginWithFacebookButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/login_facebook_margin"
                 android:layout_marginTop="@dimen/login_facebook_margin"
-                android:layout_marginBottom="@dimen/login_facebook_margin" />
+                android:visibility="gone" />
             <!--  <Button
                   android:id="@+id/loginWithFacebookButton"
                   android:layout_width="match_parent"
@@ -255,19 +249,18 @@
                   />-->
 
 
-
             <LinearLayout
                 android:id="@+id/sign_in_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/alreadyLoginLinearLayout"
+                android:layout_marginTop="@dimen/login_linear_margin_top"
                 android:background="@drawable/gbg"
                 android:clickable="true"
-                android:padding="@dimen/login_linear_padding"
-                android:layout_marginTop="@dimen/login_linear_margin_top"
                 android:gravity="center_horizontal"
-                android:visibility="visible"
-                android:layout_below="@+id/alreadyLoginLinearLayout"
                 android:orientation="horizontal"
+                android:padding="@dimen/login_linear_padding"
+                android:visibility="visible"
                 android:weightSum="1">
 
                 <ImageView
@@ -275,8 +268,7 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/google_sign"
-                     />
+                    android:src="@drawable/google_sign" />
 
                 <TextView
                     android:id="@+id/googleTextView"
@@ -284,13 +276,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="@dimen/linear_text_margin"
-                    android:gravity="center"
-                    android:textColor="@color/fb_text_color"
-                    android:textSize="@dimen/fb_text_size"
                     android:layout_marginLeft="@dimen/linear_text_margin"
-
+                    android:layout_weight="0.11"
+                    android:gravity="center"
                     android:text="@string/google_login_text"
-                    android:layout_weight="0.11" />
+
+                    android:textColor="@color/fb_text_color"
+                    android:textSize="@dimen/fb_text_size" />
             </LinearLayout>
 
 
@@ -299,8 +291,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/login_new_user_margin_top"
-                android:orientation="horizontal"
                 android:gravity="center"
+                android:orientation="horizontal"
 
                 android:paddingBottom="@dimen/login_new_user_padding">
 
@@ -313,8 +305,7 @@
                     android:gravity="center"
                     android:text="new user "
                     android:textColor="@color/alreadyMemberTextColor"
-                    android:textSize="@dimen/signup_textsize"
-                    />
+                    android:textSize="@dimen/signup_textsize" />
 
                 <TextView
                     android:id="@+id/signUpTextView"

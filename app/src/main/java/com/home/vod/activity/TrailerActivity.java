@@ -22,6 +22,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import com.home.apisdk.apiController.GetFFVideoLogDetailsAsync;
@@ -50,6 +51,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import io.fabric.sdk.android.Fabric;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -163,6 +166,7 @@ public class TrailerActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_video_player);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);
@@ -354,7 +358,6 @@ public class TrailerActivity extends AppCompatActivity implements
         player_layout_width = player_layout.getWidth();
 
         primary_ll = (LinearLayout) findViewById(R.id.primary_ll);
-        last_ll = (LinearLayout) findViewById(R.id.last_ll);
         last_ll = (LinearLayout) findViewById(R.id.last_ll);
         linearLayout1 = (LinearLayout) findViewById(R.id.linearLayout1);
 
@@ -1195,76 +1198,6 @@ public class TrailerActivity extends AppCompatActivity implements
         current_time_position_timer();
 
     }
-
-//
-//    private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
-//        String responseStr;
-//
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//
-//            try {
-//
-//                // Execute HTTP Post Request
-//                try {
-//                    URL myurl = new URL(Util.loadIPUrl);
-//                    HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
-//                    InputStream ins = con.getInputStream();
-//                    InputStreamReader isr = new InputStreamReader(ins);
-//                    BufferedReader in = new BufferedReader(isr);
-//
-//                    String inputLine;
-//
-//                    while ((inputLine = in.readLine()) != null) {
-//                        System.out.println(inputLine);
-//                        responseStr = inputLine;
-//                    }
-//
-//                    in.close();
-//
-//
-//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-//                    ipAddres = "";
-//
-//                } catch (UnsupportedEncodingException e) {
-//
-//                    ipAddres = "";
-//
-//                } catch (IOException e) {
-//                    ipAddres = "";
-//
-//                }
-//                if (responseStr != null) {
-//                    Object json = new JSONTokener(responseStr).nextValue();
-//                    if (json instanceof JSONObject) {
-//                        ipAddres = ((JSONObject) json).getString("ip");
-//
-//                    }
-//
-//                }
-//
-//            } catch (Exception e) {
-//                ipAddres = "";
-//
-//            }
-//
-//            return null;
-//        }
-//
-//
-//        protected void onPostExecute(Void result) {
-//
-//            if (responseStr == null) {
-//                ipAddres = "";
-//            }
-//            return;
-//        }
-//
-//        protected void onPreExecute() {
-//
-//        }
-//    }
 
 
     private void updateProgressBar() {

@@ -364,16 +364,10 @@
     <dimen name="season_image_height">200dp</dimen>
     <dimen name="card_title_padding">10dp</dimen>
     <dimen name="card_title">23sp</dimen>
+    <dimen name="details_Item_Title">17sp</dimen>
     <dimen name="alreadyMember_Relative_Height">50dp</dimen>
-    
-    <dimen name="configuration_xlarge_4">4dp</dimen>
-    <dimen name="configuration_normal_2">2dp</dimen>
-    <dimen name="configuration_large_3">3dp</dimen>
-    <dimen name="configuration_xlarge_5">5dp</dimen>
 
-    <dimen name="fav_configuration_xlarge_4">4dp</dimen>
-    <dimen name="fav_configuration_normal_2">2dp</dimen>
-    <dimen name="fav_configuration_large_3">3dp</dimen>
-    <dimen name="fav_configuration_xlarge_5">5dp</dimen>
+    <dimen name="search_padding">10dp</dimen>
+    <dimen name="search_view_padding">10dp</dimen>
 
 </resources>

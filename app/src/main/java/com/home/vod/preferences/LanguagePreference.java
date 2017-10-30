@@ -150,7 +150,8 @@ public class LanguagePreference {
 
     public static final String CANCEL_BUTTON = "CANCEL_BUTTON";
     public static final String CONTINUE_BUTTON = "CONTINUE_BUTTON";
-
+    public static final String SEARCH_RESULTS = "SEARCH_RESULTS";
+    public static final String DEFAULT_SEARCH_RESULTS = "SEARCH RESULTS";
 
     public static final String ADD_TO_FAV = "ADD_TO_FAV";
     public static final String ADDED_TO_FAV = "ADDED_TO_FAV";

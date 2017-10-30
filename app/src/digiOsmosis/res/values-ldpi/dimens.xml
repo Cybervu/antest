@@ -189,7 +189,7 @@
     <dimen name="listitemlayout_height">150dp</dimen>
     <dimen name="itemtitle_text_size">16sp</dimen>
 
-    <dimen name="changepas_height">50dp</dimen>
+    <dimen name="changepas_height">40dp</dimen>
     <dimen name="view_margin_top">20dp</dimen>
     <dimen name="registerimg_margin_top">300dp</dimen>
     <dimen name="layout_padding_left">40dp</dimen>
@@ -212,5 +212,6 @@
     <dimen name="user_review_textsize">14sp</dimen>
     <dimen name="downloadwidth">200dp</dimen>
     <dimen name="button_padding">6dp</dimen>
+    <dimen name="loginImageViewMarging_top1">30dp</dimen>
 
 </resources>

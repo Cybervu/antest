@@ -64,9 +64,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/categoryTitleRelativeLayout"
             android:layout_gravity="center_horizontal"
-            android:padding="6dp"
-            android:horizontalSpacing="6dp"
-            android:verticalSpacing="6dp"
+            android:layout_marginBottom="@dimen/marginleft10dp"
+            android:layout_marginLeft="@dimen/marginleft10dp"
+            android:layout_marginRight="@dimen/marginleft10dp"
+            android:layout_marginTop="@dimen/marginleft10dp"
+            android:horizontalSpacing="@dimen/pre_order_button_margin"
+            android:verticalSpacing="@dimen/pre_order_button_margin"
            />
 
     <RelativeLayout

@@ -123,7 +123,7 @@ public class Util {
     public static boolean goToLibraryplayer = false;
     public static boolean my_library_visibility = false;
 
-    public static ArrayList<Integer> image_orentiation = new ArrayList<>();
+    public static int image_orentiation;
 
     public static String GOOGLE_FCM_TOKEN = "GOOGLE_FCM_TOKEN";
     public static String DEFAULT_GOOGLE_FCM_TOKEN = "0";
@@ -542,7 +542,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, RESUME_MESSAGE, DEFAULT_RESUME_MESSAGE,"resume_watching",json);
         setTranslationLanguageToPref(languagePreference, CONTINUE_BUTTON,DEFAULT_CONTINUE_BUTTON     ,"continue",json);
 
-
+        setTranslationLanguageToPref(languagePreference, SEARCH_RESULTS,DEFAULT_SEARCH_RESULTS, "search_results",json);
         setTranslationLanguageToPref(languagePreference, CONFIRM_PASSWORD,DEFAULT_CONFIRM_PASSWORD,"confirm_password",json);
         setTranslationLanguageToPref(languagePreference, CREDIT_CARD_DETAILS,DEFAULT_CREDIT_CARD_DETAILS     ,"credit_card_detail",json);
         setTranslationLanguageToPref(languagePreference, DIRECTOR,""     ,"director",json);

@@ -34,10 +34,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import io.fabric.sdk.android.Fabric;
 import player.subtitle_support.Caption;
 import player.subtitle_support.FormatSRT;
 import player.subtitle_support.FormatSRT_WithoutCaption;
 import player.subtitle_support.TimedTextObject;
+
+import com.crashlytics.android.Crashlytics;
 import com.intertrust.wasabi.Runtime;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.home.vod.R;
@@ -224,6 +227,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Fabric.with(this, new Crashlytics());
 		setContentView(R.layout.activity_video_player);
 		languagePreference = LanguagePreference.getLanguagePreference(this);
 		preferenceManager = PreferenceManager.getPreferenceManager(this);

@@ -12,10 +12,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.home.vod.R;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
+
+import io.fabric.sdk.android.Fabric;
 
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.CONTINUE_BUTTON;
@@ -32,6 +35,7 @@ import static com.home.vod.preferences.LanguagePreference.RESUME_MESSAGE;
      @Override
      protected void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
+         Fabric.with(this, new Crashlytics());
          setContentView(R.layout.activity_resume_playing);
          languagePreference = LanguagePreference.getLanguagePreference(MyLibraryResumePopupActivity.this);
          setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);

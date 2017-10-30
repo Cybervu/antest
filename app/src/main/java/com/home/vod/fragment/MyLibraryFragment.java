@@ -76,6 +76,7 @@ import com.home.apisdk.apiModel.MyLibraryOutputModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.Episode_Programme_Handler;
+import com.home.vod.Single_Part_Programme_Handler;
 import com.home.vod.activity.Episode_list_Activity;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.activity.MovieDetailsActivity;
@@ -599,7 +600,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 } else {
 
                     if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
-                        final Intent movieDetailsIntent = new Intent(context, MovieDetailsActivity.class);
+                      /*  final Intent movieDetailsIntent = new Intent(context, MovieDetailsActivity.class);
                         movieDetailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         getActivity().runOnUiThread(new Runnable() {
@@ -608,7 +609,9 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                                 context.startActivity(movieDetailsIntent);
                             }
                         });
+*/
 
+                        new Single_Part_Programme_Handler(getActivity()).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3")) && isEpisode.equals("1")) {
                         // Call Load Videos Url to play the Video

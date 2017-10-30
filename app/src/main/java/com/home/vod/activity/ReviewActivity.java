@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.home.apisdk.apiController.AddContentRatingAsynTask;
 import com.home.apisdk.apiController.ViewContentRatingAsynTask;
 import com.home.apisdk.apiModel.AddContentRatingInputModel;
@@ -43,6 +44,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import io.fabric.sdk.android.Fabric;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_POST_REVIEW;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
@@ -107,6 +110,7 @@ public class ReviewActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_review);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(this);

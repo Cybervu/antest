@@ -153,4 +153,6 @@
     <dimen name="weight_width">4dp</dimen>
 
     <dimen name="plainrow_text_size">20sp</dimen>
+
+
 </resources>

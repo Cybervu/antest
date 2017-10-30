@@ -10,6 +10,15 @@ public class SeasonModel implements Serializable {
     private String seasonId = "";
     private int seasonImage ;
     private String seasonName = "";
+    private boolean isSelected = false;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
 
     public String getSeasonName() {
         return seasonName;
@@ -19,10 +28,11 @@ public class SeasonModel implements Serializable {
         this.seasonName = seasonName;
     }
 
-    public SeasonModel(String seasonId, int seasonImage, String seasonName) {
+    public SeasonModel(String seasonId, int seasonImage, String seasonName,boolean isSelected) {
         this.seasonId = seasonId;
         this.seasonImage = seasonImage;
         this.seasonName = seasonName;
+        this.isSelected = isSelected;
 
     }
 

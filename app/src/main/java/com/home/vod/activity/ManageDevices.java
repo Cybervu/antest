@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.home.apisdk.apiController.LoadRegisteredDevicesAsync;
 import com.home.apisdk.apiModel.LoadRegisteredDevicesInput;
 import com.home.apisdk.apiModel.LoadRegisteredDevicesOutput;
@@ -29,6 +30,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import io.fabric.sdk.android.Fabric;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MANAGE_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
@@ -63,6 +66,7 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_manage_devices);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(ManageDevices.this);

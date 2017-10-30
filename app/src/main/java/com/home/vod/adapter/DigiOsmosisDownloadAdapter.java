@@ -118,14 +118,12 @@ public class DigiOsmosisDownloadAdapter extends ArrayAdapter<ContactModel1> {
                 .error(R.drawable.logo)
                 .into(image);
         title.setText(downloadModel.get(position).getMUVIID());
-        realise_date.setText("");
+//        realise_date.setText("");
         genre.setText(downloadModel.get(position).getGenere());
         String dd = downloadModel.get(position).getDuration();
         LogUtil.showLog("SUBHA", dd);
         duration.setText(dd);
-        realise_date.setVisibility(View.GONE);
-        genre.setVisibility(View.GONE);
-        duration.setVisibility(View.GONE);
+
         image1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

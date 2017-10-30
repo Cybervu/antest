@@ -1,6 +1,7 @@
 package com.home.vod.activity;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,10 +28,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidquery.AQuery;
+import com.crashlytics.android.Crashlytics;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -77,8 +80,10 @@ import com.home.apisdk.apiModel.SocialAuthOutputModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.LoginHandler;
+import com.home.vod.LoginUIBackgroundHandler;
 import com.home.vod.ProgramPlayerIntentHandler;
 import com.home.vod.R;
+import com.home.vod.RegisterUIBackgroundHandler;
 import com.home.vod.RegisterUIHandler;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.EpisodesListModel;
@@ -90,6 +95,7 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
+import io.fabric.sdk.android.Fabric;
 import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
 import player.activity.MyActivity;
@@ -287,6 +293,7 @@ public class RegisterActivity extends AppCompatActivity implements
                     asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                 } else {
                     if (getIntent().getStringExtra("from") != null) {
+                        Log.v("SUBHA","from === ");
                         //** review **//*
                         onBackPressed();
                     } else {
@@ -326,11 +333,17 @@ public class RegisterActivity extends AppCompatActivity implements
 
                                 onBackPressed();
                             } else {
+                                if (Util.favorite_clicked == true){
+                                    Intent in = new Intent();
+                                    setResult(Activity.RESULT_OK,in);
+                                }else {
+                                    Intent in = new Intent(RegisterActivity.this, MainActivity.class);
+                                    in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(in);
+                                }
 
-                                Intent in = new Intent(RegisterActivity.this, MainActivity.class);
-                                in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(in);
+
                                 if (LoginActivity.loginA != null) {
                                     LoginActivity.loginA.finish();
                                 }
@@ -451,7 +464,9 @@ public class RegisterActivity extends AppCompatActivity implements
     MediaInfo mediaInfo;
     /*chromecast-------------------------------------*/
 
-
+    RelativeLayout mainLayout;
+    private ScrollView registerScrollView ;
+    private RelativeLayout registerParentLayout;
     RegistrationAsynTask asyncReg;
     VideoDetailsAsynctask asynLoadVideoUrls;
     GetValidateUserAsynTask asynValidateUserDetails;
@@ -493,6 +508,7 @@ public class RegisterActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         /*********fb****/
         FacebookSdk.sdkInitialize(getApplicationContext());
         /*********fb****/
@@ -500,6 +516,13 @@ public class RegisterActivity extends AppCompatActivity implements
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         setContentView(R.layout.activity_register);
+
+        mainLayout = (RelativeLayout) findViewById(R.id.mainLayout);
+//        registerScrollView = (ScrollView) findViewById(R.id.registerScrollView);
+        registerParentLayout = (RelativeLayout) findViewById(R.id.registerParentLayout);
+        RegisterUIBackgroundHandler registerUIBackgroundHandler = new RegisterUIBackgroundHandler(this);
+        registerUIBackgroundHandler.handleBackgroundOfLayout("https://sampledesign.muvi.com/Login.jpg",mainLayout,registerScrollView,registerParentLayout);
+
 
         LogUtil.showLog("BKS", "packagename===" + SDKInitializer.user_Package_Name_At_Api);
 
@@ -600,6 +623,7 @@ public class RegisterActivity extends AppCompatActivity implements
             public void onClick(View v) {
                 final Intent detailsIntent = new Intent(RegisterActivity.this, LoginActivity.class);
                 if (getIntent().getStringExtra("from") != null) {
+                    detailsIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                     detailsIntent.putExtra("from", getIntent().getStringExtra("from"));
                 }
                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -958,10 +982,15 @@ public class RegisterActivity extends AppCompatActivity implements
                                 }
                                 finish();
                             } else {
-                                Intent in = new Intent(RegisterActivity.this, MainActivity.class);
-                                in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(in);
+                                if (Util.favorite_clicked == true){
+                                    Intent in = new Intent();
+                                    setResult(Activity.RESULT_OK,in);
+                                }else {
+                                    Intent in = new Intent(RegisterActivity.this, MainActivity.class);
+                                    in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(in);
+                                }
                                 if (LoginActivity.loginA != null) {
                                     LoginActivity.loginA.finish();
                                 }
@@ -2840,6 +2869,15 @@ public class RegisterActivity extends AppCompatActivity implements
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+
+
+        if (getIntent().getStringExtra("from") != null) {
+            Log.v("SUBHA","from === ");
+            Intent intent = new Intent();
+            setResult(RESULT_OK,intent);
+        }
+
+
         finish();
         overridePendingTransition(0, 0);
         super.onBackPressed();
@@ -3244,9 +3282,17 @@ public class RegisterActivity extends AppCompatActivity implements
                     }
 
                 } else {
-                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                    removeFocusFromViews();
-                    startActivity(intent);
+
+
+
+                    if (Util.favorite_clicked == true){
+                        Intent in = new Intent();
+                        setResult(Activity.RESULT_OK,in);
+                    }else {
+                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                        removeFocusFromViews();
+                        startActivity(intent);
+                    }
                     if (LoginActivity.loginA != null) {
                         LoginActivity.loginA.finish();
                     }
@@ -3981,10 +4027,16 @@ public class RegisterActivity extends AppCompatActivity implements
                         }
                         finish();
                     } else {
-                        Intent in = new Intent(RegisterActivity.this, MainActivity.class);
-                        in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(in);
+                        if (Util.favorite_clicked == true){
+                            Intent in = new Intent();
+                            setResult(Activity.RESULT_OK,in);
+                        }else {
+                            Intent in = new Intent(RegisterActivity.this, MainActivity.class);
+                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(in);
+                        }
+
                         if (LoginActivity.loginA != null) {
                             LoginActivity.loginA.finish();
                         }

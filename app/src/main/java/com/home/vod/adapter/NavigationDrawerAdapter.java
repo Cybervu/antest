@@ -68,7 +68,23 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
 
             if (position > 0) {
                 if (Util.drawer_line_visibility && (data.get(position - 1)).getIsEnabled()) {
-                    holder.textViewLine.setVisibility(View.VISIBLE);
+
+
+                    String appName = "Digi Osmosis";
+//                        String appName = context.getResources().getString(R.string.app_name);
+
+                    if (appName != null && appName.trim().equals(context.getResources().getString(R.string.app_name))) {
+                        holder.textViewLine.setVisibility(View. GONE);
+
+                    }
+
+                    else {
+                        holder.textViewLine.setVisibility(View.VISIBLE);
+                    }
+
+
+
+
 
                     Util.drawer_line_visibility = false;
 

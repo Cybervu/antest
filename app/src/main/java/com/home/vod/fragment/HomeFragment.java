@@ -132,7 +132,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
         rootView = v;
         context = getActivity();
         setHasOptionsMenu(true);
-        Util.image_orentiation.clear();
+
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
         String GOOGLE_FCM_TOKEN;
@@ -353,18 +353,24 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
         protected void onPostExecute(Void result) {
             //ui_completed = ui_completed + 1;
 
-            if (videoWidth > videoHeight) {
+           /* if (videoWidth > videoHeight) {
 
                 Util.image_orentiation.add(0);
 
             } else {
                 Util.image_orentiation.add(1);
 
+            }*/
+            if (videoWidth > videoHeight) {
+
+                Util.image_orentiation=0;
+
+            }else{
+                Util.image_orentiation=1;
+
             }
 
-            LogUtil.showLog("MUVI", "HHH" + videoWidth );
-            LogUtil.showLog("MUVI", "HHH" + videoHeight);
-            LogUtil.showLog("MUVI", "vertical" + MainActivity.vertical);
+
 
             if (getView() != null) {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -1374,10 +1380,10 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
     public void onResume() {
         super.onResume();
 
-        if (mProgressBarHandler != null) {
+       /* if (mProgressBarHandler != null) {
             mProgressBarHandler.hide();
             mProgressBarHandler = null;
-        }
+        }*/
      /*   *//***************chromecast**********************//*
         mCastContext.addCastStateListener(mCastStateListener);
         mCastContext.getSessionManager().addSessionManagerListener(
@@ -1434,9 +1440,9 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
             // TODO: check this.exception
             // TODO: do something with the feed
 
-            if (phandler != null && phandler.isShowing()) {
+          /*  if (phandler != null && phandler.isShowing()) {
                 phandler.hide();
-            }
+            }*/
 
             LogUtil.showLog("MUVI", "HHH");
             loadui = new AsynLOADUI();
@@ -1446,8 +1452,8 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            phandler = new ProgressBarHandler(getActivity());
-            phandler.show();
+           /* phandler = new ProgressBarHandler(getActivity());
+            phandler.show();*/
 
         }
     }

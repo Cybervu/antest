@@ -1,0 +1,132 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBackgroundColor"
+    android:orientation="vertical"
+
+    >
+
+    <include layout="@layout/toolbar" />
+    <include
+        layout="@layout/logo_image"
+        android:id="@+id/logo_image"/>
+    <RelativeLayout
+        android:id="@+id/search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logo_image"
+        android:background="@drawable/search_background"
+        android:layout_marginLeft="@dimen/search_padding"
+        android:layout_marginRight="@dimen/search_padding"
+        >
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:queryBackground="@android:color/transparent"
+
+
+
+            />
+    </RelativeLayout>
+
+    <include layout="@layout/line_layout"
+        android:layout_below="@+id/search_layout"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/diet_top_padding"/>
+   <!-- <GridView
+        android:id="@+id/imagesGridView"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/textColor_margin"
+        android:layout_gravity="center_horizontal"
+        android:horizontalSpacing="@dimen/pre_order_button_margin"
+        android:verticalSpacing="@dimen/pre_order_button_margin"
+        android:layout_below="@+id/line_layout"
+        android:layout_centerHorizontal="true" />-->
+
+
+
+    <GridView
+        android:id="@+id/imagesGridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/line_layout"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/pre_order_button_margin"
+        android:layout_marginLeft="@dimen/pre_order_button_margin"
+        android:layout_marginRight="@dimen/pre_order_button_margin"
+        android:layout_marginTop="@dimen/pre_order_button_margin"
+        android:horizontalSpacing="@dimen/pre_order_button_margin"
+        android:verticalSpacing="@dimen/pre_order_button_margin"
+
+        />
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/progress_rawable"
+            android:indeterminateDuration="1000" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/noInternet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_layout"
+        android:background="@color/appBackgroundColor"
+        android:padding="@dimen/manage_device_padding"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/noInternetTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/noData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_layout"
+        android:background="@color/appBackgroundColor"
+        android:padding="@dimen/manage_device_padding"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/noDataTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+</RelativeLayout>

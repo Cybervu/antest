@@ -190,7 +190,7 @@ public class ViewFavouriteAsynTask extends AsyncTask<ViewFavouriteInputModel, Vo
                         }
 
 
-                        Log.v("SUBHA", "is_episode " + jsonChildNode.optString("is_episode"));
+                        Log.v("SUBHA", "content " + content.getStory());
                         viewFavouriteOutputModel.add(content);
                     } catch (Exception e) {
                         status = 0;

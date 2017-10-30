@@ -2,6 +2,7 @@ package com.home.vod.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.androidquery.AQuery;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
@@ -36,7 +38,9 @@ import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiModel.ContentDetailsInput;
 import com.home.apisdk.apiModel.ContentDetailsOutput;
 import com.home.vod.EpisodeListOptionMenuHandler;
+import com.home.vod.MyDownloadIntentHandler;
 import com.home.vod.R;
+import com.home.vod.SearchIntentHandler;
 import com.home.vod.adapter.SeasonAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.SeasonModel;
@@ -52,6 +56,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import io.fabric.sdk.android.Fabric;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -74,6 +80,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 
 public class SeasonActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, GetIpAddressAsynTask.IpAddressListener {
 
+    int prevPos = 0;
     RecyclerView seasonGridView;
     RelativeLayout image_logo;
     ArrayList<SeasonModel> season;
@@ -121,7 +128,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
     private TextView mAuthorView;
     private ImageButton mPlayCircle;
 
-    int[] imageArr = {R.drawable.man_doing_pushups,
+    /*int[] imageArr = {R.drawable.man_doing_pushups,
             R.drawable.man_flexing_knees_with_arms_up,
             R.drawable.man_flexing_waist,
             R.drawable.man_flexing_waist_down,
@@ -151,7 +158,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
             R.drawable.woman_flexing_waist_to_feet,
             R.drawable.woman_honding_her_body_with_arms_and_legs
     };
-
+*/
     @Override
     public void onIPAddressPreExecuteStarted() {
 
@@ -242,12 +249,20 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
 
 
     MediaInfo mediaInfo;
+    int[] imageArr;
  /*chromecast-------------------------------------*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_season);
+        TypedArray ta = getResources().obtainTypedArray(R.array.season_image_array);
+        imageArr = new int[ta.length()];
+        for (int i = 0; i < ta.length(); i++) {
+            imageArr[i] = ta.getResourceId(i,0);
+        }
+        ta.recycle();
 
 
         seasonGridView = (RecyclerView) findViewById(R.id.seasonGridView);
@@ -428,7 +443,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
         switch (item.getItemId()) {
 
             case R.id.action_search:
-                final Intent searchIntent = new Intent(SeasonActivity.this, SearchActivity.class);
+                final Intent searchIntent = new SearchIntentHandler(SeasonActivity.this).handleSearchIntent();
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
                 // Not implemented here
@@ -462,7 +477,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
                 return false;
             case R.id.action_mydownload:
 
-                Intent mydownload = new Intent(SeasonActivity.this, MyDownloads.class);
+                final Intent mydownload = new MyDownloadIntentHandler(SeasonActivity.this).handleDownloadIntent();
                 startActivity(mydownload);
                 // Not implemented here
                 return false;
@@ -521,7 +536,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
 
             if (contentDetailsOutput.getSeason() != null) {
                 for (int j = 0; j < contentDetailsOutput.getSeason().length; j++) {
-                    season.add(new SeasonModel(String.valueOf(contentDetailsOutput.getSeason()[j]), imageArr[j], languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + contentDetailsOutput.getSeason()[j]));
+                    season.add(new SeasonModel(String.valueOf(contentDetailsOutput.getSeason()[j]), imageArr[j], languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + contentDetailsOutput.getSeason()[j],false));
 
 
                 }
@@ -533,7 +548,12 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
                     public void onClick(View view, final int position) {
                         //Values are passing to activity & to fragment as well
                        // clickItem(item, position);
-                        clickItem(season.get(position),position);
+
+                        season.get(prevPos).setIsSelected(false);
+                        prevPos = position;
+                        season.get(position).setIsSelected(true);
+                        adapter.notifyDataSetChanged();
+                        clickItem(season.get(position), position);
 
                     }
 
@@ -561,8 +581,8 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
 
     }
     public static interface ClickListener2{
-        public void onClick(View view,int position);
-        public void onLongClick(View view,int position);
+        public void onClick(View view, int position);
+        public void onLongClick(View view, int position);
     }
     class RecyclerTouchListener2 implements RecyclerView.OnItemTouchListener{
 
@@ -615,7 +635,6 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
         in.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
         in.putExtra(PERMALINK_INTENT_ARRAY, season);
         in.putExtra("Index",String.valueOf(pos));
-
         startActivity(in);
     }
 

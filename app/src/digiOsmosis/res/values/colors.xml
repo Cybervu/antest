@@ -51,8 +51,8 @@
     <color name="languagePopupFadeColor">#50696969</color>
     <color name="filterTextColor">#5c6873</color>
     <color name="nav_drawer_lineColor">#000</color>
-    <color name="nav_lineColor">#000</color>
-    <color name="nav_drawer_text_Color">#000000</color>
+
+    <color name="nav_drawer_text_Color">#ffffff</color>
     <color name="button_background">#ff5a75</color>
     <color name="button_background_plan_textview">#ff5a75</color>
     <color name="cancel_button_background">#DDD</color>
@@ -99,5 +99,9 @@
     <color name="start_color">#d64b62</color>
     <color name="end_color">#ff5a75</color>
     <color name="google_signup_color">#942c27</color>
+
+    <color name="nav_lineColor">#60c6c0</color>
+    <color name="profile_editTextColor">#4f4f4f</color>
+    <color name="profile_hint_color">#4f4f4f</color>
 
 </resources>
