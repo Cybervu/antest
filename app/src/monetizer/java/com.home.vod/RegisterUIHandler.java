@@ -61,7 +61,7 @@ public class RegisterUIHandler {
         btnLogin.setVisibility(View.GONE);
 
 
-        editName = (EditText) context.findViewById(R.id.editNameStr);
+        //editName = (EditText) context.findViewById(R.id.editNameStr);
 
         editName_first = (EditText) context.findViewById(R.id.editNameStr_first);
         editName_last = (EditText) context.findViewById(R.id.editNameStr_last);
