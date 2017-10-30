@@ -11,6 +11,8 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="toolbarTitleColor">#fff</color>
     <color name="appBackgroundColor">#0f1113</color>
+    <color name="downloadpopupcolor">#fff</color>
+    <color name="appBackgroundColor1">#fff</color>
     <color name="cast_crew_titleCololr">#580661</color>
     <color name="no_internet_textColor">#fff</color>
     <color name="unSelectedHintColor">#eee</color>
@@ -19,6 +21,7 @@
     <color name="castAndCrewBackground">#181b1f</color>
     <color name="editTexColor">#fff</color>
     <color name="buttonTextColor">#fff</color>
+    <color name="downloadresolutionTextColor">#000</color>
     <color name="pageTitleColor">#fff</color>
     <color name="buttonBackgroundColor">#580661</color>
     <color name="loginTextColor">#580661</color>
@@ -73,6 +76,7 @@
     <color name="castCrewTitleTextColor">#580661 </color>
     <color name="castCrewTitleTextColor1">#fff </color>
     <color name="border_color">#580661</color>
+    <color name="nav_drawer_lineColor">#fff</color>
     <color name="videomovieTitleColor">#580661 </color>
     <color name="forgotPasswordTextViewColor">#580661</color>
     <color name="sign_up_text_color">#580661</color>
@@ -81,10 +85,11 @@
     <color name="loginTextViewColor">#580661</color>
     <color name="textColor">#676D70</color>
     <color name="filterTextColor">#fff</color>
+    <color name="resume_playing_TextColor">#fff</color>
     <color name="censorRatingBackground">#580661 </color>
     <color name="nav_lineColor">#580661 </color>
     <color name="button_background">#580661 </color>
     <color name="aboutustestcolor">#0f1113</color>
     <color name="editTextColor">#fff</color>
-
+    <color name="resumeTextColor">#0000</color>
 </resources>
