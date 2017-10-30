@@ -12,10 +12,12 @@ import com.home.vod.activity.RegisterActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.preferences.LanguagePreference;
 
+import static com.home.vod.preferences.LanguagePreference.ACCESS_PERIOD_EXPIRED;
 import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.APP_ON;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACCESS_PERIOD_EXPIRED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
@@ -42,7 +44,8 @@ public class MonetizationHandler {
         try {
 
             if (activity instanceof ShowWithEpisodesActivity)
-                ((ShowWithEpisodesActivity) activity).handleActionForValidateSonyUserPayment(validUserStr, message, subscription_Str,languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON,DEFAULT_APP_ON) + " " + activity.getResources().getString(R.string.studio_site));
+                ((ShowWithEpisodesActivity) activity).handleActionForValidateSonyUserPayment(validUserStr, message,
+                        subscription_Str,languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON,DEFAULT_APP_ON) + " " + activity.getResources().getString(R.string.studio_site));
             if (activity instanceof Episode_list_Activity)
                 ((Episode_list_Activity) activity).handleActionForValidateSonyUserPayment(validUserStr, message, subscription_Str,languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON,DEFAULT_APP_ON) + " " + activity.getResources().getString(R.string.studio_site));
             if (activity instanceof MovieDetailsActivity)
@@ -64,7 +67,7 @@ public class MonetizationHandler {
 
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(activity, R.style.MyAlertDialogStyle);
 
-        dlgAlert.setMessage(languagePreference.getTextofLanguage(CROSSED_MAXIMUM_LIMIT, DEFAULT_CROSSED_MAXIMUM_LIMIT) + " " + languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + activity.getResources().getString(R.string.studio_site));
+        dlgAlert.setMessage(languagePreference.getTextofLanguage(ACCESS_PERIOD_EXPIRED, DEFAULT_ACCESS_PERIOD_EXPIRED) + " " + languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + activity.getResources().getString(R.string.studio_site));
 
 
         dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY));

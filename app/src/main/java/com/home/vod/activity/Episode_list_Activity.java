@@ -1528,77 +1528,78 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
     public void clickItem(EpisodesListModel item) {
 
+        try {
+            Util.check_for_subscription = 1;
 
-        Util.check_for_subscription = 1;
+            itemToPlay = item;
+            DataModel dbModel = new DataModel();
+            dbModel.setIsFreeContent(isFreeContent);
+            dbModel.setIsAPV(isAPV);
+            dbModel.setIsPPV(isPPV);
+            dbModel.setIsConverted(1);
+            dbModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
+            dbModel.setStreamUniqueId(item.getEpisodeStreamUniqueId());
+            dbModel.setThirdPartyUrl(item.getEpisodeThirdPartyUrl());
+            dbModel.setVideoTitle(item.getEpisodeTitle());
+            // dbModel.setVideoStory(getIntent().getStringExtra(Util.STORY_INTENT_KEY));
+            dbModel.setVideoStory(item.getEpisodeDescription());
 
-        itemToPlay = item;
-        DataModel dbModel = new DataModel();
-        dbModel.setIsFreeContent(isFreeContent);
-        dbModel.setIsAPV(isAPV);
-        dbModel.setIsPPV(isPPV);
-        dbModel.setIsConverted(1);
-        dbModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
-        dbModel.setStreamUniqueId(item.getEpisodeStreamUniqueId());
-        dbModel.setThirdPartyUrl(item.getEpisodeThirdPartyUrl());
-        dbModel.setVideoTitle(item.getEpisodeTitle());
-        // dbModel.setVideoStory(getIntent().getStringExtra(Util.STORY_INTENT_KEY));
-        dbModel.setVideoStory(item.getEpisodeDescription());
+            dbModel.setVideoGenre(getIntent().getStringExtra(GENRE_INTENT_KEY));
+            dbModel.setVideoDuration(item.getEpisodeDuration());
+            // dbModel.setVideoReleaseDate(item.getEpisodeTelecastOn());
+            dbModel.setVideoReleaseDate("");
 
-        dbModel.setVideoGenre(getIntent().getStringExtra(GENRE_INTENT_KEY));
-        dbModel.setVideoDuration(item.getEpisodeDuration());
-        // dbModel.setVideoReleaseDate(item.getEpisodeTelecastOn());
-        dbModel.setVideoReleaseDate("");
+            dbModel.setCensorRating(getIntent().getStringExtra(CENSOR_RATING_INTENT_KEY));
+            dbModel.setCastCrew(getIntent().getBooleanExtra(CAST_INTENT_KEY, false));
+            dbModel.setEpisode_id(item.getEpisodeStreamUniqueId());
+            dbModel.setPosterImageId(item.getEpisodeThumbnailImageView());
 
-        dbModel.setCensorRating(getIntent().getStringExtra(CENSOR_RATING_INTENT_KEY));
-        dbModel.setCastCrew(getIntent().getBooleanExtra(CAST_INTENT_KEY, false));
-        dbModel.setEpisode_id(item.getEpisodeStreamUniqueId());
-        dbModel.setPosterImageId(item.getEpisodeThumbnailImageView());
+            dbModel.setContentTypesId(Integer.parseInt(getIntent().getStringExtra("content_types_id")));
 
-        dbModel.setContentTypesId(item.getEpisodeContentTypesId());
 
-        dbModel.setEpisode_series_no(item.getEpisodeSeriesNo());
-        dbModel.setEpisode_no(item.getEpisodeNumber());
-        dbModel.setEpisode_title(item.getEpisodeTitle());
+            dbModel.setEpisode_series_no(item.getEpisodeSeriesNo());
+            dbModel.setEpisode_no(item.getEpisodeNumber());
+            dbModel.setEpisode_title(item.getEpisodeTitle());
 
 
 //edit by bishal
-        //set the required data in playermodel
+            //set the required data in playermodel
 
-        playerModel.setStreamUniqueId(item.getEpisodeStreamUniqueId());
-        playerModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
-        playerModel.setUserId(preferenceManager.getUseridFromPref());
-        playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
-        playerModel.setAuthTokenStr(authTokenStr.trim());
-        playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH);
-        playerModel.setEpisode_id(item.getEpisodeStreamUniqueId());
-        playerModel.setVideoTitle(item.getEpisodeTitle());
-        playerModel.setVideoStory(item.getEpisodeDescription());
-        playerModel.setVideoGenre(getIntent().getStringExtra(GENRE_INTENT_KEY));
-        playerModel.setVideoDuration(item.getEpisodeDuration());
-        playerModel.setVideoReleaseDate("");
-        playerModel.setCensorRating(getIntent().getStringExtra(CENSOR_RATING_INTENT_KEY));
-        playerModel.setCastCrew(getIntent().getBooleanExtra(CAST_INTENT_KEY, false));
-
-
-        if (!getIntent().getStringExtra(SEASON_INTENT_KEY).equals("")) {
-            dbModel.setSeason_id(getIntent().getStringExtra(SEASON_INTENT_KEY));
-
-        } else {
-            dbModel.setSeason_id("0");
-
-        }
-        dbModel.setPurchase_type("episode");
-        Util.dataModel = dbModel;
+            playerModel.setStreamUniqueId(item.getEpisodeStreamUniqueId());
+            playerModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
+            playerModel.setUserId(preferenceManager.getUseridFromPref());
+            playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
+            playerModel.setAuthTokenStr(authTokenStr.trim());
+            playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH);
+            playerModel.setEpisode_id(item.getEpisodeStreamUniqueId());
+            playerModel.setVideoTitle(item.getEpisodeTitle());
+            playerModel.setVideoStory(item.getEpisodeDescription());
+            playerModel.setVideoGenre(getIntent().getStringExtra(GENRE_INTENT_KEY));
+            playerModel.setVideoDuration(item.getEpisodeDuration());
+            playerModel.setVideoReleaseDate("");
+            playerModel.setCensorRating(getIntent().getStringExtra(CENSOR_RATING_INTENT_KEY));
+            playerModel.setCastCrew(getIntent().getBooleanExtra(CAST_INTENT_KEY, false));
 
 
-        SubTitleName.clear();
-        SubTitlePath.clear();
-        ResolutionUrl.clear();
-        ResolutionFormat.clear();
-        String loggedInStr = preferenceManager.getLoginStatusFromPref();
-        if (isLogin == 1) {
-            if (loggedInStr != null) {
-                if (NetworkStatus.getInstance().isConnected(this)) {
+            if (!getIntent().getStringExtra(SEASON_INTENT_KEY).equals("")) {
+                dbModel.setSeason_id(getIntent().getStringExtra(SEASON_INTENT_KEY));
+
+            } else {
+                dbModel.setSeason_id("0");
+
+            }
+            dbModel.setPurchase_type("episode");
+            Util.dataModel = dbModel;
+
+
+            SubTitleName.clear();
+            SubTitlePath.clear();
+            ResolutionUrl.clear();
+            ResolutionFormat.clear();
+            String loggedInStr = preferenceManager.getLoginStatusFromPref();
+            if (isLogin == 1) {
+                if (loggedInStr != null) {
+                    if (NetworkStatus.getInstance().isConnected(this)) {
 
                     /*ValidateUserInput validateUserInput = new ValidateUserInput();
                     validateUserInput.setAuthToken(authTokenStr);
@@ -1612,60 +1613,60 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
 
 */
-                    callValidateUserAPI();
+                        callValidateUserAPI();
+                    } else {
+                        Util.showToast(Episode_list_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+
+                        //  Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
+                    }
+
                 } else {
-                    Util.showToast(Episode_list_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
 
-                    //  Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
-                }
-
-            } else {
-
-                if (mCastSession != null && mCastSession.isConnected()) {
+                    if (mCastSession != null && mCastSession.isConnected()) {
 
 
-                    Toast.makeText(Episode_list_Activity.this, "chromecast connected and not logegd in", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Episode_list_Activity.this, "chromecast connected and not logegd in", Toast.LENGTH_SHORT).show();
 
-                    final Intent resumeCast = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            resumeCast.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            Util.check_for_subscription = 1;
-                            resumeCast.putExtra("PlayerModel", playerModel);
-                            startActivityForResult(resumeCast, 2001);
+                        final Intent resumeCast = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                resumeCast.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                Util.check_for_subscription = 1;
+                                resumeCast.putExtra("PlayerModel", playerModel);
+                                startActivityForResult(resumeCast, 2001);
 
 //                                        startActivity(resumeCast);
 
-                        }
-                    });
+                            }
+                        });
+
+                    } else {
+                        Util.check_for_subscription = 1;
+                        Intent registerActivity = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
+                        registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        registerActivity.putExtra("PlayerModel", playerModel);
+                        startActivityForResult(registerActivity,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+                    }
+                }
+            } else {
+                if (NetworkStatus.getInstance().isConnected(this)) {
+                    // MUVIlaxmi
+
+                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, Episode_list_Activity.this, Episode_list_Activity.this);
+                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
                 } else {
-                    Util.check_for_subscription = 1;
-                    Intent registerActivity = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
-                    registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    registerActivity.putExtra("PlayerModel", playerModel);
-                    startActivityForResult(registerActivity,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+                    Util.showToast(Episode_list_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+
+                    //Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
                 }
             }
-        } else {
-            if (NetworkStatus.getInstance().isConnected(this)) {
-                // MUVIlaxmi
-
-                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                getVideoDetailsInput.setAuthToken(authTokenStr);
-                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, Episode_list_Activity.this, Episode_list_Activity.this);
-                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-
-            } else {
-                Util.showToast(Episode_list_Activity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
-
-                //Toast.makeText(ShowWithEpisodesActivity.this,Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
-            }
-        }
 
    /*     String loggedInStr = preferenceManager.getLoginStatusFromPref();
         if (isLogin == 1) {
@@ -1776,7 +1777,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         }
 */
 
-        //comment by bishal
+            //comment by bishal
   /*      if (isLogin == 1) {
 
                 String loggedInStr = preferenceManager.getUseridFromPref();
@@ -1832,7 +1833,11 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 Toast.makeText(Episode_list_Activity.this, Util.getTextofLanguage(Episode_list_Activity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
             }
         }*/
-
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -3621,6 +3626,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 Intent playVideoIntent;
                 if (Util.goToLibraryplayer) {
                     playVideoIntent = new Intent(Episode_list_Activity.this, MyLibraryPlayer.class);
+
 
                 } else {
                     if (Util.dataModel.getAdNetworkId() == 3) {

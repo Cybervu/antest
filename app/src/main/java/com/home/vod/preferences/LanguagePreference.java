@@ -96,6 +96,7 @@ public class LanguagePreference {
     public static final String HOME = "HOME";
     public static final String ACTIVATE_SUBSCRIPTION_WATCH_VIDEO = "ACTIVATE_SUBSCRIPTION_WATCH_VIDEO";
     public static final String CROSSED_MAXIMUM_LIMIT = "CROSSED_MAXIMUM_LIMIT";
+    public static final String ACCESS_PERIOD_EXPIRED = "ACCESS_PERIOD_EXPIRED";
     public static final String CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY = "CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY";
     public static final String ALREADY_PURCHASE_THIS_CONTENT = "ALREADY_PURCHASE_THIS_CONTENT";
     public static final String SORT_ALPHA_A_Z = "SORT_ALPHA_A_Z";
@@ -322,6 +323,7 @@ public class LanguagePreference {
 
     public static final String DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO = "You are not authorised to view this content. Please activate";
     public static final String DEFAULT_CROSSED_MAXIMUM_LIMIT = "Sorry, you have exceeded the maximum number of views for this content.";
+    public static final String DEFAULT_ACCESS_PERIOD_EXPIRED = "The watch period for the previous purchase has expired, please continue to purchase again.";
     public static final String DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY = "This content is not available to stream in your country";
     public static final String DEFAULT_ALREADY_PURCHASE_THIS_CONTENT = "Sorry, you have already purchased this content earlier.";
     public static final String DEFAULT_SORT_ALPHA_A_Z = "Alphabetic A-Z";

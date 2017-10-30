@@ -542,6 +542,7 @@ public class Util {
         } else {
             setTranslationLanguageToPref(languagePreference, CHANGE_PASSWORD, DEFAULT_CHANGE_PASSWORD, "change_password", json);
         }
+        setTranslationLanguageToPref(languagePreference, ACCESS_PERIOD_EXPIRED, DEFAULT_ACCESS_PERIOD_EXPIRED, "access_period_expired", json);
         setTranslationLanguageToPref(languagePreference, CANCEL_BUTTON, DEFAULT_CANCEL_BUTTON, "btn_cancel", json);
         setTranslationLanguageToPref(languagePreference, RESUME_MESSAGE, DEFAULT_RESUME_MESSAGE, "resume_watching", json);
         setTranslationLanguageToPref(languagePreference, CONTINUE_BUTTON, DEFAULT_CONTINUE_BUTTON, "continue", json);

@@ -1816,7 +1816,6 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
             Util.player_description = false;
             Util.landscape = false;
-
             compressed = false;
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
