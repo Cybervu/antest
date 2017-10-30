@@ -139,20 +139,26 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.ADVANCE_PURCHASE;
+import static com.home.vod.preferences.LanguagePreference.APP_ON;
 import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.CROSSED_MAXIMUM_LIMIT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ADVANCE_PURCHASE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CROSSED_MAXIMUM_LIMIT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
@@ -233,6 +239,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     ArrayList<String> ResolutionFormat = new ArrayList<>();
     ArrayList<String> ResolutionUrl = new ArrayList<>();
     ArrayList<String> SubTitleLanguage = new ArrayList<>();
+    MonetizationHandler monetizationHandler;
 
 
     VideoDetailsAsynctask asynLoadVideoUrls;
@@ -334,6 +341,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     // Video_Details_Output _video_details_output;
     LanguagePreference languagePreference;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
+    public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
 
 
     // voucher ends here //
@@ -657,6 +665,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         setContentView(R.layout.details_layout);
         playerModel = new Player();
         handleRatingbar = new HandleRatingbar(this);
+        monetizationHandler=new MonetizationHandler(this);
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(DELETE_ACTION, new IntentFilter("ITEM_STATUS"));
         // _video_details_output = new Video_Details_Output();
         languagePreference = LanguagePreference.getLanguagePreference(this);
@@ -815,7 +824,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             @Override
             public void onClick(View v) {
 
-
                 //playermodel set data
 // *****************set data into playermdel for play in exoplayer************
 
@@ -894,12 +902,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                 });
 
                             } else {
-                                Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
 
-                                registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
                                 Util.check_for_subscription = 1;
+                                Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
+                                registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 registerActivity.putExtra("PlayerModel", playerModel);
-                                startActivity(registerActivity);
+                                startActivityForResult(registerActivity,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
                             }
                             //showLoginDialog();
                         } else {
@@ -921,22 +930,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                     Log.v("BKS", "contentid" + getVideoDetailsInput.getContent_uniq_id());
                                 } else {
 
-
-                                    Log.v("MUVI", "validate user details");
-
-                                    ValidateUserInput validateUserInput = new ValidateUserInput();
-                                    validateUserInput.setAuthToken(authTokenStr);
-                                    if (preferenceManager != null) {
-                                        loggedInIdStr = preferenceManager.getUseridFromPref();
-                                    }
-                                    validateUserInput.setUserId(loggedInIdStr.trim());
-                                    validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                                    validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                                    validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                                    validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                    validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                    asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
-                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                                    callValidateUserAPI();
                                 }
                             } else {
                                 Toast.makeText(MovieDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -944,14 +938,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                         }
                     } else {
-
-                        Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
-
-                        registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         Util.check_for_subscription = 1;
+                        Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
+                        registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         registerActivity.putExtra("PlayerModel", playerModel);
-                        startActivity(registerActivity);
-
+//                        startActivity(registerActivity);
+                        startActivityForResult(registerActivity,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
 
                     }
                 } else {
@@ -976,6 +968,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             }
         });
+
+
+
 
         preorderButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3724,22 +3719,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 finish();
             }
         }
+        else if(requestCode == VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE && resultCode == RESULT_OK){
+            callValidateUserAPI();
+        }
 
-        /*loginresultcode = requestCode;
-        if (requestCode == 40500) {
-            if (resultCode == RESULT_OK) {
-                Util.favorite_clicked = false;
-
-                loggedInStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-
-                AsynLoadMovieDetails asyncViewFavorite = new AsynLoadMovieDetails();
-                asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
-            } else {
-                Log.v("BKS", "elseclickedddddd");
-                Util.favorite_clicked = false;
-            }
-
-        }*/
 
 }
 
@@ -4022,7 +4005,20 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 new MonetizationHandler(MovieDetailsActivity.this).handle429OR430statusCod(validUserStr, message, subscription_Str);
 
-            } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+            }else if (status == 428) {
+
+
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                monetizationHandler.handle428Error(subscription_Str);
+
+            }  else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
                 // Go to ppv Payment
                 payment_for_single_part();
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
@@ -5206,7 +5202,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
     }
 
-    public void handleActionForValidateSonyUserPayment(String validUserStr, String message, String subscription_Str) {
+    public void handleActionForValidateSonyUserPayment(String validUserStr, String message, String subscription_Str,String alertShowMsg) {
         if (validUserStr != null) {
 
 
@@ -5228,10 +5224,49 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             } else {
 
                 if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
-                    Util.showActivateSubscriptionWatchVideoAleart(this);
+                    Util.showActivateSubscriptionWatchVideoAleart(this,alertShowMsg);
                 }
 
             }
+        }
+    }
+
+    /**
+     * callValidateUserAPI
+     */
+
+    private void callValidateUserAPI(){
+        Log.v("MUVI", "validate user details");
+
+        ValidateUserInput validateUserInput = new ValidateUserInput();
+        validateUserInput.setAuthToken(authTokenStr);
+        if (preferenceManager != null) {
+            loggedInIdStr = preferenceManager.getUseridFromPref();
+        }
+        validateUserInput.setUserId(loggedInIdStr.trim());
+        validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
+        validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
+        validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
+        validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
+        validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
+        asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+    }
+    public void handleFor428Status( String subscription_Str){
+
+        if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+            // Go to ppv Payment
+
+            Log.v("MUVI", "unpaid msg");
+            payment_for_single_part();
+        } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+            Intent intent = new Intent(MovieDetailsActivity.this, SubscriptionActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
+        } else {
+            // Go to ppv Payment
+            Log.v("MUVI", "unpaid msg");
+            payment_for_single_part();
         }
     }
 }

@@ -207,7 +207,8 @@ public class MyDownloads extends AppCompatActivity {
     int Position = 0;
     public static ProgressBarHandler progressBarHandler;
 
-
+    AsynLoadVideoUrls asynLoadVideoUrls;
+    AsynGetIpAddress asynGetIpAddress;
     MediaInfo mediaInfo;
     /*chromecast-------------------------------------*/
 
@@ -315,7 +316,7 @@ public class MyDownloads extends AppCompatActivity {
 
                 if(Util.checkNetwork(MyDownloads.this))
                 {
-                    AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
+                    asynGetIpAddress = new AsynGetIpAddress();
                     asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
                 }else
@@ -732,7 +733,7 @@ public class MyDownloads extends AppCompatActivity {
 
             // Calling GetVideo Details API to get Latest Url Details.
 
-            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+            asynLoadVideoUrls = new AsynLoadVideoUrls();
             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
         }
 
@@ -1270,6 +1271,19 @@ public class MyDownloads extends AppCompatActivity {
             Played_Length = 0;
             PlayThroughChromeCast();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        try {
+            if(asynGetIpAddress!=null)
+                asynGetIpAddress.cancel(true);
+            if(asynLoadVideoUrls!=null)
+                asynLoadVideoUrls.cancel(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onStop();
     }
 }
 

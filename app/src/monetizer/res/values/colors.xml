@@ -74,6 +74,7 @@
     <color name="resumepopupcolor">#fff</color>
     <color name="navlogobackgroundcolor">#1e292d</color>
     <color name="castCrewTitleTextColor">#580661 </color>
+    <color name="spinnerDropDownListColor">#fff</color>
     <color name="castCrewTitleTextColor1">#fff </color>
     <color name="border_color">#580661</color>
     <color name="nav_drawer_lineColor">#fff</color>

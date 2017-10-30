@@ -265,7 +265,7 @@
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:text=""
-                        android:textColor="@color/movieTitleColor"
+                        android:textColor="@color/videoTitleTextColor"
                         android:textSize="@dimen/movie_videotitle_size"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:visibility="gone"
@@ -423,7 +423,7 @@
                     android:background="@drawable/spinner_theme"
                     android:overlapAnchor="false"
                     android:paddingRight="0dip"
-                    android:popupBackground="#e2e1e1"
+                    android:popupBackground="@color/appBackgroundColor"
                     android:spinnerMode="dropdown"
                     android:theme="@style/applicationTheme"
                     android:visibility="gone" />

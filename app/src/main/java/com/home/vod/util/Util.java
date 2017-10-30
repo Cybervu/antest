@@ -437,7 +437,7 @@ public class Util {
         dlgAlert.create().show();
     }
 
-    public static void showActivateSubscriptionWatchVideoAleart(final Activity mContext) {
+    public static void showActivateSubscriptionWatchVideoAleart(final Activity mContext,String showMsg) {
         LanguagePreference languagePreference = LanguagePreference.getLanguagePreference(mContext);
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
                   /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
@@ -446,7 +446,7 @@ public class Util {
                         dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
 
                     }*/
-        dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+        dlgAlert.setMessage(showMsg);
 
         dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
         dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
@@ -456,6 +456,9 @@ public class Util {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                         Intent in = new Intent(mContext, MainActivity.class);
+                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                         if (mContext instanceof LoginActivity) {
                             mContext.startActivity(in);
                             ((LoginActivity) mContext).onBackPressed();

@@ -906,7 +906,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         current_time.setVisibility(View.GONE);
                     }
 
-
                     final Intent detailsIntent = new Intent(ExoPlayerActivity.this, CastAndCrewActivity.class);
                     detailsIntent.putExtra("cast_movie_id", movieId.trim());
                     detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
