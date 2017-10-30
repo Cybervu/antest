@@ -4849,7 +4849,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
               //  favorite_view.setVisibility(View.VISIBLE);
                 handleRatingbar.handleVisibleUnvisibleFavicon(favorite_view);
             }
-            /***favorite *****/
+
+            /***play button visibility condition *****/
 
             if (contentDetailsOutput.getIsApv() == 1) {
                 playButton.setVisibility(View.INVISIBLE);
