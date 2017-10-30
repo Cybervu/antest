@@ -16,6 +16,10 @@ public class LanguagePreference {
     /**
      * Language Constant default Key
      */
+    public static String DEFAULT_FIRST_NAME = "First Name";
+    public static String DEFAULT_LAST_NAME = "Last Name";
+    public static String FIRST_NAME = "FIRST_NAME";
+    public static String LAST_NAME = "LAST_NAME";
     public static String DEFAULT_DELETE_BTN = "Delete";
     public static final String LOGIN_FACEBOOK = "LOGIN_FACEBOOK";
     public static final String DEFAULT_LOGIN_FACEBOOK = "Login with Facebook";

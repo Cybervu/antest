@@ -141,7 +141,7 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
             textView.setText(getStyledTextFromHtml(bodyData));*/
 
         String text = "<html><head>"
-                + "<style type=\"text/css\" >body{color:#333;}"
+                + "<style type=\"text/css\" >body{color:#fff;}"
                 + "</style></head>"
                 + "<body style >"
                 + about

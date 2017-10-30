@@ -35,15 +35,12 @@
         <item name="castMiniControllerStyle">@style/CustomCastMiniController</item>
         <item name="castIntroOverlayStyle">@style/CustomCastIntroOverlay</item>
         <item name="castExpandedControllerStyle">@style/CustomCastExpandedController</item>
-        <item name="android:mediaRouteButtonStyle">@style/CustomMediaRouteButtonStyle</item>
         <item name="castExpandedControllerToolbarStyle">
             @style/ThemeOverlay.AppCompat.Dark.ActionBar
         </item>
     </style>
-    <style name="CustomMediaRouteButtonStyle" parent="Widget.MediaRouter.MediaRouteButton">
-        <item name="buttonTint">@color/colorPrimaryDark</item>
 
-    </style>   <!-- <style name="YellowSeekBar" parent="android:Widget.SeekBar">
+   <!-- <style name="YellowSeekBar" parent="android:Widget.SeekBar">
         <item name="android:progressDrawable">
             @drawable/apptheme_scrubber_progress_horizontal_holo_light
         </item>

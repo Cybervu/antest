@@ -55,6 +55,7 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.APIUrlConstant;
 import com.home.vod.R;
 import com.home.vod.Episode_Programme_Handler;
+import com.home.vod.VideolistFragmentHandler;
 import com.home.vod.activity.FilterActivity;
 import com.home.vod.activity.LoginActivity;
 import com.home.vod.activity.MainActivity;
@@ -176,6 +177,7 @@ public class VideosListFragment extends Fragment   {
     private int mDuration;
     private TextView mAuthorView;
     private ImageButton mPlayCircle;
+    VideolistFragmentHandler videosListFragment;
 
 
     private CastContext mCastContext;
@@ -352,6 +354,7 @@ public class VideosListFragment extends Fragment   {
         //for search for each activity
         setHasOptionsMenu(true);
         filterOrderByStr = "";
+        videosListFragment=new VideolistFragmentHandler(getActivity());
         mCastStateListener = new CastStateListener() {
             @Override
             public void onCastStateChanged(int newState) {
@@ -1098,6 +1101,16 @@ public class VideosListFragment extends Fragment   {
 
 
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (videoPDialog != null && videoPDialog.isShowing()) {
+            videoPDialog.hide();
+            videoPDialog = null;
+        }
+
+
+    }
     // on device configuration change , the grid numbers need to be changed
 
     public void onResume() {
@@ -1581,9 +1594,10 @@ public class VideosListFragment extends Fragment   {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Do something that differs the Activity's menu here
 
-        MenuItem item,item1;
+       /* MenuItem item,item1;
         item= menu.findItem(R.id.action_filter);
-       // item.setVisible(true);
+       // item.setVisible(true);*/
+       videosListFragment.handleMenuFilter(menu);
 
     /*    item1= menu.findItem(R.id.action_notifications);
         item1.setVisible(false);*/

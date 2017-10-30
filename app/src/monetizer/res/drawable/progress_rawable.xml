@@ -14,10 +14,10 @@
 
 
         <gradient
-            android:centerColor="@color/appBackgroundColor"
+            android:centerColor="@color/progressbarstartColor"
             android:centerY="0.5"
-            android:endColor="@color/loader_color"
-            android:startColor="@color/appBackgroundColor"
+            android:endColor="@color/progressbarEndColor"
+            android:startColor="@color/progressbarstartColor"
             android:type="sweep"
             android:useLevel="false" />
     </shape>

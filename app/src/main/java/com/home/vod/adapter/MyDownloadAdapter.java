@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,12 +72,7 @@ public class MyDownloadAdapter extends BaseAdapter {
 
         } else {
             emailIdStr = "";
-
-
         }
-
-
-
     }
 
     @Override
@@ -140,14 +137,29 @@ public class MyDownloadAdapter extends BaseAdapter {
                                 String path1 = downloadModel.get(position).getPath().trim();
                                 File file = new File(path1);
                                 if (file != null && file.exists()) {
-
                                     file.delete();
+                                }
+                                SQLiteDatabase DB = activity.openOrCreateDatabase(DBHelper.DATABASE_NAME, activity.MODE_PRIVATE, null);
+                                Cursor cursor = DB.rawQuery("SELECT LANGUAGE,PATH FROM "+DBHelper.TABLE_NAME_SUBTITLE_LUIMERE+" WHERE UID = '"+downloadModel.get(position).getUniqueId()+"'", null);
+                                int count = cursor.getCount();
 
+                                if(count>0)
+                                {
+                                    String Query = "DELETE FROM "+DBHelper.TABLE_NAME_SUBTITLE_LUIMERE+" WHERE UID  = '"+downloadModel.get(position).getUniqueId()+"'";
+                                    DB.execSQL(Query);
                                 }
 
+                                Cursor cursor1 = DB.rawQuery("SELECT * FROM "+DBHelper.RESUME_WATCH+" WHERE UniqueId = '"+downloadModel.get(position).getUniqueId()+"'", null);
+                                int count1 = cursor.getCount();
+
+                                if(count1>0)
+                                {
+                                    String Query = "DELETE FROM "+DBHelper.RESUME_WATCH+" WHERE UniqueId  = '"+downloadModel.get(position).getUniqueId()+"'";
+                                    DB.execSQL(Query);
+                                    Log.v("BIBHU11","Resume watch record deleted");
+                                }
 
                                 audio = dbHelper.getContact(downloadModel.get(position).getUniqueId().trim());
-
                                 downloadModel.remove(position);
                                 notifyDataSetChanged();
                                 activity.visible();

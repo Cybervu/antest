@@ -48,7 +48,6 @@
             android:layout_alignBottom="@+id/movieImageOverlay"
             android:layout_alignLeft="@+id/movieImageView"
             android:layout_alignRight="@+id/movieImageView"
-            android:layout_marginBottom="@dimen/pre_order_button_margin"
             android:clickable="false"
             android:ellipsize="end"
             android:focusable="false"
