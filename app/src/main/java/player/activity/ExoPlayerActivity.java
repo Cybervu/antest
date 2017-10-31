@@ -906,7 +906,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         current_time.setVisibility(View.GONE);
                     }
 
-
                     final Intent detailsIntent = new Intent(ExoPlayerActivity.this, CastAndCrewActivity.class);
                     detailsIntent.putExtra("cast_movie_id", movieId.trim());
                     detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1429,6 +1428,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     } catch (ActivityNotFoundException e) {
                     }
                 } else {
+
+                    download.setEnabled(false);
 
                     if (isDrm) {
                         // This is applicable for DRM content.
@@ -2859,6 +2860,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 Log.v("BIBHU1111", "requestCode=" + requestCode + "==========resultCode==" + resultCode);
                 Util.call_finish_at_onUserLeaveHint = true;
 
+                download.setEnabled(false);
+
                 if (isDrm) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(ExoPlayerActivity.this)) {
                         List_Of_Resolution_Format.clear();
@@ -3781,7 +3784,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     pDialog.hide();
                 }
 
-
+                download.setEnabled(true);
                 String lengh = String.valueOf(file_size);
 
                 if(lengh.toString().equals("0.0")){
@@ -4921,6 +4924,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             if (List_Of_Resolution_Url.size() > 0) {
                 new DetectDownloadingFileSize().execute();
             } else {
+                download.setEnabled(true);
+
                 try {
                     if (pDialog_for_gettig_filesize != null && pDialog_for_gettig_filesize.isShowing()) {
                         pDialog_for_gettig_filesize.hide();

@@ -245,7 +245,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     HandleRatingbar handleRatingbar;
     ///****rating****///
 
-
+MonetizationHandler monetizationHandler;
     TextView viewRatingTextView;
     String movieIdStr;
     ArrayList<Episode_Details_output.Episode> episodeArray;
@@ -261,6 +261,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     int isReviewThere = 1;
     int isRatingThere = 1;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
+    public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
 
 
     int selectedPurchaseType = 0; // selectedPurchaseType = 1(for show),selectedPurchaseType = 2(for season),selectedPurchaseType = 3(for episode)
@@ -735,11 +736,12 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 String episodeSeriesNoStr = episode_details_output.getEpisodeArray().get(a).getSeries_number();
                 String episodeMovieStreamUniqueIdStr = episode_details_output.getEpisodeArray().get(a).getMovie_stream_uniq_id();
                 String episodeThirdParty = episode_details_output.getEpisodeArray().get(a).getThirdparty_url();
-                //int episodeContenTTypesId=episodeArray.get(a).getContent_types_id();
+                int episodeContenTTypesId=episode_details_output.getEpisodeArray().get(a).getContent_types_id();
                 String videodurationStr = episode_details_output.getEpisodeArray().get(a).getVideo_duration();
 
 
-                itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr, movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, videodurationStr));
+                itemData.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr,
+                        movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, videodurationStr,episodeContenTTypesId));
 
             }
             LogUtil.showLog("MUVI", "episode show...1");
@@ -937,6 +939,20 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             } else if (status == 429 || status == 430) {
                 new MonetizationHandler(ShowWithEpisodesActivity.this).handle429OR430statusCod(validUserStr, message, subscription_Str);
 
+
+            }
+            else if (status == 428) {
+
+
+                try {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+                    status = 0;
+                }
+                monetizationHandler.handle428Error(subscription_Str);
 
             } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
                 ShowPpvPopUp();
@@ -1773,6 +1789,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         season = new ArrayList<String>();
         Util.goToLibraryplayer = false;
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
+        monetizationHandler=new MonetizationHandler(this);
         languagePreference = LanguagePreference.getLanguagePreference(ShowWithEpisodesActivity.this);
         playerModel = new Player();
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
@@ -2520,7 +2537,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             if (loggedInStr != null) {
                 if (NetworkStatus.getInstance().isConnected(this)) {
 
-                    ValidateUserInput validateUserInput = new ValidateUserInput();
+                    /*ValidateUserInput validateUserInput = new ValidateUserInput();
                     validateUserInput.setAuthToken(authTokenStr);
                     validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                     validateUserInput.setMuviUniqueId(movieUniqueId.trim());
@@ -2529,7 +2546,9 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                     validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
                     validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
-                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
+
+                    callValidateUserAPI();
 
                 } else {
                     Util.showToast(ShowWithEpisodesActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
@@ -2557,12 +2576,12 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                     });
 
                 } else {
-                    Intent register = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
 
-                    register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     Util.check_for_subscription = 1;
-                    register.putExtra("PlayerModel", playerModel);
-                    startActivity(register);
+                    Intent registerActivity = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
+                    registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    registerActivity.putExtra("PlayerModel", playerModel);
+                    startActivityForResult(registerActivity,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
                 }
             }
         } else {
@@ -5216,18 +5235,17 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             if (data.getStringExtra("yes").equals("2002")) {
 
                 mSelectedMedia = Util.mSendingMedia;
-
-
-//                Toast.makeText(this, "Now again in details", Toast.LENGTH_SHORT).show();
-             /*   Log.v("bijay",""+mReceivedMedia.getStreamType());
-                Log.v("bijay",""+mReceivedMedia.getContentId());
-                Log.v("bijay",""+mReceivedMedia.getStreamDuration());*/
-
                 Intent resumeIntent = new Intent(ShowWithEpisodesActivity.this, ResumePopupActivity.class);
                 startActivityForResult(resumeIntent, 1007);
-
             }
-        } else if (resultCode == RESULT_OK && requestCode == 1007) {
+        }
+        else if (requestCode == 2001) {
+            LogUtil.showLog("Muvi", "else conditn called");
+            watch_status_String = "start";
+            Played_Length = 0;
+            PlayThroughChromeCast();
+
+        }else if (resultCode == RESULT_OK && requestCode == 1007) {
 
             if (data.getStringExtra("yes").equals("1002")) {
 
@@ -5257,36 +5275,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 finish();
             }
-        } else {
-            if (requestCode != 1007 && requestCode != 2001) {
-                LogUtil.showLog("Muvi", "else conditn called");
-                watch_status_String = "start";
-                Played_Length = 0;
-                PlayThroughChromeCast();
-            }
         }
-       /* loginresultcode = requestCode;
-        if (requestCode == 40500) {
-            if (resultCode == RESULT_OK) {
-                Util.favorite_clicked = false;
-                LogUtil.showLog("BKS", "ifclickedddddd");
-//            call feb Api
-                loggedInStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-
-//            AsynFavoriteAdd asynFavoriteAdd =new AsynFavoriteAdd();
-//            asynFavoriteAdd.execute();
-                AsynLoadMovieDetails asyncLoadVideos = new AsynLoadMovieDetails();
-                asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
-            } else {
-                LogUtil.showLog("BKS", "elseclickedddddd");
-                Util.favorite_clicked = false;
-//            AsynFavoriteDelete asynFavoriteDelete=new AsynFavoriteDelete();
-//            asynFavoriteDelete.execute();
-            }
-
+        else if(requestCode == VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE && resultCode == RESULT_OK){
+            callValidateUserAPI();
         }
-//*/
-
 
     }
 
@@ -5351,7 +5343,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         }
     }
 
-    public void handleActionForValidateSonyUserPayment(String validUserStr, String message, String subscription_Str) {
+    public void handleActionForValidateSonyUserPayment(String validUserStr, String message,
+                                                       String subscription_Str,String alertShowMsg) {
         if (validUserStr != null) {
 
 
@@ -5373,10 +5366,42 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             } else {
 
                 if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
-                    Util.showActivateSubscriptionWatchVideoAleart(this);
+                    Util.showActivateSubscriptionWatchVideoAleart(this,alertShowMsg);
                 }
 
             }
         }
+    }
+
+
+
+    /**
+     * callValidateUserAPI
+     */
+
+    private void callValidateUserAPI(){
+        Log.v("MUVI", "validate user details");
+        ValidateUserInput validateUserInput = new ValidateUserInput();
+        validateUserInput.setAuthToken(authTokenStr);
+        validateUserInput.setUserId(preferenceManager.getUseridFromPref());
+        validateUserInput.setMuviUniqueId(movieUniqueId.trim());
+        validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
+        validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
+        validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
+        validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
+        asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+    }
+    public void handleFor428Status( String subscription_Str){
+        if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+            ShowPpvPopUp();
+        } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
+            Intent intent = new Intent(ShowWithEpisodesActivity.this, SubscriptionActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
+        } else {
+            ShowPpvPopUp();
+        }
+
     }
 }

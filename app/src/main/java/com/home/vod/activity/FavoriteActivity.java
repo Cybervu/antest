@@ -796,6 +796,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             showToast();
 
             LogUtil.showLog("ANU", "REMOVED");
+            if(itemData!=null&&itemData.size()>0)
             itemData.remove(index);
             gridView.invalidateViews();
             customGridAdapter.notifyDataSetChanged();

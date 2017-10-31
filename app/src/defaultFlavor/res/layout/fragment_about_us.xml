@@ -1,0 +1,82 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBackgroundColor"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/categoryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginLeft="@dimen/ppv_margin"
+        android:textColor="@color/pageTitleColor"
+        android:textSize="@dimen/fragment_text_size"
+        android:textStyle="normal" />
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appBackgroundColor"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/fragmentimgview_width"
+            android:layout_height="@dimen/fragmentimgview_height"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/payment_relative_margin"
+            android:src="@drawable/logo" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/voucher_pop_up_height"
+            android:layout_below="@id/imageView"
+            android:layout_marginBottom="@dimen/name_user_margin_bottom"
+            android:layout_marginTop="@dimen/payment_relative_margin"
+            android:background="@color/textColor" />
+
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleInverse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:indeterminateDrawable="@drawable/large_progress_bar"
+        android:indeterminateDuration="1000"
+        android:visibility="gone" />
+
+    <WebView
+        android:id="@+id/aboutUsWebView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- <ScrollView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:background="@color/white">
+         <TextView
+             android:id="@+id/Abtus_tv"
+             android:layout_width="match_parent"
+             android:clickable="true"
+             android:layout_height="wrap_content"
+             android:padding="16dp"
+             android:textAppearance="?android:textAppearanceMedium"
+             android:textColor="@color/black"
+             tools:text="@string/hello_blank_fragment" />
+         <WebView
+             android:id="@+id/WebView"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+            />
+
+     </ScrollView>-->
+</LinearLayout>
