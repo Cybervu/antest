@@ -53,6 +53,7 @@ import static com.home.vod.preferences.LanguagePreference.SIGN_UP_WITH_EMAIL;
  */
 
 public class RegisterUIHandler {
+    
     private Activity context;
     private TextView termsTextView,termsTextView1,gmailTest;
     private Button loginButton;
