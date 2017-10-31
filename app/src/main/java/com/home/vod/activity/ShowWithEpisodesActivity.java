@@ -394,6 +394,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             pDialog = null;
 
         }
+
         ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
 
         for (int i = 0; i < languageListOutputArray.size(); i++) {
