@@ -664,7 +664,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
         registerUIHandler = new RegisterUIHandler(this);
         registerUIHandler.setCountryList(preferenceManager);
-        //registerUIHandler.setTermsTextView(languagePreference);
+        registerUIHandler.setTermsTextView(languagePreference);
         //registerUIHandler.setEmailText(languagePreference);
         registerUIHandler.callFblogin(callbackManager, registerButton, languagePreference);
         registerUIHandler.callSignin(languagePreference);
@@ -4207,6 +4207,7 @@ public class RegisterActivity extends AppCompatActivity implements
         }
 
         if (requestCode == RC_SIGN_IN) {
+
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
             //Log.v(TAG,""+result.toString());

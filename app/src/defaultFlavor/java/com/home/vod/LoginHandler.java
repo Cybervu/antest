@@ -59,7 +59,8 @@ public class LoginHandler {
         fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
 
         btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
-        btnLogin.setVisibility(View.VISIBLE);
+        btnLogin.setVisibility(View.GONE);
+        googleSignView.setVisibility(View.GONE);
     }
 
     public void callSignin(LanguagePreference languagePreference){

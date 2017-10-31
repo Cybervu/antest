@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Default App</string>
+    <string name="app_name">Sapphire</string>
     <string name="regular_fonts">fonts/OpenSans-Regular.ttf</string>
     <string name="light_fonts">fonts/OpenSans-Light.ttf</string>
 
@@ -9,8 +9,8 @@
     <string name="drawer_close">Close</string>
     <string name="studio_site">http://apptestsite.com/</string>
     <string name="title_activity_resume_popup">ResumePopupActivity</string>
-    <string name="facebook_app_id">261414937652536</string>
-    <string name="fb_login_protocol_scheme">fb261414937652536</string>
+    <string name="facebook_app_id">1774020405972596</string>
+    <string name="fb_login_protocol_scheme">fb1774020405972596</string>
     <string name="fb_login_text">Login With Facebook</string>
     <string name="fb_registration_text">Register With Facebook</string>
 

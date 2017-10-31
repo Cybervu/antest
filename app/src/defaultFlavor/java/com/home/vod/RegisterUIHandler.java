@@ -2,6 +2,7 @@ package com.home.vod;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,16 +37,22 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.home.vod.preferences.LanguagePreference.AGREE_TERMS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNUP;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_REGISTER_FACEBOOK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_UP_WITH_EMAIL;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNUP;
+import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.REGISTER_FACEBOOK;
 import static com.home.vod.preferences.LanguagePreference.SIGN_UP_WITH_EMAIL;
+import static com.home.vod.preferences.LanguagePreference.TERMS;
+import static player.utils.Util.DEFAULT_NAME_HINT;
 
 
 /**
@@ -55,7 +62,7 @@ import static com.home.vod.preferences.LanguagePreference.SIGN_UP_WITH_EMAIL;
 public class RegisterUIHandler {
 
     private Activity context;
-    private TextView termsTextView,termsTextView1,gmailTest;
+    private TextView termsTextView1,gmailTest;
     private Button loginButton;
     private LinearLayout btnLogin;
     private EditText editName;
@@ -79,15 +86,37 @@ public class RegisterUIHandler {
 //        termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
         btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
         loginWithFacebookButton = (LoginButton) context.findViewById(R.id.loginWithFacebookButton);
+        termsTextView1 = (TextView) context.findViewById(R.id.termsTextView);
         loginWithFacebookButton.setVisibility(View.GONE);
         fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
-
+        editName = (EditText) context.findViewById(R.id.editNameStr);
+        languagePreference = LanguagePreference.getLanguagePreference(context);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
 
+        FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName);
+        editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
 
+        googleSignView.setVisibility(View.GONE);
+        btnLogin.setVisibility(View.GONE);
 
 
     }
+    public void setTermsTextView(LanguagePreference languagePreference){
+
+        termsTextView1.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
+        FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName);
+        editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
+
+        termsTextView1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://theshilpashetty.muvi.com/page/terms-privacy-policy"));
+                browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                context.startActivity(browserIntent);
+            }
+        });
+    }
+
     public void setCountryList(PreferenceManager preferenceManager){
 
 
@@ -227,6 +256,7 @@ public class RegisterUIHandler {
 
 
     public void callSignin(LanguagePreference languagePreference){
+
         gmailTest.setText(languagePreference.getTextofLanguage(GMAIL_SIGNUP, DEFAULT_GMAIL_SIGNUP));
         googleSignView.setOnClickListener(new View.OnClickListener() {
             @Override
