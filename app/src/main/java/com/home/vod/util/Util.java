@@ -437,7 +437,7 @@ public class Util {
         dlgAlert.create().show();
     }
 
-    public static void showActivateSubscriptionWatchVideoAleart(final Activity mContext) {
+    public static void showActivateSubscriptionWatchVideoAleart(final Activity mContext,String showMsg) {
         LanguagePreference languagePreference = LanguagePreference.getLanguagePreference(mContext);
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
                   /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
@@ -446,7 +446,7 @@ public class Util {
                         dlgAlert.setMessage(Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,Util.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
 
                     }*/
-        dlgAlert.setMessage(languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO));
+        dlgAlert.setMessage(showMsg);
 
         dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
         dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
@@ -456,6 +456,9 @@ public class Util {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                         Intent in = new Intent(mContext, MainActivity.class);
+                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                         if (mContext instanceof LoginActivity) {
                             mContext.startActivity(in);
                             ((LoginActivity) mContext).onBackPressed();
@@ -515,10 +518,14 @@ public class Util {
 
         setTranslationLanguageToPref(languagePreference, ADVANCE_PURCHASE, DEFAULT_ADVANCE_PURCHASE, "advance_purchase", json);
         setTranslationLanguageToPref(languagePreference, ALERT, "", "alert", json);
+        //setTranslationLanguageToPref(languagePreference, GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN, "google_fcm_token", json);
+
         setTranslationLanguageToPref(languagePreference, EPISODE_TITLE, DEFAULT_EPISODE_TITLE, "episodes_title", json);
+        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNIN,DEFAULT_GMAIL_SIGNIN,"gmail_signin",json);
         setTranslationLanguageToPref(languagePreference, SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z, "sort_alpha_a_z", json);
         setTranslationLanguageToPref(languagePreference, SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A, "sort_alpha_z_a", json);
-
+        setTranslationLanguageToPref(languagePreference, LOGIN_FACEBOOK,DEFAULT_LOGIN_FACEBOOK,"login_facebook",json);
+        setTranslationLanguageToPref(languagePreference, REGISTER_FACEBOOK,DEFAULT_REGISTER_FACEBOOK,"register_facebook",json);
         setTranslationLanguageToPref(languagePreference, AMOUNT, DEFAULT_AMOUNT, "amount", json);
         setTranslationLanguageToPref(languagePreference, COUPON_CANCELLED, DEFAULT_COUPON_CANCELLED, "coupon_cancelled", json);
         setTranslationLanguageToPref(languagePreference, BUTTON_APPLY, DEFAULT_BUTTON_APPLY, "btn_apply", json);
@@ -535,6 +542,7 @@ public class Util {
         } else {
             setTranslationLanguageToPref(languagePreference, CHANGE_PASSWORD, DEFAULT_CHANGE_PASSWORD, "change_password", json);
         }
+        setTranslationLanguageToPref(languagePreference, ACCESS_PERIOD_EXPIRED, DEFAULT_ACCESS_PERIOD_EXPIRED, "access_period_expired", json);
         setTranslationLanguageToPref(languagePreference, CANCEL_BUTTON, DEFAULT_CANCEL_BUTTON, "btn_cancel", json);
         setTranslationLanguageToPref(languagePreference, RESUME_MESSAGE, DEFAULT_RESUME_MESSAGE, "resume_watching", json);
         setTranslationLanguageToPref(languagePreference, CONTINUE_BUTTON, DEFAULT_CONTINUE_BUTTON, "continue", json);

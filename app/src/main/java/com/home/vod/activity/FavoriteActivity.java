@@ -60,13 +60,19 @@ import com.home.vod.R;
 import com.home.vod.adapter.FavoriteAdapter;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.model.GridItem;
+import com.home.vod.model.LanguageModel;
+import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.Constant;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
+import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -76,26 +82,49 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import player.utils.Util;
+
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
+import static com.home.vod.preferences.LanguagePreference.NO;
+import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.util.Util.languageModel;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
 import static player.utils.Util.DEFAULT_IS_CHROMECAST;
 import static player.utils.Util.DEFAULT_IS_OFFLINE;
@@ -240,7 +269,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
         }
 
-        posterUrl = Util.getTextofLanguage(FavoriteActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+        posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
         gridView = (GridView) findViewById(R.id.imagesGridView);
         footerView = (RelativeLayout) findViewById(R.id.loadingPanel);
@@ -249,8 +278,8 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         noDataLayout = (RelativeLayout) findViewById(R.id.noData);
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
         noDataTextView = (TextView) findViewById(R.id.noDataTextView);
-        noInternetTextView.setText(Util.getTextofLanguage(FavoriteActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION));
-        noDataTextView.setText(Util.getTextofLanguage(FavoriteActivity.this, Util.NO_CONTENT, Util.DEFAULT_NO_CONTENT));
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+        noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT, DEFAULT_NO_CONTENT));
 
         noInternetConnectionLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
@@ -331,13 +360,13 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 }
                 else{
 
-                    if (moviePermalink.matches(Util.getTextofLanguage(FavoriteActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+                    if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(FavoriteActivity.this);
-                        dlgAlert.setMessage(Util.getTextofLanguage(FavoriteActivity.this, Util.NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE));
-                        dlgAlert.setTitle(Util.getTextofLanguage(FavoriteActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(FavoriteActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                        dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                        dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
                         dlgAlert.setCancelable(false);
-                        dlgAlert.setPositiveButton(Util.getTextofLanguage(FavoriteActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
@@ -349,7 +378,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
                         if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
                             final Intent movieDetailsIntent = new Intent(FavoriteActivity.this, MovieDetailsActivity.class);
-                            movieDetailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                            movieDetailsIntent.putExtra(Constant.PERMALINK_INTENT_KEY, moviePermalink);
                             movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             runOnUiThread(new Runnable() {
                                 public void run() {
@@ -361,7 +390,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
                         } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
                             final Intent detailsIntent = new Intent(FavoriteActivity.this, ShowWithEpisodesActivity.class);
-                            detailsIntent.putExtra(Util.PERMALINK_INTENT_KEY, moviePermalink);
+                            detailsIntent.putExtra(Constant.PERMALINK_INTENT_KEY, moviePermalink);
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -423,8 +452,8 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
                         }
                         offset += 1;
-                        boolean isNetwork = Util.checkNetwork(FavoriteActivity.this);
-                        if (isNetwork == true) {
+
+                        if (NetworkStatus.getInstance().isConnected(FavoriteActivity.this)) {
 
                             // default data
 
@@ -452,8 +481,8 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
         //Detect Network Connection
 
-        boolean isNetwork = Util.checkNetwork(FavoriteActivity.this);
-        if (isNetwork == false) {
+
+        if (!NetworkStatus.getInstance().isConnected(this)) {
             noInternetConnectionLayout.setVisibility(View.VISIBLE);
             noDataLayout.setVisibility(View.GONE);
             gridView.setVisibility(View.GONE);
@@ -493,7 +522,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,FavoriteActivity.this,FavoriteActivity.this);
         asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
 
-        LogUtil.showLog("MUVI","authtokenn = "+Util.authTokenStr);
+        LogUtil.showLog("MUVI","authtokenn = "+ authTokenStr);
         LogUtil.showLog("MUVI","user id = "+preferenceManager.getUseridFromPref());
 
 
@@ -530,9 +559,27 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             progressBarHandler = null;
 
         }
-        if (status > 0 && status == 200) {
-            ShowLanguagePopup();
+        ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
+
+        for (int i = 0; i < languageListOutputArray.size(); i++) {
+            String language_id = languageListOutputArray.get(i).getLanguageCode();
+            String language_name = languageListOutputArray.get(i).getLanguageName();
+
+
+            LanguageModel languageModel = new LanguageModel();
+            languageModel.setLanguageId(language_id);
+            languageModel.setLanguageName(language_name);
+
+            if (Default_Language.equalsIgnoreCase(language_id)) {
+                languageModel.setIsSelected(true);
+            } else {
+                languageModel.setIsSelected(false);
+            }
+            languageModels.add(languageModel);
         }
+
+        languageModel = languageModels;
+        ShowLanguagePopup();
     }
 
 
@@ -601,6 +648,37 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     @Override
     public void onGetTranslateLanguagePostExecuteCompleted(String jsonResponse, int status) {
 
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+
+        }
+
+        if (jsonResponse == null) {
+        } else {
+            if (status > 0 && status == 200) {
+
+                try {
+
+                    Util.parseLanguage(languagePreference, jsonResponse, Default_Language);
+                    //Call For Language PopUp Dialog
+
+                    languageCustomAdapter.notifyDataSetChanged();
+
+                    Intent intent = new Intent(FavoriteActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                // Call For Other Methods.
+
+
+            } else {
+            }
+        }
     }
 
 
@@ -718,6 +796,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             showToast();
 
             LogUtil.showLog("ANU", "REMOVED");
+            if(itemData!=null&&itemData.size()>0)
             itemData.remove(index);
             gridView.invalidateViews();
             customGridAdapter.notifyDataSetChanged();
@@ -1004,7 +1083,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 Default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
                 Previous_Selected_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
 
-                if (com.home.vod.util.Util.languageModel!=null && com.home.vod.util.Util.languageModel.size() > 0){
+                if (languageModel!=null && languageModel.size() > 0){
 
 
                     ShowLanguagePopup();
@@ -1042,10 +1121,10 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             case R.id.action_logout:
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(FavoriteActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(FavoriteActivity.this, Util.SIGN_OUT_WARNING, Util.DEFAULT_SIGN_OUT_WARNING));
+                dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
                 dlgAlert.setTitle("");
 
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(FavoriteActivity.this, Util.YES, Util.DEFAULT_YES), new DialogInterface.OnClickListener() {
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
                         // Do nothing but close the dialog
@@ -1054,7 +1133,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                         LogoutInput logoutInput = new LogoutInput();
                         logoutInput.setAuthToken(authTokenStr);
                         logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
-                        logoutInput.setLang_code(Util.getTextofLanguage(FavoriteActivity.this, Util.SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                        logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, FavoriteActivity.this, FavoriteActivity.this);
                         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -1063,7 +1142,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                     }
                 });
 
-                dlgAlert.setNegativeButton(Util.getTextofLanguage(FavoriteActivity.this, Util.NO, Util.DEFAULT_NO), new DialogInterface.OnClickListener() {
+                dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -1093,19 +1172,19 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
         View convertView = inflater.inflate(R.layout.language_pop_up, null);
         TextView titleTextView = (TextView) convertView.findViewById(R.id.languagePopupTitle);
-        titleTextView.setText(Util.getTextofLanguage(FavoriteActivity.this, Util.APP_SELECT_LANGUAGE, Util.DEFAULT_APP_SELECT_LANGUAGE));
+        titleTextView.setText(languagePreference.getTextofLanguage(APP_SELECT_LANGUAGE, DEFAULT_APP_SELECT_LANGUAGE));
 
         alertDialog.setView(convertView);
         alertDialog.setTitle("");
 
         RecyclerView recyclerView = (RecyclerView) convertView.findViewById(R.id.language_recycler_view);
         Button apply = (Button) convertView.findViewById(R.id.apply_btn);
-        apply.setText(Util.getTextofLanguage(FavoriteActivity.this, Util.BUTTON_APPLY, Util.DEFAULT_BUTTON_APPLY));
+        apply.setText(languagePreference.getTextofLanguage(BUTTON_APPLY, DEFAULT_BUTTON_APPLY));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        //  languageCustomAdapter = new LanguageCustomAdapter(FavoriteActivity.this, Util.languageModel);
+        languageCustomAdapter = new LanguageCustomAdapter(FavoriteActivity.this, languageModel);
         // Util.languageModel.get(0).setSelected(true);
       /*  if (Util.languageModel.get(i).getLanguageId().equalsIgnoreCase(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE))) {
             prevPosition = i;
@@ -1138,19 +1217,19 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             public void onClick(View view, int position) {
                 Util.itemclicked = true;
 
-                Util.languageModel.get(position).setSelected(true);
+                languageModel.get(position).setSelected(true);
 
 
                 if (prevPosition != position) {
-                    Util.languageModel.get(prevPosition).setSelected(false);
+                    languageModel.get(prevPosition).setSelected(false);
                     prevPosition = position;
 
                 }
 
-                Default_Language = Util.languageModel.get(position).getLanguageId();
+                Default_Language = languageModel.get(position).getLanguageId();
 
 
-                Util.setLanguageSharedPrefernce(FavoriteActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.languageModel.get(position).getLanguageId());
+                languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, languageModel.get(position).getLanguageId());
                 languageCustomAdapter.notifyDataSetChanged();
 
                 // Default_Language = Util.languageModel.get(position).getLanguageId();
@@ -1197,7 +1276,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                Util.setLanguageSharedPrefernce(FavoriteActivity.this, Util.SELECTED_LANGUAGE_CODE, Previous_Selected_Language);
+                languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Previous_Selected_Language);
             }
         });
 

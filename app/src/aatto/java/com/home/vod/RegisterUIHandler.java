@@ -54,13 +54,14 @@ public class RegisterUIHandler {
     private TextView termsTextView,termsTextView1;
     private LinearLayout btnLogin;
     LoginButton loginWithFacebookButton;
+    private EditText editName;
     String fbUserId = "";
     String fbEmail = "";
     String fbName = "";
     private Button registerButton;
     private LanguagePreference languagePreference;
 
-    public  String selected_Language_Id="", selected_Country_Id="";
+    public  String selected_Language_Id="", selected_Country_Id="",regNameStr;
 
     public RegisterUIHandler(Activity context){
         this.context=context;
@@ -71,6 +72,8 @@ public class RegisterUIHandler {
         loginWithFacebookButton.setVisibility(View.GONE);
         TextView fbLoginTextView = (TextView) context.findViewById(R.id.fbLoginTextView);
         loginWithFacebookButton.setReadPermissions("public_profile", "email", "user_friends");
+        editName = (EditText) context.findViewById(R.id.editNameStr);
+        languagePreference = LanguagePreference.getLanguagePreference(context);
 
     }
     public void setCountryList(PreferenceManager preferenceManager){
@@ -90,6 +93,17 @@ public class RegisterUIHandler {
                 context.startActivity(browserIntent);
             }
         });*/
+        FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName);
+        editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
+
+    }
+    public void getRegisterName(){
+        regNameStr = editName.getText().toString().trim();
+        if (!regNameStr.equals("")) {
+            ((RegisterActivity) context).registerButtonClicked(regNameStr);
+        }else {
+            Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
+        }
     }
 
     public void callFblogin(final CallbackManager callbackManager,Button registerButton,LanguagePreference languagePreference){

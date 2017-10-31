@@ -153,8 +153,13 @@ import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION
 import static com.home.vod.preferences.LanguagePreference.NO_VIDEO_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.util.Constant.CAST_INTENT_KEY;
+import static com.home.vod.util.Constant.CENSOR_RATING_INTENT_KEY;
+import static com.home.vod.util.Constant.GENRE_INTENT_KEY;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
+import static com.home.vod.util.Constant.STORY_INTENT_KEY;
+import static com.home.vod.util.Constant.VIDEO_TITLE_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 
 import com.home.vod.R;
@@ -639,10 +644,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3")) && isEpisode.equals("1")) {
                         // Call Load Videos Url to play the Video
 
-
-                        if (isFreeContent == 1) {
-                            /*AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);*/
                             ValidateUserInput validateUserInput = new ValidateUserInput();
                             validateUserInput.setAuthToken(authTokenStr);
                             validateUserInput.setUserId(preferenceManager.getUseridFromPref());
@@ -653,19 +654,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                             validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MyLibraryFragment.this, context);
                             asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-
-                        } else {
-                            ValidateUserInput validateUserInput = new ValidateUserInput();
-                            validateUserInput.setAuthToken(authTokenStr);
-                            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                            validateUserInput.setMuviUniqueId(movieUniqueId.trim());
-                            validateUserInput.setPurchaseType("episode");
-                            validateUserInput.setSeasonId("" + season_id);
-                            validateUserInput.setEpisodeStreamUniqueId(movieStreamUniqueId);
-                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                            GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, MyLibraryFragment.this, context);
-                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                        }
 
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3")) && isEpisode.equals("0") && season_id == 0) {
@@ -685,6 +673,17 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
                         detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         detailsIntent.putExtra(SEASON_INTENT_KEY, "" + season_id);
+
+                        detailsIntent.putExtra(GENRE_INTENT_KEY, movieGenre);
+                        detailsIntent.putExtra(STORY_INTENT_KEY, "");
+                        detailsIntent.putExtra(CENSOR_RATING_INTENT_KEY, "");
+                        detailsIntent.putExtra(CAST_INTENT_KEY, "");
+                        detailsIntent.putExtra(VIDEO_TITLE_INTENT_KEY, movieName);
+                        detailsIntent.putExtra("content_types_id", "" + "3");
+
+
+
+
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

@@ -34,14 +34,16 @@ import static com.home.vod.preferences.LanguagePreference.TERMS;
 public class RegisterUIHandler {
     private Activity context;
     private TextView termsTextView,termsTextView1;
-
-    public  String selected_Language_Id="", selected_Country_Id="";
+    private EditText editName;
+    public  String selected_Language_Id="", selected_Country_Id="",regNameStr;
+    private LanguagePreference languagePreference;
 
     public RegisterUIHandler(Activity context){
         this.context=context;
         termsTextView = (TextView) context.findViewById(R.id.termsTextView);
         termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
-
+        editName = (EditText) context.findViewById(R.id.editNameStr);
+        languagePreference = LanguagePreference.getLanguagePreference(context);
     }
     public void setCountryList(PreferenceManager preferenceManager){
 
@@ -50,7 +52,8 @@ public class RegisterUIHandler {
     public void setTermsTextView(LanguagePreference languagePreference){
         termsTextView1.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
         termsTextView.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
-
+        FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName);
+        editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
 
         termsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +64,14 @@ public class RegisterUIHandler {
             }
         });
    }
-
+    public void getRegisterName(){
+        regNameStr = editName.getText().toString().trim();
+        if (!regNameStr.equals("")) {
+            ((RegisterActivity) context).registerButtonClicked(regNameStr);
+        }else {
+            Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
+        }
+    }
     public void callFblogin(final CallbackManager callbackManager, Button loginButton, LanguagePreference languagePreference){
 
     }

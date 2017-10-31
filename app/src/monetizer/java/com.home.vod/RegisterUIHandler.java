@@ -61,7 +61,7 @@ public class RegisterUIHandler {
         btnLogin.setVisibility(View.GONE);
 
 
-        editName = (EditText) context.findViewById(R.id.editNameStr);
+        //editName = (EditText) context.findViewById(R.id.editNameStr);
 
         editName_first = (EditText) context.findViewById(R.id.editNameStr_first);
         editName_last = (EditText) context.findViewById(R.id.editNameStr_last);
@@ -86,7 +86,7 @@ public class RegisterUIHandler {
         termsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://lumiereseries.com/privacy-policy"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://monetiser-digital.muvi.com/privacy-policy"));
                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 context.startActivity(browserIntent);
             }

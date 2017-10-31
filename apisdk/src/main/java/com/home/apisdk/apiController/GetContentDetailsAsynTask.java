@@ -189,7 +189,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                     }
                     String movieTypeStr = "";
                     if ((mainJson.has("genre")) && mainJson.optString("genre").trim() != null && !mainJson.optString("genre").trim().isEmpty() && !mainJson.optString("genre").trim().equals("null") && !mainJson.optString("genre").trim().matches("")) {
-                        movieTypeStr = mainJson.getString("genre");
+                        movieTypeStr = mainJson.optString("genre");
                         movieTypeStr = movieTypeStr.replaceAll("\\[", "");
                         movieTypeStr = movieTypeStr.replaceAll("\\]", "");
                         movieTypeStr = movieTypeStr.replaceAll(",", " , ");
