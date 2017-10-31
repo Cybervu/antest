@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -36,10 +37,12 @@ import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNUP;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_REGISTER_FACEBOOK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_UP_WITH_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.DETAILS_NOT_FOUND_ALERT;
+import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.GMAIL_SIGNUP;
 import static com.home.vod.preferences.LanguagePreference.REGISTER_FACEBOOK;
 import static com.home.vod.preferences.LanguagePreference.SIGN_UP_WITH_EMAIL;
@@ -50,10 +53,12 @@ import static com.home.vod.preferences.LanguagePreference.SIGN_UP_WITH_EMAIL;
  */
 
 public class RegisterUIHandler {
+
     private Activity context;
     private TextView termsTextView,termsTextView1,gmailTest;
     private Button loginButton;
     private LinearLayout btnLogin;
+    private EditText editName;
     LoginButton loginWithFacebookButton;
     private RelativeLayout googleSignView;
     private LanguagePreference languagePreference;
@@ -64,8 +69,9 @@ public class RegisterUIHandler {
     String fbUserId = "";
     String fbEmail = "";
     String fbName = "";
+    String regNameStr;
 
-    public RegisterUIHandler(Activity context,LanguagePreference languagePreference){
+    public RegisterUIHandler(Activity context){
         this.context=context;
         gmailTest=(TextView) context.findViewById(R.id.textView);
         googleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
@@ -128,6 +134,14 @@ public class RegisterUIHandler {
 
             }
         });
+    }
+    public void getRegisterName(){
+        regNameStr = editName.getText().toString().trim();
+        if (!regNameStr.equals("")) {
+            ((RegisterActivity) context).registerButtonClicked(regNameStr);
+        }else {
+            Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
+        }
     }
 
 

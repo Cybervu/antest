@@ -87,6 +87,7 @@ import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.EpisodesListModel;
+import com.home.vod.model.LanguageModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
@@ -190,6 +191,7 @@ import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.util.Util.languageModel;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
 import static player.utils.Util.DEFAULT_IS_CHROMECAST;
 import static player.utils.Util.DEFAULT_IS_OFFLINE;
@@ -323,7 +325,14 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         // _video_details_output.setThirdparty_url("https://player.vimeo.com/video/192417650?color=00ff00&badge=0");
 
      /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
+
         then set thirdpartyurl true here and assign the url to videourl*/
+
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+        }
+
         boolean play_video = true;
 
         if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
@@ -1103,6 +1112,28 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             pDialog = null;
 
         }
+
+        ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
+
+        for (int i = 0; i < languageListOutputArray.size(); i++) {
+            String language_id = languageListOutputArray.get(i).getLanguageCode();
+            String language_name = languageListOutputArray.get(i).getLanguageName();
+
+
+            LanguageModel languageModel = new LanguageModel();
+            languageModel.setLanguageId(language_id);
+            languageModel.setLanguageName(language_name);
+
+            if (default_Language.equalsIgnoreCase(language_id)) {
+                languageModel.setIsSelected(true);
+            } else {
+                languageModel.setIsSelected(false);
+            }
+            languageModels.add(languageModel);
+        }
+
+        languageModel = languageModels;
+        ShowLanguagePopup();
     }
 
     @Override
@@ -1113,6 +1144,12 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
     @Override
     public void onLogoutPostExecuteCompleted(int code, String status, String message) {
+
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+        }
+
         if (status == null) {
             Toast.makeText(Episode_list_Activity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 

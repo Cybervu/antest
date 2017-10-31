@@ -54,6 +54,7 @@ import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.GridItem;
+import com.home.vod.model.LanguageModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
@@ -124,6 +125,7 @@ import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.util.Util.languageModel;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
 import static player.utils.Util.DEFAULT_IS_CHROMECAST;
 import static player.utils.Util.DEFAULT_IS_OFFLINE;
@@ -712,10 +714,28 @@ public class ViewMoreActivity extends AppCompatActivity implements
             progressBarHandler.hide();
             progressBarHandler = null;
 
-        } else {
         }
-        ShowLanguagePopup();
+        ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
 
+        for (int i = 0; i < languageListOutputArray.size(); i++) {
+            String language_id = languageListOutputArray.get(i).getLanguageCode();
+            String language_name = languageListOutputArray.get(i).getLanguageName();
+
+
+            LanguageModel languageModel = new LanguageModel();
+            languageModel.setLanguageId(language_id);
+            languageModel.setLanguageName(language_name);
+
+            if (Default_Language.equalsIgnoreCase(language_id)) {
+                languageModel.setIsSelected(true);
+            } else {
+                languageModel.setIsSelected(false);
+            }
+            languageModels.add(languageModel);
+        }
+
+        languageModel = languageModels;
+        ShowLanguagePopup();
 
     }
 
@@ -1769,7 +1789,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 Default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
                 Previous_Selected_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
 
-                if (Util.languageModel != null && Util.languageModel.size() > 0) {
+                if (languageModel != null && languageModel.size() > 0) {
 
 
                     ShowLanguagePopup();
@@ -2006,7 +2026,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        languageCustomAdapter = new LanguageCustomAdapter(ViewMoreActivity.this, Util.languageModel);
+        languageCustomAdapter = new LanguageCustomAdapter(ViewMoreActivity.this, languageModel);
         // Util.languageModel.get(0).setSelected(true);
       /*  if (Util.languageModel.get(i).getLanguageId().equalsIgnoreCase(Util.getTextofLanguage(MovieDetailsActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE))) {
             prevPosition = i;
@@ -2039,19 +2059,19 @@ public class ViewMoreActivity extends AppCompatActivity implements
             public void onClick(View view, int position) {
                 Util.itemclicked = true;
 
-                Util.languageModel.get(position).setSelected(true);
+                languageModel.get(position).setSelected(true);
 
 
                 if (prevPosition != position) {
-                    Util.languageModel.get(prevPosition).setSelected(false);
+                    languageModel.get(prevPosition).setSelected(false);
                     prevPosition = position;
 
                 }
 
-                Default_Language = Util.languageModel.get(position).getLanguageId();
+                Default_Language = languageModel.get(position).getLanguageId();
 
 
-                languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, Util.languageModel.get(position).getLanguageId());
+                languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, languageModel.get(position).getLanguageId());
                 languageCustomAdapter.notifyDataSetChanged();
 
                 // default_Language = Util.languageModel.get(position).getLanguageId();

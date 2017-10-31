@@ -107,6 +107,7 @@ import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.EpisodesListModel;
+import com.home.vod.model.LanguageModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
@@ -135,6 +136,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.home.vod.preferences.LanguagePreference.ACTIAVTE_PLAN_TITLE;
+import static com.home.vod.preferences.LanguagePreference.ADDED_TO_FAV;
+import static com.home.vod.preferences.LanguagePreference.ADD_TO_FAV;
+import static com.home.vod.preferences.LanguagePreference.ADVANCE_PURCHASE;
+import static com.home.vod.preferences.LanguagePreference.ALERT;
+import static com.home.vod.preferences.LanguagePreference.ALREADY_MEMBER;
 import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
@@ -162,6 +169,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
+import static com.home.vod.preferences.LanguagePreference.EPISODE_TITLE;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
@@ -176,6 +184,7 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.TRANSACTION_STATUS_ACTIVE;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.VIEW_TRAILER;
 import static com.home.vod.preferences.LanguagePreference.YES;
@@ -187,6 +196,7 @@ import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.STORY_INTENT_KEY;
 import static com.home.vod.util.Constant.VIDEO_TITLE_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.util.Util.languageModel;
 import static player.utils.Util.ADD_A_REVIEW;
 import static player.utils.Util.DEFAULT_ADD_A_REVIEW;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
@@ -219,6 +229,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
 
     String movieDetailsStr = "";
+
     String priceForUnsubscribedStr, priceFosubscribedStr;
     PPVModel ppvmodel;
     APVModel advmodel;
@@ -269,28 +280,46 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onGetTranslateLanguagePreExecuteStarted() {
         LogUtil.showLog("PINTU", "translate pdlog show");
-
+        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
         pDialog.show();
     }
 
     @Override
     public void onGetTranslateLanguagePostExecuteCompleted(String jsonResponse, int status) {
-        try {
-            if (pDialog != null && pDialog.isShowing()) {
-                LogUtil.showLog("PINTU", "translate pdlog hide");
-                pDialog.hide();
 
-            }
-        } catch (IllegalArgumentException ex) {
-            noInternetConnectionLayout.setVisibility(View.GONE);
-            noDataLayout.setVisibility(View.VISIBLE);
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+
         }
+
+        if (status > 0 && status == 200) {
+
+            try {
+
+                Util.parseLanguage(languagePreference, jsonResponse, Default_Language);
+
+                languageCustomAdapter.notifyDataSetChanged();
+
+                Intent intent = new Intent(ShowWithEpisodesActivity.this,MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            // Call For Other Methods.
+
+
+        } else {
+        }
+
     }
 
     @Override
     public void onLogoutPreExecuteStarted() {
-        LogUtil.showLog("PINTU", "logout pdlog show");
-
+        LogUtil.showLog("Abhishek", "logout pdlog show");
+        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
         pDialog.show();
     }
 
@@ -298,7 +327,7 @@ MonetizationHandler monetizationHandler;
     public void onLogoutPostExecuteCompleted(int code, String status, String message) {
         try {
             if (pDialog != null && pDialog.isShowing()) {
-                LogUtil.showLog("PINTU", "logoyut pdlog hide");
+                LogUtil.showLog("Abhishek", "logoyut pdlog hide");
                 pDialog.hide();
 
             }
@@ -355,20 +384,39 @@ MonetizationHandler monetizationHandler;
 
     @Override
     public void onGetLanguageListPreExecuteStarted() {
-        progressBarHandler = new ProgressBarHandler(ShowWithEpisodesActivity.this);
-        progressBarHandler.show();
+        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
+        pDialog.show();
     }
 
     @Override
     public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
-        if (progressBarHandler.isShowing()) {
-            progressBarHandler.hide();
-            progressBarHandler = null;
+        if (pDialog!=null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
 
         }
-        if (status > 0 && status == 200) {
-            ShowLanguagePopup();
+
+        ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
+
+        for (int i = 0; i < languageListOutputArray.size(); i++) {
+            String language_id = languageListOutputArray.get(i).getLanguageCode();
+            String language_name = languageListOutputArray.get(i).getLanguageName();
+
+
+            LanguageModel languageModel = new LanguageModel();
+            languageModel.setLanguageId(language_id);
+            languageModel.setLanguageName(language_name);
+
+            if (Default_Language.equalsIgnoreCase(language_id)) {
+                languageModel.setIsSelected(true);
+            } else {
+                languageModel.setIsSelected(false);
+            }
+            languageModels.add(languageModel);
         }
+
+        languageModel = languageModels;
+        ShowLanguagePopup();
     }
 
     @Override
@@ -1041,7 +1089,7 @@ MonetizationHandler monetizationHandler;
                 viewRatingTextView.setVisibility(View.GONE);
 
             } else {
-               // ratingBar.setVisibility(View.VISIBLE);
+                // ratingBar.setVisibility(View.VISIBLE);
                 //here handler is calling for visible and gone for sony app it should be gone thats why we create handler
                 handleRatingbar.handleVisibleUnvisibleRating(ratingBar);
                 ratingBar.setRating(Float.parseFloat(rating));
@@ -1053,7 +1101,7 @@ MonetizationHandler monetizationHandler;
                 //here handler is calling for visible and gone for sony app it should be gone thats why we create handler
 
                 handleRatingbar.handleVisibleUnvisibleRatingTextView(viewRatingTextView);
-            //    viewRatingTextView.setVisibility(View.VISIBLE);
+                //    viewRatingTextView.setVisibility(View.VISIBLE);
                 if (loggedInStr == null) {
                     viewRatingTextView.setText(languagePreference.getTextofLanguage(ADD_A_REVIEW, DEFAULT_ADD_A_REVIEW));
                     LogUtil.showLog("BISHAL", "rating 0 ==== " + viewContentRatingOutputModel.getShowrating());
@@ -1327,8 +1375,8 @@ MonetizationHandler monetizationHandler;
                                         }
                                     }
 
-                                    progressBarHandler = new ProgressBarHandler(ShowWithEpisodesActivity.this);
-                                    progressBarHandler.show();
+                                    pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
+                                    pDialog.show();
                                     Download_SubTitle(FakeSubTitlePath.get(0).trim());
                                 } else {
                                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1652,7 +1700,7 @@ MonetizationHandler monetizationHandler;
     String ipAddres = "";
 
 
-    public static ProgressBarHandler progressBarHandler;
+   // public static ProgressBarHandler progressBarHandler;
     String email, id;
     LanguageCustomAdapter languageCustomAdapter;
     String Default_Language = "";
@@ -1745,7 +1793,7 @@ MonetizationHandler monetizationHandler;
         languagePreference = LanguagePreference.getLanguagePreference(ShowWithEpisodesActivity.this);
         playerModel = new Player();
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
-        handleRatingbar=new HandleRatingbar(this);
+        handleRatingbar = new HandleRatingbar(this);
         //playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
         isLogin = preferenceManager.getLoginFeatureFromPref();
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -4119,8 +4167,8 @@ MonetizationHandler monetizationHandler;
             if (FakeSubTitlePath.size() > 0) {
                 Download_SubTitle(FakeSubTitlePath.get(0).trim());
             } else {
-                if (progressBarHandler != null && progressBarHandler.isShowing()) {
-                    progressBarHandler.hide();
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
                 }
                 playerModel.setSubTitlePath(SubTitlePath);
 

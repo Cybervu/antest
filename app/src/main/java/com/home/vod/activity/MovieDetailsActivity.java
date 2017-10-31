@@ -85,6 +85,7 @@ import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
+import com.home.vod.model.LanguageModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
@@ -205,6 +206,7 @@ import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.util.Util.languageModel;
 import static player.utils.Util.ADD_A_REVIEW;
 import static player.utils.Util.DEFAULT_ADD_A_REVIEW;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
@@ -2357,7 +2359,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 LanguageListInputModel languageListInputModel = new LanguageListInputModel();
                 languageListInputModel.setAuthToken(authTokenStr);
-                languageListInputModel.setLangCode(Default_Language);
+                languageListInputModel.setLangCode(default_Language);
 
                 if (!Previous_Selected_Language.equals(default_Language)) {
                     GetTranslateLanguageAsync getTranslateLanguageAsync = new GetTranslateLanguageAsync(languageListInputModel, MovieDetailsActivity.this, MovieDetailsActivity.this);
@@ -4072,9 +4074,27 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             pDialog = null;
 
         }
-        if (status > 0 && status == 200) {
-            ShowLanguagePopup();
+        ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
+
+        for (int i = 0; i < languageListOutputArray.size(); i++) {
+            String language_id = languageListOutputArray.get(i).getLanguageCode();
+            String language_name = languageListOutputArray.get(i).getLanguageName();
+
+
+            LanguageModel languageModel = new LanguageModel();
+            languageModel.setLanguageId(language_id);
+            languageModel.setLanguageName(language_name);
+
+            if (default_Language.equalsIgnoreCase(language_id)) {
+                languageModel.setIsSelected(true);
+            } else {
+                languageModel.setIsSelected(false);
+            }
+            languageModels.add(languageModel);
         }
+
+        languageModel = languageModels;
+        ShowLanguagePopup();
     }
 
     @Override
