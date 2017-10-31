@@ -890,8 +890,26 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         screenWidth = display.getWidth();
         screenHeight = display.getHeight();
 
+        Util.player_description = false;
+        Util.landscape = false;
 
-        Util.player_description = true;
+        LinearLayout.LayoutParams l_params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        player_layout.setLayoutParams(l_params);
+        compress_expand.setImageResource(R.drawable.ic_media_fullscreen_shrink);
+        compress_expand.setVisibility(View.GONE);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            }
+        });
+
+        hideSystemUI();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+     /*   Util.player_description = true;
 
 
         LinearLayout.LayoutParams params1 = null;
@@ -913,7 +931,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (screenHeight * 40) / 100);
             }
         }
-        player_layout.setLayoutParams(params1);
+        player_layout.setLayoutParams(params1);*/
 
         if (content_types_id == 4) {
             seekBar.setEnabled(false);
