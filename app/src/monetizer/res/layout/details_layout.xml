@@ -264,7 +264,6 @@
                     android:layout_above="@+id/durationcensorLinearlayout"
                     android:layout_marginRight="@dimen/videoGenreTextView_margin"
                     android:maxLines="1"
-                    android:padding="@dimen/Login_drawing_padding"
                     android:paddingLeft="@dimen/Login_drawing_padding"
                     android:paddingRight="@dimen/videoGenreTextView_padding"
                     android:text=""

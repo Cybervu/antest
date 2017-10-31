@@ -252,7 +252,6 @@
                         android:text=""
                         android:textColor="@color/movieTitleColor"
                         android:textSize="@dimen/review_btn_textsize"
-                        android:padding="@dimen/Login_drawing_padding"
                         android:layout_marginRight="@dimen/videoGenreTextView_margin"
                         android:layout_above="@+id/durationcensorLinearlayout"
                         android:layout_alignParentLeft="true"

@@ -26,7 +26,8 @@
         android:layout_marginTop="@dimen/pre_order_button_margin"
         android:horizontalSpacing="@dimen/pre_order_button_margin"
         android:paddingLeft="@dimen/Login_drawing_padding"
-        android:verticalSpacing="@dimen/pre_order_button_margin">
+        android:verticalSpacing="@dimen/pre_order_button_margin"
+       >
 
     </GridView>
     <!--<com.twotoasters.jazzylistview.JazzyGridView
