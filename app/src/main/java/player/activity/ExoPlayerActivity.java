@@ -86,6 +86,7 @@ import com.home.vod.R;
 import com.home.vod.activity.CastAndCrewActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
 import com.intertrust.wasabi.ErrorCodeException;
@@ -562,6 +563,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         //Check for offline content // Added By sanjay
         mediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
         download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
+        Log.d("status d:","types_id -"+content_types_id+"Offline"+playerModel.getIsOffline()
+                +"DownloadStatus"+ playerModel.getDownloadStatus());
+
         if (content_types_id!=4 && playerModel.getIsOffline().equals("1")  && playerModel.getDownloadStatus().equals("1")) {
             //download_layout.setVisibility(View.VISIBLE);
             handleOfflineInExoplayer.handleVisibelUnvisibleDownload(download_layout);

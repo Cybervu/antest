@@ -28,15 +28,20 @@ public class MonetizationHandler {
         try {
 
             if (activity instanceof ShowWithEpisodesActivity)
-                ((ShowWithEpisodesActivity) activity).handleActionForValidateSonyUserPayment(validUserStr, message, subscription_Str);
+                ((ShowWithEpisodesActivity) activity).handleActionForValidateSonyUserPayment(validUserStr, message,
+                        subscription_Str,languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON,DEFAULT_APP_ON) + " " + activity.getResources().getString(R.string.studio_site));
             if (activity instanceof Episode_list_Activity)
-                ((Episode_list_Activity) activity).handleActionForValidateSonyUserPayment(validUserStr, message, subscription_Str);
+                ((Episode_list_Activity) activity).handleActionForValidateSonyUserPayment(validUserStr, message,
+                        subscription_Str,languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON,DEFAULT_APP_ON) + " " + activity.getResources().getString(R.string.studio_site));
             if (activity instanceof MovieDetailsActivity)
-                ((MovieDetailsActivity) activity).handleActionForValidateSonyUserPayment(validUserStr, message, subscription_Str);
+                ((MovieDetailsActivity) activity).handleActionForValidateSonyUserPayment(validUserStr, message,
+                        subscription_Str,languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON,DEFAULT_APP_ON) + " " + activity.getResources().getString(R.string.studio_site));
             if (activity instanceof RegisterActivity)
-                ((RegisterActivity) activity).handleActionForValidateSonyUserPayment(validUserStr, message, subscription_Str);
+                ((RegisterActivity) activity).handleActionForValidateSonyUserPayment(validUserStr, message,
+                        subscription_Str,languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON,DEFAULT_APP_ON) + " " + activity.getResources().getString(R.string.studio_site));
             if (activity instanceof LoginActivity)
-                ((LoginActivity) activity).handleActionForValidateSonyUserPayment(validUserStr, message, subscription_Str);
+                ((LoginActivity) activity).handleActionForValidateSonyUserPayment(validUserStr, message,
+                        subscription_Str,languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON,DEFAULT_APP_ON) + " " + activity.getResources().getString(R.string.studio_site));
 
         } catch (ClassCastException e){
             e.printStackTrace();
@@ -45,5 +50,25 @@ public class MonetizationHandler {
         }
 
     }
+    public void handle428Error(String subscription_Str){
 
+        try {
+
+            if (activity instanceof ShowWithEpisodesActivity)
+                ((ShowWithEpisodesActivity) activity).handleFor428Status(validUserStr, message, subscription_Str);
+            if (activity instanceof Episode_list_Activity)
+                ((Episode_list_Activity) activity).handleFor428Status(validUserStr, message, subscription_Str);
+            if (activity instanceof MovieDetailsActivity)
+                ((MovieDetailsActivity) activity).handleFor428Status(validUserStr, message, subscription_Str);
+            if (activity instanceof RegisterActivity)
+                ((RegisterActivity) activity).handleFor428Status(validUserStr, message, subscription_Str);
+            if (activity instanceof LoginActivity)
+                ((LoginActivity) activity).handleFor428Status(validUserStr, message, subscription_Str);
+
+        } catch (ClassCastException e){
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }
