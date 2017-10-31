@@ -80,6 +80,7 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
+import com.home.vod.HandleOfflineInExoplayer;
 import com.home.vod.R;
 import com.home.vod.activity.CastAndCrewActivity;
 import com.home.vod.preferences.LanguagePreference;
@@ -209,6 +210,8 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     String fileExtenstion;
     int lenghtOfFile;
     int lengthfile;
+    Timer CheckAvailabilityOfChromecast;
+    boolean video_prepared = false;
     /***** offline *****/
 
     Timer timer;
@@ -363,6 +366,33 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     protected void onResume() {
 
         super.onResume();
+
+
+        CheckAvailabilityOfChromecast = new Timer();
+        CheckAvailabilityOfChromecast.schedule(new TimerTask() {
+            @Override
+            public void run() {
+
+                Log.v("PINTU","CheckAvailabilityOfChromecast called");
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if(video_prepared){
+                            if (mediaRouteButton.isEnabled()) {
+                                //  mediaRouteButton.setVisibility(View.VISIBLE);
+                                handleOfflineInExoplayer.handleVisibleUnvisibleChromcast(mediaRouteButton);
+                            } else {
+                                mediaRouteButton.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                });
+            }
+        },3000,3000);
+
+
         if (mAdsManager != null && mIsAdDisplayed) {
             mAdsManager.resume();
         } else {
@@ -395,6 +425,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
     // Whether an ad is displayed.
     private boolean mIsAdDisplayed;
+    HandleOfflineInExoplayer handleOfflineInExoplayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -404,7 +435,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
 
         mAdUiContainer = (ViewGroup) findViewById(R.id.videoPlayerWithAdPlayback);
-
+        handleOfflineInExoplayer=new HandleOfflineInExoplayer(this);
         // setContentView(layout);
         mSdkFactory = ImaSdkFactory.getInstance();
         mAdsLoader = mSdkFactory.createAdsLoader(this);
@@ -1153,7 +1184,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             public void onPrepared() {
 
 
-
+                video_prepared = true;
 
                /* Log.v("SUBHA","played_length"+played_length);
                 Log.v("SUBHA","emVideoView.getDuration()"+emVideoView.getDuration());
@@ -2939,12 +2970,10 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
     @Override
     protected void onPause() {
-        /*if (subtitleDisplayHandler != null) {
-            subtitleDisplayHandler.removeCallbacks(subtitleProcessesor);
-            subtitleDisplayHandler = null;
-            if (subsFetchTask != null)
-                subsFetchTask.cancel(true);
-        }*/
+
+        if(CheckAvailabilityOfChromecast!=null)
+            CheckAvailabilityOfChromecast.cancel();
+
         if (mAdsManager != null && mIsAdDisplayed) {
             mAdsManager.pause();
         } else {
