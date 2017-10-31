@@ -664,7 +664,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
         registerUIHandler = new RegisterUIHandler(this);
         registerUIHandler.setCountryList(preferenceManager);
-        //registerUIHandler.setTermsTextView(languagePreference);
+        registerUIHandler.setTermsTextView(languagePreference);
         //registerUIHandler.setEmailText(languagePreference);
         registerUIHandler.callFblogin(callbackManager, registerButton, languagePreference);
         registerUIHandler.callSignin(languagePreference);

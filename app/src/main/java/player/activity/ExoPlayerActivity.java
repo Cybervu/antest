@@ -2232,7 +2232,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
+        if (progressView != null && progressView.isShown()) {
+            progressView = null;
+        }
         if (asynGetIpAddress != null) {
             asynGetIpAddress.cancel(true);
         }
