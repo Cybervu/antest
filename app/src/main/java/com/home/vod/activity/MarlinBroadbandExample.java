@@ -173,6 +173,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	private static ProgressBar Progress;
 	TextView percentg;
 	Timer timerr;
+	String download_content_type="";
 
 	ImageButton back, center_play_pause;
 	ImageView compress_expand;
@@ -394,6 +395,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		Chromecast_Subtitle_Url = getIntent().getStringArrayListExtra("Chromecast_Subtitle_Url");
 		Chromecast_Subtitle_Language_Name = getIntent().getStringArrayListExtra("Chromecast_Subtitle_Language_Name");
 		Chromecast_Subtitle_Code = getIntent().getStringArrayListExtra("Chromecast_Subtitle_Code");
+		download_content_type = getIntent().getStringExtra("download_content_type");
 
 
 		mediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
@@ -952,17 +954,19 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			}
 		});
 
+		path = getIntent().getStringExtra("FILE").trim();
+		token = getIntent().getStringExtra("TOK").trim();
+		title = getIntent().getStringExtra("Title").trim();
 
-//commented by me
-		//  emVideoView.setVideoURI(Uri.parse(Util.dataModel.getVideoUrl()));
-		try {
+		if(download_content_type.trim().equals("1")){
+			try {
             /*
              * Initialize the Wasabi Runtime (necessary only once for each
 			 * instantiation of the application)
 			 *
 			 * ** Note: Set Runtime Properties as needed for your environment
 			 */
-			Runtime.initialize(getDir("wasabi", MODE_PRIVATE).getAbsolutePath());
+				Runtime.initialize(getDir("wasabi", MODE_PRIVATE).getAbsolutePath());
             /*
              * Personalize the application (acquire DRM keys). This is only
 			 * necessary once each time the application is freshly installed
@@ -972,90 +976,89 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			 * errors. In a production application this should be called in a
 			 * background thread.
 			 */
-			if (!Runtime.isPersonalized())
-				Runtime.personalize();
+				if (!Runtime.isPersonalized())
+					Runtime.personalize();
 
-		} catch (NullPointerException e) {
-			//onBackPressed();
-			backCalled();
-			return;
-		} catch (ErrorCodeException e) {
-			// Consult WasabiErrors.txt for resolution of the error codes
-			//onBackPressed();
-			backCalled();
-			return;
-		}
-
-
-		path = getIntent().getStringExtra("FILE").trim();
-		//Toast.makeText(getApplicationContext(),path+"\n"+token,Toast.LENGTH_LONG).show();
-		token = getIntent().getStringExtra("TOK").trim();
-		//movieid = getIntent().getStringExtra("url").trim();
-		title = getIntent().getStringExtra("Title").trim();
-		Log.v("SUBHA", "path" + token);
-		String licenseAcquisitionToken = getActionTokenFromStorage(token);
-		if (licenseAcquisitionToken == null) {
-			Log.e(TAG,
-					"Could not find action token in the assets directory - exiting");
+			} catch (NullPointerException e) {
+				//onBackPressed();
+				backCalled();
+				return;
+			} catch (ErrorCodeException e) {
+				// Consult WasabiErrors.txt for resolution of the error codes
+				//onBackPressed();
+				backCalled();
+				return;
+			}
 
 
-		}
-		com.intertrust.wasabi.jni.Runtime.processServiceToken(licenseAcquisitionToken);
-		try {
-			EnumSet<PlaylistProxy.Flags> flags = EnumSet.noneOf(PlaylistProxy.Flags.class);
-			playerProxy = new PlaylistProxy(flags, this, new Handler());
-			playerProxy.start();
-		} catch (ErrorCodeException e) {
 
-		}
+			String licenseAcquisitionToken = getActionTokenFromStorage(token);
+			if (licenseAcquisitionToken == null) {
+				Log.e(TAG,"Could not find action token in the assets directory - exiting");
+
+
+			}
+			com.intertrust.wasabi.jni.Runtime.processServiceToken(licenseAcquisitionToken);
+			try {
+				EnumSet<PlaylistProxy.Flags> flags = EnumSet.noneOf(PlaylistProxy.Flags.class);
+				playerProxy = new PlaylistProxy(flags, this, new Handler());
+				playerProxy.start();
+			} catch (ErrorCodeException e) {
+
+			}
 
         	/*
          * create a playlist proxy url and pass it to the native player
 		 */
-		try {
+			try {
 			/*
 			 * Note that the MediaSourceType must be adapted to the stream type
 			 * (DASH or HLS). Similarly,
 			 * the MediaSourceParams need to be set according to the media type
 			 * if MediaSourceType is SINGLE_FILE
 			 */
-			String dash_url = path;
-			ContentTypes contentType = ContentTypes.DASH;
-			PlaylistProxy.MediaSourceParams params = new PlaylistProxy.MediaSourceParams();
-			params.sourceContentType = contentType
-					.getMediaSourceParamsContentType();
+				String dash_url = path;
+				ContentTypes contentType = ContentTypes.DASH;
+				PlaylistProxy.MediaSourceParams params = new PlaylistProxy.MediaSourceParams();
+				params.sourceContentType = contentType
+						.getMediaSourceParamsContentType();
 			/*
 			 * if the content has separate audio tracks (eg languages) you may
 			 * select one using MediaSourceParams, eg params.language="es";
 			 */
 
 
-			try {
-				String proxy_url = playerProxy.makeUrl(dash_url, PlaylistProxy.MediaSourceType.SINGLE_FILE, new PlaylistProxy.MediaSourceParams());
-				emVideoView.setVideoURI(Uri.parse(proxy_url));
-//                emVideoView.start();
+				try {
+					String proxy_url = playerProxy.makeUrl(dash_url, PlaylistProxy.MediaSourceType.SINGLE_FILE, new PlaylistProxy.MediaSourceParams());
+					emVideoView.setVideoURI(Uri.parse(proxy_url));
 
-			} catch (Exception e) {
-				// Consult WasabiErrors.txt for resolution of the error codes
-				Log.e(TAG, "playback error: " + e.getLocalizedMessage());
+				} catch (Exception e) {
+					// Consult WasabiErrors.txt for resolution of the error codes
+					Log.e(TAG, "playback error: " + e.getLocalizedMessage());
+					e.printStackTrace();
+
+				}
+
+
+			} catch (IllegalArgumentException e) {
+				// onBackPressed();
+				backCalled();
 				e.printStackTrace();
-
+			} catch (SecurityException e) {
+				// onBackPressed();
+				backCalled();
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+				//  onBackPressed();
+				backCalled();
+				e.printStackTrace();
 			}
-
-
-		} catch (IllegalArgumentException e) {
-			// onBackPressed();
-			backCalled();
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// onBackPressed();
-			backCalled();
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			//  onBackPressed();
-			backCalled();
-			e.printStackTrace();
+		}else
+		{
+			emVideoView.setVideoPath(path);
 		}
+
+
 
 
 		registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
