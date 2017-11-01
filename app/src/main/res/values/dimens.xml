@@ -329,6 +329,7 @@
     <dimen name="paddingBottom5dp">5dp</dimen>
     <dimen name="paddingtop5dp">5dp</dimen>
     <dimen name="marginLeft15dp">15dp</dimen>
+    <dimen name="videogridRelativelayoutMarginRight">10dp</dimen>
     <dimen name="marginRight20dp">20dp</dimen>
     <dimen name="subtitle_change_btn_width">31dp</dimen>
     <dimen name="subtitle_change_btn_height">26dp</dimen>

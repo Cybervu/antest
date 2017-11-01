@@ -131,9 +131,11 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_EMAIL_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FIRST_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GOOGLE_FCM_TOKEN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_RESTRICT_DEVICE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LAST_NAME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
@@ -153,10 +155,12 @@ import static com.home.vod.preferences.LanguagePreference.EMAIL_EXISTS;
 import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
+import static com.home.vod.preferences.LanguagePreference.FIRST_NAME;
 import static com.home.vod.preferences.LanguagePreference.GOOGLE_FCM_TOKEN;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.LAST_NAME;
 import static com.home.vod.preferences.LanguagePreference.LOGIN;
 import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
@@ -281,8 +285,9 @@ public class RegisterActivity extends AppCompatActivity implements
                     // Call For Check Api.
                     CheckDeviceInput checkDeviceInput = new CheckDeviceInput();
                     checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                    checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+                    checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
                     checkDeviceInput.setAuthToken(authTokenStr);
+                    checkDeviceInput.setUser_id(preferenceManager.getUseridFromPref());
                     checkDeviceInput.setDevice_type("1");
                     checkDeviceInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     checkDeviceInput.setDevice_info(deviceName + "," + languagePreference.getTextofLanguage(ANDROID_VERSION, DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
@@ -297,7 +302,7 @@ public class RegisterActivity extends AppCompatActivity implements
                             //go to subscription page
                             if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
 
-                                ValidateUserInput validateUserInput = new ValidateUserInput();
+                               /* ValidateUserInput validateUserInput = new ValidateUserInput();
                                 validateUserInput.setAuthToken(authTokenStr);
                                 validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                                 validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
@@ -306,7 +311,12 @@ public class RegisterActivity extends AppCompatActivity implements
                                 validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                                 validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
                                 GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, RegisterActivity.this, RegisterActivity.this);
-                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
+
+                                Intent intent = new Intent();
+                                setResult(RESULT_OK,intent);
+                                finish();
+
                             } else {
                                 Util.showToast(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
                                 // Toast.makeText(LoginActivity.this, Util.getTextofLanguage(LoginActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -465,10 +475,10 @@ public class RegisterActivity extends AppCompatActivity implements
     GetValidateUserAsynTask asynValidateUserDetails;
     String movieVideoUrlStr = "";
     private ImageView registerImageView;
-    private EditText editEmail, editName, editPassword, editConfirmPassword;
+    private EditText editEmail, editName, editPassword, editConfirmPassword,editName_first,editName_last;
     private Button registerButton;
     private TextView alreadyMemmberText, loginTextView;
-    String regNameStr, regEmailStr, regPasswordStr, regConfirmPasswordStr;
+    String  regEmailStr, regPasswordStr, regConfirmPasswordStr;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     String registrationIdStr;
@@ -543,7 +553,11 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
         registerImageView = (ImageView) findViewById(R.id.registerImageView);
-        editName = (EditText) findViewById(R.id.editNameStr);
+        /*editName = (EditText) findViewById(R.id.editNameStr);
+
+        editName_first = (EditText) findViewById(R.id.editNameStr_first);
+        editName_last = (EditText) findViewById(R.id.editNameStr_last);*/
+
         editEmail = (EditText) findViewById(R.id.editEmailStr);
         editPassword = (EditText) findViewById(R.id.editPasswordStr);
         editConfirmPassword = (EditText) findViewById(R.id.editConfirmPasswordStr);
@@ -551,7 +565,11 @@ public class RegisterActivity extends AppCompatActivity implements
         alreadyMemmberText = (TextView) findViewById(R.id.alreadyMemberText);
         loginTextView = (TextView) findViewById(R.id.alreadyHaveALoginButton);
 
-        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName);
+        /*FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName_first);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName_last);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName);*/
+
+
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editEmail);
 
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editPassword);
@@ -560,7 +578,12 @@ public class RegisterActivity extends AppCompatActivity implements
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), alreadyMemmberText);
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), loginTextView);
 
-        editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
+
+        /*editName_first.setHint(languagePreference.getTextofLanguage(FIRST_NAME,DEFAULT_FIRST_NAME));
+        editName_last.setHint(languagePreference.getTextofLanguage(LAST_NAME,DEFAULT_LAST_NAME));
+        editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));*/
+
+
         editEmail.setHint(languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
         editPassword.setHint(languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD));
         editConfirmPassword.setHint(languagePreference.getTextofLanguage(CONFIRM_PASSWORD, DEFAULT_CONFIRM_PASSWORD));
@@ -606,6 +629,10 @@ public class RegisterActivity extends AppCompatActivity implements
                     if (getIntent().getStringExtra("from") != null) {
                         detailsIntent.putExtra("from", getIntent().getStringExtra("from"));
                     }
+                    if (Util.check_for_subscription == 1) {
+                        Util.check_for_subscription = 1;
+                        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+                    }
                     detailsIntent.putExtra("PlayerModel", playerModel);
                     detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(detailsIntent);
@@ -626,7 +653,8 @@ public class RegisterActivity extends AppCompatActivity implements
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                registerButtonClicked();
+                registerUIHandler.getRegisterName();
+               // registerButtonClicked();
             }
         });
 
@@ -770,15 +798,20 @@ public class RegisterActivity extends AppCompatActivity implements
     }
 
 
-    public void registerButtonClicked() {
+    public void registerButtonClicked(String name) {
 
-        regNameStr = editName.getText().toString().trim();
+     /*   regNameStr_first = editName_first.getText().toString().trim();
+        regNameStr_last = editName_last.getText().toString().trim();
+        regNameStr = editName.getText().toString().trim();*/
+
+
         regEmailStr = editEmail.getText().toString();
         regPasswordStr = editPassword.getText().toString();
         regConfirmPasswordStr = editConfirmPassword.getText().toString();
 
         if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
-            if (!regNameStr.matches("") && (!regEmailStr.matches("")) && (!regPasswordStr.matches("")) && !regNameStr.equals("")) {
+           // if (!regNameStr.matches("") && (!regEmailStr.matches("")) && (!regPasswordStr.matches("")) && !regNameStr.equals("")) {
+            if ((!regEmailStr.matches("")) && (!regPasswordStr.matches(""))){
                 boolean isValidEmail = Util.isValidMail(regEmailStr);
                 if (isValidEmail) {
                     if (regPasswordStr.equals(regConfirmPasswordStr)) {
@@ -786,7 +819,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
                         Registration_input registration_input = new Registration_input();
                         registration_input.setAuthToken(authTokenStr);
-                        registration_input.setName(regNameStr);
+                        registration_input.setName(name);
                         registration_input.setEmail(regEmailStr);
                         registration_input.setPassword(regPasswordStr);
                         registration_input.setCustom_country(registerUIHandler.selected_Country_Id);
@@ -919,7 +952,7 @@ public class RegisterActivity extends AppCompatActivity implements
                                     asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
                                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                                 } else {
-                                    ValidateUserInput validateUserInput = new ValidateUserInput();
+                                   /* ValidateUserInput validateUserInput = new ValidateUserInput();
                                     validateUserInput.setAuthToken(authTokenStr);
                                     validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                                     validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
@@ -928,7 +961,13 @@ public class RegisterActivity extends AppCompatActivity implements
                                     validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
                                     validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                                     asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, RegisterActivity.this, RegisterActivity.this);
-                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
+
+
+                                    Intent intent = new Intent();
+                                    setResult(RESULT_OK,intent);
+                                    finish();
+
                                 }
                             } else {
                                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -3494,44 +3533,65 @@ public class RegisterActivity extends AppCompatActivity implements
                 preferenceManager.setLoginHistIdPref(socialAuthOutputModel.getLogin_history_id());
 
 
-                if (Util.check_for_subscription == 1) {
-                    // Go for subscription
+                if (languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
 
-                    if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
-                        if (Util.dataModel.getIsFreeContent() == 1) {
-                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                            getVideoDetailsInput.setAuthToken(authTokenStr);
-                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                            asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                    Log.v("BIBHU", "isRestrictDevice called");
+                    // Call For Check Api.
+                    CheckDeviceInput checkDeviceInput = new CheckDeviceInput();
+                    checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                    checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
+                    checkDeviceInput.setAuthToken(authTokenStr);
+                    checkDeviceInput.setUser_id(preferenceManager.getUseridFromPref());
+                    checkDeviceInput.setDevice_type("1");
+                    checkDeviceInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    checkDeviceInput.setDevice_info(deviceName + "," + languagePreference.getTextofLanguage(ANDROID_VERSION, DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
+                    CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
+                    asynCheckDevice.executeOnExecutor(threadPoolExecutor);
+                }else{
+
+                    if (Util.check_for_subscription == 1) {
+                        // Go for subscription
+
+                        if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
+                            if (Util.dataModel.getIsFreeContent() == 1) {
+                                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                                getVideoDetailsInput.setAuthToken(authTokenStr);
+                                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
+                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                            } else {
+                              /*  ValidateUserInput validateUserInput = new ValidateUserInput();
+                                validateUserInput.setAuthToken(authTokenStr);
+                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
+                                validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
+                                validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
+                                validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
+                                validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
+                                validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                                asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, RegisterActivity.this, RegisterActivity.this);
+                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
+
+                                Intent intent = new Intent();
+                                setResult(RESULT_OK,intent);
+                                finish();
+                            }
                         } else {
-                            ValidateUserInput validateUserInput = new ValidateUserInput();
-                            validateUserInput.setAuthToken(authTokenStr);
-                            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                            validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                            validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                            validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                            validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                            asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, RegisterActivity.this, RegisterActivity.this);
-                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
-                    } else {
-                        Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                    }
 
-                } else {
-                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                    removeFocusFromViews();
-                    startActivity(intent);
-                    if (LoginActivity.loginA != null) {
-                        LoginActivity.loginA.finish();
+                    } else {
+                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                        removeFocusFromViews();
+                        startActivity(intent);
+                        if (LoginActivity.loginA != null) {
+                            LoginActivity.loginA.finish();
+                        }
+                        finish();
+                        overridePendingTransition(0, 0);
                     }
-                    finish();
-                    overridePendingTransition(0, 0);
                 }
 
 
@@ -3549,52 +3609,6 @@ public class RegisterActivity extends AppCompatActivity implements
                         pDialog.hide();
                         pDialog = null;
                     }
-                   /*  int planId = ((Global) getApplicationContext()).getPlanId();
-                        int isSubscribedDataStr = 0;
-                        if (pref != null) {
-                            isSubscribedDataStr = Integer.parseInt(pref.getString("PREFS_LOGIN_ISSUBSCRIBED_KEY", null));
-                        }
-
-                        if (isFreeContent == 1){
-                            movieVideoUrlStr = null;
-                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                        }
-                        else if (isAPV == 0 && isPPV == 0 && isConverted == 1 &&  planId == 0){
-
-                            movieVideoUrlStr = null;
-                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                        }else if (isAPV == 0 && isPPV == 0 && isConverted == 1 &&  planId == 1 && isSubscribedDataStr == 0 ){
-                            final Intent subsc = new Intent(RegisterActivity.this, SubscriptionActivity.class);
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    subsc.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(subsc);
-
-                                }
-                            });
-
-                            movieVideoUrlStr = null;
-                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-
-                        }else if (isAPV == 0 && isPPV == 0 && isConverted == 1 &&  planId == 1 && isSubscribedDataStr == 1 ){
-
-                            movieVideoUrlStr = null;
-                            AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-
-                        }else {
-
-                            AsynValidateUserDetails asynValidateUserDetails = new AsynValidateUserDetails();
-                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                        }
-                    }else {
-                        Toast.makeText(RegisterActivity.this, getResources().getString(R.string.no_internet_connection_str), Toast.LENGTH_LONG).show();
-                    }*/
-
-
                 }
             }
 
@@ -3742,23 +3756,7 @@ public class RegisterActivity extends AppCompatActivity implements
                 pDialog.hide();
                 pDialog = null;
             }
-              /*  if (isNewUserStr == 1){
-                    asynFbRegDetails = new AsynFbRegDetails();
-                    asynFbRegDetails.executeOnExecutor(threadPoolExecutor);
-                }else{
-                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(RegisterActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(languagePreference.getTextofLanguage(EMAIL_EXISTS, Util.DEFAULT_EMAIL_EXISTS));
-                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                    dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    dlgAlert.create().show();
-                }*/
+
             SocialAuthInputModel socialAuthInputModel = new SocialAuthInputModel();
             socialAuthInputModel.setAuthToken(authTokenStr);
             socialAuthInputModel.setName(fbName.trim());
@@ -4201,12 +4199,15 @@ public class RegisterActivity extends AppCompatActivity implements
         }
         else
         {
-            watch_status_String = "strat";
-            Played_Length = 0;
-            PlayThroughChromeCast();
+            if(requestCode == 1001) {
+                watch_status_String = "strat";
+                Played_Length = 0;
+                PlayThroughChromeCast();
+            }
         }
 
         if (requestCode == RC_SIGN_IN) {
+
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
             //Log.v(TAG,""+result.toString());
@@ -4243,7 +4244,7 @@ public class RegisterActivity extends AppCompatActivity implements
                             asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
-                            ValidateUserInput validateUserInput = new ValidateUserInput();
+                            /*ValidateUserInput validateUserInput = new ValidateUserInput();
                             validateUserInput.setAuthToken(authTokenStr);
                             validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                             validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
@@ -4252,7 +4253,12 @@ public class RegisterActivity extends AppCompatActivity implements
                             validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
                             validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, RegisterActivity.this, RegisterActivity.this);
-                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
+
+
+                            Intent intent = new Intent();
+                            setResult(RESULT_OK,intent);
+                            finish();
                         }
                     } else {
                         Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -4717,7 +4723,7 @@ public class RegisterActivity extends AppCompatActivity implements
         }
 
     }
-    public void handleActionForValidateSonyUserPayment(String validUserStr, String message, String subscription_Str) {
+    public void handleActionForValidateSonyUserPayment(String validUserStr, String message, String subscription_Str,String alertShowMsg) {
         if (validUserStr != null) {
 
 
@@ -4739,7 +4745,7 @@ public class RegisterActivity extends AppCompatActivity implements
             } else {
 
                 if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
-                    Util.showActivateSubscriptionWatchVideoAleart(this);
+                    Util.showActivateSubscriptionWatchVideoAleart(this,alertShowMsg);
                 }
 
             }

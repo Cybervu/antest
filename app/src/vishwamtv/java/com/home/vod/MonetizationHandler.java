@@ -46,5 +46,25 @@ public class MonetizationHandler {
                e.printStackTrace();
            }
         }
+    public void handle428Error(String subscription_Str){
 
+        try {
+
+            if (activity instanceof ShowWithEpisodesActivity)
+                ((ShowWithEpisodesActivity) activity).handleFor428Status( subscription_Str);
+            if (activity instanceof Episode_list_Activity)
+                ((Episode_list_Activity) activity).handleFor428Status(subscription_Str);
+            if (activity instanceof MovieDetailsActivity)
+                ((MovieDetailsActivity) activity).handleFor428Status(subscription_Str);
+            if (activity instanceof RegisterActivity)
+                ((RegisterActivity) activity).handleFor428Status(subscription_Str);
+            if (activity instanceof LoginActivity)
+                ((LoginActivity) activity).handleFor428Status(subscription_Str);
+
+        } catch (ClassCastException e){
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     }

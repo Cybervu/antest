@@ -6,9 +6,9 @@ package com.home.apisdk.apiModel;
  * @author MUVI
  */
 public class MyLibraryOutputModel {
-    String movieId,
-            permalink, name, story, releaseDate,
-            contentTypesId, posterUrl, genre, is_episode, muvi_uniq_id, movie_stream_uniq_id;
+    String movieId ="",
+            permalink="", name="" , story="", releaseDate="",
+            contentTypesId="", posterUrl="", genre = "", is_episode="", muvi_uniq_id="", movie_stream_uniq_id="";
     int isConverted;
 
     int season_id;

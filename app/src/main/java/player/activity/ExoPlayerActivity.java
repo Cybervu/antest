@@ -85,6 +85,8 @@ import com.home.vod.HandleOfflineInExoplayer;
 import com.home.vod.R;
 import com.home.vod.activity.CastAndCrewActivity;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
 import com.intertrust.wasabi.ErrorCodeException;
@@ -241,6 +243,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     String fileExtenstion;
     int lenghtOfFile;
     int lengthfile;
+    float file_size ;
     /***** offline *****/
 
     Timer timer;
@@ -392,6 +395,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     Player playerModel;
     LanguagePreference languagePreference;
+    PreferenceManager preferenceManager;
     boolean change_resolution = false;
     boolean is_paused = false;
 
@@ -459,7 +463,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         } else {
             isDrm = false;
         }
-
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
 
         if (!playerModel.getVideoUrl().trim().equals("")) {
             if (playerModel.isThirdPartyPlayer()) {
@@ -522,11 +526,19 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         /********* Offline********/
 
 
-        if (playerModel != null && playerModel.getUserId() != null && !playerModel.getUserId().trim().matches("")) {
+      /*  if (playerModel != null && playerModel.getUserId() != null && !playerModel.getUserId().trim().matches("")) {
             userIdStr = playerModel.getUserId();
         }
         if (playerModel != null && playerModel.getEmailId() != null && !playerModel.getEmailId().trim().matches("")) {
             emailIdStr = playerModel.getEmailId();
+        }*/
+
+        if (preferenceManager!=null){
+            emailIdStr= preferenceManager.getEmailIdFromPref();
+            userIdStr= preferenceManager.getUseridFromPref();
+        }else {
+            emailIdStr = "";
+            userIdStr = "";
         }
 
         downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
@@ -551,12 +563,16 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         //Check for offline content // Added By sanjay
         mediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
         download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
-        if (content_types_id!=4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
+        Log.d("status d:","types_id -"+content_types_id+"Offline"+playerModel.getIsOffline()
+                +"DownloadStatus"+ playerModel.getDownloadStatus());
+
+        if (content_types_id!=4 && playerModel.getIsOffline().equals("1")  && playerModel.getDownloadStatus().equals("1")) {
             //download_layout.setVisibility(View.VISIBLE);
             handleOfflineInExoplayer.handleVisibelUnvisibleDownload(download_layout);
         }
         /*if (content_types_id != 4) {
             download_layout.setVisibility(View.VISIBLE);
+
         }*/
 
 
@@ -617,13 +633,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         }
         movieId = playerModel.getMovieUniqueId();
         episodeId = playerModel.getEpisode_id();
-
-        if (playerModel != null && playerModel.getUserId() != null && !playerModel.getUserId().trim().matches("")) {
-            userIdStr = playerModel.getUserId();
-        }
-        if (playerModel != null && playerModel.getEmailId() != null && !playerModel.getEmailId().trim().matches("")) {
-            emailIdStr = playerModel.getEmailId();
-        }
 
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
         subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
@@ -900,7 +909,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         center_play_pause.setVisibility(View.GONE);
                         current_time.setVisibility(View.GONE);
                     }
-
 
                     final Intent detailsIntent = new Intent(ExoPlayerActivity.this, CastAndCrewActivity.class);
                     detailsIntent.putExtra("cast_movie_id", movieId.trim());
@@ -1424,6 +1432,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     } catch (ActivityNotFoundException e) {
                     }
                 } else {
+
+                    download.setEnabled(false);
 
                     if (isDrm) {
                         // This is applicable for DRM content.
@@ -2226,6 +2236,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        if (progressView != null && progressView.isShown()) {
+            progressView = null;
+        }
         if (asynGetIpAddress != null) {
             asynGetIpAddress.cancel(true);
         }
@@ -2853,6 +2866,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 Log.v("BIBHU1111", "requestCode=" + requestCode + "==========resultCode==" + resultCode);
                 Util.call_finish_at_onUserLeaveHint = true;
+
+                download.setEnabled(false);
 
                 if (isDrm) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(ExoPlayerActivity.this)) {
@@ -3753,6 +3768,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 float size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
                 DecimalFormat decimalFormat = new DecimalFormat("#.#");
                 size = Float.valueOf(decimalFormat.format(size));
+                file_size = size;
                 lengthfile = (int) size;
 
 
@@ -3775,8 +3791,24 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     pDialog.hide();
                 }
 
+                download.setEnabled(true);
+                String lengh = String.valueOf(file_size);
 
-                String lengh = String.valueOf(lengthfile);
+                if(lengh.toString().equals("0.0")){
+                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ExoPlayerActivity.this,R.style.MyAlertDialogStyle);
+                    dlgAlert.setMessage(Util.getTextofLanguage(ExoPlayerActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION));
+                    dlgAlert.setTitle(Util.getTextofLanguage(ExoPlayerActivity.this,Util.SORRY,Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setCancelable(false);
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    dlgAlert.create().show();
+                    return;
+                }
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ExoPlayerActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setTitle(Util.getTextofLanguage(ExoPlayerActivity.this, Util.WANT_TO_DOWNLOAD, Util.DEFAULT_WANT_TO_DOWNLOAD));
@@ -3857,7 +3889,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                             " WHERE email = '" + emailIdStr + "' AND download_contnet_id = '" + model.getDOWNLOADID() + "'";
                                     DB.execSQL(query1);
 
-                                    if (isDrm) {
+                                    if (isDrm && CallAccessPeriodApi) {
                                         try {
                                             String licenseAcquisitionToken = getActionTokenFromStorage(model.getToken());
                                             com.intertrust.wasabi.jni.Runtime.processServiceToken(licenseAcquisitionToken);
@@ -3931,8 +3963,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                             //
                             @Override
                             public void run() {
-
-
                                 download.setVisibility(View.GONE);
                                 percentg.setVisibility(View.VISIBLE);
                                 Progress.setProgress(0);
@@ -4017,9 +4047,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
         if (isDrm) {
+            contactModel1.setDownloadContentType("1");
             contactModel1.setToken(licensetoken);
             contactModel1.setPath(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/WITHDRM/" + timestamp);
         } else {
+            contactModel1.setDownloadContentType("0");
             contactModel1.setToken(fileExtenstion);
             contactModel1.setPath(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/WITHOUT_DRM/" + timestamp);
         }
@@ -4028,6 +4060,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         contactModel1.setGenere(playerModel.getVideoGenre().trim());
         contactModel1.setMuviid(playerModel.getMovieUniqueId().trim());
         contactModel1.setDuration(playerModel.getVideoDuration().trim());
+        contactModel1.setStreamId(playerModel.getStreamUniqueId().trim());
         dbHelper.insertRecord(contactModel1);
 
         Log.d("BIBHU", emailIdStr);
@@ -4079,11 +4112,30 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             DB.execSQL(query);
 
             Log.v("BIBHU1234", "insert called");
-
         }
 
 
         //=================================End=======================================================//
+
+
+        // This code is responsible for resume watch feature in downloeded content.
+
+        Cursor cursor1 = DB.rawQuery("SELECT * FROM "+DBHelper.RESUME_WATCH+" WHERE UniqueId = '"+playerModel.getStreamUniqueId()+ emailIdStr+"'", null);
+
+        if(cursor1.getCount()>0)
+        {
+            String query = "UPDATE " + DBHelper.RESUME_WATCH+ " SET Flag='0' , PlayedDuration = '0',LatestMpdUrl = '',LicenceUrl=''  WHERE UniqueId = '"+playerModel.getStreamUniqueId()+ emailIdStr+"'";
+            DB.execSQL(query);
+            Log.v("BIBHU1234","resume watch update called");
+        }
+        else {
+            String query = "INSERT INTO " + DBHelper.RESUME_WATCH + " (UniqueId , PlayedDuration,Flag,LicenceUrl,LatestMpdUrl) VALUES" +
+                    " ('" + playerModel.getStreamUniqueId() + emailIdStr + "','0','0','','')";
+            DB.execSQL(query);
+            Log.v("BIBHU1234", "resume watch insert called");
+            //=====================================End=======================================//
+
+        }
 
 
     }
@@ -4879,6 +4931,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             if (List_Of_Resolution_Url.size() > 0) {
                 new DetectDownloadingFileSize().execute();
             } else {
+                download.setEnabled(true);
+
                 try {
                     if (pDialog_for_gettig_filesize != null && pDialog_for_gettig_filesize.isShowing()) {
                         pDialog_for_gettig_filesize.hide();
@@ -4887,7 +4941,29 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 }
 
                 // Show PopUp for Multiple Options for Download .
-                ShowDownloadOptionPopUp();
+
+                if(List_Of_Resolution_Format.size()>0 && List_Of_FileSize.size()>0 && (List_Of_FileSize.size() == List_Of_Resolution_Format.size()))
+                {
+                    // Show PopUp for Multiple Options for Download .
+                    ShowDownloadOptionPopUp();
+                }else {
+                    AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ExoPlayerActivity.this,R.style.MyAlertDialogStyle);
+                    dlgAlert.setMessage(Util.getTextofLanguage(ExoPlayerActivity.this,Util.SLOW_INTERNET_CONNECTION,Util.DEFAULT_SLOW_INTERNET_CONNECTION));
+                    dlgAlert.setTitle(Util.getTextofLanguage(ExoPlayerActivity.this,Util.SORRY,Util.DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setCancelable(false);
+                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    dlgAlert.create().show();
+                }
+
+
+
+
             }
 
         }
@@ -5006,8 +5082,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("watch_remaining_time", "0");
                 httppost.addHeader("device_id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
                 httppost.addHeader("user_id", userIdStr);
-                httppost.addHeader("device_type ", "2");
-                httppost.addHeader("request_data ", "");
+                httppost.addHeader("device_type", "2");
+                httppost.addHeader("request_data", "");
                 httppost.addHeader("lang_code", Util.getTextofLanguage(ExoPlayerActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
@@ -5034,6 +5110,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     Log.v("BIBHU11", "response of server_current_time in exoplayer=======" + myJson.optLong("created_date"));
                     Log.v("BIBHU11", "response of server_current_time in exoplayer=======" + myJson.optLong("access_expiry_time"));
                     Dwonload_Complete_Msg = "";
+                    SQLiteDatabase DB1 = ExoPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
+
                     if (statusCode == 200) {
 
                         Dwonload_Complete_Msg = myJson.optString("download_complete_msg");
@@ -5041,16 +5119,16 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                         if (Dwonload_Complete_Msg.trim().equals(""))
                             Dwonload_Complete_Msg = "Your video has been downloaded successfully.";
 
-                        SQLiteDatabase DB1 = ExoPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
 
 
                         String query1 = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET server_current_time = '" + myJson.optLong("created_date") + "' ," +
                                 "watch_period = '0',access_period = '" + myJson.optLong("access_expiry_time") + "' WHERE download_id = '" + f_url[0].trim() + "'";
 
-
-//                        String query1 = "UPDATE "+DBHelper.WATCH_ACCESS_INFO+" SET server_current_time = '"+myJson.optLong("created_date")+"' ," +
-//                                "watch_period = '0',access_period = '"+((myJson.optLong("created_date"))+300000)+"' WHERE download_id = '"+f_url[0].trim()+"'";
-
+                        DB1.execSQL(query1);
+                    }else{
+                        Dwonload_Complete_Msg = "Your video has been downloaded successfully.";
+                        String query1 = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET server_current_time = '" + myJson.optLong("created_date") + "' ," +
+                                "watch_period = '0',access_period = '" +-1+ "' WHERE download_id = '" + f_url[0].trim() + "'";
 
                         DB1.execSQL(query1);
                     }

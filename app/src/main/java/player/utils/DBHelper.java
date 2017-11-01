@@ -39,6 +39,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_UID = "UID";
     public static final String COLUMN_LANGUAGE = "LANGUAGE";
     public static final String COLUMN_PATH = "PATH";
+    public static final String COLUMN_STREAMID = "StreamId";
 
     // This code is done for bandwidth log of download contnet separately.......
 
@@ -57,6 +58,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String WATCH_ACCESS_INFO_TABLE = "CREATE TABLE IF NOT EXISTS " + WATCH_ACCESS_INFO
             + " (download_id TEXT,stream_unique_id TEXT,server_current_time INTEGER,watch_period INTEGER,access_period INTEGER," +
             "initial_played_time INTEGER,"+"updated_server_current_time INTEGER,email TEXT)";
+    //=================================End=======================================================//
+
+
+    // This code is only responsible for Resume Watch Feature
+    public static final String RESUME_WATCH = "RESUME_WATCH";
+
+    public static final String RESUME_WATCH_TABLE = "CREATE TABLE IF NOT EXISTS " + RESUME_WATCH
+            + " (UniqueId TEXT,PlayedDuration TEXT,LatestMpdUrl TEXT,Flag TEXT,LicenceUrl TEXT)";
     //=================================End=======================================================//
 
 
@@ -80,8 +89,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     COLUMN_GENERE + " VARCHAR, " +
                     COLUMN_MUVIID + " VARCHAR, " +
                     COLUMN_DURATION + " VARCHAR, " +
-
-
+                    COLUMN_STREAMID + " VARCHAR, " +
                     COLUMN_DOWNLOAD_STATUS + " INTEGER)";
 
     private static final String CREATE_SOL_SUBTITLE_LUIMERE = "CREATE TABLE " + TABLE_NAME_SUBTITLE_LUIMERE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -102,6 +110,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_SOL_SUBTITLE_LUIMERE);
         db.execSQL(DOWNLOAD_CONTENT_INFO_TABLE);
         db.execSQL(WATCH_ACCESS_INFO_TABLE);
+        db.execSQL(RESUME_WATCH_TABLE);
     }
 
     @Override
@@ -130,6 +139,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_GENERE, contact.getGenere());
         contentValues.put(COLUMN_MUVIID, contact.getMuviid());
         contentValues.put(COLUMN_DURATION, contact.getDuration());
+        contentValues.put(COLUMN_STREAMID, contact.getStreamId());
 
 
 
@@ -150,69 +160,54 @@ public class DBHelper extends SQLiteOpenHelper {
         database.close();
         return status;
     }
-//    public void insertRecordAlternate(ContactModel contact) {
-//        database = this.getReadableDatabase();
-//        database.execSQL("INSERT INTO " + TABLE_NAME + "(" + COLUMN_FIRST_NAME + "," + COLUMN_LAST_NAME + ") VALUES('" + contact.getFirstName() + "','" + contact.getLastName() + "')");
-//        database.close();
-//    }
-
-//    public String getCotacts(String id) {
-//
-//        //hp = new HashMap();
-//        String resp = "";
-//        database = this.getReadableDatabase();
-//        Cursor res =  database.rawQuery( "select * from SOL where CUSTOMER_ID = '"+id+"'", null );
-//        res.moveToFirst();
-//
-//        while(res.isAfterLast() == false){
-//            resp = "Name:-"+  res.getString(res.getColumnIndex(COLUMN_FIRM_NAME))
-//                    +"\n"+"Email"+res.getString(res.getColumnIndex(COLUMN_LAST_NAME));
-//            res.moveToNext();
-//        }
-//        return resp;
-//    }
 
     public ContactModel1 getContact(String id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        ContactModel1 contactModel= null;
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = null;
-
-
-        cursor = db.query(TABLE_NAME, new String[]{COLUMN_ID,
-                        COLUMN_MUVI_ID,
-                        COLUMN_DOWNLOADID,
-                        COLUMN_DOWNLOAD_PROGRESS,COLUMN_DOWNLOAD_USERNAME,COLUMN_DOWNLOAD_UNIQUEID, COLUMN_DOWNLOAD_STATUS,
-
-                        COLUMN_POSTER,COLUMN_MUVI_TOKEN,COLUMN_FILE_PATH,COLUMN_CONTENT_ID,COLUMN_GENERE,COLUMN_MUVIID,COLUMN_DURATION,
+            Cursor cursor = null;
 
 
+            cursor = db.query(TABLE_NAME, new String[]{COLUMN_ID,
+                            COLUMN_MUVI_ID,
+                            COLUMN_DOWNLOADID,
+                            COLUMN_DOWNLOAD_PROGRESS,COLUMN_DOWNLOAD_USERNAME,COLUMN_DOWNLOAD_UNIQUEID, COLUMN_DOWNLOAD_STATUS,
 
-                }, COLUMN_DOWNLOAD_UNIQUEID + "=?",
-                new String[]{id}, null, null, null, null);
-
-        ContactModel1 contactModel=null;
-
-        if (cursor != null && cursor.moveToFirst()) {
-
-
-            contactModel = new ContactModel1();
-            contactModel.setID(cursor.getString(0));
-            contactModel.setMUVIID(cursor.getString(1));
-            contactModel.setDOWNLOADID(cursor.getInt(2));
-            contactModel.setProgress(cursor.getInt(3));
-            contactModel.setUSERNAME(cursor.getString(4));
-            contactModel.setUniqueId(cursor.getString(5));
-            contactModel.setDSTATUS(cursor.getInt(6));
+                            COLUMN_POSTER,COLUMN_MUVI_TOKEN,COLUMN_FILE_PATH,COLUMN_CONTENT_ID,COLUMN_GENERE,COLUMN_MUVIID,COLUMN_DURATION,COLUMN_STREAMID,
 
 
-            contactModel.setPoster(cursor.getString(7));
-            contactModel.setToken(cursor.getString(8));
-            contactModel.setPath(cursor.getString(9));
-            contactModel.setContentid(cursor.getString(10));
-            contactModel.setGenere(cursor.getString(11));
-            contactModel.setMuviid(cursor.getString(12));
-            contactModel.setDuration(cursor.getString(13));
 
+                    }, COLUMN_DOWNLOAD_UNIQUEID + "=?",
+                    new String[]{id}, null, null, null, null);
+
+            contactModel = null;
+
+            if (cursor != null && cursor.moveToFirst()) {
+
+
+                contactModel = new ContactModel1();
+                contactModel.setID(cursor.getString(0));
+                contactModel.setMUVIID(cursor.getString(1));
+                contactModel.setDOWNLOADID(cursor.getInt(2));
+                contactModel.setProgress(cursor.getInt(3));
+                contactModel.setUSERNAME(cursor.getString(4));
+                contactModel.setUniqueId(cursor.getString(5));
+                contactModel.setDSTATUS(cursor.getInt(6));
+
+
+                contactModel.setPoster(cursor.getString(7));
+                contactModel.setToken(cursor.getString(8));
+                contactModel.setPath(cursor.getString(9));
+                contactModel.setContentid(cursor.getString(10));
+                contactModel.setGenere(cursor.getString(11));
+                contactModel.setMuviid(cursor.getString(12));
+                contactModel.setDuration(cursor.getString(13));
+                contactModel.setStreamId(cursor.getString(14));
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return contactModel;
@@ -240,104 +235,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-   /* public ContactModel getLastrowid() {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = null;
-        String query = "SELECT ID from SOL order by ID DESC limit 1";
-
-        cursor = db.rawQuery(query,null);
-
-        ContactModel contactModel=null;
-
-        if (cursor != null && cursor.moveToFirst()) {
-
-
-            contactModel = new ContactModel();
-
-            contactModel.setID(cursor.getString(0));
-
-
-
-        }
-
-        return contactModel;
-        // return contact
-
-    }
-
-*/
-//    public ContactModel getContacts(String id) {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//
-//        Cursor cursor = null;
-//
-//
-//        cursor = db.query(TABLE_NAME, new String[]{COLUMN_ID, COLUMN_USERR_ID, COLUMN_CONTENTTYPE_ID,
-//                        COLUMN_FILE_NAME, COLUMN_FILE_PATH, COLUMN_POSTER, COLUMN_GENERE, COLUMN_VIDEO_TITLE,
-//                        COLUMN_VIDEO_DURATION,
-//
-//
-////
-////
-//
-//
-//                }, COLUMN_USERR_ID + "=?",
-//                new String[]{id}, null, null, null, null);
-//
-//        ContactModel contactModel=null;
-//
-//        if (cursor != null && cursor.moveToFirst()) {
-//
-//
-//            contactModel = new ContactModel();
-//
-//            contactModel.setID(cursor.getString(0));
-//            contactModel.setContenttypeid(cursor.getString(1));
-//            contactModel.setFilename(cursor.getString(2));
-//            contactModel.setFilepath(cursor.getString(3));
-//            contactModel.setToken(cursor.getString(4));
-//            contactModel.setPoster(cursor.getString(5));
-//            contactModel.setGenere(cursor.getString(6));
-//            contactModel.setVideotitle(cursor.getString(7));
-//            contactModel.setVideoduration(cursor.getString(8));
-//
-//
-//
-//        }
-//
-//        return contactModel;
-//        // return contact
-//
-//    }
-
-
-
-
-//    public String[] getAllCountries()
-//    {
-//
-//        database = this.getReadableDatabase();
-//        Cursor cursor = this.database.query(TABLE_NAME, new String[] {COLUMN_REQUEST_ID}, null, null, null, null, null);
-//
-//        if(cursor.getCount() >0)
-//        {
-//            String[] str = new String[cursor.getCount()];
-//            int i = 0;
-//
-//            while (cursor.moveToNext())
-//            {
-//                str[i] = cursor.getString(cursor.getColumnIndex(COLUMN_REQUEST_ID));
-//
-//                i++;
-//            }
-//            return str;
-//        }
-//        else
-//        {
-//            return new String[] {};
-//        }
-//    }
 
 
 
@@ -348,24 +245,11 @@ public class DBHelper extends SQLiteOpenHelper {
         String query = "SELECT "+COLUMN_ID+","+COLUMN_MUVI_ID+","+COLUMN_DOWNLOADID+","+COLUMN_DOWNLOAD_PROGRESS+","+
                 COLUMN_DOWNLOAD_USERNAME+","+COLUMN_DOWNLOAD_UNIQUEID+","+ COLUMN_DOWNLOAD_STATUS+","+
 
-                COLUMN_POSTER+","+COLUMN_MUVI_TOKEN+","+COLUMN_FILE_PATH+","+COLUMN_CONTENT_ID+","+COLUMN_GENERE+","+COLUMN_MUVIID+","+COLUMN_DURATION+" FROM "+TABLE_NAME+" WHERE "+COLUMN_DOWNLOAD_USERNAME+" = '"+id+"' AND "+COLUMN_DOWNLOAD_STATUS+" = "+downloadstatus;
+                COLUMN_POSTER+","+COLUMN_MUVI_TOKEN+","+COLUMN_FILE_PATH+","+COLUMN_CONTENT_ID+","+COLUMN_GENERE+","+COLUMN_MUVIID+","+COLUMN_DURATION+","+COLUMN_STREAMID+" FROM "+TABLE_NAME+" WHERE "+COLUMN_DOWNLOAD_USERNAME+" = '"+id+"' AND "+COLUMN_DOWNLOAD_STATUS+" = "+downloadstatus;
         SQLiteDatabase db = this.getReadableDatabase();
-//
+
         Cursor cursor = db.rawQuery(query,null);
-       /* Cursor cursor = null;
 
-        cursor = db.query(TABLE_NAME, new String[]{COLUMN_ID,
-                        COLUMN_MUVI_ID,
-                        COLUMN_DOWNLOADID,
-                        COLUMN_DOWNLOAD_PROGRESS,COLUMN_DOWNLOAD_USERNAME,COLUMN_DOWNLOAD_UNIQUEID, COLUMN_DOWNLOAD_STATUS,
-
-                        COLUMN_POSTER,COLUMN_MUVI_TOKEN,COLUMN_FILE_PATH,COLUMN_CONTENT_ID,COLUMN_GENERE,COLUMN_MUVIID,COLUMN_DURATION,
-
-
-
-                }, COLUMN_DOWNLOAD_USERNAME + "=?",
-                new String[]{id}, null, null, null, null);
-*/
         ContactModel1 contactModel=null;
 
         ArrayList<ContactModel1> contacts = new ArrayList<ContactModel1>();
@@ -391,8 +275,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 contactModel.setGenere(cursor.getString(11));
                 contactModel.setMuviid(cursor.getString(12));
                 contactModel.setDuration(cursor.getString(13));
-
-
+                contactModel.setStreamId(cursor.getString(14));
 
 
                 contacts.add(contactModel);
@@ -407,15 +290,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     public ArrayList<ContactModel1> getDownloadcontent(String id) {
-
-
-//        String query = "SELECT "+COLUMN_ID+","+COLUMN_MUVI_ID+","+COLUMN_DOWNLOADID+","+COLUMN_DOWNLOAD_PROGRESS+","+
-//                COLUMN_DOWNLOAD_USERNAME+","+COLUMN_DOWNLOAD_UNIQUEID+","+ COLUMN_DOWNLOAD_STATUS+","+
-//
-//                COLUMN_POSTER+","+COLUMN_MUVI_TOKEN+","+COLUMN_FILE_PATH+","+COLUMN_CONTENT_ID+","+COLUMN_GENERE+","+COLUMN_MUVIID+","+COLUMN_DURATION+" FROM "+TABLE_NAME+" WHERE "+COLUMN_DOWNLOAD_USERNAME+" = '"+id+"' AND "+COLUMN_DOWNLOAD_STATUS+" = "+downloadstatus;
         SQLiteDatabase db = this.getReadableDatabase();
-//
-        //Cursor cursor = db.rawQuery(query,null);
         Cursor cursor = null;
 
         cursor = db.query(TABLE_NAME, new String[]{COLUMN_ID,
@@ -456,15 +331,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 contactModel.setMuviid(cursor.getString(12));
                 contactModel.setDuration(cursor.getString(13));
 
-
-
-
                 contacts.add(contactModel);
             }
         }
         cursor.close();
-//        database.close();
-
         return contacts;
     }
 
@@ -489,10 +359,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 contactModel.setProgress(cursor.getInt(3));
                 contactModel.setDSTATUS(cursor.getInt(4));
 
-
-
-
-
                 contacts.add(contactModel);
             }
         }
@@ -501,31 +367,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return contacts;
     }
-
-//    public ArrayList<ContactModel> getAllRecordsAlternate() {
-//        database = this.getReadableDatabase();
-//        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_NAME, null);
-//
-//        ArrayList<ContactModel> contacts = new ArrayList<ContactModel>();
-//        ContactModel contactModel;
-//        if (cursor.getCount() > 0) {
-//            for (int i = 0; i < cursor.getCount(); i++) {
-//                cursor.moveToNext();
-//
-//                contactModel = new ContactModel();
-//                contactModel.setID(cursor.getString(0));
-//                contactModel.setRequestid(cursor.getString(1));
-//                contactModel.setFirstName(cursor.getString(2));
-//                contactModel.setLastName(cursor.getString(3));
-//
-//                contacts.add(contactModel);
-//            }
-//        }
-//        cursor.close();
-//        database.close();
-//
-//        return contacts;
-//    }
 
 
     public void updateRecord(ContactModel1 contact) {
@@ -547,19 +388,13 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_GENERE, contact.getGenere());
         contentValues.put(COLUMN_MUVIID, contact.getMuviid());
         contentValues.put(COLUMN_DURATION, contact.getDuration());
-
-
+        contentValues.put(COLUMN_STREAMID, contact.getStreamId());
 
 
         database.update(TABLE_NAME, contentValues, COLUMN_ID + " = ?", new String[]{contact.getID()});
         database.close();
     }
 
-//    public void updateRecordAlternate(ContactModel contact) {
-//        database = this.getReadableDatabase();
-//        database.execSQL("update " + TABLE_NAME + " set " + COLUMN_FIRST_NAME + " = '" + contact.getFirstName() + "', " + COLUMN_LAST_NAME + " = '" + contact.getLastName() + "' where " + COLUMN_ID + " = '" + contact.getID() + "'");
-//        database.close();
-//    }
 
     public void deleteAllRecords() {
         database = this.getReadableDatabase();
@@ -579,11 +414,6 @@ public class DBHelper extends SQLiteOpenHelper {
         database.close();
     }
 
-   /* public void deleteRecordAlternate(ContactModel contact) {
-        database = this.getReadableDatabase();
-        database.execSQL("delete from " + TABLE_NAME + " where " + COLUMN_ID + " = '" + contact.getID() + "'");
-        database.close();
-    }*/
 
     public ArrayList<String> getAllTableName()
     {

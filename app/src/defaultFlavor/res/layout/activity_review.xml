@@ -1,0 +1,184 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBackgroundColor"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <TextView
+        android:id="@+id/clickHereToLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="@dimen/ppv_margin"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="@string/addReview"
+        android:textColor="@color/pageTitleColor"
+        android:textSize="@dimen/review_text_size" />
+
+    <RelativeLayout
+        android:id="@+id/submitRatingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/clickHereToLogin"
+        android:layout_marginTop="@dimen/login_btn_margin_top"
+
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/sectionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/ppv_margin"
+            android:padding="@dimen/payment_spinner_padding"
+            android:text="Submit Your Rating"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/review_text_size"
+
+            android:textStyle="bold" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            style="@style/customRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/sectionTitle"
+            android:layout_below="@+id/sectionTitle"
+            android:layout_marginTop="@dimen/ppv_margin"
+
+            android:visibility="visible" />
+
+        <EditText
+            android:id="@+id/reviewEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/sectionTitle"
+            android:layout_below="@+id/ratingBar"
+            android:layout_marginBottom="@dimen/payment_margin_btn_top"
+            android:layout_marginRight="@dimen/ppv_margin"
+            android:layout_marginTop="@dimen/review_edit_text_margin"
+            android:hint="Add Your Review \n (Optional)"
+            android:imeOptions="actionDone"
+            android:inputType="textMultiLine"
+            android:paddingBottom="@dimen/Login_drawing_padding"
+            android:paddingLeft="@dimen/payment_spinner_padding"
+            android:paddingRight="@dimen/payment_spinner_padding"
+            android:paddingTop="@dimen/Login_drawing_padding"
+            android:textColor="@color/editTextColor"
+            android:textColorHint="@color/hint_color"
+            android:textSize="@dimen/review_edittext_size" />
+
+        <Button
+            android:id="@+id/submitReviewButton"
+            android:layout_width="@dimen/review_btn_width"
+            android:layout_height="@dimen/review_btn_height"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/reviewEditText"
+            android:layout_marginRight="@dimen/ppv_margin"
+            android:background="@drawable/button_radious"
+            android:padding="@dimen/payment_spinner_padding"
+            android:text="Submit"
+            android:textAllCaps="false"
+            android:textColor="@color/buttonTextColor"
+            android:textSize="@dimen/review_btn_textsize"
+
+
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/border_line_height"
+            android:layout_below="@+id/submitReviewButton"
+            android:layout_margin="@dimen/payment_relative_margin"
+            android:background="@color/pageTitleColor" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/submitRatingLayout"
+        android:layout_marginTop="@dimen/payment_textview_showname_margin">
+
+        <GridView
+            android:id="@+id/reviewsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:scrollbars="none" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/progress_rawable"
+            android:indeterminateDuration="1000" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/noInternet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/appBackgroundColor"
+        android:padding="@dimen/manage_device_padding"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/noInternetTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/noData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/appBackgroundColor"
+        android:padding="@dimen/manage_device_padding"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/noDataTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -263,6 +263,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         LogUtil.showLog("BKS", "packagenameMAINactivity1===" + SDKInitializer.user_Package_Name_At_Api);
+
         if (menuList != null && menuList.size() > 0) {
             menuList.clear();
         }
@@ -320,6 +321,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_NO_DATA, DEFAULT_NO_INTERNET_NO_DATA));
         noInternetLayout.setVisibility(View.GONE);
+
 
 
         if (NetworkStatus.getInstance().isConnected(MainActivity.this)) {
@@ -701,6 +703,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onLogoutPostExecuteCompleted(int code, String status, String message) {
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+
+        }
         if (code != 200) {
             Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
@@ -754,6 +761,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     public void onGetMenusPreExecuteStarted() {
 
+        pDialog = new ProgressBarHandler(MainActivity.this);
+        pDialog.show();
+
         try {
              /*   internetSpeedDialog = new ProgressDialog(MainActivity.this);
                 internetSpeedDialog.setMessage(getResources().getString(R.string.loading_str));
@@ -778,6 +788,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     public void onGetMenusPostExecuteCompleted(MenusOutputModel menusOutputModel, int status, String message) {
 
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+
+        }
 
         LogUtil.showLog("Alok", "onGetMenusPostExecuteCompleted");
         if (status == 0) {
@@ -1919,13 +1934,18 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onGetLanguageListPreExecuteStarted() {
-        progressBarHandler = new ProgressBarHandler(MainActivity.this);
-        progressBarHandler.show();
+        pDialog = new ProgressBarHandler(MainActivity.this);
+        pDialog.show();
     }
 
     @Override
     public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
 
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+
+        }
         ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
 
         for (int i = 0; i < languageListOutputArray.size(); i++) {
@@ -2123,12 +2143,20 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onGetTranslateLanguagePreExecuteStarted() {
-        progressBarHandler = new ProgressBarHandler(MainActivity.this);
-        progressBarHandler.show();
+
+        pDialog = new ProgressBarHandler(MainActivity.this);
+        pDialog.show();
     }
 
     @Override
     public void onGetTranslateLanguagePostExecuteCompleted(String jsonResponse, int status) {
+
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+
+        }
+
         if (status > 0 && status == 200) {
 
             try {

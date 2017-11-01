@@ -76,14 +76,14 @@ import static com.home.vod.util.Constant.authTokenStr;
 public class CastCrewDetailsActivity extends AppCompatActivity implements GetCastDetailsAsynTask.GetCastDetailsListener {
     ProgressBarHandler pDialog;
     Toolbar mActionBarToolbar;
-    TextView castNameTextView,castDescriptionTextView;
+    TextView castNameTextView, castDescriptionTextView;
     ImageView castImageView;
     Button btnmore;
     String castpermalinkStr = "";
     RecyclerView filmographyRecyclerView;
     int itemsInServer = 0;
-    int  videoHeight = 185;
-    int  videoWidth = 256;
+    int videoHeight = 185;
+    int videoWidth = 256;
     String videoImageStrToHeight;
     String castNameStr = "";
     String castSummaryStr = "";
@@ -118,16 +118,17 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
         });
 
 
-
-        if (getIntent().getStringExtra("castPermalink")!=null) {
+        if (getIntent().getStringExtra("castPermalink") != null) {
             castpermalinkStr = getIntent().getStringExtra("castPermalink");
 
         }
-        if (getIntent().getStringExtra("castName")!=null) {
+        if (getIntent().getStringExtra("castName") != null) {
             castNameStr = getIntent().getStringExtra("castName");
-        } if (getIntent().getStringExtra("castSummary")!=null) {
+        }
+        if (getIntent().getStringExtra("castSummary") != null) {
             castSummaryStr = getIntent().getStringExtra("castSummary");
-        } if (getIntent().getStringExtra("castImage")!=null) {
+        }
+        if (getIntent().getStringExtra("castImage") != null) {
             castImageStr = getIntent().getStringExtra("castImage");
         }
 
@@ -137,9 +138,9 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
         // Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.regular_fonts));
         // castNameTextView.setTypeface(videoGenreTextViewTypeface);
         castDescriptionTextView = (TextView) findViewById(R.id.castDescriptionTextView);
-        btnmore= (Button) findViewById(R.id.btnMore);
-        FontUtls.loadFont(CastCrewDetailsActivity.this,getResources().getString(R.string.regular_fonts),btnmore);
-        btnmore.setText(languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE));
+        btnmore = (Button) findViewById(R.id.btnMore);
+        FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.regular_fonts), btnmore);
+        btnmore.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
 
         btnmore.setVisibility(View.GONE);
         btnmore.setOnClickListener(new View.OnClickListener() {
@@ -173,13 +174,13 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                 String moviePermalink = item.getPermalink();
                 String movieTypeId = item.getVideoTypeId();
 
-                if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))) {
+                if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(CastCrewDetailsActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE,DEFAULT_NO_DETAILS_AVAILABLE));
-                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -201,7 +202,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                         });
 
 
-                    } else if ((movieTypeId.trim().equalsIgnoreCase("3")) ) {
+                    } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
                         final Intent detailsIntent = new Intent(CastCrewDetailsActivity.this, ShowWithEpisodesActivity.class);
                         detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         runOnUiThread(new Runnable() {
@@ -230,13 +231,9 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
         GetCastCrewDetails();
 
 
-
-
-
     }
 
-    public void GetCastCrewDetails()
-    {
+    public void GetCastCrewDetails() {
 
         GetCastDetailsInput getCastDetailsInput = new GetCastDetailsInput();
         getCastDetailsInput.setAuthToken(authTokenStr);
@@ -244,7 +241,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
         getCastDetailsInput.setOffset(String.valueOf(0));
         getCastDetailsInput.setPermalink(castpermalinkStr);
         getCastDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-        getCastDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+        getCastDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
         GetCastDetailsAsynTask getCastDetailsAsynTask = new GetCastDetailsAsynTask(getCastDetailsInput, CastCrewDetailsActivity.this, CastCrewDetailsActivity.this);
         getCastDetailsAsynTask.executeOnExecutor(threadPoolExecutor);
@@ -261,7 +258,13 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
     }
 
     @Override
-    public void onGetCastDetailsPostExecuteCompleted(GetCastDetailsOutputModel getCastDetailsOutputModelArray, int status,int totalItems, String message) {
+    public void onGetCastDetailsPostExecuteCompleted(GetCastDetailsOutputModel getCastDetailsOutputModelArray, int status, int totalItems, String message) {
+
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+        }
+
         String movieGenreStr = "";
         /*String movieName = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
         String movieImageStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
@@ -269,7 +272,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
         String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);*/
         String movieName = "";
         String movieImageStr = "";
-        String moviePermalinkStr ="";
+        String moviePermalinkStr = "";
         String videoTypeIdStr = "";
         String isEpisodeStr = "";
 
@@ -280,15 +283,15 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
         if (status > 0) {
             if (status == 200) {
                 for (int i = 0; i < getCastDetailsOutputModelArray.getCastdetails().size(); i++) {
-                    movieImageStr=getCastDetailsOutputModelArray.getCastdetails().get(i).getPosterUrl();
-                    movieName=getCastDetailsOutputModelArray.getCastdetails().get(i).getName();
-                    videoTypeIdStr=getCastDetailsOutputModelArray.getCastdetails().get(i).getContentTypesId();
-                    movieGenreStr=getCastDetailsOutputModelArray.getCastdetails().get(i).getGenre();
-                    moviePermalinkStr=getCastDetailsOutputModelArray.getCastdetails().get(i).getPermalink();
-                    isEpisodeStr=getCastDetailsOutputModelArray.getCastdetails().get(i).getIsEpisode();
-                    isConverted=getCastDetailsOutputModelArray.getCastdetails().get(i).getIsConverted();
-                    isPPV=getCastDetailsOutputModelArray.getCastdetails().get(i).getIsPPV();
-                    isAPV=getCastDetailsOutputModelArray.getCastdetails().get(i).getIsAdvance();
+                    movieImageStr = getCastDetailsOutputModelArray.getCastdetails().get(i).getPosterUrl();
+                    movieName = getCastDetailsOutputModelArray.getCastdetails().get(i).getName();
+                    videoTypeIdStr = getCastDetailsOutputModelArray.getCastdetails().get(i).getContentTypesId();
+                    movieGenreStr = getCastDetailsOutputModelArray.getCastdetails().get(i).getGenre();
+                    moviePermalinkStr = getCastDetailsOutputModelArray.getCastdetails().get(i).getPermalink();
+                    isEpisodeStr = getCastDetailsOutputModelArray.getCastdetails().get(i).getIsEpisode();
+                    isConverted = getCastDetailsOutputModelArray.getCastdetails().get(i).getIsConverted();
+                    isPPV = getCastDetailsOutputModelArray.getCastdetails().get(i).getIsPPV();
+                    isAPV = getCastDetailsOutputModelArray.getCastdetails().get(i).getIsAdvance();
 
                     filmogrpahyItems.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
 /*
@@ -342,7 +345,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                     if (castNameStr.matches("")) {
                         castNameTextView.setVisibility(View.GONE);
                     } else {
-                        FontUtls.loadFont(CastCrewDetailsActivity.this,getResources().getString(R.string.regular_fonts),castNameTextView);
+                        FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.regular_fonts), castNameTextView);
                         castNameTextView.setText(getCastDetailsOutputModelArray.getName());
                         castNameTextView.setVisibility(View.VISIBLE);
 
@@ -350,7 +353,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                     if (castSummaryStr.matches("")) {
                         castDescriptionTextView.setVisibility(View.GONE);
                     } else {
-                        FontUtls.loadFont(CastCrewDetailsActivity.this,getResources().getString(R.string.light_fonts),castDescriptionTextView);
+                        FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.light_fonts), castDescriptionTextView);
                         castDescriptionTextView.setText(getCastDetailsOutputModelArray.getSummary());
                         ResizableCustomView.doResizeTextView(CastCrewDetailsActivity.this, castDescriptionTextView, 2, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
                     }
@@ -358,7 +361,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                     if (castNameStr.matches("")) {
                         castNameTextView.setVisibility(View.GONE);
                     } else {
-                        FontUtls.loadFont(CastCrewDetailsActivity.this,getResources().getString(R.string.regular_fonts),castNameTextView);
+                        FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.regular_fonts), castNameTextView);
                         castNameTextView.setText(getCastDetailsOutputModelArray.getName());
                         castNameTextView.setVisibility(View.VISIBLE);
 
@@ -366,7 +369,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                     if (castSummaryStr.matches("")) {
                         castDescriptionTextView.setVisibility(View.GONE);
                     } else {
-                        FontUtls.loadFont(CastCrewDetailsActivity.this,getResources().getString(R.string.light_fonts),castDescriptionTextView);
+                        FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.light_fonts), castDescriptionTextView);
                         castDescriptionTextView.setText(getCastDetailsOutputModelArray.getSummary());
                         ResizableCustomView.doResizeTextView(CastCrewDetailsActivity.this, castDescriptionTextView, 2, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
 
@@ -473,7 +476,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
             if (castNameStr.matches("")) {
                 castNameTextView.setVisibility(View.GONE);
             } else {
-                FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.regular_fonts),castNameTextView);
+                FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.regular_fonts), castNameTextView);
                 castNameTextView.setText(castNameStr);
                 castNameTextView.setVisibility(View.VISIBLE);
 
@@ -481,7 +484,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
             if (castSummaryStr.matches("")) {
                 castDescriptionTextView.setVisibility(View.GONE);
             } else {
-                FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.light_fonts),castDescriptionTextView);
+                FontUtls.loadFont(CastCrewDetailsActivity.this, getResources().getString(R.string.light_fonts), castDescriptionTextView);
                 castDescriptionTextView.setText(castSummaryStr);
                 ResizableCustomView.doResizeTextView(CastCrewDetailsActivity.this, castDescriptionTextView, 2, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
             }
@@ -883,7 +886,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                 if (density >= 3.5 && density <= 4.0) {
                     filmographyAdapter = new FilmographyAdapter(CastCrewDetailsActivity.this, R.layout.nexus_videos_grid_layout_land, filmogrpahyItems);
 
-                }else{
+                } else {
                     filmographyAdapter = new FilmographyAdapter(CastCrewDetailsActivity.this, R.layout.videos_280_grid_layout, filmogrpahyItems);
 
                 }
@@ -891,7 +894,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
                 if (density >= 3.5 && density <= 4.0) {
                     filmographyAdapter = new FilmographyAdapter(CastCrewDetailsActivity.this, R.layout.nexus_videos_grid_layout, filmogrpahyItems);
 
-                }else{
+                } else {
                     filmographyAdapter = new FilmographyAdapter(CastCrewDetailsActivity.this, R.layout.videos_grid_layout, filmogrpahyItems);
 
                 }
@@ -908,6 +911,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
             filmographyRecyclerView.setAdapter(filmographyAdapter);
         }
     }
+
     public class ItemOffsetDecoration extends RecyclerView.ItemDecoration {
 
         private int mItemOffset;
