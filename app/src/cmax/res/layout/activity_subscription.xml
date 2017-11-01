@@ -62,7 +62,7 @@
                     android:stateListAnimator="@null"
                     android:textAllCaps="false"
                     android:textColor="@color/buttonTextColor"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/castcrew_text"
                     android:visibility="gone" />
 
                 <Button

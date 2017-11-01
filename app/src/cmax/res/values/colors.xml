@@ -115,15 +115,17 @@
     <color name="transparent">@android:color/transparent</color>
     <color name="castCrewTitleTextColor">#3084E3</color>
     <color name="subtitleListColor">#fff</color>
-    <color name="episodeBackgroundColor">#080808</color>
+    <color name="episodeBackgroundColor">#242424</color>
     <color name="preOrderButtonTextColor">#DDD</color>
     <color name="spinnerDropDownListColor">#000</color>
     <color name="leftMenuBackground">#ffffff</color>
     <color name="colorPrimary">#000</color>
+    <color name="nav_lineColor">#f73b4c</color>
+
     <color name="colorPrimaryDark">#000</color>
     <color name="languagePopupColor">#000000</color>
     <color name="languagePopupFadeColor">#50696969</color>
-    <color name="filterTextColor">#000000</color>
+    <color name="filterTextColor">#5c6873</color>
     <color name="nav_drawer_lineColor">#000</color>
     <color name="nav_drawer_text_Color">#525252</color>
     <color name="button_background">#f73b4c</color>
@@ -133,6 +135,8 @@
     <color name="fb_button_background">#3b5998</color>
     <color name="colorAccent">#3b5998</color>
     <color name="textColorPrimary">#3b5998</color>
+    <color name="videoTitleTextColor">#3b5998</color>
+    <color name="resumeTitleTextColor">#ffffff</color>
     <color name="windowBackground">#000</color>
     <color name="selected_color">#000</color>
     <color name="unselected_color">#fff</color>
@@ -145,7 +149,7 @@
     <color name="noInternetColor">#fff</color>
     <color name="editTextColor">#fff</color>
     <color name="movieTitleColor">#fff</color>
-    <color name="resumePopupColor">#000000</color>
+    <color name="resumePopupColor">#ffffff</color>
     <color name="dividerColor">#3084E3</color>
     <color name="playerColor">#000000</color>
     <color name="playPauseColor">#00000000</color>
@@ -158,5 +162,7 @@
     <color name="spinnerTextColor">#fff</color>
     <color name="filterBgColor">#fff</color>
     <color name="alertPopupColor">#fff</color>
+    <!--<color name="google_signup_color">#942c27</color>-->
+    <color name="google_signup_color">#ffffff</color>
 
 </resources>
