@@ -6,9 +6,22 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 import com.home.vod.activity.Episode_list_Activity;
+import com.home.vod.activity.LoginActivity;
 import com.home.vod.activity.MovieDetailsActivity;
+import com.home.vod.activity.RegisterActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
+import com.home.vod.preferences.LanguagePreference;
 
+import static com.home.vod.preferences.LanguagePreference.ACCESS_PERIOD_EXPIRED;
+import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.APP_ON;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACCESS_PERIOD_EXPIRED;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_ON;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.util.Util.showActivateSubscriptionWatchVideoAleart;
 
 /**
@@ -18,9 +31,10 @@ import static com.home.vod.util.Util.showActivateSubscriptionWatchVideoAleart;
 public class MonetizationHandler {
 
         Activity activity;
-
+        LanguagePreference languagePreference;
         public MonetizationHandler(Activity activity) {
             this.activity = activity;
+            languagePreference = LanguagePreference.getLanguagePreference(activity);
         }
 
         public void handle429OR430statusCod(String validUserStr,String message, String subscription_Str) {
