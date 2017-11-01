@@ -1023,6 +1023,7 @@ public class MyDownloads extends AppCompatActivity {
                             in.putExtra("PlayedLength", PlayedLength);
                             in.putExtra("UniqueId",""+download.get(Position).getUniqueId());
                             in.putExtra("streamId",""+download.get(Position).getStreamId());
+                            in.putExtra("download_content_type",""+download.get(Position).getDownloadContentType());
 
 
 
