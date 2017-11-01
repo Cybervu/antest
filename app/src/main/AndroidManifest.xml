@@ -12,7 +12,6 @@
 
     <uses-feature android:name="android.hardware.camera2" />
 
-
     <!-- Permission to use camera - required -->
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -266,33 +265,41 @@
             android:name=".activity.CastCrewDetailsActivity"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme"/>
-
-        <activity android:name=".activity.FavoriteActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/MyMaterialTheme"/>
-        <activity android:name=".activity.ReviewActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.SeasonActivity"
-                  android:screenOrientation="portrait"/>
-        <activity android:name=".activity.ProgrammeActivity"
-                  android:screenOrientation="portrait"/>
-        <activity android:name=".activity.ProgramDetailsActivity"
-                  android:screenOrientation="portrait"/>
-        <activity android:name=".activity.DietPlanActivity"
-                  android:screenOrientation="portrait"/>
-        <activity android:name=".activity.Tutorial_List_Activity"
-                  android:screenOrientation="portrait"/>
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".activity.FavoriteActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".activity.ReviewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SeasonActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ProgrammeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ProgramDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.DietPlanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Tutorial_List_Activity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="5ade002b6ada291c993af0c4732c69e8034b9e3e" />
 
-        <activity android:name=".activity.ProgramPlayerActivity"
+        <activity
+            android:name=".activity.ProgramPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.Notification"></activity>
     </application>
 
 </manifest>

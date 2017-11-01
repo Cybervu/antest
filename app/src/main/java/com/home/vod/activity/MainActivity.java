@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -45,12 +46,15 @@ import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+import com.home.apisdk.apiController.FcmRegistrationDetailsAsynTask;
 import com.home.apisdk.apiController.GetAppMenuAsync;
 import com.home.apisdk.apiController.GetImageForDownloadAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiController.SDKInitializer;
+import com.home.apisdk.apiModel.FcmRegistrationDetailsInputModel;
+import com.home.apisdk.apiModel.FcmRegistrationDetailsOutputModel;
 import com.home.apisdk.apiModel.GetMenusInputModel;
 import com.home.apisdk.apiModel.Get_UserProfile_Output;
 import com.home.apisdk.apiModel.LanguageListInputModel;
@@ -105,6 +109,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_RE
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
@@ -115,6 +120,7 @@ import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATI
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
@@ -127,7 +133,7 @@ import static com.home.vod.util.Util.languageModel;
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,
         LogoutAsynctask.LogoutListener,
         GetLanguageListAsynTask.GetLanguageListListener,
-        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, GetAppMenuAsync.GetMenusListener {
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, GetAppMenuAsync.GetMenusListener,FcmRegistrationDetailsAsynTask.FcmRegistrationDetailsListener {
 
 
     public MainActivity() {
@@ -277,6 +283,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         setContentView(R.layout.activity_main);
 
         registerReceiver(SUCCESS, new IntentFilter("LOGIN_SUCCESS"));
+
 
 
         LogUtil.showLog("BKS", "packagenameMAINactivity1===" + SDKInitializer.user_Package_Name_At_Api);
@@ -560,7 +567,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         super.onResume();
        /// sideMenuHandler = new SideMenuHandler(this);
        // sideMenuHandler.staticSideMenu(languagePreference,menuList,preferenceManager);
-
+        invalidateOptionsMenu();
 
 
         mCastContext.addCastStateListener(mCastStateListener);
@@ -576,7 +583,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //        }
 //        removeFocusFromViews();
 
-        invalidateOptionsMenu();
+
+
     }
 
 
@@ -883,6 +891,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onGetMenusPostExecuteCompleted(MenusOutputModel menusOutputModel, int status, String message) {
+
+
+        FcmRegistrationDetailsInputModel fcmRegistrationDetailsInputModel = new FcmRegistrationDetailsInputModel();
+        fcmRegistrationDetailsInputModel.setAuthToken(authTokenStr);
+        fcmRegistrationDetailsInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        fcmRegistrationDetailsInputModel.setDevice_type(1);
+        fcmRegistrationDetailsInputModel.setFcm_token(preferenceManager.getSharedPref());
+        FcmRegistrationDetailsAsynTask fcmRegistrationDetailsAsynTask = new FcmRegistrationDetailsAsynTask(fcmRegistrationDetailsInputModel,this,this);
+        fcmRegistrationDetailsAsynTask.executeOnExecutor(threadPoolExecutor);
 
 
         LogUtil.showLog("Alok", "onGetMenusPostExecuteCompleted");
@@ -2040,6 +2057,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
 
+        if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
+            internetSpeedDialog.hide();
+            internetSpeedDialog = null;
+
+        }
         ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
 
         for (int i = 0; i < languageListOutputArray.size(); i++) {
@@ -2063,6 +2085,27 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         ShowLanguagePopup();
     }
 
+    @Override
+    public void onFcmRegistrationDetailsPreExecuteStarted() {
+        progressBarHandler = new ProgressBarHandler(MainActivity.this);
+        progressBarHandler.show();
+    }
+
+    @Override
+    public void onFcmRegistrationDetailsPostExecuteCompleted(FcmRegistrationDetailsOutputModel fcmRegistrationDetailsOutputModel,String message) {
+
+
+        if (progressBarHandler != null && progressBarHandler.isShowing()) {
+            progressBarHandler.hide();
+            progressBarHandler = null;
+
+        }
+
+        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+
+
+
+    }
 
     public static class RecyclerTouchListener1 implements RecyclerView.OnItemTouchListener {
 

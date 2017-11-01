@@ -265,6 +265,10 @@ public class HeaderConstants {
      */
     public static final String DEVICE_ID = "device_id";
     /**
+     * Constant for FCM Token Header used in API Call
+     */
+    public static final String FCM_TOKEN = "fcm_token";
+    /**
      * Constant for Login History ID Header used in API Call
      */
     public static final String LOGIN_HISTORY_ID = "login_history_id";

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.vod.activity.DigiOsmosisProfileActivity;
 import com.home.vod.activity.MainActivity;
+import com.home.vod.activity.Notification;
 import com.home.vod.activity.ProfileActivity;
 import com.home.vod.activity.ProgramDetailsActivity;
 import com.home.vod.activity.ProgrammeActivity;
@@ -61,7 +64,7 @@ public class SideMenuHandler {
     String login_menu,register_menu,profile_menu,mydownload_menu,purchase_menu,logout_menu,login_menuPermalink,register_menuPermalink,profile_menuPermalink,mydownload_menuPermalink,purchase_menuPermalink,logout_menuPermalink;
 
 
-    TextView nameText;
+    TextView nameText,badge,badge1;
     ImageView editPen,profile_image,bannerImageView;
     LinearLayout layout1,layout2,notification,logout;
 
@@ -82,7 +85,18 @@ public class SideMenuHandler {
         layout2 = (LinearLayout) context.findViewById(R.id.layout_2);
         notification = (LinearLayout) context.findViewById(R.id.notification);
         logout = (LinearLayout) context.findViewById(R.id.logout);
+        badge = (TextView) context.findViewById(R.id.badge);
+        badge1 = (TextView) context.findViewById(R.id.badge);
+        final DrawerLayout drawerLayout = (DrawerLayout) context.findViewById(R.id.drawer_layout);
+       /* LayerDrawable icon2 = (LayerDrawable) layout2.getIcon();
+        // Update LayerDrawable's BadgeDrawable
+        BadgeCount.setBadgeCount(this, icon2, preferenceManager.getNOTI_COUNT());
+*/
 
+
+       /* BadgeView badge = new BadgeView(this, layout2);
+        badge.setText("1");
+        badge.show();*/
 
         editPen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +112,8 @@ public class SideMenuHandler {
         layout2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,ProfileActivity.class);
+                drawerLayout.closeDrawers();
+                Intent intent = new Intent(context,Notification.class);
                 context.startActivity(intent);
             }
         });
@@ -106,7 +121,8 @@ public class SideMenuHandler {
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Intent intent = new Intent(context, ProgrammeActivity.class);
+                drawerLayout.closeDrawers();
+                    Intent intent = new Intent(context, Notification.class);
                 context.startActivity(intent);
             }
         });
@@ -117,6 +133,13 @@ public class SideMenuHandler {
                 ((MainActivity)context).logout();
             }
         });
+
+
+
+        badge.setText(String.valueOf(preferenceManager.getNOTI_COUNT()));
+        badge1.setText(String.valueOf(preferenceManager.getNOTI_COUNT()));
+
+
 
     }
 //    login_menu= (languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
@@ -251,5 +274,9 @@ public class SideMenuHandler {
         Intent Sintent = new Intent("LOGIN_SUCCESS");
         context.sendBroadcast(Sintent);
     }
+
+    public void openDrawer(View drawerView) {
+    }
+
 
 }
