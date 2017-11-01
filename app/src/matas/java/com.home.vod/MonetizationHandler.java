@@ -31,7 +31,8 @@ import static com.home.vod.util.Util.showActivateSubscriptionWatchVideoAleart;
 public class MonetizationHandler {
 
         Activity activity;
-        LanguagePreference languagePreference;
+    LanguagePreference languagePreference;
+
         public MonetizationHandler(Activity activity) {
             this.activity = activity;
             languagePreference = LanguagePreference.getLanguagePreference(activity);

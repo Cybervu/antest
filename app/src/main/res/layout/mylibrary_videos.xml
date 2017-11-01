@@ -10,11 +10,11 @@
         android:id="@+id/sectionTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:padding="@dimen/payment_spinner_padding"
         android:textColor="@color/pageTitleColor"
         android:textSize="@dimen/sectiontitle_text_size"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        android:layout_marginLeft="@dimen/marginleft10dp"/>
 
 
     <GridView
