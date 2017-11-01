@@ -16,7 +16,7 @@
     <dimen name="buttonheight">39dp</dimen>
     <dimen name="titletxt">14sp</dimen>
     <dimen name="indicatorheight">180dp</dimen>
-    //details layout
+    <!--details layout-->
 
     <dimen name="play_icon_height">60dp</dimen>
     <dimen name="play_icon_width">60dp</dimen>

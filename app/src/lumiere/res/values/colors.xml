@@ -15,6 +15,8 @@
     <color name="selectedHintColor">#0b8f66</color>
     <color name="hintTextColor">#999</color>
     <color name="editTexColor">#666</color>
+    <color name="button_background">#2acb99</color>
+    <color name="castCrewTitleTextColor">#2acb99</color>
     <color name="buttonTextColor">#fff</color>
     <color name="buttonBackgroundColor">#2acb99</color>
     <color name="loginTextColor">#2acb99</color>

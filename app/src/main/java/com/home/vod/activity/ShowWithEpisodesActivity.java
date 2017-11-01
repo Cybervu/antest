@@ -1035,7 +1035,7 @@ MonetizationHandler monetizationHandler;
     public void onDeleteFavPreExecuteStarted() {
 
         LogUtil.showLog("PINTU", "delete fav pdlog show");
-
+        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
         pDialog.show();
 
     }

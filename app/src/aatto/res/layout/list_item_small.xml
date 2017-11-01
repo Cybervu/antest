@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@color/appBackgroundColor"
     android:orientation="vertical"
-    android:padding="5dp">
+    >
 
     <RelativeLayout
         android:id="@+id/sliderRelativeLayout"
@@ -17,7 +17,7 @@
         <com.daimajia.slider.library.SliderLayout
             android:id="@+id/sliderLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/sliderLayout_height"
+            android:layout_height="@dimen/listitemlayout_height"
             custom:auto_cycle="true"
             custom:indicator_visibility="visible"
             custom:pager_animation_span="1100" />
