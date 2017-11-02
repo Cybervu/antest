@@ -153,6 +153,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
     ImageView bannerImageView, playButton, share;
     TextView detailsTextView, durationTitleTextView, durationTextView, tutorialTextView, viewAllTextView;
+    String durationText = "" ;
     Button startWorkoutButton, dietPlanButton;
     ProgressBarHandler progressBarHandler;
     GetValidateUserAsynTask asynValidateUserDetails;
@@ -1382,14 +1383,14 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), tutorialTextView);
             FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
 
-            if (duration.matches("")) {
+          /*  if (duration.matches("")) {
                 durationTitleTextView.setVisibility(View.GONE);
             } else {
 
                 FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
                 durationTextView.setText(duration);
             }
-
+*/
             if (TextUtils.isEmpty(bannerImageId)) {
 
                 if (TextUtils.isEmpty(posterImageId)) {
@@ -1452,7 +1453,6 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
         try {
             if (progressBarHandler != null && progressBarHandler.isShowing()) {
-                LogUtil.showLog("PINTU", "getepisodedetails pdlog hide");
                 progressBarHandler.hide();
 
             }
@@ -1461,7 +1461,20 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         }
 
 
-        LogUtil.showLog("MUVI", "episode show...");
+
+        durationText = episode_details_output.getSeason_total_duration();
+
+        Log.v("SUBHA","duration in time === "+ Util.getCountDownStringInMinutes(Integer.parseInt(durationText)));
+
+
+        if (durationText.matches("") ) {
+            durationTitleTextView.setVisibility(View.GONE);
+        } else {
+
+            FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
+            durationTextView.setText(Util.getCountDownStringInMinutes(Integer.parseInt(durationText)));
+        }
+
 
 
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
@@ -1509,12 +1522,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 seasontiveLayout.setLayoutManager(mLayoutManager);
                 seasontiveLayout.setItemAnimator(new DefaultItemAnimator());
                 ProgramDetailsAdapter mAdapter = new ProgramDetailsAdapter(ProgramDetailsActivity.this, R.layout.list_card_program_details, itemData);
-                  /*  public void onItemClick(EpisodesListModel item,int position) {
-                        LogUtil.showLog("Subhalaxmi","f"+position);
 
-                        clickItem(item, position);
-                    }
-                });*/
 
                 seasontiveLayout.setAdapter(mAdapter);
 

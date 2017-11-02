@@ -770,4 +770,47 @@ public class Util {
     public static boolean getStreamingRestriction(LanguagePreference languagePreference){
         return languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION,DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1");
     }
+
+
+
+    public static String ConvertSecondToHHMMString(int secondtTime)
+    {
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        String time = df.format(new Date(secondtTime*1000L));
+
+        return time;
+
+/*
+
+        int secondsLeft = timeInSeconds % 3600 % 60;
+        int minutes = (int) Math.floor(timeInSeconds % 3600 / 60);
+        int hours = (int) Math.floor(timeInSeconds / 3600);
+
+        st HH = hours < 10 ? "0" + hours : hours;
+        string MM = minutes < 10 ? "0" + minutes : minutes;
+        string SS = secondsLeft < 10 ? "0" + secondsLeft : secondsLeft;
+
+        return HH + ":" + MM + ":" + SS;
+*/
+
+    }
+
+
+    public static String getCountDownStringInMinutes(int timeInSeconds)
+    {
+        return getTwoDecimalsValue(timeInSeconds/3600) + " : " + getTwoDecimalsValue(timeInSeconds/60) + " : " +     getTwoDecimalsValue(timeInSeconds%60);
+    }
+
+
+    public static String getTwoDecimalsValue(int value)
+    {
+        if(value>=0 && value<=9)
+        {
+            return "0"+value;
+        }
+        else
+        {
+            return value+"";
+        }
+    }
 }

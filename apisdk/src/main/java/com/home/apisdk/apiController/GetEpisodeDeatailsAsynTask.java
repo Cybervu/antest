@@ -46,6 +46,7 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
     private int isAPV;
     private String message;
     private String permalink;
+    private String season_total_duration;
     private String PACKAGE_NAME;
     private GetEpisodeDetailsListener listener;
     private Context context;
@@ -155,6 +156,7 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
                 item_count = Integer.parseInt(myJson.optString("item_count"));
                 movieUniqueId = myJson.optString("muvi_uniq_id");
                 permalink = myJson.optString("permalink");
+                season_total_duration = myJson.optString("season_total_duration");
             }
             Log.v("SUBHA", "episode api controller" + responseStr);
 
@@ -616,6 +618,7 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
 
                             }
 
+
                             episodeArray.add(episode);
                         } catch (Exception e) {
                             status = 0;
@@ -623,6 +626,7 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
                             message = "";
                         }
                     }
+                    episode_details_output.setSeason_total_duration(season_total_duration);
                     episode_details_output.setEpisodeArray(episodeArray);
                 } else {
                     responseStr = "0";
