@@ -117,7 +117,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
                         android:layout_marginRight="20dp"
-                        android:src="@drawable/profile_edit"/>
+                        android:src="@drawable/pen"/>
 
 
 
@@ -153,6 +153,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/card_view"
+                    android:layout_centerInParent="true"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingTop="@dimen/layout2_padding_top"
@@ -306,6 +308,76 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/layout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/transparent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/Login_drawing_padding">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/bannerImageView"
+                            android:layout_width="@dimen/submit_width_size"
+                            android:layout_height="@dimen/fragmentlogoimg_height"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true"
+                            android:background="#ffffff"
+                            android:padding="@dimen/pop_up_view_height"
+                            android:scaleType="fitXY"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/edit"
+                            android:layout_width="@dimen/changepas_height"
+                            android:layout_height="@dimen/changepas_height"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginEnd="@dimen/profile_image_view_margin_end"
+                            android:layout_marginRight="@dimen/forgotlayout_margin"
+                            android:layout_marginTop="@dimen/profile_image_view_margin_top"
+                            android:padding="@dimen/pop_up_view_height"
+                            android:scaleType="fitXY"
+                            android:visibility="visible" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/name_of_user"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/name_user_margin_bottom"
+                        android:layout_marginTop="@dimen/forgotlayout_margin"
+                        android:text=""
+                        android:textAllCaps="false"
+                        android:textColor="@color/textColor"
+                        android:textSize="@dimen/user_text_size"
+                        android:textStyle="bold" />
+
+
+                    <ImageView
+                        android:id="@+id/iconImageView"
+                        android:layout_width="@dimen/forgot_logo_height"
+                        android:layout_height="@dimen/homefrag_height"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:padding="@dimen/pop_up_view_height"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/logo"
+                        android:visibility="gone" />
+
+
+                </LinearLayout>
 
             </RelativeLayout>
         </LinearLayout>

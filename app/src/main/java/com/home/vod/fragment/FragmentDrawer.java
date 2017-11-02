@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 import com.home.vod.R;
@@ -33,6 +34,7 @@ import com.home.vod.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.home.vod.R.id.badge;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
@@ -53,6 +55,8 @@ public class FragmentDrawer extends Fragment {
     private FragmentDrawerListener drawerListener;
     private LanguagePreference languagePreference;
     PreferenceManager preferenceManager;
+
+    TextView badge_noti,badge1_noti;
 
     public FragmentDrawer() {
 
@@ -97,6 +101,8 @@ public class FragmentDrawer extends Fragment {
         // Inflating view layout
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
+         badge_noti = (TextView) layout.findViewById(R.id.badge);
+         badge1_noti = (TextView) layout.findViewById(R.id.badge1);
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -119,6 +125,9 @@ public class FragmentDrawer extends Fragment {
 
     public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar) {
 
+      /*  badge_noti.setText(String.valueOf(preferenceManager.getNOTI_COUNT()));
+        badge1_noti.setText(String.valueOf(preferenceManager.getNOTI_COUNT()));*/
+
         containerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
@@ -128,6 +137,22 @@ public class FragmentDrawer extends Fragment {
                /* if (MainActivity.menuList != null && MainActivity.menuList.size() > 0) {
                     titles = MainActivity.menuList;*/
                     // navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
+
+
+
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        badge_noti.setText(String.valueOf(preferenceManager.getNOTI_COUNT()));
+                        badge1_noti.setText(String.valueOf(preferenceManager.getNOTI_COUNT()));
+//                        badge1_noti.setText("23");
+//                        badge_noti.setText("23");
+
+                    }
+                });
+
                 loggedInStr = preferenceManager.getUseridFromPref();
                     boolean mylibrary_title_added = false;
                     Util.my_library_visibility = false;

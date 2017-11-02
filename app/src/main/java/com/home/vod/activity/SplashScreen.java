@@ -11,6 +11,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
+import com.home.apisdk.apiController.FcmNotificationcountAsynTask;
 import com.home.apisdk.apiController.GetGenreListAsynctask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
@@ -36,6 +38,8 @@ import com.home.apisdk.apiController.SDKInitializer;
 import com.home.apisdk.apiController.SDKInitializer;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
 import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
+import com.home.apisdk.apiModel.FcmNotificationcountInputModel;
+import com.home.apisdk.apiModel.FcmNotificationcountOutputModel;
 import com.home.apisdk.apiModel.GenreListInput;
 import com.home.apisdk.apiModel.GenreListOutput;
 import com.home.apisdk.apiModel.Get_UserProfile_Input;
@@ -54,6 +58,7 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.AppThreadPoolExecuter;
 import com.home.vod.util.Constant;
 import com.home.vod.util.LogUtil;
+import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
 import org.json.JSONException;
@@ -81,6 +86,7 @@ import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
 import static player.utils.Util.HAS_FAVORITE;
 import static player.utils.Util.IS_CHROMECAST;
 import static player.utils.Util.IS_OFFLINE;
+import static player.utils.Util.timer;
 
 public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddressListener,
         CheckGeoBlockCountryAsynTask.CheckGeoBlockForCountryListener,
@@ -89,7 +95,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         GetLanguageListAsynTask.GetLanguageListListener,
         GetGenreListAsynctask.GenreListListener,
         GetUserProfileAsynctask.Get_UserProfileListener,
-        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, SDKInitializer.SDKInitializerListner {
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, SDKInitializer.SDKInitializerListner,FcmNotificationcountAsynTask.FcmNotificationcountListener {
 
     private String[] genreArrToSend;
     private String[] genreValueArrayToSend;
@@ -101,6 +107,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private ArrayList<String> genreArrayList = new ArrayList<String>();
     private ArrayList<String> genreValueArrayList = new ArrayList<String>();
     private String user_Id = "", email_Id = "", isSubscribed = "0";
+    private final int SPLASH_DISPLAY_LENGTH = 3000;
+    public static ProgressBarHandler internetSpeedDialog;
 
  /*   private boolean isPlanlistAsyncComleted = false;
     private boolean isRegEnableAsyncComleted = false;
@@ -244,6 +252,11 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel, this, this);
             asynGetCountry.executeOnExecutor(threadPoolExecutor);
         }
+        FcmNotificationcountInputModel fcmNotificationcountInputModel = new FcmNotificationcountInputModel();
+        fcmNotificationcountInputModel.setAuthToken(authTokenStr);
+        fcmNotificationcountInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        FcmNotificationcountAsynTask fcmNotificationcountAsynTask = new FcmNotificationcountAsynTask(fcmNotificationcountInputModel,this,this);
+        fcmNotificationcountAsynTask.executeOnExecutor(threadPoolExecutor);
     }
 
     @Override
@@ -578,6 +591,30 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         asynGetGenreList.executeOnExecutor(threadPoolExecutor);
     }
 
+
+    @Override
+    public void onFcmNotificationcountPreExecuteStarted() {
+
+
+    }
+
+    @Override
+    public void onFcmNotificationcountPostExecuteCompleted(FcmNotificationcountOutputModel fcmNotificationcountOutputModel,int count,String msg) {
+
+        if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
+            internetSpeedDialog.hide();
+            internetSpeedDialog = null;
+
+        }
+
+
+        preferenceManager.setNOTI_COUNT(count);
+        LogUtil.showLog("ANU","COUNT======="+count);
+        LogUtil.showLog("ANU","device_id======="+Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+
+    }
+
+
     public void Call_One_Step_Procedure() {
 
         if (!languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN).equals("0")) {
@@ -618,11 +655,36 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 .trim()).equals("1")) {
             if (loggedInStr != null) {
                 if (isSubscribed.trim().equals("1")) {
-                    mIntent = new Intent(SplashScreen.this, MainActivity.class);
+
+
+
+                    timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+
+                            Log.v("ANU","preferenceManager.getSharedPref()==="+preferenceManager.getSharedPref());
+                            if (!preferenceManager.getSharedPref().trim().equals("0") && !preferenceManager.getSharedPref().trim().equals("")) {
+
+
+                                timer.cancel();
+                                Intent i = new Intent(SplashScreen.this, MainActivity.class);
+//                                    i.putExtra("notificationCount",Util.count);
+//                                    Log.v("pratik","count=="+Util.count);
+                                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(i);
+                                finish();
+                                overridePendingTransition(0, 0);
+                            }
+
+                        }
+                    },SPLASH_DISPLAY_LENGTH,200);
+
+                    /*mIntent = new Intent(SplashScreen.this, MainActivity.class);
                     mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(mIntent);
                     finish();
-                    overridePendingTransition(0, 0);
+                    overridePendingTransition(0, 0);*/
                 } else {
                     mIntent = new Intent(SplashScreen.this, SubscriptionActivity.class);
                     mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -640,11 +702,38 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         } else {
 
-            mIntent = new Intent(SplashScreen.this, MainActivity.class);
+
+
+
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+
+
+                    if (!preferenceManager.getSharedPref().trim().equals("0") && !preferenceManager.getSharedPref().trim().equals("")) {
+
+
+                        timer.cancel();
+                        Intent i = new Intent(SplashScreen.this, MainActivity.class);
+//                            i.putExtra("notificationCount",Util.count);
+//                            Log.v("pratik","count=="+Util.count);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(i);
+                        finish();
+                        overridePendingTransition(0, 0);
+                        //Toast.makeText(SplashScreen.this, notificationPref.getString("regId", "0"), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            }, SPLASH_DISPLAY_LENGTH, 200);
+
+
+            /*mIntent = new Intent(SplashScreen.this, MainActivity.class);
             mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(mIntent);
             finish();
-            overridePendingTransition(0, 0);
+            overridePendingTransition(0, 0);*/
         }
     }
 

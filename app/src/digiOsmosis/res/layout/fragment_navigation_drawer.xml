@@ -66,8 +66,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
+        android:layout_marginBottom="10dp"
+        android:paddingBottom="80dp"
         android:paddingTop="20dp"
-        android:background="@color/colorPrimary" />
+        android:background="@color/colorPrimary"
+
+
+
+
+        />
 
     <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:local="http://schemas.android.com/apk/res-auto"
@@ -108,7 +115,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="Anuradha Prusty"
                 android:id="@+id/edit_name"
                 android:layout_below="@+id/logo"
                 android:gravity="center"
@@ -123,7 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/edit_profile"
-                android:src="@drawable/contact_msg"
+                android:src="@drawable/pen"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="20dp"
                 android:paddingRight="@dimen/profile_margin_right"
@@ -134,6 +141,150 @@
 
 
     </android.support.v7.widget.Toolbar>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/layout_1"
+        android:weightSum="2"
+        android:visibility="gone">
+
+
+        <LinearLayout
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:id="@+id/notification"
+            android:background="@color/sidemenu_notification_Color">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/bell"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:text="Notification"
+                android:gravity="center"
+                android:textColor="@color/appBackgroundColor"/>
+
+            <RelativeLayout
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/badge_circle"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_width="20dp"
+                    android:layout_height="15dp"
+                    android:id="@+id/badge1"
+                    android:text="35"
+                    android:gravity="center"
+                    android:textColor="#FFF"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true" />
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:id="@+id/logout"
+            android:background="@color/sidemenu_logout_color"
+           >
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/logout"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"/>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:text="Logout"
+                android:gravity="center"
+                android:textColor="@color/appBackgroundColor"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:id="@+id/layout_2"
+        android:visibility="gone"
+        android:background="@color/sidemenu_notification_Color">
+
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/bell"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:text="Notification"
+            android:gravity="center"
+            android:textColor="@color/appBackgroundColor"/>
+
+        <RelativeLayout
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/badge_circle"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="15dp"
+            android:id="@+id/badge"
+            android:text="35"
+           android:gravity="center"
+            android:textColor="#FFF"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true" />
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>
 

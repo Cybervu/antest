@@ -54,8 +54,8 @@
     <dimen name="fragmentimgview_height">120dp</dimen>
     <dimen name="view_margin_top">10dp</dimen>
     <dimen name="registerimg_margin_top">300dp</dimen>
-    <dimen name="layout_padding_left">10dp</dimen>
-    <dimen name="layout_padding_right">10dp</dimen>
+    <dimen name="layout_padding_left">30dp</dimen>
+    <dimen name="layout_padding_right">30dp</dimen>
     <dimen name="register_edittext_padding">17dp</dimen>
     <dimen name="register_margin_top">40dp</dimen>
     <dimen name="login_butn_width">80dp</dimen>
@@ -136,6 +136,15 @@
 
     <dimen name="season_card_width">150dp</dimen>
     <dimen name="season_card_height">150dp</dimen>
+
+    <!--//**********profile picture*************//-->
+
+    <dimen name="profile_image_height">100dp</dimen>
+    <dimen name="profile_image_width">100dp</dimen>
+    <dimen name="profile_margin_right">20dp</dimen>
+    <dimen name="profile_padding_top">50dp</dimen>
+    <dimen name="layout2_padding_top">0dp</dimen>
+    <dimen name="sidemenu_padding_bottom">80dp</dimen>
 
     <dimen name="fav_img_height">157dp</dimen>
     <dimen name="fav_img_width">110dp</dimen>

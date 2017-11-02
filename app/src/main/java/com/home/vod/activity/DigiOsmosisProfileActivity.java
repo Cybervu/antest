@@ -161,6 +161,8 @@ public class DigiOsmosisProfileActivity extends AppCompatActivity implements Get
     String User_Id = "";
     String Email_Id = "";
     TextView name_of_user;
+    ProgressBarHandler pDialog;
+    LanguagePreference languagePreference;
     SideMenuHandler sideMenuHandler;
 
 
@@ -218,19 +220,6 @@ public class DigiOsmosisProfileActivity extends AppCompatActivity implements Get
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_profile);
-
-        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mActionBarToolbar);
-        mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-        mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-
-
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(DigiOsmosisProfileActivity.this);
         episodeListOptionMenuHandler=new EpisodeListOptionMenuHandler(this);
@@ -276,7 +265,14 @@ public class DigiOsmosisProfileActivity extends AppCompatActivity implements Get
         manage_devices.setText(languagePreference.getTextofLanguage(MANAGE_DEVICE, DEFAULT_MANAGE_DEVICE));
 
 
-
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
 
        /* userId = getIntent().getStringExtra("LOGID");
@@ -1127,23 +1123,11 @@ public class DigiOsmosisProfileActivity extends AppCompatActivity implements Get
         emailAddressEditText.setText(get_userProfile_output.getEmail());
 
         Log.v("BIBHU2", "Profile image=" + get_userProfile_output.getProfile_image());
-        Log.v("BIBHU2", "Profile image=" + get_userProfile_output.getDisplay_name());
 
         if (get_userProfile_output.getProfile_image() != null) {
-
-            int pos = get_userProfile_output.getProfile_image().lastIndexOf("/");
-            String x = get_userProfile_output.getProfile_image().substring(pos + 1, get_userProfile_output.getProfile_image().length());
-
-            if (x.equalsIgnoreCase("no-user.png")) {
-                profile_image.setImageResource(R.drawable.profile);
-
-            } else {
-                Picasso.with(DigiOsmosisProfileActivity.this)
-                        .load(get_userProfile_output.getProfile_image())
-                        .error(R.drawable.logo).noFade().resize(200, 200).into(profile_image);
-
-            }
-
+            Picasso.with(DigiOsmosisProfileActivity.this)
+                    .load(get_userProfile_output.getProfile_image())
+                    .placeholder(R.drawable.logo).error(R.drawable.logo).noFade().resize(200, 200).into(profile_image);
         }
 
             if (get_userProfile_output.getProfile_image().matches(NO_DATA)) {

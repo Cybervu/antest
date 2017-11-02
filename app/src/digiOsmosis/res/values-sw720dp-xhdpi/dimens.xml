@@ -9,6 +9,7 @@
     <dimen name="imgwidth">300dp</dimen>
     <dimen name="toolbarheight">70dp</dimen>
     <dimen name="navwide">400dp</dimen>
+    <dimen name="nav_drawer_width">300dp</dimen>
 
     <dimen name="singleimgwidth">170dp</dimen>
     <dimen name="singleimgheight">216dp</dimen>
@@ -181,6 +182,17 @@
     <dimen name="fav_card_elevation">10dp</dimen>
     <dimen name="fav_title_textsize">25dp</dimen>
     <dimen name="fav_des_textsize">15dp</dimen>
+
+
+    <!--//**********profile picture*************//-->
+
+    <dimen name="profile_image_height">120dp</dimen>
+    <dimen name="profile_image_width">120dp</dimen>
+    <dimen name="profile_margin_right">1dp</dimen>
+    <dimen name="profile_padding_top">80dp</dimen>
+    <dimen name="layout2_padding_top">80dp</dimen>
+    <dimen name="sidemenu_padding_bottom">10dp</dimen>
+
 
     <dimen name="fav_img_width">150dp</dimen>
     <dimen name="fav_img_height">214dp</dimen>

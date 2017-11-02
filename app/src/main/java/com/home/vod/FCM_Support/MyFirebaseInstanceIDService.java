@@ -82,6 +82,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         languagePreference.setLanguageSharedPrefernce(GOOGLE_FCM_TOKEN, refreshedToken);
         Log.e(TAG, "sendRegistrationToServer: " + refreshedToken);
 
+        storeRegIdInPref(refreshedToken);
         onCreate();
     }
 
@@ -108,6 +109,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
                     LogUtil.showLog("BIBHU", "Response Of the google_id updatation =" + responseStr);
+                    LogUtil.showLog("BIBHU", "device_id =" + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
 
                 } catch (Exception e) {
                     responseStr = "0";
@@ -127,5 +129,11 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         protected void onPostExecute(Void result) {
 
         }
+    }
+
+
+    private void storeRegIdInPref(String token) {
+        preferenceManager.setSharedPref(token);
+
     }
 }

@@ -162,4 +162,8 @@
     <dimen name="season_margin_left">20dp</dimen>
 
 
+    <dimen name="profile_padding_top">80dp</dimen>
+    <dimen name="sidemenu_padding_bottom">10dp</dimen>
+
+
 </resources>

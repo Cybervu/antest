@@ -9,6 +9,7 @@
     <dimen name="imgwidth">300dp</dimen>
     <dimen name="toolbarheight">70dp</dimen>
     <dimen name="navwide">400dp</dimen>
+    <dimen name="nav_drawer_width">400dp</dimen>
 
     <dimen name="singleimgwidth">170dp</dimen>
     <dimen name="singleimgheight">216dp</dimen>
@@ -83,6 +84,7 @@
     <dimen name="contactformtitle_text_size">17sp</dimen>
     <dimen name="editbox_text_size">18sp</dimen>
     <dimen name="home280_layout_width">157dp</dimen>
+    <dimen name="fragmentlogoimg_height">100dp</dimen>
 
 
     <dimen name="videogrid_land_width">182dp</dimen>
@@ -105,8 +107,8 @@
     <dimen name="changepas_height">40dp</dimen>
     <dimen name="view_margin_top">20dp</dimen>
     <dimen name="registerimg_margin_top">20dp</dimen>
-    <dimen name="layout_padding_left">40dp</dimen>
-    <dimen name="layout_padding_right">40dp</dimen>
+    <dimen name="layout_padding_left">50dp</dimen>
+    <dimen name="layout_padding_right">50dp</dimen>
     <dimen name="register_edittext_padding">17dp</dimen>
     <dimen name="register_margin_top">40dp</dimen>
     <dimen name="cast_width_icon">150dp</dimen>
@@ -199,5 +201,6 @@
     <dimen name="loginImageViewMarging_top1">30dp</dimen>
 
     <dimen name="season_margin_left">20dp</dimen>
+    <dimen name="sidemenu_padding_bottom">10dp</dimen>
 
 </resources>

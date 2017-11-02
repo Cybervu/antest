@@ -13,6 +13,7 @@ public class Update_UserProfile_Input {
     String name;
     String password;
     String lang_code;
+    String display_image;
 
     /**
      * This Method is use to Get the Language Code
@@ -107,4 +108,11 @@ public class Update_UserProfile_Input {
         return password;
     }
 
+    public String getDisplay_image() {
+        return display_image;
+    }
+
+    public void setDisplay_image(String display_image) {
+        this.display_image = display_image;
+    }
 }

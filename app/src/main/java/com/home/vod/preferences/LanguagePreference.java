@@ -307,6 +307,15 @@ public class LanguagePreference {
     public static final String DEFAULT_CHANGE_PASSWORD = "Change Password";
     public static final String DEFAULT_SEASON = "Season";
 
+
+    //********Notification***********
+    public static String NO_NOTIFICATION = "NO_NOTIFICATION";
+    public static String NOTIFICATION_TITLE = "NOTIFICATION_TITLE";
+    public static  String DEFAULT_NO_NOTIFICATION = "No notification Sent.";
+    public static  String DEFAULT_NOTIFICATION_TITLE = "Notification (s)";
+
+
+
     public static final String DEFAULT_PURCHASE = "Purchase";
     public static final String DEFAULT_BUTTON_APPLY = "Apply";
     public static final String DEFAULT_BUTTON_OK = "Ok";

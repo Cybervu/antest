@@ -204,6 +204,22 @@ public class APIUrlConstant {
      * endpoint to get Delete Favorite List Details API
      */
     public static String DeleteFavList = "DeleteFavList";
+
+    /* endpoint to get Notification Count Details API*/
+    public static String notificationcount = "GetNoOfUnreadNotification";
+
+    /* endpoint to get Fcmregistration Details API*/
+    public static String fcmregistration = "RegisterMyDevice";
+
+
+    /* endpoint to get Notification Lists Details API*/
+    public static String notificationlists = "NotificationLists";
+
+
+    /* endpoint to get Read All Notification Details API*/
+    public static String readallnotification = "ReadAllNotification";
+
+
     /**
      * endpoint to get Menu Details API
      */
@@ -333,6 +349,23 @@ public class APIUrlConstant {
     public static String getDeleteFavList() {
         return BASE_URl + DeleteFavList;
     }
+
+    public static String getNotificationcount() {
+        return BASE_URl + notificationcount;
+    }
+
+    public static String getFcmregistration() {
+        return BASE_URl + fcmregistration;
+    }
+
+    public static String getNotificationLists() {
+        return BASE_URl + notificationlists;
+    }
+
+    public static String getReadallnotification() {
+        return BASE_URl + readallnotification;
+    }
+
 
     public static String getAddContentRating() {
         return BASE_URl + AddContentRating;

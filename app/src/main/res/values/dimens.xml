@@ -21,7 +21,7 @@
     <dimen name="voucher_pop_up_margin">0dp</dimen>
     <dimen name="select_planMark_margin2">95dp</dimen>
     <dimen name="list_single_card_small_height">140dp</dimen>
-    <dimen name="textColor_margin">8dp</dimen>
+    <dimen name="textColor_margin">12dp</dimen>
     <dimen name="select_planMark_margin">135dp</dimen>
     <dimen name="planPurchaseMonthTextView_padding">18dp</dimen>
     <dimen name="compress_expand_margin">7dp</dimen>

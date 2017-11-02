@@ -1,7 +1,11 @@
 package com.home.vod.adapter;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.TrafficStats;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,17 +74,18 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
                 if (Util.drawer_line_visibility && (data.get(position - 1)).getIsEnabled()) {
 
 
-                    String appName = "Digi Osmosis";
+                        String appName = "Digi Osmosis";
 //                        String appName = context.getResources().getString(R.string.app_name);
+                        Log.v("ANU","appName==="+appName);
+                        if (appName != null && appName.trim().equals(context.getResources().getString(R.string.app_name))) {
+                            holder.textViewLine.setVisibility(View. GONE);
 
-                    if (appName != null && appName.trim().equals(context.getResources().getString(R.string.app_name))) {
-                        holder.textViewLine.setVisibility(View. GONE);
+                        }
 
-                    }
-
-                    else {
-                        holder.textViewLine.setVisibility(View.VISIBLE);
-                    }
+                        else {
+                            Log.v("ANU","INSIDE ELSE===");
+                            holder.textViewLine.setVisibility(View.VISIBLE);
+                        }
 
 
 

@@ -6,17 +6,37 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.graphics.Palette;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.home.vod.activity.DigiOsmosisProfileActivity;
+import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.vod.activity.DigiOsmosisProfileActivity;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.activity.ProfileActivity;
+import com.home.vod.activity.Notification;
+import com.home.vod.activity.ProfileActivity;
+import com.home.vod.activity.ProgramDetailsActivity;
+import com.home.vod.activity.ProgrammeActivity;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+import com.home.vod.util.LogUtil;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -30,6 +50,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
@@ -60,8 +81,9 @@ public class SideMenuHandler {
     String favourite_menu,favourite_menuPermalink, login_menu,register_menu,profile_menu,mydownload_menu,purchase_menu,logout_menu,login_menuPermalink,register_menuPermalink,profile_menuPermalink,mydownload_menuPermalink,purchase_menuPermalink,logout_menuPermalink;
 
 
-    TextView nameText;
+    TextView nameText,badge,badge1;
     ImageView editPen,profile_image,bannerImageView;
+    LinearLayout layout1,layout2,notification,logout;
 
     public SideMenuHandler(Activity context) {
         this.context = context;
@@ -76,7 +98,22 @@ public class SideMenuHandler {
         bannerImageView = (ImageView) context.findViewById(R.id.bannerImageView);
        Log.v("BKS","profile=="+preferenceManager.getDispNameFromPref());
         nameText.setText(preferenceManager.getDispNameFromPref());
+        layout1 = (LinearLayout) context.findViewById(R.id.layout_1);
+        layout2 = (LinearLayout) context.findViewById(R.id.layout_2);
+        notification = (LinearLayout) context.findViewById(R.id.notification);
+        logout = (LinearLayout) context.findViewById(R.id.logout);
+        badge = (TextView) context.findViewById(R.id.badge);
+        badge1 = (TextView) context.findViewById(R.id.badge);
+        final DrawerLayout drawerLayout = (DrawerLayout) context.findViewById(R.id.drawer_layout);
+       /* LayerDrawable icon2 = (LayerDrawable) layout2.getIcon();
+        // Update LayerDrawable's BadgeDrawable
+        BadgeCount.setBadgeCount(this, icon2, preferenceManager.getNOTI_COUNT());
+*/
 
+
+       /* BadgeView badge = new BadgeView(this, layout2);
+        badge.setText("1");
+        badge.show();*/
 
         editPen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +125,38 @@ public class SideMenuHandler {
 
             }
         });
+
+        layout2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawers();
+                Intent intent = new Intent(context,Notification.class);
+                context.startActivity(intent);
+            }
+        });
+
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawers();
+                    Intent intent = new Intent(context, Notification.class);
+                context.startActivity(intent);
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)context).logout();
+            }
+        });
+
+
+
+        badge.setText(String.valueOf(preferenceManager.getNOTI_COUNT()));
+        badge1.setText(String.valueOf(preferenceManager.getNOTI_COUNT()));
+
+
 
     }
 //    login_menu= (languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
@@ -219,6 +288,55 @@ public class SideMenuHandler {
 
 
 
+        if (loggedInStr!= null) {
+
+            layout1.setVisibility(View.VISIBLE);
+            layout2.setVisibility(View.GONE);
+            Log.v("ANU","loggedInStr===="+loggedInStr);
+            String PIMG = preferenceManager.getLoginProfImgFromPref();
+            Log.v("ANU","getLoginProfImgFromPref===="+PIMG);
+
+            if (preferenceManager.getLoginProfImgFromPref() != null && !(preferenceManager.getLoginProfImgFromPref().equalsIgnoreCase("https://d1yjifjuhwl7lc.cloudfront.net/public/no-user.png"))) {
+                Log.v("ANU","sidemenu  if not null====");
+
+                Picasso.with(context)
+                        .load(preferenceManager.getLoginProfImgFromPref())
+                        .into(profile_image);
+
+            }
+            else {
+                Log.v("ANU","sidemenu else====");
+
+                Picasso.with(context)
+                        .load(R.drawable.profile)
+                        .into(profile_image);
+
+            }
+
+
+            editPen.setVisibility(View.VISIBLE);
+            nameText.setVisibility(View.VISIBLE);
+        }
+
+        else {
+
+            layout1.setVisibility(View.GONE);
+            layout2.setVisibility(View.VISIBLE);
+            Picasso.with(context)
+                    .load(R.drawable.profile)
+                    .into(profile_image);
+
+
+            editPen.setVisibility(View.INVISIBLE);
+            nameText.setVisibility(View.INVISIBLE);
+        }
+
+
+
+
+
+
+
     }
 
     public void addLogoutMenu( LanguagePreference languagePreference, ArrayList<NavDrawerItem> menuList, PreferenceManager preferenceManager,int position) {
@@ -239,5 +357,9 @@ public class SideMenuHandler {
         Intent Sintent = new Intent("LOGIN_SUCCESS");
         context.sendBroadcast(Sintent);
     }
+
+    public void openDrawer(View drawerView) {
+    }
+
 
 }

@@ -10,10 +10,13 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
@@ -34,9 +37,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.androidquery.AQuery;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.cast.MediaInfo;
+import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.CastState;
@@ -44,20 +49,28 @@ import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+import com.home.apisdk.apiController.FcmRegistrationDetailsAsynTask;
 import com.home.apisdk.apiController.GetAppMenuAsync;
 import com.home.apisdk.apiController.GetImageForDownloadAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
+import com.home.apisdk.apiController.GetMenuListAsynctask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiController.SDKInitializer;
+import com.home.apisdk.apiModel.FcmRegistrationDetailsInputModel;
+import com.home.apisdk.apiModel.FcmRegistrationDetailsOutputModel;
 import com.home.apisdk.apiModel.GetMenusInputModel;
+import com.home.apisdk.apiModel.Get_UserProfile_Output;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
+import com.home.apisdk.apiModel.MenuListInput;
+import com.home.apisdk.apiModel.MenuListOutput;
 import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.MainActivityHeaderHandler;
 import com.home.vod.MyDownloadIntentHandler;
+import com.home.vod.ProfileHandler;
 import com.home.vod.ProfileHandler;
 import com.home.vod.R;
 import com.home.vod.SearchIntentHandler;
@@ -74,6 +87,7 @@ import com.home.vod.model.LanguageModel;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.LogUtil;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -100,37 +114,60 @@ import java.util.concurrent.TimeUnit;
 import io.fabric.sdk.android.Fabric;
 
 import static com.home.vod.preferences.LanguagePreference.APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.HOME;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LANGUAGE;
+import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
+import static com.home.vod.preferences.LanguagePreference.LOGIN;
+import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
+import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.PROFILE;
+import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
 import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_WARNING;
 import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
+import static player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static player.utils.Util.DEFAULT_IS_CHROMECAST;
+import static player.utils.Util.DEFAULT_IS_OFFLINE;
+import static player.utils.Util.HAS_FAVORITE;
+import static player.utils.Util.IS_CHROMECAST;
+import static player.utils.Util.IS_OFFLINE;
 
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,
         LogoutAsynctask.LogoutListener,
         GetLanguageListAsynTask.GetLanguageListListener,
-        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, GetAppMenuAsync.GetMenusListener {
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, GetAppMenuAsync.GetMenusListener,FcmRegistrationDetailsAsynTask.FcmRegistrationDetailsListener {
 
 
     public MainActivity() {
@@ -170,6 +207,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private CastStateListener mCastStateListener;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     private SideMenuHandler sideMenuHandler;
+
 
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
@@ -258,6 +296,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     GetImageForDownloadAsynTask as = null;
     GetAppMenuAsync asynLoadMenuItems = null;
+    Get_UserProfile_Output get_userProfile_output;
     int isLogin = 0;
 
     public static int planIdOfStudios = 3;
@@ -398,6 +437,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
             sideMenuHandler = new SideMenuHandler(MainActivity.this,preferenceManager);
             sideMenuHandler.staticSideMenu(languagePreference,menuList,originalMenuList,preferenceManager,adding_position);
+//            sideMenuHandler.editProfile(languagePreference,preferenceManager);
             //sideMenuHandler.addLogoutMenu(languagePreference,menuList,preferenceManager);
 
 
@@ -892,6 +932,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onGetMenusPostExecuteCompleted(MenusOutputModel menusOutputModel, int status, String message) {
+
+
+        FcmRegistrationDetailsInputModel fcmRegistrationDetailsInputModel = new FcmRegistrationDetailsInputModel();
+        fcmRegistrationDetailsInputModel.setAuthToken(authTokenStr);
+        fcmRegistrationDetailsInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        fcmRegistrationDetailsInputModel.setDevice_type(1);
+        fcmRegistrationDetailsInputModel.setFcm_token(preferenceManager.getSharedPref());
+        FcmRegistrationDetailsAsynTask fcmRegistrationDetailsAsynTask = new FcmRegistrationDetailsAsynTask(fcmRegistrationDetailsInputModel,this,this);
+        fcmRegistrationDetailsAsynTask.executeOnExecutor(threadPoolExecutor);
 
 
         LogUtil.showLog("Alok", "onGetMenusPostExecuteCompleted");
@@ -2049,6 +2098,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
 
+        if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
+            internetSpeedDialog.hide();
+            internetSpeedDialog = null;
+
+        }
         ArrayList<LanguageModel> languageModels = new ArrayList<LanguageModel>();
 
         for (int i = 0; i < languageListOutputArray.size(); i++) {
@@ -2072,6 +2126,27 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         ShowLanguagePopup();
     }
 
+    @Override
+    public void onFcmRegistrationDetailsPreExecuteStarted() {
+        progressBarHandler = new ProgressBarHandler(MainActivity.this);
+        progressBarHandler.show();
+    }
+
+    @Override
+    public void onFcmRegistrationDetailsPostExecuteCompleted(FcmRegistrationDetailsOutputModel fcmRegistrationDetailsOutputModel,String message) {
+
+
+        if (progressBarHandler != null && progressBarHandler.isShowing()) {
+            progressBarHandler.hide();
+            progressBarHandler = null;
+
+        }
+
+        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+
+
+
+    }
 
     public static class RecyclerTouchListener1 implements RecyclerView.OnItemTouchListener {
 
@@ -2584,8 +2659,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             ActivityCompat.finishAffinity(this);
             finish();
             System.exit(0);
-        }*/
-
+        }
+*/
 
 
 
@@ -3063,6 +3138,49 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         final Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
         searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(searchIntent);
+    }
+
+    public  void logout() {
+
+
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
+        dlgAlert.setMessage(languagePreference.getTextofLanguage(SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING));
+        dlgAlert.setTitle("");
+
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(YES, DEFAULT_YES), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing but close the dialog
+
+                // dialog.cancel();
+                LogoutInput logoutInput = new LogoutInput();
+                logoutInput.setAuthToken(authTokenStr);
+                LogUtil.showLog("Abhi", authTokenStr);
+                String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
+                logoutInput.setLogin_history_id(loginHistoryIdStr);
+                logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                LogUtil.showLog("Abhi", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MainActivity.this, MainActivity.this);
+                asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
+
+
+                dialog.dismiss();
+            }
+        });
+
+        dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(NO, DEFAULT_NO), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
+        // dlgAlert.setPositiveButton(getResources().getString(R.string.yes_str), null);
+        dlgAlert.setCancelable(false);
+
+        dlgAlert.create().show();
     }
 
 }

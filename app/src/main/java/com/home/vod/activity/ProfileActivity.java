@@ -31,7 +31,10 @@ import com.home.apisdk.apiModel.Get_UserProfile_Input;
 import com.home.apisdk.apiModel.Get_UserProfile_Output;
 import com.home.apisdk.apiModel.Update_UserProfile_Input;
 import com.home.apisdk.apiModel.Update_UserProfile_Output;
+import com.home.vod.LoginHandler;
 import com.home.vod.R;
+import com.home.vod.RegisterUIHandler;
+import com.home.vod.SideMenuHandler;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
@@ -104,6 +107,7 @@ public class ProfileActivity extends AppCompatActivity implements
     TextView name_of_user;
     ProgressBarHandler pDialog;
     LanguagePreference languagePreference;
+    SideMenuHandler sideMenuHandler;
 
 
     // load asynctask
@@ -181,9 +185,12 @@ public class ProfileActivity extends AppCompatActivity implements
        /* userId = getIntent().getStringExtra("LOGID");
         emailId = getIntent().getStringExtra("EMAIL");
 */
+/*
+        String name=preferenceManager.getDispNameFromPref();
+        sideMenuHandler=new SideMenuHandler(this,preferenceManager);
         if (loginPref != null) {
 
-        }
+        }*/
 
         manage_devices.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -463,7 +470,9 @@ public class ProfileActivity extends AppCompatActivity implements
         update_userProfile_input.setCustom_languages(Selected_Language_Id);
         UpadteUserProfileAsynctask asyncLoadVideos = new UpadteUserProfileAsynctask(update_userProfile_input, this, this);
         asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
+
     }
+
 
     @Override
     public void onUpdateUserProfilePreExecuteStarted() {
@@ -498,6 +507,11 @@ public class ProfileActivity extends AppCompatActivity implements
 
                     String displayNameStr = update_userProfile_output.getName();
                     preferenceManager.setDispNameToPref(displayNameStr);
+
+
+                    sideMenuHandler=new SideMenuHandler(ProfileActivity.this);
+                    sideMenuHandler.sendBroadCast();
+
                 }
                 Util.showToast(ProfileActivity.this, languagePreference.getTextofLanguage(PROFILE_UPDATED, DEFAULT_PROFILE_UPDATED));
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -532,6 +546,7 @@ public class ProfileActivity extends AppCompatActivity implements
                     });
             dlgAlert.create().show();
         }
+
 
 
     }
@@ -857,6 +872,8 @@ public class ProfileActivity extends AppCompatActivity implements
                 }
             }
         }
+       /* registerUIHandler=new RegisterUIHandler(this,languagePreference);
+        registerUIHandler.sendBroadCast();*/
     }
 
 //    private class AsynLoadProfileDetails extends AsyncTask<Void, Void, Void> {

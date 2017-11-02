@@ -355,4 +355,10 @@
     <dimen name="season_image_width">125dp</dimen>
     <dimen name="season_image_height">178dp</dimen>
 
+
+
+    <dimen name="sideTitle_line_height">18dp</dimen>
+    <dimen name="sideTitle_line_width">5dp</dimen>
+    <dimen name="sideTitle_line_marginleft">10dp</dimen>
+
 </resources>
