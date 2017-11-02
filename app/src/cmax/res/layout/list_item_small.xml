@@ -86,6 +86,7 @@
             android:layout_gravity="center_vertical"
             android:layout_toLeftOf="@+id/btnMore"
             android:text="Sample title"
+            android:ellipsize="marquee"
             android:textAllCaps="true"
             android:textColor="@color/videotextColor"
             android:textSize="@dimen/email_text_size" />

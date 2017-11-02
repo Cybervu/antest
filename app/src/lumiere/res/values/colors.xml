@@ -33,6 +33,7 @@
     <color name="resumeCancelButtonBackgroundColor">#DDD</color>
     <color name="dividerColor">#0b8f66</color>
     <color name="borderColor">#2acb99</color>
+    <color name="nav_text_line_color">#2acb99</color>
     <color name="videoTitleTextColor">#2acb99</color>
     <color name="detailsPageTextColor">#666</color>
     <color name="subtitleListBgColor">#fff</color>

@@ -86,6 +86,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         setContentView(R.layout.activity_forgot_password);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mActionBarToolbar);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
 
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
@@ -97,7 +98,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         {
             mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }
-        setSupportActionBar(mActionBarToolbar);
+
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
