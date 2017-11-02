@@ -139,8 +139,12 @@
             android:name=".activity.ShowWithEpisodesActivity"
             android:label=""
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.PaymentInfoActivity" />
-        <activity android:name=".activity.PPvPaymentInfoActivity" />
+        <activity
+            android:name=".activity.PaymentInfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.PPvPaymentInfoActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.LoginActivity"
             android:label=""
@@ -242,7 +246,9 @@
             android:name=".activity.TransactionDetailsActivity"
             android:label=""
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.SubscriptionActivity" />
+        <activity
+            android:name=".activity.SubscriptionActivity"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="player.activity.MyLibraryPlayer"

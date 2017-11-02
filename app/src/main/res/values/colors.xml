@@ -4,7 +4,7 @@
  <color name="appBackgroundColor">#fff</color>
  <color name="downloadpopupcolor">#fff</color>
  <color name="textColor">#111111</color>
- <color name="videotextColor">#000000</color>
+ <color name="videotextColor">#ffffff</color>
  <color name="videotitleColor">#000000</color>
  <color name="loginTextViewColor">#b70000</color>
  <color name="checkboxcolor">#fff</color>
@@ -93,7 +93,7 @@
  <color name="spinnerTextColor">#fff</color>
  <color name="filterBgColor">#fff</color>
  <color name="alertPopupColor">#fff</color>
- <color name="contactFormTitle">#333</color>
+ <color name="contactFormTitle">#c3c3c3</color>
  <color name="btnmoretextcolor">#FFF</color>
  <color name="aboutustestcolor">#fff</color>
  <color name="subtitle_list_textcolor">#808080</color>
