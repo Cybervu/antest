@@ -135,6 +135,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
                 final Intent detailsIntent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
                 detailsIntent.putExtra("PlayerModel", playerModel);
                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivity(detailsIntent);
                 finish();
             }
@@ -234,6 +235,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         final Intent detailsIntent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
         detailsIntent.putExtra("PlayerModel", playerModel);
         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
         startActivity(detailsIntent);
         finish();
         overridePendingTransition(0, 0);
@@ -254,6 +256,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
                         if (navigation) {
                             Intent in = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
                             in.putExtra("PlayerModel", playerModel);
+                            in.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                             startActivity(in);
                             finish();
                             dialog.cancel();
