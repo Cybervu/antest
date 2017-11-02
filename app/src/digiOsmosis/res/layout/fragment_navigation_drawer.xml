@@ -149,7 +149,7 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/layout_1"
         android:weightSum="2"
-        android:visibility="visible">
+        android:visibility="gone">
 
 
         <LinearLayout
@@ -158,7 +158,6 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             android:gravity="center"
-            android:visibility="gone"
             android:id="@+id/notification"
             android:background="@color/sidemenu_notification_Color">
 
