@@ -141,6 +141,7 @@
     <color name="windowBackground">#000</color>
     <color name="selected_color">#000</color>
     <color name="unselected_color">#fff</color>
+    <color name="nav_text_line_color">#000000</color>
 
     <color name="filter_text_color">#000</color>
 

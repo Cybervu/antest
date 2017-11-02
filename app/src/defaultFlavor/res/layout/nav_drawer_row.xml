@@ -18,7 +18,7 @@
         android:layout_marginLeft="@dimen/payment_textview_showname_margin"
         android:layout_marginRight="@dimen/payment_textview_showname_margin"
         android:layout_marginTop="@dimen/textColor_margin"
-        android:background="@color/nav_lineColor"
+        android:background="@color/nav_text_line_color"
         android:padding="@dimen/main_padding" />
 
     <TextView
