@@ -73,10 +73,12 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.MyViewHolder> 
         if (movie.isSelected() == false){
 
             holder.relativeplannamelayout.setBackgroundColor(context.getResources().getColor(R.color.textColor));
+            holder.planName.setTextColor(context.getResources().getColor(R.color.button_background));
             holder.lineardetails.setBackgroundColor(context.getResources().getColor(R.color.episodeBackgroundColor));
             holder.snap.setVisibility(View.INVISIBLE);
         }else{
             holder.relativeplannamelayout.setBackgroundColor(context.getResources().getColor(R.color.button_background));
+            holder.planName.setTextColor(context.getResources().getColor(R.color.textColor));
             holder.lineardetails.setBackgroundColor(context.getResources().getColor(R.color.episodeBackgroundColor));
             holder.snap.setVisibility(View.VISIBLE);
 
