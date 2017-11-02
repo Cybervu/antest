@@ -30,8 +30,8 @@ android {
     }
 
     compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_7
-            targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 
     buildTypes {
@@ -54,8 +54,7 @@ android {
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"e8ae05a2ef3fd0c6688952c8f7557823\""
             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
-          //  buildConfigField "String", "AUTH_TOKEN", "\"d2d529d95240ed416ead6684bd888c0f\""//idogic test
-
+            //  buildConfigField "String", "AUTH_TOKEN", "\"d2d529d95240ed416ead6684bd888c0f\""//idogic test
         }
         defaultFlavor_staging_ {
             dimension 'environment'
@@ -94,9 +93,9 @@ android {
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
-           // buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//mob
+            // buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//mob
             // buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
-             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
         }
         newthoughtchannel_staging_ {
             dimension 'environment'
@@ -213,8 +212,7 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"0831fbbacf89caf9d32aca43e21665b8\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
-           // buildConfigField "String", "AUTH_TOKEN", "\"a5bdd73811b3ff6bd7a5f9f0e86af23d\""
-
+            // buildConfigField "String", "AUTH_TOKEN", "\"a5bdd73811b3ff6bd7a5f9f0e86af23d\""
         }
         plusnights_staging_ {
             dimension 'environment'
@@ -224,7 +222,6 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
-
         metrox {
             dimension 'vendor'
             minSdkVersion 21
@@ -235,7 +232,6 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"97082c300cc83c4f0234f61ae50ff336\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
-
         }
         metrox_staging_ {
             dimension 'environment'
@@ -246,6 +242,24 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
 
+        wuntustreaming {
+            dimension 'vendor'
+            minSdkVersion 21
+            applicationId 'com.release.wuntustreaming'
+            versionCode 1
+            targetSdkVersion 25
+            versionName "1.0"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"a5bdd73811b3ff6bd7a5f9f0e86af23d\""
+        }
+        wuntustreaming_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+        wuntustreaming_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
     }
 }
 
@@ -393,6 +407,20 @@ android.variantFilter { variant ->
     if (vendor.equals('defaultFlavor') && environment.equals('metrox_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+    /*Avoid defaultFlavor to wuntustreaming combination for both debug & release mode.*/
+
+    if (vendor.equals('defaultFlavor') && environment.equals('wuntustreaming_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('wuntustreaming_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('wuntustreaming_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('wuntustreaming_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
 
     /**
      * Filtered vishwamtv variant.
@@ -520,6 +548,20 @@ android.variantFilter { variant ->
     if (vendor.equals('vishwamtv') && environment.equals('metrox_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+    /*Avoid vishwamtv to wuntustreaming combination for both debug & release mode.*/
+
+    if (vendor.equals('vishwamtv') && environment.equals('wuntustreaming_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('wuntustreaming_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('wuntustreaming_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('wuntustreaming_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
 
     /**
      * Filtered newthoughtchannel variant.
@@ -644,6 +686,20 @@ android.variantFilter { variant ->
     if (vendor.equals('newthoughtchannel') && environment.equals('metrox_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+    /*Avoid newthoughtchannel to wuntustreaming combination for both debug & release mode.*/
+
+    if (vendor.equals('newthoughtchannel') && environment.equals('wuntustreaming_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('wuntustreaming_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('wuntustreaming_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('wuntustreaming_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
 
     /**
      * Filtered aattoo variant.
@@ -764,6 +820,20 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     if (vendor.equals('aatto') && environment.equals('metrox_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    /*Avoid aatto to wuntustreaming combination for both debug & release mode.*/
+
+    if (vendor.equals('aatto') && environment.equals('wuntustreaming_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('wuntustreaming_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('wuntustreaming_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('wuntustreaming_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
 
@@ -889,6 +959,20 @@ android.variantFilter { variant ->
     if (vendor.equals('digiOsmosis') && environment.equals('metrox_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+    /*Avoid digiOsmosis to wuntustreaming combination for both debug & release mode.*/
+
+    if (vendor.equals('digiOsmosis') && environment.equals('wuntustreaming_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('wuntustreaming_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('wuntustreaming_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('wuntustreaming_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
 
     /**
      * Filtered Lumiere variant.
@@ -1012,6 +1096,21 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    /*Avoid lumiere to wuntustreaming_staging_ combination for both debug & release mode.*/
+
+    if (vendor.equals('lumiere') && environment.equals('wuntustreaming_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('wuntustreaming_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('wuntustreaming_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('wuntustreaming_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered Matas variant.
      */
@@ -1131,6 +1230,20 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    /*Avoid matas to wuntustreaming_staging_ combination for both debug & release mode.*/
+
+    if (vendor.equals('matas') && environment.equals('wuntustreaming_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('wuntustreaming_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('wuntustreaming_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('wuntustreaming_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
 /**
  * Filtered Monetizer variant.
  */
@@ -1246,6 +1359,20 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     if (vendor.equals('monetizer') && environment.equals('metrox_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    /*Avoid monetizer to wuntustreaming_staging_ combination for both debug & release mode.*/
+
+    if (vendor.equals('monetizer') && environment.equals('wuntustreaming_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('monetizer') && environment.equals('wuntustreaming_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('monetizer') && environment.equals('wuntustreaming_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('monetizer') && environment.equals('wuntustreaming_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
 
@@ -1366,6 +1493,20 @@ android.variantFilter { variant ->
     if (vendor.equals('plusnights') && environment.equals('metrox_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+    /*Avoid plusnights to wuntustreaming_staging_ combination for both debug & release mode.*/
+
+    if (vendor.equals('plusnights') && environment.equals('wuntustreaming_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('plusnights') && environment.equals('wuntustreaming_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('plusnights') && environment.equals('wuntustreaming_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('plusnights') && environment.equals('wuntustreaming_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
 /**
  * Filtered metrox variant.
  */
@@ -1480,6 +1621,138 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     if (vendor.equals('metrox') && environment.equals('plusnights_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    /*Avoid metrox to wuntustreaming_staging_ combination for both debug & release mode.*/
+
+    if (vendor.equals('metrox') && environment.equals('wuntustreaming_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('wuntustreaming_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('wuntustreaming_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('wuntustreaming_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /**
+     * Filtered wuntustreaming variant.
+     */
+    if (vendor.equals('wuntustreaming') && environment.equals('defaultFlavor_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('defaultFlavor_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('wuntustreaming') && environment.equals('defaultFlavor_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('defaultFlavor_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('vishwamtv_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('vishwamtv_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('vishwamtv_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('vishwamtv_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('newthoughtchannel_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('newthoughtchannel_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('newthoughtchannel_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('aatto_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('aatto_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('aatto_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('aatto_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('digiOsmosis_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('digiOsmosis_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('digiOsmosis_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('digiOsmosis_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('wuntustreaming') && environment.equals('lumiere_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('lumiere_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('lumiere_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('lumiere_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('wuntustreaming') && environment.equals('matas_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('matas_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('matas_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('matas_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('wuntustreaming') && environment.equals('plusnights_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('plusnights_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('plusnights_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('plusnights_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+
+    if (vendor.equals('wuntustreaming') && environment.equals('metrox_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('metrox_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('metrox_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('metrox_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
 
