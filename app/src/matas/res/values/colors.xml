@@ -4,6 +4,8 @@
  <color name="appBackgroundColor">#fff</color>
  <color name="textColor">#6e6f76</color>
  <color name="videotextColor">#000000</color>
+ <color name="casttextColor">#000</color>
+ <color name="videoTitleTextColor">#d60080</color>
  <color name="loginTextViewColor">#d60080</color>
  <color name="buttonTextColor">#fff</color>
  <color name="forgotPasswordTextViewColor">#d60080</color>
@@ -74,4 +76,5 @@
  <color name="disableTextColor">#50757575</color>
  <color name="OsTextColor">#757575</color>
  <color name="aboutustestcolor">#fff</color>
+ <color name="borderColor">#d60080</color>
 </resources>

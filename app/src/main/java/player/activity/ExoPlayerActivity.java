@@ -98,7 +98,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
@@ -699,10 +701,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             /**ad **/
 
             if (playerModel.getMidRoll() == 1) {
-                Log.v("SUBHA","adDetails"+playerModel.getAdDetails());
+                Log.v("MUVI","adDetails"+playerModel.getAdDetails());
 
                 adDetails = playerModel.getAdDetails().split(",");
-                Log.v("SUBHA","adDetails"+adDetails.length);
+                Log.v("MUVI","adDetails"+adDetails.length);
 
             }
 
@@ -721,7 +723,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             }
 
             if (ResolutionUrl.size() < 1) {
-                Log.v("SUBHA", "resolution image Invisible called");
+                Log.v("MUVI", "resolution image Invisible called");
             } else {
                 ResolutionUrl.add(playerModel.getVideoUrl().trim());
                 ResolutionFormat.add("Auto");
@@ -2311,7 +2313,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     /* public void onBackPressed() {
          super.onBackPressed();
-         Log.v("SUBHA","HHVID"+videoLogId);
+         Log.v("MUVI","HHVID"+videoLogId);
          if (asynGetIpAddress!=null){
              asynGetIpAddress.cancel(true);
          }
@@ -2529,7 +2531,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
    /* @Override
     public boolean onKeyDown(int keyCode, KeyEvent objEvent) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Log.v("SUBHA","FHFHFHCALLED");
+            Log.v("MUVI","FHFHFHCALLED");
             return true;
         }
         return super.onKeyUp(keyCode, objEvent);
@@ -2660,7 +2662,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             }
             /***AD ***///
             if (video_completed == true) {
-                Log.v("SUBHA", "CALLED VIDEO COMPLETED");
+                Log.v("MUVI", "CALLED VIDEO COMPLETED");
                 /**SPOTX***/
                 if (playerModel.getAdNetworkId() == 1 && playerModel.getPostRoll() == 1) {
 
@@ -3033,7 +3035,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                     @Override
                                     public void onResult(@NonNull RemoteMediaClient.MediaChannelResult mediaChannelResult) {
                                         if (!mediaChannelResult.getStatus().isSuccess()) {
-                                            Log.v("SUBHA", "Failed with status code:" +
+                                            Log.v("MUVI", "Failed with status code:" +
                                                     mediaChannelResult.getStatus().getStatusCode());
                                             Toast.makeText(getApplicationContext(), "failed to off subtitle", Toast.LENGTH_SHORT).show();
                                         }
@@ -3063,7 +3065,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                         @Override
                                         public void onResult(@NonNull RemoteMediaClient.MediaChannelResult mediaChannelResult) {
                                             if (!mediaChannelResult.getStatus().isSuccess()) {
-                                                Log.v("SUBHA", "Failed with status code:" +
+                                                Log.v("MUVI", "Failed with status code:" +
                                                         mediaChannelResult.getStatus().getStatusCode());
                                                 Toast.makeText(getApplicationContext(), "failed to set subtitle", Toast.LENGTH_SHORT).show();
                                             }
@@ -3578,6 +3580,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("stream_unique_id", playerModel.getStreamUniqueId());
 
 
+
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
@@ -3595,27 +3598,30 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 JSONObject mainJson = null;
                 if (responseCode >= 0) {
                     if (responseCode == 200) {
-                        Log.v("SUBHA", "" + responseCode);
+                        Log.v("MUVI", "" + responseCode);
                         mainJson = myJson.getJSONObject("data");
 
                         if ((mainJson.has("file")) && mainJson.getString("file").trim() != null && !mainJson.getString("file").trim().isEmpty() && !mainJson.getString("file").trim().equals("null") && !mainJson.getString("file").trim().matches("")) {
                             mlvfile = mainJson.getString("file");
 
-                            Log.v("SUBHA", mlvfile);
+                            Log.v("MUVI", mlvfile);
                         } else {
                             mlvfile = Util.getTextofLanguage(ExoPlayerActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
                         }
 
                         if ((mainJson.has("token")) && mainJson.getString("token").trim() != null && !mainJson.getString("token").trim().isEmpty() && !mainJson.getString("token").trim().equals("null") && !mainJson.getString("token").trim().matches("")) {
                             token = mainJson.getString("token");
-                            Log.v("SUBHA", "token" + token);
+                            Log.v("MUVI", "token" + token);
 
                         } else {
                             token = Util.getTextofLanguage(ExoPlayerActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
                         }
 
 
-                        if ((mainJson.has("multiple_resolution")) && mainJson.getString("multiple_resolution").trim() != null && !mainJson.getString("multiple_resolution").trim().isEmpty() && !mainJson.getString("multiple_resolution").trim().equals("null") && !mainJson.getString("multiple_resolution").trim().matches("")) {
+                        if ((mainJson.has("multiple_resolution")) && mainJson.getString("multiple_resolution").trim() != null &&
+                                !mainJson.getString("multiple_resolution").trim().isEmpty() &&
+                                !mainJson.getString("multiple_resolution").trim().equals("null") &&
+                                !mainJson.getString("multiple_resolution").trim().matches("")) {
                             JSONArray jsonArray = mainJson.optJSONArray("multiple_resolution");
 
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -3651,7 +3657,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             int count;
             InputStream is = new ByteArrayInputStream(token.getBytes());
             InputStream inputs = new BufferedInputStream(is, 8192);
-            Log.v("SUBHA", "pathh" + token);
+            Log.v("MUVI", "pathh" + token);
             File root = Environment.getExternalStorageDirectory();
             mediaStorageDir = new File(root + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/TOKEN", "");
 
@@ -3668,7 +3674,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            Log.v("SUBHA", "pathh" + licensetoken);
+            Log.v("MUVI", "pathh" + licensetoken);
             byte data[] = new byte[1024];
 
             long total = 0;
@@ -3676,7 +3682,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             try {
                 while ((count = inputs.read(data)) != -1) {
                     total += count;
-                    Log.v("SUBHA", "Lrngth" + total);
+                    Log.v("MUVI", "Lrngth" + total);
 
                     output.write(data, 0, count);
                 }
@@ -5189,8 +5195,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 if (mIsAdDisplayed || emVideoView == null || emVideoView.getDuration() <= 0) {
                     return VideoProgressUpdate.VIDEO_TIME_NOT_READY;
                 }
-                Log.v("SUBHA", "emVideoView.getCurrentPosition()" + emVideoView.getCurrentPosition());
-                Log.v("SUBHA", "emVideoView.getDuration()" + emVideoView.getDuration());
+                Log.v("MUVI", "emVideoView.getCurrentPosition()" + emVideoView.getCurrentPosition());
+                Log.v("MUVI", "emVideoView.getDuration()" + emVideoView.getDuration());
 
                /* if (emVideoView.getCurrentPosition() >= emVideoView.getDuration()){
                     return new VideoProgressUpdate(emVideoView.getCurrentPosition(),
@@ -5202,10 +5208,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             }
         });
        /* if (mAdsManager !=null){
-            Log.v("SUBHA","ddT"+mAdsManager.getAdCuePoints());
+            Log.v("MUVI","ddT"+mAdsManager.getAdCuePoints());
 
         }*/
-        Log.v("SUBHA", "ddT");
+        Log.v("MUVI", "ddT");
 
         // Request the ad. After the ad is loaded, onAdsManagerLoaded() will be called.
         mAdsLoader.requestAds(request);
@@ -5213,7 +5219,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     @Override
     public void onAdEvent(AdEvent adEvent) {
-        Log.v("SUBHA", "Event: " + adEvent.getType());
+        Log.v("MUVI", "Event: " + adEvent.getType());
 
         // These are the suggested event types to handle. For full list of all ad event
         // types, see the documentation for AdEvent.AdEventType.
@@ -5235,7 +5241,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             case STARTED:
              /*   if (pDialog != null){
-                    Log.v("SUBHA","DISMISS");
+                    Log.v("MUVI","DISMISS");
                     pDialog.dismiss();
                 }*/
                 //  progressView.setVisibility(View.VISIBLE);
@@ -5250,7 +5256,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     @Override
                     public void run() {
                         if(finalPDialog !=null && finalPDialog.isShowing()) {
-                            Log.v("SUBHA","DISMISS");
+                            Log.v("MUVI","DISMISS");
 
                             finalPDialog.dismiss();
 
@@ -5308,7 +5314,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     @Override
     public void onAdError(AdErrorEvent adErrorEvent) {
-        Log.e("subha", "Ad Error: " + adErrorEvent.getError().getMessage());
+        Log.e("MUVI", "Ad Error: " + adErrorEvent.getError().getMessage());
         Util.call_finish_at_onUserLeaveHint = true;
         watchStatus = "halfplay";
         // playerPosition = Util.dataModel.getPlayPos();

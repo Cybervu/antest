@@ -86,6 +86,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         setContentView(R.layout.activity_forgot_password);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mActionBarToolbar);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
 
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
@@ -97,7 +98,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         {
             mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }
-        setSupportActionBar(mActionBarToolbar);
+
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,6 +136,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
                 final Intent detailsIntent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
                 detailsIntent.putExtra("PlayerModel", playerModel);
                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivity(detailsIntent);
                 finish();
             }
@@ -234,6 +236,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         final Intent detailsIntent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
         detailsIntent.putExtra("PlayerModel", playerModel);
         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
         startActivity(detailsIntent);
         finish();
         overridePendingTransition(0, 0);
@@ -254,6 +257,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
                         if (navigation) {
                             Intent in = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
                             in.putExtra("PlayerModel", playerModel);
+                            in.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                             startActivity(in);
                             finish();
                             dialog.cancel();

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <resources>
-
+    <color name="appBackgroundColorSpinner">#fff</color>
     <color name="appBackgroundColor">#161616</color>
     <color name="textColor">#fff</color>
     <color name="videotextColor">#fff</color>
     <color name="videotitleColor">#ff2c54</color>
     <color name="savecardtextcolor">#fff</color>
     <color name="loginTextViewColor">#ff2c54</color>
+    <color name="casttextColor">#ff2c54</color>
     <color name="toolbarTitleColor">#fff</color>
-    <color name="aboutustestcolor">#f5e85a</color>
+    <color name="aboutustestcolor">#161616</color>
     <color name="buttonTextColor">#fff</color>
     <color name="forgotPasswordTextViewColor">#ff2c54</color>
     <color name="fb_text_color">#fff</color>
@@ -23,6 +24,7 @@
     <color name="transparent">@android:color/transparent</color>
     <color name="castCrewTitleTextColor">#ff2c54</color>
     <color name="subtitleListColor">#fff</color>
+    <color name="borderColor">#ff2c54</color>
     <color name="episodeBackgroundColor">#242424</color>
     <color name="preOrderButtonTextColor">#DDD</color>
     <color name="spinnerDropDownListColor">#000</color>

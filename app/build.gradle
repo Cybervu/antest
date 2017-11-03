@@ -115,6 +115,7 @@ android {
             versionCode 1
             versionName '1.0'
             buildConfigField "String", "AUTH_TOKEN", "\"4298851905443517c9f161e6b0471969\""
+//            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
         }
         aatto_staging_ {
             dimension 'environment'
@@ -260,6 +261,44 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
+        cmax {
+            dimension 'vendor'
+            minSdkVersion 21
+            applicationId 'com.release.cmaxtv'
+            versionCode 1
+            targetSdkVersion 25
+            versionName "1.0"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"a2478e71219f606cb5b7a3d3f7a35fe8\""
+        }
+        cmax_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        cmax_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+
+        muvinow {
+            dimension 'vendor'
+            minSdkVersion 21
+            applicationId 'com.release.quickflix'
+            versionCode 1
+            targetSdkVersion 25
+            versionName "1.0"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"53e22fe21c5225d3b7f047b26987218f\""
+        }
+        muvinow_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://adminquickflix.muvi.com/rest/\""
+        }
+        muvinow_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://adminquickflix.muvi.com/rest/\""
+        }
+
     }
 }
 
@@ -422,6 +461,36 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    /*Avoid defaultFlavor to cmax combination for both debug & release mode.*/
+
+    if (vendor.equals('defaultFlavor') && environment.equals('cmax_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('cmax_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('cmax_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('cmax_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid defaultFlavor to muvinow combination for both debug & release mode.*/
+
+    if (vendor.equals('defaultFlavor') && environment.equals('muvinow_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('muvinow_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('muvinow_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('muvinow_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered vishwamtv variant.
      */
@@ -563,6 +632,36 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    /*Avoid vishwam to cmax combination for both debug & release mode.*/
+
+    if (vendor.equals('vishwamtv') && environment.equals('cmax_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('cmax_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('cmax_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('cmax_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid vishwamtv to muvinow combination for both debug & release mode.*/
+
+    if (vendor.equals('vishwamtv') && environment.equals('muvinow_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('muvinow_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('muvinow_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('muvinow_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered newthoughtchannel variant.
      */
@@ -701,6 +800,36 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    /*Avoid newthoughtchannel to cmax combination for both debug & release mode.*/
+
+    if (vendor.equals('newthoughtchannel') && environment.equals('cmax_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('cmax_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('cmax_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('cmax_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid newthoughtchannel to muvinow combination for both debug & release mode.*/
+
+    if (vendor.equals('newthoughtchannel') && environment.equals('muvinow_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('muvinow_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('muvinow_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('muvinow_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered aattoo variant.
      */
@@ -834,6 +963,38 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     if (vendor.equals('aatto') && environment.equals('wuntustreaming_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+
+    /*Avoid aatto to metrox combination for both debug & release mode.*/
+
+    if (vendor.equals('aatto') && environment.equals('cmax_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('cmax_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('cmax_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('cmax_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+
+    /*Avoid aatto to muvinow combination for both debug & release mode.*/
+
+    if (vendor.equals('aatto') && environment.equals('muvinow_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('muvinow_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('muvinow_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('muvinow_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
 
@@ -974,6 +1135,36 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    /*Avoid digiosmosis to metrox combination for both debug & release mode.*/
+
+    if (vendor.equals('digiOsmosis') && environment.equals('cmax_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('cmax_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('cmax_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('cmax_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid digiOsmosis to muvinow combination for both debug & release mode.*/
+
+    if (vendor.equals('digiOsmosis') && environment.equals('muvinow_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('muvinow_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('muvinow_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('muvinow_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered Lumiere variant.
      */
@@ -1111,6 +1302,36 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    /*Avoid lumiere to cmax combination for both debug & release mode.*/
+
+    if (vendor.equals('lumiere') && environment.equals('cmax_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('cmax_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('cmax_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('cmax_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid lumiere to muvinow combination for both debug & release mode.*/
+
+    if (vendor.equals('lumiere') && environment.equals('muvinow_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('muvinow_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('muvinow_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('muvinow_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered Matas variant.
      */
@@ -1216,6 +1437,7 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    /*Avoid matas to metrox combination for both debug & release mode.*/
 
     if (vendor.equals('matas') && environment.equals('metrox_staging_') && isRelease) {
         variant.setIgnore(true)
@@ -1244,6 +1466,36 @@ android.variantFilter { variant ->
     if (vendor.equals('matas') && environment.equals('wuntustreaming_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+    /*Avoid matas to cmax combination for both debug & release mode.*/
+
+    if (vendor.equals('matas') && environment.equals('cmax_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('cmax_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('cmax_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('cmax_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid matas to muvinow combination for both debug & release mode.*/
+
+    if (vendor.equals('matas') && environment.equals('muvinow_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('muvinow_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('muvinow_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('muvinow_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
 /**
  * Filtered Monetizer variant.
  */
@@ -1348,6 +1600,7 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+/*Avoid monetizer to metrox combination for both debug & release mode.*/
 
     if (vendor.equals('monetizer') && environment.equals('metrox_staging_') && isRelease) {
         variant.setIgnore(true)
@@ -1376,6 +1629,34 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    /*Avoid monetizer to cmax combination for both debug & release mode.*/
+
+    if (vendor.equals('monetizer') && environment.equals('cmax_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('monetizer') && environment.equals('cmax_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('monetizer') && environment.equals('cmax_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('monetizer') && environment.equals('cmax_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    /*Avoid monetizer to muvinow combination for both debug & release mode.*/
+
+    if (vendor.equals('monetizer') && environment.equals('muvinow_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('monetizer') && environment.equals('muvinow_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('monetizer') && environment.equals('muvinow_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('monetizer') && environment.equals('muvinow_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
 
 /**
  * Filtered Plushnights variant.
@@ -1480,6 +1761,7 @@ android.variantFilter { variant ->
     if (vendor.equals('plusnights') && environment.equals('monetizer_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+    /*Avoid plusnights to metrox combination for both debug & release mode.*/
 
     if (vendor.equals('plusnights') && environment.equals('metrox_staging_') && isRelease) {
         variant.setIgnore(true)
@@ -1507,6 +1789,37 @@ android.variantFilter { variant ->
     if (vendor.equals('plusnights') && environment.equals('wuntustreaming_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
+    /*Avoid plusnights to cmax combination for both debug & release mode.*/
+
+    if (vendor.equals('plusnights') && environment.equals('cmax_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('plusnights') && environment.equals('cmax_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('plusnights') && environment.equals('cmax_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('plusnights') && environment.equals('cmax_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid plusnights to muvinow combination for both debug & release mode.*/
+
+    if (vendor.equals('plusnights') && environment.equals('muvinow_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('plusnights') && environment.equals('muvinow_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('plusnights') && environment.equals('muvinow_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('plusnights') && environment.equals('muvinow_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
 /**
  * Filtered metrox variant.
  */
@@ -1757,6 +2070,302 @@ android.variantFilter { variant ->
     }
 
 
+   if (vendor.equals('metrox') && environment.equals('cmax_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('cmax_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('cmax_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('cmax_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+
+/*Avoid metrox to muvinow combination for both debug & release mode.*/
+
+    if (vendor.equals('metrox') && environment.equals('muvinow_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('muvinow_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('muvinow_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('muvinow_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+
+/**
+ * Filtered cmax variant.
+ */
+    if (vendor.equals('cmax') && environment.equals('defaultFlavor_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('defaultFlavor_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('cmax') && environment.equals('defaultFlavor_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('defaultFlavor_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('vishwamtv_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('vishwamtv_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('vishwamtv_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('vishwamtv_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('newthoughtchannel_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('newthoughtchannel_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('newthoughtchannel_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('aatto_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('aatto_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('aatto_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('aatto_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('digiOsmosis_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('digiOsmosis_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('digiOsmosis_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('digiOsmosis_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('cmax') && environment.equals('lumiere_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('lumiere_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('lumiere_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('lumiere_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('cmax') && environment.equals('matas_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('matas_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('matas_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('matas_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('cmax') && environment.equals('monetizer_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('monetizer_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('monetizer_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('monetizer_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('cmax') && environment.equals('plusnights_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('plusnights_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('plusnights_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('plusnights_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid cmax to muvinow combination for both debug & release mode.*/
+
+    if (vendor.equals('cmax') && environment.equals('muvinow_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('muvinow_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('muvinow_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('muvinow_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+
+
+
+/**
+ * Filtered muvinow variant.
+ */
+    if (vendor.equals('muvinow') && environment.equals('defaultFlavor_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('defaultFlavor_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('muvinow') && environment.equals('defaultFlavor_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('defaultFlavor_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('vishwamtv_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('vishwamtv_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('vishwamtv_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('vishwamtv_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('newthoughtchannel_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('newthoughtchannel_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('newthoughtchannel_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('aatto_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('aatto_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('aatto_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('aatto_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('digiOsmosis_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('digiOsmosis_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('digiOsmosis_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('digiOsmosis_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('muvinow') && environment.equals('lumiere_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('lumiere_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('lumiere_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('lumiere_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('muvinow') && environment.equals('matas_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('matas_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('matas_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('matas_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('muvinow') && environment.equals('monetizer_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('monetizer_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('monetizer_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('monetizer_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('muvinow') && environment.equals('plusnights_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('plusnights_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('plusnights_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('plusnights_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid muvinow to muvinow combination for both debug & release mode.*/
+
+    if (vendor.equals('muvinow') && environment.equals('cmax_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('cmax_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('cmax_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('cmax_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
 }
 
 

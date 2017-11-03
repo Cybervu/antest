@@ -1560,6 +1560,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 final Intent detailsIntent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 detailsIntent.putExtra("PlayerModel", playerModel);
+                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivity(detailsIntent);
                 finish();
             }
@@ -1576,6 +1577,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 }
                 detailsIntent.putExtra("PlayerModel", playerModel);
                 detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                detailsIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivity(detailsIntent);
                 onBackPressed();
             }
