@@ -905,7 +905,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         searchView.setMaxWidth(10000);
 
         ImageView closeButton = (ImageView)searchView.findViewById(R.id.search_close_btn);
-        closeButton.setImageResource(R.drawable.ic_close_black_24dp);
+        closeButton.setImageResource(R.drawable.ic_close_24dp);
         ImageView imgView = (ImageView)searchView.findViewById(R.id.search_mag_icon);
         imgView.setImageResource(R.drawable.ic_search);
 
