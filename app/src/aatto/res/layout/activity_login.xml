@@ -24,9 +24,7 @@
             android:padding="@dimen/login_padding"
             android:layout_marginLeft="@dimen/layout_padding_left"
             android:layout_marginRight="@dimen/layout_padding_right"
-            android:background="@color/appBackgroundColor"
-
-            >
+            android:background="@color/appBackgroundColor">
 
             <ImageView
                 android:id="@+id/loginImageView"
