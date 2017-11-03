@@ -139,9 +139,10 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
 
           /*  textView.setMovementMethod(LinkMovementMethod.getInstance());
             textView.setText(getStyledTextFromHtml(bodyData));*/
-
+        int color = getResources().getColor(R.color.aboutustextcolor);
+        String aboutUSTextColor = "#" + Integer.toHexString(color & 0x00FFFFFF);
         String text = "<html><head>"
-                + "<style type=\"text/css\" >body{color:#fff;}"
+                + "<style type=\"text/css\" >body{color:"+aboutUSTextColor+";}"
                 + "</style></head>"
                 + "<body style >"
                 + about

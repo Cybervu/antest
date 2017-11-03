@@ -76,4 +76,5 @@
  <color name="disableTextColor">#50757575</color>
  <color name="OsTextColor">#757575</color>
  <color name="aboutustestcolor">#fff</color>
+ <color name="borderColor">#d60080</color>
 </resources>

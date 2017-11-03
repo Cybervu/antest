@@ -36,7 +36,7 @@
                 android:layout_marginTop="@dimen/loginImageViewMarging_top"
                 android:background="@drawable/logo"
                 android:paddingTop="@dimen/Login_drawing_padding" />
-            <EditText
+           <!-- <EditText
                 android:id="@+id/editNameStr_first"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                 android:padding="17dp"
                 android:textColor="@color/editTexColor"
                 android:textColorHint="@color/hintTextColor"
-                android:textSize="16dp" />
+                android:textSize="16dp" />-->
             <EditText
                 android:id="@+id/editNameStr"
                 android:layout_width="match_parent"
@@ -71,7 +71,7 @@
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
                 android:textSize="@dimen/edit_text_size"
-                android:visibility="gone"/>
+                android:visibility="visible"/>
 
             <EditText
                 android:id="@+id/editEmailStr"
