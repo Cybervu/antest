@@ -88,6 +88,7 @@ import com.twotoasters.jazzylistview.JazzyHelper;
 /**
  * Created by user on 28-06-2015.
  */
+
 public class SearchActivity extends AppCompatActivity implements SearchDataAsynTask.SearchDataListener {
     ProgressBarHandler videoPDialog;
     private static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";
