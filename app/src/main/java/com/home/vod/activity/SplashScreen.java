@@ -104,7 +104,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     Timer GoogleIdGeneraterTimer;
 
     /*Asynctask on background thread*/
-    String ipAddressStr;
+    String ipAddressStr = "";
     private Executor threadPoolExecutor;
     private PreferenceManager preferenceManager;
     private LanguagePreference languagePreference;
