@@ -4,6 +4,8 @@
  <color name="appBackgroundColor">#fff</color>
  <color name="textColor">#6e6f76</color>
  <color name="videotextColor">#000000</color>
+ <color name="casttextColor">#000</color>
+ <color name="videoTitleTextColor">#d60080</color>
  <color name="loginTextViewColor">#d60080</color>
  <color name="buttonTextColor">#fff</color>
  <color name="forgotPasswordTextViewColor">#d60080</color>

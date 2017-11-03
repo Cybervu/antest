@@ -63,27 +63,20 @@ public class MonetizationHandler {
         }
     public void handle428Error(String subscription_Str){
 
+        try {
 
-        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(activity, R.style.MyAlertDialogStyle);
+            if (activity instanceof ShowWithEpisodesActivity)
+                ((ShowWithEpisodesActivity) activity).handleFor428Status(subscription_Str);
+            if (activity instanceof Episode_list_Activity)
+                ((Episode_list_Activity) activity).handleFor428Status(subscription_Str);
+            if (activity instanceof MovieDetailsActivity)
+                ((MovieDetailsActivity) activity).handleFor428Status( subscription_Str);
 
-        dlgAlert.setMessage(languagePreference.getTextofLanguage(ACCESS_PERIOD_EXPIRED, DEFAULT_ACCESS_PERIOD_EXPIRED) + " " + languagePreference.getTextofLanguage(ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO) + " " + languagePreference.getTextofLanguage(APP_ON, DEFAULT_APP_ON) + " " + activity.getResources().getString(R.string.studio_site));
-
-
-        dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY,DEFAULT_SORRY));
-        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
-        dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-
-
-                    }
-                });
-        dlgAlert.create().show();
-
-
-
+        } catch (ClassCastException e){
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     }

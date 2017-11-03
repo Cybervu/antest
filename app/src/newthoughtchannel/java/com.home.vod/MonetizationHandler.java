@@ -27,7 +27,6 @@ public class MonetizationHandler {
 
         public void handle429OR430statusCod(String validUserStr,String message, String subscription_Str) {
            try {
-
                if (activity instanceof ShowWithEpisodesActivity)
                    ((ShowWithEpisodesActivity) activity).handleActionForValidateUserPayment(validUserStr, message, subscription_Str);
                if (activity instanceof Episode_list_Activity)
@@ -50,15 +49,15 @@ public class MonetizationHandler {
         try {
 
             if (activity instanceof ShowWithEpisodesActivity)
-                ((ShowWithEpisodesActivity) activity).handleFor428Status(validUserStr, message, subscription_Str);
+                ((ShowWithEpisodesActivity) activity).handleFor428Status(subscription_Str);
             if (activity instanceof Episode_list_Activity)
-                ((Episode_list_Activity) activity).handleFor428Status(validUserStr, message, subscription_Str);
+                ((Episode_list_Activity) activity).handleFor428Status( subscription_Str);
             if (activity instanceof MovieDetailsActivity)
-                ((MovieDetailsActivity) activity).handleFor428Status(validUserStr, message, subscription_Str);
+                ((MovieDetailsActivity) activity).handleFor428Status( subscription_Str);
             if (activity instanceof RegisterActivity)
-                ((RegisterActivity) activity).handleFor428Status(validUserStr, message, subscription_Str);
+                ((RegisterActivity) activity).handleFor428Status( subscription_Str);
             if (activity instanceof LoginActivity)
-                ((LoginActivity) activity).handleFor428Status(validUserStr, message, subscription_Str);
+                ((LoginActivity) activity).handleFor428Status(subscription_Str);
 
         } catch (ClassCastException e){
             e.printStackTrace();

@@ -150,7 +150,7 @@
                     <Button
                         android:id="@+id/preOrderButton"
                         android:layout_width="@dimen/viewmore_btn_width"
-                        android:layout_height="@dimen/viewmore_btn_width"
+                        android:layout_height="@dimen/viewmore_btn_height"
                         android:layout_marginRight="@dimen/pre_order_button_margin"
                         android:layout_toLeftOf="@+id/viewTrailerButton"
                         android:background="@drawable/preorder_button"
@@ -264,7 +264,6 @@
                     android:layout_above="@+id/durationcensorLinearlayout"
                     android:layout_marginRight="@dimen/videoGenreTextView_margin"
                     android:maxLines="1"
-                    android:padding="@dimen/Login_drawing_padding"
                     android:paddingLeft="@dimen/Login_drawing_padding"
                     android:paddingRight="@dimen/videoGenreTextView_padding"
                     android:text=""
