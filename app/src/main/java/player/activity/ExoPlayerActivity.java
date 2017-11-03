@@ -3766,6 +3766,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 HttpGet httpGet = new HttpGet(f_url[0]);
                 HttpResponse execute = client.execute(httpGet);
                 float size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
+                size = Float.parseFloat((""+size).replaceAll(",","."));
+
                 DecimalFormat decimalFormat = new DecimalFormat("#.#");
                 size = Float.valueOf(decimalFormat.format(size));
                 file_size = size;
@@ -4907,9 +4909,15 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 DefaultHttpClient client = new DefaultHttpClient();
                 HttpGet httpGet = new HttpGet(List_Of_Resolution_Url.get(0));
                 HttpResponse execute = client.execute(httpGet);
-//                int contentLength = (int)execute.getEntity().getContentLength();
 
-                float size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
+
+                // This is has been changed because of decimal issue in different issues.
+
+//                float size = (Float.parseFloat(("" + execute.getEntity().getContentLength()).replaceAll("," , "")) / 1024) / 1024;
+                float size = 0.0f;
+                size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
+                size = Float.parseFloat((""+size).replaceAll(",","."));
+
                 DecimalFormat decimalFormat = new DecimalFormat("#.#");
                 size = Float.valueOf(decimalFormat.format(size));
                 List_Of_FileSize.add("(" + size + " MB)");
