@@ -422,7 +422,7 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onGetContentDetailsPreExecuteStarted() {
         LogUtil.showLog("PINTU", "contentdetails pdlog show");
-
+        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
         pDialog.show();
         LogUtil.showLog("MUVI", "PREEXECUTE");
     }
@@ -693,7 +693,7 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onGetEpisodeDetailsPreExecuteStarted() {
         LogUtil.showLog("PINTU", "getepisodedetails pdlog show");
-
+        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
         pDialog.show();
     }
 
@@ -856,7 +856,7 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onGetValidateUserPreExecuteStarted() {
         LogUtil.showLog("PINTU", "validateuser pdlog show");
-
+        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
         pDialog.show();
     }
 
@@ -999,7 +999,7 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onAddToFavPreExecuteStarted() {
         LogUtil.showLog("PINTU", "addfav pdlog show");
-
+        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
         pDialog.show();
 
 
@@ -1057,7 +1057,7 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onViewContentRatingPreExecuteStarted() {
         LogUtil.showLog("PINTU", "view content rating pdlog show");
-
+        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
         pDialog.show();
     }
 
@@ -1148,7 +1148,7 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onVideoDetailsPreExecuteStarted() {
         LogUtil.showLog("PINTU", "videodetails pdlog show");
-
+        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
         pDialog.show();
     }
 
