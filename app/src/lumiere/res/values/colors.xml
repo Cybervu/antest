@@ -61,5 +61,6 @@
     <color name="unselected_color">#fff</color>
     <color name="leftMenuBgColor">#1e292d</color>
     <color name="aboutustestcolor">#fff</color>
-
+    <color name="purchaseBackgroundColor">#666666</color>
+    <color name="purchaseTextColor">#000</color>
 </resources>

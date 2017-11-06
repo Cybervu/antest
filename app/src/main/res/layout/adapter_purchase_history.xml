@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/ppv_margin"
             android:layout_weight="1"
-            android:background="@color/pageTitleColor"
+            android:background="@color/purchaseBackgroundColor"
             android:orientation="vertical"
             android:padding="@dimen/transactionDetailLayout_padding">
 
@@ -36,7 +36,7 @@
                     android:layout_weight="1.6"
                     android:paddingLeft="@dimen/login_new_user_padding"
                     android:text="Transaction"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/purchaseTextColor"
                     android:textSize="@dimen/transcationtitle_text_size" />
 
                 <TextView

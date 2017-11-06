@@ -373,7 +373,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             contentDetailsInput.setPermalink(permalinkStr);
             contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
             contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-            contentDetailsInput.setLanguage(preferenceManager.getLanguageListFromPref());
+            contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
             asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
         }
@@ -1335,7 +1335,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 contentDetailsInput.setPermalink(permalinkStr);
                 contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                 contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-                contentDetailsInput.setLanguage(preferenceManager.getLanguageListFromPref());
+                contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
                 asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                 asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
@@ -1466,7 +1466,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                             contentDetailsInput.setPermalink(permalinkStr);
                             contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                             contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-                            contentDetailsInput.setLanguage(preferenceManager.getLanguageListFromPref());
+                            contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                             asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
                         } else {
@@ -2207,7 +2207,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 contentDetailsInput.setPermalink(permalinkStr);
                 contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                 contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-                contentDetailsInput.setLanguage(preferenceManager.getLanguageListFromPref());
+                contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
                 asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                 asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);

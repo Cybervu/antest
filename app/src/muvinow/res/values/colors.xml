@@ -21,7 +21,6 @@
     <color name="toolbarTitleColor">#fff</color>
     <color name="subtitleListColor">#fff</color>
     <color name="episodeBackgroundColor">#999</color>
-    <color name="purchaseBackgroundColor">#909293</color>
     <color name="preOrderButtonTextColor">#eb0609</color>
     <color name="spinnerDropDownListColor">#000</color>
     <color name="leftMenuBackground">#fff</color>
@@ -87,4 +86,6 @@
     <color name="checkboxcolor">#000</color>
     <color name="cast_crew_titleCololr">#eb0609</color>
     <color name="navdrawerImageBelowLineColor">#000</color>
+    <color name="purchaseBackgroundColor">#909293</color>
+    <color name="purchaseTextColor">#000</color>
 </resources>
