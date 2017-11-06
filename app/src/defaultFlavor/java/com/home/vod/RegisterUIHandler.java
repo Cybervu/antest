@@ -96,8 +96,8 @@ public class RegisterUIHandler {
         FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName);
         editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
 
-        googleSignView.setVisibility(View.GONE);
-        btnLogin.setVisibility(View.GONE);
+        googleSignView.setVisibility(View.VISIBLE);
+        btnLogin.setVisibility(View.VISIBLE);
 
 
     }

@@ -49,6 +49,7 @@ import com.home.apisdk.apiModel.FeatureContentOutputModel;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
+import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
@@ -150,6 +151,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
     ProgressBarHandler videoPDialog;
     String videoImageStrToHeight;
     private boolean mIsScrollingUp;
+    private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     private int mLastFirstVisibleItem;
 
     int videoHeight = 185;
@@ -239,6 +241,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
         }
 
         isLogin = preferenceManager.getLoginFeatureFromPref();
+        episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
         sectionTitle = (TextView) findViewById(R.id.sectionTitle);
         FontUtls.loadFont(ViewMoreActivity.this, getResources().getString(R.string.regular_fonts),sectionTitle);
         if (getIntent().getStringExtra("sectionName") != null) {
@@ -1279,97 +1282,10 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        /***************chromecast**********************/
 
-        if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1")) {
-            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
-                    R.id.media_route_menu_item);
-            mediaRouteMenuItem.setVisible(true);
-
-        } else {
-            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
-                    R.id.media_route_menu_item);
-            mediaRouteMenuItem.setVisible(false);
-        }
-        /***************chromecast**********************/
-
-        MenuItem item, item1, item2, item3, item4, item5, item6,item7;
-        item = menu.findItem(R.id.action_filter);
-        item.setVisible(false);
-        String loggedInStr = preferenceManager.getLoginStatusFromPref();
-        String id = preferenceManager.getUseridFromPref();
-        String email = preferenceManager.getEmailIdFromPref();
-        if (preferenceManager.getLanguageListFromPref().equals("1"))
-            (menu.findItem(R.id.menu_item_language)).setVisible(false);
-
-        if (loggedInStr != null) {
-            item4 = menu.findItem(R.id.action_login);
-            item4.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
-            item4.setVisible(false);
-            item5 = menu.findItem(R.id.action_register);
-            item5.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
-            item5.setVisible(false);
-            item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
-            item1.setVisible(true);
-            item2 = menu.findItem(R.id.action_purchage);
-            item2.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
-            item2.setVisible(true);
-            item7 = menu.findItem(R.id.menu_item_favorite);
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
-                item7.setVisible(true);
-            } else {
-                item7.setVisible(false);
-
-            }
-            item3 = menu.findItem(R.id.action_logout);
-            item3.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
-            item3.setVisible(true);
-
-            item6 = menu.findItem(R.id.action_mydownload);
-            item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD));
-            if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
-                    .trim()).equals("1")) {
-                item6.setVisible(true);
-            }else{
-                item6.setVisible(false);
-
-            }
-
-        } else if (loggedInStr == null) {
-            item4 = menu.findItem(R.id.action_login);
-            item4.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
-
-
-            item5 = menu.findItem(R.id.action_register);
-            item5.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
-            if (isLogin == 1) {
-                item4.setVisible(true);
-                item5.setVisible(true);
-
-            } else {
-                item4.setVisible(false);
-                item5.setVisible(false);
-
-            }
-            item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
-            item1.setVisible(false);
-            item2 = menu.findItem(R.id.action_purchage);
-            item2.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
-            item2.setVisible(false);
-            item3 = menu.findItem(R.id.action_logout);
-            item3.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
-            item3.setVisible(false);
-            item6 = menu.findItem(R.id.action_mydownload);
-            item6.setTitle(languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE));
-            item6.setVisible(false);
-            item7 = menu.findItem(R.id.menu_item_favorite);
-            item7.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE));
-            item7.setVisible(false);
-        }
+        id = preferenceManager.getUseridFromPref();
+        email = preferenceManager.getEmailIdFromPref();
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
         return true;
     }
     /*chromecast-------------------------------------*/

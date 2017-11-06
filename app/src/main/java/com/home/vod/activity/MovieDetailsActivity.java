@@ -373,7 +373,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             contentDetailsInput.setPermalink(permalinkStr);
             contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
             contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-            contentDetailsInput.setLanguage(preferenceManager.getLanguageListFromPref());
+            contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
             asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
         }
@@ -1335,7 +1335,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 contentDetailsInput.setPermalink(permalinkStr);
                 contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                 contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-                contentDetailsInput.setLanguage(preferenceManager.getLanguageListFromPref());
+                contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
                 asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                 asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
@@ -1466,7 +1466,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                             contentDetailsInput.setPermalink(permalinkStr);
                             contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                             contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-                            contentDetailsInput.setLanguage(preferenceManager.getLanguageListFromPref());
+                            contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                             asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
                         } else {
@@ -2207,7 +2207,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 contentDetailsInput.setPermalink(permalinkStr);
                 contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                 contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-                contentDetailsInput.setLanguage(preferenceManager.getLanguageListFromPref());
+                contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
                 asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
                 asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
@@ -3023,30 +3023,31 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 //  favorite_view.setVisibility(View.VISIBLE);
                 handleRatingbar.handleVisibleUnvisibleFavicon(favorite_view);
             }
-            /***favorite *****/
+
+            /***play button visibility condition *****/
 
             if (contentDetailsOutput.getIsApv() == 1) {
                 playButton.setVisibility(View.INVISIBLE);
                 preorderButton.setText(languagePreference.getTextofLanguage(ADVANCE_PURCHASE, DEFAULT_ADVANCE_PURCHASE));
                 preorderButton.setVisibility(View.VISIBLE);
-            } else if (contentDetailsOutput.getIsApv() == 0 && contentDetailsOutput.getIsPpv() == 0
-                    && contentDetailsOutput.getIsConverted() == 0) {
-                if (contentDetailsOutput.getContentTypesId() == 4) {
-                    playButton.setVisibility(View.VISIBLE);
-                    preorderButton.setVisibility(View.GONE);
-
-                } else {
-                    playButton.setVisibility(View.INVISIBLE);
-                    preorderButton.setVisibility(View.GONE);
-
-                }
-
-            } else if (contentDetailsOutput.getIsApv() == 0 && contentDetailsOutput.getIsPpv() == 0 && contentDetailsOutput.getIsConverted() == 1) {
+            } else if (contentDetailsOutput.getContentTypesId()==4) {
                 playButton.setVisibility(View.VISIBLE);
                 preorderButton.setVisibility(View.GONE);
 
+            } else if((contentDetailsOutput.getIsFreeContent().equals("1") || contentDetailsOutput.getIsPpv() == 1)
+                    && contentDetailsOutput.getIsConverted() == 1){
+
+                playButton.setVisibility(View.VISIBLE);
+                preorderButton.setVisibility(View.GONE);
+
+            }else if (contentDetailsOutput.getIsApv() == 0 && contentDetailsOutput.getIsPpv() == 0 &&
+                    contentDetailsOutput.getIsConverted() == 1) {
+                playButton.setVisibility(View.VISIBLE);
+                preorderButton.setVisibility(View.GONE);
 
             }
+
+
             videoTitle.setVisibility(View.VISIBLE);
             Typeface castDescriptionTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
             videoTitle.setTypeface(castDescriptionTypeface);

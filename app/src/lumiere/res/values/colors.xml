@@ -11,10 +11,13 @@
     <color name="cast_crew_titleCololr">#2acb99</color>
     <color name="no_internet_textColor">#000</color>
     <color name="toolbarTitleColor">#fff</color>
+    <color name="aboutustextcolor">#000</color>
     <color name="unSelectedHintColor">#eee</color>
     <color name="selectedHintColor">#0b8f66</color>
     <color name="hintTextColor">#999</color>
     <color name="editTexColor">#666</color>
+    <color name="button_background">#2acb99</color>
+    <color name="castCrewTitleTextColor">#2acb99</color>
     <color name="buttonTextColor">#fff</color>
     <color name="buttonBackgroundColor">#2acb99</color>
     <color name="loginTextColor">#2acb99</color>
@@ -58,5 +61,6 @@
     <color name="unselected_color">#fff</color>
     <color name="leftMenuBgColor">#1e292d</color>
     <color name="aboutustestcolor">#fff</color>
-
+    <color name="purchaseBackgroundColor">#666666</color>
+    <color name="purchaseTextColor">#000</color>
 </resources>

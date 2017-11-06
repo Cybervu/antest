@@ -88,6 +88,7 @@ import com.twotoasters.jazzylistview.JazzyHelper;
 /**
  * Created by user on 28-06-2015.
  */
+
 public class SearchActivity extends AppCompatActivity implements SearchDataAsynTask.SearchDataListener {
     ProgressBarHandler videoPDialog;
     private static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";
@@ -902,6 +903,11 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         ImageView v = (ImageView) searchView.findViewById(searchImgId);
 
         searchView.setMaxWidth(10000);
+
+        ImageView closeButton = (ImageView)searchView.findViewById(R.id.search_close_btn);
+        closeButton.setImageResource(R.drawable.ic_close_24dp);
+        ImageView imgView = (ImageView)searchView.findViewById(R.id.search_mag_icon);
+        imgView.setImageResource(R.drawable.ic_search);
 
         final SearchView.SearchAutoComplete theTextArea = (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
         theTextArea.setBackgroundResource(R.drawable.edit);

@@ -7,6 +7,8 @@
     <color name="videotitleColor">#000000</color>
     <color name="loginTextViewColor">#264177</color>
     <color name="buttonTextColor">#fff</color>
+    <color name="casttextColor">#264177</color>
+    <color name="borderColor">#264177</color>
     <color name="checkboxcolor">#000</color>
     <color name="toolbarTitleColor">#fff</color>
     <color name="aboutustestcolor">#fff</color>
@@ -49,7 +51,7 @@
     <color name="languagePopupFadeColor">#50696969</color>
     <color name="filterTextColor">#5c6873</color>
     <color name="nav_drawer_lineColor">#000</color>
-    <color name="nav_lineColor">#000</color>
+    <color name="nav_lineColor">#264177</color>
     <color name="nav_drawer_text_Color">#000000</color>
     <color name="button_background">#264177</color>
     <color name="button_background_plan_textview">#264177</color>
@@ -72,6 +74,7 @@
     <color name="editTextColor">#5c6873</color>
     <color name="voucher_inactive_button">#c3c3c3</color>
     <color name="movieTitleColor">#fff</color>
+    <color name="videoTitleTextColor">#fff</color>
     <color name="videomovieTitleColor">#3f444a</color>
     <color name="resumePopupColor">#fff</color>
     <color name="dividerColor">#264177</color>
@@ -92,5 +95,6 @@
     <color name="disableTextColor">#50757575</color>
     <color name="OsTextColor">#757575</color>
     <color name="cast_crew_textcolor">#264177</color>
-
+    <color name="purchaseBackgroundColor">#3f444a</color>
+    <color name="purchaseTextColor">#757575</color>
 </resources>

@@ -11,6 +11,7 @@
  <color name="navlogobackgroundcolor">#fff</color>
  <color name="buttonTextColor">#fff</color>
  <color name="downloadresolutionTextColor">#fff</color>
+ <color name="casttextColor">#580661</color>
  <color name="forgotPasswordTextViewColor">#b70000</color>
  <color name="fb_text_color">#fff</color>
  <color name="login_new_user_text_color">#757575</color>
@@ -87,6 +88,7 @@
  <color name="playPauseColor">#00000000</color>
  <color name="waterMarkTextColor">#80ffffff</color>
  <color name="seekTimeTextColor">#80ffffff</color>
+ <color name="aboutustextcolor">#000</color>
  <color name="subTitleTextColor">#000</color>
  <color name="totalTimeTxtColor">#ffffff</color>
  <color name="contentTitleColor">#fff</color>
@@ -147,6 +149,6 @@
  <color name="progressbarstartColor">#000</color>
  <color name="termsTextColor">#2acb99</color>
  <color name="leftMenuBgColor">#1e292d</color>
-
-
+ <color name="purchaseBackgroundColor">#909293</color>
+ <color name="purchaseTextColor">#000</color>
 </resources>
