@@ -47,7 +47,7 @@
                     android:layout_weight="2"
                     android:gravity="center_vertical|right"
                     android:text="Active"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/purchaseTextColor"
                     android:textSize="@dimen/transcationview_text_size"
 
                     />
@@ -68,7 +68,7 @@
                     android:layout_weight="1.9"
                     android:paddingLeft="@dimen/login_new_user_padding"
                     android:text="Invoice :"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/purchaseTextColor"
                     android:textSize="@dimen/transcationview_text_size" />
 
 
@@ -81,7 +81,7 @@
                     android:gravity="center_vertical|left"
                     android:maxLines="1"
                     android:text="$87343876463464656456486664"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/purchaseTextColor"
                     android:textSize="@dimen/transcationview_text_size" />
 
             </LinearLayout>
@@ -101,7 +101,7 @@
                     android:layout_weight="1.9"
                     android:paddingLeft="@dimen/login_new_user_padding"
                     android:text="Order Id :"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/purchaseTextColor"
                     android:textSize="@dimen/transcationview_text_size" />
 
 
@@ -114,7 +114,7 @@
                     android:gravity="center_vertical|left"
                     android:maxLines="1"
                     android:text="sdvbkbkbdtchsdnjdskvnkjnvsdmbjbndjsbnrshwh"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/purchaseTextColor"
                     android:textSize="@dimen/transcationview_text_size" />
 
             </LinearLayout>
@@ -135,7 +135,7 @@
                     android:layout_weight="1.9"
                     android:paddingLeft="@dimen/login_new_user_padding"
                     android:text="Purchase Date :"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/purchaseTextColor"
                     android:textSize="@dimen/transcationview_text_size" />
 
 
@@ -148,7 +148,7 @@
                     android:gravity="center_vertical|left"
                     android:maxLines="1"
                     android:text="$873438768832346876532356"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/purchaseTextColor"
                     android:textSize="@dimen/transcationview_text_size"
 
                     />
