@@ -228,6 +228,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
     /***** offline *****/
     DownloadManager downloadManager;
+    
     RelativeLayout download_layout;
     public boolean downloading;
     //Handler mHandler;
