@@ -124,11 +124,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
+import java.text.FieldPosition;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -152,6 +156,7 @@ import player.utils.DBHelper;
 import player.utils.SensorOrientationChangeNotifier;
 import player.utils.Util;
 
+import static android.R.attr.format;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
@@ -459,6 +464,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         languagePreference = LanguagePreference.getLanguagePreference(this);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
         handleOfflineInExoplayer=new HandleOfflineInExoplayer(this);
+
+        Util.saveLogData("=================================================== Start Of Main ==================================================");
 
         if (playerModel.getVideoUrl().contains(".mpd")) {
             isDrm = true;
@@ -3771,7 +3778,15 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 DefaultHttpClient client = new DefaultHttpClient();
                 HttpGet httpGet = new HttpGet(f_url[0]);
                 HttpResponse execute = client.execute(httpGet);
-                float size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
+
+                float size = 0.0f;
+//                size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
+
+                Util.saveLogData("execute.getEntity().getContentLength() DownloadFileFromURL="+execute.getEntity().getContentLength());
+
+                 size = (Float.parseFloat(("" + execute.getEntity().getContentLength()).replaceAll(",","")) / 1024) / 1024;
+                size = Float.parseFloat((""+size).replaceAll("," , "."));
+
                 DecimalFormat decimalFormat = new DecimalFormat("#.#");
                 size = Float.valueOf(decimalFormat.format(size));
                 file_size = size;
@@ -3780,6 +3795,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
             } catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
+                Util.saveLogData("Exception DownloadFileFromURL="+e.toString());
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
@@ -4679,6 +4695,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     public void PlayUsingCsat() {
 
 
+
         MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
         movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory());
         movieMetadata.putString(MediaMetadata.KEY_TITLE, playerModel.getVideoTitle());
@@ -4913,16 +4930,51 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 DefaultHttpClient client = new DefaultHttpClient();
                 HttpGet httpGet = new HttpGet(List_Of_Resolution_Url.get(0));
                 HttpResponse execute = client.execute(httpGet);
-//                int contentLength = (int)execute.getEntity().getContentLength();
 
-                float size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
-                DecimalFormat decimalFormat = new DecimalFormat("#.#");
-                size = Float.valueOf(decimalFormat.format(size));
+
+                // This is has been changed because of decimal issue in different issues.
+
+                float size = 0.0f;
+
+                Util.saveLogData("execute.getEntity().getContentLength() DetectDownloadingFileSize="+execute.getEntity().getContentLength());
+                Log.v("BIBHU11","execute.getEntity().getContentLength() DetectDownloadingFileSize="+execute.getEntity().getContentLength());
+
+                size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
+//                size = (Float.parseFloat(("" + execute.getEntity().getContentLength()).replaceAll(",","")) / 1024) / 1024;
+//                size =Float.parseFloat((""+((Float.parseFloat(("" + execute.getEntity().getContentLength()).replaceAll(",","")) / 1024) / 1024)).replaceAll(",","."));
+
+                /*try{
+                    size = Float.parseFloat(("" + execute.getEntity().getContentLength()).replaceAll(",",""));
+                }catch (Exception e ){Util.saveLogData("Exception 1 DetectDownloadingFileSize="+e.toString());}
+
+                try{
+                    size = Float.parseFloat((""+(size/1024)).replaceAll(",","."));
+                }catch (Exception e ){Util.saveLogData("Exception 2 DetectDownloadingFileSize="+e.toString());}
+
+                try{
+                    size = Float.parseFloat((""+(size/1024)).replaceAll(",","."));
+                }catch (Exception e ){Util.saveLogData("Exception 3 DetectDownloadingFileSize="+e.toString());}
+
+                try{
+                    size = Float.parseFloat((""+size).replaceAll(",","."));
+                }catch (Exception e ){Util.saveLogData("Exception 4 DetectDownloadingFileSize="+e.toString());}
+
+                try{
+                    DecimalFormat decimalFormat = new DecimalFormat("#.#");
+                    size = Float.valueOf(decimalFormat.format(size));
+
+                }catch (Exception e ){Util.saveLogData("Exception 5 DetectDownloadingFileSize="+e.toString());}
+
+*/
+
+                Log.v("BIBHU11","execute.getEntity().getContentLength() DetectDownloadingFileSize==="+(Float.parseFloat(("" + execute.getEntity().getContentLength()).replaceAll(",","")) / 1024) / 1024);
+
                 List_Of_FileSize.add("(" + size + " MB)");
 
 
             } catch (Exception e) {
-                Log.e("Error: ", e.getMessage());
+                Log.v("BIBHU11","Exception="+ e.getMessage());
+                Util.saveLogData("Exception DetectDownloadingFileSize="+e.toString());
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
