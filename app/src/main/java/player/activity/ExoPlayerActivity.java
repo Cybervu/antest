@@ -124,11 +124,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -152,6 +154,7 @@ import player.utils.DBHelper;
 import player.utils.SensorOrientationChangeNotifier;
 import player.utils.Util;
 
+import static android.R.attr.format;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
@@ -4914,8 +4917,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 HttpGet httpGet = new HttpGet(List_Of_Resolution_Url.get(0));
                 HttpResponse execute = client.execute(httpGet);
 //                int contentLength = (int)execute.getEntity().getContentLength();
-
-                float size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
+                float size = 0.0f;
+               // NumberFormat noformat = NumberFormat.getInstance(Locale.ENGLISH);
+                size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
+              //  size = Float.parseFloat(noformat.format(size));
                 DecimalFormat decimalFormat = new DecimalFormat("#.#");
                 size = Float.valueOf(decimalFormat.format(size));
                 List_Of_FileSize.add("(" + size + " MB)");
