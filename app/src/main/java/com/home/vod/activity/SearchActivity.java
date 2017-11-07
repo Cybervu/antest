@@ -989,6 +989,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             } else {
                                 search_data_input.setCountry("IN");
                             }
+                            search_data_input.setLanguage_code( languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input, SearchActivity.this, SearchActivity.this);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
