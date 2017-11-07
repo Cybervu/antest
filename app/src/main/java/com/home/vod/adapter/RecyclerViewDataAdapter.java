@@ -32,7 +32,9 @@ import java.util.ArrayList;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_ALL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.VIEW_ALL;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 
 public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDataAdapter.ItemRowHolder>{
@@ -268,7 +270,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
 /*
             Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
             this.btnMore.setTypeface(watchTrailerButtonTypeface);*/
-            this.btnMore.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
+            this.btnMore.setText(languagePreference.getTextofLanguage(VIEW_ALL, DEFAULT_VIEW_ALL));
             mDemoSlider = (SliderLayout) view.findViewById(R.id.sliderLayout);
             mDemoSliderLayout = (RelativeLayout) view.findViewById(R.id.sliderRelativeLayout);
 

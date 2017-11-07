@@ -305,6 +305,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             languagePreference.setLanguageSharedPrefernce(SELECTED_LANGUAGE_CODE, defaultLanguage);
         }
 
+        else {
+            defaultLanguage = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE);
+        }
         //                  Call For Language Translation.
 
         LanguageListInputModel languageListInputModel = new LanguageListInputModel();
