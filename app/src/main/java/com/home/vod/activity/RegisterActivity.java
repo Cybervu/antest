@@ -4451,7 +4451,7 @@ public class RegisterActivity extends AppCompatActivity implements
         LogoutInput logoutInput = new LogoutInput();
         logoutInput.setAuthToken(authTokenStr);
         logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        logoutInput.setLogin_history_id(logoutInput.getLogin_history_id());
+        logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, this, this);
         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
     }
