@@ -12,6 +12,7 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.text.TextUtils;
@@ -48,12 +49,18 @@ import com.home.vod.preferences.LanguagePreference;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -123,7 +130,7 @@ public class Util {
     public static boolean goToLibraryplayer = false;
     public static boolean my_library_visibility = false;
 
-    public static int image_orentiation;
+    public static ArrayList<Integer> image_orentiation = new ArrayList<>();
 
     public static String GOOGLE_FCM_TOKEN = "GOOGLE_FCM_TOKEN";
     public static String DEFAULT_GOOGLE_FCM_TOKEN = "0";
@@ -763,4 +770,5 @@ public class Util {
     public static boolean getStreamingRestriction(LanguagePreference languagePreference) {
         return languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1");
     }
+
 }

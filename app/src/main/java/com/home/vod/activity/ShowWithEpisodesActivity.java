@@ -2216,6 +2216,7 @@ MonetizationHandler monetizationHandler;
                                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                                 getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                                getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                                 asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
                                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
@@ -2247,6 +2248,7 @@ MonetizationHandler monetizationHandler;
                         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                         getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                        getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
                         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                     } else {
@@ -2329,8 +2331,7 @@ MonetizationHandler monetizationHandler;
                 contentDetailsInput.setPermalink(permalinkStr);
                 contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                 contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
-                contentDetailsInput.setLanguage(preferenceManager.getLanguageListFromPref());
-
+                contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
                 asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
                 asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
@@ -2595,6 +2596,7 @@ MonetizationHandler monetizationHandler;
                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                 getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                 asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
@@ -3650,6 +3652,9 @@ MonetizationHandler monetizationHandler;
             ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
             contentDetailsInput.setAuthToken(authTokenStr);
             contentDetailsInput.setPermalink(permalinkStr);
+            contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+            contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
+            contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
             asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
             asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
@@ -4218,6 +4223,9 @@ MonetizationHandler monetizationHandler;
                             ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
                             contentDetailsInput.setAuthToken(authTokenStr);
                             contentDetailsInput.setPermalink(permalinkStr);
+                            contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                            contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
+                            contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
                             asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
                             asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
@@ -5268,6 +5276,9 @@ MonetizationHandler monetizationHandler;
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
                 contentDetailsInput.setAuthToken(authTokenStr);
                 contentDetailsInput.setPermalink(permalinkStr);
+                contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
+                contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
                 asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
                 asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
@@ -5320,6 +5331,8 @@ MonetizationHandler monetizationHandler;
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
                     asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                 } else {
@@ -5359,6 +5372,8 @@ MonetizationHandler monetizationHandler;
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
                     asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                 } else {

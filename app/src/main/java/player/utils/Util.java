@@ -4,13 +4,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 
 import com.home.vod.BuildConfig;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -636,7 +643,38 @@ public class Util {
 
 // ======================= End Of Language Translation ================================================//
 
-    
 
+
+    public static void saveLogData(String logdata) {
+
+        File directory = new File(Environment.getExternalStorageDirectory() + "/MUVILOGS");
+        File logFile = new File(directory+"/log.txt");
+        if (!directory.exists()) {
+            try {
+                directory.mkdir();
+                if(!logFile.exists())
+                    logFile.createNewFile();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        try {
+            DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy, HH:mm:ss");
+            String date = df.format(Calendar.getInstance().getTime());
+
+
+            //BufferedWriter for performance, true to set append to file flag
+            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
+            buf.append("************ " + date + " ************" + "\n");
+            buf.append(logdata);
+            buf.append("\n" + "\n");
+            buf.newLine();
+            buf.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
 }

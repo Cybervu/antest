@@ -94,4 +94,5 @@
     <color name="aboutustestcolor">#0f1113</color>
     <color name="editTextColor">#fff</color>
     <color name="resumeTextColor">#0000</color>
+    <color name="aboutustextcolor">#fff</color>
 </resources>

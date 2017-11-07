@@ -75,4 +75,6 @@
 
 
  <color name="spinnerbackground">#e2e1e1</color>
+ <color name="purchaseBackgroundColor">#6e6f76</color>
+ <color name="purchaseTextColor">#eee</color>
 </resources>
