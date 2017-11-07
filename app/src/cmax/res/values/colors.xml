@@ -144,8 +144,8 @@
     <color name="nav_text_line_color">#000000</color>
 
     <color name="filter_text_color">#000</color>
-    <color name="cast_crew_titleCololr">#2299dd</color>
-    <color name="loader_color">#2299dd</color>
+    <color name="cast_crew_titleCololr">#3084E3</color>
+    <color name="loader_color">#3084E3</color>
     <color name="hint_background">#3084E3</color>
     <color name="pageTitleColor">#fff</color>
     <color name="noInternetColor">#fff</color>
@@ -166,6 +166,7 @@
     <color name="alertPopupColor">#fff</color>
     <!--<color name="google_signup_color">#942c27</color>-->
     <color name="google_signup_color">#ffffff</color>
-    <color name="purchaseBackgroundColor">#909293</color>
-    <color name="purchaseTextColor">#fff</color>
+    <color name="purchaseBackgroundColor">#fff</color>
+    <color name="purchaseBackground">#414141</color>
+    <color name="purchaseTextColor">#000</color>
 </resources>

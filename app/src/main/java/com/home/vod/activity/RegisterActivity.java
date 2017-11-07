@@ -4225,6 +4225,19 @@ public class RegisterActivity extends AppCompatActivity implements
 
     @Override
     public void onCheckDevicePostExecuteCompleted(CheckDeviceOutput checkDeviceOutput, int code, String message) {
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
+            code = 0;
+
+        }
+
+        UniversalErrorMessage = message;
+
         if (code > 0) {
             if (code == 200) {
 
@@ -4447,7 +4460,7 @@ public class RegisterActivity extends AppCompatActivity implements
         LogoutInput logoutInput = new LogoutInput();
         logoutInput.setAuthToken(authTokenStr);
         logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        logoutInput.setLogin_history_id(logoutInput.getLogin_history_id());
+        logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, this, this);
         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
     }
@@ -4460,6 +4473,11 @@ public class RegisterActivity extends AppCompatActivity implements
 
     @Override
     public void onLogoutPostExecuteCompleted(int code, String status, String message) {
+        if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+                    pDialog = null;
+                }
+
         if (status == null) {
             Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 

@@ -110,6 +110,10 @@ public class AsyncGmailReg extends AsyncTask<GmailLoginInput, Void, Void> {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
                 Log.v("Nihar", responseStr);
+                Log.v("ANU","NAME==="+this.gmailLoginInput.getName());
+                Log.v("ANU","email==="+this.gmailLoginInput.getEmail());
+                Log.v("ANU","gplus_userid==="+this.gmailLoginInput.getGmail_userid());
+                Log.v("ANU","profile_image==="+this.gmailLoginInput.getProfile_image());
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 status = 0;
                 message = "Error";
