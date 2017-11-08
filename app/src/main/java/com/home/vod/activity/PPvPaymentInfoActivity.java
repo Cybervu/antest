@@ -628,6 +628,11 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         getMonetizationDetailsInputModel.setStream_id(Util.dataModel.getStreamUniqueId());
         getMonetizationDetailsInputModel.setMovie_id(Util.dataModel.getMovieUniqueId().trim());
         getMonetizationDetailsInputModel.setUser_id(loggedInIdStr);
+        if (Util.dataModel.getContentTypesId() == 3) {
+            getMonetizationDetailsInputModel.setPurchase_type("episode");
+        } else {
+            getMonetizationDetailsInputModel.setPurchase_type("show");
+        }
 
         final GetMonetizationDetailsAsynctask asynGetMoniTization = new GetMonetizationDetailsAsynctask(getMonetizationDetailsInputModel, this, this);
         asynGetMoniTization.executeOnExecutor(threadPoolExecutor);
