@@ -667,6 +667,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, UNPAID, "", "unpaid", json);
         setTranslationLanguageToPref(languagePreference, USE_NEW_CARD, DEFAULT_USE_NEW_CARD, "use_new_card", json);
         setTranslationLanguageToPref(languagePreference, VIEW_MORE, DEFAULT_VIEW_MORE, "view_more", json);
+        setTranslationLanguageToPref(languagePreference, VIEW_ALL, DEFAULT_VIEW_ALL, "viewall", json);
         setTranslationLanguageToPref(languagePreference, VIEW_TRAILER, DEFAULT_VIEW_TRAILER, "view_trailer", json);
 
         setTranslationLanguageToPref(languagePreference, WATCH, "", "watch", json);

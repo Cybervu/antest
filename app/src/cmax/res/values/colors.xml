@@ -165,7 +165,7 @@
     <color name="filterBgColor">#fff</color>
     <color name="alertPopupColor">#fff</color>
     <!--<color name="google_signup_color">#942c27</color>-->
-    <color name="google_signup_color">#ffffff</color>
+    <color name="google_signup_color">#fcfcfc</color>
     <color name="purchaseBackgroundColor">#fff</color>
     <color name="purchaseBackground">#414141</color>
     <color name="purchaseTextColor">#000</color>

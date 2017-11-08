@@ -89,6 +89,7 @@ public class RegisterUIHandler {
         FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName);
         editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
 
+
         termsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

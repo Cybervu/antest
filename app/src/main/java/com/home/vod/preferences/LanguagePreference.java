@@ -51,6 +51,7 @@ public class LanguagePreference {
     public static final String CAST = "CAST";
     public static final String DIRECTOR = "DIRECTOR";
     public static final String VIEW_MORE = "VIEW_MORE";
+    public static final String VIEW_ALL = "VIEW_ALL";
     public static final String FILTER_BY = "FILTER_BY";
     public static final String SORT_BY = "SORT_BY";
     public static final String FORGOT_PASSWORD = "FORGOT_PASSWORD";
@@ -297,7 +298,8 @@ public class LanguagePreference {
 
     public static final String DEFAULT_SEARCH_PLACEHOLDER = "Search";
     public static final String DEFAULT_VIEW_TRAILER = "View Trailer";
-    public static final String DEFAULT_VIEW_MORE = "View All";
+    public static final String DEFAULT_VIEW_MORE = "View More";
+    public static final String DEFAULT_VIEW_ALL = "View All";
     public static final String DEFAULT_FILTER_BY = "Filter By";
     public static final String DEFAULT_SORT_BY = "Sort By";
     public static final String DEFAULT_FORGOT_PASSWORD = "Forgot Password?";
