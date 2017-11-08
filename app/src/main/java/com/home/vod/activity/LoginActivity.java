@@ -18,6 +18,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -1514,25 +1516,25 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 return false;
             }
         });*/
-       /* editPasswordStr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+     
 
+        /*******enter key of keyboard *************/
 
-                if (hasFocus) {
+        InputFilter filter = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
 
-                    editPasswordStr.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#458ccc")));
-                } else {
-                    editPasswordStr.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#737373")));
+                for (int i = start; i < end; i++) {
+
+                    if (source.charAt(i) == '\n') {
+                        return " ";
+                    }
                 }
-
+                return null;
             }
-        });*/
+        };
 
-
-        /*LogUtil.showLog("MUVI","is Apv = "+ Util.dataModel.getIsAPV());
-        LogUtil.showLog("MUVI","is Apv = "+ Util.dataModel.getIsPPV());
-        LogUtil.showLog("MUVI","is Apv = "+ Util.dataModel.getContentTypesId());*/
+        editEmailStr.setFilters(new InputFilter[]{filter});
+        editPasswordStr.setFilters(new InputFilter[]{filter});
 
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), editPasswordStr);
 
