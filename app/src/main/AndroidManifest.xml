@@ -62,59 +62,12 @@
             android:name=".activity.SearchActivity"
             android:label=""
             android:screenOrientation="portrait" />
-        <activity
-            android:name="player.activity.ExoPlayerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label=""
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
 
         <activity
             android:name=".activity.MyDownloads"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="player.activity.ThirdPartyPlayer"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label=""
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name="player.activity.YouTubeAPIActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label=""
-            android:windowSoftInputMode="stateHidden" />
 
-        <service
-            android:name="player.activity.DataConsumptionService"
-            android:enabled="true"
-            android:exported="true"></service>
 
-        <service
-            android:name="player.service.PopUpService"
-            android:enabled="true"
-            android:exported="true" />
-
-        <activity
-            android:name="player.activity.Subtitle_Resolution"
-            android:configChanges="screenSize|orientation"
-            android:label=""
-            android:screenOrientation="sensor"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name="player.activity.SubtitleList"
-            android:configChanges="screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <activity
-            android:name="player.activity.ResolutionChangeActivity"
-            android:configChanges="screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <activity
-            android:name="player.activity.ResumePopupActivity"
-            android:configChanges="screenSize|orientation"
-            android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
             android:name=".activity.MovieDetailsActivity"
             android:label=""
@@ -197,9 +150,9 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
         <!--chromecast-->
-        <meta-data
+        <!--<meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
-            android:value="com.home.vod.CastOptionsProvider" />
+            android:value="com.home.vod.CastOptionsProvider" />-->
 
         <activity
             android:name=".expandedcontrols.ExpandedControlsActivity"
@@ -251,21 +204,12 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name="player.activity.MyLibraryPlayer"
+            android:name=".activity.MyLibraryPlayer"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateHidden" />
 
-        <activity
-            android:name="player.activity.AdPlayerActivity"
-            android:label=""
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="player.activity.MyActivity"
-            android:label=""
-            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.MyLibraryResumePopupActivity"

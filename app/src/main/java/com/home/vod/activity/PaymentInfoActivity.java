@@ -52,11 +52,11 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.Player;
-import player.activity.ThirdPartyPlayer;
-import player.activity.YouTubeAPIActivity;
+import com.muvi.muviplayersdk.activity.AdPlayerActivity;
+import com.muvi.muviplayersdk.activity.ExoPlayerActivity;
+import com.muvi.muviplayersdk.activity.Player;
+import com.muvi.muviplayersdk.activity.ThirdPartyPlayer;
+import com.muvi.muviplayersdk.activity.YouTubeAPIActivity;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -90,6 +90,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_CREDIT_CARD_NU
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CVV_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_SUBSCRIPTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
@@ -97,12 +98,15 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SUBSCRIPTION_C
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_SUBSCRIPTION;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.SUBSCRIPTION_COMPLETED;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
+import static com.muvi.muviplayersdk.utils.Util.DEFAULT_IS_CHROMECAST;
+import static com.muvi.muviplayersdk.utils.Util.IS_CHROMECAST;
 
 
 public class PaymentInfoActivity extends ActionBarActivity implements VideoDetailsAsynctask.VideoDetailsListener,
@@ -650,8 +654,13 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
 
         if (statusCode == 200) {
-            playerModel.setIsOffline(_video_details_output.getIs_offline());
-            playerModel.setDownloadStatus(_video_details_output.getDownload_status());
+            if((_video_details_output.getIs_offline().trim().equals("1")) && _video_details_output.getDownload_status().trim().equals("1")){
+                playerModel.canDownload(true);
+            }
+            else{
+                playerModel.canDownload(false);
+            }
+
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
                 if (_video_details_output.getVideoUrl() != null || !_video_details_output.getVideoUrl().matches("")) {
                     playerModel.setVideoUrl(_video_details_output.getVideoUrl());
@@ -694,19 +703,62 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
 
             //player model set
-            playerModel.setAdDetails(_video_details_output.getAdDetails());
             playerModel.setMidRoll(_video_details_output.getMidRoll());
             playerModel.setPostRoll(_video_details_output.getPostRoll());
             playerModel.setChannel_id(_video_details_output.getChannel_id());
             playerModel.setAdNetworkId(_video_details_output.getAdNetworkId());
             playerModel.setPreRoll(_video_details_output.getPreRoll());
+
+            // for online subtitle
             playerModel.setSubTitleName(_video_details_output.getSubTitleName());
             playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
+
+
+            // for offline subtitle
+            playerModel.setOfflineSubtitleUrl(_video_details_output.getSubTitlePath());
+            playerModel.setOfflineSubtitleLanguage(_video_details_output.getSubTitleName());
+
+
+            //for chromecast subtitle
+            playerModel.setChromecsatSubtitleUrl(_video_details_output.getSubTitlePath());
+            playerModel.setChromecsatSubtitleLanguage(_video_details_output.getSubTitleName());
+            playerModel.setChromecsatSubtitleLanguageCode(_video_details_output.getSubTitleLanguage());
+
+
+            //for resolution change in player
             playerModel.setResolutionFormat(_video_details_output.getResolutionFormat());
             playerModel.setResolutionUrl(_video_details_output.getResolutionUrl());
+
+            playerModel.setNonDrmDownloadFormatList(_video_details_output.getResolutionFormat());
+            playerModel.setNonDrmDownloadUrlList(_video_details_output.getResolutionUrl());
+
+
+
+            if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                playerModel.setIsstreaming_restricted(true);
+            }else {
+                playerModel.setIsstreaming_restricted(false);
+            }
+
+
+            if (languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).equals("1")) {
+                playerModel.setChromeCastEnable(true);
+            }else {
+                playerModel.setChromeCastEnable(false);
+            }
+
+
+            // This bolck is not coming from API
+            playerModel.useIp(true);
+            playerModel.useDate(true);
+            playerModel.useEmail(true);
+            playerModel.setWaterMark(false);
+
+
             playerModel.setFakeSubTitlePath(_video_details_output.getFakeSubTitlePath());
             playerModel.setVideoResolution(_video_details_output.getVideoResolution());
             FakeSubTitlePath = _video_details_output.getFakeSubTitlePath();
+            playerModel.setSubTitleLanguage(_video_details_output.getSubTitleLanguage());
 
 
             if (playerModel.getVideoUrl() == null ||
@@ -720,18 +772,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
                 }
                 Util.showNoDataAlert(PaymentInfoActivity.this);
-              /*  AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-                dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                dlgAlert.create().show();*/
+
             } else {
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
@@ -787,10 +828,6 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                                 Download_SubTitle(FakeSubTitlePath.get(0).trim());
                             } else {
                                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
-                                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-                                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                                 playVideoIntent.putExtra("PlayerModel", playerModel);
                                 startActivity(playVideoIntent);
                                 finish();
@@ -801,54 +838,10 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 } else {
                     final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
-                                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-                                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                     playVideoIntent.putExtra("PlayerModel", playerModel);
                     startActivity(playVideoIntent);
                     finish();
 
-                    //below part  checked at exoplayer thats why no need of checking here
-
-                   /* playerModel.setThirdPartyPlayer(true);
-                    if (playerModel.getVideoUrl().contains("://www.youtube") ||
-                            playerModel.getVideoUrl().contains("://www.youtu.be")) {
-                        if (playerModel.getVideoUrl().contains("live_stream?channel")) {
-                            final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ThirdPartyPlayer.class);
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    playVideoIntent.putExtra("PlayerModel",playerModel);
-                                    startActivity(playVideoIntent);
-
-                                }
-                            });
-                        } else {
-
-                            final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, YouTubeAPIActivity.class);
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    playVideoIntent.putExtra("PlayerModel",playerModel);
-                                    startActivity(playVideoIntent);
-
-
-                                }
-                            });
-
-                        }
-                    } else {
-                        final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ThirdPartyPlayer.class);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                playVideoIntent.putExtra("PlayerModel",playerModel);
-                                startActivity(playVideoIntent);
-
-                            }
-                        });
-                    }*/
                 }
             }
 
@@ -865,19 +858,6 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
             }
             playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
-            //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
-          /*  AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this, R.style.MyAlertDialogStyle);
-            dlgAlert.setMessage(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
-            dlgAlert.setTitle(Util.getTextofLanguage(PaymentInfoActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
-            dlgAlert.setCancelable(false);
-            dlgAlert.setPositiveButton(Util.getTextofLanguage(PaymentInfoActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-            dlgAlert.create().show();*/
             Util.showNoDataAlert(PaymentInfoActivity.this);
         }
 

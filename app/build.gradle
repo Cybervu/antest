@@ -21,7 +21,7 @@ android {
     buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.home.vod"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -47,7 +47,7 @@ android {
         defaultFlavor {
             dimension 'vendor'
             applicationId 'com.release.muvisdk'
-            minSdkVersion 15
+            minSdkVersion 21
             targetSdkVersion 23
             versionCode 1
             versionName "1.0"
@@ -2435,6 +2435,7 @@ dependencies {
         transitive = true;
     }
     compile project(':apisdk')
+    compile project(':muviplayersdk')
     compile files('libs/wasabi.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile('com.spotxchange:spotx-sdk-android:3.1.+') {

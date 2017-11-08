@@ -85,8 +85,8 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
-import static player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static player.utils.Util.HAS_FAVORITE;
+import static com.muvi.muviplayersdk.utils.Util.DEFAULT_HAS_FAVORITE;
+import static com.muvi.muviplayersdk.utils.Util.HAS_FAVORITE;
 
 /**
  * Created by MUVI on 10/6/2017.

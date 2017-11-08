@@ -116,11 +116,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.MyLibraryPlayer;
-import player.activity.Player;
-import player.activity.ResumePopupActivity;
+import com.muvi.muviplayersdk.activity.AdPlayerActivity;
+import com.muvi.muviplayersdk.activity.ExoPlayerActivity;
+import com.muvi.muviplayersdk.activity.Player;
+import com.muvi.muviplayersdk.activity.ResumePopupActivity;
 
 import static com.home.vod.preferences.LanguagePreference.ANDROID_VERSION;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;

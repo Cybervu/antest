@@ -197,23 +197,25 @@ import static com.home.vod.util.Constant.STORY_INTENT_KEY;
 import static com.home.vod.util.Constant.VIDEO_TITLE_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
-import static player.utils.Util.ADD_A_REVIEW;
-import static player.utils.Util.DEFAULT_ADD_A_REVIEW;
-import static player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static player.utils.Util.DEFAULT_REVIEWS;
-import static player.utils.Util.HAS_FAVORITE;
-import static player.utils.Util.REVIEWS;
+import static com.muvi.muviplayersdk.utils.Util.ADD_A_REVIEW;
+import static com.muvi.muviplayersdk.utils.Util.DEFAULT_ADD_A_REVIEW;
+import static com.muvi.muviplayersdk.utils.Util.DEFAULT_HAS_FAVORITE;
+import static com.muvi.muviplayersdk.utils.Util.DEFAULT_IS_CHROMECAST;
+import static com.muvi.muviplayersdk.utils.Util.DEFAULT_REVIEWS;
+import static com.muvi.muviplayersdk.utils.Util.HAS_FAVORITE;
+import static com.muvi.muviplayersdk.utils.Util.IS_CHROMECAST;
+import static com.muvi.muviplayersdk.utils.Util.REVIEWS;
 
 
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.Player;
-import player.activity.ResumePopupActivity;
-import player.activity.ThirdPartyPlayer;
-import player.activity.YouTubeAPIActivity;
+import com.muvi.muviplayersdk.activity.AdPlayerActivity;
+import com.muvi.muviplayersdk.activity.ExoPlayerActivity;
+import com.muvi.muviplayersdk.activity.Player;
+import com.muvi.muviplayersdk.activity.ResumePopupActivity;
+import com.muvi.muviplayersdk.activity.ThirdPartyPlayer;
+import com.muvi.muviplayersdk.activity.YouTubeAPIActivity;
 
 
 public class ShowWithEpisodesActivity extends AppCompatActivity implements
@@ -1154,8 +1156,6 @@ MonetizationHandler monetizationHandler;
 
     @Override
     public void onVideoDetailsPostExecuteCompleted(Video_Details_Output _video_details_output, int statusCode, String stus, String message) {
-        // _video_details_output.setThirdparty_url("https://www.youtube.com/watch?v=fqU2FzATTPY&spfreload=10");
-        // _video_details_output.setThirdparty_url("https://player.vimeo.com/video/192417650?color=00ff00&badge=0");
 
      /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
         then set thirdpartyurl true here and assign the url to videourl*/
@@ -1211,8 +1211,13 @@ MonetizationHandler monetizationHandler;
 
 
         if (statusCode == 200) {
-            playerModel.setIsOffline(_video_details_output.getIs_offline());
-            playerModel.setDownloadStatus(_video_details_output.getDownload_status());
+            if((_video_details_output.getIs_offline().trim().equals("1")) && _video_details_output.getDownload_status().trim().equals("1")){
+                playerModel.canDownload(true);
+            }
+            else{
+                playerModel.canDownload(false);
+            }
+
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
                 /**@bishal
@@ -1285,23 +1290,65 @@ MonetizationHandler monetizationHandler;
             Util.dataModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
 
             //player model set
-            playerModel.setAdDetails(_video_details_output.getAdDetails());
+
             playerModel.setMidRoll(_video_details_output.getMidRoll());
             playerModel.setPostRoll(_video_details_output.getPostRoll());
             playerModel.setChannel_id(_video_details_output.getChannel_id());
             playerModel.setAdNetworkId(_video_details_output.getAdNetworkId());
             playerModel.setPreRoll(_video_details_output.getPreRoll());
+
+            // for online subtitle
             playerModel.setSubTitleName(_video_details_output.getSubTitleName());
             playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
+
+
+            // for offline subtitle
+            playerModel.setOfflineSubtitleUrl(_video_details_output.getSubTitlePath());
+            playerModel.setOfflineSubtitleLanguage(_video_details_output.getSubTitleName());
+
+
+            //for chromecast subtitle
+            playerModel.setChromecsatSubtitleUrl(_video_details_output.getSubTitlePath());
+            playerModel.setChromecsatSubtitleLanguage(_video_details_output.getSubTitleName());
+            playerModel.setChromecsatSubtitleLanguageCode(_video_details_output.getSubTitleLanguage());
+
+
+            //for resolution change in player
             playerModel.setResolutionFormat(_video_details_output.getResolutionFormat());
             playerModel.setResolutionUrl(_video_details_output.getResolutionUrl());
+
+            playerModel.setNonDrmDownloadFormatList(_video_details_output.getResolutionFormat());
+            playerModel.setNonDrmDownloadUrlList(_video_details_output.getResolutionUrl());
+
+
+
+            if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                playerModel.setIsstreaming_restricted(true);
+            }else {
+                playerModel.setIsstreaming_restricted(false);
+            }
+
+
+            if (languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).equals("1")) {
+                playerModel.setChromeCastEnable(true);
+            }else {
+                playerModel.setChromeCastEnable(false);
+            }
+
+
+            // This bolck is not coming from API
+            playerModel.useIp(true);
+            playerModel.useDate(true);
+            playerModel.useEmail(true);
+            playerModel.setWaterMark(false);
+
+
             playerModel.setFakeSubTitlePath(_video_details_output.getFakeSubTitlePath());
             playerModel.setVideoResolution(_video_details_output.getVideoResolution());
             FakeSubTitlePath = _video_details_output.getFakeSubTitlePath();
             playerModel.setSubTitleLanguage(_video_details_output.getSubTitleLanguage());
-            playerModel.setOfflineUrl(_video_details_output.getOfflineUrl());
-            playerModel.setOfflineLanguage(_video_details_output.getOfflineLanguage());
-            playerModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
+
+
 
             if (playerModel.getVideoUrl() == null ||
                     playerModel.getVideoUrl().matches("")) {
@@ -2510,12 +2557,9 @@ MonetizationHandler monetizationHandler;
         ResolutionUrl.clear();
         ResolutionFormat.clear();
         SubTitleLanguage.clear();
-      /*  Util.offline_url.clear();
-        Util.offline_language.clear();*/
 
 
-        //edit by bishal
-        //set the required data in playermodel
+        playerModel.setAppName(getResources().getString(com.example.muviplayersdk.R.string.app_name));
         playerModel.setStreamUniqueId(item.getEpisodeStreamUniqueId());
         playerModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
         playerModel.setUserId(preferenceManager.getUseridFromPref());
@@ -2571,8 +2615,6 @@ MonetizationHandler monetizationHandler;
                             Util.check_for_subscription = 1;
                             resumeCast.putExtra("PlayerModel", playerModel);
                             startActivityForResult(resumeCast, 2001);
-
-//                                        startActivity(resumeCast);
 
                         }
                     });

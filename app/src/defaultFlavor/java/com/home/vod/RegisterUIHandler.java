@@ -52,7 +52,7 @@ import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.REGISTER_FACEBOOK;
 import static com.home.vod.preferences.LanguagePreference.SIGN_UP_WITH_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.TERMS;
-import static player.utils.Util.DEFAULT_NAME_HINT;
+import static com.muvi.muviplayersdk.utils.Util.DEFAULT_NAME_HINT;
 
 
 /**

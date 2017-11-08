@@ -125,12 +125,12 @@ import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
-import static player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static player.utils.Util.DEFAULT_IS_CHROMECAST;
-import static player.utils.Util.DEFAULT_IS_OFFLINE;
-import static player.utils.Util.HAS_FAVORITE;
-import static player.utils.Util.IS_CHROMECAST;
-import static player.utils.Util.IS_OFFLINE;
+import static com.muvi.muviplayersdk.utils.Util.DEFAULT_HAS_FAVORITE;
+import static com.muvi.muviplayersdk.utils.Util.DEFAULT_IS_CHROMECAST;
+import static com.muvi.muviplayersdk.utils.Util.DEFAULT_IS_OFFLINE;
+import static com.muvi.muviplayersdk.utils.Util.HAS_FAVORITE;
+import static com.muvi.muviplayersdk.utils.Util.IS_CHROMECAST;
+import static com.muvi.muviplayersdk.utils.Util.IS_OFFLINE;
 
 public class FavoriteActivity extends AppCompatActivity implements GetLanguageListAsynTask.GetLanguageListListener,ViewFavouriteAsynTask.ViewFavouriteListener,
         LogoutAsynctask.LogoutListener, GetTranslateLanguageAsync.GetTranslateLanguageInfoListener

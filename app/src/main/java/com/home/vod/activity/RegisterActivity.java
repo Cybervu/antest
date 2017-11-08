@@ -88,10 +88,10 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.MyActivity;
-import player.activity.Player;
+import com.muvi.muviplayersdk.activity.AdPlayerActivity;
+import com.muvi.muviplayersdk.activity.ExoPlayerActivity;
+import com.muvi.muviplayersdk.activity.MyActivity;
+import com.muvi.muviplayersdk.activity.Player;
 
 
 import org.json.JSONException;

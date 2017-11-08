@@ -1,4 +1,4 @@
-package player.activity;
+package com.home.vod.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -43,7 +42,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
-import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -80,9 +78,9 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
+import com.home.apisdk.APIUrlConstant;
 import com.home.vod.HandleOfflineInExoplayer;
 import com.home.vod.R;
-import com.home.vod.activity.CastAndCrewActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
@@ -90,6 +88,7 @@ import com.intertrust.wasabi.ErrorCodeException;
 import com.intertrust.wasabi.Runtime;
 import com.intertrust.wasabi.media.PlaylistProxy;
 import com.intertrust.wasabi.media.PlaylistProxyListener;
+import com.muvi.muviplayersdk.utils.SensorOrientationChangeNotifier;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -134,17 +133,24 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import player.adapter.DownloadOptionAdapter;
-import player.model.ContactModel1;
-import player.model.SubtitleModel;
-import player.service.PopUpService;
-import player.subtitle_support.Caption;
-import player.subtitle_support.FormatSRT;
-import player.subtitle_support.FormatSRT_WithoutCaption;
-import player.subtitle_support.TimedTextObject;
-import player.utils.DBHelper;
-import player.utils.SensorOrientationChangeNotifier;
-import player.utils.Util;
+import com.muvi.muviplayersdk.activity.AdPlayerActivity;
+import com.muvi.muviplayersdk.service.DataConsumptionService;
+import com.muvi.muviplayersdk.activity.Player;
+import com.muvi.muviplayersdk.activity.ResumePopupActivity;
+import com.muvi.muviplayersdk.activity.SubtitleList;
+import com.muvi.muviplayersdk.activity.Subtitle_Resolution;
+import com.muvi.muviplayersdk.activity.ThirdPartyPlayer;
+import com.muvi.muviplayersdk.activity.YouTubeAPIActivity;
+import com.muvi.muviplayersdk.adapter.DownloadOptionAdapter;
+import com.muvi.muviplayersdk.model.ContactModel1;
+import com.muvi.muviplayersdk.model.SubtitleModel;
+import com.muvi.muviplayersdk.service.PopUpService;
+import com.muvi.muviplayersdk.subtitle_support.Caption;
+import com.muvi.muviplayersdk.subtitle_support.FormatSRT;
+import com.muvi.muviplayersdk.subtitle_support.FormatSRT_WithoutCaption;
+import com.muvi.muviplayersdk.subtitle_support.TimedTextObject;
+import com.muvi.muviplayersdk.utils.DBHelper;
+import com.muvi.muviplayersdk.utils.Util;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -153,6 +159,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMIN
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.vod.util.Constant.authTokenStr;
 
 
 enum ContentTypes3 {
@@ -1392,6 +1399,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         /*****Offline*****/
 
+
+        // Download option is not necessary in MyLibrary Page
+
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1437,8 +1447,8 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     }
 
 
-                    if (playerModel.getOfflineUrl().size() > 0) {
-                        Download_SubTitle(playerModel.getOfflineUrl().get(0));
+                    if (playerModel.getOfflineSubtitleUrl().size() > 0) {
+                        Download_SubTitle(playerModel.getOfflineSubtitleUrl().get(0));
                     }
                 }
 
@@ -1527,12 +1537,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+            String urlRouteList = APIUrlConstant.BASE_URl + Util.videoLogUrl.trim();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("user_id", userIdStr.trim());
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
@@ -1541,7 +1551,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 httppost.addHeader("device_type", "2");
                 httppost.addHeader("log_id", videoLogId);
 
-                Log.v("BIBHU6", "authToken=" + Util.authTokenStr.trim());
+                Log.v("BIBHU6", "authToken=" + authTokenStr.trim());
                 Log.v("BIBHU6", "user_id=" + userIdStr.trim());
                 Log.v("BIBHU6", "ip_address=" + ipAddressStr.trim());
                 Log.v("BIBHU6", "movie_id=" + movieId.trim());
@@ -1743,12 +1753,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+            String urlRouteList = APIUrlConstant.BASE_URl + Util.videoLogUrl.trim();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("user_id", userIdStr);
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
@@ -2412,12 +2422,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+            String urlRouteList = APIUrlConstant.BASE_URl + Util.videoLogUrl.trim();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("user_id", userIdStr.trim());
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
@@ -2559,12 +2569,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+            String urlRouteList = APIUrlConstant.BASE_URl + Util.videoLogUrl.trim();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("user_id", userIdStr.trim());
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
@@ -2704,11 +2714,11 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     asynWithdrm = new AsynWithdrm();
                     asynWithdrm.executeOnExecutor(threadPoolExecutor);
 
-                    Log.v("BIBHU1111", "(playerModel.getOfflineUrl()=" + (playerModel.getOfflineUrl().size()));
+                    Log.v("BIBHU1111", "(playerModel.getOfflineUrl()=" + (playerModel.getOfflineSubtitleUrl().size()));
 
 
-                    if (playerModel.getOfflineUrl().size() > 0) {
-                        Download_SubTitle(playerModel.getOfflineUrl().get(0));
+                    if (playerModel.getOfflineSubtitleUrl().size() > 0) {
+                        Download_SubTitle(playerModel.getOfflineSubtitleUrl().get(0));
                     }
                 }
             } else {
@@ -3209,12 +3219,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = Util.rootUrl().trim() + Util.bufferLogUrl.trim();
+            String urlRouteList = APIUrlConstant.BASE_URl + Util.bufferLogUrl.trim();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("user_id", userIdStr);
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
@@ -3322,13 +3332,13 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         protected Void doInBackground(Void... params) {
 
 
-            String urlRouteList = Util.rootUrl().trim() + Util.morlineBB.trim();
+            String urlRouteList = APIUrlConstant.BASE_URl + Util.morlineBB.trim();
             //String urlRouteList ="https://sonydadc.muvi.com/rest/getMarlinBBOffline";
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr);
+                httppost.addHeader("authToken", authTokenStr);
                 httppost.addHeader("stream_unique_id", playerModel.getStreamUniqueId());
 
 
@@ -3558,7 +3568,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                 dialog.cancel();
                                 downloading = true;
 
-                                int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+                                int currentApiVersion = Build.VERSION.SDK_INT;
                                 if (currentApiVersion >= Build.VERSION_CODES.M) {
                                     requestStoragePermission();
                                 } else {
@@ -3813,7 +3823,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         SQLiteDatabase DB = MyLibraryPlayer.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
         String query1 = "INSERT INTO " + DBHelper.DOWNLOAD_CONTENT_INFO + "(download_contnet_id,log_id,authtoken,email," +
                 "ipaddress,movie_id,episode_id,device_type,download_status,server_sending_final_status) VALUES" +
-                "('" + enqueue + "','0','" + Util.authTokenStr.trim() + "','" + emailIdStr.trim() + "','" + ipAddressStr + "'," +
+                "('" + enqueue + "','0','" + authTokenStr.trim() + "','" + emailIdStr.trim() + "','" + ipAddressStr + "'," +
                 "'" + playerModel.getMovieUniqueId().trim() + "','" + playerModel.getStreamUniqueId().trim() + "'," +
                 "'" + 2 + "','2','0')";
 
@@ -3931,7 +3941,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 SubtitleModel subtitleModel = new SubtitleModel();
                 subtitleModel.setUID(playerModel.getStreamUniqueId() + emailIdStr);
-                subtitleModel.setLanguage(playerModel.getOfflineLanguage().get(0));
+                subtitleModel.setLanguage(playerModel.getOfflineSubtitleLanguage().get(0));
                 String filename = mediaStorageDir1.getAbsolutePath() + "/" + System.currentTimeMillis() + ".vtt";
                 subtitleModel.setPath(filename);
 
@@ -3940,7 +3950,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 long rowId = dbHelper.insertRecordSubtittel(subtitleModel);
                 Log.v("BIBHU3", "rowId============" + rowId + "sub id ::" + subtitleModel.getUID());
 
-                playerModel.getOfflineLanguage().remove(0);
+                playerModel.getOfflineSubtitleLanguage().remove(0);
 
 
                 OutputStream output = new FileOutputStream(filename);
@@ -3971,9 +3981,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         @Override
         protected void onPostExecute(String file_url) {
 
-            playerModel.getOfflineUrl().remove(0);
-            if (playerModel.getOfflineUrl().size() > 0) {
-                Download_SubTitle(playerModel.getOfflineUrl().get(0).trim());
+            playerModel.getOfflineSubtitleUrl().remove(0);
+            if (playerModel.getOfflineSubtitleUrl().size() > 0) {
+                Download_SubTitle(playerModel.getOfflineSubtitleUrl().get(0).trim());
             }
 
         }
@@ -4403,7 +4413,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", Util.authTokenStr.trim());
+                jsonObj.put("authToken", authTokenStr.trim());
                 jsonObj.put("user_id", userIdStr.trim());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -4424,7 +4434,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     Log.v("BIBHU4", "restrict_stream_id============0");
                 }
 
-                jsonObj.put("domain_name", Util.rootUrl().trim().substring(0, Util.rootUrl().trim().length() - 6));
+                jsonObj.put("domain_name", APIUrlConstant.BASE_URl.substring(0, APIUrlConstant.BASE_URl.length() - 6));
                 jsonObj.put("is_log", "1");
 
                 // MyLibraryPlayer.this code is changed according to new Video log //
@@ -4468,16 +4478,16 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             List tracks = new ArrayList();
 
             Log.v("BIBHU", "url size============" + playerModel.offline_url.size());
-            if (playerModel.offline_url.size() > 0) {
+            if (playerModel.getChromecsatSubtitleUrl().size() > 0) {
 
-                for (int i = 0; i < playerModel.offline_url.size(); i++) {
+                for (int i = 0; i < playerModel.getChromecsatSubtitleUrl().size(); i++) {
 
                     MediaTrack mediaTrack = new MediaTrack.Builder(i,
                             MediaTrack.TYPE_TEXT)
-                            .setName(playerModel.offline_language.get(i))
+                            .setName(playerModel.getChromecsatSubtitleLanguage().get(i))
                             .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                            .setContentId(playerModel.offline_url.get(i))
-                            .setLanguage(playerModel.SubTitleLanguage.get(i))
+                            .setContentId(playerModel.getChromecsatSubtitleUrl().get(i))
+                            .setLanguage(playerModel.getChromecsatSubtitleLanguageCode().get(i))
                             .setContentType("text/vtt")
                             .build();
 
@@ -4510,7 +4520,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", Util.authTokenStr.trim());
+                jsonObj.put("authToken", authTokenStr.trim());
                 jsonObj.put("user_id", userIdStr.trim());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -4531,7 +4541,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                     Log.v("BIBHU4", "restrict_stream_id============0");
                 }
 
-                jsonObj.put("domain_name", Util.rootUrl().trim().substring(0, Util.rootUrl().trim().length() - 6));
+                jsonObj.put("domain_name", APIUrlConstant.BASE_URl.substring(0, APIUrlConstant.BASE_URl.length() - 6));
                 jsonObj.put("is_log", "1");
 
                 // ExoPlayerActivity.this code is changed according to new Video log //
@@ -4566,16 +4576,16 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             List tracks = new ArrayList();
 
             Log.v("BIBHU", "url size============" + playerModel.offline_url.size());
-            if (playerModel.offline_url.size() > 0) {
+            if (playerModel.getChromecsatSubtitleUrl().size() > 0) {
 
-                for (int i = 0; i < playerModel.offline_url.size(); i++) {
+                for (int i = 0; i < playerModel.getChromecsatSubtitleUrl().size(); i++) {
 
                     MediaTrack mediaTrack = new MediaTrack.Builder(i,
                             MediaTrack.TYPE_TEXT)
-                            .setName(playerModel.offline_language.get(i))
+                            .setName(playerModel.getChromecsatSubtitleLanguage().get(i))
                             .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                            .setContentId(playerModel.offline_url.get(i))
-                            .setLanguage(playerModel.SubTitleLanguage.get(i))
+                            .setContentId(playerModel.getChromecsatSubtitleUrl().get(i))
+                            .setLanguage(playerModel.getChromecsatSubtitleLanguageCode().get(i))
                             .setContentType("text/vtt")
                             .build();
 
@@ -4762,12 +4772,12 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
             }
 
 
-            String urlRouteList = Util.rootUrl().trim() + Util.GetOfflineViewRemainingTime.trim();
+            String urlRouteList = APIUrlConstant.BASE_URl + Util.GetOfflineViewRemainingTime.trim();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", authTokenStr.trim());
                 httppost.addHeader("stream_uniq_id", Stream_Id);
                 httppost.addHeader("watch_remaining_time", "0");
                 httppost.addHeader("device_id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));

@@ -20,14 +20,14 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 
 import com.home.vod.util.LogUtil;
+import com.muvi.muviplayersdk.model.ContactModel1;
+import com.muvi.muviplayersdk.utils.DBHelper;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import player.model.ContactModel1;
-import player.utils.DBHelper;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
@@ -108,7 +108,8 @@ public class MyDownloadAdapter extends BaseAdapter {
                 .placeholder(R.drawable.logo)
                 .error(R.drawable.logo)
                 .into(image);
-        title.setText(downloadModel.get(position).getMUVIID());
+        String data[] = downloadModel.get(position).getMUVIID().trim().split("@@@");
+        title.setText(data[0]);
         realise_date.setText("");
         genre.setText(downloadModel.get(position).getGenere());
         String dd = downloadModel.get(position).getDuration();

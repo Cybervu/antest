@@ -85,9 +85,9 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.Player;
+import com.muvi.muviplayersdk.activity.AdPlayerActivity;
+import com.muvi.muviplayersdk.activity.ExoPlayerActivity;
+import com.muvi.muviplayersdk.activity.Player;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -155,6 +155,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_SUBSC
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FREE_FOR_COUPON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_INVALID_COUPON;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
@@ -176,6 +177,7 @@ import static com.home.vod.preferences.LanguagePreference.ERROR_IN_SUBSCRIPTION;
 import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.FREE_FOR_COUPON;
 import static com.home.vod.preferences.LanguagePreference.INVALID_COUPON;
+import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
@@ -190,6 +192,8 @@ import static com.home.vod.preferences.LanguagePreference.USE_NEW_CARD;
 import static com.home.vod.preferences.LanguagePreference.VOUCHER_BLANK_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.WATCH_NOW;
 import static com.home.vod.util.Constant.authTokenStr;
+import static com.muvi.muviplayersdk.utils.Util.DEFAULT_IS_CHROMECAST;
+import static com.muvi.muviplayersdk.utils.Util.IS_CHROMECAST;
 
 public class PPvPaymentInfoActivity extends ActionBarActivity implements
         VideoDetailsAsynctask.VideoDetailsListener,
@@ -1306,8 +1310,14 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         }
 
         if (statusCode == 200) {
-            playerModel.setIsOffline(_video_details_output.getIs_offline());
-            playerModel.setDownloadStatus(_video_details_output.getDownload_status());
+
+            if((_video_details_output.getIs_offline().trim().equals("1")) && _video_details_output.getDownload_status().trim().equals("1")){
+                playerModel.canDownload(true);
+            }
+            else{
+                playerModel.canDownload(false);
+            }
+
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
 
@@ -1377,20 +1387,65 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
             Util.dataModel.setAdDetails(_video_details_output.getAdDetails());
             Util.dataModel.setPlayPos(Integer.parseInt(_video_details_output.getPlayed_length()));
 
+
             //player model set
-            playerModel.setAdDetails(_video_details_output.getAdDetails());
             playerModel.setMidRoll(_video_details_output.getMidRoll());
             playerModel.setPostRoll(_video_details_output.getPostRoll());
             playerModel.setChannel_id(_video_details_output.getChannel_id());
             playerModel.setAdNetworkId(_video_details_output.getAdNetworkId());
             playerModel.setPreRoll(_video_details_output.getPreRoll());
+
+            // for online subtitle
             playerModel.setSubTitleName(_video_details_output.getSubTitleName());
             playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
+
+
+            // for offline subtitle
+            playerModel.setOfflineSubtitleUrl(_video_details_output.getSubTitlePath());
+            playerModel.setOfflineSubtitleLanguage(_video_details_output.getSubTitleName());
+
+
+            //for chromecast subtitle
+            playerModel.setChromecsatSubtitleUrl(_video_details_output.getSubTitlePath());
+            playerModel.setChromecsatSubtitleLanguage(_video_details_output.getSubTitleName());
+            playerModel.setChromecsatSubtitleLanguageCode(_video_details_output.getSubTitleLanguage());
+
+
+            //for resolution change in player
             playerModel.setResolutionFormat(_video_details_output.getResolutionFormat());
             playerModel.setResolutionUrl(_video_details_output.getResolutionUrl());
+
+            playerModel.setNonDrmDownloadFormatList(_video_details_output.getResolutionFormat());
+            playerModel.setNonDrmDownloadUrlList(_video_details_output.getResolutionUrl());
+
+
+
+            if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                playerModel.setIsstreaming_restricted(true);
+            }else {
+                playerModel.setIsstreaming_restricted(false);
+            }
+
+
+            if (languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).equals("1")) {
+                playerModel.setChromeCastEnable(true);
+            }else {
+                playerModel.setChromeCastEnable(false);
+            }
+
+
+            // This bolck is not coming from API
+            playerModel.useIp(true);
+            playerModel.useDate(true);
+            playerModel.useEmail(true);
+            playerModel.setWaterMark(false);
+
+
             playerModel.setFakeSubTitlePath(_video_details_output.getFakeSubTitlePath());
             playerModel.setVideoResolution(_video_details_output.getVideoResolution());
             FakeSubTitlePath = _video_details_output.getFakeSubTitlePath();
+            playerModel.setSubTitleLanguage(_video_details_output.getSubTitleLanguage());
+
 
 
             if (playerModel.getVideoUrl() == null ||

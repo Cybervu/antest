@@ -79,6 +79,7 @@ import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.activity.Episode_list_Activity;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.activity.MovieDetailsActivity;
+import com.home.vod.activity.MyLibraryPlayer;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.adapter.GenreFilterAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
@@ -93,12 +94,11 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.MyLibraryPlayer;
-import player.activity.Player;
-import player.activity.ThirdPartyPlayer;
-import player.activity.YouTubeAPIActivity;
+import com.muvi.muviplayersdk.activity.AdPlayerActivity;
+import com.muvi.muviplayersdk.activity.ExoPlayerActivity;
+import com.muvi.muviplayersdk.activity.Player;
+import com.muvi.muviplayersdk.activity.ThirdPartyPlayer;
+import com.muvi.muviplayersdk.activity.YouTubeAPIActivity;
 
 
 import java.io.BufferedInputStream;
@@ -170,10 +170,7 @@ import org.json.JSONTokener;
 
 import javax.net.ssl.HttpsURLConnection;
 
-/*
-import com.twotoasters.jazzylistview.JazzyGridView;
-import com.twotoasters.jazzylistview.JazzyHelper;
-*/
+
 
 /**
  * Created by user on 28-06-2015.
@@ -918,8 +915,11 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             playerModel.setVideoResolution(_video_details_output.getVideoResolution());
             FakeSubTitlePath = _video_details_output.getFakeSubTitlePath();
             playerModel.setSubTitleLanguage(_video_details_output.getSubTitleLanguage());
-            playerModel.setOfflineUrl(_video_details_output.getOfflineUrl());
-            playerModel.setOfflineLanguage(_video_details_output.getOfflineLanguage());
+
+            //for chromecast subtitle
+            playerModel.setChromecsatSubtitleUrl(_video_details_output.getSubTitlePath());
+            playerModel.setChromecsatSubtitleLanguage(_video_details_output.getSubTitleName());
+            playerModel.setChromecsatSubtitleLanguageCode(_video_details_output.getSubTitleLanguage());
 
 
             if (playerModel.getVideoUrl() == null ||
@@ -1145,10 +1145,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                                 Download_SubTitle(FakeSubTitlePath.get(0).trim());
                             } else {
                                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
-                                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-                                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                                 playVideoIntent.putExtra("PlayerModel", playerModel);
                                 startActivity(playVideoIntent);
                             }
@@ -1158,10 +1154,6 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                 } else {
                     final Intent playVideoIntent = new Intent(getActivity(), MyLibraryPlayer.class);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
-                                playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
-                                playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
-                                playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                     playVideoIntent.putExtra("PlayerModel", playerModel);
                     startActivity(playVideoIntent);
 
@@ -2927,6 +2919,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             if (FakeSubTitlePath.size() > 0) {
                 Download_SubTitle(FakeSubTitlePath.get(0).trim());
             } else {
+                playerModel.setSubTitlePath(SubTitlePath);
 
                 if (progressBarHandler != null && progressBarHandler.isShowing()) {
                     progressBarHandler.hide();
