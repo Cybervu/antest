@@ -63,6 +63,7 @@
     <dimen name="itemtitle_text_size">18sp</dimen>
     <dimen name="itemtitle1_text_size">16sp</dimen>
     <dimen name="homelogo_height">85dp</dimen>
+    <dimen name="home_layout_width">157dp</dimen>
     <dimen name="homelogo_width">170dp</dimen>
     <dimen name="btnmore_text_size">13sp</dimen>
     <dimen name="card_expiry_width">80dp</dimen>

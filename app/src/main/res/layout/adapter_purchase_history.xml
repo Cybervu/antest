@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/ppv_margin"
-        android:background="#50202020"
+        android:background="@color/purchaseBackground"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -31,7 +31,7 @@
 
                 <TextView
                     android:id="@+id/transactionTitleTextView"
-                    android:layout_width="@dimen/seekbar_progress_width"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.6"
                     android:paddingLeft="@dimen/login_new_user_padding"
