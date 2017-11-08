@@ -132,6 +132,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
         rootView = v;
         context = getActivity();
         setHasOptionsMenu(true);
+        Util.image_orentiation.clear();
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
         String GOOGLE_FCM_TOKEN;
@@ -354,10 +355,10 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
             if (videoWidth > videoHeight) {
 
-                Util.image_orentiation = 0;
+                Util.image_orentiation.add(0);
 
             } else {
-                Util.image_orentiation = 1;
+                Util.image_orentiation.add(1);
 
             }
 

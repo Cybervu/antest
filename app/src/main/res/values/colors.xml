@@ -149,6 +149,7 @@
  <color name="progressbarstartColor">#000</color>
  <color name="termsTextColor">#2acb99</color>
  <color name="leftMenuBgColor">#1e292d</color>
-
-
+ <color name="purchaseBackgroundColor">#909293</color>
+ <color name="purchaseBackground">#e2e1e1</color>
+ <color name="purchaseTextColor">#000</color>
 </resources>

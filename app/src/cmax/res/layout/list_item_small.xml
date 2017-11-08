@@ -78,7 +78,7 @@
 
         <TextView
             android:id="@+id/itemTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -86,7 +86,9 @@
             android:layout_gravity="center_vertical"
             android:layout_toLeftOf="@+id/btnMore"
             android:text="Sample title"
-            android:ellipsize="marquee"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
             android:textAllCaps="true"
             android:textColor="@color/videotextColor"
             android:textSize="@dimen/email_text_size" />

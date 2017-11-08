@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
+import com.home.vod.util.Util;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
@@ -31,6 +32,7 @@ import static player.utils.Util.DEFAULT_IS_OFFLINE;
 import static player.utils.Util.HAS_FAVORITE;
 import static player.utils.Util.IS_CHROMECAST;
 import static player.utils.Util.IS_OFFLINE;
+import static player.utils.Util.LANGUAGE_SHARED_PRE;
 
 
 /**
