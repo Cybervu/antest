@@ -586,6 +586,10 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, GENRE, "", "genre", json);
 
         setTranslationLanguageToPref(languagePreference, AGREE_TERMS, DEFAULT_AGREE_TERMS, "agree_terms", json);
+        setTranslationLanguageToPref(languagePreference, ENTER_REVIEW_HERE, DEFAULT_ENTER_REVIEW_HERE, "enter_review_here", json);
+        setTranslationLanguageToPref(languagePreference, TO_LOGIN, DEFAULT_TO_LOGIN, "to_login", json);
+        setTranslationLanguageToPref(languagePreference, CLICK_HERE, DEFAULT_CLICK_HERE, "click_here", json);
+        setTranslationLanguageToPref(languagePreference, NEED_LOGIN_TO_REVIEW, DEFAULT_NEED_LOGIN_TO_REVIEW, "need_to_login", json);
         setTranslationLanguageToPref(languagePreference, INVALID_COUPON, DEFAULT_INVALID_COUPON, "invalid_coupon", json);
         setTranslationLanguageToPref(languagePreference, INVOICE, DEFAULT_INVOICE, "invoice", json);
         setTranslationLanguageToPref(languagePreference, LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE, "language_popup_language", json);

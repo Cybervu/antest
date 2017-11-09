@@ -1305,10 +1305,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 runOnUiThread(new Runnable() {
                     public void run() {
 
+
                         registerActivity.putExtra("cast_movie_id", movieUniqueId);
                         registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(registerActivity);
-
                     }
                 });
 
