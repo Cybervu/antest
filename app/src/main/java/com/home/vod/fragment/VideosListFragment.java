@@ -194,7 +194,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         int isConverted = 0;
         if (status==200){
             itemsInServer=totalItems;
-
             for (int i=0;i<contentListOutputArray.size();i++){
                 movieGenreStr=contentListOutputArray.get(i).getGenre();
                 movieName=contentListOutputArray.get(i).getName();
@@ -339,8 +338,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         int isConverted = 0;
         if (status==200){
             itemsInServer=totalItems;
-
-
             for (int i=0;i<loadFilterVideoOutputArrayList.size();i++){
                 movieGenreStr=loadFilterVideoOutputArrayList.get(i).getGenre();
                 movieName=loadFilterVideoOutputArrayList.get(i).getName();
@@ -795,12 +792,12 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                         offset += 1;
                         if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
-                   /*         if ((filterOrderByStr!=null && !filterOrderByStr.equalsIgnoreCase("")) || (genreArray!=null && genreArray.size() > 0)) {
+                            if ((filterOrderByStr!=null && !filterOrderByStr.equalsIgnoreCase("")) || (genreArray!=null && genreArray.size() > 0)) {
 
                                 Log.v("SUBHA","filterOrderByStr "+filterOrderByStr);
 
-                               *//* AsynLoadFilterVideos asyncLoadVideos = new AsynLoadFilterVideos();
-                                asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*//*
+                               /* AsynLoadFilterVideos asyncLoadVideos = new AsynLoadFilterVideos();
+                                asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
 
                                 LoadFilterVideoInput loadFilterVideoInput=new LoadFilterVideoInput();
                                 loadFilterVideoInput.setGenreArray(genreArray);
@@ -818,9 +815,9 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                                 loadFilterVideoAsync=new LoadFilterVideoAsync(loadFilterVideoInput,VideosListFragment.this,context);
                                 loadFilterVideoAsync.executeOnExecutor(threadPoolExecutor);
 
-*/
 
-                               // Log.v("SUBHA","asynLoadVideos "+filterOrderByStr);
+                            }else{
+                                Log.v("SUBHA","asynLoadVideos "+filterOrderByStr);
 
 /*
                                 asynLoadVideos = new AsynLoadVideos();
@@ -839,7 +836,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                                 contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
                                 getContentListAsynTask=new GetContentListAsynTask(contentListInput,VideosListFragment.this,context);
                                 getContentListAsynTask.executeOnExecutor(threadPoolExecutor);
-
+                            }
 
                             scrolling = false;
 
