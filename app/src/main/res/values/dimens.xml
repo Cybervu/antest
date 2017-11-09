@@ -363,5 +363,6 @@
     <dimen name="season_image_height">200dp</dimen>
     <dimen name="card_title_padding">10dp</dimen>
     <dimen name="card_title">23sp</dimen>
-
+    <dimen name="toolbar_logo_width">100dp</dimen>
+    <dimen name="toolbar_logo_height">58dp</dimen>
 </resources>

@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -130,6 +132,21 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
 
             }
         });*/
+
+        /*******enter key of keyboard *************/
+        InputFilter filter = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+                for (int i = start; i < end; i++) {
+
+                    if (source.charAt(i) == '\n') {
+                        return " ";
+                    }
+                }
+                return null;
+            }
+        };
+        editEmailStr.setFilters(new InputFilter[]{filter});
         logintextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

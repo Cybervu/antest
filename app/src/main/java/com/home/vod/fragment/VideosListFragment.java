@@ -53,6 +53,12 @@ import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.apiController.GetContentListAsynTask;
+import com.home.apisdk.apiController.LoadFilterVideoAsync;
+import com.home.apisdk.apiModel.ContentListInput;
+import com.home.apisdk.apiModel.ContentListOutput;
+import com.home.apisdk.apiModel.LoadFilterVideoInput;
+import com.home.apisdk.apiModel.LoadFilterVideoOutput;
 import com.home.vod.R;
 import com.home.vod.Episode_Programme_Handler;
 import com.home.vod.VideolistFragmentHandler;
@@ -138,9 +144,299 @@ import com.twotoasters.jazzylistview.JazzyHelper;
 /**
  * Created by user on 28-06-2015.
  */
-public class VideosListFragment extends Fragment   {
+public class VideosListFragment extends Fragment implements GetContentListAsynTask.GetContentListListener ,
+        LoadFilterVideoAsync.LoadFilterVideoListner{
 
     public static boolean clearClicked = false;
+
+
+    @Override
+    public void onGetContentListPreExecuteStarted() {
+        if (MainActivity.internetSpeedDialog != null && MainActivity.internetSpeedDialog.isShowing()) {
+            videoPDialog = MainActivity.internetSpeedDialog;
+            footerView.setVisibility(View.GONE);
+
+        } else {
+            videoPDialog = new ProgressBarHandler(context);
+            if (listSize == 0) {
+                // hide loader for first time
+
+                  /*  if (videoPDialog!=null && videoPDialog.isShowing()){
+                    }else {
+                        videoPDialog.show();
+                    }*/
+                videoPDialog.show();
+
+                footerView.setVisibility(View.GONE);
+            } else {
+                // show loader for first time
+                if (videoPDialog != null && videoPDialog.isShowing()) {
+                    videoPDialog.hide();
+                    videoPDialog = null;
+                }
+                footerView.setVisibility(View.VISIBLE);
+
+            }
+        }
+    }
+
+    @Override
+    public void onGetContentListPostExecuteCompleted(ArrayList<ContentListOutput> contentListOutputArray, int status, int totalItems, String message) {
+
+        String movieGenreStr = "";
+        String movieName = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String movieImageStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String moviePermalinkStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String isEpisodeStr = "";
+        int isAPV = 0;
+        int isPPV = 0;
+        int isConverted = 0;
+        if (status==200){
+
+            for (int i=0;i<contentListOutputArray.size();i++){
+                movieGenreStr=contentListOutputArray.get(i).getGenre();
+                movieName=contentListOutputArray.get(i).getName();
+                movieImageStr=contentListOutputArray.get(i).getPosterUrl();
+                moviePermalinkStr=contentListOutputArray.get(i).getPermalink();
+                videoTypeIdStr=contentListOutputArray.get(i).getContentTypesId();
+                isConverted=contentListOutputArray.get(i).getIsConverted();
+                isAPV=contentListOutputArray.get(i).getIsAPV();
+                isPPV=contentListOutputArray.get(i).getIsPPV();
+                isEpisodeStr=contentListOutputArray.get(i).getIsEpisodeStr();
+                itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+            }
+
+            if (itemData.size() <= 0) {
+                try {
+                    if (videoPDialog != null && videoPDialog.isShowing()) {
+                        videoPDialog.hide();
+                        videoPDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    gridView.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
+
+                }
+                noDataLayout.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
+
+
+            } else {
+                footerView.setVisibility(View.GONE);
+                gridView.setVisibility(View.VISIBLE);
+                if (filterMenuItem != null) {
+
+                    filterMenuItem.setVisible(true);
+                }
+
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                noDataLayout.setVisibility(View.GONE);
+                videoImageStrToHeight = movieImageStr;
+
+                if (firstTime == true) {
+                    Picasso.with(getActivity()).load(videoImageStrToHeight
+                    ).into(new Target() {
+
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            videoWidth = bitmap.getWidth();
+                            videoHeight = bitmap.getHeight();
+                            loadUI = new AsynLOADUI();
+                            loadUI.executeOnExecutor(threadPoolExecutor);
+                        }
+
+                        @Override
+                        public void onBitmapFailed(final Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(final Drawable placeHolderDrawable) {
+                                /*AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);*/
+                        }
+                    });
+                } else {
+                    loadUI = new AsynLOADUI();
+                    loadUI.executeOnExecutor(threadPoolExecutor);
+                }
+
+
+            }
+        }
+        else {
+            if (status==0) {
+                try {
+                    if (videoPDialog != null && videoPDialog.isShowing()) {
+                        videoPDialog.hide();
+                        videoPDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    gridView.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
+
+                }
+                noDataLayout.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
+
+            }
+        }
+    }
+
+    @Override
+    public void onLoadFilterVideoPreExecuteStarted() {
+        if (MainActivity.internetSpeedDialog != null && MainActivity.internetSpeedDialog.isShowing()) {
+            videoPDialog = MainActivity.internetSpeedDialog;
+            footerView.setVisibility(View.GONE);
+
+        } else {
+            videoPDialog = new ProgressBarHandler(context);
+            if (listSize == 0) {
+                // hide loader for first time
+
+                  /*  if (videoPDialog!=null && videoPDialog.isShowing()){
+                    }else {
+                        videoPDialog.show();
+                    }*/
+                videoPDialog.show();
+
+                footerView.setVisibility(View.GONE);
+            } else {
+                // show loader for first time
+                if (videoPDialog != null && videoPDialog.isShowing()) {
+                    videoPDialog.hide();
+                    videoPDialog = null;
+                }
+                footerView.setVisibility(View.VISIBLE);
+
+            }
+        }
+    }
+
+    @Override
+    public void onLoadFilterVideoPostExecuteCompleted(ArrayList<LoadFilterVideoOutput> loadFilterVideoOutputArrayList, int status, int totalItems, String message) {
+
+        String movieGenreStr = "";
+        String movieName = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String movieImageStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String moviePermalinkStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String isEpisodeStr = "";
+        int isAPV = 0;
+        int isPPV = 0;
+        int isConverted = 0;
+        if (status==200){
+
+            for (int i=0;i<loadFilterVideoOutputArrayList.size();i++){
+                movieGenreStr=loadFilterVideoOutputArrayList.get(i).getGenre();
+                movieName=loadFilterVideoOutputArrayList.get(i).getName();
+                movieImageStr=loadFilterVideoOutputArrayList.get(i).getPosterUrl();
+                moviePermalinkStr=loadFilterVideoOutputArrayList.get(i).getPermalink();
+                videoTypeIdStr=loadFilterVideoOutputArrayList.get(i).getContentTypesId();
+                isConverted=loadFilterVideoOutputArrayList.get(i).getIsConverted();
+                isAPV=loadFilterVideoOutputArrayList.get(i).getIsAPV();
+                isPPV=loadFilterVideoOutputArrayList.get(i).getIsPPV();
+                isEpisodeStr=loadFilterVideoOutputArrayList.get(i).getIsEpisodeStr();
+                itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+            }
+
+            if (itemData.size() <= 0) {
+                try {
+                    if (videoPDialog != null && videoPDialog.isShowing()) {
+                        videoPDialog.hide();
+                        videoPDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    gridView.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
+
+                }
+                noDataLayout.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
+
+
+            } else {
+                footerView.setVisibility(View.GONE);
+                gridView.setVisibility(View.VISIBLE);
+                if (filterMenuItem != null) {
+
+                    filterMenuItem.setVisible(true);
+                }
+
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                noDataLayout.setVisibility(View.GONE);
+                videoImageStrToHeight = movieImageStr;
+
+                if (firstTime == true) {
+                    Picasso.with(getActivity()).load(videoImageStrToHeight
+                    ).into(new Target() {
+
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            videoWidth = bitmap.getWidth();
+                            videoHeight = bitmap.getHeight();
+                            loadUI = new AsynLOADUI();
+                            loadUI.executeOnExecutor(threadPoolExecutor);
+                        }
+
+                        @Override
+                        public void onBitmapFailed(final Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(final Drawable placeHolderDrawable) {
+                                /*AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);*/
+                        }
+                    });
+                } else {
+                    loadUI = new AsynLOADUI();
+                    loadUI.executeOnExecutor(threadPoolExecutor);
+                }
+
+
+            }
+        }
+        else {
+                try {
+                    if (videoPDialog != null && videoPDialog.isShowing()) {
+                        videoPDialog.hide();
+                        videoPDialog = null;
+                    }
+                } catch (IllegalArgumentException ex) {
+
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    noInternetConnectionLayout.setVisibility(View.GONE);
+                    gridView.setVisibility(View.GONE);
+                    footerView.setVisibility(View.GONE);
+
+                }
+                noDataLayout.setVisibility(View.VISIBLE);
+                noInternetConnectionLayout.setVisibility(View.GONE);
+                gridView.setVisibility(View.GONE);
+                footerView.setVisibility(View.GONE);
+
+        }
+
+
+    }
 
     /***************chromecast**********************/
     public enum PlaybackLocation {
@@ -245,7 +541,11 @@ public class VideosListFragment extends Fragment   {
 
 
     AsynLOADUI loadUI;
-    AsynLoadVideos asynLoadVideos;
+   // AsynLoadVideos asynLoadVideos;
+    String strtext;
+    String countryCodeStr;
+    GetContentListAsynTask getContentListAsynTask;
+    LoadFilterVideoAsync loadFilterVideoAsync;
 
     ArrayList<String> url_maps;
     private ProgressBarHandler videoPDialog;
@@ -390,7 +690,7 @@ public class VideosListFragment extends Fragment   {
         posterUrl = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
 
         gridView = (GridView) rootView.findViewById(R.id.imagesGridView);
-       
+
         footerView = (RelativeLayout) rootView.findViewById(R.id.loadingPanel);
 
         noInternetConnectionLayout = (RelativeLayout)rootView.findViewById(R.id.noInternet);
@@ -417,8 +717,27 @@ public class VideosListFragment extends Fragment   {
             footerView.setVisibility(View.GONE);
         }
         resetData();
-        asynLoadVideos = new AsynLoadVideos();
-        asynLoadVideos.executeOnExecutor(threadPoolExecutor);
+
+        strtext = getArguments().getString("item");
+        filterPermalink = strtext.trim();
+        countryCodeStr=preferenceManager.getCountryCodeFromPref();
+      /*  asynLoadVideos = new AsynLoadVideos();
+        asynLoadVideos.executeOnExecutor(threadPoolExecutor);*/
+
+        ContentListInput contentListInput=new ContentListInput();
+        contentListInput.setAuthToken(authTokenStr);
+        contentListInput.setPermalink(strtext.trim());
+        contentListInput.setLimit(String.valueOf(limit));
+        contentListInput.setOffset(String.valueOf(offset));
+        contentListInput.setOrderby("");
+        if (countryCodeStr != null) {
+            contentListInput.setCountry(countryCodeStr);
+        } else {
+            contentListInput.setCountry("IN");
+        }
+        contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+        getContentListAsynTask=new GetContentListAsynTask(contentListInput,VideosListFragment.this,context);
+        getContentListAsynTask.executeOnExecutor(threadPoolExecutor);
 
 
         gridView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -477,15 +796,46 @@ public class VideosListFragment extends Fragment   {
 
                                 Log.v("SUBHA","filterOrderByStr "+filterOrderByStr);
 
-                                AsynLoadFilterVideos asyncLoadVideos = new AsynLoadFilterVideos();
-                                asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
+                               /* AsynLoadFilterVideos asyncLoadVideos = new AsynLoadFilterVideos();
+                                asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
+
+                                LoadFilterVideoInput loadFilterVideoInput=new LoadFilterVideoInput();
+                                loadFilterVideoInput.setGenreArray(genreArray);
+                                loadFilterVideoInput.setAuthToken(authTokenStr);
+                                loadFilterVideoInput.setPermalink(strtext.trim());
+                                loadFilterVideoInput.setLimit(String.valueOf(limit));
+                                loadFilterVideoInput.setOffset(String.valueOf(offset));
+                                loadFilterVideoInput.setOrderby(filterOrderByStr);
+                                if (countryCodeStr != null) {
+                                    loadFilterVideoInput.setCountry(countryCodeStr);
+                                } else {
+                                    loadFilterVideoInput.setCountry("IN");
+                                }
+                                loadFilterVideoInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+                                loadFilterVideoAsync=new LoadFilterVideoAsync(loadFilterVideoInput,VideosListFragment.this,context);
+                                loadFilterVideoAsync.executeOnExecutor(threadPoolExecutor);
+
 
                             }else{
                                 Log.v("SUBHA","asynLoadVideos "+filterOrderByStr);
 
-
+/*
                                 asynLoadVideos = new AsynLoadVideos();
-                                asynLoadVideos.executeOnExecutor(threadPoolExecutor);
+                                asynLoadVideos.executeOnExecutor(threadPoolExecutor);*/
+                                ContentListInput contentListInput=new ContentListInput();
+                                contentListInput.setAuthToken(authTokenStr);
+                                contentListInput.setPermalink(strtext.trim());
+                                contentListInput.setLimit(String.valueOf(limit));
+                                contentListInput.setOffset(String.valueOf(offset));
+                                contentListInput.setOrderby("");
+                                if (countryCodeStr != null) {
+                                    contentListInput.setCountry(countryCodeStr);
+                                } else {
+                                    contentListInput.setCountry("IN");
+                                }
+                                contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+                                getContentListAsynTask=new GetContentListAsynTask(contentListInput,VideosListFragment.this,context);
+                                getContentListAsynTask.executeOnExecutor(threadPoolExecutor);
                             }
 
                             scrolling = false;
@@ -605,14 +955,29 @@ public class VideosListFragment extends Fragment   {
                             videoPDialog.hide();
                             videoPDialog = null;
                         }
-                        if (asynLoadVideos!=null){
-                            asynLoadVideos.cancel(true);
+                        if (getContentListAsynTask!=null){
+                            getContentListAsynTask.cancel(true);
                         }
                         if (loadUI!=null){
                             loadUI.cancel(true);
                         }
-                        AsynLoadFilterVideos asyncLoadVideos = new AsynLoadFilterVideos();
-                        asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
+                        /*AsynLoadFilterVideos asyncLoadVideos = new AsynLoadFilterVideos();
+                        asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
+                        LoadFilterVideoInput loadFilterVideoInput=new LoadFilterVideoInput();
+                        loadFilterVideoInput.setGenreArray(genreArray);
+                        loadFilterVideoInput.setAuthToken(authTokenStr);
+                        loadFilterVideoInput.setPermalink(strtext.trim());
+                        loadFilterVideoInput.setLimit(String.valueOf(limit));
+                        loadFilterVideoInput.setOffset(String.valueOf(offset));
+                        loadFilterVideoInput.setOrderby(filterOrderByStr);
+                        if (countryCodeStr != null) {
+                            loadFilterVideoInput.setCountry(countryCodeStr);
+                        } else {
+                            loadFilterVideoInput.setCountry("IN");
+                        }
+                        loadFilterVideoInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+                        loadFilterVideoAsync=new LoadFilterVideoAsync(loadFilterVideoInput,VideosListFragment.this,context);
+                        loadFilterVideoAsync.executeOnExecutor(threadPoolExecutor);
 
                     }
                 }
@@ -741,7 +1106,7 @@ public class VideosListFragment extends Fragment   {
         return rootView;
     }
 
-    private class AsynLoadFilterVideos extends AsyncTask<Void, Void, Void> {
+   /* private class AsynLoadFilterVideos extends AsyncTask<Void, Void, Void> {
         String responseStr;
         int status;
         String movieGenreStr = "";
@@ -1050,8 +1415,8 @@ public class VideosListFragment extends Fragment   {
 
                             @Override
                             public void onPrepareLoad(final Drawable placeHolderDrawable) {
-                                /*AsynLOADUI loadUI = new AsynLOADUI();
-                                loadUI.executeOnExecutor(threadPoolExecutor);*/
+                                *//*AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);*//*
                             }
                         });
                     }else {
@@ -1076,11 +1441,11 @@ public class VideosListFragment extends Fragment   {
                 if (listSize == 0) {
                     // hide loader for first time
 
-                  /*  if (videoPDialog!=null && videoPDialog.isShowing()){
+                  *//*  if (videoPDialog!=null && videoPDialog.isShowing()){
 
                     }else {
                         videoPDialog.show();
-                    }*/
+                    }*//*
                     videoPDialog.show();
 
                     footerView.setVisibility(View.GONE);
@@ -1097,7 +1462,7 @@ public class VideosListFragment extends Fragment   {
         }
 
 
-    }
+    }*/
 
 
 
@@ -1160,14 +1525,31 @@ public class VideosListFragment extends Fragment   {
                     videoPDialog.hide();
                     videoPDialog = null;
                 }
-                if (asynLoadVideos!=null){
-                    asynLoadVideos.cancel(true);
+                if (getContentListAsynTask!=null){
+                    getContentListAsynTask.cancel(true);
                 }
                 if (loadUI!=null){
                     loadUI.cancel(true);
                 }
-                AsynLoadFilterVideos asyncLoadVideos = new AsynLoadFilterVideos();
-                asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
+               /* AsynLoadFilterVideos asyncLoadVideos = new AsynLoadFilterVideos();
+                asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
+
+
+                LoadFilterVideoInput loadFilterVideoInput=new LoadFilterVideoInput();
+                loadFilterVideoInput.setGenreArray(genreArray);
+                loadFilterVideoInput.setAuthToken(authTokenStr);
+                loadFilterVideoInput.setPermalink(strtext.trim());
+                loadFilterVideoInput.setLimit(String.valueOf(limit));
+                loadFilterVideoInput.setOffset(String.valueOf(offset));
+                loadFilterVideoInput.setOrderby(filterOrderByStr);
+                if (countryCodeStr != null) {
+                    loadFilterVideoInput.setCountry(countryCodeStr);
+                } else {
+                    loadFilterVideoInput.setCountry("IN");
+                }
+                loadFilterVideoInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+                loadFilterVideoAsync=new LoadFilterVideoAsync(loadFilterVideoInput,VideosListFragment.this,context);
+                loadFilterVideoAsync.executeOnExecutor(threadPoolExecutor);
 
             }
         }
@@ -1194,8 +1576,20 @@ public class VideosListFragment extends Fragment   {
                 itemData.clear();
             }
 
-            asynLoadVideos = new AsynLoadVideos();
-            asynLoadVideos.executeOnExecutor(threadPoolExecutor);
+            ContentListInput contentListInput=new ContentListInput();
+            contentListInput.setAuthToken(authTokenStr);
+            contentListInput.setPermalink(strtext.trim());
+            contentListInput.setLimit(String.valueOf(limit));
+            contentListInput.setOffset(String.valueOf(offset));
+            contentListInput.setOrderby("");
+            if (countryCodeStr != null) {
+                contentListInput.setCountry(countryCodeStr);
+            } else {
+                contentListInput.setCountry("IN");
+            }
+            contentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+            getContentListAsynTask=new GetContentListAsynTask(contentListInput,VideosListFragment.this,context);
+            getContentListAsynTask.executeOnExecutor(threadPoolExecutor);
         }
 
 
@@ -1217,7 +1611,7 @@ public class VideosListFragment extends Fragment   {
             imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
         }
     }
-    //Load Films Videos
+    /*//Load Films Videos
     private class AsynLoadVideos extends AsyncTask<Void, Void, Void> {
         String responseStr;
         int status;
@@ -1533,7 +1927,7 @@ public class VideosListFragment extends Fragment   {
 
 
     }
-
+*/
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -1597,7 +1991,7 @@ public class VideosListFragment extends Fragment   {
        /* MenuItem item,item1;
         item= menu.findItem(R.id.action_filter);
        // item.setVisible(true);*/
-       videosListFragment.handleMenuFilter(menu);
+        videosListFragment.handleMenuFilter(menu);
 
     /*    item1= menu.findItem(R.id.action_notifications);
         item1.setVisible(false);*/
