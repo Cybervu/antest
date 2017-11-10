@@ -108,17 +108,18 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
         LogUtil.showLog("Nihar_feb",""+imageId);
 
 
+        holder.closeAlbumArt.setTag(Integer.valueOf(position));
 
         holder.closeAlbumArt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogUtil.showLog("Nihar_fev","clicked ");
+                LogUtil.showLog("SUBHAlaxmi","clicked ");
                 close=true;
                if (data.get(position).isClicked()){
 
-                   LogUtil.showLog("ANU","movieUniqueId  ========"+item.getMovieUniqueId());
+                   LogUtil.showLog("SUBHAlaxmi","movieUniqueId  ========"+item.getMovieUniqueId());
 
-                   mActivity.removeFavorite(item);
+                   mActivity.removeFavorite(item,position);
 
                }
 
@@ -132,7 +133,7 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
             holder.closeAlbumArt.setVisibility(View.VISIBLE);
 //            feb_bt.setImageResource(R.drawable.favorite);
         }else {
-            holder.closeAlbumArt.setVisibility(View.GONE);
+            holder.closeAlbumArt.setVisibility(View.VISIBLE);
 //            feb_bt.setImageResource(R.drawable.favorite_unselected);
 
         }

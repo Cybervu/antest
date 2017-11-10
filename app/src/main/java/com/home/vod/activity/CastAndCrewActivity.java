@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.home.apisdk.apiController.GetCelibrityAsyntask;
 import com.home.apisdk.apiModel.CelibrityInputModel;
 import com.home.apisdk.apiModel.CelibrityOutputModel;
@@ -35,6 +36,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import io.fabric.sdk.android.Fabric;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -86,6 +89,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_cast_and_crew);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);

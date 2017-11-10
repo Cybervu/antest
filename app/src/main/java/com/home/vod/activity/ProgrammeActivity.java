@@ -3,8 +3,11 @@ package com.home.vod.activity;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,11 +15,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,6 +36,9 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.androidquery.AQuery;
+import com.crashlytics.android.Crashlytics;
+import com.devbrackets.android.exomedia.listener.OnPreparedListener;
+import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
@@ -42,6 +52,7 @@ import com.home.apisdk.apiController.GetContentDetailsAsynTask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetRelatedContentAsynTask;
+import com.home.apisdk.apiController.GetVideoLogsAsynTask;
 import com.home.apisdk.apiController.HeaderConstants;
 import com.home.apisdk.apiModel.AddToFavInputModel;
 import com.home.apisdk.apiModel.AddToFavOutputModel;
@@ -52,27 +63,39 @@ import com.home.apisdk.apiModel.DeleteFavOutputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.RelatedContentInput;
 import com.home.apisdk.apiModel.RelatedContentOutput;
+import com.home.apisdk.apiModel.VideoLogsInputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
+import com.home.vod.MyDownloadIntentHandler;
 import com.home.vod.R;
+import com.home.vod.SearchIntentHandler;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.LanguageModel;
+import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
+import com.home.vod.util.ResizableCustomView;
+import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import io.fabric.sdk.android.Fabric;
+
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 import static com.home.vod.preferences.LanguagePreference.BENEFIT_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BENEFIT_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_TITLE;
@@ -80,15 +103,19 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIET_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIFFICULTY_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DURATION_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROGRAM_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.DETAILS_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DIET_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DIFFICULTY_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DURATION_TITLE;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.PROGRAM_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
@@ -101,10 +128,10 @@ import static player.utils.Util.HAS_FAVORITE;
  * @author Abhishek
  */
 
-public class ProgrammeActivity extends AppCompatActivity implements GetRelatedContentAsynTask.GetRelatedContentListener, GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,
+public class ProgrammeActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener,GetRelatedContentAsynTask.GetRelatedContentListener, GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,
         GetIpAddressAsynTask.IpAddressListener, GetLanguageListAsynTask.GetLanguageListListener {
 
-    TextView detailsTextView, videoStoryTextView,  colortitle,colortitle1,benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days, lineTextview;
+    TextView detailsTextView, videoStoryTextView, colortitle, colortitle1, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days, lineTextview;
     ImageView bannerImageView, playButton, moviePoster, share;
     Button startProgramButton, dietPlanButton;
     ProgressBarHandler pDialog;
@@ -222,6 +249,133 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
 
         languageModel = languageModels;
     }
+
+    @Override
+    public void onOrientationChange(int orientation) {
+
+        Log.v("Subhalaxmi","video done");
+        Toast.makeText(ProgrammeActivity.this,"video done",Toast.LENGTH_SHORT).show();
+
+        if (orientation == 90) {
+            compressed = false;
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT);
+            player_layout.setLayoutParams(params);
+            compress_expand.setImageResource(R.drawable.ic_media_fullscreen_shrink);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                }
+            });
+            hideSystemUI();
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+            //current_time.setVisibility(View.GONE);
+        } else if (orientation == 270) {
+
+
+            compressed = false;
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT);
+            player_layout.setLayoutParams(params);
+            compress_expand.setImageResource(R.drawable.ic_media_fullscreen_shrink);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                }
+            });
+            hideSystemUI();
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            //current_time.setVisibility(View.GONE);
+
+            // Do some landscape stuff
+        } else if (orientation == 180) {
+
+            RelativeLayout.LayoutParams params1 = null;
+            if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
+                if(ProgrammeActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
+
+                }
+                else
+                {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.MATCH_PARENT);
+                }
+            }
+            else
+            {
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+
+                }
+                else
+                {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+                }
+            }
+            player_layout.setLayoutParams(params1);
+            compressed = true;
+            compress_expand.setImageResource(R.drawable.ic_media_fullscreen_stretch);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                }
+            });
+            showSystemUI();
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            //current_time.setVisibility(View.GONE);
+
+        } else if (orientation == 0) {
+
+
+            RelativeLayout.LayoutParams params1 = null;
+            if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
+
+                }
+                else
+                {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
+                }
+            }
+            else
+            {
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+
+                }
+                else
+                {
+                    params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+                }
+            }
+            player_layout.setLayoutParams(params1);
+            compressed = true;
+            compress_expand.setImageResource(R.drawable.ic_media_fullscreen_stretch);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                }
+            });
+            showSystemUI();
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            //current_time.setVisibility(View.GONE);
+        }
+
+        current_time_position_timer();
+
+    }
+
  /*chromecast-------------------------------------*/
      /*chromecast-------------------------------------*/
 
@@ -304,9 +458,39 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
     /*chromecast-------------------------------------*/
     String contentId, muviStreamId;
 
+    /*--------- Added for trailer player */
+
+    private EMVideoView emVideoView;
+    ImageView subtitle_change_btn;
+    RelativeLayout player_layout;
+    ImageButton latest_center_play_pause;
+    ProgressBar progressView;
+    ImageButton back, center_play_pause;
+    ImageView compress_expand;
+    SeekBar seekBar;
+    String Current_Time, TotalTime;
+    TextView current_time, total_time;
+    TextView ipAddressTextView;
+    TextView emailAddressTextView;
+    TextView dateTextView;
+    long previous_matching_time = 0, current_matching_time = 0;
+    public int playerPreviousPosition = 0;
+    int playerStartPosition = 0;
+    int seek_label_pos = 0;
+    Timer center_pause_paly_timer;
+    boolean center_pause_paly_timer_is_running = false;
+    public boolean isFastForward = false;
+    boolean video_completed = false;
+    int screenWidth, screenHeight;
+    LinearLayout primary_ll, last_ll;
+    boolean compressed = true;
+    /* Added for trailer player ---------*/
+        ///by nihar
+    LinearLayout view_below;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_programme);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(ProgrammeActivity.this);
@@ -328,6 +512,8 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
         share = (ImageView) findViewById(R.id.share);
         image_logo = (RelativeLayout) findViewById(R.id.logo_image);
+        bannerImageRelativeLayout = (RelativeLayout) findViewById(R.id.bannerImageRelativeLayout);
+        player_layout = (RelativeLayout) findViewById(R.id.player_layout);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
         colortitle.setVisibility(View.GONE);
         colortitle1.setVisibility(View.GONE);
@@ -346,6 +532,230 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
             }
         });
 
+
+
+         /*-------------Added for trailer ---------------*/
+        bannerImageRelativeLayout.setVisibility(View.VISIBLE);
+
+        emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
+        subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
+        subtitle_change_btn.setVisibility(View.GONE);
+        latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
+        progressView = (ProgressBar) findViewById(R.id.progress_view);
+        primary_ll = (LinearLayout) findViewById(R.id.primary_ll);
+        view_below = (LinearLayout) findViewById(R.id.view_below);
+        last_ll = (LinearLayout) findViewById(R.id.last_ll);
+        seekBar = (SeekBar) findViewById(R.id.progress);
+        center_play_pause = (ImageButton) findViewById(R.id.center_play_pause);
+
+        current_time = (TextView) findViewById(R.id.current_time);
+        total_time = (TextView) findViewById(R.id.total_time);
+
+        ipAddressTextView = (TextView) findViewById(R.id.emailAddressTextView);
+        emailAddressTextView = (TextView) findViewById(R.id.ipAddressTextView);
+        dateTextView = (TextView) findViewById(R.id.dateTextView);
+
+        ipAddressTextView.setVisibility(View.GONE);
+        emailAddressTextView.setVisibility(View.GONE);
+        dateTextView.setVisibility(View.GONE);
+
+        compress_expand = (ImageView) findViewById(R.id.compress_expand);
+        back = (ImageButton) findViewById(R.id.back);
+
+
+        Display display = getWindowManager().getDefaultDisplay();
+        screenWidth = display.getWidth();
+        screenHeight = display.getHeight();
+
+        RelativeLayout.LayoutParams params1 = null;
+        if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
+            if(ProgrammeActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+            {
+                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
+
+            }
+            else
+            {
+                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.MATCH_PARENT);
+            }
+        }
+        else
+        {
+            if(ProgrammeActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+            {
+                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+
+            }
+            else
+            {
+                params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+            }
+        }
+
+        player_layout.setLayoutParams(params1);
+        bannerImageRelativeLayout.setLayoutParams(params1);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                //Toast.makeText(getApplicationContext(),""+seekBar.getProgress(),Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                mHandler.removeCallbacks(updateTimeTask);
+                playerStartPosition = emVideoView.getCurrentPosition();
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mHandler.removeCallbacks(updateTimeTask);
+                emVideoView.seekTo(seekBar.getProgress());
+                current_time.setVisibility(View.VISIBLE);
+                current_time.setVisibility(View.GONE);
+                showCurrentTime();
+                current_time.setVisibility(View.VISIBLE);
+                updateProgressBar();
+                if (playerPreviousPosition == 0) {
+                    if (playerStartPosition < emVideoView.getCurrentPosition()) {
+                        isFastForward = true;
+                        playerPreviousPosition = playerStartPosition;
+
+                    } else {
+                        playerPreviousPosition = playerStartPosition;
+                        isFastForward = false;
+
+                    }
+                }
+            }
+        });
+
+        seekBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    Instant_End_Timer();
+
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    Start_Timer();
+                }
+                return false;
+            }
+        });
+
+        emVideoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (findViewById(R.id.progress_view).getVisibility() == View.VISIBLE) {
+                    primary_ll.setVisibility(View.GONE);
+                    center_play_pause.setVisibility(View.GONE);
+                    latest_center_play_pause.setVisibility(View.GONE);
+                    current_time.setVisibility(View.GONE);
+
+
+                } else {
+                    if (primary_ll.getVisibility() == View.VISIBLE) {
+                        primary_ll.setVisibility(View.GONE);
+                        last_ll.setVisibility(View.GONE);
+                        center_play_pause.setVisibility(View.GONE);
+                        latest_center_play_pause.setVisibility(View.GONE);
+                        current_time.setVisibility(View.GONE);
+
+                        End_Timer();
+                    } else {
+
+
+                        primary_ll.setVisibility(View.GONE);
+
+
+
+
+                        last_ll.setVisibility(View.VISIBLE);
+                        center_play_pause.setVisibility(View.VISIBLE);
+                        latest_center_play_pause.setVisibility(View.VISIBLE);
+                        current_time.setVisibility(View.VISIBLE);
+                        current_time.setVisibility(View.GONE);
+                        showCurrentTime();
+                        current_time.setVisibility(View.VISIBLE);
+                        Start_Timer();
+                    }
+
+                }
+
+
+            }
+        });
+
+        compress_expand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Write code here
+
+                if (compressed) {
+                    compressed = false;
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT);
+                    player_layout.setLayoutParams(params);
+                    compress_expand.setImageResource(R.drawable.ic_media_fullscreen_shrink);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        }
+                    });
+                    hideSystemUI();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                } else {
+
+                    RelativeLayout.LayoutParams params1 = null;
+                    if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
+                        if(ProgrammeActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                        {
+                            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
+
+                        }
+                        else
+                        {
+                            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
+                        }
+                    }
+                    else
+                    {
+                        if(ProgrammeActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                        {
+                            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+
+                        }
+                        else
+                        {
+                            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+                        }
+
+                    }
+                    player_layout.setLayoutParams(params1);
+                    compressed = true;
+                    compress_expand.setImageResource(R.drawable.ic_media_fullscreen_stretch);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        }
+                    });
+                    showSystemUI();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+                }
+
+
+            }
+        });
+
+
+          /*-------------Added for trailer ---------------*/
+
+
         DataModel dbModel = new DataModel();
         movieUniqueId = dbModel.getMovieUniqueId();
         isEpisode = dbModel.getEpisode_id();
@@ -357,6 +767,51 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
         FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.regular_fonts), startProgramButton);
         FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.regular_fonts), dietPlanButton);
 
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bannerImageRelativeLayout.setVisibility(View.GONE);
+                player_layout.setVisibility(View.VISIBLE);
+                progressView.setVisibility(View.VISIBLE);
+
+                Toast.makeText(ProgrammeActivity.this,"play button clicked",Toast.LENGTH_SHORT).show();
+                //added condition for check movieTrailerurl null or not .....by nihar #30-10-2017
+
+                if(movieTrailerUrlStr != null){
+                    emVideoView.setVideoURI(Uri.parse(movieTrailerUrlStr));
+
+                }
+
+//                emVideoView.setVideoURI(Uri.parse("https://d16wkdkbh7je0c.cloudfront.net/uploads/trailers/28506/Yoga_for_Weight_Loss.mp4?Expires=1509108246&Signature=IlwLU1x8mWyuE9LZaq1SdHsXG31sJzNcUB6902WnFIM3iswG589u2~syrZ138yYRHIh4SFfKOs7pDqljNWO8BLvsVrux09StsUuBOYyCuBuKTPvzeRj57E73SjS8mwFw-OD9AaQ~sdQ8n0175ghOyEdfyQl7A5dcGYZHD38wInWEYVm70X5YHvdzOqOtf5hf~XOOZ5a~7eM0So~pomwuF~LDvrEY1~2EBGwyiDQ-YnkLv6l2sSjxPGwQ0IFSSOnFUhxiHqbX4vgfmjAZpbZrGHLfawUlsxDV5rRsSy~Pw19jMFzCRVmGvAbQnCZ43acEXyEbgYUb8RXP2EtstM5WkQ__&Key-Pair-Id=APKAJYIDWFG3D6CNOYVA"));
+            }
+        });
+
+
+        emVideoView.setOnPreparedListener(new OnPreparedListener() {
+            @Override
+            public void onPrepared() {
+                video_completed = false;
+                progressView.setVisibility(View.VISIBLE);
+                center_play_pause.setVisibility(View.GONE);
+                latest_center_play_pause.setVisibility(View.GONE);
+                try {
+
+                    Log.v("Subhalaxmi","video setOnPreparedListener not started");
+                    Toast.makeText(ProgrammeActivity.this,"video setOnPreparedListener not started",Toast.LENGTH_SHORT).show();
+                   // mHandler.removeCallbacks(updateTimeTask);
+
+                    current_time.setVisibility(View.VISIBLE);
+                    SensorOrientationChangeNotifier.getInstance(ProgrammeActivity.this).addListener(ProgrammeActivity.this);
+                    emVideoView.start();
+                    seekBar.setProgress(emVideoView.getCurrentPosition());
+                    updateProgressBar();
+
+                    ////nihar
+                } catch (Exception e) {
+                }
+            }
+        });
+
 
         startProgramButton.setOnClickListener(new View.OnClickListener() {
 
@@ -366,6 +821,8 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
                 Intent i = new Intent(getApplicationContext(), SeasonActivity.class);
                 i.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
                 startActivity(i);
+                bannerImageRelativeLayout.setVisibility(View.VISIBLE);
+                player_layout.setVisibility(View.GONE);
             }
         });
 
@@ -405,7 +862,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
 
         contentDetailsInput.setAuthToken(authTokenStr);
 
-        Log.v("SUBHA","authToken === "+authTokenStr);
+        Log.v("SUBHA", "authToken === " + authTokenStr);
         if (preferenceManager != null) {
             String countryPref = preferenceManager.getCountryCodeFromPref();
             contentDetailsInput.setCountry(countryPref);
@@ -417,6 +874,30 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
         contentDetailsInput.setUser_id(useridStr);
         asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
         asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+
+
+        ///////added by nihar
+        center_play_pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Execute_Pause_Play();
+            }
+        });
+        latest_center_play_pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (Util.hide_pause) {
+                    Util.hide_pause = false;
+                    Start_Timer();
+                }
+
+                Execute_Pause_Play();
+            }
+        });
+
+
+
 
 
         /***favorite *****/
@@ -461,23 +942,19 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
                     }
                 } else {
                     Util.favorite_clicked = true;
-                    final Intent registerActivity = new Intent(ProgrammeActivity.this, RegisterActivity.class);
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            registerActivity.putExtra("from", this.getClass().getName());
-                            startActivity(registerActivity);
 
-                        }
-                    });
+                    Intent registerActivity = new Intent(ProgrammeActivity.this, RegisterActivity.class);
+                    registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    registerActivity.putExtra("from", this.getClass().getName());
+                    startActivityForResult(registerActivity, 30060);
+
+                    bannerImageRelativeLayout.setVisibility(View.VISIBLE);
+                    player_layout.setVisibility(View.GONE);
 
                 }
 
             }
         });
-
-
-
 
 
         /***favorite *****/
@@ -578,7 +1055,6 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
         }
 
 
-
     }
 /*chromecast-------------------------------------*/
 
@@ -596,7 +1072,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
         switch (item.getItemId()) {
 
             case R.id.action_search:
-                final Intent searchIntent = new Intent(ProgrammeActivity.this, SearchActivity.class);
+                final Intent searchIntent = new SearchIntentHandler(ProgrammeActivity.this).handleSearchIntent();
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
                 // Not implemented here
@@ -630,7 +1106,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
                 return false;
             case R.id.action_mydownload:
 
-                Intent mydownload = new Intent(ProgrammeActivity.this, MyDownloads.class);
+                final Intent mydownload = new MyDownloadIntentHandler(ProgrammeActivity.this).handleDownloadIntent();
                 startActivity(mydownload);
                 // Not implemented here
                 return false;
@@ -696,6 +1172,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
             contentId = contentDetailsOutput.getId();
             muviStreamId = contentDetailsOutput.getMovieStreamId();
             movieTrailerUrlStr = contentDetailsOutput.getTrailerUrl();
+            contentTypesId = contentDetailsOutput.getContentTypesId();
 
             lineTextview.setVisibility(View.VISIBLE);
 
@@ -728,8 +1205,14 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
                 detailsTextView.setText(name);
                 colortitle.setVisibility(View.VISIBLE);
             }
-            if(movieTrailerUrlStr.matches("") || movieTrailerUrlStr != null || movieTrailerUrlStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA)) ){
+
+
+            if (movieTrailerUrlStr.equals("") && movieTrailerUrlStr != null && movieTrailerUrlStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                 playButton.setVisibility(View.GONE);
+                Log.v("SUBHA", "trailer url no === ");
+            } else {
+                playButton.setVisibility(View.VISIBLE);
+                Log.v("SUBHA", "trailer url yes === ");
             }
             if (season != null && season.length > 0) {
                 startProgramButton.setVisibility(View.VISIBLE);
@@ -760,7 +1243,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
                 lineTextview.setVisibility(View.GONE);
                 difficulty.setGravity(Gravity.CENTER);
             }
-            Util.favorite_clicked = false;
+            // Util.favorite_clicked = false;
 
 
             /***favorite *****/
@@ -777,12 +1260,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
 
             }
 
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE)
-                    .trim()).equals("1")) {
-                favorite_view_episode.setVisibility(View.VISIBLE);
-            } else {
-                favorite_view_episode.setVisibility(View.GONE);
-            }
+
             if (TextUtils.isEmpty(bannerImageId)) {
 
                 if (TextUtils.isEmpty(posterImageId)) {
@@ -830,6 +1308,33 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
 
 
             }
+            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE)
+                    .trim()).equals("1")) {
+                favorite_view_episode.setVisibility(View.VISIBLE);
+                if (preferenceManager != null) {
+                    loggedInStr = preferenceManager.getUseridFromPref();
+                }
+                if (loggedInStr != null && isFavorite == 0 && Util.favorite_clicked == true) {
+
+                    Util.favorite_clicked = false;
+                    Log.v("SUBHA", "favorite ----");
+
+                    AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
+                    addToFavInputModel.setAuthToken(authTokenStr);
+                    addToFavInputModel.setMovie_uniq_id(movieUniqueId);
+                    addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
+                    addToFavInputModel.setIsEpisodeStr(isEpisode);
+
+                    AddToFavAsync asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, ProgrammeActivity.this, ProgrammeActivity.this);
+                    asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
+                } else if (loggedInStr != null && isFavorite == 1) {
+
+                    favorite_view_episode.setImageResource(R.drawable.favorite_red);
+                }
+
+            } else {
+                favorite_view_episode.setVisibility(View.GONE);
+            }
 
         }
     }
@@ -837,8 +1342,9 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
     @Override
     public void onResume() {
         super.onResume();
+//        SensorOrientationChangeNotifier.getInstance(ProgrammeActivity.this).addListener(this);
 
-        if (Util.favorite_clicked == true) {
+       /* if (Util.favorite_clicked == true) {
 
             ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
             contentDetailsInput.setAuthToken(authTokenStr);
@@ -846,7 +1352,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
 
             asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, ProgrammeActivity.this, ProgrammeActivity.this);
             asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
-        }
+        }*/
 // **************chromecast*********************//
         if (mCastSession == null) {
             mCastSession = CastContext.getSharedInstance(this).getSessionManager()
@@ -941,10 +1447,6 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 
     /*****************
      * chromecast*-------------------------------------
@@ -1238,7 +1740,6 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
     @Override
     public void onGetRelatedContentPostExecuteCompleted(RelatedContentOutput relatedContentOutput, int status, String message) {
         if (pDialog != null && pDialog.isShowing()) {
-            LogUtil.showLog("PINTU", "contentdetails pdlog hide");
             pDialog.hide();
 
         }
@@ -1263,5 +1764,366 @@ public class ProgrammeActivity extends AppCompatActivity implements GetRelatedCo
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.v("BKS", "elseclickedddddd");
+        /*loginresultcode = requestCode;
+        if (requestCode == 40500) {
+            if (resultCode == RESULT_OK) {
+                Util.favorite_clicked = false;
 
+                loggedInStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+
+                AsynLoadMovieDetails asyncViewFavorite = new AsynLoadMovieDetails();
+                asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
+            } else {
+                Log.v("BKS", "elseclickedddddd");
+                Util.favorite_clicked = false;
+            }
+
+        }*/
+//
+        if (requestCode == 30060 && resultCode == RESULT_OK) {
+            if (NetworkStatus.getInstance().isConnected(this)) {
+                ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
+                permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
+                useridStr = preferenceManager.getUseridFromPref();
+
+                contentDetailsInput.setAuthToken(authTokenStr);
+
+                Log.v("SUBHA", "authToken1243442554 === " + authTokenStr);
+                if (preferenceManager != null) {
+                    String countryPref = preferenceManager.getCountryCodeFromPref();
+                    contentDetailsInput.setCountry(countryPref);
+                } else {
+                    contentDetailsInput.setCountry("IN");
+                }
+                contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                contentDetailsInput.setPermalink(permalinkStr);
+                contentDetailsInput.setUser_id(useridStr);
+                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
+                asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+
+            } else {
+                Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
+    }
+
+
+    /* ------ Added for Trailer ------*/
+
+
+    private Runnable updateTimeTask = new Runnable() {
+        public void run() {
+          /*  if (played_length > 0) {
+                emVideoView.seekTo(34000);
+                seekBar.setProgress(34000);
+            }else {*/
+
+            Log.v("Subhalaxmi","video done not complted");
+            Toast.makeText(ProgrammeActivity.this,"video done not complted",Toast.LENGTH_SHORT).show();
+            seekBar.setProgress(emVideoView.getCurrentPosition());
+//            }
+            seekBar.setMax(emVideoView.getDuration());
+            Calcute_Currenttime_With_TotalTime();
+            mHandler.postDelayed(this, 1000);
+
+            if (contentTypesId != 4) {
+                seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
+            }
+
+            current_matching_time = emVideoView.getCurrentPosition();
+
+
+            if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
+                Log.v("Subhalaxmi","video done not started");
+                Toast.makeText(ProgrammeActivity.this,"video done not started",Toast.LENGTH_SHORT).show();
+                findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
+                center_play_pause.setVisibility(View.GONE);
+                latest_center_play_pause.setVisibility(View.GONE);
+                previous_matching_time = current_matching_time;
+            } else {
+
+                if (contentTypesId == 4) {
+
+
+                } else {
+                    if (current_matching_time >= emVideoView.getDuration()) {
+                        mHandler.removeCallbacks(updateTimeTask);
+                        //  pause_play.setImageResource(R.drawable.ic_media_play);
+//                    emVideoView.release();
+//                    emVideoView.reset();
+                        seekBar.setProgress(0);
+//                    emVideoView.seekTo(0);
+                        current_time.setText("00:00:00");
+                        total_time.setText("00:00:00");
+                        previous_matching_time = 0;
+                        current_matching_time = 0;
+                        video_completed = true;
+
+
+//                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                        bannerImageRelativeLayout.setVisibility(View.VISIBLE);
+                        player_layout.setVisibility(View.GONE);
+
+
+                        Log.v("Subhalaxmi","video done complted");
+                        Toast.makeText(ProgrammeActivity.this,"video done complted",Toast.LENGTH_SHORT).show();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                            }
+                        });
+                        showSystemUI();
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+                        //onBackPressed();
+//                        backCalled();
+                    }
+                }
+
+
+                previous_matching_time = current_matching_time;
+                findViewById(R.id.progress_view).setVisibility(View.GONE);
+
+            }
+
+        }
+    };
+
+
+    public void showCurrentTime() {
+
+        current_time.setText(Current_Time);
+        current_time_position_timer();
+
+
+    }
+
+    public void current_time_position_timer() {
+        final Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (contentTypesId != 4) {
+
+                            seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
+                            current_time.setX(seek_label_pos - current_time.getWidth() / 2);
+                            timer.cancel();
+                        }
+                    }
+                });
+            }
+        }, 0, 100);
+    }
+
+
+    public void Start_Timer() {
+
+        End_Timer();
+        center_pause_paly_timer = new Timer();
+        center_pause_paly_timer_is_running = true;
+        TimerTask timerTaskObj = new TimerTask() {
+            public void run() {
+                //perform your action here
+
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        current_time.setVisibility(View.VISIBLE);
+                        center_play_pause.setVisibility(View.VISIBLE);
+                        latest_center_play_pause.setVisibility(View.VISIBLE);
+                        End_Timer();
+                    }
+                });
+            }
+        };
+        center_pause_paly_timer.schedule(timerTaskObj, 1000, 1000);
+    }
+
+    public void End_Timer() {
+        if (center_pause_paly_timer_is_running) {
+            center_pause_paly_timer.cancel();
+            center_pause_paly_timer_is_running = false;
+
+            primary_ll.setVisibility(View.GONE);
+            current_time.setVisibility(View.GONE);
+            last_ll.setVisibility(View.GONE);
+            center_play_pause.setVisibility(View.GONE);
+            latest_center_play_pause.setVisibility(View.GONE);
+        }
+
+    }
+
+    public void Instant_End_Timer() {
+        if (center_pause_paly_timer_is_running) {
+            center_pause_paly_timer.cancel();
+            center_pause_paly_timer_is_running = false;
+        }
+
+    }
+
+    private void updateProgressBar() {
+        mHandler.postDelayed(updateTimeTask, 1000);
+    }
+
+    public void Calcute_Currenttime_With_TotalTime() {
+        TotalTime = String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(emVideoView.getDuration()),
+                TimeUnit.MILLISECONDS.toMinutes(emVideoView.getDuration()) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(emVideoView.getDuration())),
+                TimeUnit.MILLISECONDS.toSeconds(emVideoView.getDuration()) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(emVideoView.getDuration())));
+
+        Current_Time = String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(emVideoView.getCurrentPosition()),
+                TimeUnit.MILLISECONDS.toMinutes(emVideoView.getCurrentPosition()) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(emVideoView.getCurrentPosition())),
+                TimeUnit.MILLISECONDS.toSeconds(emVideoView.getCurrentPosition()) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(emVideoView.getCurrentPosition())));
+
+        total_time.setText(TotalTime);
+        current_time.setText(Current_Time);
+    }
+
+
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        bannerImageRelativeLayout.setVisibility(View.VISIBLE);
+        player_layout.setVisibility(View.GONE);
+    }
+
+    /* ------ Added for Trailer ------*/
+    ///added by nihar
+    public void Execute_Pause_Play() {
+        if (emVideoView.isPlaying()) {
+            emVideoView.pause();
+            latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
+            center_play_pause.setImageResource(R.drawable.ic_media_play);
+            mHandler.removeCallbacks(updateTimeTask);
+        } else {
+            Log.v("Subhalaxmi","video_completed ===== "+video_completed);
+
+            if (video_completed) {
+
+              /*  if (content_types_id != 4) {
+                    // onBackPressed();
+//                    backCalled();
+                }*/
+                Log.v("Subhalaxmi","video done");
+                Toast.makeText(ProgrammeActivity.this,"video done 1",Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    }
+                });
+                showSystemUI();
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
+            } else {
+                emVideoView.start();
+                latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
+                center_play_pause.setImageResource(R.drawable.ic_media_pause);
+                mHandler.removeCallbacks(updateTimeTask);
+                updateProgressBar();
+            }
+
+        }
+    }
+    private void hideSystemUI() {
+        view_below.setVisibility(View.GONE);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        emVideoView.setLayoutParams(params);
+        // Set the IMMERSIVE flag.
+        // Set the content to appear under the system bars so that the content
+        // doesn't resize when the system bars hide and show.
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+    }
+
+    private void showSystemUI() {
+       /* LinearLayout.LayoutParams params1 = null;
+        if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
+            if(ProgrammeActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+            {
+                params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*45)/100);
+
+            }
+            else
+            {
+                params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*45)/100);
+            }
+        }
+        else
+        {
+            if(ProgrammeActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+            {
+                params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+
+            }
+            else
+            {
+                params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+            }
+        }
+
+        emVideoView.setLayoutParams(params1);*/
+        /*if (Util.dataModel.getVideoStory().trim() != null && !Util.dataModel.getVideoStory().trim().matches("")){
+            story.setText(Util.dataModel.getVideoStory());
+            story.setVisibility(View.VISIBLE);
+            ResizableCustomView.doResizeTextView(TrailerActivity.this,story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
+
+        } else {
+            story.setVisibility(View.GONE);
+        }*/
+
+        RelativeLayout.LayoutParams params1 = null;
+
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+
+        }
+        else
+        {
+            params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
+        }
+
+    player_layout.setLayoutParams(params1);
+    compressed = true;
+    compress_expand.setImageResource(R.drawable.ic_media_fullscreen_stretch);
+        view_below.setVisibility(View.VISIBLE);
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        );
+
+
+    }
 }
+
+
+

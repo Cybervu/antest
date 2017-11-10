@@ -21,8 +21,10 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
 import com.home.apisdk.apiController.FcmNotificationcountAsynTask;
 import com.home.apisdk.apiController.GetGenreListAsynctask;
@@ -72,6 +74,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import io.fabric.sdk.android.Fabric;
 
 import static com.home.apisdk.apiController.HeaderConstants.RATING;
 import static com.home.vod.preferences.LanguagePreference.*;
@@ -124,6 +128,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
 
     private void _init() {
+
+        Log.v("SUBHA","_init  === ");
         Util.getDPI(this);
         Util.printMD5Key(this);
         threadPoolExecutor = new AppThreadPoolExecuter().getThreadPoolExecutor();
@@ -158,6 +164,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_splash_screen);
 
         ImageView imageResize = (ImageView) findViewById(R.id.splash_screen);
@@ -188,6 +195,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
                 Log.v("SUBHA:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+
 
             }
         } catch (PackageManager.NameNotFoundException e) {
@@ -231,6 +239,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
+
+        Log.v("SUBHA","status ip  === "+statusCode);
         if (ipAddressStr.equals("")) {
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
@@ -256,6 +266,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onCheckGeoBlockCountryPostExecuteCompleted(CheckGeoBlockOutputModel checkGeoBlockOutputModel, int status, String message) {
+
+        Log.v("SUBHA","status geo  === "+status);
+
         if (checkGeoBlockOutputModel == null) {
             // countryCode = "";
             noInternetLayout.setVisibility(View.GONE);
@@ -284,6 +297,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onGetPlanListPostExecuteCompleted(ArrayList<SubscriptionPlanOutputModel> planListOutput, int status) {
+
+        Log.v("SUBHA","status plan id  === "+status);
         if (status > 0) {
             if (status == 200) {
                 languagePreference.setLanguageSharedPrefernce(PLAN_ID, "1");
@@ -307,6 +322,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onIsRegistrationenabledPostExecuteCompleted(IsRegistrationEnabledOutputModel isRegistrationEnabledOutputModel, int status, String message) {
+
+        Log.v("SUBHA","status is resgistration  === "+status);
 
         languagePreference.setLanguageSharedPrefernce(HAS_FAVORITE, "" + isRegistrationEnabledOutputModel.getHas_favourite());
         languagePreference.setLanguageSharedPrefernce(RATING, "" + isRegistrationEnabledOutputModel.getRating());
@@ -339,6 +356,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
 
+        Log.v("SUBHA","status language list  === "+status);
         this.default_Language = defaultLanguage;
         for (int i = 0; i < languageListOutputArray.size(); i++) {
 
@@ -382,6 +400,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onGetGenreListPostExecuteCompleted(ArrayList<GenreListOutput> genreListOutput, int code, String status) {
+
+        Log.v("SUBHA","status genre  === "+code);
 
         if (code > 0) {
 
@@ -527,6 +547,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onGet_UserProfilePostExecuteCompleted(Get_UserProfile_Output get_userProfile_output, int code, String message, String status) {
+
+        Log.v("SUBHA","status update profile  === "+status);
+
         if (status == null) {
             isSubscribed = "0";
         }
@@ -544,6 +567,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
     @Override
     public void onGetTranslateLanguagePostExecuteCompleted(String jsonResponse, int status) {
+
+        Log.v("SUBHA","status translated  === "+status);
 
         if (status > 0 && status == 200) {
 
@@ -648,6 +673,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //                                    Log.v("pratik","count=="+Util.count);
                                 i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(i);
+                                Log.v("SUBHA","main called 1");
                                 finish();
                                 overridePendingTransition(0, 0);
                             }
@@ -696,6 +722,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(i);
                         finish();
+                        Log.v("SUBHA","main called 2");
                         overridePendingTransition(0, 0);
                         //Toast.makeText(SplashScreen.this, notificationPref.getString("regId", "0"), Toast.LENGTH_SHORT).show();
                     }

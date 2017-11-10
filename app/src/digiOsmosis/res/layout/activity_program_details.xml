@@ -156,7 +156,7 @@
                     android:id="@+id/durationTitleTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/nav_lineColor"
+                    android:textColor="@color/pageTitleColor"
                     android:textSize="@dimen/duration_title_text"
                     android:textStyle="bold" />
 

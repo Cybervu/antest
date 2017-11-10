@@ -150,7 +150,8 @@ public class LanguagePreference {
 
     public static final String CANCEL_BUTTON = "CANCEL_BUTTON";
     public static final String CONTINUE_BUTTON = "CONTINUE_BUTTON";
-
+    public static final String SEARCH_RESULTS = "SEARCH_RESULTS";
+    public static final String DEFAULT_SEARCH_RESULTS = "SEARCH RESULTS";
 
     public static final String ADD_TO_FAV = "ADD_TO_FAV";
     public static final String ADDED_TO_FAV = "ADDED_TO_FAV";
@@ -411,10 +412,12 @@ public class LanguagePreference {
     public static String BENEFIT_TITLE = "BENEFIT_TITLE";
     public static String DEFAULT_BENEFIT_TITLE = "BENEFITS";
     public static String DIFFICULTY_TITLE = "DIFFICULTY_TITLE";
+    public static String REPETITION_TITLE = "REPETITION_TITLE";
     public static String PROGRAM_BUTTON = "PROGRAM_BUTTON";
     public static String WORKOUT_BUTTON = "WORKOUT_BUTTON";
     public static String DIET_BUTTON = "DIET_BUTTON";
     public static String DEFAULT_DIFFICULTY_TITLE = "DIFFICULTY";
+    public static String DEFAULT_REPETITION_TITLE = "REPETITION";
     public static String DEFAULT_PROGRAM_BUTTON = "Start programme";
     public static String DEFAULT_DIET_BUTTON = "Diet Plan";
     public static String DEFAULT_WORKOUT_BUTTON = "Start Workout";

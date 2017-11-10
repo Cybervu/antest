@@ -47,6 +47,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.androidquery.AQuery;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaTrack;
@@ -122,6 +123,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import io.fabric.sdk.android.Fabric;
 import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
 import player.activity.MyLibraryPlayer;
@@ -1234,6 +1236,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.episode_listing);
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);

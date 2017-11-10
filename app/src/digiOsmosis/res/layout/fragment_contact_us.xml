@@ -64,8 +64,8 @@
                 android:paddingBottom="@dimen/Login_drawing_padding"
                 android:paddingTop="@dimen/Login_drawing_padding"
                 android:drawablePadding="@dimen/Login_drawing_padding"
-                android:textColor="@color/editTextColor"
-                android:textColorHint="@color/hint_color"
+                android:textColor="@color/profile_editTextColor"
+                android:textColorHint="@color/profile_hint_color"
                 android:textSize="@dimen/editbox_text_size" />
 
             <EditText
@@ -82,8 +82,8 @@
                 android:inputType="textEmailAddress"
                 android:paddingBottom="@dimen/Login_drawing_padding"
                 android:paddingTop="@dimen/Login_drawing_padding"
-                android:textColor="@color/editTextColor"
-                android:textColorHint="@color/hint_color"
+                android:textColor="@color/profile_editTextColor"
+                android:textColorHint="@color/profile_hint_color"
                 android:textSize="@dimen/editbox_text_size" />
 
             <EditText
@@ -101,8 +101,8 @@
                 android:inputType="textMultiLine"
                 android:paddingBottom="@dimen/Login_drawing_padding"
                 android:paddingTop="@dimen/Login_drawing_padding"
-                android:textColor="@color/editTextColor"
-                android:textColorHint="@color/hint_color"
+                android:textColor="@color/profile_editTextColor"
+                android:textColorHint="@color/profile_hint_color"
                 android:textSize="@dimen/editbox_text_size" />
 
             <Button

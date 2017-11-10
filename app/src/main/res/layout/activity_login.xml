@@ -4,6 +4,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/mainLayout"
     android:background="@color/appBackgroundColor"
     android:orientation="vertical">
 
@@ -15,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
+        android:id="@+id/loginScrollView"
 
         >
 
@@ -22,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:id="@+id/loginParentLayout"
             android:orientation="vertical">
 
             <RelativeLayout

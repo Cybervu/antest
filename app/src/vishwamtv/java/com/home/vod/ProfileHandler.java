@@ -18,6 +18,10 @@ public class ProfileHandler {
     public Intent handleClickOnEditProfile(){
         return new Intent(activity, ProfileActivity.class);
 
+<<<<<<< HEAD
+
+=======
 ProfileHandler.java
+>>>>>>> eb6fc02fda74ab38fd9a7b8c40dcba80d51a321f
     }
 }

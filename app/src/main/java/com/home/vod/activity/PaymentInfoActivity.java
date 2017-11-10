@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.home.apisdk.apiController.AuthUserPaymentInfoAsyntask;
 import com.home.apisdk.apiController.RegisterUserPaymentAsyntask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
@@ -54,6 +55,7 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
+import io.fabric.sdk.android.Fabric;
 import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
 import player.activity.Player;
@@ -226,6 +228,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_payment_info);
         //Set toolbar
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);

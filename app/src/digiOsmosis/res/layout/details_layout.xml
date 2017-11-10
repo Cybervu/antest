@@ -343,11 +343,31 @@
 
 
             <RelativeLayout
+                android:id="@+id/iconImageRelativeLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bannerImageRelativeLayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/login_btn_margin_top"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/offlineImageButton"
+                    android:layout_width="@dimen/progressbar_width"
+                    android:layout_height="@dimen/progressbar_height"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/offlinebutton"
+
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/rating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/iconImageRelativeLayout"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_below="@+id/bannerImageRelativeLayout"
+                android:layout_toEndOf="@+id/iconImageRelativeLayout">
 
                 <RatingBar
                     android:id="@+id/ratingBar"
@@ -371,26 +391,6 @@
                     android:textColor="@color/textColor"
                     android:textSize="@dimen/preorderbtn_text_size"
                     android:textStyle="bold" />
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:id="@+id/iconImageRelativeLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/bannerImageRelativeLayout"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/login_btn_margin_top"
-                android:visibility="gone">
-
-                <ImageButton
-                    android:id="@+id/offlineImageButton"
-                    android:layout_width="@dimen/progressbar_width"
-                    android:layout_height="@dimen/progressbar_height"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/offlinebutton"
-
-                    />
             </RelativeLayout>
 
 

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/appBackgroundColor"
+    android:id="@+id/mainLayout"
     android:orientation="vertical">
 
     <include
@@ -13,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
+        android:id="@+id/registerScrollView"
         android:fillViewport="true"
 
         >
@@ -25,7 +27,7 @@
 
 
             <RelativeLayout
-                android:id="@+id/activity_register"
+                android:id="@+id/registerParentLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"

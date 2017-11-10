@@ -12,12 +12,17 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.home.apisdk.apiController.ForgotpassAsynTask;
 import com.home.apisdk.apiModel.Forgotpassword_input;
 import com.home.apisdk.apiModel.Forgotpassword_output;
+import com.home.vod.LoginUIBackgroundHandler;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
@@ -29,6 +34,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import io.fabric.sdk.android.Fabric;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
@@ -65,6 +72,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
     Button submitButton;
     ProgressBarHandler pDialog;
     String loginEmailStr = "";
+    RelativeLayout activity_forgot_password;
+    private ScrollView forgotPasswordScrollView ;
+    private LinearLayout forgotPasswordParentLayout;
     boolean navigation=false;
     ForgotpassAsynTask asyncPasswordForgot;
     // load asynctask
@@ -78,7 +88,14 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_forgot_password);
+        activity_forgot_password = (RelativeLayout) findViewById(R.id.activity_forgot_password);
+        forgotPasswordScrollView = (ScrollView) findViewById(R.id.forgotPasswordScrollView);
+        forgotPasswordParentLayout = (LinearLayout) findViewById(R.id.forgotPasswordParentLayout);
+        LoginUIBackgroundHandler loginUIBackgroundHandler = new LoginUIBackgroundHandler(this);
+        loginUIBackgroundHandler.handleBackgroundOfLayout("https://sampledesign.muvi.com/Login.jpg",activity_forgot_password,forgotPasswordScrollView,forgotPasswordParentLayout);
+
         languagePreference = LanguagePreference.getLanguagePreference(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);

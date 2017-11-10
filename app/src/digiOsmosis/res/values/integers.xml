@@ -17,5 +17,28 @@
 <resources>
 
     <integer name="column_count">3</integer>
+    <integer name="story_lines">3</integer>
+    <integer name="configuration_xlarge_horizontal">3</integer>
+    <integer name="configuration_normal_horizontal">2</integer>
+    <integer name="configuration_large_horizontal">3</integer>
+    <integer name="configuration_small_horizontal">2</integer>
 
+    <integer name="tutorial_configuration_large_3">3</integer>
+    <integer name="tutorial_configuration_xlarge_4">3</integer>
+
+
+    <integer name="configuration_xlarge_vertical">3</integer>
+    <integer name="configuration_normal_vertical">2</integer>
+    <integer name="configuration_large_vertical">3</integer>
+    <integer name="configuration_small_vertical">2</integer>
+
+    <integer name="fav_configuration_xlarge_horizontal">1</integer>
+    <integer name="fav_configuration_normal_horizontal">1</integer>
+    <integer name="fav_configuration_large_horizontal">1</integer>
+    <integer name="fav_configuration_small_horizontal">1</integer>
+
+    <integer name="fav_configuration_xlarge_vertical">1</integer>
+    <integer name="fav_configuration_normal_vertical">1</integer>
+    <integer name="fav_configuration_large_vertical">1</integer>
+    <integer name="fav_configuration_small_vertical">1</integer>
 </resources>

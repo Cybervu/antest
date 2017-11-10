@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.home.vod.R;
 import com.home.vod.adapter.MyDownloadAdapter;
 import com.home.vod.preferences.LanguagePreference;
@@ -29,6 +30,7 @@ import com.home.vod.util.ProgressBarHandler;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.fabric.sdk.android.Fabric;
 import player.model.ContactModel1;
 import player.utils.DBHelper;
 import player.utils.Util;
@@ -75,6 +77,7 @@ public class MyDownloads extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_mydownload);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);

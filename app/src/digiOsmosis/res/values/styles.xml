@@ -109,7 +109,7 @@
         <!-- Used for the buttons -->
         <item name="colorAccent">@color/button_background</item>
         <!-- Used for the title and text -->
-        <item name="android:textColorPrimary">@color/hint_color</item>
+        <item name="android:textColorPrimary">@color/pageTitleColor</item>
         <!-- Used for the background -->
         <item name="android:background">@color/alertPopupColor</item>
     </style>

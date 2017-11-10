@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBackgroundColor"
+    android:orientation="vertical">
+    <include layout="@layout/line_layout" />
+    <!-- TODO: Update blank fragment layout -->
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleInverse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:indeterminateDrawable="@drawable/large_progress_bar"
+        android:indeterminateDuration="1000"
+        android:visibility="gone" />
+
+    <WebView
+        android:id="@+id/aboutUsWebView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/diet_top_padding"
+        />
+
+    <!-- <ScrollView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:background="@color/white">
+         <TextView
+             android:id="@+id/Abtus_tv"
+             android:layout_width="match_parent"
+             android:clickable="true"
+             android:layout_height="wrap_content"
+             android:padding="16dp"
+             android:textAppearance="?android:textAppearanceMedium"
+             android:textColor="@color/black"
+             tools:text="@string/hello_blank_fragment" />
+         <WebView
+             android:id="@+id/WebView"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+            />
+
+     </ScrollView>-->
+</LinearLayout>

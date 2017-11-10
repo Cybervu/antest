@@ -111,7 +111,7 @@ public class DeleteFavAsync extends AsyncTask<DeleteFavInputModel, Void, Void> {
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-
+                Log.v("BISHAL", "response responseStr==" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
 
@@ -127,10 +127,11 @@ public class DeleteFavAsync extends AsyncTask<DeleteFavInputModel, Void, Void> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            Log.v("BISHAL", "response delete==" + myJson);
             status = Integer.parseInt(myJson.optString("code"));
             sucessMsg = myJson.optString("msg");
 //                statusmsg = myJson.optString("status");
-            Log.v("BISHAL", "response delete==" + myJson);
+
 
 
         }

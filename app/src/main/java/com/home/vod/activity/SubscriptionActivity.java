@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.home.apisdk.apiController.GetPlanListAsynctask;
 import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.SubscriptionPlanInputModel;
@@ -38,6 +39,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import io.fabric.sdk.android.Fabric;
 import player.activity.Player;
 
 import static com.home.vod.preferences.LanguagePreference.ACTIAVTE_PLAN_TITLE;
@@ -96,6 +98,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_subscription);
         subcription= (RecyclerView) findViewById(R.id.recyclerViewSubscription);
         activation_plan= (Button) findViewById(R.id.activationplan);

@@ -1,5 +1,7 @@
 package com.home.apisdk.apiModel;
 
+import java.util.HashMap;
+
 /**
  * This Model Class Holds All The Output Attributes For GetContentDetailsAsynTask
  *
@@ -8,6 +10,16 @@ package com.home.apisdk.apiModel;
 
 public class ContentDetailsOutput {
     String movieStreamId = "";
+
+    public HashMap<String, String> getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(HashMap<String, String> metadata) {
+        this.metadata = metadata;
+    }
+
+    HashMap<String,String> metadata;
 
     public String getMovieStreamId() {
         return movieStreamId;

@@ -124,11 +124,12 @@ public class Util {
     public static boolean goToLibraryplayer = false;
     public static boolean my_library_visibility = false;
 
-    public static ArrayList<Integer> image_orentiation = new ArrayList<>();
+    public static int image_orentiation;
 
     public static String GOOGLE_FCM_TOKEN = "GOOGLE_FCM_TOKEN";
     public static String DEFAULT_GOOGLE_FCM_TOKEN = "0";
     public static boolean favorite_clicked = false;
+    public static int favPosition = -1;
 
     public static int check_for_subscription = 0;
 
@@ -543,7 +544,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, RESUME_MESSAGE, DEFAULT_RESUME_MESSAGE,"resume_watching",json);
         setTranslationLanguageToPref(languagePreference, CONTINUE_BUTTON,DEFAULT_CONTINUE_BUTTON     ,"continue",json);
 
-
+        setTranslationLanguageToPref(languagePreference, SEARCH_RESULTS,DEFAULT_SEARCH_RESULTS, "search_results",json);
         setTranslationLanguageToPref(languagePreference, CONFIRM_PASSWORD,DEFAULT_CONFIRM_PASSWORD,"confirm_password",json);
         setTranslationLanguageToPref(languagePreference, CREDIT_CARD_DETAILS,DEFAULT_CREDIT_CARD_DETAILS     ,"credit_card_detail",json);
         setTranslationLanguageToPref(languagePreference, DIRECTOR,""     ,"director",json);
@@ -679,6 +680,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, DETAILS_TITLE,DEFAULT_DETAILS_TITLE, "details_title",json);
         setTranslationLanguageToPref(languagePreference, BENEFIT_TITLE,DEFAULT_BENEFIT_TITLE, "benefit_title",json);
         setTranslationLanguageToPref(languagePreference, DIFFICULTY_TITLE,DEFAULT_DIFFICULTY_TITLE, "difficulty_title",json);
+        setTranslationLanguageToPref(languagePreference, REPETITION_TITLE,DEFAULT_REPETITION_TITLE, "repetition_title",json);
         setTranslationLanguageToPref(languagePreference, DURATION_TITLE,DEFAULT_DURATION_TITLE, "duration_title",json);
         setTranslationLanguageToPref(languagePreference, DIFFICULTY_TITLE,DEFAULT_DIFFICULTY_TITLE, "difficulty_title",json);
         setTranslationLanguageToPref(languagePreference, DETAIL_VIEW_MORE,DEFAULT_DETAIL_VIEW_MORE, "view_more",json);
@@ -770,5 +772,48 @@ public class Util {
 
     public static boolean getStreamingRestriction(LanguagePreference languagePreference){
         return languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION,DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1");
+    }
+
+
+
+    public static String ConvertSecondToHHMMString(int secondtTime)
+    {
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        String time = df.format(new Date(secondtTime*1000L));
+
+        return time;
+
+/*
+
+        int secondsLeft = timeInSeconds % 3600 % 60;
+        int minutes = (int) Math.floor(timeInSeconds % 3600 / 60);
+        int hours = (int) Math.floor(timeInSeconds / 3600);
+
+        st HH = hours < 10 ? "0" + hours : hours;
+        string MM = minutes < 10 ? "0" + minutes : minutes;
+        string SS = secondsLeft < 10 ? "0" + secondsLeft : secondsLeft;
+
+        return HH + ":" + MM + ":" + SS;
+*/
+
+    }
+
+
+    public static String getCountDownStringInMinutes(int timeInSeconds)
+    {
+        return getTwoDecimalsValue(timeInSeconds/3600) + " : " + getTwoDecimalsValue(timeInSeconds/60) + " : " +     getTwoDecimalsValue(timeInSeconds%60);
+    }
+
+
+    public static String getTwoDecimalsValue(int value)
+    {
+        if(value>=0 && value<=9)
+        {
+            return "0"+value;
+        }
+        else
+        {
+            return value+"";
+        }
     }
 }

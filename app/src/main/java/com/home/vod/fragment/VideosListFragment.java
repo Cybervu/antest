@@ -55,6 +55,7 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.APIUrlConstant;
 import com.home.vod.R;
 import com.home.vod.Episode_Programme_Handler;
+import com.home.vod.Single_Part_Programme_Handler;
 import com.home.vod.activity.FilterActivity;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.activity.MovieDetailsActivity;
@@ -530,7 +531,7 @@ public class VideosListFragment extends Fragment   {
                 } else {
 
                     if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
-                        final Intent movieDetailsIntent = new Intent(context, MovieDetailsActivity.class);
+                      /*  final Intent movieDetailsIntent = new Intent(context, MovieDetailsActivity.class);
                         movieDetailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         getActivity().runOnUiThread(new Runnable() {
@@ -538,7 +539,8 @@ public class VideosListFragment extends Fragment   {
                                 movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 context.startActivity(movieDetailsIntent);
                             }
-                        });
+                        });*/
+                        new Single_Part_Programme_Handler(getActivity()).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
 
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3")) )
@@ -1519,51 +1521,6 @@ public class VideosListFragment extends Fragment   {
     }
 
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-     /*   InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-*/
-
-        ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
-        layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
-        gridView.setLayoutParams(layoutParams);
-        gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
-        gridView.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
-            if (videoWidth > videoHeight) {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
-            } else {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3);
-            }
-
-        } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
-            if (videoWidth > videoHeight) {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
-            } else {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
-            }
-
-        } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
-
-            gridView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
-
-
-        } else {
-            if (videoWidth > videoHeight) {
-                gridView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3);
-            } else {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 4);
-            }
-
-
-        }
-
-        super.onConfigurationChanged(newConfig);
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -1598,7 +1555,16 @@ public class VideosListFragment extends Fragment   {
     }
 
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (videoPDialog != null && videoPDialog.isShowing()) {
+            videoPDialog.hide();
+            videoPDialog = null;
+        }
 
+
+    }
 
     private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
         @Override
@@ -1638,28 +1604,28 @@ public class VideosListFragment extends Fragment   {
 
                 if (getActivity()!=null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_large_3) : (int) context.getResources().getDimension(R.dimen.configuration_large_3));
+                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getInteger(R.integer.configuration_large_horizontal) : (int) context.getResources().getInteger(R.integer.configuration_large_horizontal));
                     } else {
-                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_xlarge_4) : (int) context.getResources().getDimension(R.dimen.configuration_xlarge_4));
+                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getInteger(R.integer.configuration_large_vertical) : (int) context.getResources().getInteger(R.integer.configuration_large_vertical));
                     }
 
                 } else if (getActivity() !=null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_normal_2) : (int) context.getResources().getDimension(R.dimen.configuration_normal_2));
+                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getInteger(R.integer.configuration_normal_horizontal) : (int) context.getResources().getInteger(R.integer.configuration_normal_horizontal));
                     } else {
-                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_large_3) : (int) context.getResources().getDimension(R.dimen.configuration_large_3));
+                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getInteger(R.integer.configuration_normal_vertical) : (int) context.getResources().getInteger(R.integer.configuration_normal_vertical));
                     }
 
                 } else if (getActivity()!=null && (context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
 
-                    gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_normal_2) : (int) context.getResources().getDimension(R.dimen.configuration_normal_2));
+                    gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getInteger(R.integer.configuration_small_horizontal) : (int) context.getResources().getInteger(R.integer.configuration_small_horizontal));
 
 
                 } else {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_xlarge_4) : (int) context.getResources().getDimension(R.dimen.configuration_xlarge_4));
+                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getInteger(R.integer.configuration_xlarge_horizontal) : (int) context.getResources().getInteger(R.integer.configuration_xlarge_horizontal));
                     } else {
-                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_xlarge_5) : (int) context.getResources().getDimension(R.dimen.configuration_xlarge_5));
+                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getInteger(R.integer.configuration_xlarge_vertical) : (int) context.getResources().getInteger(R.integer.configuration_xlarge_vertical));
                     }
 
                 }

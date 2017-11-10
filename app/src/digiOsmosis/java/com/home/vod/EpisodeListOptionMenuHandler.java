@@ -34,9 +34,12 @@ import static player.utils.Util.IS_OFFLINE;
 /**
  * Created by MUVI on 9/25/2017.
  */
-
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
 public class EpisodeListOptionMenuHandler {
-
+    int screenSize;
     Activity activity;
 
     public EpisodeListOptionMenuHandler(Activity activity) {
@@ -46,7 +49,18 @@ public class EpisodeListOptionMenuHandler {
 
 
     public void createOptionMenu(Menu menu, PreferenceManager preferenceManager, LanguagePreference languagePreference) {
+        /////screen size///
 
+        if ((activity.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE){
+            screenSize=3;
+        }else if((activity.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL){
+            screenSize=2;
+        }else  if((activity.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL){
+
+            screenSize=1;
+        }else{
+            screenSize=0;
+        }
         MenuInflater inflater = activity.getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
@@ -101,11 +115,14 @@ public class EpisodeListOptionMenuHandler {
             profile_menu.setVisible(true);
 
 
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1"))
+          /*  if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1"))
+                favorite_menu.setVisible(true);
+            else
+                favorite_menu.setVisible(false);*/
+            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1") && (screenSize==3 || screenSize==0))
                 favorite_menu.setVisible(true);
             else
                 favorite_menu.setVisible(false);
-
             purchage_menu.setVisible(true);
 
             logout_menu.setVisible(true);

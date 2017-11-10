@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:background="@color/appBackgroundColor"
@@ -9,6 +9,12 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
+    <include
+        android:id="@+id/logo_image"
+        layout="@layout/logo_image"
+        />
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,7 +23,7 @@
         android:visibility="gone"
         android:id="@+id/noData"
         android:layout_below="@+id/toolbar"
-        >
+       >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,13 +37,28 @@
             android:gravity="center"
             android:textSize="@dimen/my_download_textsize"/>
     </RelativeLayout>
-    <include layout="@layout/line_layout" />
+    <include layout="@layout/line_layout"
+        android:layout_below="@+id/toolbar"
+
+        android:id="@+id/line_layout"
+        android:layout_marginLeft="@dimen/pre_order_button_margin"
+        android:layout_marginRight="@dimen/pre_order_button_margin"
+        android:layout_marginTop="@dimen/pre_order_button_margin"
+        android:layout_marginBottom="@dimen/pre_order_button_margin"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
     <GridView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/gridView"
+        android:layout_below="@+id/line_layout"
+        android:layout_alignLeft="@+id/line_layout"
         android:dividerHeight="@dimen/manage_device_padding"
-        android:layout_marginLeft="@dimen/my_download_margin"
-        android:layout_marginRight="@dimen/my_download_margin"
+        android:layout_marginBottom="@dimen/pre_order_button_margin"
+        android:layout_marginLeft="@dimen/pre_order_button_margin"
+        android:layout_marginRight="@dimen/pre_order_button_margin"
+        android:layout_marginTop="@dimen/pre_order_button_margin"
+        android:horizontalSpacing="@dimen/pre_order_button_margin"
+        android:verticalSpacing="@dimen/pre_order_button_margin"
         android:layout_gravity="center_horizontal" />
-</LinearLayout>
+</RelativeLayout>

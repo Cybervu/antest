@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.home.vod.Episode_Programme_Handler;
 import com.home.vod.R;
+import com.home.vod.Single_Part_Programme_Handler;
 import com.home.vod.activity.MovieDetailsActivity;
 import com.home.vod.activity.ShowWithEpisodesActivity;
 import com.home.vod.model.SingleItemModel;
@@ -158,10 +159,11 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
                     LogUtil.showLog("MUVI","HHH"+moviePermalink + movieTypeId);
                     if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
-                        final Intent detailsIntent = new Intent(mContext, MovieDetailsActivity.class);
+                       /* final Intent detailsIntent = new Intent(mContext, MovieDetailsActivity.class);
                         detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        mContext.startActivity(detailsIntent);
+                        mContext.startActivity(detailsIntent);*/
+                        new Single_Part_Programme_Handler(mContext).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
                         new Episode_Programme_Handler(mContext).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);

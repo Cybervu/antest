@@ -107,8 +107,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
         SectionListDataAdapter itemListDataAdapter = null;
 //            if (MainActivity.vertical == 1) {
 
-
-        if (Util.image_orentiation.get(i) == 1) {
+        if (Util.image_orentiation == 1) {
             float density = mContext.getResources().getDisplayMetrics().density;
             if (density >= 3.5 && density <= 4.0) {
                 itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);
@@ -153,14 +152,17 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
         Log.v("SUBHA","item size === "+ singleSectionItems.size());
 
         if (singleSectionItems.size() <= 0) {
+            itemRowHolder.btnMoreLayout.setVisibility(View.GONE);
             itemRowHolder.itemTitle.setVisibility(View.GONE);
             itemRowHolder.btnMore.setVisibility(View.GONE);
             // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
         } else  if (singleSectionItems.size() == 1) {
+            itemRowHolder.btnMoreLayout.setVisibility(View.VISIBLE);
             itemRowHolder.btnMore.setVisibility(View.GONE);
             // itemRowHolder.recycler_view_list.setVisibility(View.GONE);
 
         }else{
+            itemRowHolder.btnMoreLayout.setVisibility(View.VISIBLE);
             itemRowHolder.btnMore.setVisibility(View.VISIBLE);
             // itemRowHolder.recycler_view_list.setVisibility(View.VISIBLE);
 
@@ -255,6 +257,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
         protected Button btnMore;
         private SliderLayout mDemoSlider;
         private RelativeLayout mDemoSliderLayout;
+        private RelativeLayout btnMoreLayout;
 
         public ItemRowHolder(View view) {
             super(view);
@@ -262,6 +265,8 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
             this.itemTitle = (TextView) view.findViewById(R.id.itemTitle);
             this.recycler_view_list = (RecyclerView) view.findViewById(R.id.featureContent);
             this.btnMore= (Button) view.findViewById(R.id.btnMore);
+            this.btnMoreLayout= (RelativeLayout) view.findViewById(R.id.btnMoreLayout);
+
             FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.fonts),this.btnMore);
 
 /*

@@ -28,10 +28,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidquery.AQuery;
+import com.crashlytics.android.Crashlytics;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -81,6 +83,7 @@ import com.home.apisdk.apiModel.SocialAuthOutputModel;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.LoginHandler;
+import com.home.vod.LoginUIBackgroundHandler;
 import com.home.vod.MonetizationHandler;
 import com.home.vod.ProgramPlayerIntentHandler;
 import com.home.vod.R;
@@ -111,6 +114,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import io.fabric.sdk.android.Fabric;
 import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
 import player.activity.MyLibraryPlayer;
@@ -185,6 +189,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         , AsyncGmailReg.AsyncGmailListener {
 
 
+    RelativeLayout mainLayout;
+    private ScrollView loginScrollView ;
+    private LinearLayout loginParentLayout;
     /*subtitle-------------------------------------*/
     public static Activity loginA;
     LoginHandler loginHandler;
@@ -327,10 +334,15 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     finish();
                                     overridePendingTransition(0, 0);
                                 } else {
-                                    Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                                    in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(in);
+                                    if (Util.favorite_clicked == true){
+                                        Intent in = new Intent();
+                                        setResult(Activity.RESULT_OK,in);
+                                    }else {
+                                        Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                                        in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(in);
+                                    }
                                     finish();
                                 }
                             }
@@ -1114,12 +1126,18 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         /*********fb****/
         FacebookSdk.sdkInitialize(getApplicationContext());
         /*********fb****/
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         setContentView(R.layout.activity_login);
+        mainLayout = (RelativeLayout) findViewById(R.id.mainLayout);
+        loginScrollView = (ScrollView) findViewById(R.id.loginScrollView);
+        loginParentLayout = (LinearLayout) findViewById(R.id.loginParentLayout);
+        LoginUIBackgroundHandler loginUIBackgroundHandler = new LoginUIBackgroundHandler(this);
+        loginUIBackgroundHandler.handleBackgroundOfLayout("https://sampledesign.muvi.com/Login.jpg",mainLayout,loginScrollView,loginParentLayout);
         loginA = this;
         languagePreference = LanguagePreference.getLanguagePreference((this));
         BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
@@ -2584,9 +2602,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     @Override
     public void onBackPressed() {
-//        if (asynValidateUserDetails!=null){
-//            asynValidateUserDetails.cancel(true);
-//        }
+
 
         if (asynCheckFbUserDetails != null) {
             asynCheckFbUserDetails.cancel(true);
@@ -2600,6 +2616,13 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //        if (asyncReg!=null){
 //            asyncReg.cancel(true);
 //        }
+
+        if (getIntent().getStringExtra("from") != null) {
+            Log.v("SUBHA","from === ");
+            Intent intent = new Intent();
+            setResult(RESULT_OK,intent);
+        }
+
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -3834,11 +3857,16 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         }
 
                     } else {
+                        if (Util.favorite_clicked == true){
+                            Intent in = new Intent();
+                            setResult(Activity.RESULT_OK,in);
+                        }else {
+                            Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(in);
+                        }
 
-                        Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(in);
 
                         onBackPressed();
                     }
@@ -4711,10 +4739,16 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         finish();
                         overridePendingTransition(0, 0);
                     } else {
-                        Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                        in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(in);
+                        if (Util.favorite_clicked == true){
+                            Intent in = new Intent();
+                            setResult(Activity.RESULT_OK,in);
+                        }else {
+                            Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(in);
+                        }
+
                         finish();
                     }
                 }
@@ -5327,6 +5361,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
             loginHandler.sendBroadCast();
 
+//            loginHandler.sendBroadCast();
 
             preferenceManager.setLogInStatusToPref("1");
             preferenceManager.setUserIdToPref(gmailLoginOutput.getId());
@@ -5337,8 +5372,10 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             preferenceManager.setIsSubscribedToPref(Integer.toString(gmailLoginOutput.getIsSubscribed()));
             preferenceManager.setLoginHistIdPref(gmailLoginOutput.getLogin_history_id());
 
-            playerModel.setEmailId(gmailLoginOutput.getEmail());
-            playerModel.setUserId(gmailLoginOutput.getId());
+            if (playerModel!=null) {
+                playerModel.setEmailId(gmailLoginOutput.getEmail());
+                playerModel.setUserId(gmailLoginOutput.getId());
+            }
             /*Date todayDate = new Date();
             String todayStr = new SimpleDateFormat("yyyy-MM-dd").format(todayDate);
             editor.putString("date", todayStr.trim());
@@ -5404,11 +5441,16 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 }*/
                                 onBackPressed();
                             } else {
+                                if (Util.favorite_clicked == true){
+                                    Intent in = new Intent();
+                                    setResult(Activity.RESULT_OK,in);
+                                }else {
+                                    Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                                    in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(in);
+                                }
 
-                                Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                                in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(in);
                                 onBackPressed();
                             }
                         }

@@ -43,6 +43,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.cast.MediaTrack;
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
@@ -100,6 +101,7 @@ import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.ResizableCustomView;
 import com.home.vod.util.Util;
 
+import io.fabric.sdk.android.Fabric;
 import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
 import player.activity.Player;
@@ -645,7 +647,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Fabric.with(this, new Crashlytics());
 
         setContentView(R.layout.details_layout);
         playerModel = new Player();

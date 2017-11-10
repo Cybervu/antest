@@ -159,7 +159,12 @@
                     android:orientation="vertical"
                     android:paddingTop="@dimen/layout2_padding_top"
                     android:paddingLeft="@dimen/layout_padding_left"
-                    android:paddingRight="@dimen/layout_padding_right">
+                    android:paddingRight="@dimen/layout_padding_right"
+                    android:layout_marginLeft="@dimen/layout_padding_left"
+                    android:layout_marginRight="@dimen/layout_padding_left"
+                    android:layout_marginTop="25dp"
+                    android:padding="@dimen/profile_padding"
+                    android:layout_centerHorizontal="true">
 
                     <EditText
                         android:id="@+id/editProfileNameEditText"
@@ -170,9 +175,11 @@
                         android:layout_centerHorizontal="true"
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜáíóúñÑñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜãÃÐðÊËÈıÍÎÏÌÓßÔÒÒõÕµþÞÚÛÙýÝ "
                         android:drawablePadding="@dimen/Login_drawing_padding"
-                        android:padding="@dimen/login_padding_bottom"
-                        android:textColor="@color/editTextColor"
-                        android:textColorHint="@color/hint_color"
+                        android:padding="@dimen/profile_padding"
+                        android:drawableLeft="@drawable/contact_name"
+
+                        android:textColor="@color/profile_editTextColor"
+                        android:textColorHint="@color/profile_hint_color"
                         android:textSize="@dimen/edit_text_size" />
 
                     <EditText
@@ -181,18 +188,21 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_below="@+id/editProfileNameEditText"
-                        android:layout_marginTop="@dimen/forgotlayout_margin"
+                        android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
+                        android:drawablePadding="@dimen/Login_drawing_padding"
+
                         android:clickable="false"
                         android:editable="false"
                         android:ems="10"
                         android:focusable="false"
+                        android:drawableLeft="@drawable/contact_mail"
                         android:focusableInTouchMode="false"
                         android:hint="Email Id"
                         android:imeOptions="actionNext"
                         android:inputType="textEmailAddress"
-                        android:padding="@dimen/login_padding_bottom"
-                        android:textColor="@color/editTextColor"
-                        android:textColorHint="@color/hint_color"
+                        android:padding="@dimen/profile_padding"
+                        android:textColor="@color/profile_editTextColor"
+                        android:textColorHint="@color/profile_hint_color"
                         android:textSize="@dimen/edit_text_size" />
 
                     <Spinner
@@ -225,14 +235,16 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/countrySpinner"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/login_maring_top"
+                        android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
                         android:drawablePadding="@dimen/Login_drawing_padding"
                         android:inputType="textPassword"
-                        android:padding="@dimen/profile_new_passwd_editText_padding"
-                        android:textColor="@color/editTextColor"
-                        android:textColorHint="@color/hint_color"
+                        android:padding="@dimen/profile_padding"
+                        android:drawableLeft="@drawable/profile_pwd"
+
+                        android:textColor="@color/profile_editTextColor"
+                        android:textColorHint="@color/profile_hint_color"
                         android:textSize="@dimen/edit_text_size"
-                        android:visibility="gone" />
+                        android:visibility="visible" />
 
                     <EditText
                         android:id="@+id/editConfirmPassword"
@@ -243,19 +255,20 @@
                         android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
                         android:drawablePadding="@dimen/Login_drawing_padding"
                         android:inputType="textPassword"
-                        android:padding="@dimen/profile_new_passwd_editText_padding"
-                        android:textColor="@color/editTextColor"
-                        android:textColorHint="@color/hint_color"
+                        android:padding="@dimen/profile_padding"
+                        android:drawableLeft="@drawable/profile_con_pwd"
+                        android:textColor="@color/profile_editTextColor"
+                        android:textColorHint="@color/profile_hint_color"
                         android:textSize="@dimen/changepas_edittest"
-                        android:visibility="gone" />
+                        android:visibility="visible" />
 
                     <Button
                         android:id="@+id/update_profile"
                         android:layout_width="200dp"
                         android:layout_height="@dimen/changepas_height"
                         android:layout_below="@+id/editConfirmPassword"
-                        android:layout_marginTop="@dimen/login_maring_top"
-                        android:background="@drawable/button_radious"
+                        android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
+                        android:background="@drawable/my_button"
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
@@ -269,7 +282,7 @@
                         android:layout_height="@dimen/changepas_height"
                         android:layout_below="@+id/editConfirmPassword"
                         android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
-                        android:background="@drawable/button_radious"
+                        android:background="@drawable/my_button"
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
@@ -279,11 +292,11 @@
 
                     <Button
                         android:id="@+id/manage_devices"
-                        android:layout_width="match_parent"
+                        android:layout_width="200dp"
                         android:layout_height="@dimen/changepas_height"
                         android:layout_below="@+id/editConfirmPassword"
                         android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
-                        android:background="@drawable/button_radious"
+                        android:background="@drawable/my_button"
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
@@ -294,6 +307,76 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/layout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/transparent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/Login_drawing_padding">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/bannerImageView"
+                            android:layout_width="@dimen/submit_width_size"
+                            android:layout_height="@dimen/fragmentlogoimg_height"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true"
+                            android:background="#ffffff"
+                            android:padding="@dimen/pop_up_view_height"
+                            android:scaleType="fitXY"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/edit"
+                            android:layout_width="@dimen/changepas_height"
+                            android:layout_height="@dimen/changepas_height"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginEnd="@dimen/profile_image_view_margin_end"
+                            android:layout_marginRight="@dimen/forgotlayout_margin"
+                            android:layout_marginTop="@dimen/profile_image_view_margin_top"
+                            android:padding="@dimen/pop_up_view_height"
+                            android:scaleType="fitXY"
+                            android:visibility="visible" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/name_of_user"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/name_user_margin_bottom"
+                        android:layout_marginTop="@dimen/forgotlayout_margin"
+                        android:text=""
+                        android:textAllCaps="false"
+                        android:textColor="@color/textColor"
+                        android:textSize="@dimen/user_text_size"
+                        android:textStyle="bold" />
+
+
+                    <ImageView
+                        android:id="@+id/iconImageView"
+                        android:layout_width="@dimen/forgot_logo_height"
+                        android:layout_height="@dimen/homefrag_height"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:padding="@dimen/pop_up_view_height"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/logo"
+                        android:visibility="gone" />
+
+
+                </LinearLayout>
 
             </RelativeLayout>
         </LinearLayout>

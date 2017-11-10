@@ -60,6 +60,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidquery.AQuery;
+import com.crashlytics.android.Crashlytics;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import com.google.ads.interactivemedia.v3.api.AdDisplayContainer;
@@ -152,6 +153,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import io.fabric.sdk.android.Fabric;
 import player.activity.AdPlayerActivity;
 import player.activity.DataConsumptionService;
 import player.activity.Player;
@@ -1242,11 +1244,13 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_program_player);
         Log.v("NiharMishra", "OnCreate" + questions);
 
         languagePreference = LanguagePreference.getLanguagePreference(this);
-        playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+        playerModel = (Player) getIntent().getSerializableExtra("" +
+                "");
 
 
         SubTitleName = new ArrayList<>();
@@ -4829,7 +4833,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
                                     //writefilepath();
 //                                dbHelper.deleteRecord(audio);
-                                    download_layout.setVisibility(View.GONE);
+                                    download_layout.setVisibility(View.INVISIBLE);
                                 }
 
                             }
@@ -5921,6 +5925,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                     Dwonload_Complete_Msg = "";
                     if (statusCode == 200) {
 
+                        Log.v("SUBHASHREE","Dwonload_Complete_Msg ==== "+Dwonload_Complete_Msg);
+
                         Dwonload_Complete_Msg = myJson.optString("download_complete_msg");
 
                         if (Dwonload_Complete_Msg.trim().equals(""))
@@ -5938,9 +5944,35 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
 
                         DB1.execSQL(query1);
+                    }else{
+
+                        if (Dwonload_Complete_Msg.equals("") || responseStr.contains("html")){
+                            Dwonload_Complete_Msg = "Your video has been downloaded successfully.";
+                            SQLiteDatabase DB1 = ProgramPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
+
+
+                            String query1 = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET server_current_time = '" + 0 + "' ," +
+                                    "watch_period = '0',access_period = '" + -1 + "' WHERE download_id = '" + f_url[0].trim() + "'";
+
+
+                            DB1.execSQL(query1);
+                        }
                     }
                 }
             } catch (Exception e) {
+                Log.v("SUBHASHREE","e "+e.toString() );
+
+                if (Dwonload_Complete_Msg.equals("") || responseStr.contains("html")){
+                    Dwonload_Complete_Msg = "Your video has been downloaded successfully.";
+                    SQLiteDatabase DB1 = ProgramPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
+
+
+                    String query1 = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET server_current_time = '" + 0 + "' ," +
+                            "watch_period = '0',access_period = '" + -1 + "' WHERE download_id = '" + f_url[0].trim() + "'";
+
+
+                    DB1.execSQL(query1);
+                }
                 statusCode = 0;
             }
 
@@ -5949,8 +5981,11 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
         @Override
         protected void onPostExecute(String file_url) {
+
             Intent intent = new Intent(ProgramPlayerActivity.this, PopUpService.class);
             intent.putExtra("msg", Dwonload_Complete_Msg);
+            Log.v("SUBHASHREE","Download msg ===== "+Dwonload_Complete_Msg );
+
             startService(intent);
         }
     }

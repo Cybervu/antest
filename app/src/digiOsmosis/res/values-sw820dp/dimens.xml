@@ -208,6 +208,7 @@
     <dimen name="user_review_textsize">14sp</dimen>v
     <dimen name="downloadwidth">200dp</dimen>
     <dimen name="button_padding">6dp</dimen>
+    <dimen name="loginImageViewMarging_top1">30dp</dimen>
     <dimen name="sidemenu_padding_bottom">10dp</dimen>
 
 </resources>

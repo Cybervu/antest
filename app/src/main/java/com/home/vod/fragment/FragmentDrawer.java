@@ -3,8 +3,12 @@ package com.home.vod.fragment;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -210,6 +214,20 @@ public class FragmentDrawer extends Fragment {
                 toolbar.setAlpha(1 - slideOffset / 2);
             }
         };
+
+
+        mDrawerToggle.setDrawerIndicatorEnabled(false);
+        mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDrawerLayout.openDrawer(GravityCompat.START);
+//                navOpen();
+
+            }
+        });
+        Drawable d = ResourcesCompat.getDrawable(getResources(), R.drawable.nav_drawer, null);
+        d = DrawableCompat.wrap(d);
+        mDrawerToggle.setHomeAsUpIndicator(d);
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.post(new Runnable() {

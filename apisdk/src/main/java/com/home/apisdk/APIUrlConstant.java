@@ -298,13 +298,15 @@ public class APIUrlConstant {
 
     public static final String GetSubCategoryList = "getSubCategoryList";
 
-
+    public static String GET_CATEGORY_LIST_URL = "getCategoryList";
 
     public static String getGetSubCategoryList() {
         return GetSubCategoryList;
     }
 
-
+    public static String getGetCategoryListUrl() {
+        return BASE_URl + GET_CATEGORY_LIST_URL;
+    }
 
     public static String getGetAppMenu() {
         return BASE_URl + GetAppMenu;

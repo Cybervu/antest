@@ -22,6 +22,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+
+import com.crashlytics.android.Crashlytics;
+import com.home.vod.EpisodeListOptionMenuHandler;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -51,7 +54,10 @@ import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.LogoutInput;
 import com.home.vod.Episode_Programme_Handler;
+import com.home.vod.MyDownloadIntentHandler;
 import com.home.vod.R;
+import com.home.vod.SearchIntentHandler;
+import com.home.vod.Single_Part_Programme_Handler;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -74,6 +80,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import io.fabric.sdk.android.Fabric;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -169,7 +177,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
     //for no internet
 
     private RelativeLayout noInternetConnectionLayout;
-
+    private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     //firsttime load
     boolean firstTime = false;
 
@@ -221,6 +229,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_view_more);
         languagePreference = LanguagePreference.getLanguagePreference(this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -237,7 +246,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
             sectionId = getIntent().getStringExtra("SectionId");
 
         }
-
+        episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
         isLogin = preferenceManager.getLoginFeatureFromPref();
         sectionTitle = (TextView) findViewById(R.id.sectionTitle);
         FontUtls.loadFont(ViewMoreActivity.this, getResources().getString(R.string.fonts),sectionTitle);
@@ -324,7 +333,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 } else {
 
                     if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
-                        final Intent movieDetailsIntent = new Intent(ViewMoreActivity.this, MovieDetailsActivity.class);
+                       /* final Intent movieDetailsIntent = new Intent(ViewMoreActivity.this, MovieDetailsActivity.class);
                         movieDetailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
                         movieDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         runOnUiThread(new Runnable() {
@@ -333,7 +342,9 @@ public class ViewMoreActivity extends AppCompatActivity implements
                                 startActivity(movieDetailsIntent);
                             }
                         });
+*/
 
+                        new Single_Part_Programme_Handler(ViewMoreActivity.this).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
 
                     } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
                         new Episode_Programme_Handler(ViewMoreActivity.this).handleIntent(PERMALINK_INTENT_KEY,moviePermalink);
@@ -1147,28 +1158,32 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 gridView.setGravity(Gravity.CENTER_HORIZONTAL);
                 if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getDimension(R.dimen.configuration_large_3) : (int) getResources().getDimension(R.dimen.configuration_large_3));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_large_horizontal) : (int) getResources().getInteger(R.integer.configuration_large_horizontal));
                     } else {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getDimension(R.dimen.configuration_xlarge_4) : (int) getResources().getDimension(R.dimen.configuration_xlarge_4));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_large_vertical) : (int) getResources().getInteger(R.integer.configuration_large_vertical));
                     }
 
                 } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getDimension(R.dimen.configuration_normal_2) : (int) getResources().getDimension(R.dimen.configuration_normal_2));
+                        Toast.makeText(ViewMoreActivity.this,"call 1 === "+videoWidth,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ViewMoreActivity.this,"call 1 === "+videoHeight,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ViewMoreActivity.this,"call 1 === ",Toast.LENGTH_SHORT).show();
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_normal_horizontal) : (int) getResources().getInteger(R.integer.configuration_normal_horizontal));
                     } else {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getDimension(R.dimen.configuration_large_3) : (int) getResources().getDimension(R.dimen.configuration_large_3));
+                        Toast.makeText(ViewMoreActivity.this,"call 2",Toast.LENGTH_SHORT).show();
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_normal_vertical) : (int) getResources().getInteger(R.integer.configuration_normal_vertical));
                     }
 
                 } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
 
-                    gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getDimension(R.dimen.configuration_normal_2) : (int) getResources().getDimension(R.dimen.configuration_normal_2));
+                    gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_small_horizontal) : (int) getResources().getInteger(R.integer.configuration_small_horizontal));
 
 
                 } else {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getDimension(R.dimen.configuration_xlarge_4) : (int) getResources().getDimension(R.dimen.configuration_xlarge_4));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_xlarge_horizontal) : (int) getResources().getInteger(R.integer.configuration_xlarge_horizontal));
                     } else {
-                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getDimension(R.dimen.configuration_xlarge_5) : (int) getResources().getDimension(R.dimen.configuration_xlarge_5));
+                        gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_xlarge_vertical) : (int) getResources().getInteger(R.integer.configuration_xlarge_vertical));
                     }
 
                 }
@@ -1245,97 +1260,11 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        /***************chromecast**********************/
 
-        if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1")) {
-            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
-                    R.id.media_route_menu_item);
-            mediaRouteMenuItem.setVisible(true);
+        id = preferenceManager.getUseridFromPref();
+        email = preferenceManager.getEmailIdFromPref();
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
 
-        } else {
-            mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
-                    R.id.media_route_menu_item);
-            mediaRouteMenuItem.setVisible(false);
-        }
-        /***************chromecast**********************/
-
-        MenuItem item, item1, item2, item3, item4, item5, item6,item7;
-        item = menu.findItem(R.id.action_filter);
-        item.setVisible(false);
-        String loggedInStr = preferenceManager.getLoginStatusFromPref();
-        String id = preferenceManager.getUseridFromPref();
-        String email = preferenceManager.getEmailIdFromPref();
-        if (preferenceManager.getLanguageListFromPref().equals("1"))
-            (menu.findItem(R.id.menu_item_language)).setVisible(false);
-
-        if (loggedInStr != null) {
-            item4 = menu.findItem(R.id.action_login);
-            item4.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
-            item4.setVisible(false);
-            item5 = menu.findItem(R.id.action_register);
-            item5.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
-            item5.setVisible(false);
-            item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
-            item1.setVisible(true);
-            item2 = menu.findItem(R.id.action_purchage);
-            item2.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
-            item2.setVisible(true);
-            item7 = menu.findItem(R.id.menu_item_favorite);
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1")) {
-                item7.setVisible(true);
-            } else {
-                item7.setVisible(false);
-
-            }
-            item3 = menu.findItem(R.id.action_logout);
-            item3.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
-            item3.setVisible(true);
-
-            item6 = menu.findItem(R.id.action_mydownload);
-            item6.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD));
-            if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
-                    .trim()).equals("1")) {
-                item6.setVisible(true);
-            }else{
-                item6.setVisible(false);
-
-            }
-
-        } else if (loggedInStr == null) {
-            item4 = menu.findItem(R.id.action_login);
-            item4.setTitle(languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
-
-
-            item5 = menu.findItem(R.id.action_register);
-            item5.setTitle(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
-            if (isLogin == 1) {
-                item4.setVisible(true);
-                item5.setVisible(true);
-
-            } else {
-                item4.setVisible(false);
-                item5.setVisible(false);
-
-            }
-            item1 = menu.findItem(R.id.menu_item_profile);
-            item1.setTitle(languagePreference.getTextofLanguage(PROFILE, DEFAULT_PROFILE));
-            item1.setVisible(false);
-            item2 = menu.findItem(R.id.action_purchage);
-            item2.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
-            item2.setVisible(false);
-            item3 = menu.findItem(R.id.action_logout);
-            item3.setTitle(languagePreference.getTextofLanguage(LOGOUT, DEFAULT_LOGOUT));
-            item3.setVisible(false);
-            item6 = menu.findItem(R.id.action_mydownload);
-            item6.setTitle(languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE));
-            item6.setVisible(false);
-            item7 = menu.findItem(R.id.menu_item_favorite);
-            item7.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE,DEFAULT_MY_FAVOURITE));
-            item7.setVisible(false);
-        }
         return true;
     }
     /*chromecast-------------------------------------*/
@@ -1726,13 +1655,22 @@ public class ViewMoreActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
-                final Intent searchIntent = new Intent(ViewMoreActivity.this, SearchActivity.class);
+                final Intent searchIntent = new SearchIntentHandler(ViewMoreActivity.this).handleSearchIntent();
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
                 // Not implemented here
                 return false;
             case R.id.action_filter:
 
+                // Not implemented here
+                return false;
+            case R.id.menu_item_favorite:
+
+                Intent favoriteIntent = new Intent(this, FavoriteActivity.class);
+//                favoriteIntent.putExtra("EMAIL",email);
+//                favoriteIntent.putExtra("LOGID",id);
+                favoriteIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(favoriteIntent);
                 // Not implemented here
                 return false;
             case R.id.action_login:
@@ -1773,6 +1711,15 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 profileIntent.putExtra("EMAIL", email);
                 profileIntent.putExtra("LOGID", id);
                 startActivity(profileIntent);
+                // Not implemented here
+                return false;
+
+            case R.id.action_mydownload:
+                final Intent mydownload = new MyDownloadIntentHandler(ViewMoreActivity.this).handleDownloadIntent();
+                mydownload.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(mydownload);
+               /* Intent mydownload = new Intent(MainActivity.this, MyDownloads.class);
+                startActivity(mydownload);*/
                 // Not implemented here
                 return false;
             case R.id.action_purchage:
