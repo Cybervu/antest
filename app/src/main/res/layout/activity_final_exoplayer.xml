@@ -46,19 +46,14 @@
                             android:layout_centerVertical="true"
                             android:indeterminateDrawable="@drawable/large_progress_bar"
                             android:indeterminateDuration="1000"
-                            android:visibility="visible"></ProgressBar>
+                            android:visibility="visible">
+
+                        </ProgressBar>
 
 
                         <ImageButton
                             android:id="@+id/latest_center_play_pause"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:background="#00000000"
-                            android:src="@drawable/center_ic_media_pause"
-                            android:visibility="gone" />
-
+                            style="@style/final_exoplayer_imageButton" />
 
 
                         <LinearLayout
@@ -75,54 +70,33 @@
 
                             <TextView
                                 android:id="@+id/emailAddressTextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="#80ffffff"></TextView>
+                                style="@style/final_exoplayer_textview">
+
+                            </TextView>
 
                             <TextView
                                 android:id="@+id/ipAddressTextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="#80ffffff"></TextView>
+                                style="@style/final_exoplayer_textview">
+
+                            </TextView>
 
                             <TextView
                                 android:id="@+id/dateTextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="#80ffffff"></TextView>
+                                style="@style/final_exoplayer_textview">
+
+                            </TextView>
 
                         </LinearLayout>
 
                         <TextView
                             android:id="@+id/current_time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginBottom="38dp"
-                            android:text="wwwwwwwwww"
-                            android:textColor="#ffffff"
-                            android:textSize="@dimen/current_time_textsize"
-                            android:visibility="gone" />
+                            style="@style/final_exoplayer_textview2" />
 
 
                         <TextView
                             android:id="@+id/offLine_subtitleText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_gravity="bottom|center_horizontal"
-                            android:layout_marginBottom="@dimen/offline_margin_bottom"
-                            android:ellipsize="middle"
-                            android:gravity="center"
-                            android:shadowColor="#000"
-                            android:shadowDx="3"
-                            android:shadowDy="3"
-                            android:shadowRadius="1"
-                            android:text=""
-                            android:textSize="@dimen/offLine_subtitleText_textsize" />
+                            style="@style/exoplayer_offLine_subtitleText"
+                            android:text="" />
                         <!-- <TextView
                              android:id="@+id/detais_text"
                              android:layout_width="wrap_content"
@@ -155,11 +129,7 @@
 
                     <ImageButton
                         android:id="@+id/back"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/marginLeft15dp"
-                        android:background="@drawable/ic_back" />
+                        style="@style/exoplayer_imagebutton_back" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -184,11 +154,7 @@
 
                         <ImageView
                             android:id="@+id/subtitle_change_btn"
-                            android:layout_width="@dimen/subtitle_change_btn_width"
-                            android:layout_height="@dimen/subtitle_change_btn_height"
-                            android:layout_marginRight="@dimen/marginRight20dp"
-                            android:background="@drawable/cc_button_radious"
-                            android:src="@drawable/subtitle_image" />
+                            style="@style/exoplayer_subtitle_change_btn" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -201,8 +167,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:background="#00000000"
-                    android:orientation="vertical"
                     android:gravity="center_vertical"
+                    android:orientation="vertical"
                     android:visibility="gone">
 
                     <LinearLayout
@@ -215,46 +181,25 @@
                         android:orientation="horizontal">
 
                         <ImageButton
-                            android:layout_marginLeft="@dimen/marginleft10dp"
                             android:id="@+id/center_play_pause"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:background="#00000000"
+                            style="@style/final_exoplayer_imageButton"
+                            android:layout_marginLeft="@dimen/marginleft10dp"
                             android:src="@drawable/ic_media_pause"
                             android:visibility="visible" />
 
 
-
                         <SeekBar
                             android:id="@+id/progress"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="10"
-                            android:progressDrawable="@drawable/seekbar"
-                            android:thumb="@drawable/thumb_drawable" />
+                            style="@style/exoplayer_seekbar" />
 
                         <TextView
                             android:id="@+id/total_time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:gravity="center"
-                            android:text=""
-                            android:textColor="#ffffff"
-                            android:textSize="@dimen/totaltme_text_size" />
+                            style="@style/exoplayer_total_time_textview"
+                            android:text="" />
 
                         <ImageView
                             android:id="@+id/compress_expand"
-                            android:layout_width="@dimen/compress_expand_height"
-                            android:layout_height="@dimen/compress_expand_width"
-                            android:padding="@dimen/padding15dp"
-                            android:layout_marginRight="@dimen/marginright5dp"
-                            android:src="@drawable/ic_media_fullscreen_stretch"
-                            android:gravity="center"
-                            android:visibility="visible" />
+                            style="@style/exoplayer_compress_expand_imageview" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -279,35 +224,19 @@
 
                     <TextView
                         android:id="@+id/videoTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@+id/relativeOverlayLayout"
-                        android:layout_marginLeft="@dimen/marginleft10dp"
-                        android:layout_marginTop="@dimen/margintop8dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text=""
-                        android:textColor="@color/videoTitleTextColor"
-                        android:textSize="@dimen/videotitle_text_size"
-                        android:textStyle="bold" />
+                        style="@style/videoTitle_textview"
+                        android:layout_above="@+id/relativeOverlayLayout" />
 
                     <RelativeLayout
                         android:id="@+id/downloadRelativeLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/textlinearlayout"
-
                         android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/downloadImageView"
-                            android:layout_width="@dimen/downloadimg_width"
-                            android:layout_height="@dimen/downloadimg_height"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/marginRight20dp"
-                            android:layout_marginTop="@dimen/margintop8dp"
-                            android:src="@drawable/download_black"
-                            android:visibility="visible" />
+                            style="@style/downloadImageView" />
 
                         <ProgressBar
                             android:id="@+id/progressBar"
@@ -324,33 +253,18 @@
 
                         <TextView
                             android:id="@+id/percentage"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/exoplayer_percentageTextview"
                             android:layout_alignEnd="@+id/progressBar"
-                            android:layout_alignRight="@+id/progressBar"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="@dimen/marginright10dp"
-                            android:gravity="center"
-                            android:text="0%"
-                            android:textColor="@color/border_color"
-                            android:textSize="@dimen/percentage_text_size"
-                            android:visibility="gone" />
+                            android:layout_alignRight="@+id/progressBar" />
                     </RelativeLayout>
                 </LinearLayout>
 
 
                 <TextView
                     android:id="@+id/GenreTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    style="@style/GenreTextView"
                     android:layout_below="@+id/videoTitle"
-                    android:layout_marginBottom="0dp"
-                    android:layout_marginLeft="@dimen/marginleft10dp"
-                    android:layout_marginRight="@dimen/marginright10dp"
-                    android:layout_marginTop="@dimen/margintop8dp"
-                    android:text=""
-                    android:textColor="@color/nav_drawer_lineColor"
-                    android:textSize="@dimen/genre_textsize" />
+                    android:text="" />
 
 
                 <LinearLayout
@@ -368,28 +282,16 @@
 
                     <TextView
                         android:id="@+id/videoDurationTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/videoDurationTextView"
                         android:layout_below="@+id/videoGenreTextView"
-                        android:layout_marginLeft="@dimen/marginleft10dp"
-                        android:layout_marginTop="@dimen/margintop8dp"
-                        android:text=""
-                        android:textColor="@color/nav_drawer_lineColor"
-                        android:textSize="@dimen/genre_textsize" />
+                        android:text="" />
 
                     <TextView
-                        android:id="@+id/videoCensorRatingTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/videocensorratingtextview"
+                        style="@style/videoCensorRatingTextView"
                         android:layout_below="@+id/videoGenreTextView"
                         android:layout_marginLeft="@dimen/marginleft10dp"
-                        android:layout_marginTop="@dimen/margintop8dp"
-                        android:background="@drawable/button_bg_orange"
-                        android:paddingLeft="1dp"
-                        android:paddingRight="@dimen/padding_right4dp"
-                        android:text=""
-                        android:textColor="@color/nav_drawer_lineColor"
-                        android:textSize="@dimen/genre_textsize" />
+                        android:text="" />
 
                     <TextView
                         android:id="@+id/videoCensorRatingTextView1"

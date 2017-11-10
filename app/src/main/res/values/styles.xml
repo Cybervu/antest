@@ -242,6 +242,186 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:divider">@color/transparent</item>
+    </style>
+
+    <style name="download_popup_button">
+        <item name="android:layout_width">@dimen/download_popup_btn_width</item>
+        <item name="android:layout_height">@dimen/download_popup_btn_height</item>
+        <item name="android:layout_marginRight">@dimen/ppv_margin</item>
+        <item name="android:background">@drawable/button_radious</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textSize">@dimen/trailer_btn_text_size</item>
+    </style>
+
+    <style name="download_resolution_list_radioButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/resolutiontext_height</item>
+        <item name="android:button">@drawable/radiobutton_style</item>
+        <item name="android:textColor">@color/downloadresolutionTextColor</item>
+        <item name="android:textSize">@dimen/login_newuser_size</item>
+    </style>
+
+    <style name="filter_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/button_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+    </style>
+
+    <style name="final_exoplayer_imageButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">#00000000</item>
+        <item name="android:src">@drawable/center_ic_media_pause</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="final_exoplayer_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#80ffffff</item>
+    </style>
+
+    <style name="final_exoplayer_textview2">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_marginBottom">@dimen/payment_margin_textview_top</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">@dimen/current_time_textsize</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="exoplayer_offLine_subtitleText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_gravity">bottom|center_horizontal</item>
+        <item name="android:layout_marginBottom">@dimen/offline_margin_bottom</item>
+        <item name="android:ellipsize">middle</item>
+        <item name="android:gravity">center</item>
+        <item name="android:shadowColor">#000</item>
+        <item name="android:shadowDx">3</item>
+        <item name="android:shadowDy">3</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:textSize">@dimen/offLine_subtitleText_textsize</item>
+    </style>
+
+    <style name="exoplayer_imagebutton_back">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginLeft">@dimen/marginLeft15dp</item>
+        <item name="android:background">@drawable/ic_back</item>
+    </style>
+
+    <style name="exoplayer_subtitle_change_btn">
+        <item name="android:layout_width">@dimen/subtitle_change_btn_width</item>
+        <item name="android:layout_height">@dimen/subtitle_change_btn_height</item>
+        <item name="android:layout_marginRight">@dimen/marginRight20dp</item>
+        <item name="android:background">@drawable/cc_button_radious</item>
+        <item name="android:src">@drawable/subtitle_image</item>
+    </style>
+
+    <style name="exoplayer_seekbar">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_weight">10</item>
+        <item name="android:progressDrawable">@drawable/seekbar</item>
+        <item name="android:thumb">@drawable/thumb_drawable</item>
+    </style>
+
+    <style name="exoplayer_total_time_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">@dimen/ppv_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">@dimen/totaltme_text_size</item>
+    </style>
+
+    <style name="exoplayer_compress_expand_imageview">
+        <item name="android:layout_width">@dimen/compress_expand_height</item>
+        <item name="android:layout_height">@dimen/compress_expand_width</item>
+        <item name="android:layout_marginRight">@dimen/marginright5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/padding15dp</item>
+        <item name="android:src">@drawable/ic_media_fullscreen_stretch</item>
+        <item name="android:visibility">visible</item>
+    </style>
+
+    <style name="videoTitle_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/marginleft10dp</item>
+        <item name="android:layout_marginTop">@dimen/margintop8dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/videoTitleTextColor</item>
+        <item name="android:textSize">@dimen/videotitle_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="downloadImageView">
+        <item name="android:layout_width">@dimen/downloadimg_width</item>
+        <item name="android:layout_height">@dimen/downloadimg_height</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">@dimen/marginRight20dp</item>
+        <item name="android:layout_marginTop">@dimen/margintop8dp</item>
+        <item name="android:src">@drawable/download_black</item>
+        <item name="android:visibility">visible</item>
+    </style>
+
+    <style name="exoplayer_percentageTextview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginRight">@dimen/marginright10dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/border_color</item>
+        <item name="android:textSize">@dimen/percentage_text_size</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="GenreTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:layout_marginLeft">@dimen/marginleft10dp</item>
+        <item name="android:layout_marginRight">@dimen/marginright10dp</item>
+        <item name="android:layout_marginTop">@dimen/margintop8dp</item>
+        <item name="android:textColor">@color/nav_drawer_lineColor</item>
+        <item name="android:textSize">@dimen/genre_textsize</item>
+    </style>
+
+    <style name="videoDurationTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/marginleft10dp</item>
+        <item name="android:layout_marginTop">@dimen/margintop8dp</item>
+        <item name="android:textColor">@color/nav_drawer_lineColor</item>
+        <item name="android:textSize">@dimen/genre_textsize</item>
+    </style>
+
+    <style name="videoCensorRatingTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/marginleft10dp</item>
+        <item name="android:layout_marginTop">@dimen/margintop8dp</item>
+        <item name="android:background">@drawable/button_bg_orange</item>
+        <item name="android:paddingLeft">1dp</item>
+        <item name="android:paddingRight">@dimen/padding_right4dp</item>
+        <item name="android:textColor">@color/nav_drawer_lineColor</item>
+        <item name="android:textSize">@dimen/genre_textsize</item>
 
     </style>
+
 </resources>

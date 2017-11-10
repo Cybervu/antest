@@ -8,12 +8,8 @@
 
     <RadioButton
         android:id="@+id/selected_resolution_option"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:button="@drawable/radiobutton_style"
-        android:text="720p "
-        android:textColor="@color/downloadresolutionTextColor"
-        android:textSize="15dp" />
+        style="@style/download_resolution_list_radioButton"
+        android:text="720p " />
 
 
 </LinearLayout>
