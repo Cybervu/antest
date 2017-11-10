@@ -158,11 +158,6 @@
 
     <!--//**********profile picture*************//-->
 
-    <dimen name="profile_image_height">100dp</dimen>
-    <dimen name="profile_image_width">100dp</dimen>
-    <dimen name="profile_margin_right">20dp</dimen>
-    <dimen name="profile_padding_top">50dp</dimen>
-    <dimen name="layout2_padding_top">0dp</dimen>
 
     <dimen name="profile_padding">12dp</dimen>
     <dimen name="loginMarging_top">50dp</dimen>

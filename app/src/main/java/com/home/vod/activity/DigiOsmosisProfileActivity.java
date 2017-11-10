@@ -162,7 +162,6 @@ public class DigiOsmosisProfileActivity extends AppCompatActivity implements Get
     String Email_Id = "";
     TextView name_of_user;
     ProgressBarHandler pDialog;
-    LanguagePreference languagePreference;
     SideMenuHandler sideMenuHandler;
 
 
@@ -198,7 +197,6 @@ public class DigiOsmosisProfileActivity extends AppCompatActivity implements Get
     String Previous_Selected_Language = "";
     int prevPosition = 0;
     AlertDialog alert;
-    ProgressBarHandler pDialog;
 
     int index;
     String sucessMsg;

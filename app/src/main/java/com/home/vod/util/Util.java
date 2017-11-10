@@ -129,6 +129,7 @@ public class Util {
     public static String GOOGLE_FCM_TOKEN = "GOOGLE_FCM_TOKEN";
     public static String DEFAULT_GOOGLE_FCM_TOKEN = "0";
     public static boolean favorite_clicked = false;
+    public static int favPosition = -1;
 
     public static int check_for_subscription = 0;
 
@@ -679,6 +680,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, DETAILS_TITLE,DEFAULT_DETAILS_TITLE, "details_title",json);
         setTranslationLanguageToPref(languagePreference, BENEFIT_TITLE,DEFAULT_BENEFIT_TITLE, "benefit_title",json);
         setTranslationLanguageToPref(languagePreference, DIFFICULTY_TITLE,DEFAULT_DIFFICULTY_TITLE, "difficulty_title",json);
+        setTranslationLanguageToPref(languagePreference, REPETITION_TITLE,DEFAULT_REPETITION_TITLE, "repetition_title",json);
         setTranslationLanguageToPref(languagePreference, DURATION_TITLE,DEFAULT_DURATION_TITLE, "duration_title",json);
         setTranslationLanguageToPref(languagePreference, DIFFICULTY_TITLE,DEFAULT_DIFFICULTY_TITLE, "difficulty_title",json);
         setTranslationLanguageToPref(languagePreference, DETAIL_VIEW_MORE,DEFAULT_DETAIL_VIEW_MORE, "view_more",json);

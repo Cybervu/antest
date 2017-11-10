@@ -29,6 +29,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * This Class gives all the important content about movie/series such as story, poster, Release Date etc.
@@ -187,7 +189,29 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
 
                     if ((mainJson.has("custom_meta_data")) && mainJson.getString("custom_meta_data").trim() != null && !mainJson.getString("custom_meta_data").trim().isEmpty() && !mainJson.getString("custom_meta_data").trim().equals("null") && !mainJson.getString("custom_meta_data").trim().matches("")) {
                         JSONObject custom_meta_data = mainJson.getJSONObject("custom_meta_data");
+                        Iterator<String> iter = custom_meta_data.keys();
 
+                        HashMap<String,String> metadata  = new HashMap<>();
+
+                        while (iter.hasNext()) {
+                            String key = iter.next();
+                            try {
+                                Object value = custom_meta_data.get(key);
+                                if (key.equalsIgnoreCase("duration") || key.equalsIgnoreCase("repetition") || key.equalsIgnoreCase("difficulty_level")){
+
+                                }else{
+                                    String details = value.toString();
+                                    Log.v("Subhalaxmi", "duration setOnPreparedListener not started"+key);
+
+                                    metadata.put(key,details);
+                                }
+
+                            } catch (JSONException e) {
+                                // Something went wrong!
+                            }
+                        }
+
+                        contentDetailsOutput.setMetadata(metadata);
                         if ((custom_meta_data.has("duration")) && custom_meta_data.optString("duration").trim() != null && !custom_meta_data.optString("duration").trim().isEmpty() && !custom_meta_data.optString("duration").trim().equals("null") && !custom_meta_data.optString("duration").trim().matches("")) {
                             contentDetailsOutput.setDuration(custom_meta_data.optString("duration"));
                         }

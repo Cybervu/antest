@@ -153,7 +153,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
     ImageView bannerImageView, playButton, share;
     TextView detailsTextView, durationTitleTextView, durationTextView, tutorialTextView, viewAllTextView;
-    String durationText = "" ;
+    String durationText = "";
     Button startWorkoutButton, dietPlanButton;
     ProgressBarHandler progressBarHandler;
     GetValidateUserAsynTask asynValidateUserDetails;
@@ -198,8 +198,8 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     LanguagePreference languagePreference;
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-        /////by nihar
-        String[] season ;
+    /////by nihar
+    String[] season;
     /*chromecast-------------------------------------*/
     private VideoView mVideoView;
     private TextView mTitleView;
@@ -352,11 +352,11 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                                 Intent intent = new Intent(ProgramDetailsActivity.this, SubscriptionActivity.class);
                                 intent.putExtra("PlayerModel", playerModel);
-                                intent.putExtra("PERMALINK", permalinkStr );
-                                intent.putExtra("SEASON", season.length );
+                                intent.putExtra("PERMALINK", permalinkStr);
+                                intent.putExtra("SEASON", season.length);
                                 intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
                                 intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
-                                intent.putExtra("Index",getIntent().getStringExtra("Index"));
+                                intent.putExtra("Index", getIntent().getStringExtra("Index"));
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(intent);
                             } else {
@@ -373,11 +373,11 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
                 Intent intent = new Intent(ProgramDetailsActivity.this, SubscriptionActivity.class);
                 intent.putExtra("PlayerModel", playerModel);
-                intent.putExtra("PERMALINK", permalinkStr );
-                intent.putExtra("SEASON", season.length );
+                intent.putExtra("PERMALINK", permalinkStr);
+                intent.putExtra("SEASON", season.length);
                 intent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
                 intent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
-                intent.putExtra("Index",getIntent().getStringExtra("Index"));
+                intent.putExtra("Index", getIntent().getStringExtra("Index"));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             } else if (Util.dataModel.getIsConverted() == 0) {
@@ -822,14 +822,14 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                                     playVideoIntent.putExtra("PlayerModel", playerModel);
-                                    playVideoIntent.putExtra("PLAY_LIST",itemData);
-                                    playVideoIntent.putExtra("SEASON", season.length );
-                                    playVideoIntent.putExtra("PERMALINK", permalinkStr );
+                                    playVideoIntent.putExtra("PLAY_LIST", itemData);
+                                    playVideoIntent.putExtra("SEASON", season.length);
+                                    playVideoIntent.putExtra("PERMALINK", permalinkStr);
                                     playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
                                     playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
-                                    playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
-                                    Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
-                                    playVideoIntent.putExtra("TAG",ItemClickedPosition);
+                                    playVideoIntent.putExtra("Index", getIntent().getStringExtra("Index"));
+                                    Log.v("SUBHA", "current season ==== " + getIntent().getStringExtra(SEASON_INTENT_KEY));
+                                    playVideoIntent.putExtra("TAG", ItemClickedPosition);
                                     startActivity(playVideoIntent);
                                 }
 
@@ -843,14 +843,14 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
                     playVideoIntent.putExtra("PlayerModel", playerModel);
                     playVideoIntent.putExtra("PLAY_LIST", itemData);
-                    playVideoIntent.putExtra("SEASON", season.length );
-                    playVideoIntent.putExtra("PERMALINK", permalinkStr );
+                    playVideoIntent.putExtra("SEASON", season.length);
+                    playVideoIntent.putExtra("PERMALINK", permalinkStr);
                     playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
 
-                    Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                    Log.v("SUBHA", "current season ==== " + getIntent().getStringExtra(SEASON_INTENT_KEY));
                     playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
-                    playVideoIntent.putExtra("TAG",ItemClickedPosition);
-                    playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
+                    playVideoIntent.putExtra("TAG", ItemClickedPosition);
+                    playVideoIntent.putExtra("Index", getIntent().getStringExtra("Index"));
 
                     startActivity(playVideoIntent);
                 }
@@ -1005,9 +1005,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
             seasontiveLayout.addItemDecoration(new SpacesItemDecoration(30));
 
-        }
-
-        else {
+        } else {
 
             seasontiveLayout.addItemDecoration(new SpacesItemDecoration(50));
 
@@ -1093,10 +1091,10 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 episode.putExtra("contentTypesId", contentTypesId);
                 episode.putExtra("PLAY_LIST", itemData);
                 episode.putExtra("TAG", ItemClickedPosition);
-                episode.putExtra("SEASON", season.length );
+                episode.putExtra("SEASON", season.length);
                 episode.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
                 episode.putExtra(SEASON_INTENT_KEY, getIntent().getStringExtra(SEASON_INTENT_KEY));
-                episode.putExtra("Index",getIntent().getStringExtra("Index"));
+                episode.putExtra("Index", getIntent().getStringExtra("Index"));
 
 
                 episode.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
@@ -1112,21 +1110,21 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             }
         });
 
-                seasontiveLayout.addOnItemTouchListener(new RecyclerTouchListener(this,
-                        seasontiveLayout, new ClickListener() {
-                    @Override
-                    public void onClick(View view, final int position) {
-                        //Values are passing to activity & to fragment as well
-                        EpisodesListModel item = itemData.get(position);
-                        clickItem(item, position);
-                    }
+        seasontiveLayout.addOnItemTouchListener(new RecyclerTouchListener(this,
+                seasontiveLayout, new ClickListener() {
+            @Override
+            public void onClick(View view, final int position) {
+                //Values are passing to activity & to fragment as well
+                EpisodesListModel item = itemData.get(position);
+                clickItem(item, position);
+            }
 
-                    @Override
-                    public void onLongClick(View view, int position) {
+            @Override
+            public void onLongClick(View view, int position) {
 
-                        return;
-                    }
-                }));
+                return;
+            }
+        }));
         startWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1174,12 +1172,12 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         episode_details_input.setAuthtoken(authTokenStr);
         episode_details_input.setPermalink(permalinkStr);
         episode_details_input.setSeries_number(getIntent().getStringExtra(SEASON_INTENT_KEY));
-        Log.v("SUBHA","season number === "+getIntent().getStringExtra(SEASON_INTENT_KEY));
+        Log.v("SUBHA", "season number === " + getIntent().getStringExtra(SEASON_INTENT_KEY));
         episode_details_input.setLimit("10");
         episode_details_input.setOffset("1");
-       // episode_details_input.setSeries_number("1");
-        episode_details_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-        GetEpisodeDeatailsAsynTask getEpisodeDeatailsAsynTask=new GetEpisodeDeatailsAsynTask(episode_details_input,this,this);
+        // episode_details_input.setSeries_number("1");
+        episode_details_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        GetEpisodeDeatailsAsynTask getEpisodeDeatailsAsynTask = new GetEpisodeDeatailsAsynTask(episode_details_input, this, this);
         getEpisodeDeatailsAsynTask.executeOnExecutor(threadPoolExecutor);
 
         share.setOnClickListener(new View.OnClickListener() {
@@ -1216,7 +1214,6 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     }
 
 
-
     public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
 
         private int halfSpace;
@@ -1239,8 +1236,6 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             outRect.right = halfSpace;
         }
     }
-
-
 
 
     @Override
@@ -1366,7 +1361,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         }
         if (status == 200) {
             ///by nihar
-           season =   contentDetailsOutput.getSeason();
+            season = contentDetailsOutput.getSeason();
 
             contentTypesId = contentDetailsOutput.getContentTypesId();
             movieUniqueId = contentDetailsOutput.getMuviUniqId();
@@ -1375,7 +1370,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             duration = contentDetailsOutput.getDuration();
 
 
-           // viewAllTextView.setText(languagePreference.getTextofLanguage(DETAIL_VIEW_MORE,DEFAULT_DETAIL_VIEW_MORE));
+            // viewAllTextView.setText(languagePreference.getTextofLanguage(DETAIL_VIEW_MORE,DEFAULT_DETAIL_VIEW_MORE));
             viewAllTextView.setVisibility(View.VISIBLE);
             tutorialTextView.setText(languagePreference.getTextofLanguage(TUTORIAL_TITLE, DEFAULT_TUTORIAL_TITLE));
             durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
@@ -1461,20 +1456,18 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         }
 
 
-
         durationText = episode_details_output.getSeason_total_duration();
 
-        Log.v("SUBHA","duration in time === "+ Util.getCountDownStringInMinutes(Integer.parseInt(durationText)));
+        Log.v("SUBHA", "duration in time === " + Util.getCountDownStringInMinutes(Integer.parseInt(durationText)));
 
 
-        if (durationText.matches("") ) {
+        if (durationText.matches("")) {
             durationTitleTextView.setVisibility(View.GONE);
         } else {
 
             FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
             durationTextView.setText(Util.getCountDownStringInMinutes(Integer.parseInt(durationText)));
         }
-
 
 
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
@@ -1632,12 +1625,12 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 register.putExtra("TAG", ItemClickedPosition);
                 register.putExtra("PlayerModel", playerModel);
 
-                register.putExtra("PERMALINK", permalinkStr );
-                register.putExtra("SEASON", season.length );
+                register.putExtra("PERMALINK", permalinkStr);
+                register.putExtra("SEASON", season.length);
                 register.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
-                Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                Log.v("SUBHA", "current season ==== " + getIntent().getStringExtra(SEASON_INTENT_KEY));
                 register.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
-                register.putExtra("Index",getIntent().getStringExtra("Index"));
+                register.putExtra("Index", getIntent().getStringExtra("Index"));
                 startActivity(register);
 
 
@@ -1963,7 +1956,9 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
      */
 
 
-    /***********Subtitle********/
+    /***********
+     * Subtitle
+     ********/
 
     public void Download_SubTitle(String Url) {
         new DownloadFileFromURL().execute(Url);
@@ -2068,21 +2063,21 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 playVideoIntent.putExtra("ResolutionFormat", ResolutionFormat);
                 playVideoIntent.putExtra("ResolutionUrl", ResolutionUrl);*/
                 playVideoIntent.putExtra("PlayerModel", playerModel);
-                playVideoIntent.putExtra("PLAY_LIST",itemData);
-                playVideoIntent.putExtra("PERMALINK", permalinkStr );
-                playVideoIntent.putExtra("SEASON", season.length );
+                playVideoIntent.putExtra("PLAY_LIST", itemData);
+                playVideoIntent.putExtra("PERMALINK", permalinkStr);
+                playVideoIntent.putExtra("SEASON", season.length);
                 playVideoIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
-                Log.v("SUBHA","current season ==== "+ getIntent().getStringExtra(SEASON_INTENT_KEY));
+                Log.v("SUBHA", "current season ==== " + getIntent().getStringExtra(SEASON_INTENT_KEY));
                 playVideoIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
-                playVideoIntent.putExtra("Index",getIntent().getStringExtra("Index"));
+                playVideoIntent.putExtra("Index", getIntent().getStringExtra("Index"));
 
-               // ArrayList<SeasonModel> b =(ArrayList<SeasonModel>) getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY);
+                // ArrayList<SeasonModel> b =(ArrayList<SeasonModel>) getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY);
 
-              //  playVideoIntent.putExtra("SEASON_ARRAY_MODEL", b );
+                //  playVideoIntent.putExtra("SEASON_ARRAY_MODEL", b );
 
 
-               // Log.v("Nihar","==================="+b.size());
-                playVideoIntent.putExtra("TAG",ItemClickedPosition);
+                // Log.v("Nihar","==================="+b.size());
+                playVideoIntent.putExtra("TAG", ItemClickedPosition);
 //                playVideoIntent.putExtra("PLAY_LIST",itemData);
                 startActivity(playVideoIntent);
 
@@ -2367,11 +2362,11 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                     showPaymentIntent.putExtra("currencyCountryCode", Util.currencyModel.getCurrencyCode());
                     showPaymentIntent.putExtra("currencySymbol", Util.currencyModel.getCurrencySymbol());
                     showPaymentIntent.putExtra("PlayerModel", playerModel);
-                    showPaymentIntent.putExtra("PERMALINK", permalinkStr );
-                    showPaymentIntent.putExtra("SEASON", season.length );
+                    showPaymentIntent.putExtra("PERMALINK", permalinkStr);
+                    showPaymentIntent.putExtra("SEASON", season.length);
                     showPaymentIntent.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
                     showPaymentIntent.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
-                    showPaymentIntent.putExtra("Index",getIntent().getStringExtra("Index"));
+                    showPaymentIntent.putExtra("Index", getIntent().getStringExtra("Index"));
 
                     // showPaymentIntent.putExtra("showName", Util.dataModel.getEpisode_title());
 
@@ -2400,21 +2395,23 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             });
         }
     }
-    public static interface ClickListener{
-        public void onClick(View view,int position);
-        public void onLongClick(View view,int position);
+
+    public static interface ClickListener {
+        public void onClick(View view, int position);
+
+        public void onLongClick(View view, int position);
     }
 
 
-    class RecyclerTouchListener implements RecyclerView.OnItemTouchListener{
+    class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
         private ClickListener clicklistener;
         private GestureDetector gestureDetector;
 
-        public RecyclerTouchListener(Context context, final RecyclerView recycleView, final ClickListener clicklistener){
+        public RecyclerTouchListener(Context context, final RecyclerView recycleView, final ClickListener clicklistener) {
 
-            this.clicklistener=clicklistener;
-            gestureDetector=new GestureDetector(context,new GestureDetector.SimpleOnGestureListener(){
+            this.clicklistener = clicklistener;
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onSingleTapUp(MotionEvent e) {
                     return true;
@@ -2422,9 +2419,9 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
                 @Override
                 public void onLongPress(MotionEvent e) {
-                    View child=recycleView.findChildViewUnder(e.getX(),e.getY());
-                    if(child!=null && clicklistener!=null){
-                        clicklistener.onLongClick(child,recycleView.getChildAdapterPosition(child));
+                    View child = recycleView.findChildViewUnder(e.getX(), e.getY());
+                    if (child != null && clicklistener != null) {
+                        clicklistener.onLongClick(child, recycleView.getChildAdapterPosition(child));
                     }
                 }
             });
@@ -2432,9 +2429,9 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View child=rv.findChildViewUnder(e.getX(),e.getY());
-            if(child!=null && clicklistener!=null && gestureDetector.onTouchEvent(e)){
-                clicklistener.onClick(child,rv.getChildAdapterPosition(child));
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if (child != null && clicklistener != null && gestureDetector.onTouchEvent(e)) {
+                clicklistener.onClick(child, rv.getChildAdapterPosition(child));
             }
 
             return false;

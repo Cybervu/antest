@@ -73,6 +73,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/loginImageViewMarging_top"
+        android:id="@+id/btnMoreLayout"
+
         android:padding="@dimen/loginImageViewMarging_top_padding">
 
 

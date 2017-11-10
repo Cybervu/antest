@@ -127,10 +127,6 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.DigiOsmosisProfileActivity"
-            android:label=""
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.ForgotPasswordActivity"
             android:label=""
             android:screenOrientation="portrait" />
@@ -266,7 +262,6 @@
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
-
         <activity
             android:name=".activity.FavoriteActivity"
             android:screenOrientation="portrait"
@@ -283,7 +278,6 @@
             android:label=""
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name=".activity.ProgramDetailsActivity"
             android:screenOrientation="portrait" />
@@ -304,7 +298,6 @@
             android:label=""
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name=".activity.CustomSearchActivity"
             android:screenOrientation="portrait" />
@@ -314,8 +307,13 @@
         <activity
             android:name=".activity.DigiOsmosisProfileActivity"
             android:screenOrientation="portrait" />
-            android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activity.Notification"></activity>
+        android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.Notification" />
+        <activity android:name=".activity.YogaPlayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>

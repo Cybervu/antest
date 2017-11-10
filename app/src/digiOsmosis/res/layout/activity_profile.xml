@@ -164,7 +164,6 @@
                     android:layout_marginRight="@dimen/layout_padding_left"
                     android:layout_marginTop="25dp"
                     android:padding="@dimen/profile_padding"
-                    android:layout_below="@+id/card_view"
                     android:layout_centerHorizontal="true">
 
                     <EditText

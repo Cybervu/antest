@@ -133,7 +133,7 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
             holder.closeAlbumArt.setVisibility(View.VISIBLE);
 //            feb_bt.setImageResource(R.drawable.favorite);
         }else {
-            holder.closeAlbumArt.setVisibility(View.GONE);
+            holder.closeAlbumArt.setVisibility(View.VISIBLE);
 //            feb_bt.setImageResource(R.drawable.favorite_unselected);
 
         }

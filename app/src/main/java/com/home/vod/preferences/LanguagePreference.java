@@ -412,10 +412,12 @@ public class LanguagePreference {
     public static String BENEFIT_TITLE = "BENEFIT_TITLE";
     public static String DEFAULT_BENEFIT_TITLE = "BENEFITS";
     public static String DIFFICULTY_TITLE = "DIFFICULTY_TITLE";
+    public static String REPETITION_TITLE = "REPETITION_TITLE";
     public static String PROGRAM_BUTTON = "PROGRAM_BUTTON";
     public static String WORKOUT_BUTTON = "WORKOUT_BUTTON";
     public static String DIET_BUTTON = "DIET_BUTTON";
     public static String DEFAULT_DIFFICULTY_TITLE = "DIFFICULTY";
+    public static String DEFAULT_REPETITION_TITLE = "REPETITION";
     public static String DEFAULT_PROGRAM_BUTTON = "Start programme";
     public static String DEFAULT_DIET_BUTTON = "Diet Plan";
     public static String DEFAULT_WORKOUT_BUTTON = "Start Workout";

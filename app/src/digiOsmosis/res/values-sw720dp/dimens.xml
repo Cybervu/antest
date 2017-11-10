@@ -9,7 +9,6 @@
     <dimen name="imgwidth">300dp</dimen>
     <dimen name="toolbarheight">70dp</dimen>
     <dimen name="navwide">400dp</dimen>
-    <dimen name="nav_drawer_width">300dp</dimen>
 
     <dimen name="singleimgwidth">170dp</dimen>
     <dimen name="singleimgheight">216dp</dimen>

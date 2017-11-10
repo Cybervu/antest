@@ -1249,7 +1249,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         Log.v("NiharMishra", "OnCreate" + questions);
 
         languagePreference = LanguagePreference.getLanguagePreference(this);
-        playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+        playerModel = (Player) getIntent().getSerializableExtra("" +
+                "");
 
 
         SubTitleName = new ArrayList<>();

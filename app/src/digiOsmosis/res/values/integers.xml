@@ -17,6 +17,7 @@
 <resources>
 
     <integer name="column_count">3</integer>
+    <integer name="story_lines">3</integer>
     <integer name="configuration_xlarge_horizontal">3</integer>
     <integer name="configuration_normal_horizontal">2</integer>
     <integer name="configuration_large_horizontal">3</integer>

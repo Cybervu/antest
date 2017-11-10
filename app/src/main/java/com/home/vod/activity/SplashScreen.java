@@ -401,7 +401,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     @Override
     public void onGetGenreListPostExecuteCompleted(ArrayList<GenreListOutput> genreListOutput, int code, String status) {
 
-        Log.v("SUBHA","status genre  === "+status);
+        Log.v("SUBHA","status genre  === "+code);
 
         if (code > 0) {
 
@@ -673,6 +673,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 //                                    Log.v("pratik","count=="+Util.count);
                                 i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(i);
+                                Log.v("SUBHA","main called 1");
                                 finish();
                                 overridePendingTransition(0, 0);
                             }
@@ -721,6 +722,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(i);
                         finish();
+                        Log.v("SUBHA","main called 2");
                         overridePendingTransition(0, 0);
                         //Toast.makeText(SplashScreen.this, notificationPref.getString("regId", "0"), Toast.LENGTH_SHORT).show();
                     }

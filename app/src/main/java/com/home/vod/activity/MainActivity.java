@@ -67,6 +67,7 @@ import com.home.apisdk.apiModel.LogoutInput;
 import com.home.apisdk.apiModel.MenuListInput;
 import com.home.apisdk.apiModel.MenuListOutput;
 import com.home.apisdk.apiModel.MenusOutputModel;
+import com.home.vod.Content_List_Handler;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.MainActivityHeaderHandler;
 import com.home.vod.MyDownloadIntentHandler;
@@ -207,6 +208,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private CastStateListener mCastStateListener;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     private SideMenuHandler sideMenuHandler;
+    private Content_List_Handler contentListHandler;
 
 
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
@@ -778,8 +780,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
         else {
-
-            fragment = new VideosListFragment();
+            contentListHandler = new Content_List_Handler(this);
+            fragment = contentListHandler.handleIntent(titleStr);
             bundle.putString("item", str);
             bundle.putString("title", titleStr);
         }
@@ -814,7 +816,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
-            fragmentTransaction.commit();
+            fragmentTransaction.commitAllowingStateLoss();
 
             // set the toolbar title
             getSupportActionBar().setTitle(title);
