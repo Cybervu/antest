@@ -20,14 +20,8 @@
 
         <TextView
             android:id="@+id/castCrewTitleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/toolbar"
-            android:layout_margin="@dimen/ppv_margin"
-            android:padding="@dimen/Login_drawing_padding"
-            android:textColor="@color/cast_crew_textcolor"
-            android:textSize="@dimen/castcrew_text"
-            android:textStyle="bold" />
+            style="@style/castCrewTitleTextView"
+            android:layout_below="@+id/toolbar" />
 
         <GridView
             android:id="@+id/cast_crew_crid"
@@ -49,16 +43,8 @@
 
         <TextView
             android:id="@+id/noInternetTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
             android:maxLines="4"
-            android:singleLine="false"
-            android:textColor="@color/noInternetColor"
-            android:textSize="@dimen/castnointernet_text"
-            android:textStyle="bold" />
-
+            style="@style/noInternet" />
 
     </RelativeLayout>
 
@@ -73,16 +59,8 @@
 
         <TextView
             android:id="@+id/noDataTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
             android:maxLines="4"
-            android:singleLine="false"
-            android:textColor="@color/noInternetColor"
-            android:textSize="@dimen/castnointernet_text"
-            android:textStyle="bold" />
-
+            style="@style/noInternet" />
 
     </RelativeLayout>
 

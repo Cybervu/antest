@@ -48,6 +48,7 @@
  <color name="unselected_color">#fff</color>
 
  <color name="filter_text_color">#000</color>
+ <color name="ad_player_color">#69d3f7</color>
  <color name="censorRatingBackground">#80000000</color>
 
  <color name="loader_color">#5d6c7e</color>

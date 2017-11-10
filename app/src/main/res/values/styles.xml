@@ -3,6 +3,7 @@
     <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
 
     </style>
+
     <style name="FullyTranslucent" parent="android:Theme.Translucent.NoTitleBar">
         <item name="android:progressBarStyle">@style/InvisibleProgress</item>
     </style>
@@ -10,6 +11,7 @@
     <style name="InvisibleProgress">
         <item name="android:visibility">gone</item>
     </style>
+
     <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="colorControlNormal">@color/hint_color</item>
@@ -30,6 +32,7 @@
         <item name="android:windowDisablePreview">true</item>
 
     </style>
+
     <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -96,7 +99,6 @@
     </style>
 
 
-
     <style name="AndroidImageSlider_Corner_Oval_Orange">
 
         <item name="android:gravity">center</item>
@@ -154,7 +156,92 @@
         <item name="android:maxHeight">30dip</item>
 
     </style>
+
     <style name="cursorColor" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textCursorDrawable">@drawable/cursor</item>
+    </style>
+
+
+    <style name="ad_player_progress">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:indeterminateTint">@color/ad_player_color</item>
+        <item name="android:visibility">visible</item>
+    </style>
+
+    <style name="castCrewTitleTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/ppv_margin</item>
+        <item name="android:padding">@dimen/Login_drawing_padding</item>
+        <item name="android:textColor">@color/cast_crew_textcolor</item>
+        <item name="android:textSize">@dimen/castcrew_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="noInternet">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:textColor">@color/noInternetColor</item>
+        <item name="android:textSize">@dimen/castnointernet_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="castImageView">
+        <item name="android:layout_width">@dimen/cast_details_width</item>
+        <item name="android:layout_height">@dimen/cast_details_height</item>
+        <item name="android:layout_marginTop">@dimen/payment_relative_margin</item>
+    </style>
+
+    <style name="castCrewDetailsTextview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/ppv_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/videotextColor</item>
+        <item name="android:textSize">@dimen/cast_textsize</item>
+    </style>
+
+    <style name="buttonMore">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:layout_marginTop">@dimen/ppv_margin</item>
+        <item name="android:background">@drawable/view_more_button_background</item>
+        <item name="android:minHeight">@dimen/btnMore_min_height</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textSize">@dimen/cast_btn_textsize</item>
+    </style>
+
+    <style name="borderLineView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/border_line_height</item>
+        <item name="android:layout_marginTop">@dimen/ppv_margin</item>
+        <item name="android:background">@color/border_color</item>
+        <item name="android:paddingLeft">@dimen/Login_drawing_padding</item>
+        <item name="android:paddingRight">@dimen/Login_drawing_padding</item>
+    </style>
+
+    <style name="download_popup_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/appBackgroundColor</item>
+        <item name="android:textSize">@dimen/review_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="download_popup_listview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:divider">@color/transparent</item>
+
     </style>
 </resources>

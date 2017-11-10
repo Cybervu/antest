@@ -363,5 +363,8 @@
     <dimen name="season_image_height">200dp</dimen>
     <dimen name="card_title_padding">10dp</dimen>
     <dimen name="card_title">23sp</dimen>
+    <dimen name="download_popup_btn_width">80dp</dimen>
+    <dimen name="download_popup_btn_height">34dp</dimen>
+
 
 </resources>
