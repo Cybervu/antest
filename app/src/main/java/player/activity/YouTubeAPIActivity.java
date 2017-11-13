@@ -45,7 +45,7 @@ import player.utils.SensorOrientationChangeNotifier;
 //import com.example.muvi.playermodel.Player;
 
 public class YouTubeAPIActivity extends YouTubeBaseActivity implements
-        YouTubePlayer.OnInitializedListener, SensorOrientationChangeNotifier.Listener , ActionBarOverlayLayout.ActionBarVisibilityCallback {
+        YouTubePlayer.OnInitializedListener , ActionBarOverlayLayout.ActionBarVisibilityCallback {
 
     Toolbar mActionBarToolbar;
     Player playerModel;
@@ -124,7 +124,6 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
         if (asyncVideoLogDetails!=null){
             asyncVideoLogDetails.cancel(true);
         }
-        SensorOrientationChangeNotifier.getInstance(YouTubeAPIActivity.this).remove(this);
         finish();
         overridePendingTransition(0, 0);
         super.onUserLeaveHint();
@@ -139,7 +138,6 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
         if (asyncVideoLogDetails!=null){
             asyncVideoLogDetails.cancel(true);
         }
-        SensorOrientationChangeNotifier.getInstance(YouTubeAPIActivity.this).remove(this);
         finish();
         overridePendingTransition(0, 0);
     }
@@ -413,11 +411,10 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        SensorOrientationChangeNotifier.getInstance(YouTubeAPIActivity.this).addListener(this);
 
     }
 
-    @Override
+   /* @Override
     public void onOrientationChange(int orientation) {
 
         if (orientation == 90){
@@ -449,5 +446,5 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
 
         }
     }
-
+*/
 }
