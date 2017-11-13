@@ -226,7 +226,17 @@ public class Util {
         }
         return check;
     }
+    public static boolean isValidPhone(String phone)
+    {
 
+        if ((phone.length() >= 10) && (phone.length() <=15))
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public static boolean isConfirmPassword(String password, String confirmPassword) {
         Pattern pattern = Pattern.compile(password, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(confirmPassword);

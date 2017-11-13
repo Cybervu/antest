@@ -16,6 +16,10 @@ public class LanguagePreference {
     /**
      * Language Constant default Key
      */
+    public static String INVALID_PHONE_NUMBER = "OOPS_INVALID_PHONE_NUMBER";
+    public static  String DEFAULT_INVALID_PHONE_NUMBER = "Oops ! Invalid Number";
+    public static String MOBILE = "MOBILE";
+    public static  String DEFAULT_MOBILE = "Enter Mobile Number";
     public static String DEFAULT_FIRST_NAME = "First Name";
     public static String DEFAULT_LAST_NAME = "Last Name";
     public static String FIRST_NAME = "FIRST_NAME";
