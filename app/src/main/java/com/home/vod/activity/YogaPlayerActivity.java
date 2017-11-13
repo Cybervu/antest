@@ -438,8 +438,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     @Override
     public void onOrientationChange(int orientation) {
 
-        Log.v("Subhalaxmi", "video done");
-        Toast.makeText(YogaPlayerActivity.this, "video done", Toast.LENGTH_SHORT).show();
 
         if (orientation == 90) {
             compressed = false;
@@ -769,6 +767,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     boolean center_pause_paly_timer_is_running = false;
     public boolean isFastForward = false;
     boolean video_completed = false;
+    boolean video_prepared = false;
     int screenWidth, screenHeight;
     LinearLayout primary_ll, last_ll;
     boolean compressed = true;
@@ -924,8 +923,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 player_layout.setVisibility(View.GONE);
 
 
-                Log.v("Subhalaxmi", "video done complted");
-                Toast.makeText(YogaPlayerActivity.this, "video done complted", Toast.LENGTH_SHORT).show();
+//                Log.v("Subhalaxmi", "video done complted");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -1313,6 +1311,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             @Override
             public void onPrepared() {
                 video_completed = false;
+                video_prepared = true;
                 progressView.setVisibility(View.VISIBLE);
                 center_play_pause.setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.GONE);
@@ -2224,6 +2223,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
             private void onApplicationConnected(CastSession castSession) {
                 mCastSession = castSession;
+                Log.v("ANU","PAUSED===");
                 mLocation = PlaybackLocation.REMOTE;
                 if (null != mSelectedMedia) {
 
@@ -2238,13 +2238,198 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 }
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
+
+                if (video_prepared){
+
+                    emVideoView.setClickable(false);
+                    MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+
+                    movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory());
+                    movieMetadata.putString(MediaMetadata.KEY_TITLE, playerModel.getVideoTitle());
+                    movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
+                    movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
+
+
+                    Log.v("ANU","playerModel.getVideoTitle()===="+playerModel.getVideoTitle());
+                    String mediaContentType = "videos/mp4";
+                    if (playerModel.getVideoUrl().contains(".mpd")) {
+                        mediaContentType = "application/dash+xml";
+                        JSONObject jsonObj = null;
+                        try {
+                            jsonObj = new JSONObject();
+                            jsonObj.put("description", playerModel.getVideoTitle());
+                            jsonObj.put("licenseUrl", playerModel.getLicenseUrl());
+
+                            //  This Code Is Added For Video Log By Bibhu..
+
+                            jsonObj.put("authToken", authTokenStr);
+                            jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+//                                jsonObj.put("ip_address", ipAddres.trim());
+                            jsonObj.put("movie_id", playerModel.getMovieUniqueId());
+                            jsonObj.put("episode_id", playerModel.getEpisode_id());
+                            jsonObj.put("watch_status", "start");
+                            jsonObj.put("device_type", "2");
+                            jsonObj.put("log_id", "0");
+                            jsonObj.put("active_track_index", "0");
+
+                            if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                                jsonObj.put("restrict_stream_id", "0");
+                                jsonObj.put("is_streaming_restriction", "1");
+                                Log.v("BIBHU4", "restrict_stream_id============1");
+                            } else {
+                                jsonObj.put("restrict_stream_id", "0");
+                                jsonObj.put("is_streaming_restriction", "0");
+                                Log.v("BIBHU4", "restrict_stream_id============0");
+                            }
+
+                            jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                            jsonObj.put("is_log", "1");
+
+                            //=====================End===================//
+
+                            // This code is changed according to new Video log //
+
+                            jsonObj.put("played_length", "0");
+                            jsonObj.put("log_temp_id", "0");
+                            jsonObj.put("resume_time", "0");
+                            jsonObj.put("seek_status", "");
+                            // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                            jsonObj.put("resolution", "BEST");
+                            jsonObj.put("start_time", "0");
+                            jsonObj.put("end_time", "0");
+                            jsonObj.put("log_unique_id", "0");
+                            jsonObj.put("location", "0");
+                            jsonObj.put("bandwidth_log_id", "0");
+                            jsonObj.put("video_type", "mped_dash");
+                            jsonObj.put("drm_bandwidth_by_sender", "0");
+
+                            //====================End=====================//
+
+                        } catch (JSONException e) {
+                        }
+                        List tracks = new ArrayList();
+                        for (int i = 0; i < FakeSubTitlePath.size(); i++) {
+                            MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                                    MediaTrack.TYPE_TEXT)
+                                    .setName(SubTitleName.get(0))
+                                    .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                                    .setContentId(FakeSubTitlePath.get(0))
+                                    .setLanguage(SubTitleLanguage.get(0))
+                                    .setContentType("text/vtt")
+                                    .build();
+                            tracks.add(englishSubtitle);
+                        }
+
+                        Log.v("ANU","playerModel.getMpdVideoUrl().trim()====="+playerModel.getMpdVideoUrl().trim());
+                        mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
+                                .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                                .setContentType(mediaContentType)
+                                .setMetadata(movieMetadata)
+                                .setCustomData(jsonObj)
+                                .setMediaTracks(tracks)
+                                .build();
+                        mSelectedMedia = mediaInfo;
+
+
+                        togglePlayback();
+                    } else {
+                        Log.v("ANU","else=========");
+                        JSONObject jsonObj = null;
+                        try {
+                            jsonObj = new JSONObject();
+                            jsonObj.put("description", playerModel.getVideoTitle());
+
+                            //  This Code Is Added For Video Log By Bibhu..
+
+                            jsonObj.put("authToken", authTokenStr);
+                            jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+//                                jsonObj.put("ip_address", ipAddres.trim());
+                            jsonObj.put("movie_id", playerModel.getMovieUniqueId());
+                            jsonObj.put("episode_id", playerModel.getEpisode_id());
+                            jsonObj.put("watch_status", "start");
+                            jsonObj.put("device_type", "2");
+                            jsonObj.put("log_id", "0");
+                            jsonObj.put("active_track_index", "0");
+                            jsonObj.put("seek_status", "");
+
+                            jsonObj.put("played_length", "0");
+                            jsonObj.put("log_temp_id", "0");
+                            jsonObj.put("resume_time", "0");
+                            jsonObj.put("seek_status", "");
+
+
+                            if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                                jsonObj.put("restrict_stream_id", "0");
+                                jsonObj.put("is_streaming_restriction", "1");
+                                Log.v("BIBHU4", "restrict_stream_id============1");
+                            } else {
+                                jsonObj.put("restrict_stream_id", "0");
+                                jsonObj.put("is_streaming_restriction", "0");
+                                Log.v("BIBHU4", "restrict_stream_id============0");
+                            }
+
+                            jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                            jsonObj.put("is_log", "1");
+
+                            //=====================End===================//
+
+
+                            // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                            jsonObj.put("resolution", "BEST");
+                            jsonObj.put("start_time", "0");
+                            jsonObj.put("end_time", "0");
+                            jsonObj.put("log_unique_id", "0");
+                            jsonObj.put("location", "0");
+                            jsonObj.put("video_type", "");
+                            jsonObj.put("totalBandwidth", "0");
+
+                            //====================End=====================//
+
+                        } catch (JSONException e) {
+                        }
+
+                        List tracks = new ArrayList();
+                        for (int i = 0; i < FakeSubTitlePath.size(); i++) {
+                            MediaTrack englishSubtitle = new MediaTrack.Builder(i,
+                                    MediaTrack.TYPE_TEXT)
+                                    .setName(SubTitleName.get(0))
+                                    .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                                    .setContentId(FakeSubTitlePath.get(0))
+                                    .setLanguage(SubTitleLanguage.get(0))
+                                    .setContentType("text/vtt")
+                                    .build();
+                            tracks.add(englishSubtitle);
+                        }
+
+                        mediaInfo = new MediaInfo.Builder(com.home.vod.util.Util.dataModel.getVideoUrl().trim())
+                                .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                                .setContentType(mediaContentType)
+                                .setMetadata(movieMetadata)
+                                .setStreamDuration(15 * 1000)
+                                .setCustomData(jsonObj)
+                                .setMediaTracks(tracks)
+                                .build();
+                        mSelectedMedia = mediaInfo;
+
+
+                        togglePlayback();
+                    }
+
+
+                }
+
+
+
+
             }
 
             private void onApplicationDisconnected() {
 /*
                     mPlayCircle.setVisibility(View.GONE);
 */
-
+                emVideoView.setClickable(true);
                 updatePlaybackLocation(PlaybackLocation.LOCAL);
                 mPlaybackState = PlaybackState.IDLE;
                 mLocation = PlaybackLocation.LOCAL;
@@ -2324,6 +2509,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
     private void togglePlayback() {
         //stopControllersTimer();
+        Log.v("ANU","mPlaybackState==="+mPlaybackState);
         switch (mPlaybackState) {
             case PAUSED:
                 switch (mLocation) {
@@ -2351,11 +2537,13 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
             case PLAYING:
                 mPlaybackState = PlaybackState.PAUSED;
-
+                Log.v("ANU","mPlaybackState PLAYING==="+mPlaybackState);
                 mVideoView.pause();
                 break;
 
             case IDLE:
+                Log.v("ANU","mLocation==="+mLocation);
+                Log.v("ANU","mSeekbar.getProgress() idle===");
                 switch (mLocation) {
                     case LOCAL:
                         //watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
@@ -2372,7 +2560,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         // mPlayCircle.setVisibility(View.VISIBLE);
                         if (mCastSession != null && mCastSession.isConnected()) {
                             // watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
-                            loadRemoteMedia(0, true);
+//                            emVideoView.pause();
+                            loadRemoteMedia(emVideoView.getCurrentPosition(), true);
 
 
                             // Utils.showQueuePopup(this, mPlayCircle, mSelectedMedia);
@@ -2398,11 +2587,13 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         if (remoteMediaClient == null) {
             return;
         }
+
         remoteMediaClient.addListener(new RemoteMediaClient.Listener() {
 
             @Override
             public void onStatusUpdated() {
 
+                Log.v("ANU","ExpandedControlsActivity===");
                 Intent intent = new Intent(YogaPlayerActivity.this, ExpandedControlsActivity.class);
                 startActivity(intent);
                 remoteMediaClient.removeListener(this);
@@ -2516,8 +2707,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 seekBar.setProgress(34000);
             }else {*/
 
-            Log.v("Subhalaxmi", "video done not complted");
-            Toast.makeText(YogaPlayerActivity.this, "video done not complted", Toast.LENGTH_SHORT).show();
             seekBar.setProgress(emVideoView.getCurrentPosition());
 //            }
             seekBar.setMax(emVideoView.getDuration());
@@ -2532,8 +2721,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
 
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
-                Log.v("Subhalaxmi", "video done not started");
-                Toast.makeText(YogaPlayerActivity.this, "video done not started", Toast.LENGTH_SHORT).show();
                 findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                 center_play_pause.setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.GONE);
@@ -2563,8 +2750,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         player_layout.setVisibility(View.GONE);
 
 
-                        Log.v("Subhalaxmi", "video done complted");
-                        Toast.makeText(YogaPlayerActivity.this, "video done complted", Toast.LENGTH_SHORT).show();
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2719,8 +2904,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     // onBackPressed();
 //                    backCalled();
                 }*/
-                Log.v("Subhalaxmi", "video done");
-                Toast.makeText(YogaPlayerActivity.this, "video done 1", Toast.LENGTH_SHORT).show();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -2987,6 +3170,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         dbModel.setStreamUniqueId(contentDetailsOutput.getMovieStreamUniqId());
 //        dbModel.setThirdPartyUrl(contentDetailsOutput.getEpisodeThirdPartyUrl());
         dbModel.setVideoTitle(contentDetailsOutput.getName());
+        Log.v("ANU","contentDetailsOutput.getName()===="+contentDetailsOutput.getName());
         dbModel.setVideoStory(contentDetailsOutput.getStory());
 //        dbModel.setVideoGenre(videoGenreTextView.getText().toString());
         dbModel.setVideoDuration(contentDetailsOutput.getVideoDuration());
@@ -3277,20 +3461,23 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             }
 
 
-            if (playerModel.getVideoUrl() == null ||
-                    playerModel.getVideoUrl().matches("")) {
+            if (playerModel.getVideoUrl() == null || playerModel.getVideoUrl().matches("")) {
 
                 com.home.vod.util.Util.showNoDataAlert(YogaPlayerActivity.this);
 
 
             } else {
+                Log.v("ANU","if ELSE=========");
+                Log.v("ANU","_video_details_output.getThirdparty_url()========="+_video_details_output.getThirdparty_url());
 
 
                 // condition for checking if the response has third party url or not.
                 if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
+                    Log.v("ANU","if _video_details_output=========");
 
 
                     if (mCastSession != null && mCastSession.isConnected()) {
+                        Log.v("ANU","if=========");
                         MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
 
                         movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory());
@@ -3369,6 +3556,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                                 tracks.add(englishSubtitle);
                             }
 
+                            Log.v("ANU","playerModel.getMpdVideoUrl().trim()====="+playerModel.getMpdVideoUrl().trim());
                             mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
                                     .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
                                     .setContentType(mediaContentType)
@@ -3381,6 +3569,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                             togglePlayback();
                         } else {
+                            Log.v("ANU","else=========");
                             JSONObject jsonObj = null;
                             try {
                                 jsonObj = new JSONObject();
@@ -3464,12 +3653,14 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         }
                     } else {
 
+                        Log.v("ANU","IS CONNECTED ELSE====");
 
 //                        playerModel.setThirdPartyPlayer(false);
 //                        emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
                         if (FakeSubTitlePath.size() > 0) {
                             final Intent playVideoIntent;
 
+                            Log.v("ANU","IS CONNECTED ELSE ProgramPlayerActivity====");
                             playVideoIntent = new Intent(YogaPlayerActivity.this, ProgramPlayerActivity.class);
 
                             runOnUiThread(new Runnable() {
@@ -3499,9 +3690,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                                 }
                             });
                         } else {
+                            Log.v("ANU", "==============++++++====" + playerModel.getVideoUrl());
 
                             playerModel.setThirdPartyPlayer(false);
-                            Log.v("Niihar_url", "==============++++++====" + playerModel.getVideoUrl());
                             // emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
                             setVideoPlayer();
                         }
@@ -3621,6 +3812,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     private void setVideoPlayer() {
         emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
         try {
+            Log.v("ANU", "==============++++++====" + playerModel.getVideoUrl());
+
             /*
              * Initialize the Wasabi Runtime (necessary only once for each
 			 * instantiation of the application)
