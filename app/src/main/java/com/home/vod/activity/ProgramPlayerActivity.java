@@ -1246,12 +1246,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_program_player);
-        Log.v("NiharMishra", "OnCreate" + questions);
 
         languagePreference = LanguagePreference.getLanguagePreference(this);
-        playerModel = (Player) getIntent().getSerializableExtra("" +
-                "");
-
+        playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
+        Log.v("NiharMishra", "OnCreate" + playerModel.getVideoUrl());
 
         SubTitleName = new ArrayList<>();
         SubTitlePath = new ArrayList<>();

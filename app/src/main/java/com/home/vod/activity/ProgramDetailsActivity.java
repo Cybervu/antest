@@ -1131,12 +1131,12 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 clickItem(itemData.get(0), 0);
 
 
-               /* Intent  playVideoIntent = new Intent(ProgramDetailsActivity.this, ProgramPlayerActivity.class);
+                Intent  playVideoIntent = new Intent(ProgramDetailsActivity.this, ProgramPlayerActivity.class);
                 playVideoIntent.putExtra("PlayerModel", playerModel);
                 playVideoIntent.putExtra("PLAY_LIST",itemData);
                 Log.v("Nihar","==================="+itemData.size());
                 playVideoIntent.putExtra("TAG","0");
-                startActivity(playVideoIntent);*/
+                startActivity(playVideoIntent);
             }
         });
 
