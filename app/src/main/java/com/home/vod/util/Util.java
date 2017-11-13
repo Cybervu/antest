@@ -780,7 +780,7 @@ public class Util {
     public static void hideKeyboard(Context context){
         Activity act = (Activity) context;
         InputMethodManager inputManager = (InputMethodManager)
-                context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                act.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         inputManager.hideSoftInputFromWindow(act.getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
