@@ -50,7 +50,7 @@
  <color name="filter_text_color">#000</color>
  <color name="censorRatingBackground">#80000000</color>
 
- <color name="loader_color">#5d6c7e</color>
+ <color name="loader_color">#b2423a</color>
  <color name="hint_background">#b70000</color>
  <color name="pageTitleColor">#6e6f76</color>
  <color name="noInternetColor">#5c6873</color>

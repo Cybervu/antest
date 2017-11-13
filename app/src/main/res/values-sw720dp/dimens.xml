@@ -140,4 +140,6 @@
     <dimen name="trailer_btn_text_size">18sp</dimen>
 
     <dimen name="plainrow_text_size">20sp</dimen>
+    <dimen name="toolbar_logo_width">108dp</dimen>
+    <dimen name="toolbar_logo_height">58dp</dimen>
 </resources>

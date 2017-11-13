@@ -24,7 +24,7 @@
     <color name="preOrderButtonTextColor">#eb0609</color>
     <color name="spinnerDropDownListColor">#000</color>
     <color name="leftMenuBackground">#fff</color>
-    <color name="colorPrimary">#5c6873</color>
+    <color name="colorPrimary">#111111</color>
     <color name="colorPrimaryDark">#5c6873</color>
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#50696969</color>
