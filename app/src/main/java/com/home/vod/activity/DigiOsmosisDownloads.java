@@ -151,6 +151,7 @@ public class DigiOsmosisDownloads extends AppCompatActivity implements GetLangua
         languagePreference = LanguagePreference.getLanguagePreference(this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         dbHelper=new DBHelper(DigiOsmosisDownloads.this);
+        dbHelper.getWritableDatabase();
 
 
         Toolbar mActionBarToolbar= (Toolbar) findViewById(R.id.toolbar);
@@ -183,6 +184,8 @@ public class DigiOsmosisDownloads extends AppCompatActivity implements GetLangua
         if (preferenceManager!=null){
             emailIdStr= preferenceManager.getEmailIdFromPref();
 
+            Toast.makeText(getApplicationContext(),emailIdStr,Toast.LENGTH_LONG).show();
+
 
         }else {
             emailIdStr = "";
@@ -210,8 +213,11 @@ public class DigiOsmosisDownloads extends AppCompatActivity implements GetLangua
 //        }
 
 
-        download=dbHelper.getContactt(emailIdStr,1);
+
+
+
         if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
+
             gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_large_vertical) : (int) getResources().getInteger(R.integer.configuration_large_vertical));
 
 
@@ -229,10 +235,16 @@ public class DigiOsmosisDownloads extends AppCompatActivity implements GetLangua
 
         }
         //download=dbHelper.getDownloadcontent(emailIdStr);
+        download=dbHelper.getContactt(emailIdStr,1);
+
         if(download.size()>0) {
+
+
             adapter = new DigiOsmosisDownloadAdapter(DigiOsmosisDownloads.this, R.layout.custom_offlist, download);
             gridView.setAdapter(adapter);
         }else {
+
+
             nodata.setVisibility(View.VISIBLE);
             noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT,DEFAULT_NO_CONTENT));
         }
@@ -249,23 +261,7 @@ public class DigiOsmosisDownloads extends AppCompatActivity implements GetLangua
                 SubTitleName.clear();
                 SubTitlePath.clear();
 
-//                try {
-//
-//
-//
-//                    String path1 = Environment.getExternalStorageDirectory() + "/Android/data/"+getApplicationContext().getPackageName().trim()+"/WITHDRM/" + download.get(position).getMUVIID().trim() + "-1." + "mlv";
-//                    File file = new File(path1);
-//                    if (file != null && file.exists()) {
-//
-//                        file.delete();
-//
-//                    }
-//
-//                }catch (Exception e){
-//
-//
-//
-//                }
+
 
                 pDialog = new ProgressBarHandler(DigiOsmosisDownloads.this);
                 pDialog.show();
@@ -338,6 +334,8 @@ public class DigiOsmosisDownloads extends AppCompatActivity implements GetLangua
                                         " WHERE download_id = '"+download.get(position).getDOWNLOADID()+"' ";
 
                                 DB.execSQL(Qry);
+
+
                             }
                             else
                             {

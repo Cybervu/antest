@@ -22,7 +22,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.MediaRouteButton;
@@ -249,10 +251,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
     RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout, image_logo;
     LinearLayout story_layout;
-    String movieUniqueId = "";
+    String movieUniqueId = "", movieGenre = "";
     String movieTrailerUrlStr = "", isEpisode = "";
     String duration = "";
-    String videoduration = "";
     String[] season;
     String name;
     String difficulty_level;
@@ -280,7 +281,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     int isFreeContent = 0, isPPV, isConverted, contentTypesId, isAPV;
-    String movieStreamUniqueId, bannerImageId, posterImageId, permalinkStr, contentIdStr, contentStreamIdStr;
+    String bannerImageId, posterImageId, permalinkStr, contentIdStr, contentStreamIdStr;
     String videoDurationStr = "";
     boolean castStr = false;
     int isFavorite;
@@ -320,7 +321,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     boolean isDrm = false;
 
 
-    /***** offline *****/
+    /*****
+     * offline
+     *****/
     DownloadManager downloadManager;
     RelativeLayout download_layout;
     public boolean downloading;
@@ -344,7 +347,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     String fileExtenstion;
     int lenghtOfFile;
     int lengthfile;
-    /***** offline *****/
+    /*****
+     * offline
+     *****/
     ///////////////////////////////////////////////////////////////////
 
     /*chromecast-------------------------------------*/
@@ -815,6 +820,20 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
+
+
+        if (preferenceManager != null) {
+            emailIdStr = preferenceManager.getEmailIdFromPref();
+
+            Toast.makeText(getApplicationContext(), emailIdStr, Toast.LENGTH_LONG).show();
+
+
+        } else {
+            emailIdStr = "";
+
+
+        }
+
         contentIdStr = getIntent().getStringExtra("CONTENT_ID");
         contentStreamIdStr = getIntent().getStringExtra("CONTENT_STREAM_ID");
         languagePreference = LanguagePreference.getLanguagePreference(YogaPlayerActivity.this);
@@ -964,28 +983,19 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
 
 
-        exoplayerdownloadhandler = new Handler();
-        dbHelper = new DBHelper(YogaPlayerActivity.this);
-        dbHelper.getWritableDatabase();
-        audio_1 = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
-
-        if (audio_1 != null) {
-            if (audio_1.getUSERNAME().trim().equals(emailIdStr.trim())) {
-                checkDownLoadStatusFromDownloadManager1(audio_1, false);
-            }
-        }
-
         download = (ImageView) findViewById(R.id.downloadImageView);
         Progress = (ProgressBar) findViewById(R.id.progressBar);
         percentg = (TextView) findViewById(R.id.percentage);
 
-        content_types_id = playerModel.getContentTypesId();
+        //  content_types_id = playerModel.getContentTypesId();
         //Check for offline content // Added By sanjay
 //        mediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
         download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
-        if (content_types_id!=4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
+       /* if (content_types_id!=4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
             download_layout.setVisibility(View.VISIBLE);
-        }
+        }*/
+        download_layout.setVisibility(View.GONE);
+
         /*if (content_types_id != 4) {
             download_layout.setVisibility(View.VISIBLE);
         }*/
@@ -1014,7 +1024,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         List_Of_Resolution_Url_Used_For_Download.clear();
 
 
-                        asynWithdrm = new YogaPlayerActivity.AsynWithdrm();
+                        asynWithdrm = new AsynWithdrm();
                         asynWithdrm.executeOnExecutor(threadPoolExecutor);
                     } else {
                         // This is applicable for NON-DRM contnet.
@@ -1029,9 +1039,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                             pDialog_for_gettig_filesize = new ProgressBarHandler(YogaPlayerActivity.this);
                             pDialog_for_gettig_filesize.show();
 
-                            new YogaPlayerActivity.DetectDownloadingFileSize().execute();
+                            new DetectDownloadingFileSize().execute();
                         } else {
-                            new YogaPlayerActivity.DownloadFileFromURL().execute(playerModel.getVideoUrl());
+                            new DownloadFileFromURL().execute(playerModel.getVideoUrl());
                         }
 
                     }
@@ -1283,8 +1293,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 player_layout.setVisibility(View.VISIBLE);
                 progressView.setVisibility(View.VISIBLE);
 
-                Toast.makeText(YogaPlayerActivity.this, "play button clicked", Toast.LENGTH_SHORT).show();
-
 
                 ////
                 preLoadVideos(contentDetailsOutputModel);
@@ -1341,26 +1349,50 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             }
         });
 
-        ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-        permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
-        contentIdStr = getIntent().getStringExtra("CONTENT_ID");
-        contentStreamIdStr = getIntent().getStringExtra("CONTENT_STREAM_ID");
-        useridStr = preferenceManager.getUseridFromPref();
+        if (ContextCompat.checkSelfPermission(YogaPlayerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(YogaPlayerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                ActivityCompat.requestPermissions(YogaPlayerActivity.this,
+                        new String[]{Manifest.permission
+                                .WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS},
+                        111);
+            } else {
+                ActivityCompat.requestPermissions(YogaPlayerActivity.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        111);
 
-        contentDetailsInput.setAuthToken(authTokenStr);
-
-        Log.v("SUBHA", "authToken === " + authTokenStr);
-        if (preferenceManager != null) {
-            String countryPref = preferenceManager.getCountryCodeFromPref();
-            contentDetailsInput.setCountry(countryPref);
+            }
         } else {
-            contentDetailsInput.setCountry("IN");
+            //Call whatever you want
+            if (NetworkStatus.getInstance().isConnected(YogaPlayerActivity.this)) {
+
+                ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
+                permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
+                contentIdStr = getIntent().getStringExtra("CONTENT_ID");
+                contentStreamIdStr = getIntent().getStringExtra("CONTENT_STREAM_ID");
+                useridStr = preferenceManager.getUseridFromPref();
+
+                contentDetailsInput.setAuthToken(authTokenStr);
+
+                Log.v("SUBHA", "authToken === " + authTokenStr);
+                if (preferenceManager != null) {
+                    String countryPref = preferenceManager.getCountryCodeFromPref();
+                    contentDetailsInput.setCountry(countryPref);
+                } else {
+                    contentDetailsInput.setCountry("IN");
+                }
+                contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                contentDetailsInput.setPermalink(permalinkStr);
+                contentDetailsInput.setUser_id(useridStr);
+                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
+                asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+
+            } else {
+                Util.showToast(YogaPlayerActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+
+                // Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                finish();
+            }
         }
-        contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        contentDetailsInput.setPermalink(permalinkStr);
-        contentDetailsInput.setUser_id(useridStr);
-        asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
-        asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
 
 
         ///////added by nihar
@@ -1442,6 +1474,46 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
 
         /***favorite *****/
+
+
+
+        /*if (ContextCompat.checkSelfPermission(YogaPlayerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(YogaPlayerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                ActivityCompat.requestPermissions(YogaPlayerActivity.this,
+                        new String[]{Manifest.permission
+                                .WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS},
+                        111);
+            } else {
+                ActivityCompat.requestPermissions(YogaPlayerActivity.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        111);
+
+            }
+        } else {
+            //Call whatever you want
+            if (NetworkStatus.getInstance().isConnected(YogaPlayerActivity.this)) {
+
+                ContentDetailsInput contentDetailsInput1 = new ContentDetailsInput();
+                contentDetailsInput1.setAuthToken(authTokenStr);
+                contentDetailsInput1.setPermalink(permalinkStr);
+                contentDetailsInput1.setUser_id(preferenceManager.getUseridFromPref());
+                contentDetailsInput1.setCountry(preferenceManager.getCountryCodeFromPref());
+                contentDetailsInput1.setLanguage(preferenceManager.getLanguageListFromPref());
+
+                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput1, YogaPlayerActivity.this, YogaPlayerActivity.this);
+                asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+
+            } else {
+                Util.showToast(YogaPlayerActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+
+                // Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }*/
+
+
+
+
 /*chromecast-------------------------------------*/
 
         mAquery = new AQuery(this);
@@ -1537,6 +1609,75 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             mPlaybackState = PlaybackState.IDLE;
             updatePlayButton(mPlaybackState);
         }
+
+
+
+        percentg.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
+                                            dlgAlert.setTitle(player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.STOP_SAVING_THIS_VIDEO, player.utils.Util.DEFAULT_STOP_SAVING_THIS_VIDEO));
+                                            dlgAlert.setMessage(player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.YOUR_VIDEO_WONT_BE_SAVED, player.utils.Util.DEFAULT_YOUR_VIDEO_WONT_BE_SAVED));
+                                            dlgAlert.setPositiveButton(player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.BTN_KEEP, player.utils.Util.DEFAULT_BTN_KEEP), null);
+                                            dlgAlert.setCancelable(false);
+                                            dlgAlert.setPositiveButton(player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.BTN_KEEP, player.utils.Util.DEFAULT_BTN_KEEP),
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            dialog.cancel();
+
+                                                        }
+                                                    });
+                                            dlgAlert.setNegativeButton(player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.BTN_DISCARD, player.utils.Util.DEFAULT_BTN_DISCARD), null);
+                                            dlgAlert.setCancelable(false);
+                                            dlgAlert.setNegativeButton(player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.BTN_DISCARD, player.utils.Util.DEFAULT_BTN_DISCARD),
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            dialog.cancel();
+                                                            downloading = false;
+                                                            audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
+
+                                                            if (audio != null) {
+
+
+                                                                String k = String.valueOf(audio.getDOWNLOADID());
+
+                                                                downloadManager.remove(audio.getDOWNLOADID());
+                                                                dbHelper.deleteRecord(audio);
+
+                                                                SQLiteDatabase DB = YogaPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
+                                                                String query = "DELETE FROM " + DBHelper.DOWNLOAD_CONTENT_INFO + " WHERE download_contnet_id = '" + enqueue + "'";
+                                                                DB.execSQL(query);
+
+                                                            }
+
+
+                                                            exoplayerdownloadhandler.post(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+
+
+                                                                    Progress.setProgress((int) 0);
+                                                                    //percentg.setText(0+"%");
+                                                                    percentg.setVisibility(View.GONE);
+                                                                    download.setVisibility(View.VISIBLE);
+
+
+                                                                }
+                                                            });
+
+                                                            Toast.makeText(getApplicationContext(), player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.DOWNLOAD_CANCELLED, player.utils.Util.DEFAULT_DOWNLOAD_CANCELLED), Toast.LENGTH_SHORT).show();
+
+                                                        }
+                                                    });
+
+                                            dlgAlert.create().show();
+
+                                        }
+                                    }
+        );
+
+
+
 
 
     }
@@ -1643,12 +1784,12 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         if (status == 200) {
 
             movieUniqueId = contentDetailsOutput.getMuviUniqId();
+            movieGenre = contentDetailsOutput.getGenre();
             benefits = contentDetailsOutput.getBenefit();
             season = contentDetailsOutput.getSeason();
             movieDetailsStr = contentDetailsOutput.getStory();
             _permalink = contentDetailsOutput.getPermalink();
             isFavorite = contentDetailsOutput.getIs_favorite();
-            Log.v("Nihar_ppppp", "isFavorite    " + isFavorite);
             bannerImageId = contentDetailsOutput.getBanner();
             posterImageId = contentDetailsOutput.getPoster();
             duration = contentDetailsOutput.getDuration();
@@ -1656,7 +1797,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             difficulty_level = contentDetailsOutput.getDifficulty_level();
             name = contentDetailsOutput.getName();
             contentId = contentDetailsOutput.getId();
-            muviStreamId = contentDetailsOutput.getMovieStreamId();
+            muviStreamId = contentDetailsOutput.getMovieStreamUniqId();
             movieTrailerUrlStr = contentDetailsOutput.getTrailerUrl();
             contentTypesId = contentDetailsOutput.getContentTypesId();
             videoDurationStr = contentDetailsOutput.getVideoDuration();
@@ -1870,6 +2011,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     @Override
     public void onResume() {
         super.onResume();
+
 //        SensorOrientationChangeNotifier.getInstance(YogaPlayerActivity.this).addListener(this);
 
        /* if (Util.favorite_clicked == true) {
@@ -2455,6 +2597,12 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
     }
 
+
+
+
+
+
+
     public void current_time_position_timer() {
         final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -2983,6 +3131,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         if (code == 200) {
             playerModel.setIsOffline(_video_details_output.getIs_offline());
             playerModel.setDownloadStatus(_video_details_output.getDownload_status());
+
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
                 /**@bishal
@@ -3109,6 +3258,23 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             playerModel.setSubTitleLanguage(_video_details_output.getSubTitleLanguage());
             playerModel.setOfflineUrl(_video_details_output.getOfflineUrl());
             playerModel.setOfflineLanguage(_video_details_output.getOfflineLanguage());
+
+
+            exoplayerdownloadhandler = new Handler();
+            dbHelper = new DBHelper(YogaPlayerActivity.this);
+            dbHelper.getWritableDatabase();
+            audio_1 = dbHelper.getContact(muviStreamId + emailIdStr);
+
+            if (audio_1 != null) {
+                Log.v("SUBHALAXMIPANDA1","data called =============== ");
+                if (audio_1.getUSERNAME().trim().equals(emailIdStr.trim())) {
+                    checkDownLoadStatusFromDownloadManager1(audio_1, false);
+                }
+            }
+            Log.v("SUBHALAXMIPANDA1","STAUS"+playerModel.getContentTypesId()+"G"+playerModel.getDownloadStatus()+playerModel.getIsOffline());
+            if (playerModel.getContentTypesId()!=4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
+                download_layout.setVisibility(View.VISIBLE);
+            }
 
 
             if (playerModel.getVideoUrl() == null ||
@@ -3562,14 +3728,18 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(urlRouteList);
             httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            httppost.addHeader("authToken", player.utils.Util.authTokenStr);
-            httppost.addHeader("stream_unique_id", playerModel.getStreamUniqueId());
+            httppost.addHeader(HeaderConstants.AUTH_TOKEN, authTokenStr);
+            httppost.addHeader("stream_unique_id",muviStreamId);
+
+
+            Log.v("SUBHA","authToken == "+ player.utils.Util.authTokenStr);
+            Log.v("SUBHA","stream_unique_id == "+ muviStreamId);
 
 
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-
+                Log.v("SUBHA", " asyncwith drm response === " + responseStr);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -3583,7 +3753,7 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
             JSONObject mainJson = null;
             if (responseCode >= 0) {
                 if (responseCode == 200) {
-                    Log.v("SUBHA", "" + responseCode);
+
                     mainJson = myJson.getJSONObject("data");
 
                     if ((mainJson.has("file")) && mainJson.getString("file").trim() != null && !mainJson.getString("file").trim().isEmpty() && !mainJson.getString("file").trim().equals("null") && !mainJson.getString("file").trim().matches("")) {
@@ -3693,7 +3863,7 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                 pDialog = null;
 
             }
-            Log.d("sanji", playerModel.getStreamUniqueId());
+
 
 
             //ExoPlayerActivity.this portion is changed later because of multiple download option.
@@ -3702,9 +3872,9 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                 pDialog_for_gettig_filesize = new ProgressBarHandler(YogaPlayerActivity.this);
                 pDialog_for_gettig_filesize.show();
 
-                new YogaPlayerActivity.DetectDownloadingFileSize().execute();
+                new DetectDownloadingFileSize().execute();
             } else {
-                new YogaPlayerActivity.DownloadFileFromURL().execute(mlvfile);
+                new DownloadFileFromURL().execute(mlvfile);
 
             }
 
@@ -3757,6 +3927,8 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                 lengthfile = (int) size;
 
 
+
+
             } catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
             } catch (Throwable throwable) {
@@ -3779,9 +3951,11 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
 
                 String lengh = String.valueOf(lengthfile);
 
+                Log.v("SUBHA","size of file === "+lengh);
+
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(YogaPlayerActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setTitle(player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.WANT_TO_DOWNLOAD, player.utils.Util.DEFAULT_WANT_TO_DOWNLOAD));
-                dlgAlert.setMessage(playerModel.getVideoTitle() + " " + "(" + lengh + "MB)");
+                dlgAlert.setMessage(name + " " + "(" + lengh + "MB)");
                 dlgAlert.setPositiveButton(player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.DOWNLOAD_BUTTON_TITLE, player.utils.Util.DEFAULT_DOWNLOAD_BUTTON_TITLE), null);
                 dlgAlert.setCancelable(false);
                 dlgAlert.setPositiveButton(player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.DOWNLOAD_BUTTON_TITLE, player.utils.Util.DEFAULT_DOWNLOAD_BUTTON_TITLE),
@@ -3858,6 +4032,7 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
             fileExtenstion = MimeTypeMap.getFileExtensionFromUrl(mlvfile);
             timestamp = System.currentTimeMillis() + ".mlv";
             //Save file to destination folder
+            Log.v("SUBHALAXMIPANDA1","isdrm");
             request.setDestinationInExternalPublicDir("Android/data/" + getApplicationContext().getPackageName().trim() + "/WITHDRM", timestamp);
         } else {
             //Get download file name
@@ -3875,35 +4050,43 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
         Progress.setProgress(0);
 
         ContactModel1 contactModel1 = new ContactModel1();
-        contactModel1.setMUVIID(playerModel.getVideoTitle());
+        contactModel1.setMUVIID(name);
         contactModel1.setDOWNLOADID((int) enqueue);
         contactModel1.setProgress(0);
         contactModel1.setUSERNAME(emailIdStr);
-        contactModel1.setUniqueId(playerModel.getStreamUniqueId() + emailIdStr);
+        contactModel1.setUniqueId(muviStreamId + emailIdStr);
+
         contactModel1.setDSTATUS(2);
-        contactModel1.setPoster(playerModel.getPosterImageId().trim());
+        contactModel1.setPoster(posterImageId);
 
 
         if (isDrm) {
             contactModel1.setToken(licensetoken);
+            Log.v("SUBHALAXMIPANDA1","licensetoken");
+
             contactModel1.setPath(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/WITHDRM/" + timestamp);
         } else {
             contactModel1.setToken(fileExtenstion);
             contactModel1.setPath(Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName().trim() + "/WITHOUT_DRM/" + timestamp);
         }
 
-        contactModel1.setContentid(String.valueOf(playerModel.getContentTypesId()));
-        contactModel1.setGenere(playerModel.getVideoGenre().trim());
-        contactModel1.setMuviid(playerModel.getMovieUniqueId().trim());
-        contactModel1.setDuration(playerModel.getVideoDuration().trim());
+        contactModel1.setContentid(String.valueOf(contentTypesId));
+        contactModel1.setGenere(movieGenre);
+        contactModel1.setMuviid(movieUniqueId);
+        contactModel1.setDuration(videoDurationStr);
+
+        Log.v("SANJAYA1234",playerModel.getPosterImageId().trim());
         dbHelper.insertRecord(contactModel1);
 
         Log.d("BIBHU", emailIdStr);
 
 
-        audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
+        audio = dbHelper.getContact(contactModel1.getUniqueId());
         if (audio != null) {
+
             if (audio.getUSERNAME().trim().equals(emailIdStr.trim())) {
+
+
                 checkDownLoadStatusFromDownloadManager1(audio, true);
             }
         }
@@ -3912,8 +4095,8 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
         SQLiteDatabase DB = YogaPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
         String query1 = "INSERT INTO " + DBHelper.DOWNLOAD_CONTENT_INFO + "(download_contnet_id,log_id,authtoken,email," +
                 "ipaddress,movie_id,episode_id,device_type,download_status,server_sending_final_status) VALUES" +
-                "('" + enqueue + "','0','" + player.utils.Util.authTokenStr.trim() + "','" + emailIdStr.trim() + "','" + ipAddressStr + "'," +
-                "'" + playerModel.getMovieUniqueId().trim() + "','" + playerModel.getStreamUniqueId().trim() + "'," +
+                "('" + enqueue + "','0','" + authTokenStr + "','" + emailIdStr.trim() + "','" + ipAddres + "'," +
+                "'" + movieUniqueId + "','" + muviStreamId + "'," +
                 "'" + 2 + "','2','0')";
 
         DB.execSQL(query1);
@@ -3955,6 +4138,13 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
 
 
     }
+
+
+
+
+
+
+
 
     public void checkDownLoadStatusFromDownloadManager1(final ContactModel1 model, final boolean CallAccessPeriodApi) {
 
@@ -4075,9 +4265,12 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                                 Progress.setProgress(0);
 
                                 Progress.setProgress((int) model.getProgress());
+                                Log.v("SUBHALAXMIPANDA1","model.getProgress()"+model.getProgress());
+
                                 percentg.setText(model.getProgress() + "%");
 //
                                 if (model.getProgress() == 100) {
+                                    Log.v("SUBHALAXMIPANDA1","model.100()"+model.getProgress());
 
                                     //writefilepath();
 //                                dbHelper.deleteRecord(audio);
@@ -4215,9 +4408,33 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
 
 
                         DB1.execSQL(query1);
+                    }else{
+
+                        if (Dwonload_Complete_Msg.equals("") || responseStr.contains("html")){
+                            Dwonload_Complete_Msg = "Your video has been downloaded successfully.";
+                            SQLiteDatabase DB1 = YogaPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
+
+
+                            String query1 = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET server_current_time = '" + 0 + "' ," +
+                                    "watch_period = '0',access_period = '" + -1 + "' WHERE download_id = '" + f_url[0].trim() + "'";
+
+
+                            DB1.execSQL(query1);
+                        }
                     }
                 }
             } catch (Exception e) {
+                if (Dwonload_Complete_Msg.equals("") || responseStr.contains("html")){
+                    Dwonload_Complete_Msg = "Your video has been downloaded successfully.";
+                    SQLiteDatabase DB1 = YogaPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
+
+
+                    String query1 = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET server_current_time = '" + 0 + "' ," +
+                            "watch_period = '0',access_period = '" + -1 + "' WHERE download_id = '" + f_url[0].trim() + "'";
+
+
+                    DB1.execSQL(query1);
+                }
                 statusCode = 0;
             }
 
@@ -4273,7 +4490,7 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
 
             List_Of_Resolution_Url.remove(0);
             if (List_Of_Resolution_Url.size() > 0) {
-                new YogaPlayerActivity.DetectDownloadingFileSize().execute();
+                new DetectDownloadingFileSize().execute();
             } else {
                 try {
                     if (pDialog_for_gettig_filesize != null && pDialog_for_gettig_filesize.isShowing()) {
@@ -4405,6 +4622,33 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
 
         }
     }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_STORAGE) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+               /* if(List_Of_Resolution_Url_Used_For_Download.size()>0)
+                {
+                    downloadFile(false);
+                }else
+                {
+                    downloadFile(true);
+                }*/
+
+            } else {
+                Toast.makeText(YogaPlayerActivity.this, player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.DOWNLOAD_INTERRUPTED, player.utils.Util.DEFAULT_DOWNLOAD_INTERRUPTED), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+
+
+
 }
 
 
