@@ -1249,9 +1249,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         Log.v("NiharMishra", "OnCreate" + questions);
 
         languagePreference = LanguagePreference.getLanguagePreference(this);
-        playerModel = (Player) getIntent().getSerializableExtra("" +
-                "");
-
+        playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
 
         SubTitleName = new ArrayList<>();
         SubTitlePath = new ArrayList<>();
@@ -1504,6 +1502,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
 
         /********* Offline ********/
+
+
+
+
+
+
 /***************chromecast**********************/
 
         mAquery = new AQuery(ProgramPlayerActivity.this);
@@ -1595,9 +1599,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         Typeface videoCensorRatingTextView1face = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         durationTitleTextView.setTypeface(videoCensorRatingTextView1face);
 
-        story = (TextView) findViewById(R.id.story);
+      /*  story = (TextView) findViewById(R.id.story);
         Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-        story.setTypeface(storyTypeface);
+        story.setTypeface(storyTypeface);*/
 
         // ProgramPlayerActivity.this is changed for the new requirement of Offline Viewing.
         startService(new Intent(ProgramPlayerActivity.this, DataConsumptionService.class));
@@ -1756,10 +1760,14 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         }
 
         if (playerModel.getVideoStory().trim() != null && !playerModel.getVideoStory().trim().matches("")) {
-            story.setText(playerModel.getVideoStory());
-            story.setVisibility(View.VISIBLE);
+//            descriptionTitleTextVIew.setText(playerModel.getVideoStory());
+            String title = getColoredSpanned("DESCRIPTION", "#4cbfb8");
+            String desctitle = getColoredSpanned(playerModel.getVideoStory(),"#000000");
+
+            descriptionTitleTextVIew.setText(Html.fromHtml(title + " : " + desctitle));
+            descriptionTitleTextVIew.setVisibility(View.VISIBLE);
         } else {
-            story.setVisibility(View.GONE);
+            descriptionTitleTextVIew.setVisibility(View.GONE);
         }
 
         player_layout = (RelativeLayout) findViewById(R.id.player_layout);
@@ -3045,7 +3053,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                                 videoTitle.setText(listModel.getEpisodeTitle());
 //                                Util.dataModel.setEpisode_title(listModel.getEpisodeTitle());
                                 ///video story text view start
-                                story.setText(listModel.getEpisodeDescription());
+                                descriptionTitleTextVIew.setText(listModel.getEpisodeDescription());
 //                                Util.dataModel.setVideoStory(listModel.getEpisodeDescription());
 
                                 View decorView = getWindow().getDecorView();
@@ -4172,7 +4180,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     }
 
     private void hideSystemUI() {
-        story.setText("");
+        descriptionTitleTextVIew.setText("");
         // Set the IMMERSIVE flag.
         // Set the content to appear under the system bars so that the content
         // doesn't resize when the system bars hide and show.
@@ -4187,7 +4195,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     }
 
     private void showSystemUI() {
-        story.setText(playerModel.getVideoStory());
+        descriptionTitleTextVIew.setText(playerModel.getVideoStory());
 
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
@@ -4448,9 +4456,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr);
+                httppost.addHeader("authToken",authTokenStr);
                 httppost.addHeader("stream_unique_id", playerModel.getStreamUniqueId());
 
+
+                Log.v("SUBHA","authTokenStr " +  authTokenStr);
+                Log.v("SUBHA", "playerModel.getStreamUniqueId() === "+playerModel.getStreamUniqueId());
 
                 try {
                     HttpResponse response = httpclient.execute(httppost);
@@ -6562,7 +6573,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             videoTitle.setText(listModel.getEpisodeTitle());
 //                                Util.dataModel.setEpisode_title(listModel.getEpisodeTitle());
             ///video story text view start
-            story.setText(listModel.getEpisodeDescription());
+        descriptionTitleTextVIew.setText(listModel.getEpisodeDescription());
 //                                Util.dataModel.setVideoStory(listModel.getEpisodeDescription());
 
             View decorView = getWindow().getDecorView();
@@ -6648,5 +6659,14 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
         }
     }
+
+
+
+
+    private String getColoredSpanned(String text, String color) {
+        String input = "<font color=" + color + ">" + text + "</font>";
+        return input;
+    }
+
 
 }

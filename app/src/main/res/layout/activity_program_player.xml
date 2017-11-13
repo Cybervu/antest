@@ -408,7 +408,7 @@
                     android:textSize="@dimen/genre_textsize" />
 
 
-                <TextView
+               <!-- <TextView
                     android:id="@+id/story"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -421,7 +421,7 @@
                     android:text="hbbuhb hubububn"
                     android:textColor="@color/nav_drawer_lineColor"
                     android:textSize="@dimen/genre_textsize" />
-
+-->
             </RelativeLayout>
 
             <RelativeLayout
