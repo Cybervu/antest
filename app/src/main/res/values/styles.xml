@@ -424,4 +424,208 @@
 
     </style>
 
+    <style name="videoCensorRatingTextView1">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/videoCensorRatingTextView_margin</item>
+        <item name="android:layout_marginTop">@dimen/margintop8dp</item>
+        <item name="android:textColor">@color/nav_drawer_lineColor</item>
+        <item name="android:textSize">@dimen/genre_textsize</item>
+    </style>
+
+    <style name="storyTextview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/marginleft10dp</item>
+        <item name="android:layout_marginLeft">@dimen/marginleft10dp</item>
+        <item name="android:layout_marginRight">@dimen/marginright10dp</item>
+        <item name="android:layout_marginTop">@dimen/margintop8dp</item>
+        <item name="android:textColor">@color/nav_drawer_lineColor</item>
+        <item name="android:textSize">@dimen/genre_textsize</item>
+    </style>
+
+    <style name="videoCastCrewTitleTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginLeft">@dimen/marginleft10dp</item>
+        <item name="android:layout_marginTop">@dimen/margintop12dp</item>
+        <item name="android:textColor">@color/cast_crew_titleCololr</item>
+        <item name="android:textSize">@dimen/genre_textsize</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="logoImageView">
+        <item name="android:layout_width">@dimen/forgot_logo_width</item>
+        <item name="android:layout_height">@dimen/forgot_logo_height</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:background">@drawable/logo</item>
+        <item name="android:paddingLeft">@dimen/layout_padding_left</item>
+        <item name="android:paddingRight">@dimen/layout_padding_right</item>
+    </style>
+
+    <style name="loginTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/loginTextViewColor</item>
+        <item name="android:textSize">@dimen/login_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="submitButton">
+        <item name="android:layout_width">@dimen/submit_width_size</item>
+        <item name="android:layout_height">@dimen/submit_height_size</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/button_radious</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textSize">@dimen/submit_text_size</item>
+    </style>
+
+    <style name="editEmailStr">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginTop">@dimen/videoStoryTextView_margin</item>
+        <item name="android:drawablePadding">@dimen/Login_drawing_padding</item>
+        <item name="android:padding">@dimen/Login_drawing_padding</item>
+        <item name="android:paddingTop">@dimen/editEmailStr_padding</item>
+        <item name="android:textColor">@color/editTextColor</item>
+        <item name="android:textColorHint">@color/hint_color</item>
+        <item name="android:textSize">@dimen/email_text_size</item>
+    </style>
+
+    <style name="loginImageView">
+        <item name="android:layout_width">@dimen/forgot_logo_width</item>
+        <item name="android:layout_height">@dimen/forgot_logo_height</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/loginImageViewMarging_top</item>
+        <item name="android:background">@drawable/logo</item>
+        <item name="android:paddingTop">@dimen/login_padding</item>
+    </style>
+
+    <style name="loginEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginTop">@dimen/login_maring_top</item>
+        <item name="android:drawablePadding">@dimen/Login_drawing_padding</item>
+        <item name="android:paddingBottom">@dimen/login_padding_bottom</item>
+        <item name="android:paddingTop">@dimen/login_padding_bottom</item>
+        <item name="android:textColor">@color/editTextColor</item>
+        <item name="android:textColorHint">@color/hint_color</item>
+        <item name="android:textSize">@dimen/email_text_size</item>
+    </style>
+
+    <style name="forgotPasswordTextView">
+        <item name="android:layout_width">@dimen/login_text_height</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/forgotPasswordTextViewColor</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">4</item>
+        <item name="android:textSize">@dimen/forgot_text_size</item>
+    </style>
+
+    <style name="loginButton">
+        <item name="android:layout_width">@dimen/login_butn_width</item>
+        <item name="android:layout_height">@dimen/login_butn_height</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:background">@drawable/button_radious</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textSize">@dimen/submit_text_size</item>
+    </style>
+
+    <style name="fbIconImageview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginRight">@dimen/login_imageview_linear</item>
+        <item name="android:src">@drawable/fb_icon</item>
+    </style>
+
+    <style name="fbLoginTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_margin">@dimen/linear_text_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/fb_text_color</item>
+        <item name="android:textSize">@dimen/fb_text_size</item>
+    </style>
+
+    <style name="loginNewUserTextview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">@dimen/login_new_user_padding</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/login_new_user_text_color</item>
+        <item name="android:textSize">@dimen/signup_textsize</item>
+    </style>
+
+    <style name="signUpTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">3</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:textColor">@color/sign_up_text_color</item>
+        <item name="android:textSize">@dimen/signup_textsize</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="manage_device_text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/manage_device_padding</item>
+        <item name="android:textColor">@color/pageTitleColor</item>
+        <item name="android:textSize">@dimen/videotitle_text_size</item>
+    </style>
+
+    <style name="device_list_listview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:divider">#eee</item>
+        <item name="android:dividerHeight">@dimen/divider_height</item>
+        <item name="android:padding">@dimen/Login_drawing_padding</item>
+    </style>
+
+    <style name="mydownloadListview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginLeft">@dimen/my_download_margin</item>
+        <item name="android:layout_marginRight">@dimen/my_download_margin</item>
+        <item name="android:dividerHeight">@dimen/manage_device_padding</item>
+    </style>
+
+    <style name="scanButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/scanbtn_height</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginRight">@dimen/forgotlayout_margin</item>
+        <item name="android:background">@drawable/button_bg_orange</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textSize">@dimen/scanbtn_text_size</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="chargeDetailsTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/forgotlayout_margin</item>
+        <item name="android:maxLines">4</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:textColor">@color/pageTitleColor</item>
+        <item name="android:textSize">@dimen/chargedetail_text_size</item>
+    </style>
 </resources>

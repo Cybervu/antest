@@ -295,52 +295,28 @@
 
                     <TextView
                         android:id="@+id/videoCensorRatingTextView1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/videoCensorRatingTextView1"
                         android:layout_below="@+id/videoGenreTextView"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginTop="@dimen/margintop8dp"
-                        android:text=""
-                        android:textColor="@color/nav_drawer_lineColor"
-                        android:textSize="@dimen/genre_textsize" />
+                        android:text="" />
 
 
                     <TextView
                         android:id="@+id/videoReleaseDateTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/videoDurationTextView"
                         android:layout_below="@+id/videoGenreTextView"
-                        android:layout_marginLeft="@dimen/marginleft10dp"
-                        android:layout_marginTop="@dimen/margintop8dp"
-                        android:text=""
-                        android:textColor="@color/nav_drawer_lineColor"
-                        android:textSize="@dimen/genre_textsize" />
+                        android:text="" />
 
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/story"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    style="@style/storyTextview"
                     android:layout_below="@+id/videoTitle"
-                    android:layout_marginBottom="@dimen/marginleft10dp"
-                    android:layout_marginLeft="@dimen/marginleft10dp"
-                    android:layout_marginRight="@dimen/marginright10dp"
-                    android:layout_marginTop="@dimen/margintop8dp"
-                    android:text=""
-                    android:textColor="@color/nav_drawer_lineColor"
-                    android:textSize="@dimen/genre_textsize" />
+                    android:text="" />
 
                 <TextView
                     android:id="@+id/videoCastCrewTitleTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="@dimen/marginleft10dp"
-                    android:layout_marginTop="@dimen/margintop12dp"
-                    android:textColor="@color/cast_crew_titleCololr"
-                    android:textSize="@dimen/genre_textsize"
-                    android:textStyle="bold" />
+                    style="@style/videoCastCrewTitleTextView" />
 
             </LinearLayout>
         </LinearLayout>

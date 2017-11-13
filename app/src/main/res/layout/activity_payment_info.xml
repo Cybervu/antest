@@ -36,29 +36,15 @@
 
                     <Button
                         android:id="@+id/scanButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/scanbtn_height"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginRight="@dimen/forgotlayout_margin"
-                        android:background="@drawable/button_bg_orange"
+                        style="@style/scanButton"
                         android:stateListAnimator="@null"
-                        android:text="Scan"
-                        android:textColor="@color/buttonTextColor"
-                        android:textSize="@dimen/scanbtn_text_size"
-                        android:visibility="gone" />
+                        android:text="Scan" />
 
                     <TextView
                         android:id="@+id/chargeDetailsTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/chargeDetailsTextView"
                         android:layout_below="@+id/creditCardDetailsTitleTextView"
-                        android:layout_marginTop="@dimen/forgotlayout_margin"
-                        android:maxLines="4"
-                        android:singleLine="false"
-                        android:text="Your card will be charged now:"
-                        android:textColor="@color/pageTitleColor"
-                        android:textSize="@dimen/chargedetail_text_size" />
+                        android:text="Your card will be charged now:" />
 
                     <!-- <RelativeLayout
                          android:layout_width="match_parent"

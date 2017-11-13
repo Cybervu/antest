@@ -7,6 +7,7 @@
     tools:context="player.activity.MyActivity"
     tools:ignore="MergeRootFrame">
 
+
     <fragment
         android:name="player.activity.MyActivity$VideoFragment"
         android:layout_width="match_parent"

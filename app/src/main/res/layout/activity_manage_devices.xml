@@ -11,12 +11,8 @@
 
     <TextView
         android:id="@+id/manage_device_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/manage_device_padding"
-        android:text="Your Devices"
-        android:textColor="@color/pageTitleColor"
-        android:textSize="@dimen/videotitle_text_size" />
+        style="@style/manage_device_text"
+        android:text="Your Devices" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,11 +22,7 @@
 
         <ListView
             android:id="@+id/device_list"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:divider="#eee"
-            android:dividerHeight="@dimen/divider_height"
-            android:padding="@dimen/Login_drawing_padding">
+            style="@style/device_list_listview">
 
         </ListView>
 
