@@ -2144,7 +2144,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         }
 
-        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+//        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
 
 
 

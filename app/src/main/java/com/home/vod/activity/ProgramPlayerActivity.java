@@ -4501,9 +4501,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 httppost.addHeader("stream_unique_id", playerModel.getStreamUniqueId());
 
 
-                Log.v("SUBHA","authTokenStr " +  authTokenStr);
-                Log.v("SUBHA", "playerModel.getStreamUniqueId() === "+playerModel.getStreamUniqueId());
-
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
@@ -5517,7 +5514,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 //                remoteMediaClient.removeListener(ProgramPlayerActivity.this);
 
                 if (mCastSession != null && mCastSession.isConnected()) {
-                    Log.v("BIBHU222", "======" + remoteMediaClient.isPlaying());
 
                     if (remoteMediaClient.isPlaying()) {
                         runOnUiThread(new Runnable() {

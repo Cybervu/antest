@@ -36,7 +36,6 @@
             android:layout_alignBottom="@+id/categoryTitle"
             android:layout_alignTop="@+id/categoryTitle"
             android:layout_marginLeft="@dimen/sideTitle_line_marginleft"
-
             android:background="@color/colorPrimary"
             android:paddingLeft="@dimen/marginleft10dp" />
 
