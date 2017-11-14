@@ -921,6 +921,10 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             playerModel.setChromecsatSubtitleLanguage(_video_details_output.getSubTitleName());
             playerModel.setChromecsatSubtitleLanguageCode(_video_details_output.getSubTitleLanguage());
 
+            // for offline subtitle
+            playerModel.setOfflineSubtitleUrl(_video_details_output.getOfflineUrl());
+            playerModel.setOfflineSubtitleLanguage(_video_details_output.getOfflineLanguage());
+
 
             if (playerModel.getVideoUrl() == null ||
                     playerModel.getVideoUrl().matches("")) {

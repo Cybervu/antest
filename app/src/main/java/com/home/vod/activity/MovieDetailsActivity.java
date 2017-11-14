@@ -2590,8 +2590,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
 
             // for offline subtitle
-            playerModel.setOfflineSubtitleUrl(_video_details_output.getSubTitlePath());
-            playerModel.setOfflineSubtitleLanguage(_video_details_output.getSubTitleName());
+            playerModel.setOfflineSubtitleUrl(_video_details_output.getOfflineUrl());
+            playerModel.setOfflineSubtitleLanguage(_video_details_output.getOfflineLanguage());
 
 
             //for chromecast subtitle
