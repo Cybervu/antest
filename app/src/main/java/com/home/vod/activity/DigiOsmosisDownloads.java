@@ -237,6 +237,8 @@ public class DigiOsmosisDownloads extends AppCompatActivity implements GetLangua
         //download=dbHelper.getDownloadcontent(emailIdStr);
         download=dbHelper.getContactt(emailIdStr,1);
 
+        Log.v("SUBHASUBHREE","download"+download.size());
+        Log.v("SUBHASUBHREE","download"+download.get(0).getStory());
         if(download.size()>0) {
 
 
@@ -395,11 +397,14 @@ public class DigiOsmosisDownloads extends AppCompatActivity implements GetLangua
 
                         //=====================================END================================================//
 
+                        Log.v("SUBHASUBHREE","download story"+ download.get(position).getStory());
 
+                        Log.v("SUBHASUBHREE","download titles"+ download.get(position).getMUVIID());
 
                         final String pathh=download.get(position).getPath();
                         final String titles=download.get(position).getMUVIID();
                         final String gen=download.get(position).getGenere();
+                        final String story = download.get(position).getStory();
                         final String tok=download.get(position).getToken();
                         final String contentid=download.get(position).getContentid();
                         final String muviid=download.get(position).getMuviid();
@@ -407,6 +412,8 @@ public class DigiOsmosisDownloads extends AppCompatActivity implements GetLangua
                         final String vidduration=download.get(position).getDuration();
                         final String filename=pathh.substring(pathh.lastIndexOf("/") + 1);
 
+                        Log.v("SUBHA","story ==== 1   "+ download.get(position).getStory());
+                        Log.v("SUBHA","story ==== 2    "+ story);
 
                         try {
 
@@ -434,6 +441,7 @@ public class DigiOsmosisDownloads extends AppCompatActivity implements GetLangua
 
                                     in.putExtra("contid", contentid);
                                     in.putExtra("gen", gen);
+                                    in.putExtra("story", story);
                                     in.putExtra("muvid", muviid);
                                     in.putExtra("vid", vidduration);
                                     in.putExtra("FNAME", filename);

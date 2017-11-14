@@ -1634,7 +1634,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                                                         public void onClick(DialogInterface dialog, int id) {
                                                             dialog.cancel();
                                                             downloading = false;
-                                                            audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
+                                                            audio = dbHelper.getContact(muviStreamId + emailIdStr);
 
                                                             if (audio != null) {
 
@@ -2872,8 +2872,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         View view = new View(this);
         int paddingleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
         //  view.setPadding(paddingleft, 0, 0, 0);
-        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.sideTitle_line_height), getResources().getDisplayMetrics());
-        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.sideTitle_line_width), getResources().getDisplayMetrics());
+        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,18, getResources().getDisplayMetrics());
+        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width - 1, height + 2);
         view.setLayoutParams(parms);
         int marginleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
@@ -3565,7 +3565,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 }
 
                 SubtitleModel subtitleModel = new SubtitleModel();
-                subtitleModel.setUID(playerModel.getStreamUniqueId() + emailIdStr);
+                subtitleModel.setUID(muviStreamId + emailIdStr);
                 subtitleModel.setLanguage(playerModel.getOfflineLanguage().get(0));
                 String filename = mediaStorageDir1.getAbsolutePath() + "/" + System.currentTimeMillis() + ".vtt";
                 subtitleModel.setPath(filename);
@@ -4074,8 +4074,9 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
         contactModel1.setGenere(movieGenre);
         contactModel1.setMuviid(movieUniqueId);
         contactModel1.setDuration(videoDurationStr);
+        contactModel1.setStory(movieDetailsStr);
 
-        Log.v("SANJAYA1234",playerModel.getPosterImageId().trim());
+        Log.v("SANJAYA1234",movieDetailsStr);
         dbHelper.insertRecord(contactModel1);
 
         Log.d("BIBHU", emailIdStr);
@@ -4114,19 +4115,19 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
 
         // ExoPlayerActivity.this code is only responsible for Access period and Watch Period feature on Download Contnet
         Cursor cursor = DB.rawQuery("SELECT * FROM " + DBHelper.WATCH_ACCESS_INFO + "" +
-                " WHERE email = '" + emailIdStr.trim() + "' AND stream_unique_id = '" + playerModel.getStreamUniqueId() + "'", null);
+                " WHERE email = '" + emailIdStr.trim() + "' AND stream_unique_id = '" + muviStreamId + "'", null);
 
         if (cursor.getCount() > 0) {
             String query = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET download_id = '" + enqueue + "' , " +
-                    "stream_unique_id = '" + playerModel.getStreamUniqueId() + "',initial_played_time = '0'," +
-                    "updated_server_current_time = '0' WHERE email = '" + emailIdStr.trim() + "' AND stream_unique_id = '" + playerModel.getStreamUniqueId() + "'";
+                    "stream_unique_id = '" + muviStreamId + "',initial_played_time = '0'," +
+                    "updated_server_current_time = '0' WHERE email = '" + emailIdStr.trim() + "' AND stream_unique_id = '" + muviStreamId + "'";
             DB.execSQL(query);
 
             Log.v("BIBHU1234", "update called");
 
         } else {
             String query = "INSERT INTO " + DBHelper.WATCH_ACCESS_INFO + " (download_id , stream_unique_id , initial_played_time , updated_server_current_time,email) VALUES" +
-                    " ('" + enqueue + "','" + playerModel.getStreamUniqueId() + "','0','0','" + emailIdStr.trim() + "')";
+                    " ('" + enqueue + "','" + muviStreamId + "','0','0','" + emailIdStr.trim() + "')";
             DB.execSQL(query);
 
             Log.v("BIBHU1234", "insert called");

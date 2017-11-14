@@ -46,6 +46,7 @@ import com.home.apisdk.apiModel.DownloadContentInput;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 
@@ -70,10 +71,12 @@ import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIET_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN_STATUS_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_PDF;
 import static com.home.vod.preferences.LanguagePreference.DIET_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.LOGIN_STATUS_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.NO_PDF;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -92,6 +95,7 @@ public class DietPlanActivity extends AppCompatActivity implements DownloadConte
     Context context;
     ProgressBar progresBar;
     WebView dietPlanWebView;
+    PreferenceManager preferenceManager;
     String Download_Url;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -107,7 +111,7 @@ public class DietPlanActivity extends AppCompatActivity implements DownloadConte
         setContentView(R.layout.activity_diet_plan);
         context = DietPlanActivity.this;
 
-
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
         progresBar = (ProgressBar) findViewById(R.id.progress_bar);
         pHandler = new ProgressBarHandler(DietPlanActivity.this);
         pHandler.show();
@@ -147,34 +151,44 @@ public class DietPlanActivity extends AppCompatActivity implements DownloadConte
             @Override
             public void onClick(View v) {
 
-                if (ContextCompat.checkSelfPermission(DietPlanActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(DietPlanActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        ActivityCompat.requestPermissions(DietPlanActivity.this,
-                                new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_CONTACTS},
-                                111);
-                    } else {
-                        ActivityCompat.requestPermissions(DietPlanActivity.this,
-                                new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                111);
-                    }
-                } else {
 
-                    //Call whatever you want
-                    if (NetworkStatus.getInstance().isConnected(DietPlanActivity.this)) {
-                        if (!dietData.equals("")) {
-                            Log.v("SUBHALAXMI", "CALLED");
-                            DownloadTransactionDetails();
-                        }
-                         else {
-                            com.home.vod.util.Util.showToast(getApplicationContext(), languagePreference.getTextofLanguage(NO_PDF, DEFAULT_NO_PDF));
-                        }
-
-                    } else {
-                        Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-
-                    }
+                String loggedInStr = "";
+                if (preferenceManager.getLoginFeatureFromPref() == 1) {
+                    loggedInStr = preferenceManager.getUseridFromPref();
                 }
 
+                if (loggedInStr != null) {
+
+                    if (ContextCompat.checkSelfPermission(DietPlanActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(DietPlanActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                            ActivityCompat.requestPermissions(DietPlanActivity.this,
+                                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_CONTACTS},
+                                    111);
+                        } else {
+                            ActivityCompat.requestPermissions(DietPlanActivity.this,
+                                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    111);
+                        }
+                    } else {
+
+                        //Call whatever you want
+                        if (NetworkStatus.getInstance().isConnected(DietPlanActivity.this)) {
+                            if (!dietData.equals("")) {
+                                Log.v("SUBHALAXMI", "CALLED");
+                                DownloadTransactionDetails();
+                            } else {
+                                com.home.vod.util.Util.showToast(getApplicationContext(), languagePreference.getTextofLanguage(NO_PDF, DEFAULT_NO_PDF));
+                            }
+
+                        } else {
+                            Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(LOGIN_STATUS_MESSAGE, DEFAULT_LOGIN_STATUS_MESSAGE), Toast.LENGTH_LONG).show();
+
+                }
 
 
 

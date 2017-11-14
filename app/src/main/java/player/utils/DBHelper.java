@@ -31,8 +31,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_CONTENT_ID = "Contentid";
     public static final String COLUMN_GENERE = "Genere";
     public static final String COLUMN_MUVIID = "Muviid";
+    public static final String COLUMN_STORY = "Story";
     public static final String COLUMN_DURATION = "Duration";
     public static final String COLUMN_DOWNLOAD_PROGRESS = "DOWNLOAD_PROGRESS";
+
 
 
     public static final String TABLE_NAME_SUBTITLE_LUIMERE = "SUBTITLE_ONDEMAND";
@@ -79,6 +81,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     COLUMN_CONTENT_ID + " VARCHAR, " +
                     COLUMN_GENERE + " VARCHAR, " +
                     COLUMN_MUVIID + " VARCHAR, " +
+                    COLUMN_STORY + " VARCHAR, " +
                     COLUMN_DURATION + " VARCHAR, " +
 
 
@@ -129,6 +132,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_CONTENT_ID, contact.getContentid());
         contentValues.put(COLUMN_GENERE, contact.getGenere());
         contentValues.put(COLUMN_MUVIID, contact.getMuviid());
+        contentValues.put(COLUMN_STORY, contact.getStory());
         contentValues.put(COLUMN_DURATION, contact.getDuration());
 
 
@@ -183,7 +187,7 @@ public class DBHelper extends SQLiteOpenHelper {
                         COLUMN_DOWNLOADID,
                         COLUMN_DOWNLOAD_PROGRESS,COLUMN_DOWNLOAD_USERNAME,COLUMN_DOWNLOAD_UNIQUEID, COLUMN_DOWNLOAD_STATUS,
 
-                        COLUMN_POSTER,COLUMN_MUVI_TOKEN,COLUMN_FILE_PATH,COLUMN_CONTENT_ID,COLUMN_GENERE,COLUMN_MUVIID,COLUMN_DURATION,
+                        COLUMN_POSTER,COLUMN_MUVI_TOKEN,COLUMN_FILE_PATH,COLUMN_CONTENT_ID,COLUMN_GENERE,COLUMN_MUVIID,COLUMN_STORY,COLUMN_DURATION,
 
 
 
@@ -211,7 +215,8 @@ public class DBHelper extends SQLiteOpenHelper {
             contactModel.setContentid(cursor.getString(10));
             contactModel.setGenere(cursor.getString(11));
             contactModel.setMuviid(cursor.getString(12));
-            contactModel.setDuration(cursor.getString(13));
+            contactModel.setStory(cursor.getString(13));
+            contactModel.setDuration(cursor.getString(14));
 
         }
 
@@ -348,7 +353,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String query = "SELECT "+COLUMN_ID+","+COLUMN_MUVI_ID+","+COLUMN_DOWNLOADID+","+COLUMN_DOWNLOAD_PROGRESS+","+
                 COLUMN_DOWNLOAD_USERNAME+","+COLUMN_DOWNLOAD_UNIQUEID+","+ COLUMN_DOWNLOAD_STATUS+","+
 
-                COLUMN_POSTER+","+COLUMN_MUVI_TOKEN+","+COLUMN_FILE_PATH+","+COLUMN_CONTENT_ID+","+COLUMN_GENERE+","+COLUMN_MUVIID+","+COLUMN_DURATION+" FROM "+TABLE_NAME+" WHERE "+COLUMN_DOWNLOAD_USERNAME+" = '"+id+"' AND "+COLUMN_DOWNLOAD_STATUS+" = "+downloadstatus;
+                COLUMN_POSTER+","+COLUMN_MUVI_TOKEN+","+COLUMN_FILE_PATH+","+COLUMN_CONTENT_ID+","+COLUMN_GENERE+","+COLUMN_MUVIID+","+COLUMN_STORY+","+COLUMN_DURATION+" FROM "+TABLE_NAME+" WHERE "+COLUMN_DOWNLOAD_USERNAME+" = '"+id+"' AND "+COLUMN_DOWNLOAD_STATUS+" = "+downloadstatus;
         SQLiteDatabase db = this.getReadableDatabase();
 //
         Cursor cursor = db.rawQuery(query,null);
@@ -390,7 +395,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 contactModel.setContentid(cursor.getString(10));
                 contactModel.setGenere(cursor.getString(11));
                 contactModel.setMuviid(cursor.getString(12));
-                contactModel.setDuration(cursor.getString(13));
+                contactModel.setStory(cursor.getString(13));
+                contactModel.setDuration(cursor.getString(14));
 
 
 
@@ -546,7 +552,8 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_CONTENT_ID, contact.getContentid());
         contentValues.put(COLUMN_GENERE, contact.getGenere());
         contentValues.put(COLUMN_MUVIID, contact.getMuviid());
-        contentValues.put(COLUMN_DURATION, contact.getDuration());
+        contentValues.put(COLUMN_STORY, contact.getStory());
+        contentValues.put(COLUMN_STORY, contact.getStory());
 
 
 

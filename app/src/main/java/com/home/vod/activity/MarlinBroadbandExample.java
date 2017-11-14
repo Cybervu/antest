@@ -183,7 +183,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 	TextView videoTitle, GenreTextView, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView,
 			videoCastCrewTitleTextView;
-	TextView story;
+	TextView storyTextView;
 
 	private EMVideoView emVideoView;
 	int seek_label_pos = 0;
@@ -207,6 +207,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 	private boolean downloading;
 
 	String contid,muviid,gen,vidduration;
+    String story = "";
 
 	private SubtitleProcessingTask subsFetchTask;
 	public TimedTextObject srt;
@@ -233,15 +234,33 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		preferenceManager = PreferenceManager.getPreferenceManager(this);
 		/*MediaRouteButton mediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
 		mediaRouteButton.setVisibility(View.INVISIBLE);*/
-
-		contid = getIntent().getStringExtra("contid").trim();
-		muviid = getIntent().getStringExtra("muvid").trim();
+        if(getIntent().getStringExtra("contid")!=null && !getIntent().getStringExtra("contid").matches("")) {
+            contid = getIntent().getStringExtra("contid").trim();
+        }if(getIntent().getStringExtra("muvid")!=null && !getIntent().getStringExtra("muvid").matches("")) {
+            muviid = getIntent().getStringExtra("muvid").trim();
+        }
+	/*	contid = getIntent().getStringExtra("contid").trim();
+		muviid = getIntent().getStringExtra("muvid").trim();*/
 		//movieid = getIntent().getStringExtra("url").trim();
-		gen = getIntent().getStringExtra("gen").trim();
-		title=getIntent().getStringExtra("Title").trim();
-		vidduration = getIntent().getStringExtra("vid").trim();
-		download_id_from_watch_access_table = getIntent().getStringExtra("download_id_from_watch_access_table").trim();
-
+		//gen = getIntent().getStringExtra("gen").trim();
+		if(getIntent().getStringExtra("story")!=null && !getIntent().getStringExtra("story").matches("")) {
+            story = getIntent().getStringExtra("story").trim();
+        }
+        if(getIntent().getStringExtra("gen")!=null && !getIntent().getStringExtra("gen").matches("")) {
+            gen = getIntent().getStringExtra("gen").trim();
+        }
+        if(getIntent().getStringExtra("Title")!=null && !getIntent().getStringExtra("Title").matches("")) {
+            title = getIntent().getStringExtra("Title").trim();
+        }
+        if(getIntent().getStringExtra("vid")!=null && !getIntent().getStringExtra("vid").matches("")) {
+            vidduration = getIntent().getStringExtra("vid").trim();
+        }
+	//	title=getIntent().getStringExtra("Title").trim();
+		//vidduration = getIntent().getStringExtra("vid").trim();
+		//download_id_from_watch_access_table = getIntent().getStringExtra("download_id_from_watch_access_table").trim();
+        if(getIntent().getStringExtra("download_id_from_watch_access_table")!=null && !getIntent().getStringExtra("download_id_from_watch_access_table").matches("")) {
+            download_id_from_watch_access_table = getIntent().getStringExtra("download_id_from_watch_access_table").trim();
+        }
 
 
 		content_types_id = Integer.parseInt(contid);
@@ -290,9 +309,9 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 		videoReleaseDateTextView = (TextView) findViewById(R.id.videoReleaseDateTextView);
 		Typeface videoReleaseDateTextViewface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoReleaseDateTextView.setTypeface(videoReleaseDateTextViewface);
-	/*	story = (TextView) findViewById(R.id.story);
+		storyTextView = (TextView) findViewById(R.id.videoStoryTextView);
 		Typeface storyTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
-		story.setTypeface(storyTypeface);*/
+		storyTextView.setTypeface(storyTypeface);
 		videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
 		Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
 		videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
@@ -397,6 +416,14 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 			GenreTextView.setVisibility(View.GONE);
 		}
 
+		if (story != null && !story.matches(""))
+
+		{
+			storyTextView.setText(story);
+			storyTextView.setVisibility(View.VISIBLE);
+		} else {
+			storyTextView.setVisibility(View.GONE);
+		}
 
 		if (vidduration != null && !vidduration.matches(""))
 
