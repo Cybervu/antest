@@ -42,7 +42,7 @@ public class RegisterUIHandler {
     private Activity context;
     private TextView termsTextView,termsTextView1;
     private EditText editName;
-    public  String selected_Language_Id="", selected_Country_Id="",regNameStr;
+    public  String selected_Language_Id="", selected_Country_Id="",regNameStr,regPhone="";
     private LanguagePreference languagePreference;
 
     public RegisterUIHandler(Activity context){
@@ -74,7 +74,7 @@ public class RegisterUIHandler {
     public void getRegisterName(){
         regNameStr = editName.getText().toString().trim();
         if (!regNameStr.equals("")) {
-            ((RegisterActivity) context).registerButtonClicked(regNameStr);
+            ((RegisterActivity) context).registerButtonClicked(regNameStr,regPhone);
         }else {
             Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
         }

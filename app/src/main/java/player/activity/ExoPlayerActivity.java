@@ -1748,7 +1748,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                     asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
 
-                            } else if (isFastForward == false && currentPositionStr >= millisecondsToString(playerPreviousPosition)) {
+                            } else if (isFastForward == false && currentPositionStr >0) {
 
                                 playerPreviousPosition = 0;
 
