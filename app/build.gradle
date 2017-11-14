@@ -95,7 +95,7 @@ android {
             buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
             // buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//mob
             // buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
-           // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
         }
         newthoughtchannel_staging_ {
             dimension 'environment'
@@ -316,6 +316,24 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
+        magicmovies {
+            minSdkVersion 15
+            dimension 'vendor'
+            applicationId 'com.release.magicmovies'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"3ea7e43c13d8ab6eb505b960217df923\""
+            targetSdkVersion 23
+            versionCode 1
+            versionName '1.0'
+        }
+        magicmovies_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        magicmovies_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
     }
 }
 
@@ -345,7 +363,19 @@ android.variantFilter { variant ->
     if (vendor.equals('defaultFlavor') && environment.equals('vishwamtv_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+    if (vendor.equals('defaultFlavor') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
 
+    if (vendor.equals('defaultFlavor') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('defaultFlavor') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
     /*Avoid defaultFlavor to newthoughtchannel combination for both debug & release mode.*/
 
     if (vendor.equals('defaultFlavor') && environment.equals('newthoughtchannel_staging_') && isRelease) {
@@ -539,6 +569,7 @@ android.variantFilter { variant ->
     if (vendor.equals('vishwamtv') && environment.equals('defaultFlavor_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('vishwamtv') && environment.equals('newthoughtchannel_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -551,6 +582,7 @@ android.variantFilter { variant ->
     if (vendor.equals('vishwamtv') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('vishwamtv') && environment.equals('aatto_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -708,6 +740,20 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    if (vendor.equals('vishwamtv') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('vishwamtv') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('vishwamtv') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered newthoughtchannel variant.
      */
@@ -724,6 +770,7 @@ android.variantFilter { variant ->
     if (vendor.equals('newthoughtchannel') && environment.equals('defaultFlavor_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('newthoughtchannel') && environment.equals('vishwamtv_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -736,6 +783,8 @@ android.variantFilter { variant ->
     if (vendor.equals('newthoughtchannel') && environment.equals('vishwamtv_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
+
     if (vendor.equals('newthoughtchannel') && environment.equals('aatto_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -890,6 +939,19 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    if (vendor.equals('newthoughtchannel') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('newthoughtchannel') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered aattoo variant.
      */
@@ -906,6 +968,7 @@ android.variantFilter { variant ->
     if (vendor.equals('aatto') && environment.equals('defaultFlavor_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('aatto') && environment.equals('vishwamtv_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -918,6 +981,7 @@ android.variantFilter { variant ->
     if (vendor.equals('aatto') && environment.equals('vishwamtv_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('aatto') && environment.equals('newthoughtchannel_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -930,6 +994,7 @@ android.variantFilter { variant ->
     if (vendor.equals('aatto') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('aatto') && environment.equals('digiOsmosis_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -942,6 +1007,7 @@ android.variantFilter { variant ->
     if (vendor.equals('aatto') && environment.equals('digiOsmosis_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('aatto') && environment.equals('lumiere_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1070,6 +1136,20 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    if (vendor.equals('aatto') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('aatto') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('aatto') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
     /**
      * Filtered digiosmosis variant.
      */
@@ -1086,6 +1166,7 @@ android.variantFilter { variant ->
     if (vendor.equals('digiOsmosis') && environment.equals('defaultFlavor_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('digiOsmosis') && environment.equals('vishwamtv_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1098,6 +1179,7 @@ android.variantFilter { variant ->
     if (vendor.equals('digiOsmosis') && environment.equals('vishwamtv_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('digiOsmosis') && environment.equals('newthoughtchannel_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1110,6 +1192,7 @@ android.variantFilter { variant ->
     if (vendor.equals('digiOsmosis') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('digiOsmosis') && environment.equals('aatto_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1122,6 +1205,7 @@ android.variantFilter { variant ->
     if (vendor.equals('digiOsmosis') && environment.equals('aatto_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('digiOsmosis') && environment.equals('lumiere_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1251,6 +1335,19 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    if (vendor.equals('digiOsmosis') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('digiOsmosis') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('digiOsmosis') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
     /**
      * Filtered Lumiere variant.
      */
@@ -1267,6 +1364,7 @@ android.variantFilter { variant ->
     if (vendor.equals('lumiere') && environment.equals('defaultFlavor_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('lumiere') && environment.equals('vishwamtv_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1279,6 +1377,7 @@ android.variantFilter { variant ->
     if (vendor.equals('lumiere') && environment.equals('vishwamtv_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('lumiere') && environment.equals('newthoughtchannel_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1291,6 +1390,7 @@ android.variantFilter { variant ->
     if (vendor.equals('lumiere') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('lumiere') && environment.equals('aatto_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1303,6 +1403,7 @@ android.variantFilter { variant ->
     if (vendor.equals('lumiere') && environment.equals('aatto_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('lumiere') && environment.equals('digiOsmosis_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1418,6 +1519,19 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     /*Avoid lumiere to yoteshingo combination for both debug & release mode.*/
+    if (vendor.equals('lumiere') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('lumiere') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('lumiere') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
 
     if (vendor.equals('lumiere') && environment.equals('yoteshingo_staging_') && isRelease) {
         variant.setIgnore(true)
@@ -1447,6 +1561,7 @@ android.variantFilter { variant ->
     if (vendor.equals('matas') && environment.equals('defaultFlavor_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('matas') && environment.equals('vishwamtv_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1459,6 +1574,7 @@ android.variantFilter { variant ->
     if (vendor.equals('matas') && environment.equals('vishwamtv_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('matas') && environment.equals('newthoughtchannel_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1471,6 +1587,7 @@ android.variantFilter { variant ->
     if (vendor.equals('matas') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('matas') && environment.equals('aatto_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1483,6 +1600,7 @@ android.variantFilter { variant ->
     if (vendor.equals('matas') && environment.equals('aatto_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('matas') && environment.equals('digiOsmosis_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1595,6 +1713,19 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     /*Avoid matas to yoteshingo combination for both debug & release mode.*/
+    if (vendor.equals('matas') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('matas') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('matas') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
 
     if (vendor.equals('matas') && environment.equals('yoteshingo_staging_') && isRelease) {
         variant.setIgnore(true)
@@ -1624,6 +1755,7 @@ android.variantFilter { variant ->
     if (vendor.equals('monetizer') && environment.equals('defaultFlavor_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('monetizer') && environment.equals('vishwamtv_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1636,6 +1768,7 @@ android.variantFilter { variant ->
     if (vendor.equals('monetizer') && environment.equals('vishwamtv_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('monetizer') && environment.equals('newthoughtchannel_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1648,6 +1781,7 @@ android.variantFilter { variant ->
     if (vendor.equals('monetizer') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('monetizer') && environment.equals('aatto_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1660,6 +1794,7 @@ android.variantFilter { variant ->
     if (vendor.equals('monetizer') && environment.equals('aatto_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('monetizer') && environment.equals('digiOsmosis_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1770,6 +1905,19 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     /*Avoid monetizer to yoteshingo combination for both debug & release mode.*/
+    if (vendor.equals('monetizer') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('monetizer') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('monetizer') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('monetizer') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
 
     if (vendor.equals('monetizer') && environment.equals('yoteshingo_staging_') && isRelease) {
         variant.setIgnore(true)
@@ -1799,6 +1947,7 @@ android.variantFilter { variant ->
     if (vendor.equals('plusnights') && environment.equals('defaultFlavor_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('plusnights') && environment.equals('vishwamtv_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1811,6 +1960,7 @@ android.variantFilter { variant ->
     if (vendor.equals('plusnights') && environment.equals('vishwamtv_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('plusnights') && environment.equals('newthoughtchannel_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1823,6 +1973,7 @@ android.variantFilter { variant ->
     if (vendor.equals('plusnights') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('plusnights') && environment.equals('aatto_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1835,6 +1986,7 @@ android.variantFilter { variant ->
     if (vendor.equals('plusnights') && environment.equals('aatto_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('plusnights') && environment.equals('digiOsmosis_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1945,6 +2097,19 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
     /*Avoid plusnights to yoteshingo combination for both debug & release mode.*/
+    if (vendor.equals('plusnights') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('plusnights') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('plusnights') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('plusnights') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
 
     if (vendor.equals('plusnights') && environment.equals('yoteshingo_staging_') && isRelease) {
         variant.setIgnore(true)
@@ -1968,12 +2133,13 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
-    if (vendor.equals('metrox') && environment.equals('defaultFlavor_Prod_') && isRelease) {
+    /*if (vendor.equals('metrox') && environment.equals('defaultFlavor_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
     if (vendor.equals('metrox') && environment.equals('defaultFlavor_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('metrox') && environment.equals('vishwamtv_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1986,6 +2152,7 @@ android.variantFilter { variant ->
     if (vendor.equals('metrox') && environment.equals('vishwamtv_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('metrox') && environment.equals('newthoughtchannel_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -1998,6 +2165,7 @@ android.variantFilter { variant ->
     if (vendor.equals('metrox') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('metrox') && environment.equals('aatto_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2010,6 +2178,7 @@ android.variantFilter { variant ->
     if (vendor.equals('metrox') && environment.equals('aatto_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('metrox') && environment.equals('digiOsmosis_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2074,7 +2243,7 @@ android.variantFilter { variant ->
     if (vendor.equals('metrox') && environment.equals('plusnights_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
-    /*Avoid metrox to wuntustreaming_staging_ combination for both debug & release mode.*/
+    *//*Avoid metrox to wuntustreaming_staging_ combination for both debug & release mode.*//*
 
     if (vendor.equals('metrox') && environment.equals('wuntustreaming_staging_') && isRelease) {
         variant.setIgnore(true)
@@ -2088,7 +2257,20 @@ android.variantFilter { variant ->
     if (vendor.equals('metrox') && environment.equals('wuntustreaming_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
-    /*Avoid metrox to yoteshingo combination for both debug & release mode.*/
+    *//*Avoid metrox to yoteshingo combination for both debug & release mode.*//*
+    if (vendor.equals('metrox') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('metrox') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
 
     if (vendor.equals('metrox') && environment.equals('yoteshingo_staging_') && isRelease) {
         variant.setIgnore(true)
@@ -2101,7 +2283,7 @@ android.variantFilter { variant ->
     }
     if (vendor.equals('metrox') && environment.equals('yoteshingo_Prod_') && isRelease) {
         variant.setIgnore(true)
-    }
+    }*/
     /**
      * Filtered wuntustreaming variant.
      */
@@ -2118,6 +2300,7 @@ android.variantFilter { variant ->
     if (vendor.equals('wuntustreaming') && environment.equals('defaultFlavor_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('wuntustreaming') && environment.equals('vishwamtv_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2130,6 +2313,7 @@ android.variantFilter { variant ->
     if (vendor.equals('wuntustreaming') && environment.equals('vishwamtv_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('wuntustreaming') && environment.equals('newthoughtchannel_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2142,6 +2326,7 @@ android.variantFilter { variant ->
     if (vendor.equals('wuntustreaming') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('wuntustreaming') && environment.equals('aatto_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2154,6 +2339,7 @@ android.variantFilter { variant ->
     if (vendor.equals('wuntustreaming') && environment.equals('aatto_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('wuntustreaming') && environment.equals('digiOsmosis_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2219,6 +2405,7 @@ android.variantFilter { variant ->
     if (vendor.equals('wuntustreaming') && environment.equals('metrox_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('wuntustreaming') && environment.equals('cmax_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2274,6 +2461,20 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    if (vendor.equals('wuntustreaming') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('wuntustreaming') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('wuntustreaming') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
 
     if (vendor.equals('metrox') && environment.equals('cmax_staging_') && isRelease) {
         variant.setIgnore(true)
@@ -2303,6 +2504,20 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    if (vendor.equals('metrox') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('metrox') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('metrox') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
 /**
  * Filtered cmax variant.
  */
@@ -2319,6 +2534,7 @@ android.variantFilter { variant ->
     if (vendor.equals('cmax') && environment.equals('defaultFlavor_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('cmax') && environment.equals('vishwamtv_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2331,6 +2547,7 @@ android.variantFilter { variant ->
     if (vendor.equals('cmax') && environment.equals('vishwamtv_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('cmax') && environment.equals('newthoughtchannel_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2343,6 +2560,7 @@ android.variantFilter { variant ->
     if (vendor.equals('cmax') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('cmax') && environment.equals('aatto_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2355,6 +2573,7 @@ android.variantFilter { variant ->
     if (vendor.equals('cmax') && environment.equals('aatto_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('cmax') && environment.equals('digiOsmosis_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2449,6 +2668,19 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 /*Avoid cmax to yoteshingo combination for both debug & release mode.*/
+    if (vendor.equals('cmax') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('cmax') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('cmax') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
 
     if (vendor.equals('cmax') && environment.equals('yoteshingo_staging_') && isRelease) {
         variant.setIgnore(true)
@@ -2478,6 +2710,7 @@ android.variantFilter { variant ->
     if (vendor.equals('muvinow') && environment.equals('defaultFlavor_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('muvinow') && environment.equals('vishwamtv_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2490,6 +2723,7 @@ android.variantFilter { variant ->
     if (vendor.equals('muvinow') && environment.equals('vishwamtv_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('muvinow') && environment.equals('newthoughtchannel_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2502,6 +2736,7 @@ android.variantFilter { variant ->
     if (vendor.equals('muvinow') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('muvinow') && environment.equals('aatto_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2514,6 +2749,7 @@ android.variantFilter { variant ->
     if (vendor.equals('muvinow') && environment.equals('aatto_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('muvinow') && environment.equals('digiOsmosis_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2622,7 +2858,19 @@ android.variantFilter { variant ->
         variant.setIgnore(true)
     }
 
+    if (vendor.equals('muvinow') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
 
+    if (vendor.equals('muvinow') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('muvinow') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
 
     /**
      * Filtered yoteshingo variant.
@@ -2640,6 +2888,7 @@ android.variantFilter { variant ->
     if (vendor.equals('yoteshingo') && environment.equals('defaultFlavor_Prod_') && isDebug) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('yoteshingo') && environment.equals('vishwamtv_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2652,6 +2901,7 @@ android.variantFilter { variant ->
     if (vendor.equals('yoteshingo') && environment.equals('vishwamtv_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('yoteshingo') && environment.equals('newthoughtchannel_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2664,6 +2914,7 @@ android.variantFilter { variant ->
     if (vendor.equals('yoteshingo') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('yoteshingo') && environment.equals('aatto_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2676,6 +2927,7 @@ android.variantFilter { variant ->
     if (vendor.equals('yoteshingo') && environment.equals('aatto_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
+
     if (vendor.equals('yoteshingo') && environment.equals('digiOsmosis_staging_') && isRelease) {
         variant.setIgnore(true)
     }
@@ -2798,8 +3050,226 @@ android.variantFilter { variant ->
     if (vendor.equals('yoteshingo') && environment.equals('metrox_Prod_') && isRelease) {
         variant.setIgnore(true)
     }
-}
 
+    if (vendor.equals('yoteshingo') && environment.equals('magicmovies_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('yoteshingo') && environment.equals('magicmovies_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('yoteshingo') && environment.equals('magicmovies_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('yoteshingo') && environment.equals('magicmovies_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+
+
+    /*Avoid magicmovies to vishwamtv combination for both debug & release mode.*/
+
+    if (vendor.equals('magicmovies') && environment.equals('vishwamtv_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('vishwamtv_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('magicmovies') && environment.equals('vishwamtv_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('vishwamtv_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid magicmovies to newthoughtchannel combination for both debug & release mode.*/
+
+    if (vendor.equals('magicmovies') && environment.equals('newthoughtchannel_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('newthoughtchannel_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('newthoughtchannel_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('newthoughtchannel_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid magicmovies to aatto combination for both debug & release mode.*/
+
+    if (vendor.equals('magicmovies') && environment.equals('aatto_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('aatto_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('aatto_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('aatto_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid magicmovies to digiosmosis combination for both debug & release mode.*/
+
+    if (vendor.equals('magicmovies') && environment.equals('digiOsmosis_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('digiOsmosis_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('digiOsmosis_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('digiOsmosis_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid magicmovies to Lumiere combination for both debug & release mode.*/
+
+    if (vendor.equals('magicmovies') && environment.equals('lumiere_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('lumiere_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('lumiere_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('lumiere_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid magicmovies to Matas combination for both debug & release mode.*/
+
+    if (vendor.equals('magicmovies') && environment.equals('matas_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('matas_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('matas_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('matas_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid defaultFlavor to Monetizer combination for both debug & release mode.*/
+
+    if (vendor.equals('magicmovies') && environment.equals('monetizer_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('monetizer_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('monetizer_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('monetizer_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    /*Avoid magicmovies to plusnights combination for both debug & release mode.*/
+
+    if (vendor.equals('magicmovies') && environment.equals('plusnights_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('plusnights_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('plusnights_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('plusnights_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    /*Avoid magicmovies to Metrox combination for both debug & release mode.*/
+
+    if (vendor.equals('magicmovies') && environment.equals('metrox_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('metrox_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('metrox_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('metrox_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    /*Avoid magicmovies to wuntustreaming combination for both debug & release mode.*/
+
+    if (vendor.equals('magicmovies') && environment.equals('wuntustreaming_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('wuntustreaming_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('wuntustreaming_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('wuntustreaming_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid magicmovies to cmax combination for both debug & release mode.*/
+
+    if (vendor.equals('magicmovies') && environment.equals('cmax_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('cmax_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('cmax_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('cmax_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+
+    /*Avoid defaultFlavor to muvinow combination for both debug & release mode.*/
+
+    if (vendor.equals('magicmovies') && environment.equals('muvinow_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('muvinow_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('muvinow_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('muvinow_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('defaultFlavor_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('defaultFlavor_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+
+    if (vendor.equals('magicmovies') && environment.equals('defaultFlavor_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('defaultFlavor_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('yoteshingo_staging_') && isRelease) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('yoteshingo_staging_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('yoteshingo_Prod_') && isDebug) {
+        variant.setIgnore(true)
+    }
+    if (vendor.equals('magicmovies') && environment.equals('yoteshingo_Prod_') && isRelease) {
+        variant.setIgnore(true)
+    }
+}
 
 android {
     useLibrary 'org.apache.http.legacy'
