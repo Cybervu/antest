@@ -219,6 +219,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
 import static player.utils.Util.HAS_FAVORITE;
+import static player.utils.Util.timer;
 
 /**
  * Created by MUVI on 10/6/2017.
@@ -304,6 +305,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     ProgressBarHandler progressBarHandler;
     String licensetoken;
     ImageView downloadImageView;
+    int player_start_time = 0;
+    int player_end_time = 0;
+    String log_temp_id = "0";
 
     //////////download///////
 
@@ -382,6 +386,12 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     private int content_types_id;
     private String ipAddressStr;
 
+
+    int playerPosition = 0;
+    TimerTask timerTask;
+
+    int current_played_length = 0;
+    long cast_disconnected_position = 0;
     @Override
     public void onIPAddressPreExecuteStarted() {
 
@@ -683,6 +693,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             new MySessionManagerListener();
     private CastSession mCastSession;
 
+    RemoteMediaClient remoteMediaClient;
 
     private IntroductoryOverlay mIntroductoryOverlay;
     private CastStateListener mCastStateListener;
@@ -1307,9 +1318,40 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         });
 
 
+
+
+        center_play_pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Execute_Pause_Play();
+            }
+        });
+        latest_center_play_pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (mCastSession != null && mCastSession.isConnected()) {
+                    if (player.utils.Util.hide_pause) {
+                        player.utils.Util.hide_pause = false;
+                        latest_center_play_pause.setVisibility(View.GONE);
+                    }
+                    Execute_Pause_Play();
+
+                } else {
+                    Execute_Pause_Play();
+
+                }
+
+            }
+        });
+
+
+
         emVideoView.setOnPreparedListener(new OnPreparedListener() {
             @Override
             public void onPrepared() {
+                Log.v("ANU","PREPARED CALLED===");
+
                 video_completed = false;
                 video_prepared = true;
                 progressView.setVisibility(View.VISIBLE);
@@ -1317,7 +1359,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 latest_center_play_pause.setVisibility(View.GONE);
                 try {
 
-                    Toast.makeText(YogaPlayerActivity.this, "video setOnPreparedListener not started", Toast.LENGTH_SHORT).show();
                     // mHandler.removeCallbacks(updateTimeTask);
 
                     current_time.setVisibility(View.VISIBLE);
@@ -2183,6 +2224,32 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             @Override
             public void onSessionEnded(CastSession session, int error) {
                 onApplicationDisconnected();
+
+                player.utils.Util.call_finish_at_onUserLeaveHint = true;
+                latest_center_play_pause.setEnabled(true);
+                emVideoView.setEnabled(true);
+
+                startTimer();
+                emVideoView.start();
+
+                if (cast_disconnected_position != 0) {
+
+                    emVideoView.seekTo((int) cast_disconnected_position);
+                    log_temp_id = "0";
+                    player_start_time = millisecondsToString((int) cast_disconnected_position);
+                    playerPosition = player_start_time;
+
+                    // Call video log here
+                }
+
+                latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
+                center_play_pause.setImageResource(R.drawable.ic_media_pause);
+                latest_center_play_pause.setVisibility(View.GONE);
+                mHandler.removeCallbacks(updateTimeTask);
+                updateProgressBar();
+
+
+
             }
 
             @Override
@@ -2211,6 +2278,10 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
             @Override
             public void onSessionEnding(CastSession session) {
+
+
+                cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
+
             }
 
             @Override
@@ -2222,14 +2293,48 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             }
 
             private void onApplicationConnected(CastSession castSession) {
+
+
+
+                stoptimertask();
+                player.utils.Util.call_finish_at_onUserLeaveHint = false;
+                player.utils.Util.hide_pause = true;
+                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                latest_center_play_pause.setVisibility(View.VISIBLE);
+                emVideoView.setEnabled(false);
+//                latest_center_play_pause.setEnabled(true);
+
+                if (emVideoView.isPlaying()) {
+                    emVideoView.pause();
+                    latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
+                    center_play_pause.setImageResource(R.drawable.ic_media_play);
+                    mHandler.removeCallbacks(updateTimeTask);
+                }
+
+
+                if (center_pause_paly_timer_is_running) {
+                    center_pause_paly_timer.cancel();
+                    center_pause_paly_timer_is_running = false;
+                    Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
+
+
+                    last_ll.setVisibility(View.GONE);
+                    center_play_pause.setVisibility(View.GONE);
+                    current_time.setVisibility(View.GONE);
+                }
+
+                if (SubTitlePath.size() > 0)
+                    subtitle_change_btn.setVisibility(View.VISIBLE);
+                primary_ll.setVisibility(View.VISIBLE);
+
+
+
                 mCastSession = castSession;
-                Log.v("ANU","PAUSED===");
                 mLocation = PlaybackLocation.REMOTE;
                 if (null != mSelectedMedia) {
-
                     if (mPlaybackState == PlaybackState.PLAYING) {
-                        mVideoView.pause();
-                        loadRemoteMedia(mSeekbar.getProgress(), true);
+//                        mVideoView.pause();
+//                        loadRemoteMedia(mSeekbar.getProgress(), true);
                         return;
                     } else {
                         mPlaybackState = PlaybackState.IDLE;
@@ -2239,9 +2344,10 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
 
+                Log.v("ANU","video_prepared ==****=="+video_prepared);
                 if (video_prepared){
 
-                    emVideoView.setClickable(false);
+                    emVideoView.setEnabled(false);
                     MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
 
                     movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory());
@@ -2321,7 +2427,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                             tracks.add(englishSubtitle);
                         }
 
-                        Log.v("ANU","playerModel.getMpdVideoUrl().trim()====="+playerModel.getMpdVideoUrl().trim());
                         mediaInfo = new MediaInfo.Builder(playerModel.getMpdVideoUrl().trim())
                                 .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
                                 .setContentType(mediaContentType)
@@ -2334,7 +2439,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                         togglePlayback();
                     } else {
-                        Log.v("ANU","else=========");
                         JSONObject jsonObj = null;
                         try {
                             jsonObj = new JSONObject();
@@ -2416,20 +2520,15 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                         togglePlayback();
                     }
-
-
                 }
-
-
-
-
             }
 
             private void onApplicationDisconnected() {
 /*
                     mPlayCircle.setVisibility(View.GONE);
 */
-                emVideoView.setClickable(true);
+                emVideoView.setEnabled(true);
+                emVideoView.start();
                 updatePlaybackLocation(PlaybackLocation.LOCAL);
                 mPlaybackState = PlaybackState.IDLE;
                 mLocation = PlaybackLocation.LOCAL;
@@ -2509,20 +2608,11 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
     private void togglePlayback() {
         //stopControllersTimer();
-        Log.v("ANU","mPlaybackState==="+mPlaybackState);
         switch (mPlaybackState) {
             case PAUSED:
                 switch (mLocation) {
                     case LOCAL:
 
-
-
-                      /* mVideoView.start();
-                        Log.d(TAG, "Playing locally...");
-                        mPlaybackState = PlaybackState.PLAYING;
-                        startControllersTimer();
-                        restartTrickplayTimer();
-                        updatePlaybackLocation(PlaybackLocation.LOCAL);*/
                         break;
 
                     case REMOTE:
@@ -2537,30 +2627,17 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
             case PLAYING:
                 mPlaybackState = PlaybackState.PAUSED;
-                Log.v("ANU","mPlaybackState PLAYING==="+mPlaybackState);
                 mVideoView.pause();
                 break;
 
             case IDLE:
-                Log.v("ANU","mLocation==="+mLocation);
-                Log.v("ANU","mSeekbar.getProgress() idle===");
                 switch (mLocation) {
                     case LOCAL:
-                        //watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
 
-                        // mPlayCircle.setVisibility(View.GONE);
-                       /* mVideoView.setVideoURI(Uri.parse(mSelectedMedia.getContentId()));
-                        mVideoView.seekTo(0);
-                        mVideoView.start();
-                        mPlaybackState = PlaybackState.PLAYING;
-                        restartTrickplayTimer();
-                        updatePlaybackLocation(PlaybackLocation.LOCAL);*/
                         break;
                     case REMOTE:
                         // mPlayCircle.setVisibility(View.VISIBLE);
                         if (mCastSession != null && mCastSession.isConnected()) {
-                            // watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
-//                            emVideoView.pause();
                             loadRemoteMedia(emVideoView.getCurrentPosition(), true);
 
 
@@ -2583,7 +2660,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         if (mCastSession == null) {
             return;
         }
-        final RemoteMediaClient remoteMediaClient = mCastSession.getRemoteMediaClient();
+        remoteMediaClient = mCastSession.getRemoteMediaClient();
         if (remoteMediaClient == null) {
             return;
         }
@@ -2593,10 +2670,34 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             @Override
             public void onStatusUpdated() {
 
-                Log.v("ANU","ExpandedControlsActivity===");
-                Intent intent = new Intent(YogaPlayerActivity.this, ExpandedControlsActivity.class);
+                /*Intent intent = new Intent(YogaPlayerActivity.this, ExpandedControlsActivity.class);
                 startActivity(intent);
-                remoteMediaClient.removeListener(this);
+                remoteMediaClient.removeListener(this);*/
+
+
+                if (mCastSession != null && mCastSession.isConnected()) {
+                    Log.v("BIBHU222", "======" + remoteMediaClient.isPlaying());
+
+                    if (remoteMediaClient.isPlaying()) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
+                                latest_center_play_pause.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
+                                latest_center_play_pause.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    }
+
+                }
+
             }
 
             @Override
@@ -2885,11 +2986,28 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
         bannerImageRelativeLayout.setVisibility(View.VISIBLE);
         player_layout.setVisibility(View.GONE);
+
+        if(emVideoView!=null)
+            emVideoView.release();
     }
 
     /* ------ Added for Trailer ------*/
     ///added by nihar
     public void Execute_Pause_Play() {
+
+
+        if (mCastSession != null && mCastSession.isConnected()) {
+            if (remoteMediaClient.isPlaying()) {
+                remoteMediaClient.pause();
+                return;
+            }
+            if (remoteMediaClient.isPaused()) {
+                remoteMediaClient.play();
+                return;
+            }
+        }
+
+
         if (emVideoView.isPlaying()) {
             emVideoView.pause();
             latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
@@ -3161,6 +3279,12 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
 
     public void preLoadVideos(ContentDetailsOutput contentDetailsOutput) {
+
+
+        playerModel.setVideoTitle(contentDetailsOutput.getName());
+        playerModel.setVideoStory(contentDetailsOutput.getStory());
+        playerModel.setPosterImageId(contentDetailsOutput.getPoster());
+
 
         dbModel.setIsFreeContent(isFreeContent);
         dbModel.setIsAPV(isAPV);
@@ -3810,7 +3934,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     }
 
     private void setVideoPlayer() {
-        emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
         try {
             Log.v("ANU", "==============++++++====" + playerModel.getVideoUrl());
 
@@ -3880,7 +4003,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
             } else {
                 // emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
-                setVideoPlayer();
+//                setVideoPlayer();
+                emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
 
             }
 
@@ -4839,8 +4963,45 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
     }
 
 
+    public void stoptimertask() {
+        //stop the timer, if it's not already null
+        if (timer != null) {
+
+            Log.v("BIBHU", "=======================================stoptimertask caled=================================");
+
+            timer.cancel();
+            timer = null;
+        }
+
+    }
 
 
+    private int millisecondsToString(int milliseconds) {
+        // int seconds = (int) (milliseconds / 1000) % 60 ;
+        int seconds = (int) (milliseconds / 1000);
+
+        return seconds;
+    }
+
+
+    public void startTimer() {
+        //set a new Timer
+        timer = new Timer();
+
+        initializeTimerTask();
+        timer.schedule(timerTask, 1000, 1000); //
+    }
+
+
+
+    public void initializeTimerTask() {
+
+        timerTask = new TimerTask() {
+            public void run() {
+
+            }
+        };
+    }
 
 }
 

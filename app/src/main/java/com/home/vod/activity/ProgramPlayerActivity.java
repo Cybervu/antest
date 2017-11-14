@@ -5465,7 +5465,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 //                remoteMediaClient.removeListener(ProgramPlayerActivity.this);
 
                 if (mCastSession != null && mCastSession.isConnected()) {
-                    Log.v("BIBHU222", "======" + remoteMediaClient.isPlaying());
 
                     if (remoteMediaClient.isPlaying()) {
                         runOnUiThread(new Runnable() {
