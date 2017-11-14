@@ -32,7 +32,7 @@ public class ResolutionChangeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_resolution_change);
+        setContentView(R.layout.sdk_activity_resolution_change);
 
         listView = (ListView) findViewById(R.id.listView);
         total_layout = (LinearLayout) findViewById(R.id.total_layout);

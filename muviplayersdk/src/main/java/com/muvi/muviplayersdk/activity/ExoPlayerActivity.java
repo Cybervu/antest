@@ -372,11 +372,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        castButtonClicked = false;
-    }
+
 
     @Override
     protected void onResume() {
@@ -1661,7 +1657,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                             }else
                             {
-
+                                Log.v("BIBHU123", "ff CALLED "+"isFastForward="+isFastForward+"       currentPositionStr="+currentPositionStr+"     playerPreviousPosition="+millisecondsToString(playerPreviousPosition));
                                 if (isFastForward == true) {
                                     isFastForward = false;
 
@@ -1677,7 +1673,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                         CallVideoLog(ASYNC_FF_VODEOLOG_DETAILS);
                                     }
 
-                                } else if (isFastForward == false && currentPositionStr >= millisecondsToString(playerPreviousPosition)) {
+                                } else if (isFastForward == false && currentPositionStr >0) {
 
                                     playerPreviousPosition = 0;
 
@@ -2166,8 +2162,6 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         }
 
         if (Util.call_finish_at_onUserLeaveHint) {
-
-
             Util.call_finish_at_onUserLeaveHint = true;
 
             mHandler.removeCallbacks(updateTimeTask);
@@ -3366,6 +3360,12 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             subtitleDisplayHandler.removeCallbacks(subtitleProcessesor);
         }
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        castButtonClicked = false;
     }
 
     @Override
@@ -5459,6 +5459,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 || Requestdata.equals(""+ASYNC_RESUME_VODEOLOG_DETAILS))
         {
             stoptimertask();
+            Log.v("BIBHU123", "stoptimertask CALLED ");
         }
 
     }
@@ -5502,7 +5503,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
            {
                // Call Bufferlog Here
                CallBufferLog();
-               Log.v("BIBHU1", "CallBufferLog CALLED ");
+               Log.v("BIBHU123", "CallBufferLog CALLED ");
            }
 
             //#######################################//

@@ -48,7 +48,7 @@ public class ResolutionChangeAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         // inflate the layout for each list row
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.resolution_list_layout, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.sdk_resolution_list_layout, parent, false);
         }
 
         // get the TextView for item name and item description
