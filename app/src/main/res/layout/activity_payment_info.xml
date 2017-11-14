@@ -76,21 +76,11 @@
 
                     <EditText
                         android:id="@+id/cardNumberEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/card_no_height"
-                        android:layout_alignParentLeft="true"
+                        style="@style/cardNumberEditText"
                         android:layout_below="@+id/nameOnCardEditText"
-                        android:layout_marginTop="@dimen/ppv_margin"
                         android:ems="10"
                         android:hint="Card Number"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:paddingBottom="@dimen/payment_spinner_padding"
-                        android:paddingLeft="@dimen/payment_spinner_padding_left"
-                        android:paddingRight="@dimen/payment_spinner_padding"
-                        android:paddingTop="@dimen/payment_spinner_padding"
-                        android:textColor="@color/editTextColor"
-                        android:textColorHint="@color/hint_color" />
+                        android:imeOptions="actionNext" />
 
                     <LinearLayout
                         android:id="@+id/cardExpiryDetailsLayout"
@@ -121,15 +111,8 @@
 
                         <TextView
                             android:id="@+id/yearLineTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="@dimen/payment_spinner_padding"
-                            android:layout_marginTop="@dimen/my_download_margin"
-                            android:text="/"
-                            android:textColor="@color/hint_background"
-                            android:textSize="@dimen/yearline_text_size"
-                            android:textStyle="normal" />
+                            style="@style/yearLineTextView"
+                            android:text="/" />
                         <!--<RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -159,79 +142,42 @@
 
                         <EditText
                             android:id="@+id/securityCodeEditText"
-                            android:layout_width="@dimen/securitycode_width"
-                            android:layout_height="@dimen/securitycode_height"
-                            android:layout_marginLeft="@dimen/payment_left_margin"
+                            style="@style/securityCodeEditText"
                             android:hint="CVV"
-                            android:imeOptions="actionGo"
-                            android:inputType="number"
-                            android:paddingLeft="@dimen/payment_spinner_padding_left"
-                            android:paddingRight="@dimen/payment_spinner_padding"
-                            android:textColor="@color/editTextColor"
-                            android:textColorHint="@color/hint_color" />
+                            android:imeOptions="actionGo" />
 
                     </LinearLayout>
 
                     <CheckBox
                         android:id="@+id/saveCardCheckbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/saveCardCheckbox"
                         android:layout_below="@+id/cardExpiryDetailsLayout"
-                        android:layout_marginTop="@dimen/forgotlayout_margin"
-                        android:buttonTint="@color/button_background"
-                        android:text="Save this card for faster checkout"
-                        android:textColor="@color/buttonTextColor"
-                        android:visibility="gone" />
+                        android:text="Save this card for faster checkout" />
 
                     <Button
                         android:id="@+id/payNowButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/paybtn_height"
+                        style="@style/payNowButton"
                         android:layout_below="@+id/saveCardCheckbox"
-                        android:layout_marginLeft="@dimen/payment_margin_btn"
-                        android:layout_marginRight="@dimen/payment_margin_btn"
-                        android:layout_marginTop="@dimen/payment_margin_btn_top"
-                        android:background="@drawable/button_radious"
                         android:stateListAnimator="@null"
-                        android:text="Pay Now"
-                        android:textAllCaps="false"
-                        android:textColor="@color/buttonTextColor"
-                        android:textSize="@dimen/paybtn_text_size"
-
-
-                        />
+                        android:text="Pay Now" />
 
                     <EditText
                         android:id="@+id/nameOnCardEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/nameoncard_height"
-                        android:layout_alignParentLeft="true"
+                        style="@style/cardNumberEditText"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/creditCardSaveEditText"
                         android:layout_marginTop="@dimen/payment_spinner_padding_left"
                         android:ems="10"
                         android:hint="Name on Card"
                         android:imeOptions="actionNext"
-                        android:inputType="textPersonName"
-                        android:paddingBottom="@dimen/payment_spinner_padding"
-                        android:paddingLeft="@dimen/payment_spinner_padding_left"
-                        android:paddingRight="@dimen/payment_spinner_padding"
-                        android:paddingTop="@dimen/payment_spinner_padding"
-                        android:textColor="@color/editTextColor"
-                        android:textColorHint="@color/hint_color" />
+                        android:inputType="textPersonName" />
 
                     <TextView
                         android:id="@+id/creditCardDetailsTitleTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginTop="@dimen/payment_margin_btn"
+                        style="@style/creditCardDetailsTitleTextView"
                         android:layout_toEndOf="@+id/scanButton"
                         android:layout_toRightOf="@+id/scanButton"
-                        android:text="Credit Card Details"
-                        android:textColor="@color/pageTitleColor"
-                        android:textSize="@dimen/creditcarddetail_text_size"
-                        android:textStyle="bold" />
+                        android:text="Credit Card Details" />
                 </RelativeLayout>
 
 
@@ -273,23 +219,13 @@
 
                         <TextView
                             android:id="@+id/withoutPaymentTitleTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginTop="@dimen/forgotlayout_margin"
-                            android:text="You can watch the video at free of cost."
-                            android:textColor="@color/alreadyHaveALoginButtonTextColor"
-                            android:textSize="@dimen/withoutpayment_text_size" />
+                            style="@style/withoutPaymentTitleTextView"
+                            android:text="You can watch the video at free of cost." />
 
                         <TextView
                             android:id="@+id/withoutPaymentChargeDetailsTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/chargeDetailsTextView"
                             android:layout_below="@+id/withoutPaymentTitleTextView"
-                            android:layout_marginTop="@dimen/forgotlayout_margin"
-                            android:maxLines="4"
-                            android:singleLine="false"
                             android:text="Your card will be charged now:"
                             android:textColor="@color/alreadyMemberTextColor"
                             android:textSize="@dimen/withoutpaymentcharge_text_size" />
@@ -299,15 +235,10 @@
 
                 <Button
                     android:id="@+id/nextButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/nextbtn_height"
+                    style="@style/nextButton"
                     android:layout_below="@+id/withoutPaymentCardView"
-                    android:layout_marginTop="@dimen/payment_spinner_padding_left"
-                    android:background="@drawable/button_bg_orange"
                     android:stateListAnimator="@null"
-                    android:text="Next"
-                    android:textColor="@color/buttonTextColor"
-                    android:textSize="@dimen/nextbtn_text_size" />
+                    android:text="Next" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -323,20 +254,13 @@
 
                 <TextView
                     android:id="@+id/lineTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/payment_margin_top"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@+id/purchaseTextView"
-                    android:background="@color/alreadyHaveALoginButtonTextColor" />
+                    style="@style/lineTextView"
+                    android:layout_below="@+id/purchaseTextView" />
 
                 <TextView
                     android:id="@+id/showNameWithPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/lineTextView"
-                    android:layout_marginTop="@dimen/payment_textview_showname_margin"
-                    android:textColor="@color/textColor"
-                    android:textSize="@dimen/showname_text_size" />
+                    style="@style/showNameWithPrice"
+                    android:layout_below="@+id/lineTextView" />
 
 
                 <LinearLayout
@@ -347,48 +271,27 @@
 
                     <EditText
                         android:id="@+id/couponCodeEditText"
-                        android:layout_width="@dimen/payment_margin_top"
-                        android:layout_height="@dimen/coupancode_height"
-                        android:layout_alignParentLeft="true"
+                        style="@style/couponCodeEditText"
                         android:layout_below="@+id/showNameWithPrice"
                         android:layout_weight="2"
                         android:ems="10"
                         android:hint="Enter Coupon Code"
-                        android:imeOptions="actionGo"
-                        android:inputType="text"
-                        android:paddingBottom="@dimen/payment_spinner_padding"
-                        android:paddingLeft="@dimen/payment_spinner_padding_left"
-                        android:paddingRight="@dimen/payment_spinner_padding"
-                        android:paddingTop="@dimen/payment_spinner_padding"
-                        android:textColor="@color/textColor"
-                        android:textColorHint="@color/hint_color" />
+                        android:imeOptions="actionGo" />
 
                     <Button
                         android:id="@+id/addCouponButton"
-                        android:layout_width="@dimen/payment_margin_top"
-                        android:layout_height="@dimen/coupanbtn_height"
-                        android:layout_gravity="right"
-                        android:layout_marginLeft="@dimen/loginImageViewMarging_top"
+                        style="@style/addCouponButton"
                         android:layout_weight="1"
-                        android:background="@drawable/button_radious"
                         android:stateListAnimator="@null"
                         android:text="Apply"
-                        android:textAllCaps="false"
-                        android:textColor="@color/buttonTextColor"
-                        android:textSize="@dimen/coupanbtn_text_size"
 
                         />
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/purchaseTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:text="Purchase"
-                    android:textColor="@color/pageTitleColor"
-                    android:textSize="@dimen/purchase_text_size"
-                    android:textStyle="bold" />
+                    style="@style/purchaseTextView"
+                    android:text="Purchase" />
 
 
             </RelativeLayout>

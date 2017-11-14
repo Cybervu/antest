@@ -20,14 +20,7 @@
 
         <TextView
             android:id="@+id/resumeTitleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:maxLines="4"
-            android:singleLine="false"
-            android:textColor="@color/resumepopupcolor"
-            android:textSize="@dimen/resumetitle_text_size"
-            android:textStyle="bold" />
+            style="@style/resumeTitleTextView" />
 
         <View
             android:layout_width="match_parent"
@@ -45,28 +38,13 @@
 
             <Button
                 android:id="@+id/yesButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/login_maring_top"
-                android:background="@drawable/play_button_radious"
-                android:padding="@dimen/padding7dp"
-                android:stateListAnimator="@null"
-                android:textAllCaps="false"
-                android:textColor="#000"
-                android:textSize="@dimen/button_textsize" />
+                style="@style/resume_playing_button"
+                android:stateListAnimator="@null" />
 
             <Button
                 android:id="@+id/cancelButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cancel_button_radious"
-                android:padding="@dimen/padding7dp"
-                android:stateListAnimator="@null"
-                android:textAllCaps="false"
-                android:textColor="#000"
-                android:textSize="@dimen/button_textsize"
-
-                />
+                style="@style/resume_playing_button2"
+                android:stateListAnimator="@null" />
         </LinearLayout>
     </LinearLayout>
 
