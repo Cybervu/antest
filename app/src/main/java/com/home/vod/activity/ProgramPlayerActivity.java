@@ -2603,7 +2603,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                             if (isFastForward == true) {
                                 isFastForward = false;
-
                                 log_temp_id = "0";
 
 

@@ -179,6 +179,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -1415,11 +1416,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 center_play_pause.setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.GONE);
 
-
-
-
-
-
                     if (playerModel.getPlayPos() >= emVideoView.getDuration() / 1000) {
                         played_length = 0;
                     }
@@ -1430,7 +1426,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         center_play_pause.setVisibility(View.GONE);
                         latest_center_play_pause.setVisibility(View.GONE);
                     }
-
 
                     try {
 
@@ -3488,7 +3483,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         Util.dataModel = dbModel;
 
         //validate user called.
-        ValidateUser(getApplicationContext(), useridStr, contentDetailsOutput.getId(), contentDetailsOutput.getMovieStreamId());
+        ValidateUser(getApplicationContext(), useridStr, contentDetailsOutput.getId(), contentDetailsOutput.getIsEpisode());
 
     }
 
@@ -3537,6 +3532,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
         getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+
+        Log.v("SUBHA","video details user id === " + preferenceManager.getUseridFromPref());
 
         asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, YogaPlayerActivity.this, context);
         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
@@ -5198,8 +5195,8 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                     httppost.addHeader("is_streaming_restriction", "1");
                     httppost.addHeader("restrict_stream_id", restrict_stream_id);
 
-                    Log.v("BIBHU6", "is_streaming_restriction=" + "1");
-                    Log.v("BIBHU6", "restrict_stream_id=" + restrict_stream_id);
+                    Log.v("BIBHU141", "is_streaming_restriction=" + "1");
+                    Log.v("BIBHU141", "restrict_stream_id=" + restrict_stream_id);
                 }
 
                 // Following code is changed due to NewVideoLog API ;
@@ -5208,21 +5205,19 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                 httppost.addHeader("log_temp_id", log_temp_id);
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
-               /* Log.v("BIBHU", "player_start_time===*****************=========" + player_start_time);
-                Log.v("BIBHU", "playerPosition======***************8======" + playerPosition);
+                Log.v("BIBHU141", "player_start_time===*****************=========" + player_start_time);
+                Log.v("BIBHU141", "playerPosition======***************8======" + playerPosition);
 
 
-                Log.v("BIBHU", "played_length============" + (playerPosition - player_start_time));
-                Log.v("BIBHU", "log_temp_id============" + log_temp_id);
-                Log.v("BIBHU", "resume_time============" + (playerPosition));
-                Log.v("BIBHU", "playerPosition============" + playerPosition);
-                Log.v("BIBHU", "log_id============" + videoLogId);
+                Log.v("BIBHU141", "played_length============" + (playerPosition - player_start_time));
+                Log.v("BIBHU141", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU141", "resume_time============" + (playerPosition));
+                Log.v("BIBHU141", "playerPosition============" + playerPosition);
+                Log.v("BIBHU141", "log_id============" + videoLogId);
 
-                Log.v("BIBHU", "user_id============" + userIdStr.trim());
-                Log.v("BIBHU", "movieId.trim()============" + playerModel.getMovieUniqueId().trim());
-                Log.v("BIBHU", "episodeId.trim()============" + playerModel.getStreamUniqueId().trim());
-                Log.v("BIBHU", "watchStatus============" + watchStatus);
-                Log.v("BIBHU", "restrict_stream_id============" + restrict_stream_id);*/
+
+                Log.v("BIBHU141", "watchStatus============" + watchStatus);
+                Log.v("BIBHU141", "restrict_stream_id============" + restrict_stream_id);
 
 
                 //===============End=============================//
@@ -5233,7 +5228,7 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                    Log.v("SUBHA", "responseStr of videolog============" + responseStr);
+                    Log.v("BIBHU141", "responseStr of videolog============" + responseStr);
 
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
@@ -5249,6 +5244,7 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                 } catch (Exception e) {
                     videoLogId = "0";
                     e.printStackTrace();
+                    Log.v("BIBHU141", "Exception of videolog============" + responseStr);
 
                 }
                 if (responseStr != null) {
@@ -5272,6 +5268,7 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
             } catch (Exception e) {
                 videoLogId = "0";
                 log_temp_id = "0";
+                Log.v("BIBHU141", "Exception of videolog1============" + responseStr);
 
             }
 
@@ -5344,7 +5341,7 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                    Log.v("BIBHU", "Response of the bufferlog =" + responseStr);
+                    Log.v("BIBHU141", "Response of the bufferlog =" + responseStr);
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     runOnUiThread(new Runnable() {
@@ -5452,10 +5449,10 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                 httppost.addHeader("log_temp_id", log_temp_id);
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
-                Log.v("BIBHU11", "played_length============" + (playerPosition - player_start_time));
-                Log.v("BIBHU11", "log_temp_id============" + log_temp_id);
-                Log.v("BIBHU11", "resume_time============" + (playerPosition));
-                Log.v("BIBHU11", "log_id============" + videoLogId);
+                Log.v("BIBHU141", "played_length============" + (playerPosition - player_start_time));
+                Log.v("BIBHU141", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU141", "resume_time============" + (playerPosition));
+                Log.v("BIBHU141", "log_id============" + videoLogId);
 
                 //===============End=============================//
 
@@ -5468,7 +5465,7 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
-                    Log.v("BIBHU", "responseStr of responseStr============" + responseStr);
+                    Log.v("BIBHU141", "responseStr of responseStr  resume ============" + responseStr);
 
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
@@ -5712,12 +5709,12 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
 
-                Log.v("BIBHU11", "played_length============" + (playerPosition - player_start_time));
+                Log.v("BIBHU141", "played_length============" + (playerPosition - player_start_time));
 
 
-                Log.v("BIBHU11", "log_temp_id============" + log_temp_id);
-                Log.v("BIBHU11", "resume_time============" + (playerPosition));
-                Log.v("BIBHU11", "log_id============" + videoLogId);
+                Log.v("BIBHU141", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU141", "resume_time============" + (playerPosition));
+                Log.v("BIBHU141", "log_id============" + videoLogId);
 
                 //===============End=============================//
 
@@ -5726,7 +5723,7 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                    Log.v("BIBHU", "responseStr of responseStr============" + responseStr);
+                    Log.v("BIBHU141", "responseStr of responseStr   ffvideo log============" + responseStr);
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     runOnUiThread(new Runnable() {
@@ -5738,8 +5735,9 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
 
                     });
 
-                } catch (IOException e) {
+                } catch (Exception e) {
                     videoLogId = "0";
+                    Log.v("BIBHU141", "Exception of ffvideolog============" + responseStr);
 
                     e.printStackTrace();
                 }
@@ -5762,6 +5760,7 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
             } catch (Exception e) {
                 videoLogId = "0";
                 log_temp_id = "0";
+                Log.v("BIBHU141", "Exception of ffvideolog1============" + responseStr);
 
             }
 
@@ -6115,9 +6114,8 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
 
                             if (isFastForward == true) {
                                 isFastForward = false;
-
                                 log_temp_id = "0";
-
+                                Log.v("BIBHU1","initializeTimerTask fastforword true called");
 
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
@@ -6134,15 +6132,29 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
 
                                 playerPreviousPosition = 0;
 
+                                Log.v("BIBHU1","initializeTimerTask fastforword false called");
+
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
-                                    asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     watchStatus = "complete";
-                                    asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+
+
+                                    try{
+                                        stoptimertask();
+                                        asyncVideoLogDetails = new AsyncVideoLogDetails();
+                                        asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+                                    }catch (Exception e){Log.v("BIBHU1","Exception at complete ="+e.toString());}
+
+
                                 } else if (currentPositionStr > 0 && currentPositionStr % 60 == 0) {
-                                    asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     watchStatus = "halfplay";
-                                    asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+
+                                    try{
+                                        asyncVideoLogDetails = new AsyncVideoLogDetails();
+                                        asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+                                    }catch (Exception e){Log.v("BIBHU1","Exception at halfplay ="+e.toString());}
+
+
 
                                 }
                             }
