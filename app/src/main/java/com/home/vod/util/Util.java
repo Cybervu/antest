@@ -23,6 +23,7 @@ import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.google.android.gms.cast.MediaInfo;
@@ -226,7 +227,17 @@ public class Util {
         }
         return check;
     }
+    public static boolean isValidPhone(String phone)
+    {
 
+        if ((phone.length() >= 10) && (phone.length() <=15))
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public static boolean isConfirmPassword(String password, String confirmPassword) {
         Pattern pattern = Pattern.compile(password, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(confirmPassword);
@@ -774,6 +785,15 @@ public class Util {
 
     public static boolean getStreamingRestriction(LanguagePreference languagePreference) {
         return languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1");
+    }
+
+    public static void hideKeyboard(Context context){
+        Activity act = (Activity) context;
+        InputMethodManager inputManager = (InputMethodManager)
+                act.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(act.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
 }

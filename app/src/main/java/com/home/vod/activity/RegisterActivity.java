@@ -819,7 +819,7 @@ public class RegisterActivity extends AppCompatActivity implements
     }
 
 
-    public void registerButtonClicked(String name) {
+    public void registerButtonClicked(String name,String phone) {
 
      /*   regNameStr_first = editName_first.getText().toString().trim();
         regNameStr_last = editName_last.getText().toString().trim();
@@ -842,6 +842,7 @@ public class RegisterActivity extends AppCompatActivity implements
                         registration_input.setAuthToken(authTokenStr);
                         registration_input.setName(name);
                         registration_input.setEmail(regEmailStr);
+                        registration_input.setPhone(phone);
                         registration_input.setPassword(regPasswordStr);
                         registration_input.setCustom_country(registerUIHandler.selected_Country_Id);
                         registration_input.setCustom_languages(registerUIHandler.selected_Language_Id);

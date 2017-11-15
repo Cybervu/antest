@@ -193,7 +193,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         int isPPV = 0;
         int isConverted = 0;
         if (status==200){
-
+            itemsInServer=totalItems;
             for (int i=0;i<contentListOutputArray.size();i++){
                 movieGenreStr=contentListOutputArray.get(i).getGenre();
                 movieName=contentListOutputArray.get(i).getName();
@@ -337,7 +337,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         int isPPV = 0;
         int isConverted = 0;
         if (status==200){
-
+            itemsInServer=totalItems;
             for (int i=0;i<loadFilterVideoOutputArrayList.size();i++){
                 movieGenreStr=loadFilterVideoOutputArrayList.get(i).getGenre();
                 movieName=loadFilterVideoOutputArrayList.get(i).getName();

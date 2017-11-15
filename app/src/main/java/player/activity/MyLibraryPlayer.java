@@ -1712,7 +1712,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                                     asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
 
-                            } else if (isFastForward == false && currentPositionStr >= millisecondsToString(playerPreviousPosition)) {
+                            } else if (isFastForward == false && currentPositionStr >0) {
 
                                 playerPreviousPosition = 0;
 

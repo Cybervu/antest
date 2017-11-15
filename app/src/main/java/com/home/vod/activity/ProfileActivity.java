@@ -328,7 +328,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
                         } else {
                             if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
-                                UpdateProfile(profileHandler.final_name);
+                                UpdateProfile(profileHandler.final_name,profileHandler.phoneStr);
                                 editConfirmPassword.setText("");
                                 editNewPassword.setText("");
                                 editConfirmPassword.setVisibility(View.GONE);
@@ -439,12 +439,13 @@ public class ProfileActivity extends AppCompatActivity implements
         dlgAlert.create().show();
     }
 
-    public void UpdateProfile(String name) {
+    public void UpdateProfile(String name,String phone_No) {
 
         Update_UserProfile_Input update_userProfile_input = new Update_UserProfile_Input();
         update_userProfile_input.setAuthToken(authTokenStr);
         update_userProfile_input.setUser_id(preferenceManager.getUseridFromPref().trim());
         update_userProfile_input.setName(name);
+        update_userProfile_input.setPhone_no(phone_No);
         String confirmPasswordStr = editNewPassword.getText().toString().trim();
         if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")) {
             update_userProfile_input.setPassword(confirmPasswordStr.trim());
@@ -489,6 +490,8 @@ public class ProfileActivity extends AppCompatActivity implements
 
                     String displayNameStr = update_userProfile_output.getName();
                     preferenceManager.setDispNameToPref(displayNameStr);
+                    String displayPhoneNumber = update_userProfile_output.getPhone_no();
+                    preferenceManager.setDispPhoneToPref(displayPhoneNumber);
                 }
                 Util.showToast(ProfileActivity.this, languagePreference.getTextofLanguage(PROFILE_UPDATED, DEFAULT_PROFILE_UPDATED));
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -791,7 +794,7 @@ public class ProfileActivity extends AppCompatActivity implements
         Language_arrayAdapter.notifyDataSetChanged();
 
 
-        profileHandler.setNameTxt(get_userProfile_output.getDisplay_name());
+        profileHandler.setNameTxt(get_userProfile_output.getDisplay_name(),get_userProfile_output.getPhone());
         name_of_user.setText(get_userProfile_output.getDisplay_name());
         emailAddressEditText.setText(get_userProfile_output.getEmail());
         if (get_userProfile_output.getProfile_image().matches(NO_DATA)) {

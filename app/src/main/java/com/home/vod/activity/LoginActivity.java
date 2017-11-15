@@ -1576,11 +1576,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             @Override
             public void onClick(View v) {
 
-                InputMethodManager inputManager = (InputMethodManager)
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
-
-                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+               Util.hideKeyboard(LoginActivity.this);
 
                 loginButtonClicked();
 
