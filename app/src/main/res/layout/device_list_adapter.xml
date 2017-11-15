@@ -14,22 +14,12 @@
 
         <TextView
             android:id="@+id/device_name"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/device_name_height"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="2"
-            android:text="vjbrihfofher"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/cast_name_text" />
+            style="@style/device_name_textview"
+            android:text="vjbrihfofher"/>
 
         <TextView
             android:id="@+id/os_version"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/device_name_height"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="2"
+            style="@style/device_name_textview"
             android:text="vjbrihfofher"
             android:textColor="@color/OsTextColor"
             android:textSize="@dimen/cast_description_text" />
@@ -38,15 +28,9 @@
 
     <TextView
         android:id="@+id/delete_device"
-        android:layout_width="@dimen/seekbar_progress_width"
-        android:layout_height="wrap_content"
+        style="@style/delete_device_textview"
         android:layout_weight="1.5"
-        android:ellipsize="end"
-        android:gravity="right"
-        android:maxLines="1"
-        android:text="Delete"
-        android:textColor="@color/button_background"
-        android:textSize="@dimen/email_text_size" />
+        android:text="Delete"/>
 
 
 </LinearLayout>

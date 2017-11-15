@@ -78,12 +78,7 @@
 
         <TextView
             android:id="@+id/itemTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"
+            style="@style/itemTitle_listItem"
             android:layout_toLeftOf="@+id/btnMore"
             android:text="Sample title"
             android:textAllCaps="true"
@@ -92,17 +87,8 @@
 
         <Button
             android:id="@+id/btnMore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/view_more_button_background"
-            android:minHeight="@dimen/btnMore_min_height"
-            android:padding="@dimen/Login_drawing_padding"
-            android:stateListAnimator="@null"
-            android:textAllCaps="false"
-            android:textColor="@color/buttonTextColor"
-            android:textSize="@dimen/email_text_size" />
+            style="@style/btnMore_listItem2"
+            android:stateListAnimator="@null" />
 
 
     </RelativeLayout>

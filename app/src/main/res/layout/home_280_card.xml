@@ -20,45 +20,25 @@
 
         <ImageView
             android:id="@+id/itemImage"
-            android:layout_width="@dimen/home_layout_width"
-            android:layout_height="@dimen/homelogo_height"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:adjustViewBounds="true"
-            android:src="@drawable/logo" />
+            style="@style/itemImage_home280_card"
+            android:layout_centerHorizontal="true" />
 
         <ImageView
             android:id="@+id/movieImageOverlay"
-            android:layout_width="@dimen/home_layout_width"
-            android:layout_height="@dimen/homelogo_height"
+            style="@style/itemImage_home280_card"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:adjustViewBounds="true"
-            android:background="@drawable/content_list_overlay"
-
-            />
+            android:background="@drawable/content_list_overlay" />
 
 
         <TextView
             android:id="@+id/itemTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/itemTitle_home280_card"
             android:layout_alignBaseline="@+id/movieImageOverlay"
             android:layout_alignBottom="@+id/movieImageOverlay"
             android:layout_alignLeft="@+id/itemImage"
             android:layout_alignRight="@+id/itemImage"
-            android:clickable="false"
-            android:ellipsize="end"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:gravity="left"
-            android:maxLines="1"
-            android:padding="@dimen/loginImageViewMarging_top_padding"
-            android:text=""
-            android:textColor="@color/contentTitleColor"
-            android:textSize="@dimen/itemtitle1_text_size"
-            android:textStyle="normal" />
+            android:text=""/>
 
     </RelativeLayout>
 

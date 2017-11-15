@@ -19,11 +19,7 @@
 
         <ImageView
             android:id="@+id/castImageView"
-            android:layout_width="@dimen/cast_width_icon"
-            android:layout_height="@dimen/cast_height_icon"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:src="@drawable/logo" />
+            style="@style/castImageView2" />
 
         <LinearLayout
             android:id="@+id/castTitleLinearLayout"
@@ -35,24 +31,11 @@
 
             <TextView
                 android:id="@+id/castNameTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:maxLines="2"
-                android:textColor="@color/button_background"
-                android:textSize="@dimen/cast_name_text" />
+                style="@style/castNameTextView" />
 
             <TextView
                 android:id="@+id/castDescriptionTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/textColor_margin"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:maxLines="1"
-                android:textColor="@color/videotextColor"
-                android:textSize="@dimen/cast_description_text" />
+                style="@style/castDescriptionTextView" />
 
         </LinearLayout>
 

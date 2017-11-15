@@ -7,15 +7,8 @@
 
     <TextView
         android:id="@+id/noInternetConnection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:maxLines="4"
-        android:singleLine="false"
-        android:textColor="@color/noInternetColor"
-        android:textSize="@dimen/my_download_textsize"
-        android:textStyle="bold" />
+        style="@style/noInternet"
+        android:maxLines="4"/>
 
     <WebView
         android:id="@+id/webView"

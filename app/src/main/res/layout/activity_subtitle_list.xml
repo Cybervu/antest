@@ -17,10 +17,7 @@
 
         <ListView
             android:id="@+id/listView"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:divider="#A9A9A9"
+            style="@style/resolution_listview"
             android:dividerHeight="0dip"
             android:paddingBottom="@dimen/editEmailStr_padding" />
     </LinearLayout>

@@ -8,15 +8,8 @@
 
     <TextView
         android:id="@+id/toastMsg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:background="#c6151616"
-        android:padding="@dimen/toastmsg_padding"
+        style="@style/toastMsg"
         android:text="Added to Favorites"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="#fcf6f6"
-        android:textStyle="bold" />
+        android:textAppearance="?android:textAppearanceMedium"/>
 
 </RelativeLayout>

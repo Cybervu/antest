@@ -299,34 +299,14 @@
 
                 <Spinner
                     android:id="@+id/seasonSpinner"
-                    android:layout_width="@dimen/forgot_logo_width"
-                    android:layout_height="@dimen/preorderbtn_height"
-                    android:layout_marginBottom="@dimen/ppv_margin"
-                    android:layout_marginLeft="@dimen/seasonSpinner_margin"
-                    android:layout_marginRight="@dimen/ppv_margin"
-                    android:layout_marginTop="@dimen/ppv_margin"
-                    android:background="@drawable/spinner_theme"
-                    android:overlapAnchor="false"
                     android:paddingRight="0dip"
-                    android:popupBackground="#e2e1e1"
-                    android:spinnerMode="dropdown"
-                    android:theme="@style/applicationTheme"
-                    android:visibility="gone" />
+                    style="@style/seasonSpinner" />
 
 
                 <Button
                     android:id="@+id/btnMore"
-                    android:layout_width="@dimen/review_btn_width"
-                    android:layout_height="@dimen/review_btn_height"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/ppv_margin"
-                    android:backgroundTint="@color/button_background"
                     android:stateListAnimator="@null"
-                    android:textAllCaps="false"
-                    android:textColor="@color/buttonTextColor"
-                    android:textSize="@dimen/trailerbtn_text_size" />
+                    style="@style/btnMore" />
 
 
             </RelativeLayout>

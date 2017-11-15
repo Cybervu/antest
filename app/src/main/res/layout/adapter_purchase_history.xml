@@ -31,23 +31,19 @@
 
                 <TextView
                     android:id="@+id/transactionTitleTextView"
-                    android:layout_width="@dimen/seekbar_progress_width"
-                    android:layout_height="wrap_content"
+                    style="@style/transactionTitleTextView_adapter"
                     android:layout_weight="1.6"
                     android:paddingLeft="@dimen/login_new_user_padding"
                     android:text="Transaction"
-                    android:textColor="@color/textColor"
                     android:textSize="@dimen/transcationtitle_text_size" />
 
                 <TextView
                     android:id="@+id/activeAlertTextView"
-                    android:layout_width="@dimen/seekbar_progress_width"
-                    android:layout_height="wrap_content"
+                    style="@style/transactionTitleTextView_adapter"
                     android:layout_toRightOf="@+id/transactionTitleTextView"
                     android:layout_weight="2"
                     android:gravity="center_vertical|right"
                     android:text="Active"
-                    android:textColor="@color/textColor"
                     android:textSize="@dimen/transcationview_text_size"
 
                     />
@@ -63,25 +59,21 @@
 
                 <TextView
                     android:id="@+id/transactionInvoiceTitleTextView"
-                    android:layout_width="@dimen/seekbar_progress_width"
-                    android:layout_height="wrap_content"
+                    style="@style/transactionTitleTextView_adapter"
                     android:layout_weight="1.9"
                     android:paddingLeft="@dimen/login_new_user_padding"
                     android:text="Invoice :"
-                    android:textColor="@color/textColor"
                     android:textSize="@dimen/transcationview_text_size" />
 
 
                 <TextView
                     android:id="@+id/transactionInvoice"
-                    android:layout_width="@dimen/seekbar_progress_width"
-                    android:layout_height="wrap_content"
+                    style="@style/transactionTitleTextView_adapter"
                     android:layout_weight="2"
                     android:ellipsize="end"
                     android:gravity="center_vertical|left"
                     android:maxLines="1"
                     android:text="$87343876463464656456486664"
-                    android:textColor="@color/textColor"
                     android:textSize="@dimen/transcationview_text_size" />
 
             </LinearLayout>
@@ -96,25 +88,21 @@
 
                 <TextView
                     android:id="@+id/transactionOrderTitleTextView"
-                    android:layout_width="@dimen/seekbar_progress_width"
-                    android:layout_height="wrap_content"
+                    style="@style/transactionTitleTextView_adapter"
                     android:layout_weight="1.9"
                     android:paddingLeft="@dimen/login_new_user_padding"
                     android:text="Order Id :"
-                    android:textColor="@color/textColor"
                     android:textSize="@dimen/transcationview_text_size" />
 
 
                 <TextView
                     android:id="@+id/transactionOrderTextView"
-                    android:layout_width="@dimen/seekbar_progress_width"
-                    android:layout_height="wrap_content"
+                    style="@style/transactionTitleTextView_adapter"
                     android:layout_weight="2"
                     android:ellipsize="end"
                     android:gravity="center_vertical|left"
                     android:maxLines="1"
                     android:text="sdvbkbkbdtchsdnjdskvnkjnvsdmbjbndjsbnrshwh"
-                    android:textColor="@color/textColor"
                     android:textSize="@dimen/transcationview_text_size" />
 
             </LinearLayout>
@@ -130,25 +118,21 @@
 
                 <TextView
                     android:id="@+id/transactionPurchaseDateTitleTextView"
-                    android:layout_width="@dimen/seekbar_progress_width"
-                    android:layout_height="wrap_content"
+                    style="@style/transactionTitleTextView_adapter"
                     android:layout_weight="1.9"
                     android:paddingLeft="@dimen/login_new_user_padding"
                     android:text="Purchase Date :"
-                    android:textColor="@color/textColor"
                     android:textSize="@dimen/transcationview_text_size" />
 
 
                 <TextView
                     android:id="@+id/transactionPurchaseDateTextView"
-                    android:layout_width="@dimen/seekbar_progress_width"
-                    android:layout_height="wrap_content"
+                    style="@style/transactionTitleTextView_adapter"
                     android:layout_weight="2"
                     android:ellipsize="end"
                     android:gravity="center_vertical|left"
                     android:maxLines="1"
                     android:text="$873438768832346876532356"
-                    android:textColor="@color/textColor"
                     android:textSize="@dimen/transcationview_text_size"
 
                     />
@@ -167,29 +151,16 @@
 
             <TextView
                 android:id="@+id/showPriceTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
+                style="@style/showPriceTextView"
                 android:layout_toRightOf="@+id/transactionDetailLayout"
-                android:gravity="center"
-                android:paddingLeft="@dimen/login_new_user_padding"
-                android:text="$299"
-                android:textSize="@dimen/transcationshowprice_text_size" />
+                android:text="$299" />
 
 
             <TextView
                 android:id="@+id/successTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
+                style="@style/successTextView"
                 android:layout_toRightOf="@+id/transactionDetailLayout"
-                android:gravity="center_vertical|left"
-                android:text="Successs"
-                android:textColor="#737373"
-                android:textSize="@dimen/transcationview_text_size" />
+                android:text="Successs" />
 
 
         </LinearLayout>

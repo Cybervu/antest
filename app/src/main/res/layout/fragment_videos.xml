@@ -8,26 +8,16 @@
 
     <TextView
         android:id="@+id/categoryTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/categoryTitle"
         android:layout_below="@+id/toolbar"
-        android:layout_marginLeft="@dimen/ppv_margin"
-        android:textColor="@color/pageTitleColor"
-        android:textSize="@dimen/itemtitle_text_size"
-        android:textStyle="normal" />
+        android:textSize="@dimen/itemtitle_text_size" />
 
     <GridView
         android:id="@+id/imagesGridView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/imagesGridView_viewmore"
         android:layout_below="@+id/categoryTitle"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/pre_order_button_margin"
-        android:layout_marginLeft="@dimen/pre_order_button_margin"
-        android:layout_marginRight="@dimen/pre_order_button_margin"
-        android:layout_marginTop="@dimen/pre_order_button_margin"
-        android:horizontalSpacing="@dimen/pre_order_button_margin"
-        android:verticalSpacing="@dimen/pre_order_button_margin">
+        android:layout_marginLeft="@dimen/pre_order_button_margin">
 
     </GridView>
     <!--<com.twotoasters.jazzylistview.JazzyGridView
@@ -69,15 +59,8 @@
 
         <TextView
             android:id="@+id/noInternetTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:maxLines="4"
-            android:singleLine="false"
-            android:textColor="@color/noInternetColor"
-            android:textSize="@dimen/testview_text_size"
-            android:textStyle="bold" />
+            style="@style/noInternet"
+            android:maxLines="4" />
 
 
     </RelativeLayout>
@@ -93,15 +76,8 @@
 
         <TextView
             android:id="@+id/noDataTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:maxLines="4"
-            android:singleLine="false"
-            android:textColor="@color/noInternetColor"
-            android:textSize="@dimen/testview_text_size"
-            android:textStyle="bold" />
+            style="@style/noInternet"
+            android:maxLines="4" />
 
 
     </RelativeLayout>
@@ -117,12 +93,7 @@
 
         <ImageView
             android:id="@+id/arrowIv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/arrowIv_margin"
-            android:background="@drawable/filter_arrow" />
+            style="@style/arrowIv_imageview" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/demoListView"

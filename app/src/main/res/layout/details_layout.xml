@@ -22,15 +22,8 @@
 
         <TextView
             android:id="@+id/noInternetTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:maxLines="4"
-            android:singleLine="false"
-            android:textColor="@color/noInternetColor"
-            android:textSize="@dimen/testview_text_size"
-            android:textStyle="bold" />
+            style="@style/noInternet"
+            android:maxLines="4" />
 
 
     </RelativeLayout>
@@ -46,15 +39,8 @@
 
         <TextView
             android:id="@+id/noDataTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:maxLines="4"
-            android:singleLine="false"
-            android:textColor="@color/noInternetColor"
-            android:textSize="@dimen/testview_text_size"
-            android:textStyle="bold" />
+            style="@style/noInternet"
+            android:maxLines="4" />
 
 
     </RelativeLayout>
@@ -69,9 +55,10 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fillViewport="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/toolbar"
-        android:layout_alignParentStart="true">
+        android:fillViewport="true">
 
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -92,24 +79,12 @@
 
                 <ImageView
                     android:id="@+id/bannerImageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/banerimg_height"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop" />
+                    style="@style/episode_bannerImageView" />
 
                 <ImageView
                     android:id="@+id/bannerOverlay"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/banerimg_height"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/content_list_overlay"
-                    android:scaleType="centerCrop"
-
-                    />
+                    style="@style/episode_bannerImageView"
+                    android:background="@drawable/content_list_overlay" />
 
 
                 <RelativeLayout
@@ -123,11 +98,7 @@
 
                     <ImageView
                         android:id="@+id/favorite_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/payment_relative_margin"
-                        android:src="@drawable/favorite_unselected"
-                        android:visibility="visible" />
+                        style="@style/favorite_view_episode_imageview" />
 
                 </RelativeLayout>
 
@@ -150,33 +121,19 @@
 
                     <Button
                         android:id="@+id/preOrderButton"
-                        android:layout_width="@dimen/preorderbtn_width"
-                        android:layout_height="@dimen/preorderbtn_height"
-                        android:layout_marginRight="@dimen/pre_order_button_margin"
+                        style="@style/preOrderButton"
                         android:layout_toLeftOf="@+id/viewTrailerButton"
                         android:background="@drawable/pre_order_button_radious"
-                        android:padding="@dimen/payment_spinner_padding"
-                        android:stateListAnimator="@null"
-                        android:textAllCaps="false"
-                        android:textColor="@color/preOrderButtonTextColor"
-                        android:textSize="@dimen/preorderbtn_text_size"
-                        android:visibility="gone" />
+                        android:stateListAnimator="@null" />
 
 
                     <Button
                         android:id="@+id/viewTrailerButton"
+                        style="@style/viewTrailerButton"
                         android:layout_width="@dimen/preorderbtn_width"
                         android:layout_height="@dimen/preorderbtn_height"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/button_radious"
-                        android:padding="@dimen/payment_spinner_padding"
                         android:stateListAnimator="@null"
-                        android:textAllCaps="false"
-                        android:textColor="@color/buttonTextColor"
-                        android:textSize="@dimen/trailerbtn_text_size"
-                        android:visibility="gone"
-
-                        />
+                        android:textSize="@dimen/trailerbtn_text_size" />
                 </RelativeLayout>
 
 
@@ -192,83 +149,49 @@
 
                     <TextView
                         android:id="@+id/videoDurationTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/videoDurationTextView2"
                         android:layout_below="@+id/videoGenreTextView"
-                        android:layout_marginLeft="@dimen/ppv_margin"
                         android:text=""
                         android:textColor="@color/textColor"
                         android:textSize="@dimen/vdioduration_text_size" />
 
                     <TextView
                         android:id="@+id/videoCensorRatingTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
-                        android:layout_marginLeft="@dimen/ppv_margin"
-                        android:background="@color/censorRatingBackground"
-                        android:paddingLeft="@dimen/videoCensorRatingTextView_padding"
-                        android:paddingRight="@dimen/videoCensorRatingTextView_padding"
-                        android:textColor="@color/textColor"
-                        android:textSize="@dimen/preorderbtn_text_size"
-                        android:visibility="gone" />
+                        style="@style/videoCensorRatingTextView3"
+                        android:textSize="@dimen/preorderbtn_text_size" />
 
                     <TextView
                         android:id="@+id/videoCensorRatingTextView1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
-                        android:layout_marginLeft="@dimen/name_user_margin_bottom"
-                        android:textColor="@color/textColor"
-                        android:textSize="@dimen/preorderbtn_text_size" />
+                        style="@style/videoCensorRatingTextView4"
+                        android:layout_below="@+id/videoGenreTextView" />
 
 
                     <TextView
                         android:id="@+id/videoReleaseDateTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/videoGenreTextView"
-                        android:layout_marginLeft="@dimen/ppv_margin"
-                        android:textColor="@color/textColor"
-                        android:textSize="@dimen/preorderbtn_text_size" />
+                        style="@style/videoReleaseDateTextView"
+                        android:layout_below="@+id/videoGenreTextView" />
 
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/playButton"
-                    android:layout_width="@dimen/playbtn_width"
-                    android:layout_height="@dimen/playbtn_height"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/play" />
+                    style="@style/playButton" />
 
                 <TextView
                     android:id="@+id/videoGenreTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    style="@style/videoGenreTextView"
                     android:layout_above="@+id/durationcensorLinearlayout"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:paddingLeft="@dimen/Login_drawing_padding"
                     android:text=""
                     android:textColor="@color/textColor"
                     android:textSize="@dimen/preorderbtn_text_size" />
 
                 <TextView
                     android:id="@+id/videoTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/videoTitle_textview3"
                     android:layout_above="@+id/videoGenreTextView"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginLeft="@dimen/ppv_margin"
-                    android:ellipsize="end"
-                    android:maxLines="1"
                     android:text=""
-                    android:textColor="@color/movieTitleColor"
                     android:textSize="@dimen/videotitle_text_size"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
+                    android:textStyle="bold" />
 
             </RelativeLayout>
 
@@ -297,16 +220,8 @@
 
                     <TextView
                         android:id="@+id/viewRatingTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/textColor_margin"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:textColor="@color/pageTitleColor"
-                        android:textSize="@dimen/preorderbtn_text_size"
-                        android:textStyle="bold" />
+                        style="@style/viewRatingTextView"
+                        android:textSize="@dimen/preorderbtn_text_size" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -331,29 +246,20 @@
 
                     <Button
                         android:id="@+id/storyViewMoreButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@color/transparent"
                         android:text="View More"
                         android:textAllCaps="false"
-                        android:textColor="@color/button_background"
-                        android:textSize="@dimen/preorderbtn_text_size"
-                        android:visibility="gone" />
+                        style="@style/storyViewMoreButton"
+                        android:textSize="@dimen/preorderbtn_text_size"/>
                 </RelativeLayout>
 
 
                 <TextView
                     android:id="@+id/videoCastCrewTitleTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
+                    style="@style/videoCastCrewTitleTextView"
                     android:layout_marginLeft="@dimen/divider_height"
                     android:layout_marginTop="@dimen/textColor_margin"
                     android:textColor="@color/castCrewTitleTextColor"
-                    android:textSize="@dimen/forgot_text_size"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/forgot_text_size"/>
 
             </LinearLayout>
 
@@ -369,12 +275,7 @@
 
                 <ImageButton
                     android:id="@+id/offlineImageButton"
-                    android:layout_width="@dimen/progressbar_width"
-                    android:layout_height="@dimen/progressbar_height"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/offlinebutton"
-
-                    />
+                    style="@style/offlineImageButton" />
             </RelativeLayout>
 
 

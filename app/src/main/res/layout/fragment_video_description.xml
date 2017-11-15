@@ -5,11 +5,7 @@
 
     <TextView
         android:id="@+id/playerDescription"
-        android:text="HELLO"
-        android:textAlignment="center"
-        android:gravity="center_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="16dp" />
+        style="@style/playerDescription_textview"
+        android:text="HELLO"/>
 
 </FrameLayout>

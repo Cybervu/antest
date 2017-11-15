@@ -1396,4 +1396,639 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:src">@drawable/offlinebutton</item>
     </style>
+
+    <style name="seasonSpinner">
+        <item name="android:layout_width">@dimen/forgot_logo_width</item>
+        <item name="android:layout_height">@dimen/preorderbtn_height</item>
+        <item name="android:layout_marginBottom">@dimen/ppv_margin</item>
+        <item name="android:layout_marginLeft">@dimen/seasonSpinner_margin</item>
+        <item name="android:layout_marginRight">@dimen/ppv_margin</item>
+        <item name="android:layout_marginTop">@dimen/ppv_margin</item>
+        <item name="android:background">@drawable/spinner_theme</item>
+        <item name="android:overlapAnchor">false</item>
+        <item name="android:popupBackground">#e2e1e1</item>
+        <item name="android:spinnerMode">dropdown</item>
+        <item name="android:theme">@style/applicationTheme</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="btnMore">
+        <item name="android:layout_width">@dimen/review_btn_width</item>
+        <item name="android:layout_height">@dimen/review_btn_height</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginRight">@dimen/ppv_margin</item>
+        <item name="android:backgroundTint">@color/button_background</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textSize">@dimen/trailerbtn_text_size</item>
+    </style>
+
+    <style name="noInternetImageView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:src">@drawable/logo</item>
+    </style>
+
+    <style name="geoBlockedTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/my_download_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">4</item>
+        <item name="android:paddingTop">@dimen/login_new_user_padding</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:textColor">@color/noInternetColor</item>
+        <item name="android:textSize">@dimen/testview_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="subscriptionTitleTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/ppv_margin</item>
+        <item name="android:textColor">@color/pageTitleColor</item>
+        <item name="android:textSize">@dimen/subscription_text_size</item>
+    </style>
+
+    <style name="recyclerViewSubscription">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/ppv_margin</item>
+        <item name="android:layout_marginTop">@dimen/ppv_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/preorderbtn_padding</item>
+        <item name="android:scrollbars">horizontal</item>
+    </style>
+
+    <style name="activationplanButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/activation_height</item>
+        <item name="android:layout_marginBottom">@dimen/ppv_margin</item>
+        <item name="android:layout_marginLeft">@dimen/activationplan_margin</item>
+        <item name="android:layout_marginRight">@dimen/activationplan_margin</item>
+        <item name="android:layout_marginTop">@dimen/payment_relative_margin</item>
+        <item name="android:background">@drawable/button_radious</item>
+        <item name="android:padding">@dimen/Login_drawing_padding</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">@dimen/activation_text_size</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="subtitle_resolution_imageview">
+        <item name="android:layout_width">@dimen/subtitle_resolution_width</item>
+        <item name="android:layout_height">@dimen/subtitle_resolution_height</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginLeft">@dimen/compress_expand_margin</item>
+        <item name="android:src">@drawable/resolution_icon</item>
+    </style>
+
+    <style name="resolution_text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/resolutiontext_height</item>
+        <item name="android:layout_marginLeft">@dimen/loginImageViewMarging_top</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:textColor">@color/subtitle_resolution</item>
+        <item name="android:textSize">@dimen/submit_text_size</item>
+    </style>
+
+    <style name="transactionTitleTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/loginImageViewMarging_top</item>
+        <item name="android:layout_marginLeft">@dimen/my_download_margin</item>
+        <item name="android:layout_marginTop">@dimen/loginImageViewMarging_top</item>
+        <item name="android:textColor">@color/pageTitleColor</item>
+        <item name="android:textSize">@dimen/transcationdetail_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="transactionDateTitleTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/alreadyMemberTextColor</item>
+        <item name="android:textSize">@dimen/transcation_text_size</item>
+    </style>
+
+    <style name="transactionDownloadButton">
+        <item name="android:layout_width">@dimen/transcationbtn_width</item>
+        <item name="android:layout_height">@dimen/transcationbtn_height</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_margin">@dimen/loginImageViewMarging_top</item>
+        <item name="android:background">@drawable/button_radious</item>
+        <item name="android:paddingLeft">@dimen/transactionDownloadButton_padding</item>
+        <item name="android:paddingRight">@dimen/transactionDownloadButton_padding</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textSize">@dimen/login_text_size</item>
+    </style>
+
+    <style name="current_time_textview2">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_marginBottom">@dimen/current_time_margin_bottom</item>
+        <item name="android:textColor">@color/seekTimeTextColor</item>
+        <item name="android:textSize">@dimen/totaltme_text_size</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="viewmore_sectionTitle_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/payment_spinner_padding</item>
+        <item name="android:textColor">@color/pageTitleColor</item>
+        <item name="android:textSize">@dimen/itemtitle_text_size</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="imagesGridView_viewmore">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginBottom">@dimen/pre_order_button_margin</item>
+        <item name="android:layout_marginRight">@dimen/pre_order_button_margin</item>
+        <item name="android:layout_marginTop">@dimen/pre_order_button_margin</item>
+        <item name="android:horizontalSpacing">@dimen/pre_order_button_margin</item>
+        <item name="android:verticalSpacing">@dimen/pre_order_button_margin</item>
+    </style>
+
+    <style name="transactionTitleTextView_adapter">
+        <item name="android:layout_width">@dimen/seekbar_progress_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="showPriceTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">@dimen/login_new_user_padding</item>
+        <item name="android:textSize">@dimen/transcationshowprice_text_size</item>
+    </style>
+
+    <style name="successTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:textColor">#737373</item>
+        <item name="android:textSize">@dimen/transcationview_text_size</item>
+    </style>
+
+    <style name="castImageView2">
+        <item name="android:layout_width">@dimen/cast_width_icon</item>
+        <item name="android:layout_height">@dimen/cast_height_icon</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/logo</item>
+    </style>
+
+    <style name="castNameTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:textColor">@color/button_background</item>
+        <item name="android:textSize">@dimen/cast_name_text</item>
+    </style>
+
+    <style name="castDescriptionTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/textColor_margin</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/videotextColor</item>
+        <item name="android:textSize">@dimen/cast_description_text</item>
+    </style>
+
+    <style name="cardTextView">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/offlinebtn_width</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">@dimen/payment_spinner_padding_left</item>
+        <item name="android:textColor">@color/editTextColor</item>
+        <item name="android:textColorHint">@color/hint_color</item>
+        <item name="android:textSize">@dimen/edit_text_size</item>
+    </style>
+
+    <style name="offset_imageView">
+        <item name="android:layout_width">@dimen/cast_width_icon</item>
+        <item name="android:layout_height">@dimen/cast_height_icon</item>
+        <item name="android:src">@drawable/ic_watch_now</item>
+    </style>
+
+    <style name="offset_textView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/editTextColor</item>
+    </style>
+
+    <style name="delete_imageview">
+        <item name="android:layout_width">@dimen/recylerimg_width</item>
+        <item name="android:layout_height">@dimen/recylerimg_height</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:src">@drawable/delete</item>
+    </style>
+
+    <style name="toastMsg">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:background">#c6151616</item>
+        <item name="android:padding">@dimen/toastmsg_padding</item>
+        <item name="android:textColor">#fcf6f6</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="preOrderButton">
+        <item name="android:layout_width">@dimen/preorderbtn_width</item>
+        <item name="android:layout_height">@dimen/preorderbtn_height</item>
+        <item name="android:layout_marginRight">@dimen/pre_order_button_margin</item>
+        <item name="android:background">@drawable/pre_order_button_radious</item>
+        <item name="android:padding">@dimen/payment_spinner_padding</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/preOrderButtonTextColor</item>
+        <item name="android:textSize">@dimen/preorderbtn_text_size</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="videoCensorRatingTextView3">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/ppv_margin</item>
+        <item name="android:background">@color/censorRatingBackground</item>
+        <item name="android:paddingLeft">@dimen/videoCensorRatingTextView_padding</item>
+        <item name="android:paddingRight">@dimen/videoCensorRatingTextView_padding</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">@dimen/preorderbtn_text_size</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="videoCensorRatingTextView4">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/name_user_margin_bottom</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">@dimen/preorderbtn_text_size</item>
+    </style>
+
+    <style name="videoReleaseDateTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/ppv_margin</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">@dimen/preorderbtn_text_size</item>
+    </style>
+
+    <style name="device_name_textview">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/device_name_height</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/cast_name_text</item>
+    </style>
+
+    <style name="delete_device_textview">
+        <item name="android:layout_width">@dimen/seekbar_progress_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">right</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/button_background</item>
+        <item name="android:textSize">@dimen/email_text_size</item>
+    </style>
+
+    <style name="episodeImageView">
+        <item name="android:layout_width">@dimen/episodelayout_width</item>
+        <item name="android:layout_height">@dimen/episodelayout_height</item>
+        <item name="android:src">@drawable/logo</item>
+    </style>
+
+    <style name="sectionTitle_episode_listing">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/episodesectiontitle_height</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:padding">@dimen/payment_spinner_padding</item>
+        <item name="android:textColor">@color/pageTitleColor</item>
+        <item name="android:textSize">@dimen/itemtitle_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="filter_listTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/my_download_margin</item>
+        <item name="android:layout_marginLeft">@dimen/loginImageViewMarging_top</item>
+        <item name="android:layout_marginTop">@dimen/my_download_margin</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">@dimen/cast_description_text</item>
+    </style>
+
+    <style name="filter_listCheckBox">
+        <item name="android:layout_width">@dimen/listview_img_width</item>
+        <item name="android:layout_height">@dimen/listview_img_height</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">@dimen/profile_spinner_margin</item>
+        <item name="android:layout_marginTop">@dimen/name_user_margin_bottom</item>
+        <item name="android:clickable">true</item>
+        <item name="android:src">@drawable/ic_radio_button_default</item>
+    </style>
+
+    <style name="categoryTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/ppv_margin</item>
+        <item name="android:textColor">@color/pageTitleColor</item>
+        <item name="android:textSize">@dimen/fragment_text_size</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="aboutus_imageView">
+        <item name="android:layout_width">@dimen/fragmentimgview_width</item>
+        <item name="android:layout_height">@dimen/fragmentimgview_height</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_marginTop">@dimen/payment_relative_margin</item>
+        <item name="android:src">@drawable/logo</item>
+    </style>
+
+    <style name="skipButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">@dimen/ppv_margin</item>
+        <item name="android:background">@color/button_background</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:layout_marginTop">@dimen/ppv_margin</item>
+    </style>
+
+    <style name="contactus_categoryTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/categoryTitle_margin</item>
+        <item name="android:layout_marginLeft">@dimen/loginImageViewMarging_top</item>
+        <item name="android:layout_marginTop">@dimen/loginImageViewMarging_top</item>
+        <item name="android:paddingBottom">@dimen/Login_drawing_padding</item>
+        <item name="android:paddingTop">@dimen/Login_drawing_padding</item>
+        <item name="android:textColor">@color/pageTitleColor</item>
+        <item name="android:textSize">@dimen/sectiontitle_text_size</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="contactFormTitle">
+        <item name="android:layout_width">@dimen/fragmenttextview_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/categoryTitle_margin</item>
+        <item name="android:layout_marginLeft">@dimen/ppv_margin</item>
+        <item name="android:paddingBottom">@dimen/Login_drawing_padding</item>
+        <item name="android:paddingLeft">@dimen/login_new_user_padding</item>
+        <item name="android:paddingTop">@dimen/login_new_user_padding</item>
+        <item name="android:textColor">@color/contactFormTitle</item>
+        <item name="android:textSize">@dimen/contactformtitle_text_size</item>
+    </style>
+
+    <style name="contact_name_editText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/contact_name_margin</item>
+        <item name="android:layout_marginLeft">@dimen/ppv_margin</item>
+        <item name="android:layout_marginRight">@dimen/ppv_margin</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:inputType">textPersonName</item>
+        <item name="android:paddingBottom">@dimen/Login_drawing_padding</item>
+        <item name="android:paddingTop">@dimen/Login_drawing_padding</item>
+        <item name="android:textColor">@color/editTextColor</item>
+        <item name="android:textColorHint">@color/hint_color</item>
+        <item name="android:textSize">@dimen/edit_text_size</item>
+    </style>
+
+    <style name="contact_msg_edittext">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/payment_margin_btn_top</item>
+        <item name="android:layout_marginLeft">@dimen/ppv_margin</item>
+        <item name="android:layout_marginRight">@dimen/ppv_margin</item>
+        <item name="android:layout_marginTop">@dimen/review_edit_text_margin</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:inputType">textMultiLine</item>
+        <item name="android:paddingBottom">@dimen/Login_drawing_padding</item>
+        <item name="android:paddingTop">@dimen/Login_drawing_padding</item>
+        <item name="android:textColor">@color/editTextColor</item>
+        <item name="android:textColorHint">@color/hint_color</item>
+        <item name="android:textSize">@dimen/edit_text_size</item>
+    </style>
+
+    <style name="submit_contact_button">
+        <item name="android:layout_width">@dimen/submitcontact_width</item>
+        <item name="android:layout_height">@dimen/submitcontact_height</item>
+        <item name="android:layout_gravity">end</item>
+        <item name="android:layout_marginLeft">@dimen/ppv_margin</item>
+        <item name="android:layout_marginRight">@dimen/ppv_margin</item>
+        <item name="android:layout_marginTop">@dimen/payment_margin_btn_top</item>
+        <item name="android:background">@drawable/button_radious</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textSize">@dimen/submitcontact_text_size</item>
+    </style>
+
+    <style name="nav_drawer_imageview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/nav_drawer_height</item>
+        <item name="android:src">@drawable/logo</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_marginRight">@dimen/payment_margin_btn_top</item>
+        <item name="android:layout_alignParentStart">true</item>
+    </style>
+
+    <style name="playerDescription_textview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">@dimen/edit_text_size</item>
+    </style>
+
+    <style name="arrowIv_imageview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginRight">@dimen/arrowIv_margin</item>
+        <item name="android:background">@drawable/filter_arrow</item>
+    </style>
+
+    <style name="itemImage_home280_card">
+        <item name="android:layout_width">@dimen/home_layout_width</item>
+        <item name="android:layout_height">@dimen/homelogo_height</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:src">@drawable/logo</item>
+    </style>
+
+    <style name="itemTitle_home280_card">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clickable">false</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:focusable">false</item>
+        <item name="android:focusableInTouchMode">false</item>
+        <item name="android:gravity">left</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:padding">@dimen/loginImageViewMarging_top_padding</item>
+        <item name="android:textColor">@color/contentTitleColor</item>
+        <item name="android:textSize">@dimen/itemtitle1_text_size</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="languagePopupTitle_textview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/videoCensorRatingTextView_margin</item>
+        <item name="android:layout_marginLeft">@dimen/pre_order_button_margin</item>
+        <item name="android:layout_marginTop">@dimen/login_button_margin</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">@dimen/languagepop_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="apply_button_language_popup">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/applybtn_height</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginBottom">@dimen/payment_relative_margin</item>
+        <item name="android:layout_marginTop">@dimen/ppv_margin</item>
+        <item name="android:background">@drawable/button_radious</item>
+        <item name="android:gravity">center_horizontal|center</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textSize">@dimen/applybtn_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="image_language_recycler">
+        <item name="android:layout_width">@dimen/recylerimg_width</item>
+        <item name="android:layout_height">@dimen/recylerimg_height</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginEnd">@dimen/loginImageViewMarging_top</item>
+        <item name="android:layout_marginRight">@dimen/language_recycler_layout</item>
+        <item name="android:src">@drawable/unselected</item>
+    </style>
+
+    <style name="language_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/languagetext_height</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">@dimen/loginImageViewMarging_top</item>
+        <item name="android:layout_marginStart">@dimen/loginImageViewMarging_top</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/languageTextColor</item>
+        <item name="android:textSize">@dimen/languagepop_text_size</item>
+    </style>
+
+    <style name="list_card_imageview">
+        <item name="android:layout_width">@dimen/listcard_width</item>
+        <item name="android:layout_height">@dimen/listcard_height</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:src">@drawable/logo</item>
+    </style>
+
+    <style name="list_card_itemTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">end</item>
+        <item name="android:maxLength">18</item>
+        <item name="android:textColor">@color/contentTitleColor</item>
+        <item name="android:textSize">@dimen/itemtitle1_text_size</item>
+    </style>
+
+    <style name="itemTitle_listItem">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textColor">@color/pageTitleColor</item>
+        <item name="android:textSize">@dimen/itemtitle_text_size</item>
+    </style>
+
+    <style name="btnMore_listItem">
+        <item name="android:layout_width">@dimen/btnmore_width</item>
+        <item name="android:layout_height">@dimen/btnmore_height</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">@drawable/button_radious</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textSize">@dimen/btnmore_text_size</item>
+    </style>
+
+    <style name="btnMore_listItem2">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:background">@drawable/view_more_button_background</item>
+        <item name="android:minHeight">@dimen/btnMore_min_height</item>
+        <item name="android:padding">@dimen/Login_drawing_padding</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textSize">@dimen/email_text_size</item>
+    </style>
+
+    <style name="movieImageOverlay">
+        <item name="android:layout_width">@dimen/list_singlecard_img_width</item>
+        <item name="android:layout_height">@dimen/list_singlecard_img_height</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:background">@drawable/content_list_overlay</item>
+    </style>
+
+    <style name="logout_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/logouttext_height</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">@dimen/Login_drawing_padding</item>
+        <item name="android:paddingRight">@dimen/Login_drawing_padding</item>
+        <item name="android:textColor">@color/pageTitleColor</item>
+        <item name="android:textSize">@dimen/logout_text_size</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="ok_Button">
+        <item name="android:layout_width">@dimen/okbtn_width</item>
+        <item name="android:layout_height">@dimen/okbtn_height</item>
+        <item name="android:layout_marginLeft">@dimen/textColor_margin</item>
+        <item name="android:background">@drawable/button_radious</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textSize">@dimen/okbtn_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

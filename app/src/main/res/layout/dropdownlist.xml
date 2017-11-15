@@ -6,6 +6,4 @@
     android:ellipsize="marquee"
     android:singleLine="true"
     android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
-    android:textColor="@color/spinnerDropDownListColor"
-
-    />
+    android:textColor="@color/spinnerDropDownListColor" />

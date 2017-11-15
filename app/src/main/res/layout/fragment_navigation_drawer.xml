@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    android:gravity="center">
 
 
     <!-- <RelativeLayout
@@ -65,24 +65,23 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:background="@color/leftMenuBackground"
-        android:paddingBottom="10dp"
-        />
+        android:paddingBottom="10dp" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/appBackgroundColor"
-        android:layout_below="@+id/toolbar"/>
+        android:layout_below="@+id/toolbar"
+        android:background="@color/appBackgroundColor" />
 
-    <android.support.v7.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:local="http://schemas.android.com/apk/res-auto"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
         android:background="@color/navlogobackgroundcolor"
-        local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        local:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+        android:minHeight="?attr/actionBarSize"
+        local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -90,13 +89,8 @@
             android:background="@color/navlogobackgroundcolor">
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="130dp"
-                android:src="@drawable/logo"
-                android:layout_gravity="center"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="25dp"
-                android:layout_alignParentStart="true" />
+                style="@style/nav_drawer_imageview"
+                android:layout_width="match_parent" />
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>

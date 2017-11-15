@@ -9,26 +9,16 @@
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/listTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/my_download_margin"
+        style="@style/filter_listTextView"
         android:layout_marginLeft="@dimen/profile_spinner_margin"
-        android:layout_marginTop="@dimen/my_download_margin"
         android:layout_toRightOf="@+id/listCheckBox"
-        android:layout_weight="1"
         android:text=""
         android:textColor="@color/filterTextColor"
         android:textSize="@dimen/video_text_size" />
 
     <ImageView
         android:id="@+id/listCheckBox"
-        android:layout_width="@dimen/listview_img_width"
-        android:layout_height="@dimen/listview_img_height"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/profile_spinner_margin"
-        android:layout_marginTop="@dimen/my_download_margin"
-        android:clickable="true"
+        style="@style/filter_listCheckBox"
         android:src="@drawable/tick_select25x25" />
 
 </RelativeLayout>

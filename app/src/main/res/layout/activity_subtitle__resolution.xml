@@ -3,15 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_subtitle__resolution"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-  >
+    android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#60000000"
         android:gravity="bottom"
-        android:id="@+id/main_layout"
         android:orientation="vertical">
 
         <LinearLayout
@@ -26,25 +25,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="@dimen/preorderbtn_padding">
 
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="7dp"
-                    android:src="@drawable/resolution_icon" />
+                    style="@style/subtitle_resolution_imageview"
+                    android:layout_width="@dimen/subtitle_resolution_width" />
 
                 <TextView
                     android:id="@+id/resolution_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="15dp"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:text="Quality 360"
-                    android:textColor="#808080"
-                    android:textSize="18sp" />
+                    style="@style/resolution_text"
+                    android:text="Quality 360" />
             </LinearLayout>
 
 
@@ -53,25 +43,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="@dimen/preorderbtn_padding">
 
                 <ImageView
-                    android:layout_marginLeft="7dp"
-                    android:layout_width="28dp"
-                    android:layout_gravity="center"
-                    android:layout_height="28dp"
+                    style="@style/subtitle_resolution_imageview"
                     android:src="@drawable/cc_icon" />
 
                 <TextView
                     android:id="@+id/subtitle_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="15dp"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:text="Sub Title"
-                    android:textColor="#808080"
-                    android:textSize="18dp" />
+                    style="@style/resolution_text"
+                    android:text="Sub Title" />
 
             </LinearLayout>
 

@@ -16,22 +16,13 @@
 
         <ImageView
             android:id="@+id/noInternetImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:src="@drawable/logo" />
+            style="@style/noInternetImageView" />
 
         <TextView
             android:id="@+id/noInternetTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_below="@+id/noInternetImageView"
-            android:gravity="center"
             android:maxLines="4"
-            android:singleLine="false"
-            android:textColor="@color/noInternetColor"
-            android:textSize="@dimen/testview_text_size"
-            android:textStyle="bold" />
+            style="@style/noInternet" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -44,24 +35,12 @@
 
         <ImageView
             android:id="@+id/geoBlockedImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:src="@drawable/logo" />
+            style="@style/noInternetImageView" />
 
         <TextView
             android:id="@+id/geoBlockedTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_below="@+id/geoBlockedImageView"
-            android:layout_marginTop="@dimen/my_download_margin"
-            android:gravity="center"
-            android:maxLines="4"
-            android:paddingTop="@dimen/login_new_user_padding"
-            android:singleLine="false"
-            android:textColor="@color/noInternetColor"
-            android:textSize="@dimen/testview_text_size"
-            android:textStyle="bold" />
+            style="@style/geoBlockedTextView" />
     </RelativeLayout>
 
 </RelativeLayout>

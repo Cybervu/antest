@@ -29,24 +29,20 @@
 
                 <ImageView
                     android:id="@+id/episodeImageView"
-                    android:layout_width="@dimen/episodelayout_width"
-                    android:layout_height="@dimen/episodelayout_height"
-                    android:src="@drawable/logo" />
+                    style="@style/episodeImageView" />
 
                 <ImageView
                     android:id="@+id/movieImageOverlay"
-                    android:layout_width="@dimen/episodelayout_width"
-                    android:layout_height="@dimen/episodelayout_height"
+                    style="@style/episodeImageView"
                     android:background="@drawable/episode_list_overlay"
 
                     />
 
                 <ImageView
                     android:id="@+id/playButton"
+                    style="@style/playButton"
                     android:layout_width="@dimen/playimg_width"
-                    android:layout_height="@dimen/playimg_height"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/play" />
+                    android:layout_height="@dimen/playimg_height" />
             </RelativeLayout>
 
             <LinearLayout
@@ -58,18 +54,14 @@
 
                 <TextView
                     android:id="@+id/episodeTitleTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/ppv_margin"
+                    style="@style/videoDurationTextView2"
                     android:textColor="@color/editTextColor"
                     android:textSize="@dimen/testview1_text_size"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/episodeNameTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/ppv_margin"
+                    style="@style/videoDurationTextView2"
                     android:layout_marginTop="@dimen/textColor_margin"
                     android:textColor="@color/editTextColor"
                     android:textSize="@dimen/episodename_text_size"
@@ -77,9 +69,7 @@
 
                 <TextView
                     android:id="@+id/episodeDateTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/ppv_margin"
+                    style="@style/videoDurationTextView2"
                     android:layout_marginTop="@dimen/textColor_margin"
                     android:textColor="@color/editTextColor"
                     android:textSize="@dimen/episodedate_text_size" />
