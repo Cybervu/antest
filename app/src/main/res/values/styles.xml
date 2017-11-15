@@ -1324,4 +1324,76 @@
         <item name="android:textColor">@color/movieTitleColor</item>
         <item name="android:textSize">@dimen/review_btn_textsize</item>
     </style>
+
+    <style name="playButton">
+        <item name="android:layout_width">@dimen/playbtn_width</item>
+        <item name="android:layout_height">@dimen/playbtn_height</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:src">@drawable/play</item>
+    </style>
+
+    <style name="videoGenreTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:paddingLeft">@dimen/Login_drawing_padding</item>
+        <item name="android:textColor">@color/movieTitleColor</item>
+        <item name="android:textSize">@dimen/review_btn_textsize</item>
+    </style>
+
+    <style name="videoTitle_textview3">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_marginLeft">@dimen/ppv_margin</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/movieTitleColor</item>
+        <item name="android:textSize">@dimen/forgot_text_size</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="viewRatingTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginRight">@dimen/textColor_margin</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/pageTitleColor</item>
+        <item name="android:textSize">@dimen/review_btn_textsize</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="videoStoryTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginRight">@dimen/login_linear_margin_top</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/videotextColor</item>
+        <item name="android:textSize">@dimen/review_btn_textsize</item>
+    </style>
+
+    <style name="storyViewMoreButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/button_background</item>
+        <item name="android:textSize">@dimen/review_btn_textsize</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="offlineImageButton">
+        <item name="android:layout_width">@dimen/offlinebtn_width</item>
+        <item name="android:layout_height">@dimen/offlinebtn_height</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:src">@drawable/offlinebutton</item>
+    </style>
 </resources>
