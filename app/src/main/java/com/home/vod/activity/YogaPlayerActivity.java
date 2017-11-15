@@ -835,9 +835,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         if (preferenceManager != null) {
             emailIdStr = preferenceManager.getEmailIdFromPref();
 
-            Toast.makeText(getApplicationContext(), emailIdStr, Toast.LENGTH_LONG).show();
-
-
         } else {
             emailIdStr = "";
 
@@ -2324,8 +2321,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 }
 
                 if (SubTitlePath.size() > 0)
-                    subtitle_change_btn.setVisibility(View.VISIBLE);
-                primary_ll.setVisibility(View.VISIBLE);
+//                    subtitle_change_btn.setVisibility(View.VISIBLE);
+//                primary_ll.setVisibility(View.VISIBLE);
 
 
 
@@ -2527,8 +2524,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 /*
                     mPlayCircle.setVisibility(View.GONE);
 */
-                emVideoView.setEnabled(true);
-                emVideoView.start();
+//                emVideoView.setEnabled(true);
+//                emVideoView.start();
                 updatePlaybackLocation(PlaybackLocation.LOCAL);
                 mPlaybackState = PlaybackState.IDLE;
                 mLocation = PlaybackLocation.LOCAL;
@@ -3777,14 +3774,12 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         }
                     } else {
 
-                        Log.v("ANU","IS CONNECTED ELSE====");
 
 //                        playerModel.setThirdPartyPlayer(false);
 //                        emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
                         if (FakeSubTitlePath.size() > 0) {
                             final Intent playVideoIntent;
 
-                            Log.v("ANU","IS CONNECTED ELSE ProgramPlayerActivity====");
                             playVideoIntent = new Intent(YogaPlayerActivity.this, ProgramPlayerActivity.class);
 
                             runOnUiThread(new Runnable() {

@@ -133,4 +133,7 @@
     <dimen name="sidemenu_padding_bottom">80dp</dimen>
 
     <dimen name="season_margin_left">10dp</dimen>
+
+    <dimen name="detailsTextView">150dp</dimen>
+
 </resources>

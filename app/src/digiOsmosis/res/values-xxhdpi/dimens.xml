@@ -167,4 +167,6 @@
 
     <dimen name="season_margin_left">7dp</dimen>
 
+    <dimen name="detailsTextView">150dp</dimen>
+
 </resources>

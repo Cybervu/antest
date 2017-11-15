@@ -166,4 +166,6 @@
     <dimen name="sidemenu_padding_bottom">10dp</dimen>
 
 
+    <dimen name="detailsTextView">230dp</dimen>
+
 </resources>
