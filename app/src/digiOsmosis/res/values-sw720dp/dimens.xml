@@ -178,4 +178,6 @@
     <dimen name="nav_drawer_width">300dp</dimen>
     <dimen name="loginImageViewMarging_top1">30dp</dimen>
 
+    <dimen name="detailsTextView">250dp</dimen>
+
 </resources>

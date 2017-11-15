@@ -94,4 +94,6 @@
     <dimen name="season_image_width">130dp</dimen>
     <dimen name="season_margin_left">10dp</dimen>
 
+    <dimen name="detailsTextView">150dp</dimen>
+
 </resources>

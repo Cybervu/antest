@@ -203,4 +203,6 @@
     <dimen name="season_margin_left">20dp</dimen>
     <dimen name="sidemenu_padding_bottom">10dp</dimen>
 
+    <dimen name="detailsTextView">250dp</dimen>
+
 </resources>

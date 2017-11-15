@@ -40,12 +40,15 @@ import com.crashlytics.android.Crashlytics;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import com.google.android.gms.cast.MediaInfo;
+import com.google.android.gms.cast.MediaMetadata;
+import com.google.android.gms.cast.MediaTrack;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+import com.google.android.gms.common.images.WebImage;
 import com.home.apisdk.apiController.AddToFavAsync;
 import com.home.apisdk.apiController.DeleteFavAsync;
 import com.home.apisdk.apiController.GetContentDetailsAsynTask;
@@ -64,6 +67,7 @@ import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.RelatedContentInput;
 import com.home.apisdk.apiModel.RelatedContentOutput;
 import com.home.apisdk.apiModel.VideoLogsInputModel;
+import com.home.vod.BuildConfig;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.MyDownloadIntentHandler;
 import com.home.vod.R;
@@ -82,7 +86,11 @@ import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -102,6 +110,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIET_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIFFICULTY_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DURATION_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROGRAM_BUTTON;
@@ -111,6 +120,7 @@ import static com.home.vod.preferences.LanguagePreference.DETAILS_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DIET_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DIFFICULTY_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DURATION_TITLE;
+import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.PROGRAM_BUTTON;
@@ -121,6 +131,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
 import static player.utils.Util.HAS_FAVORITE;
+import static player.utils.Util.timer;
 
 /**
  * Created by MUVI on 10/6/2017.
@@ -171,6 +182,13 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
     String movieStreamUniqueId, bannerImageId, posterImageId, permalinkStr;
     boolean castStr = false;
     int isFavorite;
+
+    TimerTask timerTask;
+    long cast_disconnected_position = 0;
+    int player_start_time = 0;
+    int player_end_time = 0;
+    String log_temp_id = "0";
+    int playerPosition = 0;
 
     /*chromecast-------------------------------------*/
     private VideoView mVideoView;
@@ -438,6 +456,10 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
         @Override
         public void onSessionEnding(CastSession session) {
+
+            cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
+
+
         }
 
         @Override
@@ -774,11 +796,90 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 player_layout.setVisibility(View.VISIBLE);
                 progressView.setVisibility(View.VISIBLE);
 
-                Toast.makeText(ProgrammeActivity.this,"play button clicked",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ProgrammeActivity.this,"play button clicked",Toast.LENGTH_SHORT).show();
                 //added condition for check movieTrailerurl null or not .....by nihar #30-10-2017
 
                 if(movieTrailerUrlStr != null){
-                    emVideoView.setVideoURI(Uri.parse(movieTrailerUrlStr));
+
+
+
+                    if (mCastSession != null && mCastSession.isConnected()) {
+
+
+                        MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+
+                        movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, movieReleaseDateStr);
+                        movieMetadata.putString(MediaMetadata.KEY_TITLE, name + " - Trailer");
+                        movieMetadata.addImage(new WebImage(Uri.parse(posterImageId.trim())));
+                        movieMetadata.addImage(new WebImage(Uri.parse(posterImageId.trim())));
+                        JSONObject jsonObj = null;
+                        try {
+                            jsonObj = new JSONObject();
+                            jsonObj.put("description", name);
+
+
+                            //  This Code Is Added For Video Log By Bibhu..
+
+                            jsonObj.put("authToken", authTokenStr.trim());
+                            jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+                            jsonObj.put("ip_address", ipAddres.trim());
+                            jsonObj.put("movie_id", movieUniqueId);
+                            jsonObj.put("episode_id", "");
+
+
+                            jsonObj.put("played_length", "0");
+
+
+                            jsonObj.put("watch_status", "start");
+                            jsonObj.put("device_type", "2");
+                            jsonObj.put("log_id", "0");
+
+                            // restrict_stream_id is always set to be "0" , bcoz it's a triler.
+                            jsonObj.put("restrict_stream_id", "0");
+
+                            jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                            jsonObj.put("is_log", "1");
+
+                            //=====================End===================//
+
+
+                            // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                            jsonObj.put("resolution", "BEST");
+                            jsonObj.put("start_time", "0");
+                            jsonObj.put("end_time", "0");
+                            jsonObj.put("log_unique_id", "0");
+                            jsonObj.put("location", "0");
+                            jsonObj.put("video_type", "");
+                            jsonObj.put("totalBandwidth", "0");
+                            // This is added only to identify, the videolog is called for trailer
+                            jsonObj.put("content_type", "2");
+
+                            //====================End=====================//
+
+                        } catch (JSONException e) {
+                        }
+
+                        mediaInfo = new MediaInfo.Builder(movieTrailerUrlStr.trim())
+                                .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                                .setContentType("videos/mp4")
+                                .setMetadata(movieMetadata)
+                                .setStreamDuration(15 * 1000)
+                                .setCustomData(jsonObj)
+                                .build();
+                        mSelectedMedia = mediaInfo;
+                        // Util.showQueuePopup(ShowWithEpisodesActivity.this, view, mediaInfo);
+
+                        togglePlayback();
+
+                    }
+
+
+                    else {
+                        emVideoView.setVideoURI(Uri.parse(movieTrailerUrlStr));
+                    }
+
+
 
                 }
 
@@ -796,8 +897,6 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 latest_center_play_pause.setVisibility(View.GONE);
                 try {
 
-                    Log.v("Subhalaxmi","video setOnPreparedListener not started");
-                    Toast.makeText(ProgrammeActivity.this,"video setOnPreparedListener not started",Toast.LENGTH_SHORT).show();
                    // mHandler.removeCallbacks(updateTimeTask);
 
                     current_time.setVisibility(View.VISIBLE);
@@ -1491,6 +1590,33 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onSessionEnded(CastSession session, int error) {
                 onApplicationDisconnected();
+
+
+                player.utils.Util.call_finish_at_onUserLeaveHint = true;
+                latest_center_play_pause.setEnabled(true);
+                emVideoView.setEnabled(true);
+
+                startTimer();
+                emVideoView.start();
+
+                if (cast_disconnected_position != 0) {
+
+                    emVideoView.seekTo((int) cast_disconnected_position);
+                    log_temp_id = "0";
+                    player_start_time = millisecondsToString((int) cast_disconnected_position);
+                    playerPosition = player_start_time;
+
+                    // Call video log here
+                }
+
+                latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
+                center_play_pause.setImageResource(R.drawable.ic_media_pause);
+                latest_center_play_pause.setVisibility(View.GONE);
+                mHandler.removeCallbacks(updateTimeTask);
+                updateProgressBar();
+
+
+
             }
 
             @Override
@@ -1530,13 +1656,44 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             }
 
             private void onApplicationConnected(CastSession castSession) {
+
+
+
+                stoptimertask();
+                player.utils.Util.call_finish_at_onUserLeaveHint = false;
+                player.utils.Util.hide_pause = true;
+                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                latest_center_play_pause.setVisibility(View.VISIBLE);
+                emVideoView.setEnabled(false);
+//                latest_center_play_pause.setEnabled(true);
+
+                if (emVideoView.isPlaying()) {
+                    emVideoView.pause();
+                    latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
+                    center_play_pause.setImageResource(R.drawable.ic_media_play);
+                    mHandler.removeCallbacks(updateTimeTask);
+                }
+
+
+                if (center_pause_paly_timer_is_running) {
+                    center_pause_paly_timer.cancel();
+                    center_pause_paly_timer_is_running = false;
+                    Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
+
+
+                    last_ll.setVisibility(View.GONE);
+                    center_play_pause.setVisibility(View.GONE);
+                    current_time.setVisibility(View.GONE);
+                }
+
+
                 mCastSession = castSession;
                 mLocation = PlaybackLocation.REMOTE;
                 if (null != mSelectedMedia) {
 
                     if (mPlaybackState == PlaybackState.PLAYING) {
-                        mVideoView.pause();
-                        loadRemoteMedia(mSeekbar.getProgress(), true);
+//                        mVideoView.pause();
+//                        loadRemoteMedia(mSeekbar.getProgress(), true);
                         return;
                     } else {
                         mPlaybackState = PlaybackState.IDLE;
@@ -1551,7 +1708,8 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 /*
                     mPlayCircle.setVisibility(View.GONE);
 */
-
+//                emVideoView.setEnabled(true);
+//                emVideoView.start();
                 updatePlaybackLocation(PlaybackLocation.LOCAL);
                 mPlaybackState = PlaybackState.IDLE;
                 mLocation = PlaybackLocation.LOCAL;
@@ -1710,9 +1868,33 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void onStatusUpdated() {
 
-                Intent intent = new Intent(ProgrammeActivity.this, ExpandedControlsActivity.class);
+                /*Intent intent = new Intent(ProgrammeActivity.this, ExpandedControlsActivity.class);
                 startActivity(intent);
-                remoteMediaClient.removeListener(this);
+                remoteMediaClient.removeListener(this);*/
+
+                if (mCastSession != null && mCastSession.isConnected()) {
+                    Log.v("BIBHU222", "======" + remoteMediaClient.isPlaying());
+
+                    if (remoteMediaClient.isPlaying()) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
+                                latest_center_play_pause.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
+                                latest_center_play_pause.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    }
+
+                }
+
             }
 
             @Override
@@ -1832,7 +2014,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             mHandler.postDelayed(this, 1000);
 
             if (contentTypesId != 4) {
-                seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
+//                seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
             }
 
             current_matching_time = emVideoView.getCurrentPosition();
@@ -1841,7 +2023,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
                 Log.v("Subhalaxmi","video done not started");
                 Toast.makeText(ProgrammeActivity.this,"video done not started",Toast.LENGTH_SHORT).show();
-                findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
+//                findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                 center_play_pause.setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.GONE);
                 previous_matching_time = current_matching_time;
@@ -2123,6 +2305,49 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
 
     }
+
+
+    public void stoptimertask() {
+        //stop the timer, if it's not already null
+        if (timer != null) {
+
+            Log.v("BIBHU", "=======================================stoptimertask caled=================================");
+
+            timer.cancel();
+            timer = null;
+        }
+
+    }
+
+
+    private int millisecondsToString(int milliseconds) {
+        // int seconds = (int) (milliseconds / 1000) % 60 ;
+        int seconds = (int) (milliseconds / 1000);
+
+        return seconds;
+    }
+
+
+    public void startTimer() {
+        //set a new Timer
+        timer = new Timer();
+
+        initializeTimerTask();
+        timer.schedule(timerTask, 1000, 1000); //
+    }
+
+
+
+    public void initializeTimerTask() {
+
+        timerTask = new TimerTask() {
+            public void run() {
+
+            }
+        };
+    }
+
+
 }
 
 

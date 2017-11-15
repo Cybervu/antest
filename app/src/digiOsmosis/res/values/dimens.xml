@@ -361,6 +361,8 @@
     <dimen name="sideTitle_line_width">5dp</dimen>
     <dimen name="sideTitle_line_marginleft">10dp</dimen>
 
+    <dimen name="detailsTextView">150dp</dimen>
+
     <dimen name="yogaDownloadWidth">70dp</dimen>
 
 </resources>

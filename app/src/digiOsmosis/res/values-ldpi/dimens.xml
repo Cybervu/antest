@@ -214,4 +214,6 @@
     <dimen name="button_padding">6dp</dimen>
     <dimen name="loginImageViewMarging_top1">30dp</dimen>
 
+    <dimen name="detailsTextView">150dp</dimen>
+
 </resources>
