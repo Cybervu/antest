@@ -73,6 +73,7 @@ import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.images.WebImage;
+import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiController.AddToFavAsync;
 import com.home.apisdk.apiController.DeleteFavAsync;
 import com.home.apisdk.apiController.GetContentDetailsAsynTask;
@@ -173,6 +174,7 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.HttpsURLConnection;
 
 import io.fabric.sdk.android.Fabric;
+import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
 import player.activity.Player;
 import player.adapter.DownloadOptionAdapter;
@@ -246,6 +248,10 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     PlaylistProxy playerProxy;
     GetValidateUserAsynTask asynValidateUserDetails = null;
     VideoDetailsAsynctask asynLoadVideoUrls = null;
+
+    String watchStatus = "start";
+    String videoLogId = "0";
+    String restrict_stream_id = "0";
 
     TextView detailsTextView, colortitle, colortitle1, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days, lineTextview, repetitionTitleTextView, repetitionTextView, lineTextview1;
     ImageView bannerImageView, playButton, moviePoster, share;
@@ -2884,11 +2890,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     }
 
 
-
-
-
-
-
     public void current_time_position_timer() {
         final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -5003,6 +5004,516 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
             }
         };
     }
+
+
+
+
+   /* private class AsyncVideoLogDetails extends AsyncTask<Void, Void, Void> {
+        //  ProgressDialog pDialog;
+        String responseStr;
+        int statusCode = 0;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+
+//            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost(APIUrlConstant.getVideoLogsUrl());
+                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+                httppost.addHeader("authToken", authTokenStr);
+                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
+                httppost.addHeader("ip_address", ipAddressStr.trim());
+                httppost.addHeader("movie_id",playerModel.getMovieUniqueId().trim());
+                httppost.addHeader("episode_id", playerModel.getStreamUniqueId().trim());
+                httppost.addHeader("watch_status", watchStatus);
+                httppost.addHeader("device_type", "2");
+                httppost.addHeader("log_id", videoLogId);
+
+
+
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                    Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
+                    httppost.addHeader("is_streaming_restriction", "1");
+                    httppost.addHeader("restrict_stream_id", restrict_stream_id);
+
+                    Log.v("BIBHU6", "is_streaming_restriction=" + "1");
+                    Log.v("BIBHU6", "restrict_stream_id=" + restrict_stream_id);
+                }
+
+                // Following code is changed due to NewVideoLog API ;
+
+                httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
+                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("resume_time", "" + (playerPosition));
+
+               *//* Log.v("BIBHU", "player_start_time===*****************=========" + player_start_time);
+                Log.v("BIBHU", "playerPosition======***************8======" + playerPosition);
+
+
+                Log.v("BIBHU", "played_length============" + (playerPosition - player_start_time));
+                Log.v("BIBHU", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU", "resume_time============" + (playerPosition));
+                Log.v("BIBHU", "playerPosition============" + playerPosition);
+                Log.v("BIBHU", "log_id============" + videoLogId);
+
+                Log.v("BIBHU", "user_id============" + userIdStr.trim());
+                Log.v("BIBHU", "movieId.trim()============" + movieId.trim());
+                Log.v("BIBHU", "episodeId.trim()============" + episodeId.trim());
+                Log.v("BIBHU", "watchStatus============" + watchStatus);
+                Log.v("BIBHU", "restrict_stream_id============" + restrict_stream_id);
+
+*//*
+                //===============End=============================//
+
+
+                // Execute HTTP Post Request
+                try {
+                    HttpResponse response = httpclient.execute(httppost);
+                    responseStr = EntityUtils.toString(response.getEntity());
+
+                    Log.v("BIBHU", "responseStr of videolog============" + responseStr);
+
+
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            videoLogId = "0";
+
+                        }
+
+                    });
+
+                } catch (Exception e) {
+                    videoLogId = "0";
+                    e.printStackTrace();
+
+                }
+                if (responseStr != null) {
+                    JSONObject myJson = new JSONObject(responseStr);
+                    statusCode = Integer.parseInt(myJson.optString("code"));
+                    if (statusCode == 200) {
+                        videoLogId = myJson.optString("log_id");
+                        log_temp_id = myJson.optString("log_temp_id");
+                        restrict_stream_id = myJson.optString("restrict_stream_id");
+
+                        Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
+
+
+                    } else {
+                        videoLogId = "0";
+                        log_temp_id = "0";
+                    }
+
+                }
+
+            } catch (Exception e) {
+                videoLogId = "0";
+                log_temp_id = "0";
+
+            }
+
+            return null;
+        }
+
+
+        protected void onPostExecute(Void result) {
+
+            if (responseStr == null) {
+                videoLogId = "0";
+                log_temp_id = "0";
+            }
+
+            AsyncVideoBufferLogDetails asyncVideoBufferLogDetails = new AsyncVideoBufferLogDetails();
+            asyncVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Log.v("SUBHA","played_length === 2" );
+//            stoptimertask();
+        }
+
+
+    }
+
+    private class AsyncVideoBufferLogDetails extends AsyncTask<Void, Void, Void> {
+        //  ProgressDialog pDialog;
+        String responseStr;
+        int statusCode = 0;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+//            String urlRouteList = Util.rootUrl().trim() + Util.bufferLogUrl.trim();
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost(APIUrlConstant.getUpdateBufferLogUrl());
+                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+                httppost.addHeader("authToken",authTokenStr);
+                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
+                httppost.addHeader("ip_address", ipAddressStr.trim());
+                httppost.addHeader("movie_id", playerModel.getMovieUniqueId());
+                httppost.addHeader("episode_id", playerModel.getStreamUniqueId().trim());
+                httppost.addHeader("device_type", "2");
+                httppost.addHeader("log_id", videoBufferLogId);
+                httppost.addHeader("resolution", resolution.trim());
+                httppost.addHeader("start_time", String.valueOf(playerPosition));
+                httppost.addHeader("end_time", String.valueOf(playerPosition));
+                httppost.addHeader("log_unique_id", videoBufferLogUniqueId);
+                httppost.addHeader("location", Location);
+                httppost.addHeader("video_type", "mped_dash");
+
+                if (videoBufferLogUniqueId.equals("0"))
+                    httppost.addHeader("totalBandwidth", "0");
+                else if (isDrm)
+                    httppost.addHeader("totalBandwidth", "" + (CurrentUsedData + DataUsedByChrmoeCast));
+                else
+                    httppost.addHeader("totalBandwidth", "" + CurrentUsedData);
+
+
+                Log.v("BIBHU", "Response of the bufferlog totalBandwidth======#############=" + (CurrentUsedData + DataUsedByChrmoeCast));
+                Log.v("BIBHU", "Response of the bufferlog CurrentUsedData======#############=" + CurrentUsedData);
+                Log.v("BIBHU", "Response of the bufferlog DataUsedByChrmoeCast======#############=" + DataUsedByChrmoeCast);
+
+
+                // Execute HTTP Post Request
+                try {
+                    HttpResponse response = httpclient.execute(httppost);
+                    responseStr = EntityUtils.toString(response.getEntity());
+
+                    Log.v("BIBHU", "Response of the bufferlog =" + responseStr);
+
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            videoBufferLogId = "0";
+                            videoBufferLogUniqueId = "0";
+                            Location = "0";
+                        }
+                    });
+
+                } catch (IOException e) {
+                    videoBufferLogId = "0";
+                    videoBufferLogUniqueId = "0";
+                    Location = "0";
+                    e.printStackTrace();
+                }
+                if (responseStr != null) {
+                    JSONObject myJson = new JSONObject(responseStr);
+                    statusCode = Integer.parseInt(myJson.optString("code"));
+                    if (statusCode == 200) {
+                        videoBufferLogId = myJson.optString("log_id");
+                        videoBufferLogUniqueId = myJson.optString("log_unique_id");
+                        Location = myJson.optString("location");
+
+                    } else {
+                        videoBufferLogId = "0";
+                        videoBufferLogUniqueId = "0";
+                        Location = "0";
+                    }
+                }
+            } catch (Exception e) {
+                videoBufferLogId = "0";
+                videoBufferLogUniqueId = "0";
+                Location = "0";
+            }
+
+            return null;
+        }
+
+
+        protected void onPostExecute(Void result) {
+
+            if (responseStr == null) {
+
+                videoBufferLogId = "0";
+                videoBufferLogUniqueId = "0";
+                Location = "0";
+            }
+            if (!watchStatus.equals("complete"))
+                startTimer();
+
+            return;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+    }
+
+    private class AsyncResumeVideoLogDetails extends AsyncTask<Void, Void, Void> {
+        //  ProgressDialog pDialog;
+        String responseStr;
+        int statusCode = 0;
+        String watchSt = "halfplay";
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+//            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost(APIUrlConstant.getVideoLogsUrl());
+                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+                httppost.addHeader("authToken", authTokenStr);
+                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
+                httppost.addHeader("ip_address", ipAddressStr.trim());
+                httppost.addHeader("movie_id", playerModel.getMovieUniqueId());
+                httppost.addHeader("episode_id", playerModel.getStreamUniqueId().trim());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (current_matching_time >= emVideoView.getDuration()) {
+                            watchSt = "complete";
+                        }
+
+                    }
+
+                });
+                httppost.addHeader("watch_status", watchSt);
+
+
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                    Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
+
+                    httppost.addHeader("is_streaming_restriction", "1");
+                    httppost.addHeader("restrict_stream_id", restrict_stream_id);
+                    httppost.addHeader("is_active_stream_closed", "1");
+                }
+
+                // Following code is changed due to NewVideoLog API ;
+
+                httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
+                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("resume_time", "" + (playerPosition));
+
+                Log.v("BIBHU11", "played_length============" + (playerPosition - player_start_time));
+                Log.v("BIBHU11", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU11", "resume_time============" + (playerPosition));
+                Log.v("BIBHU11", "log_id============" + videoLogId);
+
+                //===============End=============================//
+
+
+                httppost.addHeader("device_type", "2");
+                httppost.addHeader("log_id", videoLogId);
+
+
+                // Execute HTTP Post Request
+                try {
+                    HttpResponse response = httpclient.execute(httppost);
+                    responseStr = EntityUtils.toString(response.getEntity());
+                    Log.v("BIBHU", "responseStr of responseStr============" + responseStr);
+
+
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            videoLogId = "0";
+
+                        }
+
+                    });
+
+                } catch (IOException e) {
+                    videoLogId = "0";
+
+                    e.printStackTrace();
+                }
+                if (responseStr != null) {
+                    JSONObject myJson = new JSONObject(responseStr);
+                    statusCode = Integer.parseInt(myJson.optString("code"));
+                    if (statusCode == 200) {
+                        videoLogId = myJson.optString("log_id");
+                        log_temp_id = myJson.optString("log_temp_id");
+                        restrict_stream_id = myJson.optString("restrict_stream_id");
+                        Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
+                    } else {
+                        videoLogId = "0";
+                        log_temp_id = "0";
+                    }
+
+                }
+
+            } catch (Exception e) {
+                videoLogId = "0";
+                log_temp_id = "0";
+
+            }
+
+            return null;
+        }
+
+
+        protected void onPostExecute(Void result) {
+         *//*   try {
+                if (pDialog.isShowing())
+                    pDialog.dismiss();
+            } catch (IllegalArgumentException ex) {
+                videoLogId = "0";
+            }*//*
+            if (responseStr == null) {
+                videoLogId = "0";
+                log_temp_id = "0";
+
+            }
+            mHandler.removeCallbacks(updateTimeTask);
+            if (emVideoView != null) {
+                emVideoView.release();
+            }
+            *//***AD ***//*//
+            if (video_completed == true) {
+                Log.v("SUBHA", "CALLED VIDEO COMPLETED");
+                *//**SPOTX***//*
+                if (playerModel.getAdNetworkId() == 1 && playerModel.getPostRoll() == 1) {
+
+                    Intent adIntent = new Intent(ProgramPlayerActivity.this, AdPlayerActivity.class);
+                    adIntent.putExtra("fromAd", "fromAd");
+                    adIntent.putExtra("PlayerModel", playerModel);
+                    startActivity(adIntent);
+
+                }
+                finish();
+                overridePendingTransition(0, 0);
+
+
+            }
+            finish();
+            overridePendingTransition(0, 0);
+            //startTimer();
+            return;
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            stoptimertask();
+        }
+    }
+
+    private class AsyncResumeVideoLogDetails_HomeClicked extends AsyncTask<Void, Void, Void> {
+        //  ProgressDialog pDialog;
+        String responseStr;
+        int statusCode = 0;
+        String watchSt = "halfplay";
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            String urlRouteList = player.utils.Util.rootUrl().trim() + player.utils.Util.videoLogUrl.trim();
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost(urlRouteList);
+                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+                httppost.addHeader("authToken", authTokenStr);
+                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
+                httppost.addHeader("ip_address", ipAddressStr.trim());
+                httppost.addHeader("movie_id", movieUniqueId.trim());
+                httppost.addHeader("episode_id", muviStreamId.trim());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (current_matching_time >= emVideoView.getDuration()) {
+                            watchSt = "complete";
+                        }
+
+                    }
+
+                });
+
+                httppost.addHeader("watch_status", watchSt);
+
+
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                    Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
+
+                    httppost.addHeader("is_streaming_restriction", "1");
+                    httppost.addHeader("restrict_stream_id", restrict_stream_id);
+                    httppost.addHeader("is_active_stream_closed", "1");
+                }
+
+
+                // Following code is changed due to NewVideoLog API ;
+
+                httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
+                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("resume_time", "" + (playerPosition));
+
+
+                Log.v("BIBHU11", "played_length============" + (playerPosition - player_start_time));
+                Log.v("BIBHU11", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU11", "resume_time============" + (playerPosition));
+                Log.v("BIBHU11", "log_id============" + videoLogId);
+
+
+                httppost.addHeader("device_type", "2");
+                httppost.addHeader("log_id", videoLogId);
+
+
+                // Execute HTTP Post Request
+                try {
+                    HttpResponse response = httpclient.execute(httppost);
+                    responseStr = EntityUtils.toString(response.getEntity());
+                    Log.v("BIBHU", "responseStr of responseStr============" + responseStr);
+
+
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            videoLogId = "0";
+
+                        }
+
+                    });
+
+                } catch (IOException e) {
+                    videoLogId = "0";
+
+                    e.printStackTrace();
+                }
+                if (responseStr != null) {
+                    JSONObject myJson = new JSONObject(responseStr);
+                    statusCode = Integer.parseInt(myJson.optString("code"));
+                    if (statusCode == 200) {
+                        videoLogId = myJson.optString("log_id");
+                        log_temp_id = myJson.optString("log_temp_id");
+                        restrict_stream_id = myJson.optString("restrict_stream_id");
+                        Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
+                    } else {
+                        videoLogId = "0";
+                        log_temp_id = "0";
+                    }
+
+                }
+
+            } catch (Exception e) {
+                videoLogId = "0";
+                log_temp_id = "0";
+
+            }
+
+            return null;
+        }
+
+
+        protected void onPostExecute(Void result) {
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+
+    }*/
 
 }
 

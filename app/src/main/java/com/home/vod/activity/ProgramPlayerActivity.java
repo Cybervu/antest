@@ -1498,7 +1498,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         Progress = (ProgressBar) findViewById(R.id.progressBar);
         percentg = (TextView) findViewById(R.id.percentage);
 
-
         share = (ImageView) findViewById(R.id.share);
 
         share.setOnClickListener(new View.OnClickListener() {
@@ -4950,7 +4949,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         Progress.setProgress(0);
 
         ContactModel1 contactModel1 = new ContactModel1();
-        contactModel1.setMUVIID(playerModel.getVideoTitle());
+        contactModel1.setMUVIID(playerModel.getVideoTitle()+"@@@"+playerModel.getStreamUniqueId());
         contactModel1.setDOWNLOADID((int) enqueue);
         contactModel1.setProgress(0);
         contactModel1.setUSERNAME(emailIdStr);
@@ -5029,6 +5028,28 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         }
 
 
+        //=================================End=======================================================//
+
+
+
+
+        // This code is responsible for resume watch feature in downloeded content.
+
+        Cursor cursor1 = DB.rawQuery("SELECT * FROM "+DBHelper.RESUME_WATCH+" WHERE UniqueId = '"+playerModel.getStreamUniqueId()+ emailIdStr+"'", null);
+
+        if(cursor1.getCount()>0)
+        {
+            String query = "UPDATE " + DBHelper.RESUME_WATCH+ " SET Flag='0' , PlayedDuration = '0',LatestMpdUrl = '',LicenceUrl=''  WHERE UniqueId = '"+playerModel.getStreamUniqueId()+ emailIdStr+"'";
+            DB.execSQL(query);
+            Log.v("BIBHU1234","resume watch update called");
+        }
+        else {
+            String query = "INSERT INTO " + DBHelper.RESUME_WATCH + " (UniqueId , PlayedDuration,Flag,LicenceUrl,LatestMpdUrl) VALUES" +
+                    " ('" + playerModel.getStreamUniqueId() + emailIdStr + "','0','0','','')";
+            DB.execSQL(query);
+            Log.v("BIBHU1234", "resume watch insert called");
+
+        }
         //=================================End=======================================================//
 
 

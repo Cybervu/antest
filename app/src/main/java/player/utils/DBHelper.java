@@ -61,6 +61,12 @@ public class DBHelper extends SQLiteOpenHelper {
             "initial_played_time INTEGER,"+"updated_server_current_time INTEGER,email TEXT)";
     //=================================End=======================================================//
 
+    // This code is only responsible for Resume Watch Feature
+    public static final String RESUME_WATCH = "RESUME_WATCH";
+
+    public static final String RESUME_WATCH_TABLE = "CREATE TABLE IF NOT EXISTS " + RESUME_WATCH
+            + " (UniqueId TEXT,PlayedDuration TEXT,LatestMpdUrl TEXT,Flag TEXT,LicenceUrl TEXT)";
+    //=================================End=======================================================//
 
 
     private static final String CREATE_SOL =
@@ -105,6 +111,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_SOL_SUBTITLE_LUIMERE);
         db.execSQL(DOWNLOAD_CONTENT_INFO_TABLE);
         db.execSQL(WATCH_ACCESS_INFO_TABLE);
+        db.execSQL(RESUME_WATCH_TABLE);
     }
 
     @Override

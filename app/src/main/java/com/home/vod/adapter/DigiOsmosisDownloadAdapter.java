@@ -117,7 +117,8 @@ public class DigiOsmosisDownloadAdapter extends ArrayAdapter<ContactModel1> {
                 .placeholder(R.drawable.logo)
                 .error(R.drawable.logo)
                 .into(image);
-        title.setText(downloadModel.get(position).getMUVIID());
+        final String data[] =  downloadModel.get(position).getMUVIID().trim().split("@@@");
+        title.setText(data[0]);
 //        realise_date.setText("");
         genre.setText(downloadModel.get(position).getGenere());
         String dd = downloadModel.get(position).getDuration();
