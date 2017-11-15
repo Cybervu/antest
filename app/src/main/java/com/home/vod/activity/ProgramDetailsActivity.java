@@ -1586,7 +1586,13 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         playerModel.setVideoReleaseDate("");
 //        playerModel.setCensorRating(censorRatingStr);
         playerModel.setContentTypesId(contentTypesId);
-        playerModel.setPosterImageId(posterImageId);
+
+        if(contentTypesId == 3){
+            playerModel.setPosterImageId(item.getEpisodeThumbnailImageView());
+
+        }else {
+            playerModel.setPosterImageId(posterImageId);
+        }
 
         LogUtil.showLog("MUVI", "content typesid = " + contentTypesId);
         String loggedInStr = preferenceManager.getLoginStatusFromPref();

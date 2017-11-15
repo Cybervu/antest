@@ -804,6 +804,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
 
                     if (mCastSession != null && mCastSession.isConnected()) {
+                        progressView.setVisibility(View.GONE);
 
 
                         MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);

@@ -2618,7 +2618,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                                     asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
 
-                            } else if (isFastForward == false && currentPositionStr >= millisecondsToString(playerPreviousPosition)) {
+                            } else if (isFastForward == false && currentPositionStr > 0) {
 
                                 playerPreviousPosition = 0;
 
