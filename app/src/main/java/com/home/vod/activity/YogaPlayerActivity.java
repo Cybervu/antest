@@ -1432,26 +1432,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         }
 
 
-        ///////added by nihar
-        center_play_pause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Execute_Pause_Play();
-            }
-        });
-        latest_center_play_pause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (Util.hide_pause) {
-                    Util.hide_pause = false;
-                    Start_Timer();
-                }
-
-                Execute_Pause_Play();
-            }
-        });
-
 
         /***favorite *****/
         favorite_view_episode.setVisibility(View.GONE);
@@ -2278,6 +2258,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
 
                 cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
+                Log.v("ANU","cast_disconnected_position"+cast_disconnected_position);
 
             }
 
@@ -2299,7 +2280,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.VISIBLE);
                 emVideoView.setEnabled(false);
-//                latest_center_play_pause.setEnabled(true);
 
                 if (emVideoView.isPlaying()) {
                     emVideoView.pause();
@@ -2341,7 +2321,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
 
-                Log.v("ANU","video_prepared ==****=="+video_prepared);
                 if (video_prepared){
 
                     emVideoView.setEnabled(false);
@@ -2521,11 +2500,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             }
 
             private void onApplicationDisconnected() {
-/*
-                    mPlayCircle.setVisibility(View.GONE);
-*/
-//                emVideoView.setEnabled(true);
-//                emVideoView.start();
                 updatePlaybackLocation(PlaybackLocation.LOCAL);
                 mPlaybackState = PlaybackState.IDLE;
                 mLocation = PlaybackLocation.LOCAL;
@@ -2615,8 +2589,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     case REMOTE:
 
                         loadRemoteMedia(0, true);
-
                         break;
+
                     default:
                         break;
                 }
@@ -2633,12 +2607,10 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                         break;
                     case REMOTE:
-                        // mPlayCircle.setVisibility(View.VISIBLE);
                         if (mCastSession != null && mCastSession.isConnected()) {
                             loadRemoteMedia(emVideoView.getCurrentPosition(), true);
 
 
-                            // Utils.showQueuePopup(this, mPlayCircle, mSelectedMedia);
                         } else {
                         }
                         break;
@@ -3599,6 +3571,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                     if (mCastSession != null && mCastSession.isConnected()) {
                         Log.v("ANU","if=========");
+                        progressView.setVisibility(View.GONE);
                         MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
 
                         movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory());

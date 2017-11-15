@@ -189,6 +189,8 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
     int player_end_time = 0;
     String log_temp_id = "0";
     int playerPosition = 0;
+    boolean video_prepared = false;
+    RemoteMediaClient remoteMediaClient;
 
     /*chromecast-------------------------------------*/
     private VideoView mVideoView;
@@ -456,9 +458,6 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
         @Override
         public void onSessionEnding(CastSession session) {
-
-            cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
-
 
         }
 
@@ -805,7 +804,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
                     if (mCastSession != null && mCastSession.isConnected()) {
 
-
+                        progressView.setVisibility(View.GONE);
                         MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
 
                         movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, movieReleaseDateStr);
@@ -888,10 +887,38 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         });
 
 
+
+
+        center_play_pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Execute_Pause_Play();
+            }
+        });
+        latest_center_play_pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (mCastSession != null && mCastSession.isConnected()) {
+                    if (player.utils.Util.hide_pause) {
+                        player.utils.Util.hide_pause = false;
+                        latest_center_play_pause.setVisibility(View.GONE);
+                    }
+                    Execute_Pause_Play();
+
+                } else {
+                    Execute_Pause_Play();
+
+                }
+
+            }
+        });
+
         emVideoView.setOnPreparedListener(new OnPreparedListener() {
             @Override
             public void onPrepared() {
                 video_completed = false;
+                video_prepared = true;
                 progressView.setVisibility(View.VISIBLE);
                 center_play_pause.setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.GONE);
@@ -973,30 +1000,6 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         contentDetailsInput.setUser_id(useridStr);
         asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
         asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
-
-
-        ///////added by nihar
-        center_play_pause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Execute_Pause_Play();
-            }
-        });
-        latest_center_play_pause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (Util.hide_pause) {
-                    Util.hide_pause = false;
-                    Start_Timer();
-                }
-
-                Execute_Pause_Play();
-            }
-        });
-
-
-
 
 
         /***favorite *****/
@@ -1645,6 +1648,10 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
             @Override
             public void onSessionEnding(CastSession session) {
+
+                cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
+                Log.v("ANU","cast_disconnected_position===="+cast_disconnected_position);
+
             }
 
             @Override
@@ -1702,6 +1709,78 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 }
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
+
+                if (video_prepared){
+
+                    emVideoView.setEnabled(false);
+                    MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+
+                    movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, movieReleaseDateStr);
+                    movieMetadata.putString(MediaMetadata.KEY_TITLE, name + " - Trailer");
+                    movieMetadata.addImage(new WebImage(Uri.parse(posterImageId.trim())));
+                    movieMetadata.addImage(new WebImage(Uri.parse(posterImageId.trim())));
+                    JSONObject jsonObj = null;
+                    try {
+                        jsonObj = new JSONObject();
+                        jsonObj.put("description", name);
+
+
+                        //  This Code Is Added For Video Log By Bibhu..
+
+                        jsonObj.put("authToken", authTokenStr.trim());
+                        jsonObj.put("user_id", preferenceManager.getUseridFromPref());
+                        jsonObj.put("ip_address", ipAddres.trim());
+                        jsonObj.put("movie_id", movieUniqueId);
+                        jsonObj.put("episode_id", "");
+
+
+                        jsonObj.put("played_length", "0");
+
+
+                        jsonObj.put("watch_status", "start");
+                        jsonObj.put("device_type", "2");
+                        jsonObj.put("log_id", "0");
+
+                        // restrict_stream_id is always set to be "0" , bcoz it's a triler.
+                        jsonObj.put("restrict_stream_id", "0");
+
+                        jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+                        jsonObj.put("is_log", "1");
+
+                        //=====================End===================//
+
+
+                        // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                        jsonObj.put("resolution", "BEST");
+                        jsonObj.put("start_time", "0");
+                        jsonObj.put("end_time", "0");
+                        jsonObj.put("log_unique_id", "0");
+                        jsonObj.put("location", "0");
+                        jsonObj.put("video_type", "");
+                        jsonObj.put("totalBandwidth", "0");
+                        // This is added only to identify, the videolog is called for trailer
+                        jsonObj.put("content_type", "2");
+
+                        //====================End=====================//
+
+                    } catch (JSONException e) {
+                    }
+
+                    mediaInfo = new MediaInfo.Builder(movieTrailerUrlStr.trim())
+                            .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                            .setContentType("videos/mp4")
+                            .setMetadata(movieMetadata)
+                            .setStreamDuration(15 * 1000)
+                            .setCustomData(jsonObj)
+                            .build();
+                    mSelectedMedia = mediaInfo;
+                    // Util.showQueuePopup(ShowWithEpisodesActivity.this, view, mediaInfo);
+
+                    togglePlayback();
+
+                }
+
             }
 
             private void onApplicationDisconnected() {
@@ -1793,21 +1872,10 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             case PAUSED:
                 switch (mLocation) {
                     case LOCAL:
-
-
-
-                      /* mVideoView.start();
-                        Log.d(TAG, "Playing locally...");
-                        mPlaybackState = PlaybackState.PLAYING;
-                        startControllersTimer();
-                        restartTrickplayTimer();
-                        updatePlaybackLocation(PlaybackLocation.LOCAL);*/
                         break;
 
                     case REMOTE:
-
                         loadRemoteMedia(0, true);
-
                         break;
                     default:
                         break;
@@ -1823,24 +1891,11 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             case IDLE:
                 switch (mLocation) {
                     case LOCAL:
-                        //watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
-
-                        // mPlayCircle.setVisibility(View.GONE);
-                       /* mVideoView.setVideoURI(Uri.parse(mSelectedMedia.getContentId()));
-                        mVideoView.seekTo(0);
-                        mVideoView.start();
-                        mPlaybackState = PlaybackState.PLAYING;
-                        restartTrickplayTimer();
-                        updatePlaybackLocation(PlaybackLocation.LOCAL);*/
                         break;
                     case REMOTE:
-                        // mPlayCircle.setVisibility(View.VISIBLE);
                         if (mCastSession != null && mCastSession.isConnected()) {
-                            // watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
-                            loadRemoteMedia(0, true);
+                            loadRemoteMedia(emVideoView.getCurrentPosition(), true);
 
-
-                            // Utils.showQueuePopup(this, mPlayCircle, mSelectedMedia);
                         } else {
                         }
                         break;
@@ -1859,7 +1914,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         if (mCastSession == null) {
             return;
         }
-        final RemoteMediaClient remoteMediaClient = mCastSession.getRemoteMediaClient();
+      remoteMediaClient = mCastSession.getRemoteMediaClient();
         if (remoteMediaClient == null) {
             return;
         }
@@ -2006,7 +2061,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             }else {*/
 
             Log.v("Subhalaxmi","video done not complted");
-            Toast.makeText(ProgrammeActivity.this,"video done not complted",Toast.LENGTH_SHORT).show();
+//            Toast.makeText(ProgrammeActivity.this,"video done not complted",Toast.LENGTH_SHORT).show();
             seekBar.setProgress(emVideoView.getCurrentPosition());
 //            }
             seekBar.setMax(emVideoView.getDuration());
@@ -2022,8 +2077,8 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
                 Log.v("Subhalaxmi","video done not started");
-                Toast.makeText(ProgrammeActivity.this,"video done not started",Toast.LENGTH_SHORT).show();
-//                findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
+//                Toast.makeText(ProgrammeActivity.this,"video done not started",Toast.LENGTH_SHORT).show();
+                findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                 center_play_pause.setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.GONE);
                 previous_matching_time = current_matching_time;
@@ -2053,7 +2108,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
 
                         Log.v("Subhalaxmi","video done complted");
-                        Toast.makeText(ProgrammeActivity.this,"video done complted",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(ProgrammeActivity.this,"video done complted",Toast.LENGTH_SHORT).show();
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2191,6 +2246,20 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
     /* ------ Added for Trailer ------*/
     ///added by nihar
     public void Execute_Pause_Play() {
+
+
+        if (mCastSession != null && mCastSession.isConnected()) {
+            if (remoteMediaClient.isPlaying()) {
+                remoteMediaClient.pause();
+                return;
+            }
+            if (remoteMediaClient.isPaused()) {
+                remoteMediaClient.play();
+                return;
+            }
+        }
+
+
         if (emVideoView.isPlaying()) {
             emVideoView.pause();
             latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
