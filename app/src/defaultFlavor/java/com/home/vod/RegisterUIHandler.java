@@ -42,6 +42,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_AGREE_TERMS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_GMAIL_SIGNUP;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_REGISTER_FACEBOOK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_UP_WITH_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TERMS;
@@ -52,7 +53,7 @@ import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.REGISTER_FACEBOOK;
 import static com.home.vod.preferences.LanguagePreference.SIGN_UP_WITH_EMAIL;
 import static com.home.vod.preferences.LanguagePreference.TERMS;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_NAME_HINT;
+
 
 
 /**

@@ -1,6 +1,6 @@
 package com.home.vod.util;
 
-import com.home.apisdk.APIUrlConstant;
+import com.release.muvisdk.api.APIUrlConstant;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;

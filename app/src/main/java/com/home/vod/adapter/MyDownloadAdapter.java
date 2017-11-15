@@ -20,8 +20,8 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 
 import com.home.vod.util.LogUtil;
-import com.muvi.muviplayersdk.model.ContactModel1;
-import com.muvi.muviplayersdk.utils.DBHelper;
+import com.release.muvisdk.player.model.DownloadContentModel;
+import com.release.muvisdk.player.utils.DBHelper;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -42,7 +42,7 @@ import static com.home.vod.preferences.LanguagePreference.WANT_TO_DELETE;
  */
 public class MyDownloadAdapter extends BaseAdapter {
     MyDownloads activity;
-    ArrayList<ContactModel1> downloadModel;
+    ArrayList<DownloadContentModel> downloadModel;
     PreferenceManager preferenceManager;
     LanguagePreference languagePreference;
     List<String[]> allElements;
@@ -50,13 +50,13 @@ public class MyDownloadAdapter extends BaseAdapter {
     String[] nextLine;
     SharedPreferences pref;
     String emailIdStr = "";
-    ContactModel1 audio;
+    DownloadContentModel audio;
     //MydownloadModel mydownloadModel;
     DBHelper dbHelper;
     public boolean downloading;
     DownloadManager downloadManager;
     //Downloadlistdb downloadlistdb;
-    public MyDownloadAdapter(MyDownloads activity, int simple_dropdown_item_1line, ArrayList<ContactModel1> downloadModel) {
+    public MyDownloadAdapter(MyDownloads activity, int simple_dropdown_item_1line, ArrayList<DownloadContentModel> downloadModel) {
 
         LogUtil.showLog("MUVI","DOWNLOAD MODEL=="+downloadModel.get(0).toString());
         this.activity = activity;

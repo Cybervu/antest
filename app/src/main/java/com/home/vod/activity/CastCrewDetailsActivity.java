@@ -24,9 +24,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.home.apisdk.apiController.GetCastDetailsAsynTask;
-import com.home.apisdk.apiModel.GetCastDetailsInput;
-import com.home.apisdk.apiModel.GetCastDetailsOutputModel;
+import com.release.muvisdk.api.apiController.GetCastDetailsAsynTask;
+import com.release.muvisdk.api.apiModel.GetCastDetailsInput;
+import com.release.muvisdk.api.apiModel.GetCastDetailsOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.FilmographyAdapter;
 import com.home.vod.model.GetCastCrewItem;

@@ -1,1 +1,2 @@
-include ':app', ':apisdk', ':muviplayersdk'
+include ':app',':muvisdk'
+//include ':app', ':apisdk', ':muviplayersdk', ':muvisdk'

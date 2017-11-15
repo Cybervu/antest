@@ -43,18 +43,18 @@ import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 
-import com.home.apisdk.apiController.DeleteFavAsync;
-import com.home.apisdk.apiController.GetLanguageListAsynTask;
-import com.home.apisdk.apiController.GetTranslateLanguageAsync;
-import com.home.apisdk.apiController.LogoutAsynctask;
-import com.home.apisdk.apiController.ViewFavouriteAsynTask;
-import com.home.apisdk.apiModel.DeleteFavInputModel;
-import com.home.apisdk.apiModel.DeleteFavOutputModel;
-import com.home.apisdk.apiModel.LanguageListInputModel;
-import com.home.apisdk.apiModel.LanguageListOutputModel;
-import com.home.apisdk.apiModel.LogoutInput;
-import com.home.apisdk.apiModel.ViewFavouriteInputModel;
-import com.home.apisdk.apiModel.ViewFavouriteOutputModel;
+import com.release.muvisdk.api.apiController.DeleteFavAsync;
+import com.release.muvisdk.api.apiController.GetLanguageListAsynTask;
+import com.release.muvisdk.api.apiController.GetTranslateLanguageAsync;
+import com.release.muvisdk.api.apiController.LogoutAsynctask;
+import com.release.muvisdk.api.apiController.ViewFavouriteAsynTask;
+import com.release.muvisdk.api.apiModel.DeleteFavInputModel;
+import com.release.muvisdk.api.apiModel.DeleteFavOutputModel;
+import com.release.muvisdk.api.apiModel.LanguageListInputModel;
+import com.release.muvisdk.api.apiModel.LanguageListOutputModel;
+import com.release.muvisdk.api.apiModel.LogoutInput;
+import com.release.muvisdk.api.apiModel.ViewFavouriteInputModel;
+import com.release.muvisdk.api.apiModel.ViewFavouriteOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.FavoriteAdapter;
@@ -125,12 +125,7 @@ import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.YES;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_HAS_FAVORITE;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_IS_CHROMECAST;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_IS_OFFLINE;
-import static com.muvi.muviplayersdk.utils.Util.HAS_FAVORITE;
-import static com.muvi.muviplayersdk.utils.Util.IS_CHROMECAST;
-import static com.muvi.muviplayersdk.utils.Util.IS_OFFLINE;
+
 
 public class FavoriteActivity extends AppCompatActivity implements GetLanguageListAsynTask.GetLanguageListListener,ViewFavouriteAsynTask.ViewFavouriteListener,
         LogoutAsynctask.LogoutListener, GetTranslateLanguageAsync.GetTranslateLanguageInfoListener

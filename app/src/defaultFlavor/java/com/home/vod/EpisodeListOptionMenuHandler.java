@@ -25,12 +25,12 @@ import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
 import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_HAS_FAVORITE;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_IS_CHROMECAST;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_IS_OFFLINE;
-import static com.muvi.muviplayersdk.utils.Util.HAS_FAVORITE;
-import static com.muvi.muviplayersdk.utils.Util.IS_CHROMECAST;
-import static com.muvi.muviplayersdk.utils.Util.IS_OFFLINE;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_IS_CHROMECAST;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_IS_OFFLINE;
+import static com.release.muvisdk.player.utils.Util.HAS_FAVORITE;
+import static com.release.muvisdk.player.utils.Util.IS_CHROMECAST;
+import static com.release.muvisdk.player.utils.Util.IS_OFFLINE;
 
 
 /**

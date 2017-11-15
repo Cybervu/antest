@@ -12,9 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.home.apisdk.apiController.LoadRegisteredDevicesAsync;
-import com.home.apisdk.apiModel.LoadRegisteredDevicesInput;
-import com.home.apisdk.apiModel.LoadRegisteredDevicesOutput;
+import com.release.muvisdk.api.apiController.LoadRegisteredDevicesAsync;
+import com.release.muvisdk.api.apiModel.LoadRegisteredDevicesInput;
+import com.release.muvisdk.api.apiModel.LoadRegisteredDevicesOutput;
 import com.home.vod.R;
 import com.home.vod.adapter.DeviceListAdapter;
 import com.home.vod.preferences.LanguagePreference;

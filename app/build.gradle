@@ -2434,8 +2434,9 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
-    compile project(':apisdk')
-    compile project(':muviplayersdk')
+//    compile project(':apisdk')
+//    compile project(':muviplayersdk')
+    compile project(':muvisdk')
     compile files('libs/wasabi.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile('com.spotxchange:spotx-sdk-android:3.1.+') {

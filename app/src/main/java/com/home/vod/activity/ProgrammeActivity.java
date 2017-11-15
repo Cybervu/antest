@@ -34,15 +34,15 @@ import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
-import com.home.apisdk.apiController.AddToFavAsync;
-import com.home.apisdk.apiController.DeleteFavAsync;
-import com.home.apisdk.apiController.GetContentDetailsAsynTask;
-import com.home.apisdk.apiModel.AddToFavInputModel;
-import com.home.apisdk.apiModel.AddToFavOutputModel;
-import com.home.apisdk.apiModel.ContentDetailsInput;
-import com.home.apisdk.apiModel.ContentDetailsOutput;
-import com.home.apisdk.apiModel.DeleteFavInputModel;
-import com.home.apisdk.apiModel.DeleteFavOutputModel;
+import com.release.muvisdk.api.apiController.AddToFavAsync;
+import com.release.muvisdk.api.apiController.DeleteFavAsync;
+import com.release.muvisdk.api.apiController.GetContentDetailsAsynTask;
+import com.release.muvisdk.api.apiModel.AddToFavInputModel;
+import com.release.muvisdk.api.apiModel.AddToFavOutputModel;
+import com.release.muvisdk.api.apiModel.ContentDetailsInput;
+import com.release.muvisdk.api.apiModel.ContentDetailsOutput;
+import com.release.muvisdk.api.apiModel.DeleteFavInputModel;
+import com.release.muvisdk.api.apiModel.DeleteFavOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.R;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -85,8 +85,8 @@ import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_HAS_FAVORITE;
-import static com.muvi.muviplayersdk.utils.Util.HAS_FAVORITE;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static com.release.muvisdk.player.utils.Util.HAS_FAVORITE;
 
 /**
  * Created by MUVI on 10/6/2017.

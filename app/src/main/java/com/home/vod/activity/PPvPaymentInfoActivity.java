@@ -43,36 +43,36 @@ import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.apiController.AuthUserPaymentInfoAsyntask;
-import com.home.apisdk.apiController.GetCardListForPPVAsynTask;
-import com.home.apisdk.apiController.GetMonetizationDetailsAsynctask;
-import com.home.apisdk.apiController.GetPPVPaymentAsync;
-import com.home.apisdk.apiController.GetVoucherPlanAsynTask;
-import com.home.apisdk.apiController.ValidateCouponCodeAsynTask;
-import com.home.apisdk.apiController.ValidateVoucherAsynTask;
-import com.home.apisdk.apiController.VideoDetailsAsynctask;
-import com.home.apisdk.apiController.VoucherSubscriptionAsyntask;
-import com.home.apisdk.apiController.WithouPaymentSubscriptionRegDetailsAsync;
-import com.home.apisdk.apiModel.AuthUserPaymentInfoInputModel;
-import com.home.apisdk.apiModel.AuthUserPaymentInfoOutputModel;
-import com.home.apisdk.apiModel.GetCardListForPPVInputModel;
-import com.home.apisdk.apiModel.GetCardListForPPVOutputModel;
-import com.home.apisdk.apiModel.GetMonetizationDetailsInputModel;
-import com.home.apisdk.apiModel.GetMonetizationDetailsOutputModel;
-import com.home.apisdk.apiModel.GetVideoDetailsInput;
-import com.home.apisdk.apiModel.GetVoucherPlanInputModel;
-import com.home.apisdk.apiModel.GetVoucherPlanOutputModel;
-import com.home.apisdk.apiModel.ValidateVoucherInputModel;
-import com.home.apisdk.apiModel.ValidateVoucherOutputModel;
-import com.home.apisdk.apiModel.Video_Details_Output;
-import com.home.apisdk.apiModel.RegisterUserPaymentInputModel;
-import com.home.apisdk.apiModel.RegisterUserPaymentOutputModel;
-import com.home.apisdk.apiModel.ValidateCouponCodeInputModel;
-import com.home.apisdk.apiModel.ValidateCouponCodeOutputModel;
-import com.home.apisdk.apiModel.VoucherSubscriptionInputModel;
-import com.home.apisdk.apiModel.VoucherSubscriptionOutputModel;
-import com.home.apisdk.apiModel.WithouPaymentSubscriptionRegDetailsInput;
+import  com.release.muvisdk.api.APIUrlConstant;
+import  com.release.muvisdk.api.apiController.AuthUserPaymentInfoAsyntask;
+import  com.release.muvisdk.api.apiController.GetCardListForPPVAsynTask;
+import  com.release.muvisdk.api.apiController.GetMonetizationDetailsAsynctask;
+import  com.release.muvisdk.api.apiController.GetPPVPaymentAsync;
+import  com.release.muvisdk.api.apiController.GetVoucherPlanAsynTask;
+import  com.release.muvisdk.api.apiController.ValidateCouponCodeAsynTask;
+import  com.release.muvisdk.api.apiController.ValidateVoucherAsynTask;
+import  com.release.muvisdk.api.apiController.VideoDetailsAsynctask;
+import  com.release.muvisdk.api.apiController.VoucherSubscriptionAsyntask;
+import  com.release.muvisdk.api.apiController.WithouPaymentSubscriptionRegDetailsAsync;
+import  com.release.muvisdk.api.apiModel.AuthUserPaymentInfoInputModel;
+import  com.release.muvisdk.api.apiModel.AuthUserPaymentInfoOutputModel;
+import  com.release.muvisdk.api.apiModel.GetCardListForPPVInputModel;
+import  com.release.muvisdk.api.apiModel.GetCardListForPPVOutputModel;
+import  com.release.muvisdk.api.apiModel.GetMonetizationDetailsInputModel;
+import  com.release.muvisdk.api.apiModel.GetMonetizationDetailsOutputModel;
+import  com.release.muvisdk.api.apiModel.GetVideoDetailsInput;
+import  com.release.muvisdk.api.apiModel.GetVoucherPlanInputModel;
+import  com.release.muvisdk.api.apiModel.GetVoucherPlanOutputModel;
+import  com.release.muvisdk.api.apiModel.ValidateVoucherInputModel;
+import  com.release.muvisdk.api.apiModel.ValidateVoucherOutputModel;
+import  com.release.muvisdk.api.apiModel.Video_Details_Output;
+import  com.release.muvisdk.api.apiModel.RegisterUserPaymentInputModel;
+import  com.release.muvisdk.api.apiModel.RegisterUserPaymentOutputModel;
+import  com.release.muvisdk.api.apiModel.ValidateCouponCodeInputModel;
+import  com.release.muvisdk.api.apiModel.ValidateCouponCodeOutputModel;
+import  com.release.muvisdk.api.apiModel.VoucherSubscriptionInputModel;
+import  com.release.muvisdk.api.apiModel.VoucherSubscriptionOutputModel;
+import  com.release.muvisdk.api.apiModel.WithouPaymentSubscriptionRegDetailsInput;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -85,9 +85,9 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
-import com.muvi.muviplayersdk.activity.AdPlayerActivity;
-import com.muvi.muviplayersdk.activity.ExoPlayerActivity;
-import com.muvi.muviplayersdk.activity.Player;
+import com.release.muvisdk.player.activity.AdPlayerActivity;
+import com.release.muvisdk.player.activity.PlayerActivity;
+import com.release.muvisdk.player.activity.Player;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -117,7 +117,7 @@ import java.util.concurrent.TimeUnit;
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
 
-import static com.home.apisdk.apiModel.CommonConstants.VOUCHER_CODE;
+import static  com.release.muvisdk.api.apiModel.CommonConstants.VOUCHER_CODE;
 import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.BTN_NEXT;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
@@ -192,8 +192,8 @@ import static com.home.vod.preferences.LanguagePreference.USE_NEW_CARD;
 import static com.home.vod.preferences.LanguagePreference.VOUCHER_BLANK_MESSAGE;
 import static com.home.vod.preferences.LanguagePreference.WATCH_NOW;
 import static com.home.vod.util.Constant.authTokenStr;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_IS_CHROMECAST;
-import static com.muvi.muviplayersdk.utils.Util.IS_CHROMECAST;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_IS_CHROMECAST;
+import static com.release.muvisdk.player.utils.Util.IS_CHROMECAST;
 
 public class PPvPaymentInfoActivity extends ActionBarActivity implements
         VideoDetailsAsynctask.VideoDetailsListener,
@@ -1474,7 +1474,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
                     playerModel.setThirdPartyPlayer(false);
 
-                    final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, PlayerActivity.class);
 
                     if (FakeSubTitlePath.size() > 0) {
                         // This Portion Will Be changed Later.
@@ -1501,7 +1501,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
 
                 } else {
-                    final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, PlayerActivity.class);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
@@ -3116,17 +3116,16 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 if (Util.dataModel.getAdNetworkId() == 3) {
                     LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                    playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent = new Intent(PPvPaymentInfoActivity.this, PlayerActivity.class);
 
                 } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                     if (Util.dataModel.getPlayPos() <= 0) {
                         playVideoIntent = new Intent(PPvPaymentInfoActivity.this, AdPlayerActivity.class);
                     } else {
-                        playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
-
+                        playVideoIntent = new Intent(PPvPaymentInfoActivity.this, PlayerActivity.class);
                     }
                 } else {
-                    playVideoIntent = new Intent(PPvPaymentInfoActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent = new Intent(PPvPaymentInfoActivity.this, PlayerActivity.class);
 
                 }
                 /***ad **/

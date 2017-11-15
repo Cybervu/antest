@@ -5,14 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.home.apisdk.*;
+
 import com.crashlytics.android.Crashlytics;
-import com.home.apisdk.apiController.SDKInitializer;
-import com.home.apisdk.apiController.SDKInitializer;
+import com.release.muvisdk.api.APIUrlConstant;
+import com.release.muvisdk.api.apiController.SDKInitializer;
+import com.release.muvisdk.api.apiController.SDKInitializer;
 import com.home.vod.activity.CastAndCrewActivity;
 import com.home.vod.util.LogUtil;
-import com.muvi.muviplayersdk.activity.CastCrew;
-import com.muvi.muviplayersdk.chromecast.ChromeCastApplicationId;
+import com.release.muvisdk.player.activity.CastCrew;
+import com.release.muvisdk.player.chromecast.ChromeCastApplicationId;
 
 import io.fabric.sdk.android.Fabric;
 

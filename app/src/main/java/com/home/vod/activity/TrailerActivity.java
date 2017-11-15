@@ -32,7 +32,7 @@ import android.widget.Toast;
 
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
-import com.home.apisdk.APIUrlConstant;
+import com.release.muvisdk.api.APIUrlConstant;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
@@ -69,7 +69,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import com.muvi.muviplayersdk.utils.DBHelper;
+import com.release.muvisdk.player.utils.DBHelper;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -81,8 +81,8 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
 import static com.home.vod.util.Constant.authTokenStr;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_NO_INTERNET_CONNECTION;
-import static com.muvi.muviplayersdk.utils.Util.VIEW_MORE;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.release.muvisdk.player.utils.Util.VIEW_MORE;
 
 
 /*enum ContentTypes1 {
@@ -192,7 +192,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_player);
+        setContentView(R.layout.sdk_activity_video_player);
         content_types_id = Util.dataModel.getContentTypesId();
 
         PreviousUsedDataByApp(true);

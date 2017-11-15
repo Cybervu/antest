@@ -24,12 +24,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.home.apisdk.apiController.GetUserProfileAsynctask;
-import com.home.apisdk.apiController.UpadteUserProfileAsynctask;
-import com.home.apisdk.apiModel.Get_UserProfile_Input;
-import com.home.apisdk.apiModel.Get_UserProfile_Output;
-import com.home.apisdk.apiModel.Update_UserProfile_Input;
-import com.home.apisdk.apiModel.Update_UserProfile_Output;
+import com.release.muvisdk.api.apiController.GetUserProfileAsynctask;
+import com.release.muvisdk.api.apiController.UpadteUserProfileAsynctask;
+import com.release.muvisdk.api.apiModel.Get_UserProfile_Input;
+import com.release.muvisdk.api.apiModel.Get_UserProfile_Output;
+import com.release.muvisdk.api.apiModel.Update_UserProfile_Input;
+import com.release.muvisdk.api.apiModel.Update_UserProfile_Output;
 import com.home.vod.ProfileHandler;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;

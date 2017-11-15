@@ -57,26 +57,26 @@ import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.images.WebImage;
-import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.apiController.GetEpisodeDeatailsAsynTask;
-import com.home.apisdk.apiController.GetIpAddressAsynTask;
-import com.home.apisdk.apiController.GetLanguageListAsynTask;
-import com.home.apisdk.apiController.GetTranslateLanguageAsync;
-import com.home.apisdk.apiController.GetValidateUserAsynTask;
-import com.home.apisdk.apiController.LogoutAsynctask;
-import com.home.apisdk.apiController.VideoDetailsAsynctask;
-import com.home.apisdk.apiModel.APVModel;
-import com.home.apisdk.apiModel.CurrencyModel;
-import com.home.apisdk.apiModel.Episode_Details_input;
-import com.home.apisdk.apiModel.Episode_Details_output;
-import com.home.apisdk.apiModel.GetVideoDetailsInput;
-import com.home.apisdk.apiModel.Video_Details_Output;
-import com.home.apisdk.apiModel.LanguageListInputModel;
-import com.home.apisdk.apiModel.LanguageListOutputModel;
-import com.home.apisdk.apiModel.LogoutInput;
-import com.home.apisdk.apiModel.PPVModel;
-import com.home.apisdk.apiModel.ValidateUserInput;
-import com.home.apisdk.apiModel.ValidateUserOutput;
+import com.release.muvisdk.api.APIUrlConstant;
+import com.release.muvisdk.api.apiController.GetEpisodeDeatailsAsynTask;
+import com.release.muvisdk.api.apiController.GetIpAddressAsynTask;
+import com.release.muvisdk.api.apiController.GetLanguageListAsynTask;
+import com.release.muvisdk.api.apiController.GetTranslateLanguageAsync;
+import com.release.muvisdk.api.apiController.GetValidateUserAsynTask;
+import com.release.muvisdk.api.apiController.LogoutAsynctask;
+import com.release.muvisdk.api.apiController.VideoDetailsAsynctask;
+import com.release.muvisdk.api.apiModel.APVModel;
+import com.release.muvisdk.api.apiModel.CurrencyModel;
+import com.release.muvisdk.api.apiModel.Episode_Details_input;
+import com.release.muvisdk.api.apiModel.Episode_Details_output;
+import com.release.muvisdk.api.apiModel.GetVideoDetailsInput;
+import com.release.muvisdk.api.apiModel.Video_Details_Output;
+import com.release.muvisdk.api.apiModel.LanguageListInputModel;
+import com.release.muvisdk.api.apiModel.LanguageListOutputModel;
+import com.release.muvisdk.api.apiModel.LogoutInput;
+import com.release.muvisdk.api.apiModel.PPVModel;
+import com.release.muvisdk.api.apiModel.ValidateUserInput;
+import com.release.muvisdk.api.apiModel.ValidateUserOutput;
 import com.home.vod.BuildConfig;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.LoginRegistrationOnContentClickHandler;
@@ -122,10 +122,10 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import com.muvi.muviplayersdk.activity.AdPlayerActivity;
-import com.muvi.muviplayersdk.activity.ExoPlayerActivity;
-import com.muvi.muviplayersdk.activity.Player;
-import com.muvi.muviplayersdk.activity.ResumePopupActivity;
+import com.release.muvisdk.player.activity.AdPlayerActivity;
+import com.release.muvisdk.player.activity.PlayerActivity;
+import com.release.muvisdk.player.activity.Player;
+import com.release.muvisdk.player.activity.ResumePopupActivity;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -191,12 +191,9 @@ import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.languageModel;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_HAS_FAVORITE;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_IS_CHROMECAST;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_IS_OFFLINE;
-import static com.muvi.muviplayersdk.utils.Util.HAS_FAVORITE;
-import static com.muvi.muviplayersdk.utils.Util.IS_CHROMECAST;
-import static com.muvi.muviplayersdk.utils.Util.IS_OFFLINE;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_IS_CHROMECAST;
+import static com.release.muvisdk.player.utils.Util.IS_CHROMECAST;
+
 
 /**
  * Created by Muvi on 2/6/2017.
@@ -560,22 +557,22 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                             if (Util.dataModel.getAdNetworkId() == 3) {
                                 LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                                playVideoIntent = new Intent(Episode_list_Activity.this, ExoPlayerActivity.class);
+                                playVideoIntent = new Intent(Episode_list_Activity.this, PlayerActivity.class);
 
                             } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                                 if (Util.dataModel.getPlayPos() <= 0) {
                                     playVideoIntent = new Intent(Episode_list_Activity.this, AdPlayerActivity.class);
                                 } else {
-                                    playVideoIntent = new Intent(Episode_list_Activity.this, ExoPlayerActivity.class);
+                                    playVideoIntent = new Intent(Episode_list_Activity.this, PlayerActivity.class);
 
                                 }
 
                             } else {
-                                playVideoIntent = new Intent(Episode_list_Activity.this, ExoPlayerActivity.class);
+                                playVideoIntent = new Intent(Episode_list_Activity.this, PlayerActivity.class);
 
                             }
                         }
-                        //final Intent playVideoIntent = new Intent(Episode_list_Activity.this, ExoPlayerActivity.class);
+                        //final Intent playVideoIntent = new Intent(Episode_list_Activity.this, PlayerActivity.class);
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 if (FakeSubTitlePath.size() > 0) {
@@ -606,7 +603,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         });
                     }
                 } else {
-                    final Intent playVideoIntent = new Intent(Episode_list_Activity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent = new Intent(Episode_list_Activity.this, PlayerActivity.class);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
@@ -1633,7 +1630,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
 //edit by bishal
             //set the required data in playermodel
-            playerModel.setAppName(getResources().getString(com.example.muviplayersdk.R.string.app_name));
+            playerModel.setAppName(getResources().getString(R.string.app_name));
             playerModel.setStreamUniqueId(item.getEpisodeStreamUniqueId());
             playerModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
             playerModel.setUserId(preferenceManager.getUseridFromPref());
@@ -2955,20 +2952,20 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     if (Util.dataModel.getAdNetworkId() == 3) {
                         LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                        playVideoIntent = new Intent(Episode_list_Activity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new Intent(Episode_list_Activity.this, PlayerActivity.class);
 
                     } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                         if (Util.dataModel.getPlayPos() <= 0) {
                             playVideoIntent = new Intent(Episode_list_Activity.this, AdPlayerActivity.class);
                         } else {
-                            playVideoIntent = new Intent(Episode_list_Activity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new Intent(Episode_list_Activity.this, PlayerActivity.class);
 
                         }
                     } else {
-                        playVideoIntent = new Intent(Episode_list_Activity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new Intent(Episode_list_Activity.this, PlayerActivity.class);
 
                     }
-                    // playVideoIntent = new Intent(Episode_list_Activity.this, ExoPlayerActivity.class);
+                    // playVideoIntent = new Intent(Episode_list_Activity.this, PlayerActivity.class);
 
                 }
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

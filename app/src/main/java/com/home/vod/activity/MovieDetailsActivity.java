@@ -47,41 +47,41 @@ import com.google.android.gms.cast.MediaTrack;
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.apiController.AddToFavAsync;
-import com.home.apisdk.apiController.DeleteFavAsync;
-import com.home.apisdk.apiController.GetContentDetailsAsynTask;
-import com.home.apisdk.apiController.GetIpAddressAsynTask;
-import com.home.apisdk.apiController.GetLanguageListAsynTask;
-import com.home.apisdk.apiController.GetTranslateLanguageAsync;
-import com.home.apisdk.apiController.GetValidateUserAsynTask;
-import com.home.apisdk.apiController.LogoutAsynctask;
-import com.home.apisdk.apiController.VideoDetailsAsynctask;
-import com.home.apisdk.apiController.ViewContentRatingAsynTask;
-import com.home.apisdk.apiModel.APVModel;
-import com.home.apisdk.apiModel.AddToFavInputModel;
-import com.home.apisdk.apiModel.AddToFavOutputModel;
-import com.home.apisdk.apiModel.ContentDetailsInput;
-import com.home.apisdk.apiModel.ContentDetailsOutput;
-import com.home.apisdk.apiModel.CurrencyModel;
-import com.home.apisdk.apiModel.DeleteFavInputModel;
-import com.home.apisdk.apiModel.DeleteFavOutputModel;
-import com.home.apisdk.apiModel.GetVideoDetailsInput;
-import com.home.apisdk.apiModel.Video_Details_Output;
-import com.home.apisdk.apiModel.LanguageListInputModel;
-import com.home.apisdk.apiModel.LanguageListOutputModel;
-import com.home.apisdk.apiModel.LogoutInput;
-import com.home.apisdk.apiModel.PPVModel;
-import com.home.apisdk.apiModel.ValidateUserInput;
-import com.home.apisdk.apiModel.ValidateUserOutput;
+import com.release.muvisdk.api.APIUrlConstant;
+import com.release.muvisdk.api.apiController.AddToFavAsync;
+import com.release.muvisdk.api.apiController.DeleteFavAsync;
+import com.release.muvisdk.api.apiController.GetContentDetailsAsynTask;
+import com.release.muvisdk.api.apiController.GetIpAddressAsynTask;
+import com.release.muvisdk.api.apiController.GetLanguageListAsynTask;
+import com.release.muvisdk.api.apiController.GetTranslateLanguageAsync;
+import com.release.muvisdk.api.apiController.GetValidateUserAsynTask;
+import com.release.muvisdk.api.apiController.LogoutAsynctask;
+import com.release.muvisdk.api.apiController.VideoDetailsAsynctask;
+import com.release.muvisdk.api.apiController.ViewContentRatingAsynTask;
+import com.release.muvisdk.api.apiModel.APVModel;
+import com.release.muvisdk.api.apiModel.AddToFavInputModel;
+import com.release.muvisdk.api.apiModel.AddToFavOutputModel;
+import com.release.muvisdk.api.apiModel.ContentDetailsInput;
+import com.release.muvisdk.api.apiModel.ContentDetailsOutput;
+import com.release.muvisdk.api.apiModel.CurrencyModel;
+import com.release.muvisdk.api.apiModel.DeleteFavInputModel;
+import com.release.muvisdk.api.apiModel.DeleteFavOutputModel;
+import com.release.muvisdk.api.apiModel.GetVideoDetailsInput;
+import com.release.muvisdk.api.apiModel.Video_Details_Output;
+import com.release.muvisdk.api.apiModel.LanguageListInputModel;
+import com.release.muvisdk.api.apiModel.LanguageListOutputModel;
+import com.release.muvisdk.api.apiModel.LogoutInput;
+import com.release.muvisdk.api.apiModel.PPVModel;
+import com.release.muvisdk.api.apiModel.ValidateUserInput;
+import com.release.muvisdk.api.apiModel.ValidateUserOutput;
 import com.home.vod.BuildConfig;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.HandleRatingbar;
 import com.home.vod.LoginRegistrationOnContentClickHandler;
 import com.home.vod.MonetizationHandler;
 import com.home.vod.R;
-import com.home.apisdk.apiModel.ViewContentRatingInputModel;
-import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
+import com.release.muvisdk.api.apiModel.ViewContentRatingInputModel;
+import com.release.muvisdk.api.apiModel.ViewContentRatingOutputModel;
 import com.home.vod.VodApplication;
 import com.home.vod.adapter.LanguageCustomAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -104,12 +104,12 @@ import com.home.vod.util.ResizableCustomView;
 import com.home.vod.util.Util;
 
 
-import com.muvi.muviplayersdk.activity.AdPlayerActivity;
-import com.muvi.muviplayersdk.activity.ExoPlayerActivity;
-import com.muvi.muviplayersdk.activity.Player;
-import com.muvi.muviplayersdk.activity.ResumePopupActivity;
-import com.muvi.muviplayersdk.activity.ThirdPartyPlayer;
-import com.muvi.muviplayersdk.activity.YouTubeAPIActivity;
+import com.release.muvisdk.player.activity.AdPlayerActivity;
+import com.release.muvisdk.player.activity.Player;
+import com.release.muvisdk.player.activity.PlayerActivity;
+import com.release.muvisdk.player.activity.ResumePopupActivity;
+import com.release.muvisdk.player.activity.ThirdPartyPlayer;
+import com.release.muvisdk.player.activity.YouTubeAPIActivity;
 import com.squareup.picasso.Picasso;
 
 
@@ -141,7 +141,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import static com.example.muviplayersdk.R.menu.player;
+
 import static com.home.vod.preferences.LanguagePreference.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.ADVANCE_PURCHASE;
 import static com.home.vod.preferences.LanguagePreference.APP_ON;
@@ -209,14 +209,14 @@ import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.languageModel;
-import static com.muvi.muviplayersdk.utils.Util.ADD_A_REVIEW;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_ADD_A_REVIEW;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_HAS_FAVORITE;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_IS_CHROMECAST;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_REVIEWS;
-import static com.muvi.muviplayersdk.utils.Util.HAS_FAVORITE;
-import static com.muvi.muviplayersdk.utils.Util.IS_CHROMECAST;
-import static com.muvi.muviplayersdk.utils.Util.REVIEWS;
+import static com.release.muvisdk.player.utils.Util.ADD_A_REVIEW;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_ADD_A_REVIEW;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_IS_CHROMECAST;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_REVIEWS;
+import static com.release.muvisdk.player.utils.Util.HAS_FAVORITE;
+import static com.release.muvisdk.player.utils.Util.IS_CHROMECAST;
+import static com.release.muvisdk.player.utils.Util.REVIEWS;
 
 
 public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsynctask.LogoutListener,
@@ -831,7 +831,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 //playermodel set data
 // *****************set data into playermdel for play in exoplayer************
 
-                playerModel.setAppName(getResources().getString(com.example.muviplayersdk.R.string.app_name));
+                playerModel.setAppName(getResources().getString(R.string.app_name));
                 playerModel.setStreamUniqueId(movieStreamUniqueId);
                 playerModel.setMovieUniqueId(movieUniqueId);
                 playerModel.setUserId(preferenceManager.getUseridFromPref());
@@ -2099,21 +2099,21 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 /***ad **/
                 final Intent playVideoIntent;
                 if (Util.dataModel.getAdNetworkId() == 3) {
-                    playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent = new Intent(MovieDetailsActivity.this, PlayerActivity.class);
 
                 } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                     if (Util.dataModel.getPlayPos() <= 0) {
                         playVideoIntent = new Intent(MovieDetailsActivity.this, AdPlayerActivity.class);
                     } else {
-                        playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new Intent(MovieDetailsActivity.this, PlayerActivity.class);
 
                     }
                 } else {
-                    playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent = new Intent(MovieDetailsActivity.this, PlayerActivity.class);
 
                 }
                 /***ad **/
-                //playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
+                //playVideoIntent = new Intent(MovieDetailsActivity.this, PlayerActivity.class);
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                /* playVideoIntent.putExtra("SubTitleName", SubTitleName);
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
@@ -2678,17 +2678,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         if (Util.dataModel.getAdNetworkId() == 3) {
                             Log.v("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                            playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new Intent(MovieDetailsActivity.this, PlayerActivity.class);
 
                         } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                             if (Util.dataModel.getPlayPos() <= 0) {
                                 playVideoIntent = new Intent(MovieDetailsActivity.this, AdPlayerActivity.class);
                             } else {
-                                playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
+                                playVideoIntent = new Intent(MovieDetailsActivity.this, PlayerActivity.class);
 
                             }
                         } else {
-                            playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new Intent(MovieDetailsActivity.this, PlayerActivity.class);
 
                         }
 
@@ -2717,7 +2717,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                     }
                 } else {
-                    final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, PlayerActivity.class);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);

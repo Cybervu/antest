@@ -78,7 +78,7 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
-import com.home.apisdk.APIUrlConstant;
+import com.release.muvisdk.api.APIUrlConstant;
 import com.home.vod.HandleOfflineInExoplayer;
 import com.home.vod.R;
 import com.home.vod.preferences.LanguagePreference;
@@ -88,7 +88,7 @@ import com.intertrust.wasabi.ErrorCodeException;
 import com.intertrust.wasabi.Runtime;
 import com.intertrust.wasabi.media.PlaylistProxy;
 import com.intertrust.wasabi.media.PlaylistProxyListener;
-import com.muvi.muviplayersdk.utils.SensorOrientationChangeNotifier;
+import com.release.muvisdk.player.utils.SensorOrientationChangeNotifier;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -133,24 +133,24 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import com.muvi.muviplayersdk.activity.AdPlayerActivity;
-import com.muvi.muviplayersdk.service.DataConsumptionService;
-import com.muvi.muviplayersdk.activity.Player;
-import com.muvi.muviplayersdk.activity.ResumePopupActivity;
-import com.muvi.muviplayersdk.activity.SubtitleList;
-import com.muvi.muviplayersdk.activity.Subtitle_Resolution;
-import com.muvi.muviplayersdk.activity.ThirdPartyPlayer;
-import com.muvi.muviplayersdk.activity.YouTubeAPIActivity;
-import com.muvi.muviplayersdk.adapter.DownloadOptionAdapter;
-import com.muvi.muviplayersdk.model.ContactModel1;
-import com.muvi.muviplayersdk.model.SubtitleModel;
-import com.muvi.muviplayersdk.service.PopUpService;
-import com.muvi.muviplayersdk.subtitle_support.Caption;
-import com.muvi.muviplayersdk.subtitle_support.FormatSRT;
-import com.muvi.muviplayersdk.subtitle_support.FormatSRT_WithoutCaption;
-import com.muvi.muviplayersdk.subtitle_support.TimedTextObject;
-import com.muvi.muviplayersdk.utils.DBHelper;
-import com.muvi.muviplayersdk.utils.Util;
+import com.release.muvisdk.player.activity.AdPlayerActivity;
+import com.release.muvisdk.player.service.DataConsumptionService;
+import com.release.muvisdk.player.activity.Player;
+import com.release.muvisdk.player.activity.ResumePopupActivity;
+import com.release.muvisdk.player.activity.SubtitleList;
+import com.release.muvisdk.player.activity.Subtitle_Resolution;
+import com.release.muvisdk.player.activity.ThirdPartyPlayer;
+import com.release.muvisdk.player.activity.YouTubeAPIActivity;
+import com.release.muvisdk.player.adapter.DownloadOptionAdapter;
+import com.release.muvisdk.player.model.DownloadContentModel;
+import com.release.muvisdk.player.model.SubtitleModel;
+import com.release.muvisdk.player.service.PopUpService;
+import com.release.muvisdk.player.subtitle_support.Caption;
+import com.release.muvisdk.player.subtitle_support.FormatSRT;
+import com.release.muvisdk.player.subtitle_support.FormatSRT_WithoutCaption;
+import com.release.muvisdk.player.subtitle_support.TimedTextObject;
+import com.release.muvisdk.player.utils.DBHelper;
+import com.release.muvisdk.player.utils.Util;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -199,9 +199,9 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
     public boolean downloading;
     //Handler mHandler;
     static String filename, path;
-    ArrayList<ContactModel1> dmanager;
+    ArrayList<DownloadContentModel> dmanager;
     AsynWithdrm asynWithdrm;
-    ContactModel1 audio, audio_1;
+    DownloadContentModel audio, audio_1;
     DBHelper dbHelper;
     public Handler exoplayerdownloadhandler;
     public long enqueue;
@@ -1402,7 +1402,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
         // Download option is not necessary in MyLibrary Page
 
-        download.setOnClickListener(new View.OnClickListener() {
+    /*    download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -1433,7 +1433,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                         List_Of_FileSize.clear();
                         if (List_Of_Resolution_Url.size() > 0) {
                             for (int i = 1; i < List_Of_Resolution_Url.size(); i++) {
-                                List_Of_Resolution_Url.add(playerModel.ResolutionUrl.get(i));
+                                List_Of_Resolution_Url.add(playerModel.getResolutionUrl.get(i));
                             }
 
                             pDialog_for_gettig_filesize = new ProgressBarHandler(MyLibraryPlayer.this);
@@ -1453,7 +1453,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                 }
 
             }
-        });
+        });*/
 
 
         percentg.setOnClickListener(new View.OnClickListener() {
@@ -1537,7 +1537,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = APIUrlConstant.BASE_URl + Util.videoLogUrl.trim();
+            String urlRouteList = APIUrlConstant.getVideoLogsUrl();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
@@ -1753,7 +1753,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = APIUrlConstant.BASE_URl + Util.videoLogUrl.trim();
+            String urlRouteList = APIUrlConstant.getVideoLogsUrl();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
@@ -1930,7 +1930,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
                 // Execute HTTP Post Request
                 try {
-                    URL myurl = new URL(Util.loadIPUrl);
+                    URL myurl = new URL(APIUrlConstant.IP_ADDRESS_URL);
                     HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
                     InputStream ins = con.getInputStream();
                     InputStreamReader isr = new InputStreamReader(ins);
@@ -2422,7 +2422,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = APIUrlConstant.BASE_URl + Util.videoLogUrl.trim();
+            String urlRouteList = APIUrlConstant.getVideoLogsUrl();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
@@ -2569,7 +2569,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = APIUrlConstant.BASE_URl + Util.videoLogUrl.trim();
+            String urlRouteList =APIUrlConstant.getVideoLogsUrl();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
@@ -2702,7 +2702,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
 
             Log.v("BIBHU1111", "requestCode=" + requestCode + "==========resultCode==" + resultCode);
             Util.call_finish_at_onUserLeaveHint = true;
-
+/*
             if (isDrm) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(MyLibraryPlayer.this)) {
                     List_Of_Resolution_Format.clear();
@@ -2740,7 +2740,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
                         new DownloadFileFromURL().execute(playerModel.getVideoUrl());
                     }
                 }
-            }
+            }*/
 
         }
 
@@ -3219,7 +3219,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = APIUrlConstant.BASE_URl + Util.bufferLogUrl.trim();
+            String urlRouteList = APIUrlConstant.getVideoBufferLogsUrl();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
@@ -3598,7 +3598,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         }
     }
 
-    public void checkDownLoadStatusFromDownloadManager1(final ContactModel1 model, final boolean CallAccessPeriodApi) {
+    public void checkDownLoadStatusFromDownloadManager1(final DownloadContentModel model, final boolean CallAccessPeriodApi) {
 
         if (model.getDOWNLOADID() != 0) {
             new Thread(new Runnable() {
@@ -3785,7 +3785,7 @@ public class MyLibraryPlayer extends AppCompatActivity implements SensorOrientat
         percentg.setVisibility(View.VISIBLE);
         Progress.setProgress(0);
 
-        ContactModel1 contactModel1 = new ContactModel1();
+        DownloadContentModel contactModel1 = new DownloadContentModel();
         contactModel1.setMUVIID(playerModel.getVideoTitle());
         contactModel1.setDOWNLOADID((int) enqueue);
         contactModel1.setProgress(0);

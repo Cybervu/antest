@@ -32,15 +32,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.home.apisdk.apiController.AuthUserPaymentInfoAsyntask;
-import com.home.apisdk.apiController.RegisterUserPaymentAsyntask;
-import com.home.apisdk.apiController.VideoDetailsAsynctask;
-import com.home.apisdk.apiModel.AuthUserPaymentInfoInputModel;
-import com.home.apisdk.apiModel.AuthUserPaymentInfoOutputModel;
-import com.home.apisdk.apiModel.GetVideoDetailsInput;
-import com.home.apisdk.apiModel.Video_Details_Output;
-import com.home.apisdk.apiModel.RegisterUserPaymentInputModel;
-import com.home.apisdk.apiModel.RegisterUserPaymentOutputModel;
+import com.release.muvisdk.api.apiController.AuthUserPaymentInfoAsyntask;
+import com.release.muvisdk.api.apiController.RegisterUserPaymentAsyntask;
+import com.release.muvisdk.api.apiController.VideoDetailsAsynctask;
+import com.release.muvisdk.api.apiModel.AuthUserPaymentInfoInputModel;
+import com.release.muvisdk.api.apiModel.AuthUserPaymentInfoOutputModel;
+import com.release.muvisdk.api.apiModel.GetVideoDetailsInput;
+import com.release.muvisdk.api.apiModel.Video_Details_Output;
+import com.release.muvisdk.api.apiModel.RegisterUserPaymentInputModel;
+import com.release.muvisdk.api.apiModel.RegisterUserPaymentOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.CardSpinnerAdapter;
 import com.home.vod.model.CardModel;
@@ -52,11 +52,11 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
-import com.muvi.muviplayersdk.activity.AdPlayerActivity;
-import com.muvi.muviplayersdk.activity.ExoPlayerActivity;
-import com.muvi.muviplayersdk.activity.Player;
-import com.muvi.muviplayersdk.activity.ThirdPartyPlayer;
-import com.muvi.muviplayersdk.activity.YouTubeAPIActivity;
+import com.release.muvisdk.player.activity.AdPlayerActivity;
+import com.release.muvisdk.player.activity.PlayerActivity;
+import com.release.muvisdk.player.activity.Player;
+import com.release.muvisdk.player.activity.ThirdPartyPlayer;
+import com.release.muvisdk.player.activity.YouTubeAPIActivity;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -105,8 +105,8 @@ import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.SUBSCRIPTION_COMPLETED;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
-import static com.muvi.muviplayersdk.utils.Util.DEFAULT_IS_CHROMECAST;
-import static com.muvi.muviplayersdk.utils.Util.IS_CHROMECAST;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_IS_CHROMECAST;
+import static com.release.muvisdk.player.utils.Util.IS_CHROMECAST;
 
 
 public class PaymentInfoActivity extends ActionBarActivity implements VideoDetailsAsynctask.VideoDetailsListener,
@@ -796,17 +796,17 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     if (Util.dataModel.getAdNetworkId() == 3) {
                         LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                        playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new Intent(PaymentInfoActivity.this, PlayerActivity.class);
 
                     } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                         if (Util.dataModel.getPlayPos() <= 0) {
                             playVideoIntent = new Intent(PaymentInfoActivity.this, AdPlayerActivity.class);
                         } else {
-                            playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new Intent(PaymentInfoActivity.this, PlayerActivity.class);
 
                         }
                     } else {
-                        playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new Intent(PaymentInfoActivity.this, PlayerActivity.class);
 
                     }
                     /***ad **/
@@ -836,7 +836,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                         }
                     });
                 } else {
-                    final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, PlayerActivity.class);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     playVideoIntent.putExtra("PlayerModel", playerModel);
                     startActivity(playVideoIntent);
@@ -1773,7 +1773,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 //                        Util.dataModel.setVideoUrl(Util.getTextofLanguage(PaymentInfoActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA));
 //                    }
 //                    if (!videoUrlStr.equals("")) {
-//                        final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+//                        final Intent playVideoIntent = new Intent(PaymentInfoActivity.this, PlayerActivity.class);
 //                        runOnUiThread(new Runnable() {
 //                            public void run() {
 //                                playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1910,21 +1910,21 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 if (Util.dataModel.getAdNetworkId() == 3) {
                     LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                    playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent = new Intent(PaymentInfoActivity.this, PlayerActivity.class);
 
                 } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                     if (Util.dataModel.getPlayPos() <= 0) {
                         playVideoIntent = new Intent(PaymentInfoActivity.this, AdPlayerActivity.class);
                     } else {
-                        playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new Intent(PaymentInfoActivity.this, PlayerActivity.class);
 
                     }
                 } else {
-                    playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent = new Intent(PaymentInfoActivity.this, PlayerActivity.class);
 
                 }
                 playerModel.setSubTitlePath(SubTitlePath);
-                //Intent playVideoIntent = new Intent(PaymentInfoActivity.this, ExoPlayerActivity.class);
+                //Intent playVideoIntent = new Intent(PaymentInfoActivity.this, PlayerActivity.class);
                 playVideoIntent.putExtra("PlayerModel", playerModel);
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 

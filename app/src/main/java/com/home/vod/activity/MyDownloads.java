@@ -38,18 +38,19 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
-import com.home.apisdk.APIUrlConstant;
+import com.release.muvisdk.api.APIUrlConstant;
 import com.home.vod.R;
 import com.home.vod.adapter.MyDownloadAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
-import com.muvi.muviplayersdk.activity.MarlinBroadbandExample;
-import com.muvi.muviplayersdk.activity.ResumePopupActivity;
-import com.muvi.muviplayersdk.model.ContactModel1;
-import com.muvi.muviplayersdk.utils.DBHelper;
-import com.muvi.muviplayersdk.utils.Util;
+import com.release.muvisdk.player.activity.MarlinBroadbandExample;
+import com.release.muvisdk.player.activity.ResumePopupActivity;
+import com.release.muvisdk.player.model.DownloadContentModel;
+import com.release.muvisdk.player.utils.DBHelper;
+import com.release.muvisdk.player.utils.Util;
+
 
 
 import org.apache.http.HttpResponse;
@@ -104,7 +105,7 @@ public class MyDownloads extends AppCompatActivity {
     String StreamId = "";
     DBHelper dbHelper;
     static String path,filename,_filename,token,title,poster,genre,duration,rdate,movieid,user,uniqid;
-    ArrayList<ContactModel1> download;
+    ArrayList<DownloadContentModel> download;
     ProgressBarHandler pDialog;
     ArrayList<String> SubTitleName = new ArrayList<>();
     ArrayList<String> SubTitlePath = new ArrayList<>();
@@ -338,7 +339,6 @@ public class MyDownloads extends AppCompatActivity {
         if(download.size()>0) {
             adapter = new MyDownloadAdapter(MyDownloads.this, android.R.layout.simple_dropdown_item_1line, download);
             list.setAdapter(adapter);
-
         }else {
 
             nodata.setVisibility(View.VISIBLE);
@@ -683,7 +683,7 @@ public class MyDownloads extends AppCompatActivity {
 
                 // Execute HTTP Post Request
                 try {
-                    URL myurl = new URL(Util.loadIPUrl);
+                    URL myurl = new URL(APIUrlConstant.IP_ADDRESS_URL);
                     HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
                     InputStream ins = con.getInputStream();
                     InputStreamReader isr = new InputStreamReader(ins);
@@ -763,7 +763,7 @@ public class MyDownloads extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             try {
                 HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(APIUrlConstant.BASE_URl.trim()+Util.loadVideoUrl.trim());
+                HttpPost httppost = new HttpPost(APIUrlConstant.getVideoDetailsUrl().trim());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken",authTokenStr.trim());
                 httppost.addHeader("content_uniq_id", download.get(Position).getMuviid());
@@ -819,7 +819,7 @@ public class MyDownloads extends AppCompatActivity {
                             DB.execSQL(Qry1);
 
                             if ((myJson.has("played_length")) && myJson.getString("played_length").trim() != null && !myJson.getString("played_length").trim().isEmpty() && !myJson.getString("played_length").trim().equals("null") && !myJson.getString("played_length").trim().matches("")) {
-                                Played_Length = Util.isDouble(myJson.getString("played_length"));
+                                Played_Length = com.home.vod.util.Util.isDouble(myJson.getString("played_length"));
                                 Played_Length = Played_Length * 1000;
                             }
 
