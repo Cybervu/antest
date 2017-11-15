@@ -275,6 +275,7 @@ public class LanguagePreference {
     public static final String DEFAULT_DETAILS_NOT_FOUND_ALERT = "Failed to find details.";
     public static final String DEFAULT_MY_FAVOURITE = "My Favourite";
     public static final String DEFAULT_GOOGLE_FCM_TOKEN = "0";
+    public static final String DEFAULT_DESCRIPTION = "DESCRIPTION";
 
     //ADD LATER FOR PURCHASE AND TRANSACTION DETAILS
 

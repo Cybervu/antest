@@ -183,6 +183,7 @@
     <dimen name="season_card_height">300dp</dimen>
     <dimen name="fav_title_textsize">25dp</dimen>
     <dimen name="fav_des_textsize">15dp</dimen>
+    <dimen name="season_layout_card_height">290dp</dimen>
 
     <dimen name="fav_img_width">150dp</dimen>
     <dimen name="fav_img_height">214dp</dimen>

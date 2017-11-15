@@ -363,4 +363,6 @@
 
     <dimen name="detailsTextView">150dp</dimen>
 
+    <dimen name="yogaDownloadWidth">70dp</dimen>
+
 </resources>

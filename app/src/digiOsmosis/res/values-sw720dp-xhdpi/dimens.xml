@@ -181,6 +181,7 @@
     <dimen name="fav_card_elevation">10dp</dimen>
     <dimen name="fav_title_textsize">25dp</dimen>
     <dimen name="fav_des_textsize">15dp</dimen>
+    <dimen name="season_layout_card_height">288dp</dimen>
 
 
     <!--//**********profile picture*************//-->

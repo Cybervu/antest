@@ -29,6 +29,7 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -85,7 +86,9 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
+import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiController.GetEpisodeDeatailsAsynTask;
+import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
 import com.home.apisdk.apiModel.Episode_Details_input;
@@ -181,6 +184,7 @@ import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DESCRIPTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MORE_VIDEOS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
@@ -189,6 +193,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CO
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DESCRIPTION;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.MORE_VIDEOS;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
@@ -216,7 +221,7 @@ enum ContentTypes3 {
     }
 }
 
-public class ProgramPlayerActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener, PlaylistProxyListener, AdEvent.AdEventListener, AdErrorEvent.AdErrorListener,
+public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAddressAsynTask.IpAddressListener,SensorOrientationChangeNotifier.Listener, PlaylistProxyListener, AdEvent.AdEventListener, AdErrorEvent.AdErrorListener,
         GetValidateUserAsynTask.GetValidateUserListener,
         VideoDetailsAsynctask.VideoDetailsListener,GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener{
     RecyclerView.LayoutManager mLayoutManager;
@@ -517,8 +522,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                     getVideoDetailsInput.setContent_uniq_id(upContentUniqueId);
                     getVideoDetailsInput.setStream_uniq_id(upStreamUniqueId);
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-//                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                    getVideoDetailsInput.setUser_id("157218");
+                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+//                    getVideoDetailsInput.setUser_id("157218");
                     asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                 } else {
@@ -558,8 +563,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                     getVideoDetailsInput.setContent_uniq_id(upContentUniqueId);
                     getVideoDetailsInput.setStream_uniq_id(upStreamUniqueId);
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-//                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                    getVideoDetailsInput.setUser_id("157218");
+                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+//                    getVideoDetailsInput.setUser_id("157218");
                     asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                 } else {
@@ -1132,6 +1137,17 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
     }
 
+    @Override
+    public void onIPAddressPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
+        this.ipAddressStr = ipAddressStr;
+        return;
+    }
+
     public enum PlaybackLocation {
         LOCAL,
         REMOTE
@@ -1196,6 +1212,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     @Override
     protected void onResume() {
         super.onResume();
+        GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+        asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
         CheckAvailabilityOfChromecast = new Timer();
         CheckAvailabilityOfChromecast.schedule(new TimerTask() {
@@ -1480,7 +1498,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         Progress = (ProgressBar) findViewById(R.id.progressBar);
         percentg = (TextView) findViewById(R.id.percentage);
 
-
         share = (ImageView) findViewById(R.id.share);
 
         share.setOnClickListener(new View.OnClickListener() {
@@ -1761,7 +1778,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
         if (playerModel.getVideoStory().trim() != null && !playerModel.getVideoStory().trim().matches("")) {
 //            descriptionTitleTextVIew.setText(playerModel.getVideoStory());
-            String title = getColoredSpanned("DESCRIPTION", "#4cbfb8");
+            String title = getColoredSpanned(languagePreference.getTextofLanguage(DESCRIPTION,DEFAULT_DESCRIPTION), "#4cbfb8");
             String desctitle = getColoredSpanned(playerModel.getVideoStory(),"#000000");
 
             descriptionTitleTextVIew.setText(Html.fromHtml(title + " : " + desctitle));
@@ -2118,6 +2135,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                         } else {
                             startTimer();
 
+
+                            Log.v("SUBHA","played_length === " + played_length);
+
                             if (played_length > 0) {
                                 ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
                                 Util.call_finish_at_onUserLeaveHint = false;
@@ -2143,6 +2163,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                                     subsFetchTask = new SubtitleProcessingTask("1");
                                     subsFetchTask.execute();
                                 } else {
+                                    Log.v("SUBHA","played_length === 1" );
                                     asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
@@ -2272,49 +2293,65 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             @Override
             public void onClick(View v) {
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(ProgramPlayerActivity.this)) {
-                    final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-                    try {
-                        Util.call_finish_at_onUserLeaveHint = false;
-                        startActivityForResult(intent, 22222);
-                    } catch (ActivityNotFoundException e) {
-                    }
-                } else {
 
-                    if (isDrm) {
-                        // This is applicable for DRM content.
-
-                        List_Of_Resolution_Format.clear();
-                        List_Of_FileSize.clear();
-                        List_Of_Resolution_Url.clear();
-                        List_Of_Resolution_Url_Used_For_Download.clear();
-
-
-                        asynWithdrm = new AsynWithdrm();
-                        asynWithdrm.executeOnExecutor(threadPoolExecutor);
+                if (ContextCompat.checkSelfPermission(ProgramPlayerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(ProgramPlayerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        ActivityCompat.requestPermissions(ProgramPlayerActivity.this,
+                                new String[]{Manifest.permission
+                                        .WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS},
+                                111);
                     } else {
-                        // This is applicable for NON-DRM contnet.
+                        ActivityCompat.requestPermissions(ProgramPlayerActivity.this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                111);
 
-                        List_Of_Resolution_Url.clear();
-                        List_Of_FileSize.clear();
-                        if (List_Of_Resolution_Url.size() > 0) {
-                            for (int i = 1; i < List_Of_Resolution_Url.size(); i++) {
-                                List_Of_Resolution_Url.add(playerModel.ResolutionUrl.get(i));
+                    }
+                }else {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(ProgramPlayerActivity.this)) {
+                        final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+                        try {
+                            Util.call_finish_at_onUserLeaveHint = false;
+                            startActivityForResult(intent, 22222);
+                        } catch (ActivityNotFoundException e) {
+                        }
+                    } else {
+
+                        if (isDrm) {
+                            // This is applicable for DRM content.
+
+                            List_Of_Resolution_Format.clear();
+                            List_Of_FileSize.clear();
+                            List_Of_Resolution_Url.clear();
+                            List_Of_Resolution_Url_Used_For_Download.clear();
+
+
+                            asynWithdrm = new AsynWithdrm();
+                            asynWithdrm.executeOnExecutor(threadPoolExecutor);
+                        } else {
+                            // This is applicable for NON-DRM contnet.
+
+                            List_Of_Resolution_Url.clear();
+                            List_Of_FileSize.clear();
+                            if (List_Of_Resolution_Url.size() > 0) {
+                                for (int i = 1; i < List_Of_Resolution_Url.size(); i++) {
+                                    List_Of_Resolution_Url.add(playerModel.ResolutionUrl.get(i));
+                                }
+
+                                pDialog_for_gettig_filesize = new ProgressBarHandler(ProgramPlayerActivity.this);
+                                pDialog_for_gettig_filesize.show();
+
+                                new DetectDownloadingFileSize().execute();
+                            } else {
+                                new DownloadFileFromURL().execute(playerModel.getVideoUrl());
                             }
 
-                            pDialog_for_gettig_filesize = new ProgressBarHandler(ProgramPlayerActivity.this);
-                            pDialog_for_gettig_filesize.show();
-
-                            new DetectDownloadingFileSize().execute();
-                        } else {
-                            new DownloadFileFromURL().execute(playerModel.getVideoUrl());
                         }
 
-                    }
 
-
-                    if (playerModel.getOfflineUrl().size() > 0) {
-                        Download_SubTitle(playerModel.getOfflineUrl().get(0));
+                        if (playerModel.getOfflineUrl().size() > 0) {
+                            Download_SubTitle(playerModel.getOfflineUrl().get(0));
+                        }
                     }
                 }
 
@@ -2403,29 +2440,21 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+
+//            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
+                HttpPost httppost = new HttpPost(APIUrlConstant.getVideoLogsUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", userIdStr.trim());
+                httppost.addHeader("authToken", authTokenStr);
+                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
                 httppost.addHeader("ip_address", ipAddressStr.trim());
-                httppost.addHeader("movie_id", movieId.trim());
-                httppost.addHeader("episode_id", episodeId.trim());
+                httppost.addHeader("movie_id",playerModel.getMovieUniqueId().trim());
+                httppost.addHeader("episode_id", playerModel.getStreamUniqueId().trim());
                 httppost.addHeader("watch_status", watchStatus);
                 httppost.addHeader("device_type", "2");
                 httppost.addHeader("log_id", videoLogId);
 
-                Log.v("BIBHU6", "authToken=" + Util.authTokenStr.trim());
-                Log.v("BIBHU6", "user_id=" + userIdStr.trim());
-                Log.v("BIBHU6", "ip_address=" + ipAddressStr.trim());
-                Log.v("BIBHU6", "movie_id=" + movieId.trim());
-                Log.v("BIBHU6", "episode_id=" + episodeId.trim());
-                Log.v("BIBHU6", "played_length=" + String.valueOf(playerPosition));
-                Log.v("BIBHU6", "watch_status=" + watchStatus);
-                Log.v("BIBHU6", "device_type=" + "2");
-                Log.v("BIBHU6", "log_id=" + videoLogId);
 
 
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
@@ -2443,7 +2472,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                 httppost.addHeader("log_temp_id", log_temp_id);
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
-                Log.v("BIBHU", "player_start_time===*****************=========" + player_start_time);
+               /* Log.v("BIBHU", "player_start_time===*****************=========" + player_start_time);
                 Log.v("BIBHU", "playerPosition======***************8======" + playerPosition);
 
 
@@ -2459,7 +2488,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                 Log.v("BIBHU", "watchStatus============" + watchStatus);
                 Log.v("BIBHU", "restrict_stream_id============" + restrict_stream_id);
 
-
+*/
                 //===============End=============================//
 
 
@@ -2527,7 +2556,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
         @Override
         protected void onPreExecute() {
-            stoptimertask();
+            Log.v("SUBHA","played_length === 2" );
+//            stoptimertask();
         }
 
 
@@ -2546,8 +2576,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         //stop the timer, if it's not already null
         if (timer != null) {
 
-            Log.v("BIBHU", "=======================================stoptimertask caled=================================");
-
+            Log.v("SUBHA", "=======================================stoptimertask caled=================================");
+            Log.v("SUBHA","played_length === 3" );
             timer.cancel();
             timer = null;
         }
@@ -2564,7 +2594,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                     public void run() {
                         if (emVideoView != null) {
 
-                            //  Log.v("BIBHU","===================****====================initializeTimerTask caled===============**==================");
+                              Log.v("BIBHU","===================****====================initializeTimerTask caled===============**==================");
 
 
                             int currentPositionStr = millisecondsToString(emVideoView.getCurrentPosition());
@@ -2573,7 +2603,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
                             if (isFastForward == true) {
                                 isFastForward = false;
-
                                 log_temp_id = "0";
 
 
@@ -2588,7 +2617,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                                     asyncFFVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
 
-                            } else if (isFastForward == false && currentPositionStr >= millisecondsToString(playerPreviousPosition)) {
+                            } else if (isFastForward == false && currentPositionStr > 0) {
 
                                 playerPreviousPosition = 0;
 
@@ -2619,16 +2648,16 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+//            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
+                HttpPost httppost = new HttpPost(APIUrlConstant.getVideoLogsUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", userIdStr);
+                httppost.addHeader("authToken", authTokenStr);
+                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
                 httppost.addHeader("ip_address", ipAddressStr.trim());
-                httppost.addHeader("movie_id", movieId.trim());
-                httppost.addHeader("episode_id", episodeId.trim());
+                httppost.addHeader("movie_id", playerModel.getMovieUniqueId().trim());
+                httppost.addHeader("episode_id", playerModel.getStreamUniqueId().trim());
 
                 httppost.addHeader("watch_status", watchStatus);
 
@@ -3053,8 +3082,13 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                                 videoTitle.setText(listModel.getEpisodeTitle());
 //                                Util.dataModel.setEpisode_title(listModel.getEpisodeTitle());
                                 ///video story text view start
-                                descriptionTitleTextVIew.setText(listModel.getEpisodeDescription());
+                               // descriptionTitleTextVIew.setText(listModel.getEpisodeDescription());
 //                                Util.dataModel.setVideoStory(listModel.getEpisodeDescription());
+                                    String title = getColoredSpanned(languagePreference.getTextofLanguage(DESCRIPTION,DEFAULT_DESCRIPTION), "#4cbfb8");
+                                    String desctitle = getColoredSpanned(listModel.getEpisodeDescription(),"#000000");
+
+                                    descriptionTitleTextVIew.setText(Html.fromHtml(title + " : " + desctitle));
+
 
                                 View decorView = getWindow().getDecorView();
                                 decorView.setSystemUiVisibility(
@@ -3073,8 +3107,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
                                 ValidateUserInput validateUserInput = new ValidateUserInput();
                                 validateUserInput.setAuthToken(authTokenStr);
-//                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                                validateUserInput.setUserId("157218");
+                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
+//                                validateUserInput.setUserId("157218");
                                 validateUserInput.setMuviUniqueId(upContentUniqueId.trim());
                                 validateUserInput.setPurchaseType(com.home.vod.util.Util.dataModel.getPurchase_type());
                                 validateUserInput.setSeasonId(com.home.vod.util.Util.dataModel.getSeason_id());
@@ -3439,16 +3473,16 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+//            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
+                HttpPost httppost = new HttpPost(APIUrlConstant.getVideoLogsUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", userIdStr.trim());
+                httppost.addHeader("authToken", authTokenStr);
+                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
                 httppost.addHeader("ip_address", ipAddressStr.trim());
-                httppost.addHeader("movie_id", movieId.trim());
-                httppost.addHeader("episode_id", episodeId.trim());
+                httppost.addHeader("movie_id", playerModel.getMovieUniqueId());
+                httppost.addHeader("episode_id", playerModel.getStreamUniqueId().trim());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -3596,8 +3630,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", userIdStr.trim());
+                httppost.addHeader("authToken", authTokenStr);
+                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
                 httppost.addHeader("episode_id", episodeId.trim());
@@ -4195,7 +4229,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
     }
 
     private void showSystemUI() {
-        descriptionTitleTextVIew.setText(playerModel.getVideoStory());
+       // descriptionTitleTextVIew.setText(playerModel.getVideoStory());
+        String title = getColoredSpanned(languagePreference.getTextofLanguage(DESCRIPTION,DEFAULT_DESCRIPTION), "#4cbfb8");
+        String desctitle = getColoredSpanned(playerModel.getVideoStory(),"#000000");
+
+        descriptionTitleTextVIew.setText(Html.fromHtml(title + " : " + desctitle));
+
 
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
@@ -4336,16 +4375,16 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         @Override
         protected Void doInBackground(Void... params) {
 
-            String urlRouteList = Util.rootUrl().trim() + Util.bufferLogUrl.trim();
+//            String urlRouteList = Util.rootUrl().trim() + Util.bufferLogUrl.trim();
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
+                HttpPost httppost = new HttpPost(APIUrlConstant.getUpdateBufferLogUrl());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("user_id", userIdStr);
+                httppost.addHeader("authToken",authTokenStr);
+                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
                 httppost.addHeader("ip_address", ipAddressStr.trim());
-                httppost.addHeader("movie_id", movieId.trim());
-                httppost.addHeader("episode_id", episodeId.trim());
+                httppost.addHeader("movie_id", playerModel.getMovieUniqueId());
+                httppost.addHeader("episode_id", playerModel.getStreamUniqueId().trim());
                 httppost.addHeader("device_type", "2");
                 httppost.addHeader("log_id", videoBufferLogId);
                 httppost.addHeader("resolution", resolution.trim());
@@ -4558,22 +4597,27 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
             try {
                 while ((count = inputs.read(data)) != -1) {
                     total += count;
-                    Log.v("SUBHA", "Lrngth" + total);
+                    Log.v("SUBHA", "Length" + total);
 
-                    output.write(data, 0, count);
+                    if(output != null) {
+                        output.write(data, 0, count);
+                    }
                 }
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
 
             try {
-                output.flush();
-                output.close();
+
+                //output.flush();
+                //output.close();
 
 
                 inputs.close();
             } catch (IOException e) {
+
                 e.printStackTrace();
+
             }
 
             return null;
@@ -4904,7 +4948,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         Progress.setProgress(0);
 
         ContactModel1 contactModel1 = new ContactModel1();
-        contactModel1.setMUVIID(playerModel.getVideoTitle());
+        contactModel1.setMUVIID(playerModel.getVideoTitle()+"@@@"+playerModel.getStreamUniqueId());
         contactModel1.setDOWNLOADID((int) enqueue);
         contactModel1.setProgress(0);
         contactModel1.setUSERNAME(emailIdStr);
@@ -4925,9 +4969,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         contactModel1.setGenere(playerModel.getVideoGenre().trim());
         contactModel1.setMuviid(playerModel.getMovieUniqueId().trim());
         contactModel1.setDuration(playerModel.getVideoDuration().trim());
+
+        contactModel1.setStory(playerModel.getVideoStory().trim());
+        Log.v("SUBHASUBHREE", "SUBHASUBHREE====== vcjv  " + contactModel1.getStory());
+
         dbHelper.insertRecord(contactModel1);
 
-        Log.d("BIBHU", emailIdStr);
 
 
         audio = dbHelper.getContact(playerModel.getStreamUniqueId() + emailIdStr);
@@ -4980,6 +5027,28 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
         }
 
 
+        //=================================End=======================================================//
+
+
+
+
+        // This code is responsible for resume watch feature in downloeded content.
+
+        Cursor cursor1 = DB.rawQuery("SELECT * FROM "+DBHelper.RESUME_WATCH+" WHERE UniqueId = '"+playerModel.getStreamUniqueId()+ emailIdStr+"'", null);
+
+        if(cursor1.getCount()>0)
+        {
+            String query = "UPDATE " + DBHelper.RESUME_WATCH+ " SET Flag='0' , PlayedDuration = '0',LatestMpdUrl = '',LicenceUrl=''  WHERE UniqueId = '"+playerModel.getStreamUniqueId()+ emailIdStr+"'";
+            DB.execSQL(query);
+            Log.v("BIBHU1234","resume watch update called");
+        }
+        else {
+            String query = "INSERT INTO " + DBHelper.RESUME_WATCH + " (UniqueId , PlayedDuration,Flag,LicenceUrl,LatestMpdUrl) VALUES" +
+                    " ('" + playerModel.getStreamUniqueId() + emailIdStr + "','0','0','','')";
+            DB.execSQL(query);
+            Log.v("BIBHU1234", "resume watch insert called");
+
+        }
         //=================================End=======================================================//
 
 
@@ -5897,11 +5966,11 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken",authTokenStr);
                 httppost.addHeader("stream_uniq_id", Stream_Id);
                 httppost.addHeader("watch_remaining_time", "0");
                 httppost.addHeader("device_id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                httppost.addHeader("user_id", userIdStr);
+                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
                 httppost.addHeader("device_type ", "2");
                 httppost.addHeader("request_data ", "");
                 httppost.addHeader("lang_code", Util.getTextofLanguage(ProgramPlayerActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
@@ -6588,8 +6657,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements SensorOr
 
             ValidateUserInput validateUserInput = new ValidateUserInput();
             validateUserInput.setAuthToken(authTokenStr);
-//                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-            validateUserInput.setUserId("157218");
+            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
+//            validateUserInput.setUserId("157218");
             validateUserInput.setMuviUniqueId(upContentUniqueId.trim());
             validateUserInput.setPurchaseType(com.home.vod.util.Util.dataModel.getPurchase_type());
             validateUserInput.setSeasonId(com.home.vod.util.Util.dataModel.getSeason_id());

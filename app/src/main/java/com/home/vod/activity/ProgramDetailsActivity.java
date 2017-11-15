@@ -437,6 +437,9 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
         boolean play_video = true;
 
+
+        Log.v("SUBHA"," video called startworkout button");
+
         if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
 
             if (_video_details_output.getStreaming_restriction().trim().equals("0")) {
@@ -1130,13 +1133,6 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             public void onClick(View view) {
                 clickItem(itemData.get(0), 0);
 
-
-                Intent  playVideoIntent = new Intent(ProgramDetailsActivity.this, ProgramPlayerActivity.class);
-                playVideoIntent.putExtra("PlayerModel", playerModel);
-                playVideoIntent.putExtra("PLAY_LIST",itemData);
-                Log.v("Nihar","==================="+itemData.size());
-                playVideoIntent.putExtra("TAG","0");
-                startActivity(playVideoIntent);
             }
         });
 
@@ -1528,7 +1524,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
        /* Intent intent=new Intent(ProgramDetailsActivity.this,ProgramPlayerActivity.class);
         startActivity(intent);*/
-
+        Log.v("SUBHA","called after startbutton clicked == ");
 
         itemToPlay = item;
         ItemClickedPosition = position;
@@ -1590,7 +1586,13 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         playerModel.setVideoReleaseDate("");
 //        playerModel.setCensorRating(censorRatingStr);
         playerModel.setContentTypesId(contentTypesId);
-        playerModel.setPosterImageId(posterImageId);
+
+        if(contentTypesId == 3){
+            playerModel.setPosterImageId(item.getEpisodeThumbnailImageView());
+
+        }else {
+            playerModel.setPosterImageId(posterImageId);
+        }
 
         LogUtil.showLog("MUVI", "content typesid = " + contentTypesId);
         String loggedInStr = preferenceManager.getLoginStatusFromPref();

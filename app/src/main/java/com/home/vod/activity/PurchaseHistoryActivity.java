@@ -773,9 +773,9 @@ LanguagePreference languagePreference;
     public static class RecyclerTouchListener1 implements RecyclerView.OnItemTouchListener {
 
         private GestureDetector gestureDetector;
-        private DigiOsmosisDownloads.ClickListener1 clickListener;
+        private ClickListener1 clickListener;
 
-        public RecyclerTouchListener1(Context context, final RecyclerView recyclerView, final DigiOsmosisDownloads.ClickListener1 clickListener) {
+        public RecyclerTouchListener1(Context context, final RecyclerView recyclerView, final ClickListener1 clickListener) {
             this.clickListener = clickListener;
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override
