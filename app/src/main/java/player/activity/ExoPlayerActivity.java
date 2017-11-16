@@ -124,6 +124,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
@@ -3778,17 +3779,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 DefaultHttpClient client = new DefaultHttpClient();
                 HttpGet httpGet = new HttpGet(f_url[0]);
                 HttpResponse execute = client.execute(httpGet);
-
-                float size = 0.0f;
-//                size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
-
-                Util.saveLogData("execute.getEntity().getContentLength() DownloadFileFromURL="+execute.getEntity().getContentLength());
-
-                 size = (Float.parseFloat(("" + execute.getEntity().getContentLength()).replaceAll(",","")) / 1024) / 1024;
-                size = Float.parseFloat((""+size).replaceAll("," , "."));
-
-                DecimalFormat decimalFormat = new DecimalFormat("#.#");
-                size = Float.valueOf(decimalFormat.format(size));
+                float size = calculateDownloadFileSize(execute);
                 file_size = size;
                 lengthfile = (int) size;
 
@@ -4930,45 +4921,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 DefaultHttpClient client = new DefaultHttpClient();
                 HttpGet httpGet = new HttpGet(List_Of_Resolution_Url.get(0));
                 HttpResponse execute = client.execute(httpGet);
-
-
-                // This is has been changed because of decimal issue in different issues.
-
-                float size = 0.0f;
-
-                Util.saveLogData("execute.getEntity().getContentLength() DetectDownloadingFileSize="+execute.getEntity().getContentLength());
-                Log.v("BIBHU11","execute.getEntity().getContentLength() DetectDownloadingFileSize="+execute.getEntity().getContentLength());
-
-                size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
-//                size = (Float.parseFloat(("" + execute.getEntity().getContentLength()).replaceAll(",","")) / 1024) / 1024;
-//                size =Float.parseFloat((""+((Float.parseFloat(("" + execute.getEntity().getContentLength()).replaceAll(",","")) / 1024) / 1024)).replaceAll(",","."));
-
-                /*try{
-                    size = Float.parseFloat(("" + execute.getEntity().getContentLength()).replaceAll(",",""));
-                }catch (Exception e ){Util.saveLogData("Exception 1 DetectDownloadingFileSize="+e.toString());}
-
-                try{
-                    size = Float.parseFloat((""+(size/1024)).replaceAll(",","."));
-                }catch (Exception e ){Util.saveLogData("Exception 2 DetectDownloadingFileSize="+e.toString());}
-
-                try{
-                    size = Float.parseFloat((""+(size/1024)).replaceAll(",","."));
-                }catch (Exception e ){Util.saveLogData("Exception 3 DetectDownloadingFileSize="+e.toString());}
-
-                try{
-                    size = Float.parseFloat((""+size).replaceAll(",","."));
-                }catch (Exception e ){Util.saveLogData("Exception 4 DetectDownloadingFileSize="+e.toString());}
-
-                try{
-                    DecimalFormat decimalFormat = new DecimalFormat("#.#");
-                    size = Float.valueOf(decimalFormat.format(size));
-
-                }catch (Exception e ){Util.saveLogData("Exception 5 DetectDownloadingFileSize="+e.toString());}
-
-*/
-
-                Log.v("BIBHU11","execute.getEntity().getContentLength() DetectDownloadingFileSize==="+(Float.parseFloat(("" + execute.getEntity().getContentLength()).replaceAll(",","")) / 1024) / 1024);
-
+                float size = calculateDownloadFileSize(execute);
                 List_Of_FileSize.add("(" + size + " MB)");
 
 
@@ -5388,5 +5341,36 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             mDialog.hide();
 
         }
+    }
+
+    /**
+     * Method to calculate file size from server response across locale.
+     * Uncomment Util.saveLogData method when you generate log internaly.
+     * @param execute
+     * @return
+     */
+    private float calculateDownloadFileSize( HttpResponse execute){
+
+        float size = 0.0f;
+        try{
+            size = (Float.parseFloat("" + execute.getEntity().getContentLength()) / 1024) / 1024;
+            try {
+                DecimalFormat decimalFormat = new DecimalFormat("#.#", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+                String formatString = decimalFormat.format(size);
+                size = Float.valueOf(formatString);
+               // Util.saveLogData("try 5 decimalFormat="+size);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                //Util.saveLogData("Exception 1 DownloadFileFromURL="+e.toString());
+            }
+
+
+        }catch (Exception e ){
+           // Util.saveLogData("Exception 2 DownloadFileFromURL="+e.toString());}
+
+
+        return size;
+
+
     }
 }
