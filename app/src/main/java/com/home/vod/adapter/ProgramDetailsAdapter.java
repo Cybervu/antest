@@ -137,6 +137,7 @@ public class ProgramDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }else{
             itemcount = data.size();
         }
+
         return  itemcount;
     }
 

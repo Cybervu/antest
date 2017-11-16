@@ -181,6 +181,7 @@
                         android:layout_width="@dimen/subtitle_change_btn_width"
                         android:layout_height="@dimen/subtitle_change_btn_height"
                         android:layout_marginRight="@dimen/marginRight20dp"
+                        android:visibility="gone"
                         android:background="@drawable/cc_button_radious"
                         android:src="@drawable/subtitle_image" />
 

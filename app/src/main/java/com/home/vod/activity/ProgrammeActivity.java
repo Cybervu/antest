@@ -272,7 +272,6 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
     public void onOrientationChange(int orientation) {
 
         Log.v("Subhalaxmi","video done");
-        Toast.makeText(ProgrammeActivity.this,"video done",Toast.LENGTH_SHORT).show();
 
         if (orientation == 90) {
             compressed = false;
@@ -2006,8 +2005,6 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 seekBar.setProgress(34000);
             }else {*/
 
-            Log.v("Subhalaxmi","video done not complted");
-            Toast.makeText(ProgrammeActivity.this,"video done not complted",Toast.LENGTH_SHORT).show();
             seekBar.setProgress(emVideoView.getCurrentPosition());
 //            }
             seekBar.setMax(emVideoView.getDuration());
@@ -2022,8 +2019,6 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
 
             if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
-                Log.v("Subhalaxmi","video done not started");
-                Toast.makeText(ProgrammeActivity.this,"video done not started",Toast.LENGTH_SHORT).show();
 //                findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
                 center_play_pause.setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.GONE);
@@ -2054,7 +2049,6 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
 
                         Log.v("Subhalaxmi","video done complted");
-                        Toast.makeText(ProgrammeActivity.this,"video done complted",Toast.LENGTH_SHORT).show();
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -2207,7 +2201,6 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 //                    backCalled();
                 }*/
                 Log.v("Subhalaxmi","video done");
-                Toast.makeText(ProgrammeActivity.this,"video done 1",Toast.LENGTH_SHORT).show();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

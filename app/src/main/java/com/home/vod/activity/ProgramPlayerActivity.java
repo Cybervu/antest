@@ -523,6 +523,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                     getVideoDetailsInput.setStream_uniq_id(upStreamUniqueId);
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 //                    getVideoDetailsInput.setUser_id("157218");
                     asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
@@ -564,6 +565,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                     getVideoDetailsInput.setStream_uniq_id(upStreamUniqueId);
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
 //                    getVideoDetailsInput.setUser_id("157218");
                     asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
@@ -1005,7 +1008,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                         } else {
 
                             playerModel.setThirdPartyPlayer(false);
-                            emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
+                            setPlayVideoUrl(playerModel.getVideoUrl());
+                            //emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
                         }
                     }
                 } else {
@@ -2098,8 +2102,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                     if (playerModel.getPlayPos() >= emVideoView.getDuration() / 1000) {
                         played_length = 0;
+                    }else{
+                        played_length = playerModel.getPlayPos() * 1000;
+                        current_played_length = played_length;
                     }
-
                     video_completed = false;
                     if (progressView != null) {
                         ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
@@ -2135,9 +2141,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                         } else {
                             startTimer();
 
-
-                            Log.v("SUBHA","played_length === " + played_length);
-
+                            Log.v("SUBHA","played_length === 74632 video log details called" + played_length );
                             if (played_length > 0) {
                                 ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
                                 Util.call_finish_at_onUserLeaveHint = false;
@@ -2163,7 +2167,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                                     subsFetchTask = new SubtitleProcessingTask("1");
                                     subsFetchTask.execute();
                                 } else {
-                                    Log.v("SUBHA","played_length === 1" );
+                                    Log.v("SUBHA","played_length === 1 video log details called" );
                                     asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
                                 }
@@ -2190,101 +2194,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             }
         });
 
+        setPlayVideoUrl(playerModel.getVideoUrl());
 
-//commented by me
-        //  emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
-        try {
-            /*
-             * Initialize the Wasabi Runtime (necessary only once for each
-			 * instantiation of the application)
-			 *
-			 * ** Note: Set Runtime Properties as needed for your environment
-			 */
-            Runtime.initialize(getDir("wasabi", MODE_PRIVATE).getAbsolutePath());
-            /*
-             * Personalize the application (acquire DRM keys). ProgramPlayerActivity.this is only
-			 * necessary once each time the application is freshly installed
-			 *
-			 * ** Note: personalize() is a blocking call and may take long
-			 * enough to complete to trigger ANR (Application Not Responding)
-			 * errors. In a production application ProgramPlayerActivity.this should be called in a
-			 * background thread.
-			 */
-            if (!Runtime.isPersonalized())
-                Runtime.personalize();
-
-        } catch (NullPointerException e) {
-            //onBackPressed();
-            backCalled();
-            return;
-        } catch (ErrorCodeException e) {
-            // Consult WasabiErrors.txt for resolution of the error codes
-            //onBackPressed();
-            backCalled();
-            return;
-        }
-
-        try {
-            EnumSet<PlaylistProxy.Flags> flags = EnumSet.noneOf(PlaylistProxy.Flags.class);
-            playerProxy = new PlaylistProxy(flags, ProgramPlayerActivity.this, new Handler());
-            playerProxy.start();
-        } catch (ErrorCodeException e) {
-            // Consult WasabiErrors.txt for resolution of the error codes
-            //  onBackPressed();
-            backCalled();
-            return;
-        }
-
-
-
-        	/*
-         * create a playlist proxy url and pass it to the native player
-		 */
-        try {
-            /*
-             * Note that the MediaSourceType must be adapted to the stream type
-			 * (DASH or HLS). Similarly,
-			 * the MediaSourceParams need to be set according to the media type
-			 * if MediaSourceType is SINGLE_FILE
-			 */
-
-            ContentTypes3 contentType = ContentTypes3.DASH;
-            PlaylistProxy.MediaSourceParams params = new PlaylistProxy.MediaSourceParams();
-            params.sourceContentType = contentType
-                    .getMediaSourceParamsContentType();
-            /*
-             * if the content has separate audio tracks (eg languages) you may
-			 * select one using MediaSourceParams, eg params.language="es";
-			 */
-            String contentTypeValue = contentType.toString();
-            if (playerModel.getVideoUrl().contains(".mpd")) {
-                String url = playerProxy.makeUrl(playerModel.getVideoUrl(), PlaylistProxy.MediaSourceType.valueOf((contentTypeValue == "MP4" || contentTypeValue == "HLS" || contentTypeValue == "DASH") ? contentTypeValue : "SINGLE_FILE"), params);
-                emVideoView.setVideoURI(Uri.parse(url));
-
-            } else {
-                emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
-
-            }
-
-
-        } catch (ErrorCodeException e) {
-            // Consult WasabiErrors.txt for resolution of the error codes
-            //  onBackPressed();
-            backCalled();
-            return;
-        } catch (IllegalArgumentException e) {
-            // onBackPressed();
-            backCalled();
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            // onBackPressed();
-            backCalled();
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            //  onBackPressed();
-            backCalled();
-            e.printStackTrace();
-        }
 
 
         /*****Offline*****/
@@ -2621,15 +2532,29 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                                 playerPreviousPosition = 0;
 
+                                Log.v("BIBHU1","initializeTimerTask fastforword false called");
+
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
-                                    asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     watchStatus = "complete";
-                                    asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+
+
+                                    try{
+                                        stoptimertask();
+                                        asyncVideoLogDetails = new AsyncVideoLogDetails();
+                                        asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+                                    }catch (Exception e){Log.v("BIBHU1","Exception at complete ="+e.toString());}
+
+
                                 } else if (currentPositionStr > 0 && currentPositionStr % 60 == 0) {
-                                    asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     watchStatus = "halfplay";
-                                    asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+
+                                    try{
+                                        asyncVideoLogDetails = new AsyncVideoLogDetails();
+                                        asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+                                    }catch (Exception e){Log.v("BIBHU1","Exception at halfplay ="+e.toString());}
+
+
 
                                 }
                             }
@@ -3925,8 +3850,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                         }
                         change_resolution = true;
                         ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
-                        emVideoView.setVideoURI(Uri.parse(ResolutionUrl.get(Integer.parseInt(data.getStringExtra("position")))));
-
+                       // emVideoView.setVideoURI(Uri.parse(ResolutionUrl.get(Integer.parseInt(data.getStringExtra("position")))));
+                        setPlayVideoUrl(ResolutionUrl.get(Integer.parseInt(data.getStringExtra("position"))));
                     }
 
                 } else {
@@ -5173,7 +5098,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 Download_SubTitle(playerModel.getOfflineUrl().get(0).trim());
             } else {
                 playerModel.setThirdPartyPlayer(false);
-                emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
+                setPlayVideoUrl(playerModel.getVideoUrl());
+               // emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
             }
 
         }
@@ -6609,7 +6535,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
         int totalsize = questions.size() - 1;
         Log.v("Nihar", "" + contentPosition);
-       // if (totalsize > contentPosition && contentPosition != questions.size()) {
+     //   if (totalsize > contentPosition && contentPosition != questions.size()) {
 
            // contentPosition = contentPosition + 1;
             stoptimertask();
@@ -6620,6 +6546,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
 
         moreVideosRecyclerView.setAdapter(mAdapter);
+
+
+
+
         primary_ll.setVisibility(View.GONE);
             last_ll.setVisibility(View.GONE);
             center_play_pause.setVisibility(View.GONE);
@@ -6672,6 +6602,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                             asynLoadVideoUrls.execute();*/
             previous_matching_time = current_matching_time;
             ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+
+
        // }
     }
     public static interface ClickListener1{
@@ -6733,5 +6665,98 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         return input;
     }
 
+    public void setPlayVideoUrl(String videourl){
+        //commented by me
+        //  emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
+        try {
+            /*
+             * Initialize the Wasabi Runtime (necessary only once for each
+			 * instantiation of the application)
+			 *
+			 * ** Note: Set Runtime Properties as needed for your environment
+			 */
+            Runtime.initialize(getDir("wasabi", MODE_PRIVATE).getAbsolutePath());
+            /*
+             * Personalize the application (acquire DRM keys). ProgramPlayerActivity.this is only
+			 * necessary once each time the application is freshly installed
+			 *
+			 * ** Note: personalize() is a blocking call and may take long
+			 * enough to complete to trigger ANR (Application Not Responding)
+			 * errors. In a production application ProgramPlayerActivity.this should be called in a
+			 * background thread.
+			 */
+            if (!Runtime.isPersonalized())
+                Runtime.personalize();
 
+        } catch (NullPointerException e) {
+            //onBackPressed();
+            backCalled();
+            return;
+        } catch (ErrorCodeException e) {
+            // Consult WasabiErrors.txt for resolution of the error codes
+            //onBackPressed();
+            backCalled();
+            return;
+        }
+
+        try {
+            EnumSet<PlaylistProxy.Flags> flags = EnumSet.noneOf(PlaylistProxy.Flags.class);
+            playerProxy = new PlaylistProxy(flags, ProgramPlayerActivity.this, new Handler());
+            playerProxy.start();
+        } catch (ErrorCodeException e) {
+            // Consult WasabiErrors.txt for resolution of the error codes
+            //  onBackPressed();
+            backCalled();
+            return;
+        }
+
+
+
+        	/*
+         * create a playlist proxy url and pass it to the native player
+		 */
+        try {
+            /*
+             * Note that the MediaSourceType must be adapted to the stream type
+			 * (DASH or HLS). Similarly,
+			 * the MediaSourceParams need to be set according to the media type
+			 * if MediaSourceType is SINGLE_FILE
+			 */
+
+            ContentTypes3 contentType = ContentTypes3.DASH;
+            PlaylistProxy.MediaSourceParams params = new PlaylistProxy.MediaSourceParams();
+            params.sourceContentType = contentType
+                    .getMediaSourceParamsContentType();
+            /*
+             * if the content has separate audio tracks (eg languages) you may
+			 * select one using MediaSourceParams, eg params.language="es";
+			 */
+            String contentTypeValue = contentType.toString();
+            if (videourl.contains(".mpd")) {
+                videourl = playerProxy.makeUrl(videourl, PlaylistProxy.MediaSourceType.valueOf((contentTypeValue == "MP4" || contentTypeValue == "HLS" || contentTypeValue == "DASH") ? contentTypeValue : "SINGLE_FILE"), params);
+
+            }
+            emVideoView.setVideoURI(Uri.parse(videourl));
+
+
+        } catch (ErrorCodeException e) {
+            // Consult WasabiErrors.txt for resolution of the error codes
+            //  onBackPressed();
+            backCalled();
+            return;
+        } catch (IllegalArgumentException e) {
+            // onBackPressed();
+            backCalled();
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            // onBackPressed();
+            backCalled();
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            //  onBackPressed();
+            backCalled();
+            e.printStackTrace();
+        }
+
+    }
 }

@@ -84,6 +84,7 @@ import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
 import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiController.AddToFavAsync;
@@ -289,11 +290,13 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     public TimedTextObject srt;
     TextView subtitleText;
     long CurrentUsedData = 0;
+    String active_track_index = "0";
     String restrict_stream_id = "0";
     private SubtitleProcessingTask subsFetchTask;
     TextView detailsTextView, colortitle, colortitle1, benefitsTitleTextView, benefitsStoryTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days, lineTextview, repetitionTitleTextView, repetitionTextView, lineTextview1;
     ImageView bannerImageView, playButton, moviePoster, share;
-
+    boolean change_resolution = false;
+    boolean is_paused = false;
     RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout, image_logo;
     LinearLayout story_layout;
     String movieUniqueId = "", movieGenre = "";
@@ -859,7 +862,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     pDialog.hide();
 
                 }
-                onBackPressed();
+                backCalled();
+                //onBackPressed();
             }
         });
 
@@ -1418,6 +1422,9 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                     if (playerModel.getPlayPos() >= emVideoView.getDuration() / 1000) {
                         played_length = 0;
+                    }else{
+                        played_length = playerModel.getPlayPos() * 1000;
+                        current_played_length = played_length;
                     }
 
                     video_completed = false;
@@ -1455,7 +1462,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                             startTimer();
 
 
-                            Log.v("SUBHA","played_length === " + played_length);
+                            Log.v("SUBHA","played_length ===  resumepop " + played_length);
 
                             if (played_length > 0) {
                                 ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
@@ -2932,22 +2939,255 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.v("BKS", "elseclickedddddd");
-        /*loginresultcode = requestCode;
-        if (requestCode == 40500) {
-            if (resultCode == RESULT_OK) {
-                Util.favorite_clicked = false;
+        if (requestCode == 8001) {
+            latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
+            latest_center_play_pause.setVisibility(View.GONE);
+            center_play_pause.setImageResource(R.drawable.ic_media_pause);
 
-                loggedInStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
+            player.utils.Util.call_finish_at_onUserLeaveHint = true;
+            watchStatus = "halfplay";
+            //  playerPosition = Util.dataModel.getPlayPos();
+            emVideoView.start();
+             /*   emVideoView.seekTo(played_length);
+                seekBar.setProgress(played_length);*/
+            seekBar.setProgress(emVideoView.getCurrentPosition());
 
-                AsynLoadMovieDetails asyncViewFavorite = new AsynLoadMovieDetails();
-                asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
+            updateProgressBar();
+
+
+        }
+        if (requestCode == 8002) {
+            latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
+            latest_center_play_pause.setVisibility(View.GONE);
+            center_play_pause.setImageResource(R.drawable.ic_media_pause);
+            player.utils.Util.call_finish_at_onUserLeaveHint = true;
+            watchStatus = "start";
+            // playerPosition = Util.dataModel.getPlayPos();
+            emVideoView.start();
+               /* emVideoView.seekTo(played_length);
+                seekBar.setProgress(played_length);
+                updateProgressBar();
+                emVideoView.start();*/
+            seekBar.setProgress(emVideoView.getCurrentPosition());
+            updateProgressBar();
+
+        }
+
+        if (requestCode == 22222) {
+
+            Log.v("BIBHU1111", "requestCode=" + requestCode + "==========resultCode==" + resultCode);
+            player.utils.Util.call_finish_at_onUserLeaveHint = true;
+
+            if (isDrm) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(YogaPlayerActivity.this)) {
+                    List_Of_Resolution_Format.clear();
+                    List_Of_FileSize.clear();
+                    List_Of_Resolution_Url.clear();
+                    List_Of_Resolution_Url_Used_For_Download.clear();
+
+
+                    asynWithdrm = new AsynWithdrm();
+                    asynWithdrm.executeOnExecutor(threadPoolExecutor);
+
+                    Log.v("BIBHU1111", "(playerModel.getOfflineUrl()=" + (playerModel.getOfflineUrl().size()));
+
+
+                    if (playerModel.getOfflineUrl().size() > 0) {
+                        Download_SubTitle(playerModel.getOfflineUrl().get(0));
+                    }
+                }
             } else {
-                Log.v("BKS", "elseclickedddddd");
-                Util.favorite_clicked = false;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(YogaPlayerActivity.this)) {
+                    // This is applicable for NON-DRM contnet.
+
+                    List_Of_Resolution_Url.clear();
+                    List_Of_FileSize.clear();
+                    if (List_Of_Resolution_Url.size() > 0) {
+                        for (int i = 1; i < List_Of_Resolution_Url.size(); i++) {
+                            List_Of_Resolution_Url.add(playerModel.ResolutionUrl.get(i));
+                        }
+
+                        pDialog_for_gettig_filesize = new ProgressBarHandler(YogaPlayerActivity.this);
+                        pDialog_for_gettig_filesize.show();
+
+                        new DetectDownloadingFileSize().execute();
+                    } else {
+                        new DownloadFileFromURL().execute(playerModel.getVideoUrl());
+                    }
+                }
             }
 
-        }*/
-//
+        }
+
+        if (requestCode == 1001) {
+
+            player.utils.Util.call_finish_at_onUserLeaveHint = true;
+
+
+            if (data.getStringExtra("yes").equals("1002")) {
+
+                watchStatus = "halfplay";
+                playerPosition = playerModel.getPlayPos();
+                player_start_time = playerPosition;
+                PreviousUsedDataByApp(false);
+                emVideoView.start();
+                emVideoView.seekTo(played_length);
+                seekBar.setProgress(played_length);
+                updateProgressBar();
+
+            } else {
+                if (playerModel.getPreRoll() == 1 && playerModel.getAdNetworkId() == 1) {
+                    if (player.utils.Util.checkNetwork(YogaPlayerActivity.this)) {
+                        player.utils.Util.call_finish_at_onUserLeaveHint = false;
+                        player.utils.Util.hide_pause = true;
+                        ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                        latest_center_play_pause.setVisibility(View.VISIBLE);
+
+
+                        if (emVideoView.isPlaying()) {
+                            emVideoView.pause();
+                            latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
+                            center_play_pause.setImageResource(R.drawable.ic_media_play);
+                            mHandler.removeCallbacks(updateTimeTask);
+
+                        }
+
+                        if (center_pause_paly_timer_is_running) {
+                            center_pause_paly_timer.cancel();
+                            center_pause_paly_timer_is_running = false;
+                            Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
+
+
+                            subtitle_change_btn.setVisibility(View.INVISIBLE);
+                            primary_ll.setVisibility(View.GONE);
+                            last_ll.setVisibility(View.GONE);
+                            center_play_pause.setVisibility(View.GONE);
+                            current_time.setVisibility(View.GONE);
+                        }
+
+
+                        /**ad **/
+
+                        Intent adIntent = new Intent(YogaPlayerActivity.this, AdPlayerActivity.class);
+                        adIntent.putExtra("fromAd", "fromAd");
+                        adIntent.putExtra("PlayerModel", playerModel);
+                        adIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                        startActivityForResult(adIntent, 8002);
+                        /**ad **/
+                    } else {
+                        Toast.makeText(getApplicationContext(), player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.NO_INTERNET_CONNECTION, player.utils.Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    emVideoView.start();
+                    seekBar.setProgress(emVideoView.getCurrentPosition());
+                    updateProgressBar();
+                }
+            }
+            if (SubTitlePath.size() > 0) {
+
+                CheckSubTitleParsingType("1");
+
+                subtitleDisplayHandler = new Handler();
+                subsFetchTask = new SubtitleProcessingTask("1");
+                subsFetchTask.execute();
+            } else {
+                asyncVideoLogDetails = new AsyncVideoLogDetails();
+                asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            }
+        }
+        if (requestCode == 222) {
+
+
+            if (data.getStringExtra("type").equals("resolution")) {
+//                Toast.makeText(getApplicationContext(),"resolution == "+data.getStringExtra("position"),Toast.LENGTH_SHORT).show();
+                mHandler.removeCallbacks(updateTimeTask);
+                if (!data.getStringExtra("position").equals("nothing")) {
+
+                    if (!emVideoView.isPlaying()) {
+                        is_paused = true;
+                    }
+                    change_resolution = true;
+                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
+                    emVideoView.setVideoURI(Uri.parse(ResolutionUrl.get(Integer.parseInt(data.getStringExtra("position")))));
+
+                }
+
+            } else {
+                if (mCastSession != null && mCastSession.isConnected()) {
+                    player.utils.Util.call_finish_at_onUserLeaveHint = false;
+                }
+
+
+                if (!data.getStringExtra("position").equals("nothing")) {
+
+                    if (data.getStringExtra("position").equals("0")) {
+                        // Stop Showing Subtitle
+                        if (subtitleDisplayHandler != null)
+                            subtitleDisplayHandler.removeCallbacks(subtitleProcessesor);
+                        subtitleText.setText("");
+
+                        active_track_index = "";
+
+                        Log.v("BIBHU", "selected trackid===========**" + active_track_index);
+
+                        // check chromecast is connected or not , if connected then remove the active track id
+
+                        if (mCastSession != null && mCastSession.isConnected()) {
+
+                            subtitleText.setText("");
+                            remoteMediaClient.setActiveMediaTracks(new long[]{}).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {
+                                @Override
+                                public void onResult(@NonNull RemoteMediaClient.MediaChannelResult mediaChannelResult) {
+                                    if (!mediaChannelResult.getStatus().isSuccess()) {
+                                        Log.v("SUBHA", "Failed with status code:" +
+                                                mediaChannelResult.getStatus().getStatusCode());
+                                        Toast.makeText(getApplicationContext(), "failed to off subtitle", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+
+
+                    } else {
+                        try {
+                            CheckSubTitleParsingType(data.getStringExtra("position"));
+
+                            subtitleDisplayHandler = new Handler();
+                            subsFetchTask = new SubtitleProcessingTask(data.getStringExtra("position"));
+                            subsFetchTask.execute();
+
+                            active_track_index = (Integer.parseInt(data.getStringExtra("position")) - 1) + "";
+                            int id = Integer.parseInt(active_track_index);
+
+                            Log.v("BIBHU", " trackid===========" + id);
+
+                            // check chromecast is connected or not , if connected then remove the active track id
+
+                            if (mCastSession != null && mCastSession.isConnected()) {
+                                subtitleText.setText("");
+                                remoteMediaClient.setActiveMediaTracks(new long[]{id}).setResultCallback(new ResultCallback<RemoteMediaClient.MediaChannelResult>() {
+                                    @Override
+                                    public void onResult(@NonNull RemoteMediaClient.MediaChannelResult mediaChannelResult) {
+                                        if (!mediaChannelResult.getStatus().isSuccess()) {
+                                            Log.v("SUBHA", "Failed with status code:" +
+                                                    mediaChannelResult.getStatus().getStatusCode());
+                                            Toast.makeText(getApplicationContext(), "failed to set subtitle", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
+
+
+                        } catch (Exception e) {
+                        }
+
+                    }
+
+                }
+            }
+
+        }
         if (requestCode == 30060 && resultCode == RESULT_OK) {
             if (NetworkStatus.getInstance().isConnected(this)) {
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
@@ -3483,7 +3723,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         Util.dataModel = dbModel;
 
         //validate user called.
-        ValidateUser(getApplicationContext(), useridStr, contentDetailsOutput.getId(), contentDetailsOutput.getIsEpisode());
+        ValidateUser(getApplicationContext(), preferenceManager.getUseridFromPref(), contentDetailsOutput.getMuviUniqId(), contentDetailsOutput.getIsEpisode());
 
     }
 
@@ -3532,6 +3772,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
         getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+        getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
         Log.v("SUBHA","video details user id === " + preferenceManager.getUseridFromPref());
 
@@ -6166,7 +6407,113 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
         };
     }
 
+    public void backCalled() {
 
+
+        if (asyncVideoLogDetails != null) {
+            asyncVideoLogDetails.cancel(true);
+        }
+        if (asyncFFVideoLogDetails != null) {
+            asyncFFVideoLogDetails.cancel(true);
+        }
+        if (progressView != null && progressView.isShown()) {
+            progressView = null;
+        }
+        if (timer != null) {
+            stoptimertask();
+            timer = null;
+        }
+        AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+        asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+        return;
+      /*  if (video_completed == false){
+
+            AsyncResumeVideoLogDetails  asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+            asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            return;
+        }*//*else{
+            watchStatus = "com"
+            asyncVideoLogDetails = new AsyncVideoLogDetails();
+            asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+        }*//*
+        mHandler.removeCallbacks(updateTimeTask);
+        if (emVideoView!=null) {
+            emVideoView.release();
+        }
+        finish();
+        overridePendingTransition(0, 0);*/
+    }
+
+    /* public void onBackPressed() {
+         super.onBackPressed();
+         Log.v("SUBHA","HHVID"+videoLogId);
+         if (asynGetIpAddress!=null){
+             asynGetIpAddress.cancel(true);
+         }
+         if (asyncVideoLogDetails!=null){
+             asyncVideoLogDetails.cancel(true);
+         }
+         if (asyncFFVideoLogDetails!=null){
+             asyncFFVideoLogDetails.cancel(true);
+         }
+         if (progressView!=null && progressView.isShown()){
+             progressView = null;
+         }
+         if (timer!=null){
+             stoptimertask();
+             timer = null;
+         }
+         mHandler.removeCallbacks(updateTimeTask);
+         if (emVideoView!=null) {
+             emVideoView.release();
+         }
+         finish();
+         overridePendingTransition(0, 0);
+     }*/
+    @Override
+    protected void onUserLeaveHint() {
+
+        //if (played_length <= 0) {
+       /* if (asynGetIpAddress != null) {
+            asynGetIpAddress.cancel(true);
+        }*/
+        if (asyncVideoLogDetails != null) {
+            asyncVideoLogDetails.cancel(true);
+        }
+        if (asyncFFVideoLogDetails != null) {
+            asyncFFVideoLogDetails.cancel(true);
+        }
+        if (progressView != null && progressView.isShown()) {
+            progressView = null;
+        }
+        if (timer != null && player.utils.Util.call_finish_at_onUserLeaveHint) {
+            stoptimertask();
+            timer = null;
+        }
+
+        if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1") && player.utils.Util.call_finish_at_onUserLeaveHint) {
+
+            AsyncResumeVideoLogDetails_HomeClicked asyncResumeVideoLogDetails_homeClicked = new AsyncResumeVideoLogDetails_HomeClicked();
+            asyncResumeVideoLogDetails_homeClicked.executeOnExecutor(threadPoolExecutor);
+        }
+
+        if (player.utils.Util.call_finish_at_onUserLeaveHint) {
+
+            Log.v("BIBHU6", "finish activity");
+
+            player.utils.Util.call_finish_at_onUserLeaveHint = true;
+
+            mHandler.removeCallbacks(updateTimeTask);
+            if (emVideoView != null) {
+                emVideoView.release();
+            }
+
+            finish();
+            overridePendingTransition(0, 0);
+            super.onUserLeaveHint();
+        }
+
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();

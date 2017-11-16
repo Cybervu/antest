@@ -161,12 +161,12 @@ public class ProgramPlayerAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public int getItemCount() {
         int itemcount;
-        if (data.size()>4){
+      /*  if (data.size()>4){
             itemcount = 4;
         }else{
             itemcount = data.size();
-        }
-        return  itemcount;
+        }*/
+        return  data.size();
     }
     public static int calculateInSampleSize(BitmapFactory.Options opt, int reqWidth, int reqHeight){
         final int height = opt.outHeight;
