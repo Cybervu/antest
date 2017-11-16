@@ -106,6 +106,7 @@ import static com.home.vod.preferences.LanguagePreference.YES;
  * Created by User on 24-07-2015.
  */
 public class Util {
+    public static MediaInfo mSendingMedia;
     public static boolean app_is_in_player_context = false;
 
 
