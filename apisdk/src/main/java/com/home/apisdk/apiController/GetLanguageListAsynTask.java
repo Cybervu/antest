@@ -12,6 +12,7 @@ import android.util.Log;
 
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.Utils;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 
@@ -109,56 +110,11 @@ public class GetLanguageListAsynTask extends AsyncTask<LanguageListInputModel, V
         Log.v("MUVISDK", "this.languageListInputModel.getAuthToken()" + this.languageListInputModel.getAuthToken());
 
         try {
-
-            try {
                 URL url = new URL(APIUrlConstant.getGetLanguageListUrl());
-                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-                conn.setReadTimeout(10000);
-                conn.setConnectTimeout(15000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("authToken", this.languageListInputModel.getAuthToken());
                 String query = builder.build().getEncodedQuery();
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(query);
-                writer.flush();
-                writer.close();
-                os.close();
-
-                InputStream ins = conn.getInputStream();
-                InputStreamReader isr = new InputStreamReader(ins);
-                BufferedReader in = new BufferedReader(isr);
-
-                String inputLine;
-
-                while ((inputLine = in.readLine()) != null) {
-                    System.out.println(inputLine);
-                    responseStr = inputLine;
-                    Log.v("MUVISDK", "responseStr" + responseStr);
-
-                }
-                in.close();
-
-            }
-            // Execute HTTP Post Request
-            catch (org.apache.http.conn.ConnectTimeoutException e) {
-                Log.v("MUVISDK", "org.apache.http.conn.ConnectTimeoutException e" + e.toString());
-
-                status = 0;
-                message = "";
-
-            } catch (IOException e) {
-                Log.v("MUVISDK", "IOException" + e.toString());
-
-                status = 0;
-                message = "";
-            }
+                responseStr = Utils.handleHttpAndHttpsRequest(url, query, status, message);
 
             JSONObject myJson = null;
             if (responseStr != null) {

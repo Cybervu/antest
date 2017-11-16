@@ -13,11 +13,50 @@ public class Video_Details_Output {
     String videoResolution;
     String videoUrl;
     String emed_url;
+
+    public boolean isWatermark_status() {
+        return watermark_status;
+    }
+
+    public void setWatermark_status(boolean watermark_status) {
+        this.watermark_status = watermark_status;
+    }
+
     ArrayList<String> SubTitleName = new ArrayList<>();
     String studio_approved_url, licenseUrl;
     String is_offline;
     String channel_id;
     int midRoll;
+
+    boolean watermark_status = false;
+    boolean watermark_email = false;
+
+    public boolean isWatermark_email() {
+        return watermark_email;
+    }
+
+    public void setWatermark_email(boolean watermark_email) {
+        this.watermark_email = watermark_email;
+    }
+
+    public boolean isWatermark_ip() {
+        return watermark_ip;
+    }
+
+    public void setWatermark_ip(boolean watermark_ip) {
+        this.watermark_ip = watermark_ip;
+    }
+
+    public boolean isWatermark_date() {
+        return watermark_date;
+    }
+
+    public void setWatermark_date(boolean watermark_date) {
+        this.watermark_date = watermark_date;
+    }
+
+    boolean watermark_ip = false;
+    boolean watermark_date = false;
 
     /**
      * This Method is use to Get the Download Status

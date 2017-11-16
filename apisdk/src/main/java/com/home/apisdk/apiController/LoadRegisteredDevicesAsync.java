@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
+import com.home.apisdk.Utils;
 import com.home.apisdk.apiModel.LoadRegisteredDevicesInput;
 import com.home.apisdk.apiModel.LoadRegisteredDevicesOutput;
 
@@ -108,56 +109,16 @@ public class LoadRegisteredDevicesAsync extends AsyncTask<LoadRegisteredDevicesI
 
         try {
 
-            try {
-                URL url = new URL(APIUrlConstant.getManageDevices());
-                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-                conn.setReadTimeout(10000);
-                conn.setConnectTimeout(15000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
 
-                Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.loadRegisteredDevicesInput.getAuthToken())
-                        .appendQueryParameter(HeaderConstants.USER_ID, this.loadRegisteredDevicesInput.getUser_id())
-                        .appendQueryParameter(HeaderConstants.DEVICE, this.loadRegisteredDevicesInput.getDevice())
-                        .appendQueryParameter(HeaderConstants.LANG_CODE, this.loadRegisteredDevicesInput.getLang_code());
-                String query = builder.build().getEncodedQuery();
+            URL url = new URL(APIUrlConstant.getManageDevices());
 
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(query);
-                writer.flush();
-                writer.close();
-                os.close();
-
-                InputStream ins = conn.getInputStream();
-                InputStreamReader isr = new InputStreamReader(ins);
-                BufferedReader in = new BufferedReader(isr);
-
-                String inputLine;
-
-                while ((inputLine = in.readLine()) != null) {
-                    System.out.println(inputLine);
-                    responseStr = inputLine;
-                    Log.v("MUVISDK", "responseStr" + responseStr);
-
-                }
-                in.close();
-
-
-            } catch (org.apache.http.conn.ConnectTimeoutException e) {
-
-                status = 0;
-                message = "Error";
-
-
-            } catch (IOException e) {
-                status = 0;
-                message = "Error";
-            }
+            Uri.Builder builder = new Uri.Builder()
+                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.loadRegisteredDevicesInput.getAuthToken())
+                    .appendQueryParameter(HeaderConstants.USER_ID, this.loadRegisteredDevicesInput.getUser_id())
+                    .appendQueryParameter(HeaderConstants.DEVICE, this.loadRegisteredDevicesInput.getDevice())
+                    .appendQueryParameter(HeaderConstants.LANG_CODE, this.loadRegisteredDevicesInput.getLang_code());
+            String query = builder.build().getEncodedQuery();
+            responseStr = Utils.handleHttpAndHttpsRequest(url, query, status, message);
 
             JSONObject myJson = null;
             if (responseStr != null) {
