@@ -836,7 +836,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 playerModel.setMovieUniqueId(movieUniqueId);
                 playerModel.setUserId(preferenceManager.getUseridFromPref());
                 playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
-                playerModel.setAuthTokenStr(authTokenStr.trim());
+                playerModel.setAuthToken(authTokenStr.trim());
                 playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH);
                 playerModel.setEpisode_id("0");
                 playerModel.setIsFreeContent(isFreeContent);

@@ -2436,7 +2436,10 @@ dependencies {
     }
 //    compile project(':apisdk')
 //    compile project(':muviplayersdk')
-    compile project(':muvisdk')
+//    compile project(':muvisdk')
+
+    compile 'com.muvi:MUVISDK:v1.0'
+
     compile files('libs/wasabi.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile('com.spotxchange:spotx-sdk-android:3.1.+') {

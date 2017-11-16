@@ -17,8 +17,6 @@ import java.util.Timer;
  */
 public class Util {
 
-
-
     public static String LANGUAGE_SHARED_PRE = "SdkLanguage";
     public static String DOWNLOAD_INFO_PREF = "download_info_pref";
 /*

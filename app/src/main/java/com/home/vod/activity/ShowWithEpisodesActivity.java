@@ -2564,7 +2564,7 @@ MonetizationHandler monetizationHandler;
         playerModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
         playerModel.setUserId(preferenceManager.getUseridFromPref());
         playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
-        playerModel.setAuthTokenStr(authTokenStr.trim());
+        playerModel.setAuthToken(authTokenStr.trim());
         playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH.trim());
         playerModel.setEpisode_id(item.getEpisodeStreamUniqueId());
         playerModel.setVideoTitle(movieNameStr);

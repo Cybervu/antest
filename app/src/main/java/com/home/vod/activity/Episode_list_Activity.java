@@ -1635,7 +1635,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             playerModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
             playerModel.setUserId(preferenceManager.getUseridFromPref());
             playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
-            playerModel.setAuthTokenStr(authTokenStr.trim());
+            playerModel.setAuthToken(authTokenStr.trim());
             playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH);
             playerModel.setEpisode_id(item.getEpisodeStreamUniqueId());
             playerModel.setVideoTitle(item.getEpisodeTitle());
