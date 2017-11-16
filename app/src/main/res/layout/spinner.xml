@@ -8,9 +8,8 @@
 
     <TextView
         android:id="@+id/cardTextView"
-        android:layout_width="fill_parent"
+        style="@style/cardTextView"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:paddingLeft="@dimen/Login_drawing_padding"
         android:text="vbuivheiuv"
         android:textColor="@color/hint_color"

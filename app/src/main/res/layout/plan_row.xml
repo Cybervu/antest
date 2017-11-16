@@ -8,9 +8,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
         <LinearLayout
             android:id="@+id/subscriptionDetailsTextView"
@@ -30,13 +30,8 @@
 
                 <TextView
                     android:id="@+id/planNameTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Quarterly"
-                    android:textColor="@color/buttonTextColor"
-                    android:textSize="@dimen/itemtitle1_text_size" />
+                    style="@style/planNameTextView"
+                    android:text="Quarterly" />
 
             </RelativeLayout>
 
@@ -52,28 +47,19 @@
 
                 <TextView
                     android:id="@+id/planPurchaseCurrenyTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/videoGenreTextView_padding"
-                    android:text="$ "
-                    android:textColor="#000"
-                    android:textSize="@dimen/plainrow_text_size" />
+                    style="@style/planPurchaseCurrenyTextView"
+                    android:text="$ " />
 
                 <TextView
                     android:id="@+id/planPurchaseValueTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="125 "
-                    android:textColor="@color/button_background_plan_textview"
-                    android:textSize="@dimen/purchasevalue_text_size" />
+                    style="@style/planPurchaseValueTextView"
+                    android:text="125 " />
 
                 <TextView
                     android:id="@+id/planPurchaseMonthTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/planPurchaseCurrenyTextView"
                     android:paddingTop="@dimen/planPurchaseMonthTextView_padding"
                     android:text="(3 months )"
-                    android:textColor="#000"
                     android:textSize="@dimen/itemtitle1_text_size" />
 
             </LinearLayout>
@@ -82,15 +68,8 @@
 
         <ImageView
             android:id="@+id/select_planMark"
-            android:layout_width="@dimen/plainmark_width"
-            android:layout_height="@dimen/plainmark_height"
+            style="@style/select_planMark_imageview"
             android:layout_alignLeft="@+id/subscriptionDetailsTextView"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/subscriptionDetailsTextView"
-            android:layout_marginLeft="@dimen/select_planMark_margin"
-            android:layout_marginStart="@dimen/select_planMark_margin2"
-            android:layout_marginTop="@dimen/loginImageViewMarging_top"
-            android:background="@drawable/mark"
-            android:visibility="visible" />
+            android:layout_alignStart="@+id/subscriptionDetailsTextView" />
     </RelativeLayout>
 </RelativeLayout>

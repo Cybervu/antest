@@ -30,16 +30,14 @@
 
                 <TextView
                     android:id="@+id/content_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/planPurchaseValueTextView"
                     android:text="Purchase"
                     android:textColor="@color/pageTitleColor"
                     android:textSize="@dimen/email_text_size" />
 
                 <TextView
                     android:id="@+id/content_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/planPurchaseValueTextView"
                     android:text="Content Name"
                     android:textColor="@color/pageTitleColor"
                     android:textSize="@dimen/email_text_size"
@@ -62,30 +60,15 @@
 
             <EditText
                 android:id="@+id/voucher_code"
-                android:layout_width="@dimen/main_frame_height"
-                android:layout_height="@dimen/card_expiry_height"
-                android:layout_marginRight="@dimen/textColor_margin"
-                android:layout_weight="2"
+                style="@style/voucher_code_edittext_popup"
                 android:hint="Enter Voucher Code"
-                android:paddingLeft="@dimen/Login_drawing_padding"
-                android:textColor="@color/editTextColor"
-                android:textColorHint="@color/hint_color"
-                android:textSize="@dimen/login_text_size"
-                android:textStyle="normal" />
+                android:paddingLeft="@dimen/Login_drawing_padding" />
 
             <Button
                 android:id="@+id/apply"
-                android:layout_width="@dimen/main_frame_height"
-                android:layout_height="@dimen/card_no_height"
-                android:layout_marginLeft="@dimen/textColor_margin"
-                android:layout_weight="1"
-                android:background="@drawable/button_radious"
+                style="@style/apply_button2"
                 android:stateListAnimator="@null"
-                android:text="APPLY"
-                android:textAllCaps="false"
-                android:textColor="#ffffff"
-                android:textSize="@dimen/login_text_size"
-                android:textStyle="bold" />
+                android:text="APPLY" />
 
         </LinearLayout>
 
@@ -98,10 +81,7 @@
 
             <TextView
                 android:id="@+id/voucher_success"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/loginImageViewMarging_top"
-                android:layout_marginLeft="@dimen/loginImageViewMarging_top"
+                style="@style/voucher_success_textview"
                 android:text="Voucher Applied Successfully!!"
                 android:textColor="@color/button_background"
                 android:textSize="@dimen/edit_text_size"
@@ -109,14 +89,10 @@
 
             <Button
                 android:id="@+id/watch_now"
-                android:layout_width="wrap_content"
+                style="@style/watch_now_button"
                 android:layout_height="@dimen/submit_height_size"
-                android:layout_gravity="right"
-                android:background="@drawable/voucher_inactive_button"
                 android:stateListAnimator="@null"
                 android:text="      Wathc Now      "
-                android:textAllCaps="false"
-                android:textColor="#7f7f7f"
                 android:textSize="@dimen/login_text_size" />
 
         </LinearLayout>

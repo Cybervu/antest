@@ -3,24 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#fff"
-    android:padding="@dimen/main_padding"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/main_padding">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/scanbtn_height"
         android:id="@+id/title"
-        android:textSize="@dimen/withoutpayment_text_size"
-        android:text="wdeded"
-        android:gravity="center_vertical"
-        android:layout_marginLeft="@dimen/confirm_passwrd_margin_top"
-        android:textColor="#808080"
-        android:orientation="vertical" />
-<!--    <View
+        style="@style/resolution_list_title"
         android:layout_width="match_parent"
-        android:background="@color/holo_red_dark"
-        android:layout_marginTop="3dp"
-        android:id="@+id/view"
-        android:layout_height="2dp" />-->
+        android:layout_marginLeft="@dimen/confirm_passwrd_margin_top"
+        android:text="wdeded"
+        android:textSize="@dimen/withoutpayment_text_size" />
+    <!--    <View
+            android:layout_width="match_parent"
+            android:background="@color/holo_red_dark"
+            android:layout_marginTop="3dp"
+            android:id="@+id/view"
+            android:layout_height="2dp" />-->
 
 </LinearLayout>

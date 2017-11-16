@@ -19,13 +19,8 @@
 
             <TextView
                 android:id="@+id/heading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/pre_order_button_margin"
-                android:text="Select Purchase Type"
-                android:textColor="@color/pageTitleColor"
-                android:textSize="@dimen/vdiotitle1_text_size"
-                android:textStyle="bold" />
+                style="@style/heading_textview_voucher_popup"
+                android:text="Select Purchase Type" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -44,14 +39,10 @@
 
             <RadioButton
                 android:id="@+id/completeRadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/voucherRadioButton"
                 android:text="  Show"
-                android:textColor="@color/pageTitleColor"
                 android:textSize="@dimen/vdiotitle_text_size" />
             <!--  android:button="@drawable/radiobutton_style"-->
-
-            />
         </LinearLayout>
 
         <LinearLayout
@@ -62,10 +53,8 @@
 
             <RadioButton
                 android:id="@+id/seasonRadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/voucherRadioButton"
                 android:text="  Season"
-                android:textColor="@color/pageTitleColor"
                 android:textSize="@dimen/vdiotitle_text_size" />
 
         </LinearLayout>
@@ -78,26 +67,19 @@
 
             <RadioButton
                 android:id="@+id/episodeRadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/voucherRadioButton"
                 android:text="  Episode"
-                android:textColor="@color/pageTitleColor"
                 android:textSize="@dimen/vdiotitle_text_size" />
 
         </LinearLayout>
 
         <Button
             android:id="@+id/payNowButton"
+            style="@style/payNowButton2"
             android:layout_width="@dimen/okbtn_width"
             android:layout_height="@dimen/registerbtn_height"
-            android:layout_gravity="right"
-            android:layout_marginBottom="@dimen/payment_relative_margin"
-            android:layout_marginRight="@dimen/payment_relative_margin"
-            android:background="@drawable/button_radious"
-            android:gravity="center"
             android:stateListAnimator="@null"
             android:text="Next"
-            android:textAllCaps="false"
             android:textColor="@color/pageTitleColor"
             android:textSize="@dimen/cast_name_text" />
 

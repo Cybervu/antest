@@ -8,26 +8,16 @@
 
     <TextView
         android:id="@+id/sectionTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/payment_spinner_padding"
+        style="@style/sectionTitleTextview"
         android:textColor="@color/pageTitleColor"
         android:textSize="@dimen/sectiontitle_text_size"
-        android:textStyle="normal"
-        android:layout_marginLeft="@dimen/marginleft10dp"/>
+        android:textStyle="normal" />
 
 
     <GridView
         android:id="@+id/imagesGridView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/sectionTitle"
-        android:layout_marginBottom="@dimen/pre_order_button_margin"
-        android:layout_marginTop="@dimen/pre_order_button_margin"
-        android:horizontalSpacing="@dimen/pre_order_button_margin"
-        android:paddingLeft="@dimen/Login_drawing_padding"
-        android:verticalSpacing="@dimen/pre_order_button_margin"
-       >
+        style="@style/mylibrary_imagesGridView"
+        android:layout_below="@id/sectionTitle">
 
     </GridView>
     <!--<com.twotoasters.jazzylistview.JazzyGridView
@@ -69,15 +59,9 @@
 
         <TextView
             android:id="@+id/noInternetTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
+           style="@style/noInternet"
             android:maxLines="4"
-            android:singleLine="false"
-            android:textColor="@color/noInternetColor"
-            android:textSize="@dimen/testview_text_size"
-            android:textStyle="bold" />
+            android:singleLine="false"/>
 
 
     </RelativeLayout>
@@ -93,15 +77,8 @@
 
         <TextView
             android:id="@+id/noDataTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:maxLines="4"
-            android:singleLine="false"
-            android:textColor="@color/noInternetColor"
-            android:textSize="@dimen/testview_text_size"
-            android:textStyle="bold" />
+            style="@style/noInternet"
+            android:maxLines="4"/>
 
 
     </RelativeLayout>
@@ -118,12 +95,8 @@
 
         <ImageView
             android:id="@+id/arrowIv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/profile_spinner_margin"
-            android:background="@drawable/filter_arrow" />
+            style="@style/arrowIv_imageview"
+            android:layout_marginRight="@dimen/profile_spinner_margin"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/demoListView"

@@ -2031,4 +2031,158 @@
         <item name="android:textSize">@dimen/okbtn_text_size</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="mylibrary_imagesGridView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/pre_order_button_margin</item>
+        <item name="android:layout_marginTop">@dimen/pre_order_button_margin</item>
+        <item name="android:horizontalSpacing">@dimen/pre_order_button_margin</item>
+        <item name="android:paddingLeft">@dimen/Login_drawing_padding</item>
+        <item name="android:verticalSpacing">@dimen/pre_order_button_margin</item>
+    </style>
+
+    <style name="textViewLine_nav_drawer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/divider_height</item>
+        <item name="android:layout_marginBottom">@dimen/textColor_margin</item>
+        <item name="android:layout_marginLeft">@dimen/payment_textview_showname_margin</item>
+        <item name="android:layout_marginRight">@dimen/payment_textview_showname_margin</item>
+        <item name="android:layout_marginTop">@dimen/textColor_margin</item>
+        <item name="android:background">@color/nav_text_line_color</item>
+        <item name="android:padding">@dimen/main_padding</item>
+    </style>
+
+    <style name="nav_drawer_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_marginLeft">@dimen/current_time_margin_bottom</item>
+        <item name="android:gravity">left</item>
+        <item name="android:textColor">@color/nav_drawer_text_Color</item>
+        <item name="android:textSize">@dimen/nav_drawer_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="movieImageView">
+        <item name="android:layout_width">@dimen/videogrid_width</item>
+        <item name="android:layout_height">@dimen/videogrid_height</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:src">@drawable/logo</item>
+    </style>
+
+    <style name="close_album_art_imageview">
+        <item name="android:layout_width">@dimen/close_album_img_width</item>
+        <item name="android:layout_height">@dimen/close_album_img_height</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:src">@drawable/close</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="planNameTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textSize">@dimen/itemtitle1_text_size</item>
+    </style>
+
+    <style name="planPurchaseCurrenyTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/videoGenreTextView_padding</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textSize">@dimen/plainrow_text_size</item>
+    </style>
+
+    <style name="planPurchaseValueTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/button_background_plan_textview</item>
+        <item name="android:textSize">@dimen/purchasevalue_text_size</item>
+    </style>
+
+    <style name="select_planMark_imageview">
+        <item name="android:layout_width">@dimen/plainmark_width</item>
+        <item name="android:layout_height">@dimen/plainmark_height</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginLeft">@dimen/select_planMark_margin</item>
+        <item name="android:layout_marginStart">@dimen/select_planMark_margin2</item>
+        <item name="android:layout_marginTop">@dimen/loginImageViewMarging_top</item>
+        <item name="android:background">@drawable/mark</item>
+        <item name="android:visibility">visible</item>
+    </style>
+
+    <style name="selected_resolution_imageview">
+        <item name="android:layout_width">@dimen/selected_resolution_width</item>
+        <item name="android:layout_height">@dimen/selected_resolution_height</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginLeft">@dimen/ppv_margin</item>
+        <item name="android:src">@drawable/selected_resolution</item>
+    </style>
+
+    <style name="resolution_list_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/scanbtn_height</item>
+        <item name="android:layout_marginLeft">@dimen/resolution_list_margin</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:textColor">#808080</item>
+        <item name="android:textSize">@dimen/offlinesubtitle_text_size</item>
+    </style>
+
+    <style name="userreviewTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/textColor_margin</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">10</item>
+        <item name="android:lines">2</item>
+        <item name="android:textColor">@color/pageTitleColor</item>
+        <item name="android:textSize">@dimen/user_review_textsize</item>
+    </style>
+
+    <style name="toolbar_custom">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="heading_textview_voucher_popup">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/pre_order_button_margin</item>
+        <item name="android:textColor">@color/pageTitleColor</item>
+        <item name="android:textSize">@dimen/vdiotitle1_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="voucher_code_edittext_popup">
+        <item name="android:layout_width">@dimen/main_frame_height</item>
+        <item name="android:layout_height">@dimen/card_expiry_height</item>
+        <item name="android:layout_marginRight">@dimen/textColor_margin</item>
+        <item name="android:layout_weight">2</item>
+        <item name="android:paddingLeft">@dimen/Login_drawing_padding</item>
+        <item name="android:textColor">@color/editTexColor</item>
+        <item name="android:textColorHint">@color/hint_color</item>
+        <item name="android:textSize">@dimen/login_text_size</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="apply_button2">
+        <item name="android:layout_width">@dimen/main_frame_height</item>
+        <item name="android:layout_height">@dimen/card_no_height</item>
+        <item name="android:layout_marginLeft">@dimen/textColor_margin</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/button_radious</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">@dimen/login_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
