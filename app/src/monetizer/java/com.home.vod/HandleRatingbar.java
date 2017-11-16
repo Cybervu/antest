@@ -27,4 +27,5 @@ public class HandleRatingbar {
         favorite_view.setVisibility(View.GONE);
     }
 
+
 }

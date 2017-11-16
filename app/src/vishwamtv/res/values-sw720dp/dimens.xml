@@ -14,9 +14,12 @@
     <dimen name="singleimgheight">216dp</dimen>
     <dimen name="buttonheight">47dp</dimen>
     <dimen name="titletxt">24sp</dimen>
+
+
     <dimen name="forgot_logo_width">200dp</dimen>
     <dimen name="forgot_logo_height">200dp</dimen>
-    <dimen name="email_text_size">18sp</dimen>
+    <dimen name="email_text_size">14sp</dimen>
+    <dimen name="btnmore_text_size">16sp</dimen>
     <dimen name="edit_text_size">18sp</dimen>
     <dimen name="login_text_size">20sp</dimen>
     <dimen name="submit_text_size">22sp</dimen>
@@ -28,6 +31,7 @@
     <dimen name="login_newuser_size">18sp</dimen>
     <dimen name="signup_textsize">18sp</dimen>
     <dimen name="alreadymember_text_size">17sp</dimen>
+    <dimen name="banner_image_height">300dp</dimen>
     <dimen name="already_login_size">18sp</dimen>
     <dimen name="register_button">21sp</dimen>
     <dimen name="user_text_size">30sp</dimen>
@@ -40,11 +44,10 @@
     <dimen name="vdiocast_text_size">19sp</dimen>
     <dimen name="btnmore_width">120dp</dimen>
     <dimen name="btnmore_height">48dp</dimen>
-    <dimen name="btnmore_text_size">16sp</dimen>
     <dimen name="banerimg_height">300dp</dimen>
     <dimen name="vdiotitle1_text_size">19sp</dimen>
     <dimen name="homefrag_height">310dp</dimen>
-    <dimen name="slider_height">355dp</dimen>
+    <dimen name="slider_height">440dp</dimen>
     <dimen name="subtitle_width">36dp</dimen>
     <dimen name="subtitle_height">33dp</dimen>
     <dimen name="compress_width">21dp</dimen>
@@ -78,22 +81,20 @@
     <dimen name="contactformtitle_text_size">17sp</dimen>
     <dimen name="editbox_text_size">18sp</dimen>
     <dimen name="home280_layout_width">157dp</dimen>
-    <dimen name="list_singlecard_img_width">102dp</dimen>
-    <dimen name="list_singlecard_img_height">146dp</dimen>
     <dimen name="videogrid_width">140dp</dimen>
     <dimen name="videogrid_height">200dp</dimen>
     <dimen name="videogrid_land_width">182dp</dimen>
     <dimen name="videogrid_land_height">101dp</dimen>
     <dimen name="plainrowlayout_height">100dp</dimen>
     <dimen name="plainrowlayout_width">130dp</dimen>
-    <dimen name="purchasevalue_text_size">45sp</dimen>
+    <dimen name="purchasevalue_text_size">60sp</dimen>
     <dimen name="purchasemonth_text_size">18sp</dimen>
-    <dimen name="movieimg_width">102dp</dimen>
-    <dimen name="movieimg_height">146dp</dimen>
+    <dimen name="movieimg_width">140dp</dimen>
+    <dimen name="movieimg_height">200dp</dimen>
     <dimen name="video280_width">185dp</dimen>
     <dimen name="video280_height">100dp</dimen>
-    <dimen name="listitemlayout_height">345dp</dimen>
-    <dimen name="itemtitle_text_size">24sp</dimen>
+    <dimen name="listitemlayout_height">350dp</dimen>
+    <dimen name="itemtitle_text_size">16sp</dimen>
     <dimen name="left_padding">10dp</dimen>
     <dimen name="right_padding">10dp</dimen>
     <dimen name="login_padding">10dp</dimen>
@@ -108,18 +109,18 @@
     <dimen name="register_margin_top">40dp</dimen>
     <dimen name="cast_width_icon">150dp</dimen>
     <dimen name="cast_height_icon">130dp</dimen>
-    <dimen name="itemtitle1_text_size">18sp</dimen>
-    <dimen name="homelogo_height">85dp</dimen>
+    <dimen name="itemtitle1_text_size">16sp</dimen>
+    <dimen name="homelogo_height">87dp</dimen>
     <dimen name="homelogo_width">185dp</dimen>
     <dimen name="card_expiryyear_width">200dp</dimen>
     <dimen name="card_expiryyear_height">60dp</dimen>
     <dimen name="plainrow_mrgin_top">30dp</dimen>
-    <dimen name="yearline_text_size">80sp</dimen>
+    <dimen name="yearline_text_size">50sp</dimen>
     <dimen name="preorderbtn_padding">20dp</dimen>
     <dimen name="registerbtn_height">50dp</dimen>
     <dimen name="submit_width_size">200dp</dimen>
 
-
+    <dimen name="paymentOptionsTitle_textsize">24sp</dimen>
     <dimen name="cast_details_width">200dp</dimen>
     <dimen name="cast_details_height">200dp</dimen>
     <dimen name="cast_textsize">17sp</dimen>
@@ -134,4 +135,14 @@
     <dimen name="user_review_textsize">14sp</dimen>
 
     <dimen name="plainrow_text_size">20sp</dimen>
+
+    <!--new dimen optimization for layouts-->
+    <dimen name="viewmore_btn_width">95dp</dimen>
+    <dimen name="viewmore_btn_height">40dp</dimen>
+    <dimen name="viewmore_text_size">13sp</dimen>
+    <dimen name="homescreen_title_text_size">15sp</dimen>
+    <dimen name="list_singlecard_img_width">140dp</dimen>
+    <dimen name="list_singlecard_img_height">200dp</dimen>
+    <dimen name="movie_videotitle_size">18sp</dimen>
+
 </resources>
