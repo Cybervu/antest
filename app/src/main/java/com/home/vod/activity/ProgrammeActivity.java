@@ -39,6 +39,8 @@ import com.androidquery.AQuery;
 import com.crashlytics.android.Crashlytics;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.google.android.gms.cast.Cast;
+import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaTrack;
@@ -89,6 +91,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -191,6 +194,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
     int playerPosition = 0;
     boolean video_prepared = false;
     RemoteMediaClient remoteMediaClient;
+    boolean video_completed_at_chromecast = false;
 
     /*chromecast-------------------------------------*/
     private VideoView mVideoView;
@@ -1665,6 +1669,33 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
             private void onApplicationConnected(CastSession castSession) {
 
+
+
+
+
+                try {
+                    castSession.setMessageReceivedCallbacks("urn:x-cast:muvi.mcrt.final", new Cast.MessageReceivedCallback() {
+                        @Override
+                        public void onMessageReceived(CastDevice castDevice, String s, String s1) {
+                            Log.v("bibhu", "onMessageReceived Message from receiver=" + s1);
+
+
+                            if (s1.contains("completed")) {
+                                video_completed_at_chromecast = true;
+                                Log.v("bibhu", "video completed at chromecast");
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        emVideoView.reset();
+                                    }
+                                });
+                            }
+
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
 
                 stoptimertask();
