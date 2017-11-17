@@ -1389,11 +1389,28 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
 
             //player model set
+
             playerModel.setMidRoll(_video_details_output.getMidRoll());
             playerModel.setPostRoll(_video_details_output.getPostRoll());
             playerModel.setChannel_id(_video_details_output.getChannel_id());
             playerModel.setAdNetworkId(_video_details_output.getAdNetworkId());
             playerModel.setPreRoll(_video_details_output.getPreRoll());
+
+            /**
+             * Set Data For WaterMark
+             */
+
+            if(_video_details_output.isWatermark_status()){
+                playerModel.setWaterMark(true);
+                if(_video_details_output.isWatermark_email())
+                    playerModel.useEmail(true);
+                if(_video_details_output.isWatermark_ip())
+                    playerModel.useIp(true);
+                if(_video_details_output.isWatermark_date())
+                    playerModel.useDate(true);
+            }else{
+                playerModel.setWaterMark(false);
+            }
 
             // for online subtitle
             playerModel.setSubTitleName(_video_details_output.getSubTitleName());
@@ -1434,11 +1451,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
             }
 
 
-            // This bolck is not coming from API
-            playerModel.useIp(true);
-            playerModel.useDate(true);
-            playerModel.useEmail(true);
-            playerModel.setWaterMark(false);
+
 
 
             playerModel.setFakeSubTitlePath(_video_details_output.getFakeSubTitlePath());

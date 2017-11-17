@@ -451,6 +451,22 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             playerModel.setAdNetworkId(_video_details_output.getAdNetworkId());
             playerModel.setPreRoll(_video_details_output.getPreRoll());
 
+            /**
+             * Set Data For WaterMark
+             */
+
+            if(_video_details_output.isWatermark_status()){
+                playerModel.setWaterMark(true);
+                if(_video_details_output.isWatermark_email())
+                    playerModel.useEmail(true);
+                if(_video_details_output.isWatermark_ip())
+                    playerModel.useIp(true);
+                if(_video_details_output.isWatermark_date())
+                    playerModel.useDate(true);
+            }else{
+                playerModel.setWaterMark(false);
+            }
+
             // for online subtitle
             playerModel.setSubTitleName(_video_details_output.getSubTitleName());
             playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
@@ -490,11 +506,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             }
 
 
-            // This bolck is not coming from API
-            playerModel.useIp(true);
-            playerModel.useDate(true);
-            playerModel.useEmail(true);
-            playerModel.setWaterMark(false);
+
 
 
             playerModel.setFakeSubTitlePath(_video_details_output.getFakeSubTitlePath());

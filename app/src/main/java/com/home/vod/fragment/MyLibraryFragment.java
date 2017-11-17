@@ -916,6 +916,22 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             FakeSubTitlePath = _video_details_output.getFakeSubTitlePath();
             playerModel.setSubTitleLanguage(_video_details_output.getSubTitleLanguage());
 
+            /**
+             * Set Data For WaterMark
+             */
+
+            if(_video_details_output.isWatermark_status()){
+                playerModel.setWaterMark(true);
+                if(_video_details_output.isWatermark_email())
+                    playerModel.useEmail(true);
+                if(_video_details_output.isWatermark_ip())
+                    playerModel.useIp(true);
+                if(_video_details_output.isWatermark_date())
+                    playerModel.useDate(true);
+            }else{
+                playerModel.setWaterMark(false);
+            }
+
             //for chromecast subtitle
             playerModel.setChromecsatSubtitleUrl(_video_details_output.getSubTitlePath());
             playerModel.setChromecsatSubtitleLanguage(_video_details_output.getSubTitleName());

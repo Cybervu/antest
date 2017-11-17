@@ -709,6 +709,24 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
             playerModel.setAdNetworkId(_video_details_output.getAdNetworkId());
             playerModel.setPreRoll(_video_details_output.getPreRoll());
 
+
+            /**
+             * Set Data For WaterMark
+             */
+
+            if(_video_details_output.isWatermark_status()){
+                playerModel.setWaterMark(true);
+                if(_video_details_output.isWatermark_email())
+                    playerModel.useEmail(true);
+                if(_video_details_output.isWatermark_ip())
+                    playerModel.useIp(true);
+                if(_video_details_output.isWatermark_date())
+                    playerModel.useDate(true);
+            }else{
+                playerModel.setWaterMark(false);
+            }
+
+
             // for online subtitle
             playerModel.setSubTitleName(_video_details_output.getSubTitleName());
             playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
@@ -748,13 +766,6 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
             }
 
 
-            // This bolck is not coming from API
-            playerModel.useIp(true);
-            playerModel.useDate(true);
-            playerModel.useEmail(true);
-            playerModel.setWaterMark(false);
-
-
             playerModel.setFakeSubTitlePath(_video_details_output.getFakeSubTitlePath());
             playerModel.setVideoResolution(_video_details_output.getVideoResolution());
             FakeSubTitlePath = _video_details_output.getFakeSubTitlePath();
@@ -786,16 +797,15 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
                 // condition for checking if the response has third party url or not.
                 if (_video_details_output.getThirdparty_url() == null ||
-                        _video_details_output.getThirdparty_url().matches("")
-                        ) {
+                        _video_details_output.getThirdparty_url().matches("")) {
 
 
                     playerModel.setThirdPartyPlayer(false);
                     final Intent playVideoIntent;
 
                     if (Util.dataModel.getAdNetworkId() == 3) {
-                        LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
+                        LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
                         playVideoIntent = new Intent(PaymentInfoActivity.this, PlayerActivity.class);
 
                     } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
@@ -803,7 +813,6 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                             playVideoIntent = new Intent(PaymentInfoActivity.this, AdPlayerActivity.class);
                         } else {
                             playVideoIntent = new Intent(PaymentInfoActivity.this, PlayerActivity.class);
-
                         }
                     } else {
                         playVideoIntent = new Intent(PaymentInfoActivity.this, PlayerActivity.class);
