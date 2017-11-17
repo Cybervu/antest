@@ -1305,10 +1305,16 @@ MonetizationHandler monetizationHandler;
                 playerModel.setWaterMark(true);
                 if(_video_details_output.isWatermark_email())
                     playerModel.useEmail(true);
+                else
+                    playerModel.useEmail(false);
                 if(_video_details_output.isWatermark_ip())
                     playerModel.useIp(true);
+                else
+                    playerModel.useIp(false);
                 if(_video_details_output.isWatermark_date())
                     playerModel.useDate(true);
+                else
+                    playerModel.useDate(false);
             }else{
                 playerModel.setWaterMark(false);
             }

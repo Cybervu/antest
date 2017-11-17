@@ -2587,23 +2587,28 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
              * Set Data For WaterMark
              */
 
-          /*  if(_video_details_output.isWatermark_status()){
+            if(_video_details_output.isWatermark_status()){
                 playerModel.setWaterMark(true);
                 if(_video_details_output.isWatermark_email())
                     playerModel.useEmail(true);
+                else
+                    playerModel.useEmail(false);
                 if(_video_details_output.isWatermark_ip())
                     playerModel.useIp(true);
+                else
+                    playerModel.useIp(false);
                 if(_video_details_output.isWatermark_date())
                     playerModel.useDate(true);
+                else
+                    playerModel.useDate(false);
             }else{
                 playerModel.setWaterMark(false);
             }
-*/
 
-            playerModel.setWaterMark(true);
+          /*  playerModel.setWaterMark(true);
             playerModel.useIp(true);
             playerModel.useEmail(true);
-            playerModel.useDate(true);
+            playerModel.useDate(true);*/
             // for online subtitle
             playerModel.setSubTitleName(_video_details_output.getSubTitleName());
             playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
