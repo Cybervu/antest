@@ -331,7 +331,7 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
-        magicmovies_Prod_ {6
+        magicmovies_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
@@ -388,6 +388,9 @@ android.variantFilter { variant ->
             && (isRelease||isDebug)) {
         variant.setIgnore(false)
     }else if (vendor.equals('yoteshingo') && (environment.equals('yoteshingo_staging_')||environment.equals('yoteshingo_Prod_'))
+            && (isRelease||isDebug)) {
+        variant.setIgnore(false)
+    }else if (vendor.equals('magicmovies') && (environment.equals('magicmovies_staging_')||environment.equals('magicmovies_Prod_'))
             && (isRelease||isDebug)) {
         variant.setIgnore(false)
     }else{
