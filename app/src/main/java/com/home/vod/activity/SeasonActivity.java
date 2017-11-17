@@ -12,9 +12,9 @@ import android.view.View;
 import android.widget.Toast;
 
 
-import com.home.apisdk.apiController.GetContentDetailsAsynTask;
-import com.home.apisdk.apiModel.ContentDetailsInput;
-import com.home.apisdk.apiModel.ContentDetailsOutput;
+import com.release.muvisdk.api.apiController.GetContentDetailsAsynTask;
+import com.release.muvisdk.api.apiModel.ContentDetailsInput;
+import com.release.muvisdk.api.apiModel.ContentDetailsOutput;
 import com.home.vod.R;
 import com.home.vod.adapter.SeasonAdapter;
 import com.home.vod.model.SeasonModel;

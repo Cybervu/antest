@@ -16,9 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import com.home.apisdk.apiController.ForgotpassAsynTask;
-import com.home.apisdk.apiModel.Forgotpassword_input;
-import com.home.apisdk.apiModel.Forgotpassword_output;
+import com.release.muvisdk.api.apiController.ForgotpassAsynTask;
+import com.release.muvisdk.api.apiModel.Forgotpassword_input;
+import com.release.muvisdk.api.apiModel.Forgotpassword_output;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
@@ -31,7 +31,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import player.activity.Player;
+import com.release.muvisdk.player.activity.Player;
 
 import static com.home.vod.preferences.LanguagePreference.BTN_SUBMIT;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;

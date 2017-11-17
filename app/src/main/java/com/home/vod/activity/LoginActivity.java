@@ -59,31 +59,31 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.images.WebImage;
-import com.home.apisdk.apiController.AsyncGmailReg;
-import com.home.apisdk.apiController.CheckDeviceAsyncTask;
-import com.home.apisdk.apiController.CheckFbUserDetailsAsyn;
-import com.home.apisdk.apiController.GetIpAddressAsynTask;
-import com.home.apisdk.apiController.GetSimultaneousLogoutAsync;
-import com.home.apisdk.apiController.GetValidateUserAsynTask;
-import com.home.apisdk.apiController.LoginAsynTask;
-import com.home.apisdk.apiController.LogoutAsynctask;
-import com.home.apisdk.apiController.SocialAuthAsynTask;
-import com.home.apisdk.apiController.VideoDetailsAsynctask;
-import com.home.apisdk.apiModel.CheckDeviceInput;
-import com.home.apisdk.apiModel.CheckDeviceOutput;
-import com.home.apisdk.apiModel.CheckFbUserDetailsInput;
-import com.home.apisdk.apiModel.GetVideoDetailsInput;
-import com.home.apisdk.apiModel.GmailLoginInput;
-import com.home.apisdk.apiModel.GmailLoginOutput;
-import com.home.apisdk.apiModel.Video_Details_Output;
-import com.home.apisdk.apiModel.Login_input;
-import com.home.apisdk.apiModel.Login_output;
-import com.home.apisdk.apiModel.LogoutInput;
-import com.home.apisdk.apiModel.SimultaneousLogoutInput;
-import com.home.apisdk.apiModel.SocialAuthInputModel;
-import com.home.apisdk.apiModel.SocialAuthOutputModel;
-import com.home.apisdk.apiModel.ValidateUserInput;
-import com.home.apisdk.apiModel.ValidateUserOutput;
+import com.release.muvisdk.api.apiController.AsyncGmailReg;
+import com.release.muvisdk.api.apiController.CheckDeviceAsyncTask;
+import com.release.muvisdk.api.apiController.CheckFbUserDetailsAsyn;
+import com.release.muvisdk.api.apiController.GetIpAddressAsynTask;
+import com.release.muvisdk.api.apiController.GetSimultaneousLogoutAsync;
+import com.release.muvisdk.api.apiController.GetValidateUserAsynTask;
+import com.release.muvisdk.api.apiController.LoginAsynTask;
+import com.release.muvisdk.api.apiController.LogoutAsynctask;
+import com.release.muvisdk.api.apiController.SocialAuthAsynTask;
+import com.release.muvisdk.api.apiController.VideoDetailsAsynctask;
+import com.release.muvisdk.api.apiModel.CheckDeviceInput;
+import com.release.muvisdk.api.apiModel.CheckDeviceOutput;
+import com.release.muvisdk.api.apiModel.CheckFbUserDetailsInput;
+import com.release.muvisdk.api.apiModel.GetVideoDetailsInput;
+import com.release.muvisdk.api.apiModel.GmailLoginInput;
+import com.release.muvisdk.api.apiModel.GmailLoginOutput;
+import com.release.muvisdk.api.apiModel.Video_Details_Output;
+import com.release.muvisdk.api.apiModel.Login_input;
+import com.release.muvisdk.api.apiModel.Login_output;
+import com.release.muvisdk.api.apiModel.LogoutInput;
+import com.release.muvisdk.api.apiModel.SimultaneousLogoutInput;
+import com.release.muvisdk.api.apiModel.SocialAuthInputModel;
+import com.release.muvisdk.api.apiModel.SocialAuthOutputModel;
+import com.release.muvisdk.api.apiModel.ValidateUserInput;
+import com.release.muvisdk.api.apiModel.ValidateUserOutput;
 import com.home.vod.BuildConfig;
 import com.home.vod.LoginHandler;
 import com.home.vod.MonetizationHandler;
@@ -116,11 +116,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.MyLibraryPlayer;
-import player.activity.Player;
-import player.activity.ResumePopupActivity;
+import com.release.muvisdk.player.activity.AdPlayerActivity;
+import com.release.muvisdk.player.activity.PlayerActivity;
+import com.release.muvisdk.player.activity.Player;
+import com.release.muvisdk.player.activity.ResumePopupActivity;
 
 import static com.home.vod.preferences.LanguagePreference.ANDROID_VERSION;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
@@ -184,7 +183,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         LogoutAsynctask.LogoutListener, CheckDeviceAsyncTask.CheckDeviceListener,
         GetSimultaneousLogoutAsync.SimultaneousLogoutAsyncListener,
         CheckFbUserDetailsAsyn.CheckFbUserDetailsListener, SocialAuthAsynTask.SocialAuthListener
-        , AsyncGmailReg.AsyncGmailListener, GetIpAddressAsynTask.IpAddressListener {
+        ,AsyncGmailReg.AsyncGmailListener, GetIpAddressAsynTask.IpAddressListener {
 
 
     /*subtitle-------------------------------------*/
@@ -931,20 +930,20 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             if (Util.dataModel.getAdNetworkId() == 3) {
                                 LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                                playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                                playVideoIntent = new Intent(LoginActivity.this, PlayerActivity.class);
 
                             } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                                 if (Util.dataModel.getPlayPos() <= 0) {
                                     playVideoIntent = new Intent(LoginActivity.this, AdPlayerActivity.class);
                                 } else {
-                                    playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                                    playVideoIntent = new Intent(LoginActivity.this, PlayerActivity.class);
 
                                 }
                             } else {
-                                playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                                playVideoIntent = new Intent(LoginActivity.this, PlayerActivity.class);
 
                             }
-                            // playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                            // playVideoIntent = new Intent(LoginActivity.this, PlayerActivity.class);
                         }
                         runOnUiThread(new Runnable() {
                             public void run() {
@@ -977,7 +976,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         });
                     }
                 } else {
-                    final Intent playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent = new Intent(LoginActivity.this, PlayerActivity.class);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 /*playVideoIntent.putExtra("SubTitleName", SubTitleName);
                                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);
@@ -2767,7 +2766,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 //                            }
 //                            else
 //                            {
-//                                playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+//                                playVideoIntent = new Intent(LoginActivity.this, PlayerActivity.class);
 //                            }
 //                            /**subtitle**/
 //                            runOnUiThread(new Runnable() {
@@ -3709,20 +3708,20 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     if (Util.dataModel.getAdNetworkId() == 3) {
                         LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                        playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new Intent(LoginActivity.this, PlayerActivity.class);
 
                     } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                         if (Util.dataModel.getPlayPos() <= 0) {
                             playVideoIntent = new Intent(LoginActivity.this, AdPlayerActivity.class);
                         } else {
-                            playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new Intent(LoginActivity.this, PlayerActivity.class);
 
                         }
                     } else {
-                        playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new Intent(LoginActivity.this, PlayerActivity.class);
 
                     }
-                    // playVideoIntent = new Intent(LoginActivity.this, ExoPlayerActivity.class);
+                    // playVideoIntent = new Intent(LoginActivity.this, PlayerActivity.class);
                 }
                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                /* playVideoIntent.putExtra("SubTitleName", SubTitleName);

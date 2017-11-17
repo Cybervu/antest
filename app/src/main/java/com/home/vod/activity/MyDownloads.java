@@ -38,12 +38,19 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
+import com.release.muvisdk.api.APIUrlConstant;
 import com.home.vod.R;
 import com.home.vod.adapter.MyDownloadAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
+import com.release.muvisdk.player.activity.MarlinBroadbandExample;
+import com.release.muvisdk.player.activity.ResumePopupActivity;
+import com.release.muvisdk.player.model.DownloadContentModel;
+import com.release.muvisdk.player.utils.DBHelper;
+import com.release.muvisdk.player.utils.Util;
+
 
 
 import org.apache.http.HttpResponse;
@@ -73,17 +80,13 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import player.activity.ResumePopupActivity;
-import player.model.ContactModel1;
-import player.utils.DBHelper;
-import player.utils.Util;
-
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
+import static com.home.vod.util.Constant.authTokenStr;
 import static java.lang.Thread.sleep;
 
 public class MyDownloads extends AppCompatActivity {
@@ -98,9 +101,11 @@ public class MyDownloads extends AppCompatActivity {
     MyDownloadAdapter adapter;
     SharedPreferences pref;
     String emailIdStr = "";
+    String user_Id = "";
+    String StreamId = "";
     DBHelper dbHelper;
     static String path,filename,_filename,token,title,poster,genre,duration,rdate,movieid,user,uniqid;
-    ArrayList<ContactModel1> download;
+    ArrayList<DownloadContentModel> download;
     ProgressBarHandler pDialog;
     ArrayList<String> SubTitleName = new ArrayList<>();
     ArrayList<String> SubTitlePath = new ArrayList<>();
@@ -286,12 +291,10 @@ public class MyDownloads extends AppCompatActivity {
         //  islogin = preferenceManager.getLoginFeatureFromPref();
         if (preferenceManager!=null){
             emailIdStr= preferenceManager.getEmailIdFromPref();
-
-
+            user_Id= preferenceManager.getUseridFromPref();
         }else {
             emailIdStr = "";
-
-
+            user_Id = "";
         }
 
         list= (ListView)findViewById(R.id.listView);
@@ -314,6 +317,9 @@ public class MyDownloads extends AppCompatActivity {
                 Position = position;
                 SubtitleUrl = "";
 
+                final String data[] = download.get(position).getMUVIID().trim().split("@@@");
+                StreamId = data[1];
+
                 if(Util.checkNetwork(MyDownloads.this))
                 {
                     asynGetIpAddress = new AsynGetIpAddress();
@@ -333,7 +339,6 @@ public class MyDownloads extends AppCompatActivity {
         if(download.size()>0) {
             adapter = new MyDownloadAdapter(MyDownloads.this, android.R.layout.simple_dropdown_item_1line, download);
             list.setAdapter(adapter);
-
         }else {
 
             nodata.setVisibility(View.VISIBLE);
@@ -678,7 +683,7 @@ public class MyDownloads extends AppCompatActivity {
 
                 // Execute HTTP Post Request
                 try {
-                    URL myurl = new URL(Util.loadIPUrl);
+                    URL myurl = new URL(APIUrlConstant.IP_ADDRESS_URL);
                     HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
                     InputStream ins = con.getInputStream();
                     InputStreamReader isr = new InputStreamReader(ins);
@@ -758,20 +763,20 @@ public class MyDownloads extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             try {
                 HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.loadVideoUrl.trim());
+                HttpPost httppost = new HttpPost(APIUrlConstant.getVideoDetailsUrl().trim());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken",authTokenStr.trim());
                 httppost.addHeader("content_uniq_id", download.get(Position).getMuviid());
-                httppost.addHeader("stream_uniq_id", download.get(Position).getStreamId());
+                httppost.addHeader("stream_uniq_id", StreamId);
                 httppost.addHeader("internet_speed",MainActivity.internetSpeed.trim());
                 httppost.addHeader("user_id",preferenceManager.getUseridFromPref());
                 httppost.addHeader("lang_code",Util.getTextofLanguage(MyDownloads.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
 
-                Log.v("SUBHA","authToken = "+Util.authTokenStr.trim());
+                Log.v("SUBHA","authToken = "+authTokenStr.trim());
                 Log.v("SUBHA","content_uniq_id = "+download.get(Position).getMuviid());
-                Log.v("SUBHA","stream_uniq_id = "+download.get(Position).getStreamId());
+                Log.v("SUBHA","stream_uniq_id = "+StreamId);
                 Log.v("SUBHA","user_id = "+preferenceManager.getUseridFromPref());
 
                 // Execute HTTP Post Request
@@ -814,7 +819,7 @@ public class MyDownloads extends AppCompatActivity {
                             DB.execSQL(Qry1);
 
                             if ((myJson.has("played_length")) && myJson.getString("played_length").trim() != null && !myJson.getString("played_length").trim().isEmpty() && !myJson.getString("played_length").trim().equals("null") && !myJson.getString("played_length").trim().matches("")) {
-                                Played_Length = Util.isDouble(myJson.getString("played_length"));
+                                Played_Length = com.home.vod.util.Util.isDouble(myJson.getString("played_length"));
                                 Played_Length = Played_Length * 1000;
                             }
 
@@ -983,8 +988,10 @@ public class MyDownloads extends AppCompatActivity {
         new Thread(new Runnable(){
             public void run(){
 
+                final String data[] = download.get(Position).getMUVIID().trim().split("@@@");
+                final String titles=data[0];
+
                 final String pathh=download.get(Position).getPath();
-                final String titles=download.get(Position).getMUVIID();
                 final String gen=download.get(Position).getGenere();
                 final String tok=download.get(Position).getToken();
                 final String contentid=download.get(Position).getContentid();
@@ -992,7 +999,6 @@ public class MyDownloads extends AppCompatActivity {
                 final String poster=download.get(Position).getPoster();
                 final String vidduration=download.get(Position).getDuration();
                 final String filename=pathh.substring(pathh.lastIndexOf("/") + 1);
-
 
                 try {
                     sleep(1200);
@@ -1005,13 +1011,13 @@ public class MyDownloads extends AppCompatActivity {
                             Intent in=new Intent(MyDownloads.this,MarlinBroadbandExample.class);
                             Log.v("SUBHA", "PATH" + pathh);
 
-
+                            in.putExtra("rootUrl", APIUrlConstant.BASE_URl);
+                            in.putExtra("authToken", authTokenStr);
                             in.putExtra("SubTitleName", SubTitleName);
                             in.putExtra("SubTitlePath", SubTitlePath);
 
                             in.putExtra("FILE", pathh);
                             in.putExtra("Title", titles);
-                            //in.putExtra("GENRE", gen);
                             in.putExtra("TOK", tok);
                             in.putExtra("poster", poster);
                             in.putExtra("contid", contentid);
@@ -1022,18 +1028,16 @@ public class MyDownloads extends AppCompatActivity {
                             in.putExtra("download_id_from_watch_access_table", download_id_from_watch_access_table);
                             in.putExtra("PlayedLength", PlayedLength);
                             in.putExtra("UniqueId",""+download.get(Position).getUniqueId());
-                            in.putExtra("streamId",""+download.get(Position).getStreamId());
+                            in.putExtra("streamId",data[1]);
                             in.putExtra("download_content_type",""+download.get(Position).getDownloadContentType());
-
-
+                            in.putExtra("user_id",user_Id);
+                            in.putExtra("email",emailIdStr);
 
                             in.putExtra("Chromecast_Subtitle_Url",Chromecast_Subtitle_Url);
                             in.putExtra("Chromecast_Subtitle_Language_Name",Chromecast_Subtitle_Language_Name);
                             in.putExtra("Chromecast_Subtitle_Code",Chromecast_Subtitle_Code);
 
-
-
-                            Log.v("BIBHU1","PlayedLength="+PlayedLength);
+                             Log.v("BIBHU1","PlayedLength="+PlayedLength);
 
                             //
                             startActivity(in);
@@ -1157,7 +1161,11 @@ public class MyDownloads extends AppCompatActivity {
 
         MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
         movieMetadata.putString(MediaMetadata.KEY_SUBTITLE,download.get(Position).getStory());
-        movieMetadata.putString(MediaMetadata.KEY_TITLE, download.get(Position).getMUVIID());
+
+        final String data[] = download.get(Position).getMUVIID().trim().split("@@@");
+        final String titles=data[0];
+
+        movieMetadata.putString(MediaMetadata.KEY_TITLE, titles);
         movieMetadata.addImage(new WebImage(Uri.parse(download.get(Position).getPoster())));
 
 
@@ -1167,17 +1175,17 @@ public class MyDownloads extends AppCompatActivity {
             JSONObject jsonObj = null;
             try {
                 jsonObj = new JSONObject();
-                jsonObj.put("description", download.get(Position).getMUVIID());
+                jsonObj.put("description", titles);
                 jsonObj.put("licenseUrl",licenseUrl);
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", Util.authTokenStr.trim());
+                jsonObj.put("authToken", authTokenStr.trim());
                 jsonObj.put("user_id",preferenceManager.getUseridFromPref());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id",download.get(Position).getMuviid());
-                jsonObj.put("episode_id",download.get(Position).getStreamId());
-                jsonObj.put("watch_status", "start");
+                jsonObj.put("episode_id",StreamId);
+                jsonObj.put("watch_status",watch_status);
                 jsonObj.put("device_type", "2");
                 jsonObj.put("log_id", "0");
                 jsonObj.put("active_track_index", "0");
@@ -1192,7 +1200,7 @@ public class MyDownloads extends AppCompatActivity {
                     Log.v("BIBHU4", "restrict_stream_id============0");
                 }
 
-                jsonObj.put("domain_name", Util.rootUrl().trim().substring(0, Util.rootUrl().trim().length() - 6));
+                jsonObj.put("domain_name", APIUrlConstant.BASE_URl.substring(0, APIUrlConstant.BASE_URl.trim().length() - 6));
                 jsonObj.put("is_log", "1");
 
                 //=====================End===================//
@@ -1201,7 +1209,7 @@ public class MyDownloads extends AppCompatActivity {
 
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
-                jsonObj.put("resume_time", "0");
+                jsonObj.put("resume_time",Played_Length);
                 jsonObj.put("seek_status", "");
                 // This  Code Is Added For Drm BufferLog By Bibhu ...
 
@@ -1247,6 +1255,93 @@ public class MyDownloads extends AppCompatActivity {
             Log.v("BIBHU4", "restrict_stream_id=====33=======111");
 
             togglePlayback();
+        }
+        else{
+            {
+                mediaContentType = "videos/mp4";
+                JSONObject jsonObj = null;
+                try {
+                    jsonObj = new JSONObject();
+                    jsonObj.put("description",titles);
+
+                    //  This Code Is Added For Video Log By Bibhu..
+
+                    jsonObj.put("authToken", authTokenStr.trim());
+                    jsonObj.put("user_id",preferenceManager.getUseridFromPref());
+                    jsonObj.put("ip_address", ipAddressStr.trim());
+                    jsonObj.put("movie_id",download.get(Position).getMuviid());
+                    jsonObj.put("episode_id",StreamId);
+                    jsonObj.put("watch_status",watch_status);
+                    jsonObj.put("device_type", "2");
+                    jsonObj.put("log_id", "0");
+                    jsonObj.put("active_track_index", "0");
+
+                    if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                        jsonObj.put("restrict_stream_id", "0");
+                        jsonObj.put("is_streaming_restriction", "1");
+                        Log.v("BIBHU4", "restrict_stream_id============1");
+                    } else {
+                        jsonObj.put("restrict_stream_id", "0");
+                        jsonObj.put("is_streaming_restriction", "0");
+                        Log.v("BIBHU4", "restrict_stream_id============0");
+                    }
+
+                    jsonObj.put("domain_name",APIUrlConstant.BASE_URl.trim().substring(0, APIUrlConstant.BASE_URl.trim().length() - 6));
+                    jsonObj.put("is_log", "1");
+
+                    //=====================End===================//
+
+                    // This code is changed according to new Video log //
+
+                    jsonObj.put("played_length", "0");
+                    jsonObj.put("log_temp_id", "0");
+                    jsonObj.put("resume_time",Played_Length);
+                    jsonObj.put("seek_status", "");
+                    // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                    jsonObj.put("resolution", "BEST");
+                    jsonObj.put("start_time", "0");
+                    jsonObj.put("end_time", "0");
+                    jsonObj.put("log_unique_id", "0");
+                    jsonObj.put("location", "0");
+                    jsonObj.put("bandwidth_log_id", "0");
+                    jsonObj.put("video_type", "");
+                    jsonObj.put("drm_bandwidth_by_sender", "0");
+
+                    //====================End=====================//
+
+                } catch (JSONException e) {
+                }
+                List tracks = new ArrayList();
+                Log.v("BIBHU4", "restrict_stream_id============111");
+                if(!SubtitleUrl.equals(""))
+                {
+                    Log.v("BIBHU4", "restrict_stream_id======11======111");
+                    MediaTrack englishSubtitle = new MediaTrack.Builder(0,
+                            MediaTrack.TYPE_TEXT)
+                            .setName(SubtitleLanguage)
+                            .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                            .setContentId(SubtitleUrl)
+                            .setLanguage(SubtitleCode)
+                            .setContentType("text/vtt")
+                            .build();
+                    tracks.add(englishSubtitle);
+                }
+
+
+                mediaInfo = new MediaInfo.Builder(MpdVideoUrl)
+                        .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                        .setContentType(mediaContentType)
+                        .setMetadata(movieMetadata)
+                        .setCustomData(jsonObj)
+                        .setMediaTracks(tracks)
+                        .build();
+                mSelectedMedia = mediaInfo;
+
+                Log.v("BIBHU4", "restrict_stream_id=====33=======111");
+
+                togglePlayback();
+            }
         }
     }
 

@@ -17,28 +17,28 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
-import com.home.apisdk.apiController.GetGenreListAsynctask;
-import com.home.apisdk.apiController.GetIpAddressAsynTask;
-import com.home.apisdk.apiController.GetLanguageListAsynTask;
-import com.home.apisdk.apiController.GetPlanListAsynctask;
-import com.home.apisdk.apiController.GetTranslateLanguageAsync;
-import com.home.apisdk.apiController.GetUserProfileAsynctask;
-import com.home.apisdk.apiController.IsRegistrationEnabledAsynTask;
-import com.home.apisdk.apiController.SDKInitializer;
-import com.home.apisdk.apiController.SDKInitializer;
-import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
-import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
-import com.home.apisdk.apiModel.GenreListInput;
-import com.home.apisdk.apiModel.GenreListOutput;
-import com.home.apisdk.apiModel.Get_UserProfile_Input;
-import com.home.apisdk.apiModel.Get_UserProfile_Output;
-import com.home.apisdk.apiModel.IsRegistrationEnabledInputModel;
-import com.home.apisdk.apiModel.IsRegistrationEnabledOutputModel;
-import com.home.apisdk.apiModel.LanguageListInputModel;
-import com.home.apisdk.apiModel.LanguageListOutputModel;
-import com.home.apisdk.apiModel.SubscriptionPlanInputModel;
-import com.home.apisdk.apiModel.SubscriptionPlanOutputModel;
+import com.release.muvisdk.api.apiController.CheckGeoBlockCountryAsynTask;
+import com.release.muvisdk.api.apiController.GetGenreListAsynctask;
+import com.release.muvisdk.api.apiController.GetIpAddressAsynTask;
+import com.release.muvisdk.api.apiController.GetLanguageListAsynTask;
+import com.release.muvisdk.api.apiController.GetPlanListAsynctask;
+import com.release.muvisdk.api.apiController.GetTranslateLanguageAsync;
+import com.release.muvisdk.api.apiController.GetUserProfileAsynctask;
+import com.release.muvisdk.api.apiController.IsRegistrationEnabledAsynTask;
+import com.release.muvisdk.api.apiController.SDKInitializer;
+import com.release.muvisdk.api.apiController.SDKInitializer;
+import com.release.muvisdk.api.apiModel.CheckGeoBlockInputModel;
+import com.release.muvisdk.api.apiModel.CheckGeoBlockOutputModel;
+import com.release.muvisdk.api.apiModel.GenreListInput;
+import com.release.muvisdk.api.apiModel.GenreListOutput;
+import com.release.muvisdk.api.apiModel.Get_UserProfile_Input;
+import com.release.muvisdk.api.apiModel.Get_UserProfile_Output;
+import com.release.muvisdk.api.apiModel.IsRegistrationEnabledInputModel;
+import com.release.muvisdk.api.apiModel.IsRegistrationEnabledOutputModel;
+import com.release.muvisdk.api.apiModel.LanguageListInputModel;
+import com.release.muvisdk.api.apiModel.LanguageListOutputModel;
+import com.release.muvisdk.api.apiModel.SubscriptionPlanInputModel;
+import com.release.muvisdk.api.apiModel.SubscriptionPlanOutputModel;
 import com.home.vod.R;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.network.NetworkStatus;
@@ -63,15 +63,16 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.home.apisdk.apiController.HeaderConstants.RATING;
+import static com.release.muvisdk.api.apiController.HeaderConstants.RATING;
 import static com.home.vod.preferences.LanguagePreference.*;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_GOOGLE_FCM_TOKEN;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
-import static player.utils.Util.HAS_FAVORITE;
-import static player.utils.Util.IS_CHROMECAST;
-import static player.utils.Util.IS_OFFLINE;
+import static com.release.muvisdk.player.utils.Util.HAS_FAVORITE;
+import static com.release.muvisdk.player.utils.Util.IS_CHROMECAST;
+import static com.release.muvisdk.player.utils.Util.IS_OFFLINE;
+
 
 public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAddressListener,
         CheckGeoBlockCountryAsynTask.CheckGeoBlockForCountryListener,

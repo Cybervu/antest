@@ -52,7 +52,7 @@ import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
-import com.home.apisdk.APIUrlConstant;
+import com.release.muvisdk.api.APIUrlConstant;
 import com.home.vod.R;
 import com.home.vod.Episode_Programme_Handler;
 import com.home.vod.VideolistFragmentHandler;

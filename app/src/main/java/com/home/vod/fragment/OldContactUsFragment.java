@@ -22,9 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.home.apisdk.apiController.ContactUsAsynTask;
-import com.home.apisdk.apiModel.ContactUsInputModel;
-import com.home.apisdk.apiModel.ContactUsOutputModel;
+import com.release.muvisdk.api.apiController.ContactUsAsynTask;
+import com.release.muvisdk.api.apiModel.ContactUsInputModel;
+import com.release.muvisdk.api.apiModel.ContactUsOutputModel;
 import com.home.vod.R;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.network.NetworkStatus;

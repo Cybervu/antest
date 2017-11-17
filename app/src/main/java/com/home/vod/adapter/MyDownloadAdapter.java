@@ -20,14 +20,14 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 
 import com.home.vod.util.LogUtil;
+import com.release.muvisdk.player.model.DownloadContentModel;
+import com.release.muvisdk.player.utils.DBHelper;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import player.model.ContactModel1;
-import player.utils.DBHelper;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
@@ -42,7 +42,7 @@ import static com.home.vod.preferences.LanguagePreference.WANT_TO_DELETE;
  */
 public class MyDownloadAdapter extends BaseAdapter {
     MyDownloads activity;
-    ArrayList<ContactModel1> downloadModel;
+    ArrayList<DownloadContentModel> downloadModel;
     PreferenceManager preferenceManager;
     LanguagePreference languagePreference;
     List<String[]> allElements;
@@ -50,13 +50,13 @@ public class MyDownloadAdapter extends BaseAdapter {
     String[] nextLine;
     SharedPreferences pref;
     String emailIdStr = "";
-    ContactModel1 audio;
+    DownloadContentModel audio;
     //MydownloadModel mydownloadModel;
     DBHelper dbHelper;
     public boolean downloading;
     DownloadManager downloadManager;
     //Downloadlistdb downloadlistdb;
-    public MyDownloadAdapter(MyDownloads activity, int simple_dropdown_item_1line, ArrayList<ContactModel1> downloadModel) {
+    public MyDownloadAdapter(MyDownloads activity, int simple_dropdown_item_1line, ArrayList<DownloadContentModel> downloadModel) {
 
         LogUtil.showLog("MUVI","DOWNLOAD MODEL=="+downloadModel.get(0).toString());
         this.activity = activity;
@@ -108,7 +108,8 @@ public class MyDownloadAdapter extends BaseAdapter {
                 .placeholder(R.drawable.logo)
                 .error(R.drawable.logo)
                 .into(image);
-        title.setText(downloadModel.get(position).getMUVIID());
+        String data[] = downloadModel.get(position).getMUVIID().trim().split("@@@");
+        title.setText(data[0]);
         realise_date.setText("");
         genre.setText(downloadModel.get(position).getGenere());
         String dd = downloadModel.get(position).getDuration();

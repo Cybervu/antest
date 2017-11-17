@@ -65,37 +65,37 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
-import com.home.apisdk.apiController.AddToFavAsync;
-import com.home.apisdk.apiController.DeleteFavAsync;
-import com.home.apisdk.apiController.GetContentDetailsAsynTask;
-import com.home.apisdk.apiController.GetEpisodeDeatailsAsynTask;
-import com.home.apisdk.apiController.GetIpAddressAsynTask;
-import com.home.apisdk.apiController.GetLanguageListAsynTask;
-import com.home.apisdk.apiController.GetTranslateLanguageAsync;
-import com.home.apisdk.apiController.GetValidateUserAsynTask;
-import com.home.apisdk.apiController.LogoutAsynctask;
-import com.home.apisdk.apiController.VideoDetailsAsynctask;
-import com.home.apisdk.apiController.ViewContentRatingAsynTask;
-import com.home.apisdk.apiModel.APVModel;
-import com.home.apisdk.apiModel.AddToFavInputModel;
-import com.home.apisdk.apiModel.AddToFavOutputModel;
-import com.home.apisdk.apiModel.ContentDetailsInput;
-import com.home.apisdk.apiModel.ContentDetailsOutput;
-import com.home.apisdk.apiModel.CurrencyModel;
-import com.home.apisdk.apiModel.DeleteFavInputModel;
-import com.home.apisdk.apiModel.DeleteFavOutputModel;
-import com.home.apisdk.apiModel.Episode_Details_input;
-import com.home.apisdk.apiModel.Episode_Details_output;
-import com.home.apisdk.apiModel.GetVideoDetailsInput;
-import com.home.apisdk.apiModel.Video_Details_Output;
-import com.home.apisdk.apiModel.LanguageListInputModel;
-import com.home.apisdk.apiModel.LanguageListOutputModel;
-import com.home.apisdk.apiModel.LogoutInput;
-import com.home.apisdk.apiModel.PPVModel;
-import com.home.apisdk.apiModel.ValidateUserInput;
-import com.home.apisdk.apiModel.ValidateUserOutput;
-import com.home.apisdk.apiModel.ViewContentRatingInputModel;
-import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
+import com.release.muvisdk.api.apiController.AddToFavAsync;
+import com.release.muvisdk.api.apiController.DeleteFavAsync;
+import com.release.muvisdk.api.apiController.GetContentDetailsAsynTask;
+import com.release.muvisdk.api.apiController.GetEpisodeDeatailsAsynTask;
+import com.release.muvisdk.api.apiController.GetIpAddressAsynTask;
+import com.release.muvisdk.api.apiController.GetLanguageListAsynTask;
+import com.release.muvisdk.api.apiController.GetTranslateLanguageAsync;
+import com.release.muvisdk.api.apiController.GetValidateUserAsynTask;
+import com.release.muvisdk.api.apiController.LogoutAsynctask;
+import com.release.muvisdk.api.apiController.VideoDetailsAsynctask;
+import com.release.muvisdk.api.apiController.ViewContentRatingAsynTask;
+import com.release.muvisdk.api.apiModel.APVModel;
+import com.release.muvisdk.api.apiModel.AddToFavInputModel;
+import com.release.muvisdk.api.apiModel.AddToFavOutputModel;
+import com.release.muvisdk.api.apiModel.ContentDetailsInput;
+import com.release.muvisdk.api.apiModel.ContentDetailsOutput;
+import com.release.muvisdk.api.apiModel.CurrencyModel;
+import com.release.muvisdk.api.apiModel.DeleteFavInputModel;
+import com.release.muvisdk.api.apiModel.DeleteFavOutputModel;
+import com.release.muvisdk.api.apiModel.Episode_Details_input;
+import com.release.muvisdk.api.apiModel.Episode_Details_output;
+import com.release.muvisdk.api.apiModel.GetVideoDetailsInput;
+import com.release.muvisdk.api.apiModel.Video_Details_Output;
+import com.release.muvisdk.api.apiModel.LanguageListInputModel;
+import com.release.muvisdk.api.apiModel.LanguageListOutputModel;
+import com.release.muvisdk.api.apiModel.LogoutInput;
+import com.release.muvisdk.api.apiModel.PPVModel;
+import com.release.muvisdk.api.apiModel.ValidateUserInput;
+import com.release.muvisdk.api.apiModel.ValidateUserOutput;
+import com.release.muvisdk.api.apiModel.ViewContentRatingInputModel;
+import com.release.muvisdk.api.apiModel.ViewContentRatingOutputModel;
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.HandleRatingbar;
 import com.home.vod.LoginRegistrationOnContentClickHandler;
@@ -197,23 +197,25 @@ import static com.home.vod.util.Constant.STORY_INTENT_KEY;
 import static com.home.vod.util.Constant.VIDEO_TITLE_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.languageModel;
-import static player.utils.Util.ADD_A_REVIEW;
-import static player.utils.Util.DEFAULT_ADD_A_REVIEW;
-import static player.utils.Util.DEFAULT_HAS_FAVORITE;
-import static player.utils.Util.DEFAULT_REVIEWS;
-import static player.utils.Util.HAS_FAVORITE;
-import static player.utils.Util.REVIEWS;
+import static com.release.muvisdk.player.utils.Util.ADD_A_REVIEW;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_ADD_A_REVIEW;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_IS_CHROMECAST;
+import static com.release.muvisdk.player.utils.Util.DEFAULT_REVIEWS;
+import static com.release.muvisdk.player.utils.Util.HAS_FAVORITE;
+import static com.release.muvisdk.player.utils.Util.IS_CHROMECAST;
+import static com.release.muvisdk.player.utils.Util.REVIEWS;
 
 
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
 
-import player.activity.AdPlayerActivity;
-import player.activity.ExoPlayerActivity;
-import player.activity.Player;
-import player.activity.ResumePopupActivity;
-import player.activity.ThirdPartyPlayer;
-import player.activity.YouTubeAPIActivity;
+import com.release.muvisdk.player.activity.AdPlayerActivity;
+import com.release.muvisdk.player.activity.PlayerActivity;
+import com.release.muvisdk.player.activity.Player;
+import com.release.muvisdk.player.activity.ResumePopupActivity;
+import com.release.muvisdk.player.activity.ThirdPartyPlayer;
+import com.release.muvisdk.player.activity.YouTubeAPIActivity;
 
 
 public class ShowWithEpisodesActivity extends AppCompatActivity implements
@@ -1154,8 +1156,6 @@ MonetizationHandler monetizationHandler;
 
     @Override
     public void onVideoDetailsPostExecuteCompleted(Video_Details_Output _video_details_output, int statusCode, String stus, String message) {
-        // _video_details_output.setThirdparty_url("https://www.youtube.com/watch?v=fqU2FzATTPY&spfreload=10");
-        // _video_details_output.setThirdparty_url("https://player.vimeo.com/video/192417650?color=00ff00&badge=0");
 
      /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
         then set thirdpartyurl true here and assign the url to videourl*/
@@ -1211,8 +1211,13 @@ MonetizationHandler monetizationHandler;
 
 
         if (statusCode == 200) {
-            playerModel.setIsOffline(_video_details_output.getIs_offline());
-            playerModel.setDownloadStatus(_video_details_output.getDownload_status());
+            if((_video_details_output.getIs_offline().trim().equals("1")) && _video_details_output.getDownload_status().trim().equals("1")){
+                playerModel.canDownload(true);
+            }
+            else{
+                playerModel.canDownload(false);
+            }
+
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
                 /**@bishal
@@ -1285,23 +1290,77 @@ MonetizationHandler monetizationHandler;
             Util.dataModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
 
             //player model set
-            playerModel.setAdDetails(_video_details_output.getAdDetails());
+
             playerModel.setMidRoll(_video_details_output.getMidRoll());
             playerModel.setPostRoll(_video_details_output.getPostRoll());
             playerModel.setChannel_id(_video_details_output.getChannel_id());
             playerModel.setAdNetworkId(_video_details_output.getAdNetworkId());
             playerModel.setPreRoll(_video_details_output.getPreRoll());
+
+            /**
+             * Set Data For WaterMark
+             */
+
+            if(_video_details_output.isWatermark_status()){
+                playerModel.setWaterMark(true);
+                if(_video_details_output.isWatermark_email())
+                    playerModel.useEmail(true);
+                if(_video_details_output.isWatermark_ip())
+                    playerModel.useIp(true);
+                if(_video_details_output.isWatermark_date())
+                    playerModel.useDate(true);
+            }else{
+                playerModel.setWaterMark(false);
+            }
+
+            // for online subtitle
             playerModel.setSubTitleName(_video_details_output.getSubTitleName());
             playerModel.setSubTitlePath(_video_details_output.getSubTitlePath());
+
+
+            // for offline subtitle
+            playerModel.setOfflineSubtitleUrl(_video_details_output.getOfflineUrl());
+            playerModel.setOfflineSubtitleLanguage(_video_details_output.getOfflineLanguage());
+
+
+            //for chromecast subtitle
+            playerModel.setChromecsatSubtitleUrl(_video_details_output.getSubTitlePath());
+            playerModel.setChromecsatSubtitleLanguage(_video_details_output.getSubTitleName());
+            playerModel.setChromecsatSubtitleLanguageCode(_video_details_output.getSubTitleLanguage());
+
+
+            //for resolution change in player
             playerModel.setResolutionFormat(_video_details_output.getResolutionFormat());
             playerModel.setResolutionUrl(_video_details_output.getResolutionUrl());
+
+            playerModel.setNonDrmDownloadFormatList(_video_details_output.getResolutionFormat());
+            playerModel.setNonDrmDownloadUrlList(_video_details_output.getResolutionUrl());
+
+
+
+            if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                playerModel.setIsstreaming_restricted(true);
+            }else {
+                playerModel.setIsstreaming_restricted(false);
+            }
+
+
+            if (languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).equals("1")) {
+                playerModel.setChromeCastEnable(true);
+            }else {
+                playerModel.setChromeCastEnable(false);
+            }
+
+
+
+
+
             playerModel.setFakeSubTitlePath(_video_details_output.getFakeSubTitlePath());
             playerModel.setVideoResolution(_video_details_output.getVideoResolution());
             FakeSubTitlePath = _video_details_output.getFakeSubTitlePath();
             playerModel.setSubTitleLanguage(_video_details_output.getSubTitleLanguage());
-            playerModel.setOfflineUrl(_video_details_output.getOfflineUrl());
-            playerModel.setOfflineLanguage(_video_details_output.getOfflineLanguage());
-            playerModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
+
+
 
             if (playerModel.getVideoUrl() == null ||
                     playerModel.getVideoUrl().matches("")) {
@@ -1348,19 +1407,19 @@ MonetizationHandler monetizationHandler;
                         if (Util.dataModel.getAdNetworkId() == 3) {
                             LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                            playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new Intent(ShowWithEpisodesActivity.this, PlayerActivity.class);
 
                         } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                             if (Util.dataModel.getPlayPos() <= 0) {
                                 playVideoIntent = new Intent(ShowWithEpisodesActivity.this, AdPlayerActivity.class);
                             } else {
-                                playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+                                playVideoIntent = new Intent(ShowWithEpisodesActivity.this, PlayerActivity.class);
 
                             }
 
 
                         } else {
-                            playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new Intent(ShowWithEpisodesActivity.this, PlayerActivity.class);
                         }
                         /***ad **/
                         runOnUiThread(new Runnable() {
@@ -1390,7 +1449,7 @@ MonetizationHandler monetizationHandler;
                         });
                     }
                 } else {
-                    final Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+                    final Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, PlayerActivity.class);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                     playVideoIntent.putExtra("PlayerModel", playerModel);
@@ -2510,17 +2569,14 @@ MonetizationHandler monetizationHandler;
         ResolutionUrl.clear();
         ResolutionFormat.clear();
         SubTitleLanguage.clear();
-      /*  Util.offline_url.clear();
-        Util.offline_language.clear();*/
 
 
-        //edit by bishal
-        //set the required data in playermodel
+        playerModel.setAppName(getResources().getString(R.string.app_name));
         playerModel.setStreamUniqueId(item.getEpisodeStreamUniqueId());
         playerModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
         playerModel.setUserId(preferenceManager.getUseridFromPref());
         playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
-        playerModel.setAuthTokenStr(authTokenStr.trim());
+        playerModel.setAuthToken(authTokenStr.trim());
         playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH.trim());
         playerModel.setEpisode_id(item.getEpisodeStreamUniqueId());
         playerModel.setVideoTitle(movieNameStr);
@@ -2571,8 +2627,6 @@ MonetizationHandler monetizationHandler;
                             Util.check_for_subscription = 1;
                             resumeCast.putExtra("PlayerModel", playerModel);
                             startActivityForResult(resumeCast, 2001);
-
-//                                        startActivity(resumeCast);
 
                         }
                     });
@@ -2931,7 +2985,7 @@ MonetizationHandler monetizationHandler;
                         } else {
                             final Intent playVideoIntent;
 
-                            playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+                            playVideoIntent = new Intent(ShowWithEpisodesActivity.this, PlayerActivity.class);
 
 
                             runOnUiThread(new Runnable() {
@@ -4183,21 +4237,21 @@ MonetizationHandler monetizationHandler;
                 if (Util.dataModel.getAdNetworkId() == 3) {
                     LogUtil.showLog("responseStr", "playVideoIntent" + Util.dataModel.getAdNetworkId());
 
-                    playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent = new Intent(ShowWithEpisodesActivity.this, PlayerActivity.class);
 
                 } else if (Util.dataModel.getAdNetworkId() == 1 && Util.dataModel.getPreRoll() == 1) {
                     if (Util.dataModel.getPlayPos() <= 0) {
                         playVideoIntent = new Intent(ShowWithEpisodesActivity.this, AdPlayerActivity.class);
                     } else {
-                        playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+                        playVideoIntent = new Intent(ShowWithEpisodesActivity.this, PlayerActivity.class);
 
                     }
                 } else {
-                    playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+                    playVideoIntent = new Intent(ShowWithEpisodesActivity.this, PlayerActivity.class);
 
                 }
                 /***ad **/
-                //Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, ExoPlayerActivity.class);
+                //Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, PlayerActivity.class);
                 /*playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 playVideoIntent.putExtra("SubTitleName", SubTitleName);
                 playVideoIntent.putExtra("SubTitlePath", SubTitlePath);

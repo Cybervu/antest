@@ -20,12 +20,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.home.apisdk.apiController.AddContentRatingAsynTask;
-import com.home.apisdk.apiController.ViewContentRatingAsynTask;
-import com.home.apisdk.apiModel.AddContentRatingInputModel;
-import com.home.apisdk.apiModel.AddContentRatingOutputModel;
-import com.home.apisdk.apiModel.ViewContentRatingInputModel;
-import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
+import com.release.muvisdk.api.apiController.AddContentRatingAsynTask;
+import com.release.muvisdk.api.apiController.ViewContentRatingAsynTask;
+import com.release.muvisdk.api.apiModel.AddContentRatingInputModel;
+import com.release.muvisdk.api.apiModel.AddContentRatingOutputModel;
+import com.release.muvisdk.api.apiModel.ViewContentRatingInputModel;
+import com.release.muvisdk.api.apiModel.ViewContentRatingOutputModel;
 
 import com.home.vod.R;
 import com.home.vod.adapter.ReviewsAdapter;

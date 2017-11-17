@@ -14,9 +14,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.home.apisdk.apiController.PurchaseHistoryAsyntask;
-import com.home.apisdk.apiModel.PurchaseHistoryInputModel;
-import com.home.apisdk.apiModel.PurchaseHistoryOutputModel;
+import com.release.muvisdk.api.apiController.PurchaseHistoryAsyntask;
+import com.release.muvisdk.api.apiModel.PurchaseHistoryInputModel;
+import com.release.muvisdk.api.apiModel.PurchaseHistoryOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.PurchaseHistoryAdapter;
 import com.home.vod.model.PurchaseHistoryModel;

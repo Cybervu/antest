@@ -16,10 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.home.apisdk.APIUrlConstant;
-import com.home.apisdk.apiController.RemoveDeviceAsynTask;
-import com.home.apisdk.apiModel.RemoveDeviceInputModel;
-import com.home.apisdk.apiModel.RemoveDeviceOutputModel;
+import com.release.muvisdk.api.APIUrlConstant;
+import com.release.muvisdk.api.apiController.RemoveDeviceAsynTask;
+import com.release.muvisdk.api.apiModel.RemoveDeviceInputModel;
+import com.release.muvisdk.api.apiModel.RemoveDeviceOutputModel;
 import com.home.vod.R;
 import com.home.vod.activity.LoginActivity;
 import com.home.vod.activity.ManageDevices;

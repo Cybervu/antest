@@ -10,7 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 
-import com.home.apisdk.apiModel.ViewContentRatingOutputModel;
+import com.release.muvisdk.api.apiModel.ViewContentRatingOutputModel;
 import com.home.vod.R;
 import com.home.vod.model.ReviewsItem;
 import com.home.vod.util.FontUtls;

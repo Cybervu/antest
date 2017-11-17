@@ -19,8 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
-import com.home.apisdk.apiController.AboutUsAsync;
-import com.home.apisdk.apiModel.AboutUsInput;
+import com.release.muvisdk.api.apiController.AboutUsAsync;
+import com.release.muvisdk.api.apiModel.AboutUsInput;
 import com.home.vod.R;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;

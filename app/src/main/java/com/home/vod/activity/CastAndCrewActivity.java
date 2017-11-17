@@ -15,10 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
-import com.home.apisdk.apiController.GetCelibrityAsyntask;
-import com.home.apisdk.apiModel.CelibrityInputModel;
-import com.home.apisdk.apiModel.CelibrityOutputModel;
+import com.release.muvisdk.api.apiController.GetCelibrityAsyntask;
+import com.release.muvisdk.api.apiModel.CelibrityInputModel;
+import com.release.muvisdk.api.apiModel.CelibrityOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.CastCrewAdapter;
 import com.home.vod.model.GetCastCrewItem;

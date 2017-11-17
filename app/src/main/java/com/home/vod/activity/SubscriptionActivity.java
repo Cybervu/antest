@@ -13,10 +13,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
-import com.home.apisdk.apiController.GetPlanListAsynctask;
-import com.home.apisdk.apiModel.CurrencyModel;
-import com.home.apisdk.apiModel.SubscriptionPlanInputModel;
-import com.home.apisdk.apiModel.SubscriptionPlanOutputModel;
+import com.release.muvisdk.api.apiController.GetPlanListAsynctask;
+import com.release.muvisdk.api.apiModel.CurrencyModel;
+import com.release.muvisdk.api.apiModel.SubscriptionPlanInputModel;
+import com.release.muvisdk.api.apiModel.SubscriptionPlanOutputModel;
 import com.home.vod.R;
 import com.home.vod.adapter.PlanAdapter;
 import com.home.vod.fragment.VideosListFragment;
