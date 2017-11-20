@@ -76,9 +76,14 @@ public class LanguagePreference {
     public static final String TRANSACTION_STATUS = "TRANSACTION_STATUS";
     public static final String PLAN_NAME = "PLAN_NAME";
     public static final String SEASON = "SEASON";
+    public static String NEXT = "NEXT";
+    public static String SELECT_PURCHASE_TYPE = "SELECT_PURCHASE_TYPE";
+    public static String COMPLETE_SEASON = "COMPLETE_SEASON";
     public static final String SELECT_PLAN = "SELECT_PLAN";
     public static final String SKIP_BUTTON_TITLE = "SKIP_BUTTON_TITLE";
     public static final String PURCHASE = "PURCHASE";
+    public static String ENTER_VOUCHER_CODE = "ENTER_VOUCHER_CODE";
+    public static String VOUCHER_SUCCESS = "VOUCHER_SUCCESS";
     public static final String CREDIT_CARD_DETAILS = "CREDIT_CARD_DETAILS";
     public static final String CARD_WILL_CHARGE = "CARD_WILL_CHARGE";
     public static final String SAVE_THIS_CARD = "SAVE_THIS_CARD";
@@ -314,8 +319,13 @@ public class LanguagePreference {
     public static final String DEFAULT_LOGOUT = "Logout";
     public static final String DEFAULT_CHANGE_PASSWORD = "Change Password";
     public static final String DEFAULT_SEASON = "Season";
+    public static String DEFAULT_NEXT = "Next";
+    public static String DEFAULT_COMPLETE_SEASON = "Complete Season";
+    public static String DEFAULT_SELECT_PURCHASE_TYPE = "Select Purchase Type";
 
     public static final String DEFAULT_PURCHASE = "Purchase";
+    public static String DEFAULT_ENTER_VOUCHER_CODE = "Enter Voucher Code";
+    public static String DEFAULT_VOUCHER_SUCCESS = "Voucher Applied  Successfully.";
     public static final String DEFAULT_BUTTON_APPLY = "Apply";
     public static final String DEFAULT_BUTTON_OK = "Ok";
     public static final String DEFAULT_OOPS_INVALID_EMAIL = "Oops! Invalid email.";

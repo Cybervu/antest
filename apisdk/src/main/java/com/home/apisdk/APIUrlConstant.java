@@ -42,6 +42,16 @@ public class APIUrlConstant {
      * endpoint to get Video Details API
      */
     public static String VIDEO_DETAILS_URL = "getVideoDetails";
+
+    /**
+     * endpoint to getMonitization Details API
+     */
+    public static String GET_MONITIZATION_DETAILS = "GetMonetizationDetails";
+
+    public static String getGetMonitizationDetails() {
+        return BASE_URl + GET_MONITIZATION_DETAILS;
+    }
+
     /**
      * endpoint to get Content List API
      */
