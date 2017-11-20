@@ -23,6 +23,7 @@ import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.google.android.gms.cast.MediaInfo;
@@ -226,7 +227,17 @@ public class Util {
         }
         return check;
     }
+    public static boolean isValidPhone(String phone)
+    {
 
+        if ((phone.length() >= 10) && (phone.length() <=15))
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public static boolean isConfirmPassword(String password, String confirmPassword) {
         Pattern pattern = Pattern.compile(password, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(confirmPassword);
@@ -586,6 +597,10 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, GENRE, "", "genre", json);
 
         setTranslationLanguageToPref(languagePreference, AGREE_TERMS, DEFAULT_AGREE_TERMS, "agree_terms", json);
+        setTranslationLanguageToPref(languagePreference, ENTER_REVIEW_HERE, DEFAULT_ENTER_REVIEW_HERE, "enter_review_here", json);
+        setTranslationLanguageToPref(languagePreference, TO_LOGIN, DEFAULT_TO_LOGIN, "to_login", json);
+        setTranslationLanguageToPref(languagePreference, CLICK_HERE, DEFAULT_CLICK_HERE, "click_here", json);
+        setTranslationLanguageToPref(languagePreference, NEED_LOGIN_TO_REVIEW, DEFAULT_NEED_LOGIN_TO_REVIEW, "need_to_login", json);
         setTranslationLanguageToPref(languagePreference, INVALID_COUPON, DEFAULT_INVALID_COUPON, "invalid_coupon", json);
         setTranslationLanguageToPref(languagePreference, INVOICE, DEFAULT_INVOICE, "invoice", json);
         setTranslationLanguageToPref(languagePreference, LANGUAGE_POPUP_LANGUAGE, DEFAULT_LANGUAGE_POPUP_LANGUAGE, "language_popup_language", json);
@@ -770,6 +785,15 @@ public class Util {
 
     public static boolean getStreamingRestriction(LanguagePreference languagePreference) {
         return languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1");
+    }
+
+    public static void hideKeyboard(Context context){
+        Activity act = (Activity) context;
+        InputMethodManager inputManager = (InputMethodManager)
+                act.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(act.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
 }

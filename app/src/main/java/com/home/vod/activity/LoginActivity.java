@@ -18,7 +18,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -1481,28 +1484,57 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
             }R
         });*/
+       /* editEmailStr.setOnKeyListener(new View.OnKeyListener() {
 
-        editPasswordStr = (EditText) findViewById(R.id.editPasswordStr);
-
-       /* editPasswordStr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
-
-                if (hasFocus) {
-
-                    editPasswordStr.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#458ccc")));
-                } else {
-                    editPasswordStr.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#737373")));
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER))
+                {
+                    // Perform action on Enter key press
+                    editEmailStr.clearFocus();
+                    editPasswordStr.requestFocus();
+                    return true;
                 }
-
+                return false;
             }
         });*/
 
+        editPasswordStr = (EditText) findViewById(R.id.editPasswordStr);
+        /*editPasswordStr.setOnKeyListener(new View.OnKeyListener() {
 
-        /*LogUtil.showLog("MUVI","is Apv = "+ Util.dataModel.getIsAPV());
-        LogUtil.showLog("MUVI","is Apv = "+ Util.dataModel.getIsPPV());
-        LogUtil.showLog("MUVI","is Apv = "+ Util.dataModel.getContentTypesId());*/
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER))
+                {
+                    // Perform action on Enter key press
+                    editPasswordStr.clearFocus();
+                    editEmailStr.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });*/
+     
+
+        /*******enter key of keyboard *************/
+
+        InputFilter filter = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+                for (int i = start; i < end; i++) {
+
+                    if (source.charAt(i) == '\n') {
+                        return " ";
+                    }
+                }
+                return null;
+            }
+        };
+
+        editEmailStr.setFilters(new InputFilter[]{filter});
+        editPasswordStr.setFilters(new InputFilter[]{filter});
 
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), editPasswordStr);
 
@@ -1544,11 +1576,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             @Override
             public void onClick(View v) {
 
-                InputMethodManager inputManager = (InputMethodManager)
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
-
-                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+               Util.hideKeyboard(LoginActivity.this);
 
                 loginButtonClicked();
 
@@ -1850,6 +1878,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     login_input.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
                     login_input.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
                     login_input.setDevice_type("1");
+                    login_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
                     LoginAsynTask asyncReg = new LoginAsynTask(login_input, this, this);
                     asyncReg.executeOnExecutor(threadPoolExecutor);
                 } else {
@@ -5226,7 +5255,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         LogoutInput logoutInput = new LogoutInput();
         logoutInput.setAuthToken(authTokenStr);
         logoutInput.setLogin_history_id(loginHistoryIdStr);
-        logoutInput.setLang_code(logoutInput.getLang_code());
+        logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, this, this);
         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
     }

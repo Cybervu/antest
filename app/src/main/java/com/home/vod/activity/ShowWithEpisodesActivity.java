@@ -282,8 +282,8 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onGetTranslateLanguagePreExecuteStarted() {
         LogUtil.showLog("PINTU", "translate pdlog show");
-        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
-        pDialog.show();
+        if(pDialog!=null&&!pDialog.isShowing())
+            pDialog.show();
     }
 
     @Override
@@ -291,7 +291,7 @@ MonetizationHandler monetizationHandler;
 
         if (pDialog != null && pDialog.isShowing()) {
             pDialog.hide();
-            pDialog = null;
+
 
         }
 
@@ -321,8 +321,8 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onLogoutPreExecuteStarted() {
         LogUtil.showLog("Abhishek", "logout pdlog show");
-        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
-        pDialog.show();
+        if(pDialog!=null&&!pDialog.isShowing())
+            pDialog.show();
     }
 
     @Override
@@ -386,15 +386,15 @@ MonetizationHandler monetizationHandler;
 
     @Override
     public void onGetLanguageListPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
-        pDialog.show();
+        if(pDialog!=null&&!pDialog.isShowing())
+            pDialog.show();
     }
 
     @Override
     public void onGetLanguageListPostExecuteCompleted(ArrayList<LanguageListOutputModel> languageListOutputArray, int status, String message, String defaultLanguage) {
         if (pDialog!=null && pDialog.isShowing()) {
             pDialog.hide();
-            pDialog = null;
+
 
         }
 
@@ -424,9 +424,8 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onGetContentDetailsPreExecuteStarted() {
         LogUtil.showLog("PINTU", "contentdetails pdlog show");
-
-        pDialog.show();
-        LogUtil.showLog("MUVI", "PREEXECUTE");
+        if(pDialog!=null&&!pDialog.isShowing())
+            pDialog.show();
     }
 
     @Override
@@ -438,6 +437,7 @@ MonetizationHandler monetizationHandler;
             if (pDialog != null && pDialog.isShowing()) {
                 LogUtil.showLog("PINTU", "contentdetails pdlog hide");
                 pDialog.hide();
+
 
             }
         } catch (IllegalArgumentException ex) {
@@ -695,8 +695,8 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onGetEpisodeDetailsPreExecuteStarted() {
         LogUtil.showLog("PINTU", "getepisodedetails pdlog show");
-
-        pDialog.show();
+        if(pDialog!=null&&!pDialog.isShowing())
+            pDialog.show();
     }
 
     @Override
@@ -751,11 +751,18 @@ MonetizationHandler monetizationHandler;
             LogUtil.showLog("BISHAL", "itemdata==" + itemData);
             if (itemData.size() <= 0) {
 
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.hide();
+
+                }
 
                 //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
             } else {
+                    if (pDialog != null && pDialog.isShowing()) {
 
+                        pDialog.hide();
 
+                    }
                 LogUtil.showLog("BISHAL", "data show...");
                 seasontiveLayout.setVisibility(View.VISIBLE);
                 seasontiveLayout.setLayoutManager(mLayoutManager);
@@ -858,8 +865,8 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onGetValidateUserPreExecuteStarted() {
         LogUtil.showLog("PINTU", "validateuser pdlog show");
-
-        pDialog.show();
+        if(pDialog!=null&&!pDialog.isShowing())
+            pDialog.show();
     }
 
     @Override
@@ -873,6 +880,7 @@ MonetizationHandler monetizationHandler;
             if (pDialog != null && pDialog.isShowing()) {
                 LogUtil.showLog("PINTU", "validate user pdlog hide");
                 pDialog.hide();
+
 
             }
         } catch (IllegalArgumentException ex) {
@@ -949,7 +957,7 @@ MonetizationHandler monetizationHandler;
                 try {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.hide();
-                        pDialog = null;
+
                     }
                 } catch (IllegalArgumentException ex) {
                     status = 0;
@@ -1001,8 +1009,8 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onAddToFavPreExecuteStarted() {
         LogUtil.showLog("PINTU", "addfav pdlog show");
-
-        pDialog.show();
+        if(pDialog!=null&&!pDialog.isShowing())
+            pDialog.show();
 
 
     }
@@ -1012,7 +1020,7 @@ MonetizationHandler monetizationHandler;
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
-                pDialog = null;
+
             }
         } catch (IllegalArgumentException ex) {
             noInternetConnectionLayout.setVisibility(View.GONE);
@@ -1037,8 +1045,8 @@ MonetizationHandler monetizationHandler;
     public void onDeleteFavPreExecuteStarted() {
 
         LogUtil.showLog("PINTU", "delete fav pdlog show");
-        pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
-        pDialog.show();
+        if(pDialog!=null&&!pDialog.isShowing())
+            pDialog.show();
 
     }
 
@@ -1049,9 +1057,10 @@ MonetizationHandler monetizationHandler;
         favorite_view_episode.setImageResource(R.drawable.favorite_unselected);
         showToast();
         isFavorite = 0;
-        if (pDialog.isShowing() && pDialog != null) {
+        if (pDialog != null && pDialog.isShowing()) {
             LogUtil.showLog("PINTU", "delete fav pdlog hide");
             pDialog.hide();
+
         }
 
     }
@@ -1059,8 +1068,8 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onViewContentRatingPreExecuteStarted() {
         LogUtil.showLog("PINTU", "view content rating pdlog show");
-
-        pDialog.show();
+        if(pDialog!=null&&!pDialog.isShowing())
+            pDialog.show();
     }
 
     @Override
@@ -1070,6 +1079,7 @@ MonetizationHandler monetizationHandler;
             if (pDialog != null && pDialog.isShowing()) {
                 LogUtil.showLog("PINTU", "view content pdlog hide");
                 pDialog.hide();
+
 
             }
         } catch (IllegalArgumentException ex) {
@@ -1150,8 +1160,8 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onVideoDetailsPreExecuteStarted() {
         LogUtil.showLog("PINTU", "videodetails pdlog show");
-
-        pDialog.show();
+        if(pDialog!=null&&!pDialog.isShowing())
+            pDialog.show();
     }
 
     @Override
@@ -1161,6 +1171,8 @@ MonetizationHandler monetizationHandler;
 
      /*check if status code 200 then set the video url before this it check it is thirdparty url or normal if third party
         then set thirdpartyurl true here and assign the url to videourl*/
+
+
 
         boolean play_video = true;
 
@@ -1378,8 +1390,8 @@ MonetizationHandler monetizationHandler;
                                         }
                                     }
 
-                                    pDialog = new ProgressBarHandler(ShowWithEpisodesActivity.this);
-                                    pDialog.show();
+                                    if(pDialog!=null&&!pDialog.isShowing())
+                                        pDialog.show();
                                     Download_SubTitle(FakeSubTitlePath.get(0).trim());
                                 } else {
                                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -4177,6 +4189,7 @@ MonetizationHandler monetizationHandler;
             } else {
                 if (pDialog != null && pDialog.isShowing()) {
                     pDialog.hide();
+                    pDialog=null;
                 }
                 playerModel.setSubTitlePath(SubTitlePath);
 

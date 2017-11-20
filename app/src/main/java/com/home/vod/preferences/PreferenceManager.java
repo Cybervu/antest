@@ -25,6 +25,7 @@ public class PreferenceManager {
     public  final String PREFS_LOGGEDIN_KEY = "pref_loged_in";
     public  final String PREFS_LOGGEDIN_PASSWORD_KEY = "password";
     public  final String PREFS_LOGIN_DISPLAY_NAME_KEY = "displayName";
+    public  final String PREFS_LOGIN_DISPLAY_PHONE_KEY = "mobilenumber";
     public  final String PREFS_LOGIN_PROFILE_IMAGE_KEY = "loginProfImg";
     public  final String PREFS_LOGIN_HISTORYID_KEY = "loginHistId";
     public  final String PREFS_LOGIN_DATE = "date";
@@ -140,6 +141,14 @@ public class PreferenceManager {
     }
     public void setDispNameToPref(String name) {
         mEditor.putString(PREFS_LOGIN_DISPLAY_NAME_KEY,name);
+        mEditor.commit();
+    }
+
+    public String getDispPhoneFromPref() {
+        return mSharedPreferences.getString(PREFS_LOGIN_DISPLAY_PHONE_KEY, "");
+    }
+    public void setDispPhoneToPref(String phone) {
+        mEditor.putString(PREFS_LOGIN_DISPLAY_PHONE_KEY,phone);
         mEditor.commit();
     }
 

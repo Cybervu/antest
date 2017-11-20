@@ -56,6 +56,7 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
     private Video_Details_Output _video_details_output;
     private VideoDetailsListener listener;
     private Context context;
+    int watermark_status;
 
     /**
      * Interface used to allow the caller of a VideoDetailsAsynctask to run some code when get
@@ -76,9 +77,9 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
          * This method to handle post-execution work.
          *
          * @param _video_details_output A Model Class which contain responses. To get that responses we need to call the respective getter methods.
-         * @param code                     Response Code from the server
-         * @param status                   For Getting The Status
-         * @param message                  On Success Message
+         * @param code                  Response Code from the server
+         * @param status                For Getting The Status
+         * @param message               On Success Message
          */
 
         void onVideoDetailsPostExecuteCompleted(Video_Details_Output _video_details_output, int code, String status, String message);
@@ -243,10 +244,10 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                         if (adJosnArray != null) {
                             if (adJosnArray.length() > 0) {
                                 for (int i = 0; i < adJosnArray.length(); i++) {
-                                    if(adJosnArray.getJSONObject(i).has("channel_id"))
-                                    _video_details_output.setChannel_id(adJosnArray.getJSONObject(i).optString("channel_id").trim());
-                                    if(adJosnArray.getJSONObject(i).has("ad_network_id"))
-                                    _video_details_output.setAdNetworkId(adJosnArray.getJSONObject(i).optInt("ad_network_id"));
+                                    if (adJosnArray.getJSONObject(i).has("channel_id"))
+                                        _video_details_output.setChannel_id(adJosnArray.getJSONObject(i).optString("channel_id").trim());
+                                    if (adJosnArray.getJSONObject(i).has("ad_network_id"))
+                                        _video_details_output.setAdNetworkId(adJosnArray.getJSONObject(i).optInt("ad_network_id"));
                                 }
 
                             }
@@ -255,13 +256,22 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
 
                     if (adJosnDetails.has("adsTime")) {
                         JSONObject adTimeJosnDetails = adJosnDetails.getJSONObject("adsTime");
-                            _video_details_output.setMidRoll(Integer.parseInt(adTimeJosnDetails.optString("mid")));
-                            _video_details_output.setPreRoll(Integer.parseInt(adTimeJosnDetails.optString("start")));
-                            _video_details_output.setPostRoll(Integer.parseInt(adTimeJosnDetails.optString("end")));
+                        _video_details_output.setMidRoll(Integer.parseInt(adTimeJosnDetails.optString("mid")));
+                        _video_details_output.setPreRoll(Integer.parseInt(adTimeJosnDetails.optString("start")));
+                        _video_details_output.setPostRoll(Integer.parseInt(adTimeJosnDetails.optString("end")));
 
-                            if (_video_details_output.getMidRoll()==1) {
-                                _video_details_output.setAdDetails(adTimeJosnDetails.optString("midroll_values"));
+                        if (_video_details_output.getMidRoll() == 1) {
+                            _video_details_output.setAdDetails(adTimeJosnDetails.optString("midroll_values"));
                         }
+                    }
+                }
+                if (myJson.has("is_watermark")) {
+                    JSONObject mainJson = myJson.getJSONObject("is_watermark");
+                    _video_details_output.setWatermark_status(mainJson.optInt("status")==1?true:false);
+                    if (_video_details_output.isWatermark_status()) {
+                        _video_details_output.setWatermark_email(mainJson.optString("email").equals("1")?true:false);
+                        _video_details_output.setWatermark_date(mainJson.optString("date").equals("1")?true:false);
+                        _video_details_output.setWatermark_ip(mainJson.optString("ip").equals("1")?true:false);
                     }
                 }
             }

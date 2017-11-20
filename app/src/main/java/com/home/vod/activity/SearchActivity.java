@@ -369,7 +369,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             } else {
                                 search_data_input.setCountry("IN");
                             }
-                            search_data_input.setLanguage_code( languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            search_data_input.setLanguage_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input, SearchActivity.this, SearchActivity.this);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
@@ -481,13 +481,13 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     @Override
     public void onSearchDataPostExecuteCompleted(ArrayList<Search_Data_otput> contentListOutputArray, int status, int totalItems, String message) {
 
-        String videoGenreStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String videoGenreStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         String videoName = "";
-        String videoImageStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
-        String videoPermalinkStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
-        String videoTypeStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
-        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
-        String videoUrlStr = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
+        String videoImageStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoPermalinkStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoTypeStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoUrlStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         String isEpisodeStr = "";
         String movieUniqueIdStr = "";
         String movieStreamUniqueIdStr = "";
@@ -501,37 +501,37 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                 pDialog.hide();
                 pDialog = null;
             }
-        }catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
 
         }
 
-        if (status>0){
-            if (status==200){
+        if (status > 0) {
+            if (status == 200) {
                 gridView.setVisibility(View.VISIBLE);
                 noInternetConnectionLayout.setVisibility(View.GONE);
                 noDataLayout.setVisibility(View.GONE);
 
-                if (contentListOutputArray.size()> 0) {
+                if (contentListOutputArray.size() > 0) {
 
                     gridView.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
                     noDataLayout.setVisibility(View.GONE);
 
 
-                for (int i=0;i<contentListOutputArray.size();i++) {
+                    for (int i = 0; i < contentListOutputArray.size(); i++) {
 
 
-                    videoImageStr = contentListOutputArray.get(i).getPoster_url();
-                    videoName = contentListOutputArray.get(i).getEpisode_title();
-                    videoTypeIdStr = contentListOutputArray.get(i).getContent_types_id();
-                    videoGenreStr = contentListOutputArray.get(i).getGenre();
-                    videoPermalinkStr = contentListOutputArray.get(i).getPermalink();
-                    isEpisodeStr = contentListOutputArray.get(i).getIs_episode();
-                    isConverted = contentListOutputArray.get(i).getIs_converted();
-                    isPPV = contentListOutputArray.get(i).getIs_ppv();
-                    isAPV = contentListOutputArray.get(i).getIs_advance();
-                    itemData.add(new GridItem(videoImageStr, videoName, "", videoTypeIdStr, videoGenreStr, "", videoPermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
-                }
+                        videoImageStr = contentListOutputArray.get(i).getPoster_url();
+                        videoName = contentListOutputArray.get(i).getEpisode_title();
+                        videoTypeIdStr = contentListOutputArray.get(i).getContent_types_id();
+                        videoGenreStr = contentListOutputArray.get(i).getGenre();
+                        videoPermalinkStr = contentListOutputArray.get(i).getPermalink();
+                        isEpisodeStr = contentListOutputArray.get(i).getIs_episode();
+                        isConverted = contentListOutputArray.get(i).getIs_converted();
+                        isPPV = contentListOutputArray.get(i).getIs_ppv();
+                        isAPV = contentListOutputArray.get(i).getIs_advance();
+                        itemData.add(new GridItem(videoImageStr, videoName, "", videoTypeIdStr, videoGenreStr, "", videoPermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+                    }
 
                     videoImageStrToHeight = videoImageStr;
 
@@ -539,7 +539,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     AsynLOADUI loadui = new AsynLOADUI();
                     loadui.executeOnExecutor(threadPoolExecutor);
 
-                }else {
+                } else {
 
                     noDataLayout.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
@@ -547,7 +547,8 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     footerView.setVisibility(View.GONE);
 
                 }
-            }else {
+
+            } else {
 
                 noDataLayout.setVisibility(View.VISIBLE);
                 noInternetConnectionLayout.setVisibility(View.GONE);
@@ -555,7 +556,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                 footerView.setVisibility(View.GONE);
 
             }
-        }else {
+        } else {
 
             noDataLayout.setVisibility(View.VISIBLE);
             noInternetConnectionLayout.setVisibility(View.GONE);
@@ -904,9 +905,9 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
         searchView.setMaxWidth(10000);
 
-        ImageView closeButton = (ImageView)searchView.findViewById(R.id.search_close_btn);
+        ImageView closeButton = (ImageView) searchView.findViewById(R.id.search_close_btn);
         closeButton.setImageResource(R.drawable.ic_close_24dp);
-        ImageView imgView = (ImageView)searchView.findViewById(R.id.search_mag_icon);
+        ImageView imgView = (ImageView) searchView.findViewById(R.id.search_mag_icon);
         imgView.setImageResource(R.drawable.ic_search);
 
         final SearchView.SearchAutoComplete theTextArea = (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
@@ -989,7 +990,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             } else {
                                 search_data_input.setCountry("IN");
                             }
-                            search_data_input.setLanguage_code( languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                            search_data_input.setLanguage_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input, SearchActivity.this, SearchActivity.this);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
@@ -1150,6 +1151,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                 }
 
             }
+            Util.hideKeyboard(SearchActivity.this);
         }
     }
 

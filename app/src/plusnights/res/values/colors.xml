@@ -72,5 +72,6 @@
     <color name="unselected_color">#fff</color>
     <color name="leftMenuBgColor">#87005F</color>
     <color name="aboutustestcolor">#fff</color>
+    <color name="videotextColor">#666</color>
 
 </resources>
