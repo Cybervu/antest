@@ -1388,7 +1388,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             params.sourceContentType = contentType
                     .getMediaSourceParamsContentType();
             /*
-			 * if the content has separate audio tracks (eg languages) you may
+             * if the content has separate audio tracks (eg languages) you may
 			 * select one using MediaSourceParams, eg params.language="es";
 			 */
             String contentTypeValue = contentType.toString();
@@ -5341,9 +5341,13 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 //Util.saveLogData("Exception 1 DownloadFileFromURL="+e.toString());
             }
 
+
         } catch (Exception e) {
             // Util.saveLogData("Exception 2 DownloadFileFromURL="+e.toString());}
+
+
             return 0;
+
         }
         return size;
     }
