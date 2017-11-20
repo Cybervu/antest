@@ -53,7 +53,7 @@ android {
             versionName "1.01"
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
-           // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
+            // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
             //  buildConfigField "String", "AUTH_TOKEN", "\"d2d529d95240ed416ead6684bd888c0f\""//idogic test
             buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//edocent
         }
@@ -184,7 +184,7 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
-       /*Structuring Monetizer flavour with dimension*/
+        /*Structuring Monetizer flavour with dimension*/
         monetizer {
             dimension 'vendor'
             minSdkVersion 21
@@ -307,7 +307,6 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             //            buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
-
         }
         yoteshingo_staging_ {
             dimension 'environment'
@@ -332,6 +331,24 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         magicmovies_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        onyx {
+            minSdkVersion 15
+            dimension 'vendor'
+            applicationId 'com.release.muvionyx1'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"3ea7e43c13d8ab6eb505b960217df923\""
+            targetSdkVersion 23
+            versionCode 1
+            versionName '1.0'
+        }
+        onyx_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        onyx_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
@@ -391,6 +408,9 @@ android.variantFilter { variant ->
             && (isRelease||isDebug)) {
         variant.setIgnore(false)
     }else if (vendor.equals('magicmovies') && (environment.equals('magicmovies_staging_')||environment.equals('magicmovies_Prod_'))
+            && (isRelease||isDebug)) {
+        variant.setIgnore(false)
+    }else if (vendor.equals('onyx') && (environment.equals('onyx_staging_')||environment.equals('onyx_Prod_'))
             && (isRelease||isDebug)) {
         variant.setIgnore(false)
     }else{
