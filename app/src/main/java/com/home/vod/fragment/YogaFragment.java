@@ -1994,6 +1994,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
             private void onApplicationConnected(CastSession castSession) {
                 mCastSession = castSession;
+                Log.v("ANU","mCastSession==="+mCastSession);
 
                 if (null != mSelectedMedia) {
                    /* if (mCastSession != null && mCastSession.isConnected()) {

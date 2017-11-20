@@ -127,6 +127,13 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
             httppost.addHeader(HeaderConstants.USER_ID, this.getVideoDetailsInput.getUser_id());
             httppost.addHeader(HeaderConstants.LANG_CODE, this.getVideoDetailsInput.getLanguage());
 
+            Log.v("pratik","getAuthToken==="+this.getVideoDetailsInput.getAuthToken());
+            Log.v("pratik","getContent_uniq_id==="+this.getVideoDetailsInput.getContent_uniq_id());
+            Log.v("pratik","getStream_uniq_id==="+this.getVideoDetailsInput.getStream_uniq_id());
+            Log.v("pratik","getInternetSpeed==="+this.getVideoDetailsInput.getInternetSpeed());
+            Log.v("pratik","userid==="+this.getVideoDetailsInput.getUser_id());
+            Log.v("pratik","language==="+this.getVideoDetailsInput.getLanguage());
+
             // Execute HTTP Post Request
             try {
                 HttpResponse response = httpclient.execute(httppost);
@@ -169,6 +176,7 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                     } else {
                         _video_details_output.setPlayed_length("0");
                     }
+                    Log.v("pratik","played length in asyntask==="+myJson.optString("played_length"));
                     _video_details_output.setThirdparty_url(myJson.optString("thirdparty_url"));
                     _video_details_output.setStudio_approved_url(myJson.optString("studio_approved_url"));
                     _video_details_output.setLicenseUrl(myJson.optString("licenseUrl"));

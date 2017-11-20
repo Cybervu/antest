@@ -702,6 +702,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             if (_video_details_output.getPlayed_length() != null && !_video_details_output.getPlayed_length().equals(""))
                 playerModel.setPlayPos((com.home.vod.util.Util.isDouble(_video_details_output.getPlayed_length())));
 
+//            played_length = playerModel.getPlayPos() * 1000;
+            Log.v("pratik","length in ppa post vd==="+played_length);
 
             //dependency for datamodel
 
@@ -1466,6 +1468,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
         content_types_id = playerModel.getContentTypesId();
         played_length = playerModel.getPlayPos() * 1000;
+        Log.v("pratik","resume pop in pp"+played_length);
         current_played_length = played_length;
         PreviousUsedDataByApp(true);
         PreviousUsedData_By_DownloadContent = DataUsedByDownloadContent();

@@ -333,7 +333,10 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     String videoDurationStr = "";
     boolean castStr = false;
     int isFavorite;
+    int itemClickedPosistion;
     public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
+
+    GetIpAddressAsynTask asynGetIpAddress;
 
 
 
@@ -940,6 +943,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         lineTextview.setVisibility(View.GONE);
 
         played_length = playerModel.getPlayPos() * 1000;
+        Log.v("pratik","played_length==============="+played_length);
         current_played_length = played_length;
         PreviousUsedDataByApp(true);
         PreviousUsedData_By_DownloadContent = DataUsedByDownloadContent();
@@ -963,6 +967,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 relatedContentList, new ClickListener() {
             @Override
             public void onClick(View view, final int position) {
+
+//                itemClickedPosistion = position;
                 if (asynValidateUserDetails != null) {
                     asynValidateUserDetails.cancel(true);
                 }
@@ -1006,10 +1012,13 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
+//                CalLoadMovieDetails(position);
+
+
                 RelatedContentListItem item = itemData.get(position);
-                //Values are passing to activity & to fragment as well
-               /* EpisodesListModel item = itemData.get(position);
-                clickItem(item, position);*/
+              /*  //Values are passing to activity & to fragment as well
+               *//**//* EpisodesListModel item = itemData.get(position);
+                clickItem(item, position);*//**//**/
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
                 permalinkStr = item.getPermalink();
                 contentIdStr = item.getContentId();
@@ -1030,6 +1039,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 contentDetailsInput.setUser_id(useridStr);
                 asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, YogaPlayerActivity.this, YogaPlayerActivity.this);
                 asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+
 
             }
 
@@ -1468,8 +1478,10 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
 
                             Log.v("SUBHA","played_length === " + played_length);
+                            Log.v("pratik","played_length when prepared=== " + Util.dataModel.getPlayPos() * 1000 );
+                            played_length=Util.dataModel.getPlayPos() * 1000;
 
-                            if (played_length > 0) {
+                            if (Util.dataModel.getPlayPos() * 1000  > 0) {
                                 ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
                                 player.utils.Util.call_finish_at_onUserLeaveHint = false;
 
@@ -2199,7 +2211,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     .getCurrentCastSession();
         }
 
-        GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+         asynGetIpAddress = new GetIpAddressAsynTask(this, this);
         asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
         /***************chromecast**********************/
@@ -2355,6 +2367,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             public void onSessionEnded(CastSession session, int error) {
                 onApplicationDisconnected();
 
+
                 player.utils.Util.call_finish_at_onUserLeaveHint = true;
                 latest_center_play_pause.setEnabled(true);
                 emVideoView.setEnabled(true);
@@ -2377,9 +2390,6 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 latest_center_play_pause.setVisibility(View.GONE);
                 mHandler.removeCallbacks(updateTimeTask);
                 updateProgressBar();
-
-
-
             }
 
             @Override
@@ -2395,6 +2405,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             @Override
             public void onSessionStarted(CastSession session, String sessionId) {
                 onApplicationConnected(session);
+                Log.v("ANU","SESSION===="+session);
             }
 
             @Override
@@ -2426,7 +2437,13 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             private void onApplicationConnected(CastSession castSession) {
 
 
+                asyncVideoLogDetails = new AsyncVideoLogDetails();
+                asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
 
+
+                mCastSession = castSession;
+                Log.v("ANU","mCastSession===="+mCastSession);
+                Log.v("ANU","castSession===="+castSession);
                 stoptimertask();
                 player.utils.Util.call_finish_at_onUserLeaveHint = false;
                 player.utils.Util.hide_pause = true;
@@ -2434,6 +2451,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 latest_center_play_pause.setVisibility(View.VISIBLE);
                 emVideoView.setEnabled(false);
 
+                Log.v("ANU","on application connected start");
                 if (emVideoView.isPlaying()) {
                     emVideoView.pause();
                     latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
@@ -2453,13 +2471,14 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                     current_time.setVisibility(View.GONE);
                 }
 
-                if (SubTitlePath.size() > 0)
+//                if (SubTitlePath.size() > 0)
 //                    subtitle_change_btn.setVisibility(View.VISIBLE);
 //                primary_ll.setVisibility(View.VISIBLE);
 
 
 
-                mCastSession = castSession;
+
+
                 mLocation = PlaybackLocation.REMOTE;
                 if (null != mSelectedMedia) {
                     if (mPlaybackState == PlaybackState.PLAYING) {
@@ -2541,12 +2560,12 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                             jsonObj.put("authToken", authTokenStr);
                             jsonObj.put("user_id", preferenceManager.getUseridFromPref());
-//                                jsonObj.put("ip_address", ipAddres.trim());
+                            jsonObj.put("ip_address", ipAddres.trim());
                             jsonObj.put("movie_id", movieUniqueId);
                             jsonObj.put("episode_id", playerModel.getEpisode_id());
-                            jsonObj.put("watch_status", "start");
+                            jsonObj.put("watch_status", watchStatus);
                             jsonObj.put("device_type", "2");
-                            jsonObj.put("log_id", "0");
+                            jsonObj.put("log_id", videoLogId);
                             jsonObj.put("active_track_index", "0");
 
                             if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
@@ -2568,18 +2587,18 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                             jsonObj.put("played_length", "0");
                             jsonObj.put("log_temp_id", "0");
-                            jsonObj.put("resume_time", "0");
-                            jsonObj.put("seek_status", "");
+                            jsonObj.put("resume_time", "" + playerPosition);
+                            jsonObj.put("seek_status", "first_time");
                             // This  Code Is Added For Drm BufferLog By Bibhu ...
 
                             jsonObj.put("resolution", "BEST");
-                            jsonObj.put("start_time", "0");
-                            jsonObj.put("end_time", "0");
-                            jsonObj.put("log_unique_id", "0");
-                            jsonObj.put("location", "0");
-                            jsonObj.put("bandwidth_log_id", "0");
+                            jsonObj.put("start_time", String.valueOf(playerPosition));
+                            jsonObj.put("end_time", String.valueOf(playerPosition));
+                            jsonObj.put("log_unique_id", videoBufferLogUniqueId);
+                            jsonObj.put("bandwidth_log_id", videoBufferLogId);
+                            jsonObj.put("location", Location);
                             jsonObj.put("video_type", "mped_dash");
-                            jsonObj.put("drm_bandwidth_by_sender", "0");
+                            jsonObj.put("drm_bandwidth_by_sender", "" + ((CurrentUsedData + DataUsedByChrmoeCast) * 1024));
 
                             //====================End=====================//
 
@@ -2619,7 +2638,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                             jsonObj.put("authToken", authTokenStr);
                             jsonObj.put("user_id", preferenceManager.getUseridFromPref());
-//                                jsonObj.put("ip_address", ipAddres.trim());
+                            jsonObj.put("ip_address", ipAddres.trim());
                             jsonObj.put("movie_id", movieUniqueId);
                             jsonObj.put("episode_id", playerModel.getEpisode_id());
                             jsonObj.put("watch_status", "start");
@@ -2822,6 +2841,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         // mPlayCircle.setVisibility(View.VISIBLE);
                         if (mCastSession != null && mCastSession.isConnected()) {
                             // watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
+                            Log.v("ANU","DOING 2=========");
+                            Log.v("ANU","Played_Length 2========="+Played_Length);
                             loadRemoteMedia(Played_Length, true);
 
 
@@ -2858,7 +2879,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 startActivity(intent);
                 remoteMediaClient.removeListener(this);*/
 
-
+                Log.v("ANU","DOING 3=========");
                 if (mCastSession != null && mCastSession.isConnected()) {
                     Log.v("BIBHU222", "======" + remoteMediaClient.isPlaying());
 
@@ -2937,7 +2958,85 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == 1001) {
+        if (resultCode == RESULT_OK && requestCode == 1001){
+
+            player.utils.Util.call_finish_at_onUserLeaveHint = true;
+
+
+            if (data.getStringExtra("yes").equals("1002")) {
+
+                Log.v("pratik","plaied len afer resume=="+played_length);
+                watchStatus = "halfplay";
+                playerPosition = playerModel.getPlayPos();
+                player_start_time = playerPosition;
+                PreviousUsedDataByApp(false);
+                emVideoView.start();
+                emVideoView.seekTo(played_length);
+                seekBar.setProgress(played_length);
+                updateProgressBar();
+
+            } else {
+                if (playerModel.getPreRoll() == 1 && playerModel.getAdNetworkId() == 1) {
+                    if (player.utils.Util.checkNetwork(YogaPlayerActivity.this)) {
+                        player.utils.Util.call_finish_at_onUserLeaveHint = false;
+                        player.utils.Util.hide_pause = true;
+                        ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+                        latest_center_play_pause.setVisibility(View.VISIBLE);
+
+
+                        if (emVideoView.isPlaying()) {
+                            emVideoView.pause();
+                            latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
+                            center_play_pause.setImageResource(R.drawable.ic_media_play);
+                            mHandler.removeCallbacks(updateTimeTask);
+
+                        }
+
+                        if (center_pause_paly_timer_is_running) {
+                            center_pause_paly_timer.cancel();
+                            center_pause_paly_timer_is_running = false;
+                            Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
+
+
+                            subtitle_change_btn.setVisibility(View.INVISIBLE);
+                            primary_ll.setVisibility(View.GONE);
+                            last_ll.setVisibility(View.GONE);
+                            center_play_pause.setVisibility(View.GONE);
+                            current_time.setVisibility(View.GONE);
+                        }
+
+
+                        /**ad **/
+
+                        Intent adIntent = new Intent(YogaPlayerActivity.this, AdPlayerActivity.class);
+                        adIntent.putExtra("fromAd", "fromAd");
+                        adIntent.putExtra("PlayerModel", playerModel);
+                        adIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                        startActivityForResult(adIntent, 8002);
+                        /**ad **/
+                    } else {
+                        Toast.makeText(getApplicationContext(), player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.NO_INTERNET_CONNECTION, player.utils.Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    emVideoView.start();
+                    seekBar.setProgress(emVideoView.getCurrentPosition());
+                    updateProgressBar();
+                }
+            }
+            if (SubTitlePath.size() > 0) {
+
+                CheckSubTitleParsingType("1");
+
+                subtitleDisplayHandler = new Handler();
+                subsFetchTask = new SubtitleProcessingTask("1");
+                subsFetchTask.execute();
+            } else {
+                asyncVideoLogDetails = new AsyncVideoLogDetails();
+                asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            }
+        }
+        else if (resultCode == RESULT_OK && requestCode == 5555) {
             if (data.getStringExtra("yes").equals("1002")) {
                 watch_status_String = "halfplay";
                 seek_status = "first_time";
@@ -3030,7 +3129,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
             if (contentTypesId != 4) {
 
-                seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
+                showCurrentTime();
             }
 
             current_matching_time = emVideoView.getCurrentPosition();
@@ -3048,7 +3147,10 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
                 } else {
                     if (current_matching_time >= emVideoView.getDuration()) {
-                        mHandler.removeCallbacks(updateTimeTask);
+                        try{
+                            stoptimertask();
+                            mHandler.removeCallbacks(updateTimeTask);
+                        }catch (Exception e){}
                         //  pause_play.setImageResource(R.drawable.ic_media_play);
 //                    emVideoView.release();
 //                    emVideoView.reset();
@@ -3895,30 +3997,30 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
 
             } else {
-                Log.v("ANU","if ELSE=========");
-                Log.v("ANU","_video_details_output.getThirdparty_url()========="+_video_details_output.getThirdparty_url());
-
 
                 // condition for checking if the response has third party url or not.
                 if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
-                    Log.v("ANU","if _video_details_output=========");
+                    Log.v("ANU","if mcastsession========="+mCastSession);
 
 
                     if (mCastSession != null && mCastSession.isConnected()) {
-                        Log.v("pratik","if=========");
+
+                        Log.v("ANU","doing -1=========");
                         progressView.setVisibility(View.GONE);
 
                         Log.v("pratik","pl len="+Util.dataModel.getPlayPos() * 1000);
+                        Log.v("pratik","played_length len="+played_length);
                         ///Added for resume cast watch
-                        if ((Util.dataModel.getPlayPos() * 1000) > 0) {
+                        if (Util.dataModel.getPlayPos() * 1000 > 0) {
                             Util.dataModel.setPlayPos(Util.dataModel.getPlayPos());
                             Intent resumeIntent = new Intent(YogaPlayerActivity.this, ResumePopupActivity.class);
-                            startActivityForResult(resumeIntent, 1001);
+                            startActivityForResult(resumeIntent, 5555);
 
                         } else {
                             Played_Length = 0;
                             watch_status_String = "start";
 
+                            Log.v("ANU","DOING 0=========");
                             PlayThroughChromeCast();
                         }
 
@@ -5102,6 +5204,32 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                     downloadFile(true);
                 }*/
 
+               /* RelatedContentListItem item = itemData.get(position);
+
+                ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
+                permalinkStr = item.getPermalink();
+                contentIdStr = item.getContentId();
+                contentStreamIdStr = item.getContentStreamId();
+                useridStr = preferenceManager.getUseridFromPref();
+
+                contentDetailsInput.setAuthToken(authTokenStr);
+
+                Log.v("SUBHA", "authToken === " + authTokenStr);
+                if (preferenceManager != null) {
+                    String countryPref = preferenceManager.getCountryCodeFromPref();
+                    contentDetailsInput.setCountry(countryPref);
+                } else {
+                    contentDetailsInput.setCountry("IN");
+                }
+                contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                contentDetailsInput.setPermalink(permalinkStr);
+                contentDetailsInput.setUser_id(useridStr);
+                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, YogaPlayerActivity.this, YogaPlayerActivity.this);
+                asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+*/
+
+
+
             } else {
                 Toast.makeText(YogaPlayerActivity.this, player.utils.Util.getTextofLanguage(YogaPlayerActivity.this, player.utils.Util.DOWNLOAD_INTERRUPTED, player.utils.Util.DEFAULT_DOWNLOAD_INTERRUPTED), Toast.LENGTH_SHORT).show();
             }
@@ -5132,8 +5260,11 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
 
     public void startTimer() {
         //set a new Timer
-        timer = new Timer();
 
+        if(video_completed)
+            return;
+
+        timer = new Timer();
         initializeTimerTask();
         timer.schedule(timerTask, 1000, 1000); //
     }
@@ -5185,19 +5316,19 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                 httppost.addHeader("log_temp_id", log_temp_id);
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
-                Log.v("BIBHU141", "player_start_time===*****************=========" + player_start_time);
-                Log.v("BIBHU141", "playerPosition======***************8======" + playerPosition);
+                Log.v("BIBHU1412", "player_start_time===*****************=========" + player_start_time);
+                Log.v("BIBHU1412", "playerPosition======***************8======" + playerPosition);
 
 
-                Log.v("BIBHU141", "played_length============" + (playerPosition - player_start_time));
-                Log.v("BIBHU141", "log_temp_id============" + log_temp_id);
-                Log.v("BIBHU141", "resume_time============" + (playerPosition));
-                Log.v("BIBHU141", "playerPosition============" + playerPosition);
-                Log.v("BIBHU141", "log_id============" + videoLogId);
+                Log.v("BIBHU1412", "played_length============" + (playerPosition - player_start_time));
+                Log.v("BIBHU1412", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU1412", "resume_time============" + (playerPosition));
+                Log.v("BIBHU1412", "playerPosition============" + playerPosition);
+                Log.v("BIBHU1412", "log_id============" + videoLogId);
 
 
-                Log.v("BIBHU141", "watchStatus============" + watchStatus);
-                Log.v("BIBHU141", "restrict_stream_id============" + restrict_stream_id);
+                Log.v("BIBHU1412", "watchStatus============" + watchStatus);
+                Log.v("BIBHU1412", "restrict_stream_id============" + restrict_stream_id);
 
 
                 //===============End=============================//
@@ -5270,7 +5401,7 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             Log.v("SUBHA","played_length === 2" );
-//            stoptimertask();
+            stoptimertask();
         }
 
 
@@ -5371,8 +5502,12 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                 videoBufferLogUniqueId = "0";
                 Location = "0";
             }
-            if (!watchStatus.equals("complete"))
+            if (!watchStatus.equals("complete")){
+                if (mCastSession != null && mCastSession.isConnected()) {
+                    return;
+                }
                 startTimer();
+            }
 
             return;
         }
@@ -5689,12 +5824,13 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
                 httppost.addHeader("resume_time", "" + (playerPosition));
 
 
-                Log.v("BIBHU141", "played_length============" + (playerPosition - player_start_time));
+                Log.v("BIBHU1413", "played_length============" + (playerPosition - player_start_time));
 
 
-                Log.v("BIBHU141", "log_temp_id============" + log_temp_id);
-                Log.v("BIBHU141", "resume_time============" + (playerPosition));
-                Log.v("BIBHU141", "log_id============" + videoLogId);
+                Log.v("BIBHU1413", "log_temp_id============" + log_temp_id);
+                Log.v("BIBHU1413", "resume_time============" + (playerPosition));
+                Log.v("BIBHU1413", "log_id============" + videoLogId);
+                Log.v("BIBHU1413", "ipAddres============" + ipAddres);
 
                 //===============End=============================//
 
@@ -6090,6 +6226,7 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
 
                             int currentPositionStr = millisecondsToString(emVideoView.getCurrentPosition());
                             playerPosition = currentPositionStr;
+                            Played_Length = emVideoView.getCurrentPosition();
 
 
                             if (isFastForward == true) {
@@ -6280,6 +6417,7 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
             mSelectedMedia = mediaInfo;
 
 
+            Log.v("ANU","doing 1");
             togglePlayback();
         } else {
             Log.v("ANU","else=========");
@@ -6372,11 +6510,111 @@ private class AsynWithdrm extends AsyncTask<Void, Void, Void> {
         return i;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if (asynGetIpAddress != null) {
+            asynGetIpAddress.cancel(true);
+        }
+        if (asyncVideoLogDetails != null) {
+            asyncVideoLogDetails.cancel(true);
+        }
+        if (asyncFFVideoLogDetails != null) {
+            asyncFFVideoLogDetails.cancel(true);
+        }
+        if (progressView != null && progressView.isShown()) {
+            progressView = null;
+        }
+        if (timer != null) {
+            stoptimertask();
+            timer = null;
+        }
+
+        if (video_completed == false) {
+
+            AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+            asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            return;
+        }
+        mHandler.removeCallbacks(updateTimeTask);
+        if (emVideoView != null) {
+            emVideoView.release();
+        }
+        finish();
+        overridePendingTransition(0, 0);
+
+    }
+
+    public void backCalled() {
+
+        if (asynGetIpAddress != null) {
+            asynGetIpAddress.cancel(true);
+        }
+        if (asyncVideoLogDetails != null) {
+            asyncVideoLogDetails.cancel(true);
+        }
+        if (asyncFFVideoLogDetails != null) {
+            asyncFFVideoLogDetails.cancel(true);
+        }
+        if (progressView != null && progressView.isShown()) {
+            progressView = null;
+        }
+        if (timer != null) {
+            stoptimertask();
+            timer = null;
+        }
+        AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+        asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+        return;
+      /*  if (video_completed == false){
+
+            AsyncResumeVideoLogDetails  asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+            asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            return;
+        }*//*else{
+            watchStatus = "com"
+            asyncVideoLogDetails = new AsyncVideoLogDetails();
+            asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+        }*//*
+        mHandler.removeCallbacks(updateTimeTask);
+        if (emVideoView!=null) {
+            emVideoView.release();
+        }
+        finish();
+        overridePendingTransition(0, 0);*/
+    }
 
 
+   /* private void CalLoadMovieDetails(int itemPosition) {
+
+        RelatedContentListItem item = itemData.get(itemPosition);
+        //Values are passing to activity & to fragment as well
+               *//* EpisodesListModel item = itemData.get(position);
+                clickItem(item, position);*//*
+        ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
+        permalinkStr = item.getPermalink();
+        contentIdStr = item.getContentId();
+        contentStreamIdStr = item.getContentStreamId();
+        useridStr = preferenceManager.getUseridFromPref();
+
+        contentDetailsInput.setAuthToken(authTokenStr);
+
+        Log.v("SUBHA", "authToken === " + authTokenStr);
+        if (preferenceManager != null) {
+            String countryPref = preferenceManager.getCountryCodeFromPref();
+            contentDetailsInput.setCountry(countryPref);
+        } else {
+            contentDetailsInput.setCountry("IN");
+        }
+        contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        contentDetailsInput.setPermalink(permalinkStr);
+        contentDetailsInput.setUser_id(useridStr);
+        asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, YogaPlayerActivity.this, YogaPlayerActivity.this);
+        asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
 
 
-
+    }*/
 }
 
 

@@ -570,7 +570,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             Util.dataModel.setAdDetails(_video_details_output.getAdDetails());
             Util.dataModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
 
-
+            Log.v("pratik","played length in data model==="+Util.dataModel.getPlayPos()*1000);
             //player model set
             playerModel.setAdDetails(_video_details_output.getAdDetails());
             playerModel.setMidRoll(_video_details_output.getMidRoll());
@@ -589,6 +589,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             playerModel.setOfflineUrl(_video_details_output.getOfflineUrl());
             playerModel.setOfflineLanguage(_video_details_output.getOfflineLanguage());
             playerModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
+            Log.v("pratik","played length in playermodel==="+playerModel.getPlayPos()*1000);
 
 
             if (playerModel.getVideoUrl() == null ||
