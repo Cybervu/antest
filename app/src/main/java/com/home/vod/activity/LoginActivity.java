@@ -593,18 +593,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
         if (statusCode == 200) {
-            if (_video_details_output.getIs_offline()!=null
-                    && !_video_details_output.getIs_offline().trim().isEmpty() &&
-                    !_video_details_output.getIs_offline().trim().equals("null") &&
-                    !_video_details_output.getIs_offline().trim().matches("")) {
-                playerModel.setIsOffline(_video_details_output.getIs_offline());
+            if((_video_details_output.getIs_offline().trim().equals("1")) && _video_details_output.getDownload_status().trim().equals("1")){
+                playerModel.canDownload(true);
             }
-            if (_video_details_output.getDownload_status()!=null
-                    && !_video_details_output.getDownload_status().trim().isEmpty() &&
-                    !_video_details_output.getDownload_status().trim().equals("null") &&
-                    !_video_details_output.getDownload_status().trim().matches("")
-                    ) {
-                playerModel.setDownloadStatus(_video_details_output.getDownload_status());
+            else{
+                playerModel.canDownload(false);
             }
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 

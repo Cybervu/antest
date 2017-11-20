@@ -1062,8 +1062,14 @@ public class RegisterActivity extends AppCompatActivity implements
         if (statusCode == 200) {
 
             if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
-                playerModel.setIsOffline(_video_details_output.getIs_offline());
-                playerModel.setDownloadStatus(_video_details_output.getDownload_status());
+
+
+                if((_video_details_output.getIs_offline().trim().equals("1")) && _video_details_output.getDownload_status().trim().equals("1")){
+                    playerModel.canDownload(true);
+                }
+                else{
+                    playerModel.canDownload(false);
+                }
 
                 /**@bishal
                  * for drm player below condition added
