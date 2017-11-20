@@ -383,6 +383,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
+
         episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
 /************chromecast***********/
         mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
@@ -619,8 +620,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             } else {
 
 
-                if (menuList.get(position).getLinkType().trim().equalsIgnoreCase("external")) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menuList.get(position).getUrl().trim()));
+                if (menuList.get(position).getLinkType().trim().equalsIgnoreCase("2")) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menuList.get(position).getPermalink().trim()));
                     browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(browserIntent);
                     return;
