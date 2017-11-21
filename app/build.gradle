@@ -322,8 +322,8 @@ android {
             dimension 'vendor'
             applicationId 'com.release.magicmovies'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            //buildConfigField "String", "AUTH_TOKEN", "\"3ea7e43c13d8ab6eb505b960217df923\""//Magic Movies
-            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            buildConfigField "String", "AUTH_TOKEN", "\"3ea7e43c13d8ab6eb505b960217df923\""//Magic Movies
+            //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             targetSdkVersion 23
             versionCode 1
             versionName '1.0'
