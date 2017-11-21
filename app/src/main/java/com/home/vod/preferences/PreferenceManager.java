@@ -29,6 +29,9 @@ public class PreferenceManager {
     public  final String PREFS_LOGIN_PROFILE_IMAGE_KEY = "loginProfImg";
     public  final String PREFS_LOGIN_HISTORYID_KEY = "loginHistId";
     public  final String PREFS_LOGIN_DATE = "date";
+    public  final String NOTI_COUNT = "noti_count";
+    public static final String SHARED_PREF = "ah_firebase";
+
 
 
     private PreferenceManager(Context mContext){
@@ -176,6 +179,14 @@ public class PreferenceManager {
         mEditor.commit();
     }
 
+    public String getSharedPref() {
+        return mSharedPreferences.getString(SHARED_PREF,"0");
+    }
+
+    public void setSharedPref(String s) {
+        mEditor.putString(SHARED_PREF,s);
+        mEditor.commit();
+    }
 
 
     public void clearLoginPref(){

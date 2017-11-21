@@ -101,6 +101,10 @@ public class APIUrlConstant {
      * endpoint to get Registration Enable details API
      */
     public static String IS_REGISTRATIONENABLED_URL = "isRegistrationEnabled";
+
+    /**endpoint to get Registration Enable details API**/
+    public static String GET_STUDIO_AUTH_TOKEN = "getStudioAuthkey";
+
     /**
      * endpoint to get Static Page Details API
      */
@@ -287,6 +291,9 @@ public class APIUrlConstant {
 
 
 
+    public static final String SHARED_PREF = "ah_firebase";
+
+
     public static String getGetSubCategoryList() {
         return GetSubCategoryList;
     }
@@ -450,6 +457,10 @@ public class APIUrlConstant {
 
     public static String getIsRegistrationenabledUrl() {
         return BASE_URl + IS_REGISTRATIONENABLED_URL;
+    }
+
+    public static String getGetStudioAuthToken() {
+        return BASE_URl + GET_STUDIO_AUTH_TOKEN;
     }
 
     public static String getGetstaticpagesUrl() {
