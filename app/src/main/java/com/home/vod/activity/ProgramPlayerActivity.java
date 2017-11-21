@@ -2602,6 +2602,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                             int currentPositionStr = millisecondsToString(emVideoView.getCurrentPosition());
                             playerPosition = currentPositionStr;
+//                            Played_Length = emVideoView.getCurrentPosition();
 
 
                             if (isFastForward == true) {
