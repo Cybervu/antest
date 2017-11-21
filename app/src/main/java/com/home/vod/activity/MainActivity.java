@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -380,6 +383,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
+
         episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
 /************chromecast***********/
         mediaRouteMenuItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu,
@@ -616,8 +620,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             } else {
 
 
-                if (menuList.get(position).getLinkType().trim().equalsIgnoreCase("external")) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menuList.get(position).getUrl().trim()));
+                if (menuList.get(position).getLinkType().trim().equalsIgnoreCase("2")) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menuList.get(position).getPermalink().trim()));
                     browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(browserIntent);
                     return;

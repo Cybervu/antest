@@ -7,10 +7,13 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
+import com.home.vod.activity.RegisterActivity;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
@@ -20,6 +23,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_REGISTER_FIELDS_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
+import static com.home.vod.preferences.LanguagePreference.ENTER_REGISTER_FIELDS_DATA;
+import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
 
 
 /**
@@ -32,7 +39,7 @@ public class RegisterUIHandler {
     Spinner country_spinner, language_spinner;
     private EditText editName;
     ArrayAdapter<String> Language_arrayAdapter, Country_arrayAdapter;
-    public  String selected_Language_Id="", selected_Country_Id="",regNameStr;
+    public  String selected_Language_Id="", selected_Country_Id="",regNameStr,regPhone="";
     private LanguagePreference languagePreference;
 
     public RegisterUIHandler(Activity context){
@@ -152,7 +159,7 @@ public class RegisterUIHandler {
     public void getRegisterName(){
         regNameStr = editName.getText().toString().trim();
         if (!regNameStr.equals("")) {
-            ((RegisterActivity) context).registerButtonClicked(regNameStr);
+            ((RegisterActivity) context).registerButtonClicked(regNameStr,regPhone);
         }else {
             Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
         }

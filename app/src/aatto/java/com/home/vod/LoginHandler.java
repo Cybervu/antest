@@ -101,20 +101,43 @@ public class LoginHandler {
                                 if (json != null) {
 
 
-                                    if ((json.has("name")) && json.getString("name").trim() != null && !json.getString("name").trim().isEmpty() && !json.getString("name").trim().equals("null") && !json.getString("name").trim().matches("")) {
+                                    String fName = "";
+                                    if ((json.has("id")) && json.getString("id").trim() != null && !json.getString("id").trim().isEmpty() && !json.getString("id").trim().equals("null") && !json.getString("id").trim().matches("")) {
+                                        fbUserId = json.getString("id");
+                                    }
+                                    if ((json.has("first_name")) && json.getString("first_name").trim() != null && !json.getString("first_name").trim().isEmpty() && !json.getString("first_name").trim().equals("null") && !json.getString("first_name").trim().matches("")) {
+                                        if ((json.has("last_name")) && json.getString("last_name").trim() != null && !json.getString("last_name").trim().isEmpty() && !json.getString("last_name").trim().equals("null") && !json.getString("last_name").trim().matches("")) {
+                                            fbName = json.getString("first_name") + " " + json.getString("last_name");
+                                        }
+                                        fName =  json.getString("first_name");
+                                    } else {
 
-                                        fbName = json.getString("name");
+                                        if ((json.has("last_name")) && json.getString("last_name").trim() != null && !json.getString("last_name").trim().isEmpty() && !json.getString("last_name").trim().equals("null") && !json.getString("last_name").trim().matches("")) {
+                                            fbName = json.getString("last_name");
+                                            fName =  json.getString("last_name");
+                                        }else{
+                                            if ((json.has("name")) && json.getString("name").trim() != null && !json.getString("name").trim().isEmpty() && !json.getString("name").trim().equals("null") && !json.getString("name").trim().matches("")) {
+                                                fbName = json.getString("name");
+                                                fName = json.getString("name").replace(" ","").trim();
+                                            }
+                                        }
 
                                     }
+
+                                  /*  if (fbName!=null && fbName.matches("")){
+                                        fbName = fbUserId;
+                                    }*/
                                     if ((json.has("email")) && json.getString("email").trim() != null && !json.getString("email").trim().isEmpty() && !json.getString("email").trim().equals("null") && !json.getString("email").trim().matches("")) {
                                         fbEmail = json.getString("email");
                                     } else {
-                                        fbEmail = fbName + "@facebook.com";
+                                        if (fbName != null && !fbName.matches("")) {
+                                            fbEmail = fName + "@facebook.com";
+                                        } else {
+                                            fbName = fbUserId;
+                                            fbEmail = fbUserId + "@facebook.com";
+                                        }
+                                    }
 
-                                    }
-                                    if ((json.has("id")) && json.optString("id").trim() != null && !json.optString("id").trim().isEmpty() && !json.optString("id").trim().equals("null") && !json.optString("id").trim().matches("")) {
-                                        fbUserId = json.optString("id");
-                                    }
                                     loginButton.setVisibility(View.GONE);
                                     loginWithFacebookButton.setVisibility(View.GONE);
                                     btnLogin.setVisibility(View.GONE);

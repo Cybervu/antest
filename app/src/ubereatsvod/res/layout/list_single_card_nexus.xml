@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listViewLayout"
+    android:layout_width="108dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/grid_color_selector"
+    android:clickable="false"
+    android:padding="@dimen/videoCensorRatingTextView_padding"
+    android:focusable="false">
+
+
+        <ImageView
+            android:id="@+id/itemImage"
+            android:layout_width="@dimen/list_singlecard_img_width"
+            android:layout_height="@dimen/list_singlecard_img_height"
+            android:layout_alignParentTop="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/logo"
+            />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/itemImage"
+        android:layout_alignLeft="@+id/itemImage"
+        android:layout_alignRight="@+id/itemImage"
+        android:background="@color/buttonbg"
+        >
+        <TextView
+            android:id="@+id/itemTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:background="@color/transparent"
+            android:focusableInTouchMode="false"
+            android:gravity="left"
+            android:padding="@dimen/itemTitle_padding"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="@dimen/itemtitle1_text_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+</RelativeLayout>

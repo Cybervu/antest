@@ -53,17 +53,21 @@ android {
             versionName "1.01"
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
-           // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
+            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
             //  buildConfigField "String", "AUTH_TOKEN", "\"d2d529d95240ed416ead6684bd888c0f\""//idogic test
-            buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//edocent
+            //buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//edocent
         }
         defaultFlavor_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+           // buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+
         }
         defaultFlavor_Prod_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+            //buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+
         }
         /*Structuring vishwamtv flavour with dimension*/
         vishwamtv {
@@ -75,6 +79,7 @@ android {
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"e8ae05a2ef3fd0c6688952c8f7557823\""
+            // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
         }
         vishwamtv_staging_ {
             dimension 'environment'
@@ -184,7 +189,7 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
-       /*Structuring Monetizer flavour with dimension*/
+        /*Structuring Monetizer flavour with dimension*/
         monetizer {
             dimension 'vendor'
             minSdkVersion 21
@@ -305,9 +310,8 @@ android {
             targetSdkVersion 25
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            //            buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
-            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
-
+            buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
+            //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
         }
         yoteshingo_staging_ {
             dimension 'environment'
@@ -335,6 +339,24 @@ android {
         magicmovies_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        ubereatsvod {
+            minSdkVersion 21
+            dimension 'vendor'
+            applicationId 'com.release.UberEatsVOD'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"45cfb681ab026427eb9c031e3f6c1f08\""
+            targetSdkVersion 23
+            versionCode 1
+            versionName '1.0'
+        }
+        ubereatsvod_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+        ubereatsvod_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
     }
 }
@@ -391,10 +413,16 @@ android.variantFilter { variant ->
     }else if (vendor.equals('yoteshingo') && (environment.equals('yoteshingo_staging_')||environment.equals('yoteshingo_Prod_'))
             && (isRelease||isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('magicmovies') && (environment.equals('magicmovies_staging_')||environment.equals('magicmovies_Prod_'))
+    }
+    else if (vendor.equals('magicmovies') && (environment.equals('magicmovies_staging_')||environment.equals('magicmovies_Prod_'))
             && (isRelease||isDebug)) {
         variant.setIgnore(false)
-    }else{
+    }
+    else if (vendor.equals('ubereatsvod') && (environment.equals('ubereatsvod_staging_')||environment.equals('ubereatsvod_Prod_'))
+            && (isRelease||isDebug)) {
+        variant.setIgnore(false)
+    }
+    else{
         variant.setIgnore(true)
     }
    }
