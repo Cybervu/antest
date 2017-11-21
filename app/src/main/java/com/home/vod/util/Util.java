@@ -566,6 +566,8 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, CANCEL_BUTTON, DEFAULT_CANCEL_BUTTON, "btn_cancel", json);
         setTranslationLanguageToPref(languagePreference, RESUME_MESSAGE, DEFAULT_RESUME_MESSAGE, "resume_watching", json);
         setTranslationLanguageToPref(languagePreference, CONTINUE_BUTTON, DEFAULT_CONTINUE_BUTTON, "continue", json);
+        setTranslationLanguageToPref(languagePreference, CONTACT_US, DEFAULT_CONTACT_US, "contact_us", json);
+
 
         setTranslationLanguageToPref(languagePreference, ENTER_VOUCHER_CODE, DEFAULT_ENTER_VOUCHER_CODE, "enter_voucher_code", json);
         setTranslationLanguageToPref(languagePreference, CONFIRM_PASSWORD, DEFAULT_CONFIRM_PASSWORD, "confirm_password", json);
