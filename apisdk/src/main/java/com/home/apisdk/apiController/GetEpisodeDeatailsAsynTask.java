@@ -523,7 +523,7 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
                             if (currencyJson.has("symbol") && currencyJson.optString("symbol").trim() != null && !currencyJson.optString("symbol").trim().isEmpty() && !currencyJson.optString("symbol").trim().equals("null") && !currencyJson.optString("symbol").trim().matches("")) {
                                 currencyModel.setCurrencySymbol(currencyJson.optString("symbol"));
                             } else {
-                                currencyModel.setCurrencySymbol("");
+                                currencyModel.setCurrencySymbol("$");
                             }
                             episode_details_output.setCurrencyDetails(currencyModel);
 

@@ -249,6 +249,14 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
             //mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }
 
+        if (getIntent().getStringExtra("muviuniqueid") != null) {
+            muviUniqueIdStr = getIntent().getStringExtra("muviuniqueid");
+        } else {
+            muviUniqueIdStr = "";
+        }
+
+
+
         /*mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1185,13 +1193,14 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
     @Override
     public void onRegisterUserPaymentPostExecuteCompleted(RegisterUserPaymentOutputModel registerUserPaymentOutputModel, int status) {
 
+        try {
+            if (progressBarHandler.isShowing())
+                progressBarHandler.hide();
+        } catch (IllegalArgumentException ex) {
+            status = 0;
+        }
         if (status == 0) {
-            try {
-                if (progressBarHandler.isShowing())
-                    progressBarHandler.hide();
-            } catch (IllegalArgumentException ex) {
-                status = 0;
-            }
+
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
             dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_SUBSCRIPTION, DEFAULT_ERROR_IN_SUBSCRIPTION));
             dlgAlert.setTitle(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE));
@@ -1207,8 +1216,6 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
         } else if (status > 0) {
 
             if (status == 200) {
-                if (progressBarHandler.isShowing())
-                    progressBarHandler.hide();
                 Toast.makeText(PaymentInfoActivity.this, languagePreference.getTextofLanguage(SUBSCRIPTION_COMPLETED, DEFAULT_SUBSCRIPTION_COMPLETED), Toast.LENGTH_LONG).show();
                 if (Util.check_for_subscription == 0) {
                     Intent intent = new Intent(PaymentInfoActivity.this, MainActivity.class);
@@ -1239,12 +1246,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 }
 
             } else {
-                try {
-                    if (progressBarHandler.isShowing())
-                        progressBarHandler.hide();
-                } catch (IllegalArgumentException ex) {
-                    status = 0;
-                }
+
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
                 dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_SUBSCRIPTION, DEFAULT_ERROR_IN_SUBSCRIPTION));
                 dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
@@ -1257,6 +1259,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                             }
                         });
                 dlgAlert.create().show();
+
             }
         }
 
