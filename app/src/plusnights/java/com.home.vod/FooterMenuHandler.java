@@ -21,12 +21,10 @@ public class FooterMenuHandler {
 
         for (MenusOutputModel.FooterMenu menuListOutput : menusOutputModel.getFooterMenuModel()) {
             LogUtil.showLog("Alok", "footermenuListOutputList ::" + menuListOutput.getPermalink());
-            if (menuListOutput.getUrl() != null && !menuListOutput.getUrl().equalsIgnoreCase("")) {
                 if (menuListOutput.getPermalink().equals("about-us") || menuListOutput.getPermalink().equals("contactus")) {
                     menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getLink_type(), menuListOutput.getUrl()));
                 }
 
-            }
         }
     }
 }

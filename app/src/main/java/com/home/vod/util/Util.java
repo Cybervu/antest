@@ -35,6 +35,7 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.apiModel.APVModel;
 import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.PPVModel;
+import com.home.vod.BuildConfig;
 import com.home.vod.QueueDataProvider;
 import com.home.vod.R;
 import com.home.vod.activity.LoginActivity;
@@ -150,7 +151,12 @@ public class Util {
     public static boolean hide_pause = false;
     public static boolean call_finish_at_onUserLeaveHint = true;
 
-    public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
+    //public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
+
+    public static String pdf_url=BuildConfig.SERVICE_BASE_PATH;
+    public static String  final_pdf_url=pdf_url.substring(0,pdf_url.lastIndexOf("rest"+""+'/'));
+    public static String Dwonload_pdf_rootUrl = final_pdf_url +""+ "docs/";
+
     public static boolean app_is_in_player_context = false;
 
    /*public static boolean checkNetwork(Context context) {

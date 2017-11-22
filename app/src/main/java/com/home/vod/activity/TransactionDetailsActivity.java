@@ -53,6 +53,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -120,6 +121,9 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
     String filename;
     int progress_bar_type = 0;
     int progressStatus = 0;
+    String Download_Url;
+    int downloadedSize = 0, totalsize;
+    //float per = 0;
 
     String id, user_id;
     RelativeLayout noInternet;
@@ -403,8 +407,10 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         protected String doInBackground(String... f_url) {
             int count;
 
-            try {
+           /* try {
                 URL url = new URL(f_url[0]);
+                //URL url = new URL("https://upload.wikimedia.org/wikipedia/commons/3/36/Hopetoun_falls.jpg");
+                LogUtil.showLog("MUVI","url=="+url);
                 String str = f_url[0];
                 filename = str.substring(str.lastIndexOf("/") + 1);
                 URLConnection conection = url.openConnection();
@@ -423,11 +429,13 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                 }
                 // Output stream
 
-
+                LogUtil.showLog("MUVI","Download File link found");
                 OutputStream output = new FileOutputStream(mediaStorageDir + "/" + filename);
                 byte data[] = new byte[1024];
                 long total = 0;
+                LogUtil.showLog("MUVI","input .read(data)=="+ input.read(data));
                 while ((count = input.read(data)) != -1) {
+                    LogUtil.showLog("MUVI","Download started");
                     total += count;
                     // publishing the progress....
                     // After this onProgressUpdate will be called
@@ -444,7 +452,61 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                 output.close();
                 input.close();
 
-            } catch (Exception e) {
+            }*/
+            File file = null;
+            try {
+                URL url = new URL(f_url[0]);
+                String dwnload_file_path = f_url[0];
+                Download_Url = dwnload_file_path.substring(dwnload_file_path.lastIndexOf("/") + 1);
+                HttpURLConnection urlConnection = (HttpURLConnection) url
+                        .openConnection();
+
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setDoOutput(true);
+
+                // connect
+                urlConnection.connect();
+
+                // set the path where we want to save the file
+                File SDCardRoot =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                // create a new file, to save the downloaded file
+                file = new File(SDCardRoot, Download_Url);
+
+                FileOutputStream fileOutput = new FileOutputStream(file);
+
+                // Stream used for reading the data from the internet
+                InputStream inputStream = urlConnection.getInputStream();
+
+                // this is the total size of the file which we are
+                // downloading
+                totalsize = urlConnection.getContentLength();
+                //setText("Starting PDF download...");
+
+                // create a buffer...
+                byte[] buffer = new byte[1024 * 1024];
+                int bufferLength = 0;
+                float per = 0;
+                while ((bufferLength = inputStream.read(buffer)) > 0) {
+                    fileOutput.write(buffer, 0, bufferLength);
+                    downloadedSize += bufferLength;
+                    per = ((float) downloadedSize / totalsize) * 100;
+                    pDialog.setProgress((int) per);
+
+                }
+                // close the output stream when complete //
+                fileOutput.close();
+                //setText("Download Complete. Open PDF Application installed in the device.");
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        pDialog.dismiss(); // if you want close it..
+
+                        showDialog(languagePreference.getTextofLanguage(DOWNLOAD_COMPLETED,DEFAULT_DOWNLOAD_COMPLETED), 1);
+                    }
+                });
+            }
+
+
+           catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
