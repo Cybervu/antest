@@ -971,6 +971,7 @@ public class RegisterActivity extends AppCompatActivity implements
                                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                                     asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
                                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                                 } else {
@@ -1865,6 +1866,8 @@ public class RegisterActivity extends AppCompatActivity implements
                         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                         getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                        getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
                         asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
                         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                     } else {

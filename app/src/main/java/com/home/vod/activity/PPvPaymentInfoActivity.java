@@ -2200,6 +2200,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                                     VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
                                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                                 }
@@ -2589,6 +2590,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                                     VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
                                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                                 }
