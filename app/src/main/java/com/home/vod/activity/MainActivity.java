@@ -44,17 +44,7 @@ import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
-import com.release.muvisdk.api.apiController.GetAppMenuAsync;
-import com.release.muvisdk.api.apiController.GetImageForDownloadAsynTask;
-import com.release.muvisdk.api.apiController.GetLanguageListAsynTask;
-import com.release.muvisdk.api.apiController.GetTranslateLanguageAsync;
-import com.release.muvisdk.api.apiController.LogoutAsynctask;
-import com.release.muvisdk.api.apiController.SDKInitializer;
-import com.release.muvisdk.api.apiModel.GetMenusInputModel;
-import com.release.muvisdk.api.apiModel.LanguageListInputModel;
-import com.release.muvisdk.api.apiModel.LanguageListOutputModel;
-import com.release.muvisdk.api.apiModel.LogoutInput;
-import com.release.muvisdk.api.apiModel.MenusOutputModel;
+
 import com.home.vod.EpisodeListOptionMenuHandler;
 import com.home.vod.FooterMenuHandler;
 import com.home.vod.R;
@@ -74,6 +64,17 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
+import com.release.muvisdk.api.apiController.GetAppMenuAsync;
+import com.release.muvisdk.api.apiController.GetImageForDownloadAsynTask;
+import com.release.muvisdk.api.apiController.GetLanguageListAsynTask;
+import com.release.muvisdk.api.apiController.GetTranslateLanguageAsync;
+import com.release.muvisdk.api.apiController.LogoutAsynctask;
+import com.release.muvisdk.api.apiController.SDKInitializer;
+import com.release.muvisdk.api.apiModel.GetMenusInputModel;
+import com.release.muvisdk.api.apiModel.LanguageListInputModel;
+import com.release.muvisdk.api.apiModel.LanguageListOutputModel;
+import com.release.muvisdk.api.apiModel.LogoutInput;
+import com.release.muvisdk.api.apiModel.MenusOutputModel;
 
 import org.json.JSONException;
 

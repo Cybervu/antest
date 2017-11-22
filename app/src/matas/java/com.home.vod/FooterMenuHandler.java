@@ -2,9 +2,9 @@ package com.home.vod;
 
 import android.app.Activity;
 
-import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.model.NavDrawerItem;
 import com.home.vod.util.LogUtil;
+import com.release.muvisdk.api.apiModel.MenusOutputModel;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class FooterMenuHandler {
     public FooterMenuHandler(Activity context){
         this.context=context;
     }
-    public void addFooterMenu(MenusOutputModel menusOutputModel,ArrayList<NavDrawerItem> menuList ){
+    public void addFooterMenu(MenusOutputModel menusOutputModel, ArrayList<NavDrawerItem> menuList ){
 
         for (MenusOutputModel.FooterMenu menuListOutput : menusOutputModel.getFooterMenuModel()) {
             LogUtil.showLog("Alok", "footermenuListOutputList ::" + menuListOutput.getPermalink());

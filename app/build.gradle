@@ -2438,7 +2438,7 @@ dependencies {
 //    compile project(':muviplayersdk')
 //    compile project(':muvisdk')
 
-    compile 'com.muvi:MUVISDK:v1.02'
+    compile 'com.muvi:MUVISDK:v1.03'
 
     compile files('libs/wasabi.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')
