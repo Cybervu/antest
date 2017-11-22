@@ -41,6 +41,7 @@
         <dimen name="login_padding">10dp</dimen>
         <dimen name="forgotlayout_margin">10dp</dimen>
         <dimen name="registerlayout_padding">10dp</dimen>
+        <dimen name="radiobtn_text_size">14dp</dimen>
         <dimen name="movieimg_width">108dp</dimen>
         <dimen name="movieimg_height">150dp</dimen>
         <dimen name="video280_width">170dp</dimen>

@@ -1785,7 +1785,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             dbModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
             dbModel.setStreamUniqueId(item.getEpisodeStreamUniqueId());
             dbModel.setThirdPartyUrl(item.getEpisodeThirdPartyUrl());
-            dbModel.setVideoTitle(item.getEpisodeTitle());
+            dbModel.setVideoTitle(movieNameStr);
             // dbModel.setVideoStory(getIntent().getStringExtra(Util.STORY_INTENT_KEY));
             dbModel.setVideoStory(item.getEpisodeDescription());
 
@@ -2851,9 +2851,9 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         }
 
 
-        completeRadioButton.setText("  " + Util.dataModel.getEpisode_title().trim() + " Complete Season ");
-        seasonRadioButton.setText("  " + Util.dataModel.getEpisode_title().trim() + " Season " + Util.dataModel.getEpisode_series_no().trim() + " ");
-        episodeRadioButton.setText("  " + Util.dataModel.getEpisode_title().trim() + " S" + Util.dataModel.getEpisode_series_no().trim() + " E " + Util.dataModel.getEpisode_no().trim() + " ");
+        completeRadioButton.setText("  " + Util.dataModel.getVideoTitle().trim() + " Complete Season ");
+        seasonRadioButton.setText("  " + Util.dataModel.getVideoTitle().trim() + " Season " + Util.dataModel.getEpisode_series_no().trim() + " ");
+        episodeRadioButton.setText("  " + Util.dataModel.getVideoTitle().trim() + " S" + Util.dataModel.getEpisode_series_no().trim() + " E " + Util.dataModel.getEpisode_no().trim() + " ");
 
 
       /*  if (Util.dataModel.getIsAPV() == 1) {
