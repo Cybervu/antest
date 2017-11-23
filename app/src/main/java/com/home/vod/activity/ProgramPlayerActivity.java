@@ -516,6 +516,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 if (NetworkStatus.getInstance().isConnected(this)) {
 
                     Log.v("SUBHA", "Video PLayer Called 1");
+                    Log.v("SUBHALAXMIPANDA1", "status" +upContentUniqueId+upStreamUniqueId+preferenceManager.getUseridFromPref()+languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);
@@ -589,6 +590,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
     @Override
     public void onVideoDetailsPostExecuteCompleted(Video_Details_Output _video_details_output, int code, String status, String message) {
 
+        Log.v("SUBHALAXMIPANDA1", "_video_details_output============" +_video_details_output);
 
         // _video_details_output.setThirdparty_url("https://www.youtube.com/watch?v=fqU2FzATTPY&spfreload=10");
         // _video_details_output.setThirdparty_url("https://player.vimeo.com/video/192417650?color=00ff00&badge=0");
@@ -610,7 +612,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             play_video = true;
         }
 
-        Log.v("SUBHA", "play video ==== " + play_video);
+        Log.v("SUBHALAXMIPANDA1", "play video ==== " + play_video);
         if (!play_video) {
 
             try {
@@ -702,8 +704,11 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             com.home.vod.util.Util.dataModel.setVideoResolution(_video_details_output.getVideoResolution());
 
             playerModel.setVideoResolution(_video_details_output.getVideoResolution());
-            if (_video_details_output.getPlayed_length() != null && !_video_details_output.getPlayed_length().equals(""))
+            Log.v("SUBHALAXMIPANDA1", "play video ==== " + _video_details_output.getPlayed_length());
+
+            if (_video_details_output.getPlayed_length() != null && !_video_details_output.getPlayed_length().equals("")) {
                 playerModel.setPlayPos((com.home.vod.util.Util.isDouble(_video_details_output.getPlayed_length())));
+            }
 
 
             //dependency for datamodel
@@ -1008,6 +1013,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                         } else {
 
                             playerModel.setThirdPartyPlayer(false);
+
                             setPlayVideoUrl(playerModel.getVideoUrl());
                             //emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
                         }
@@ -1100,6 +1106,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                         contentPosition = position;
                         getData();
+
                         Log.v("SUBHA", "data set here");
                     }
 
@@ -1596,6 +1603,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
         subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
         subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
+        subtitle_change_btn.setVisibility(View.GONE);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
         videoTitle = (TextView) findViewById(R.id.videoTitle);
         moreVideoTitleTextView = (TextView) findViewById(R.id.moreVideoTitleTextView);
@@ -2081,8 +2089,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             @Override
             public void onPrepared() {
 
+                Log.v("SUBHALAXMIPANDA1","onPrepared"+is_paused);
                 video_prepared = true;
                 if (change_resolution) {
+                    Log.v("SUBHALAXMIPANDA1","change_resolution"+is_paused);
 
                     change_resolution = false;
                     emVideoView.start();
@@ -2099,8 +2109,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                 } else {
 
+                    Log.v("SUBHALAXMIPANDA1","onplayerModel.getPlayPos()"+playerModel.getPlayPos());
 
                     if (playerModel.getPlayPos() >= emVideoView.getDuration() / 1000) {
+
                         played_length = 0;
                     }else{
                         played_length = playerModel.getPlayPos() * 1000;
@@ -2141,10 +2153,11 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                         } else {
                             startTimer();
 
-                            Log.v("SUBHA","played_length === 74632 video log details called" + played_length );
+                            Log.v("SUBHALAXMIPANDA1","played_length === 74632 video log details called" + played_length );
                             if (played_length > 0) {
                                 ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
                                 Util.call_finish_at_onUserLeaveHint = false;
+                                Log.v("SUBHALAXMIPANDA1","ResumePopupActivity " + played_length );
 
                                 Intent resumeIntent = new Intent(ProgramPlayerActivity.this, ResumePopupActivity.class);
                                 startActivityForResult(resumeIntent, 1001);
@@ -2434,7 +2447,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
 
-                        Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
+                        Log.v("SUBHA11", "responseStr of video log id normal player===========" + videoLogId);
 
 
                     } else {
@@ -2461,13 +2474,18 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 log_temp_id = "0";
             }
 
-            AsyncVideoBufferLogDetails asyncVideoBufferLogDetails = new AsyncVideoBufferLogDetails();
-            asyncVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
+            try {
+                AsyncVideoBufferLogDetails asyncVideoBufferLogDetails = new AsyncVideoBufferLogDetails();
+                asyncVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
+            }catch (Exception e){
+                videoLogId = "0";
+                log_temp_id = "0";
+            }
         }
 
         @Override
         protected void onPreExecute() {
-            Log.v("SUBHA","played_length === 2" );
+
 //            stoptimertask();
         }
 
@@ -3140,8 +3158,16 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             stoptimertask();
             timer = null;
         }
-        AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
-        asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+        if (video_completed == false) {
+
+            AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+            asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            return;
+        }
+        mHandler.removeCallbacks(updateTimeTask);
+        if (emVideoView != null) {
+            emVideoView.release();
+        }
         return;
       /*  if (video_completed == false){
 
@@ -3387,6 +3413,134 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         return super.onKeyUp(keyCode, objEvent);
     }
 */
+
+
+    private class AsyncResumeNextVideoLogDetails extends AsyncTask<Void, Void, Void> {
+        //  ProgressDialog pDialog;
+        String responseStr;
+        int statusCode = 0;
+        String watchSt = "halfplay";
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+//            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost(APIUrlConstant.getVideoLogsUrl());
+                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+                httppost.addHeader("authToken", authTokenStr);
+                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
+                httppost.addHeader("ip_address", ipAddressStr.trim());
+                httppost.addHeader("movie_id", playerModel.getMovieUniqueId());
+                httppost.addHeader("episode_id", playerModel.getStreamUniqueId().trim());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (current_matching_time >= emVideoView.getDuration()) {
+                            watchSt = "complete";
+                        }
+
+                    }
+
+                });
+                httppost.addHeader("watch_status", watchSt);
+
+
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+
+                    httppost.addHeader("is_streaming_restriction", "1");
+                    httppost.addHeader("restrict_stream_id", restrict_stream_id);
+                    httppost.addHeader("is_active_stream_closed", "1");
+                }
+
+                // Following code is changed due to NewVideoLog API ;
+
+                httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
+                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("resume_time", "" + (playerPosition));
+
+                Log.v("SUBHALAXMIPANDA1", "played_length============" + (playerPosition - player_start_time));
+                Log.v("SUBHALAXMIPANDA1", "log_temp_id============" + log_temp_id);
+                Log.v("SUBHALAXMIPANDA1", "resume_time============" + (playerPosition));
+                Log.v("SUBHALAXMIPANDA1", "log_id============" + videoLogId);
+                Log.v("SUBHALAXMIPANDA1","video_completed1"+video_completed);
+
+                //===============End=============================//
+
+
+                httppost.addHeader("device_type", "2");
+                httppost.addHeader("log_id", videoLogId);
+
+
+                // Execute HTTP Post Request
+                try {
+                    HttpResponse response = httpclient.execute(httppost);
+                    responseStr = EntityUtils.toString(response.getEntity());
+                    Log.v("SUBHALAXMIPANDA1","responseStr of responseStr============"+responseStr);
+
+
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            videoLogId = "0";
+
+                        }
+
+                    });
+
+                } catch (IOException e) {
+                    videoLogId = "0";
+
+                    e.printStackTrace();
+                }
+                if (responseStr != null) {
+                    JSONObject myJson = new JSONObject(responseStr);
+                    statusCode = Integer.parseInt(myJson.optString("code"));
+                    if (statusCode == 200) {
+                        videoLogId = myJson.optString("log_id");
+                        log_temp_id = myJson.optString("log_temp_id");
+                        restrict_stream_id = myJson.optString("restrict_stream_id");
+                        Log.v("SUBHALAXMIPANDA1", "responseStr of restrict_stream_id============" + restrict_stream_id);
+                    } else {
+                        videoLogId = "0";
+                        log_temp_id = "0";
+                    }
+
+                }
+
+            } catch (Exception e) {
+                videoLogId = "0";
+                log_temp_id = "0";
+
+            }
+
+            return null;
+        }
+
+
+        protected void onPostExecute(Void result) {
+
+            if (responseStr == null) {
+                videoLogId = "0";
+                log_temp_id = "0";
+
+            }
+            Log.v("SUBHALAXMIPANDA1","loadAnotherVideo");
+            mHandler.removeCallbacks(updateTimeTask);
+
+            loadAnotherVideo();
+            return;
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+           // stoptimertask();
+        }
+    }
 
 
     private class AsyncResumeVideoLogDetails extends AsyncTask<Void, Void, Void> {
@@ -3677,7 +3831,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Log.v("SUBHAlaxmipanda1","onActivityResult"+requestCode);
         if (resultCode == RESULT_OK) {
 
             if (requestCode == 8001) {
@@ -3766,6 +3920,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
 
                 if (data.getStringExtra("yes").equals("1002")) {
+                    Log.v("SUBHALAXMIPANDA1","1002");
 
                     watchStatus = "halfplay";
                     playerPosition = playerModel.getPlayPos();
@@ -5134,7 +5289,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                 if (cast_disconnected_position != 0) {
 
-                    Log.v("BIBHU2", "onSessionEnded===and video log called");
+                    Log.v("BIBHU2", "onSessionEnded===and video log called"+cast_disconnected_position);
 
                     emVideoView.seekTo((int) cast_disconnected_position);
                     log_temp_id = "0";
@@ -5239,12 +5394,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                     castSession.setMessageReceivedCallbacks("urn:x-cast:muvi.mcrt.final", new Cast.MessageReceivedCallback() {
                         @Override
                         public void onMessageReceived(CastDevice castDevice, String s, String s1) {
-                            Log.v("bibhu", "onMessageReceived Message from receiver=" + s1);
+                            Log.v("SUBHA", "onMessageReceived Message from receiver=" + s1);
 
 
                             if (s1.contains("completed")) {
                                 video_completed_at_chromecast = true;
-                                Log.v("bibhu", "video completed at chromecast");
+                                Log.v("SUBHA", "video completed at chromecast");
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -5255,6 +5410,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                                 try {
                                     JSONObject jsonObject = new JSONObject(s1);
                                     videoLogId = jsonObject.optString("video_log_id");
+
+                                    Log.v("SUBHA11","video log id for cast connected == "+videoLogId );
 
                                     if (isDrm) {
                                         videoBufferLogId = jsonObject.optString("bandwidth_log_id");
@@ -5535,11 +5692,30 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", Util.authTokenStr.trim());
+
+                Log.v("SUBHA11","AUthtoken === " +authTokenStr );
+                Log.v("SUBHA11","userIdStr === " +userIdStr.trim() );
+                Log.v("SUBHA11","ipAddressStr === " +ipAddressStr.trim() );
+                Log.v("SUBHA11"," playerModel.getMovieUniqueId() === " + playerModel.getMovieUniqueId() );
+                Log.v("SUBHA11"," playerModel.getEpisode_id() === " + playerModel.getStreamUniqueId() );
+                Log.v("SUBHA11"," watchStatus === " + watchStatus );
+                Log.v("SUBHA11"," videoLogId === " + videoLogId );
+                Log.v("SUBHA11"," resumetime === " + playerPosition );
+                Log.v("SUBHA11"," domain name  === " + BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+
+
+                jsonObj.put("authToken", authTokenStr);
                 jsonObj.put("user_id", userIdStr.trim());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
-                jsonObj.put("episode_id", playerModel.getEpisode_id());
+
+                if(content_types_id == 3){
+                    jsonObj.put("episode_id", playerModel.getStreamUniqueId());
+
+                }else{
+                    jsonObj.put("episode_id", playerModel.getEpisode_id());
+
+                }
 
 
                 jsonObj.put("watch_status", watchStatus);
@@ -5549,14 +5725,14 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "1");
-                    Log.v("BIBHU4", "restrict_stream_id============1");
+                    Log.v("SUBHA11", "restrict_stream_id============1");
                 } else {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "0");
-                    Log.v("BIBHU4", "restrict_stream_id============0");
+                    Log.v("SUBHA11", "restrict_stream_id============0");
                 }
 
-                jsonObj.put("domain_name", Util.rootUrl().trim().substring(0, Util.rootUrl().trim().length() - 6));
+                jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
                 jsonObj.put("is_log", "1");
 
                 // ProgramPlayerActivity.this code is changed according to new Video log //
@@ -5581,9 +5757,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 jsonObj.put("video_type", "mped_dash");
 
 
-                Log.v("BIBHU4", "drm_bandwidth_by_sender============" + ((CurrentUsedData + DataUsedByChrmoeCast) * 1024));
-                Log.v("BIBHU4", "CurrentUsedData============" + CurrentUsedData);
-                Log.v("BIBHU4", "DataUsedByChrmoeCast============" + DataUsedByChrmoeCast);
+                Log.v("SUBHA11", "drm_bandwidth_by_sender============" + ((CurrentUsedData + DataUsedByChrmoeCast) * 1024));
+                Log.v("SUBHA11", "CurrentUsedData============" + CurrentUsedData);
+                Log.v("SUBHA11", "DataUsedByChrmoeCast============" + DataUsedByChrmoeCast);
 
                 jsonObj.put("drm_bandwidth_by_sender", "" + ((CurrentUsedData + DataUsedByChrmoeCast) * 1024));
 
@@ -5594,7 +5770,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
             List tracks = new ArrayList();
 
-            Log.v("BIBHU", "url size============" + playerModel.offline_url.size());
+            Log.v("SUBHA11", "url size============" + playerModel.offline_url.size());
             if (playerModel.offline_url.size() > 0) {
 
                 for (int i = 0; i < playerModel.offline_url.size(); i++) {
@@ -6495,8 +6671,30 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
 
     public void getData() {
-        mHandler.removeCallbacks(updateTimeTask);
-        seekBar.setProgress(0);
+
+        Util.call_finish_at_onUserLeaveHint = true;
+
+        if (asyncVideoLogDetails != null) {
+            asyncVideoLogDetails.cancel(true);
+        }
+        if (asyncFFVideoLogDetails != null) {
+            asyncFFVideoLogDetails.cancel(true);
+        }
+
+        if (timer != null) {
+            stoptimertask();
+            timer = null;
+        }
+        Log.v("SUBHALAXMIPANDA1","video_completed1"+video_completed);
+
+        if (video_completed == false) {
+
+            AsyncResumeNextVideoLogDetails asyncResumeNextVideoLogDetails = new AsyncResumeNextVideoLogDetails();
+            asyncResumeNextVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+        }
+        //Util.call_finish_at_onUserLeaveHint = true;
+
+       /* seekBar.setProgress(0);
         current_time.setText("00:00:00");
         total_time.setText("00:00:00");
         previous_matching_time = 0;
@@ -6528,13 +6726,13 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
         seekBarProgress = 0;
         change_resolution = false;
-        is_paused = false;
+        is_paused = false;*/
 
         //======end========//
 
 
-        int totalsize = questions.size() - 1;
-        Log.v("Nihar", "" + contentPosition);
+       /* int totalsize = questions.size() - 1;
+        Log.v("SUBHALAXMIPANDA1", "called contentposition" + contentPosition);
      //   if (totalsize > contentPosition && contentPosition != questions.size()) {
 
            // contentPosition = contentPosition + 1;
@@ -6598,11 +6796,11 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
             asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                          /*  AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
-                            asynLoadVideoUrls.execute();*/
+                          *//*  AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+                            asynLoadVideoUrls.execute();*//*
             previous_matching_time = current_matching_time;
             ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
-
+*/
 
        // }
     }
@@ -6757,6 +6955,117 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             backCalled();
             e.printStackTrace();
         }
+
+    }
+    void loadAnotherVideo()
+    {
+
+        seekBar.setProgress(0);
+        current_time.setText("00:00:00");
+        total_time.setText("00:00:00");
+        previous_matching_time = 0;
+        current_matching_time = 0;
+        video_completed = true;
+        content_types_id = 0;//set
+        videoLogId = "0";
+        watchStatus = "start";
+        playerPosition = 0;
+        videoBufferLogId = "0";
+        videoBufferLogUniqueId = "0";
+        Location = "0";
+        played_length = 0;
+        playerStartPosition = 0;
+        restrict_stream_id = "0";
+        movieId = "";//set
+        episodeId = "0";//set
+        selected_download_format = 0;
+        previous_matching_time = 0;
+        current_matching_time = 0;
+        SubTitleName.clear();
+        SubTitlePath.clear();
+        ResolutionFormat.clear();
+        ResolutionUrl.clear();
+        callWithoutCaption = true;
+        censor_layout = true;
+
+        // This added for resolution Change.
+
+        seekBarProgress = 0;
+        change_resolution = false;
+        is_paused = false;
+
+
+        int totalsize = questions.size() - 1;
+        Log.v("SUBHALAXMIPANDA1", "called contentposition" + contentPosition);
+        //   if (totalsize > contentPosition && contentPosition != questions.size()) {
+
+        // contentPosition = contentPosition + 1;
+
+        String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
+        clocktimetv.setText(clocktext);
+
+        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
+
+        moreVideosRecyclerView.setAdapter(mAdapter);
+
+
+
+
+        primary_ll.setVisibility(View.GONE);
+        last_ll.setVisibility(View.GONE);
+        center_play_pause.setVisibility(View.GONE);
+        latest_center_play_pause.setVisibility(View.GONE);
+        current_time.setVisibility(View.GONE);
+        subtitle_change_btn.setVisibility(View.INVISIBLE);
+        mediaRouteButton.setVisibility(View.INVISIBLE);
+        End_Timer();
+        Log.v("Nihar", totalsize + "NextPosition   429  :" + contentPosition);
+        EpisodesListModel listModel = questions.get(contentPosition);
+        durationTextView.setText(listModel.getEpisodeDuration());
+        playerModel.setVideoDuration(listModel.getEpisodeDuration());
+
+//                                Util.dataModel.setVideoDuration(listModel.getEpisodeDuration());
+        /////genere
+        videoTitle.setText(listModel.getEpisodeTitle());
+//                                Util.dataModel.setEpisode_title(listModel.getEpisodeTitle());
+        ///video story text view start
+        descriptionTitleTextVIew.setText(listModel.getEpisodeDescription());
+//                                Util.dataModel.setVideoStory(listModel.getEpisodeDescription());
+
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+
+        );
+        ///end videostory
+        Episodeid = listModel.getEpisodeMuviUniqueId();
+        content_types_id = playerModel.getContentTypesId();
+
+        upStreamUniqueId = listModel.getEpisodeStreamUniqueId();
+        episodeId = upStreamUniqueId;
+        upContentUniqueId = listModel.getEpisodeMuviUniqueId();
+        movieId = upContentUniqueId;
+        playerModel.setMovieUniqueId(movieId);
+        playerModel.setStreamUniqueId(episodeId);
+        emVideoView.pause();
+
+        ValidateUserInput validateUserInput = new ValidateUserInput();
+        validateUserInput.setAuthToken(authTokenStr);
+        validateUserInput.setUserId(preferenceManager.getUseridFromPref());
+//            validateUserInput.setUserId("157218");
+        validateUserInput.setMuviUniqueId(upContentUniqueId.trim());
+        validateUserInput.setPurchaseType(com.home.vod.util.Util.dataModel.getPurchase_type());
+        validateUserInput.setSeasonId(com.home.vod.util.Util.dataModel.getSeason_id());
+        // validateUserInput.setEpisodeStreamUniqueId(com.home.vod.util.Util.dataModel.getEpisode_id());
+        validateUserInput.setEpisodeStreamUniqueId(upStreamUniqueId);
+
+        validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
+        asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                          /*  AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+                            asynLoadVideoUrls.execute();*/
+        previous_matching_time = current_matching_time;
+        ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
 
     }
 }

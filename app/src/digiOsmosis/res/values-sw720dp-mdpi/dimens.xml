@@ -176,8 +176,8 @@
     <dimen name="card_padding">4dp</dimen>
     <dimen name="card_radius">9dp</dimen>
     <dimen name="card_elevation">9dp</dimen>
-    <dimen name="sideTitle_line_height">18dp</dimen>
-    <dimen name="sideTitle_line_width">5dp</dimen>
+    <dimen name="sideTitle_line_height">17dp</dimen>
+    <dimen name="sideTitle_line_width">3dp</dimen>
     <dimen name="sideTitle_line_marginleft">15dp</dimen>
     <dimen name="season_card_width">300dp</dimen>
     <dimen name="season_card_height">300dp</dimen>
@@ -202,6 +202,7 @@
 
     <dimen name="season_margin_left">20dp</dimen>
     <dimen name="sidemenu_padding_bottom">10dp</dimen>
+
 
     <dimen name="detailsTextView">250dp</dimen>
 

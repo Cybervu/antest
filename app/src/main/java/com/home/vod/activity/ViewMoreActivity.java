@@ -1165,12 +1165,9 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
                 } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
                     if (videoWidth > videoHeight) {
-                        Toast.makeText(ViewMoreActivity.this,"call 1 === "+videoWidth,Toast.LENGTH_SHORT).show();
-                        Toast.makeText(ViewMoreActivity.this,"call 1 === "+videoHeight,Toast.LENGTH_SHORT).show();
-                        Toast.makeText(ViewMoreActivity.this,"call 1 === ",Toast.LENGTH_SHORT).show();
+
                         gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_normal_horizontal) : (int) getResources().getInteger(R.integer.configuration_normal_horizontal));
                     } else {
-                        Toast.makeText(ViewMoreActivity.this,"call 2",Toast.LENGTH_SHORT).show();
                         gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_normal_vertical) : (int) getResources().getInteger(R.integer.configuration_normal_vertical));
                     }
 

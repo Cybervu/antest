@@ -378,15 +378,18 @@ TextView titleTextView;
             gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) getResources().getInteger(R.integer.configuration_xlarge_vertical) : (int) getResources().getInteger(R.integer.configuration_xlarge_vertical));
 
         }
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                Toast.makeText(DigiOsmosisDownloads.this, " item called " + position, Toast.LENGTH_SHORT).show();
                 Position = position;
                 SubtitleUrl = "";
 
                 final String data[] = download.get(position).getMUVIID().trim().split("@@@");
                 StreamId = data[1];
+
+                Log.v("SUBHA1"," item clicked === ");
 
                 if(Util.checkNetwork(DigiOsmosisDownloads.this))
                 {
@@ -397,9 +400,9 @@ TextView titleTextView;
                 {
                     MoveToOfflinePlayer();
                 }
-
             }
         });
+
     }
 
     public void visible(){
@@ -1303,8 +1306,8 @@ TextView titleTextView;
                     SubTitlePath.add(cursor.getString(1).trim());
 
 
-                    Log.v("BIBHU3","SubTitleName============"+cursor.getString(0).trim());
-                    Log.v("BIBHU3","SubTitlePath============"+cursor.getString(1).trim());
+                    Log.v("SUBHA1","SubTitleName============"+cursor.getString(0).trim());
+                    Log.v("SUBHA1","SubTitlePath============"+cursor.getString(1).trim());
 
                 } while (cursor.moveToNext());
             }

@@ -288,10 +288,6 @@ public class RegisterUIHandler {
         });
     }
 
-   /* public void setEmailText(LanguagePreference languagePreference){
-        gmailTest.setText(languagePreference.getTextofLanguage(GMAIL_SIGNUP, DEFAULT_GMAIL_SIGNUP));
-
-    }*/
 
    public void sendBroadCast()
    {

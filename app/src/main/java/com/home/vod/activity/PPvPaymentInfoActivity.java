@@ -1834,17 +1834,27 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
         if (status == 200) {
 
+            if (getIntent().getStringExtra("from") != null) {
+                /** yogaplayer **/
+                onBackPressed();
+            } else {
 
-            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-            getVideoDetailsInput.setAuthToken(authTokenStr);
-            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-            getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+               /* GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                getVideoDetailsInput.setAuthToken(authTokenStr);
+                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
-            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
-            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
+                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);*/
+
+
+                Intent intent = new Intent();
+                setResult(RESULT_OK,intent);
+                finish();
+            }
 
         } else {
             Toast.makeText(getApplicationContext(), voucherSubscriptionOutputModel.getMsg(), Toast.LENGTH_LONG).show();
@@ -2221,14 +2231,24 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                                     onBackPressed();
 
                                 } else {
-                                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(authTokenStr);
-                                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                                    if (getIntent().getStringExtra("from") != null) {
+                                        /** yogaplayer **/
+                                        onBackPressed();
+                                    } else {
+                                       /* GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                                        getVideoDetailsInput.setAuthToken(authTokenStr);
+                                        getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                                        getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                                        getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
 
-                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
-                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                                        VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
+                                        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);*/
+
+
+                                        Intent intent = new Intent();
+                                        setResult(RESULT_OK,intent);
+                                        finish();
+                                    }
                                 }
                             }
                                /* final Intent playVideoIntent = new Intent(PPvPaymentInfoActivity.this, PlayVideoActivity.class);
@@ -2610,14 +2630,23 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                                     onBackPressed();
 
                                 } else {
-                                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(authTokenStr);
-                                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                                    if (getIntent().getStringExtra("from") != null) {
+                                        /** yogaplayer **/
+                                        onBackPressed();
+                                    } else {
+                                       /* GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                                        getVideoDetailsInput.setAuthToken(authTokenStr);
+                                        getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                                        getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                                        getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
 
-                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
-                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                                        VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, PPvPaymentInfoActivity.this, PPvPaymentInfoActivity.this);
+                                        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);*/
+
+                                        Intent intent = new Intent();
+                                        setResult(RESULT_OK,intent);
+                                        finish();
+                                    }
                                 }
                             }
                         }
@@ -3415,6 +3444,21 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         super.onBackPressed();
 
     }*/
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        finish();
+        overridePendingTransition(0, 0);
+    }
 
 
 }

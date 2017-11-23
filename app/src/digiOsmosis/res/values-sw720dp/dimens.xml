@@ -180,4 +180,7 @@
 
     <dimen name="detailsTextView">250dp</dimen>
 
+    <dimen name="sideTitle_line_height">17dp</dimen>
+    <dimen name="sideTitle_line_width">3dp</dimen>
+
 </resources>

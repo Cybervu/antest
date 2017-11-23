@@ -72,6 +72,7 @@ import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.vod.BuildConfig;
 import com.home.vod.EpisodeListOptionMenuHandler;
+import com.home.vod.LoginRegistrationOnContentClickHandler;
 import com.home.vod.MonetizationHandler;
 import com.home.vod.MyDownloadIntentHandler;
 import com.home.vod.R;
@@ -168,7 +169,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     String movieUniqueId = "";
     DataModel dbModel = new DataModel();
     int isLogin = 0;
-
+    public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
     RecyclerView.LayoutManager mLayoutManager;
     Toolbar mActionBarToolbar;
     String episodeVideoUrlStr;
@@ -1454,16 +1455,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             if (loggedInStr != null) {
                 if (NetworkStatus.getInstance().isConnected(this)) {
 
-                    ValidateUserInput validateUserInput = new ValidateUserInput();
-                    validateUserInput.setAuthToken(authTokenStr);
-                    validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                    validateUserInput.setMuviUniqueId(movieUniqueId.trim());
-                    validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                    validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                    validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                    validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                    asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ProgramDetailsActivity.this, ProgramDetailsActivity.this);
-                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                    callForValidateUser();
 
                 } else {
                     Util.showToast(ProgramDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
@@ -1473,21 +1465,21 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
             } else {
 
-                final Intent register = new Intent(ProgramDetailsActivity.this, RegisterActivity.class);
 
-                register.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                Intent registerActivity = new LoginRegistrationOnContentClickHandler(ProgramDetailsActivity.this).handleClickOnContent();
+                registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 Util.check_for_subscription = 1;
-                register.putExtra("PLAY_LIST", itemData);
-                register.putExtra("TAG", ItemClickedPosition);
-                register.putExtra("PlayerModel", playerModel);
-
-                register.putExtra("PERMALINK", permalinkStr);
-                register.putExtra("SEASON", season.length);
-                register.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
-                Log.v("SUBHA", "current season ==== " + getIntent().getStringExtra(SEASON_INTENT_KEY));
-                register.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
-                register.putExtra("Index", getIntent().getStringExtra("Index"));
-                startActivity(register);
+                registerActivity.putExtra("PLAY_LIST", itemData);
+                registerActivity.putExtra("TAG", ItemClickedPosition);
+                registerActivity.putExtra("PlayerModel", playerModel);
+                registerActivity.putExtra("PERMALINK", permalinkStr);
+                registerActivity.putExtra("SEASON", season.length);
+                registerActivity.putExtra("Current_SEASON", getIntent().getStringExtra(SEASON_INTENT_KEY));
+                registerActivity.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
+                registerActivity.putExtra("Index", getIntent().getStringExtra("Index"));
+                startActivityForResult(registerActivity,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+              //  startActivity(registerActivity);
 
 
             }
@@ -1525,37 +1517,6 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
     }
 
-    private void updateMetadata(boolean visible) {
-        Point displaySize;
-        if (!visible) {
-            /*mDescriptionView.setVisibility(View.GONE);
-            mTitleView.setVisibility(View.GONE);
-            mAuthorView.setVisibility(View.GONE);*/
-            displaySize = Util.getDisplaySize(this);
-            RelativeLayout.LayoutParams lp = new
-                    RelativeLayout.LayoutParams(displaySize.x,
-                    displaySize.y + getSupportActionBar().getHeight());
-            lp.addRule(RelativeLayout.CENTER_IN_PARENT);
-            // mVideoView.setLayoutParams(lp);
-            //mVideoView.invalidate();
-        } else {
-            //MediaMetadata mm = mSelectedMedia.getMetadata();
-          /*  mDescriptionView.setText(mSelectedMedia.getCustomData().optString(
-                    VideoProvider.KEY_DESCRIPTION));
-            //mTitleView.setText(mm.getString(MediaMetadata.KEY_TITLE));
-            //mAuthorView.setText(mm.getString(MediaMetadata.KEY_SUBTITLE));
-            mDescriptionView.setVisibility(View.VISIBLE);
-            mTitleView.setVisibility(View.VISIBLE);
-            mAuthorView.setVisibility(View.VISIBLE);*/
-            displaySize = Util.getDisplaySize(this);
-            RelativeLayout.LayoutParams lp = new
-                    RelativeLayout.LayoutParams(displaySize.x,
-                    (int) (displaySize.x * mAspectRatio));
-            lp.addRule(RelativeLayout.BELOW, R.id.toolbar);
-            // mVideoView.setLayoutParams(lp);
-            //mVideoView.invalidate();
-        }
-    }
 
 
     private void setupCastListener() {
@@ -2532,7 +2493,27 @@ private void PlayThroughChromeCast(){
                 Played_Length = 0;
                 togglePlayback();
             }
+        } else if(requestCode == VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE && resultCode == RESULT_OK){
+//            new CheckVoucherOrPpvPaymentHandler(MovieDetailsActivity.this).handleVoucherPaymentOrPpvPayment();
+            // callValidateUserAPI();
+
+
+            callForValidateUser();
+
         }
 
+    }
+    public  void callForValidateUser()
+    {
+        ValidateUserInput validateUserInput = new ValidateUserInput();
+        validateUserInput.setAuthToken(authTokenStr);
+        validateUserInput.setUserId(preferenceManager.getUseridFromPref());
+        validateUserInput.setMuviUniqueId(movieUniqueId.trim());
+        validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
+        validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
+        validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
+        validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ProgramDetailsActivity.this, ProgramDetailsActivity.this);
+        asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
     }
 }

@@ -178,8 +178,8 @@
     <dimen name="card_padding">4dp</dimen>
     <dimen name="card_radius">9dp</dimen>
     <dimen name="card_elevation">9dp</dimen>
-    <dimen name="sideTitle_line_height">18dp</dimen>
-    <dimen name="sideTitle_line_width">5dp</dimen>
+    <dimen name="sideTitle_line_height">17dp</dimen>
+    <dimen name="sideTitle_line_width">3dp</dimen>
     <dimen name="sideTitle_line_marginleft">15dp</dimen>
 
     <dimen name="season_card_width">250dp</dimen>

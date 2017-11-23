@@ -522,6 +522,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(ProgrammeActivity.this);
         playButton = (ImageView) findViewById(R.id.playButton);
+        playButton.setVisibility(View.GONE);
         detailsTextView = (TextView) findViewById(R.id.detailsTextView);
         difficulty = (TextView) findViewById(R.id.difficulty);
         lineTextview = (TextView) findViewById(R.id.lineTextview);
@@ -1283,6 +1284,8 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             movieTrailerUrlStr = contentDetailsOutput.getTrailerUrl();
             contentTypesId = contentDetailsOutput.getContentTypesId();
 
+
+            Log.v("SUBHASHREE","movieTrailer === "+ movieTrailerUrlStr);
             lineTextview.setVisibility(View.VISIBLE);
 
             benefitsTitleTextView.setText(languagePreference.getTextofLanguage(BENEFIT_TITLE, DEFAULT_BENEFIT_TITLE));
@@ -1316,7 +1319,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             }
 
 
-            if (movieTrailerUrlStr.equals("") && movieTrailerUrlStr != null && movieTrailerUrlStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
+            if (movieTrailerUrlStr.matches("") || (movieTrailerUrlStr != null && movieTrailerUrlStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA)))) {
                 playButton.setVisibility(View.GONE);
                 Log.v("SUBHA", "trailer url no === ");
             } else {

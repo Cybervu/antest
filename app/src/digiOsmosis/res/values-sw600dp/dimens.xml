@@ -165,6 +165,8 @@
     <dimen name="profile_padding_top">80dp</dimen>
     <dimen name="sidemenu_padding_bottom">10dp</dimen>
 
+    <dimen name="sideTitle_line_height">17dp</dimen>
+    <dimen name="sideTitle_line_width">3dp</dimen>
 
     <dimen name="detailsTextView">230dp</dimen>
 

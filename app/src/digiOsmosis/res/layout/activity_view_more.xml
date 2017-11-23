@@ -22,33 +22,34 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/toolbar"
         android:layout_alignParentStart="true"
+        android:layout_marginTop="@dimen/marginRight20dp"
+        android:layout_marginBottom="@dimen/marginRight20dp"
         android:padding="@dimen/marginleft10dp">
 
-        <View
-            android:id="@+id/view1"
+        <TextView
             android:layout_width="@dimen/sideTitle_line_width"
             android:layout_height="@dimen/sideTitle_line_height"
-            android:layout_alignBottom="@+id/sectionTitle"
-            android:layout_alignTop="@+id/sectionTitle"
-            android:layout_marginLeft="@dimen/sideTitle_line_marginleft"
-
+            android:id="@+id/colortitle"
             android:background="@color/colorPrimary"
-            android:paddingLeft="@dimen/marginleft10dp" />
-
-
-
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/marginleft10dp"
+            />
 
 
         <TextView
             android:id="@+id/sectionTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Sample title"
             android:textAllCaps="true"
-            android:layout_toRightOf="@+id/view1"
-            android:padding="@dimen/payment_spinner_padding"
-            android:textColor="@color/pageTitleColor"
+            android:textColor="@color/videotextColor"
             android:textSize="@dimen/itemtitle_text_size"
-            android:textStyle="normal" />
+            android:layout_marginLeft="@dimen/marginRight20dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 
@@ -69,18 +70,7 @@
         android:verticalSpacing="@dimen/pre_order_button_margin"
 
         />
-    <!--<com.twotoasters.jazzylistview.JazzyGridView
-        android:id="@+id/imagesGridView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"
-        android:numColumns="2"
-        android:layout_marginRight="3dp"
-        android:layout_marginLeft="3dp"
-        android:horizontalSpacing="8dp"
-        android:verticalSpacing="8dp"
-        app:only_animate_new_items="false" />
--->
+
     <RelativeLayout
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"

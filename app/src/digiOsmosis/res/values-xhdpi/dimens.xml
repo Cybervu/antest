@@ -138,6 +138,8 @@
 
     <dimen name="season_margin_left">10dp</dimen>
 
+    <dimen name="sideTitle_line_height">17dp</dimen>
+    <dimen name="sideTitle_line_width">3dp</dimen>
     <dimen name="detailsTextView">150dp</dimen>
 
 </resources>

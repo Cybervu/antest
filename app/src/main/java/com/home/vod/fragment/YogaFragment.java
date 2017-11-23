@@ -36,6 +36,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -320,7 +321,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
     String posterUrl;
 
     // UI
-    private GridView gridView;
+    private ListView listView;
 
     ImageView img;
     //data to load videourl
@@ -392,10 +393,6 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
         setupCastListener();
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
-        TextView categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fonts));
-        categoryTitle.setTypeface(castDescriptionTypeface);
-        categoryTitle.setText(getArguments().getString("title"));
         genreListData = (RecyclerView) rootView.findViewById(R.id.demoListView);
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);
@@ -405,7 +402,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
         posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
-        gridView = (GridView) rootView.findViewById(R.id.imagesGridView);
+        listView = (ListView) rootView.findViewById(R.id.imagesGridView);
 
         footerView = (RelativeLayout) rootView.findViewById(R.id.loadingPanel);
 
@@ -419,18 +416,25 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
         noInternetConnectionLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
-        gridView.setVisibility(View.VISIBLE);
+        listView.setVisibility(View.VISIBLE);
+        View headerView = ((LayoutInflater)getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE)).inflate(R.layout.yoga_listing, null, false);
+        listView.addHeaderView(headerView);
+
+        listView.setAdapter(customGridAdapter);
 
 
-        gridView.setAdapter(customGridAdapter);
 
+        TextView categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
+        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fonts));
+        categoryTitle.setTypeface(castDescriptionTypeface);
+        categoryTitle.setText(getArguments().getString("title"));
         //Detect Network Connection
 
 
         if (!NetworkStatus.getInstance().isConnected(getActivity())) {
             noInternetConnectionLayout.setVisibility(View.VISIBLE);
             noDataLayout.setVisibility(View.GONE);
-            gridView.setVisibility(View.GONE);
+            listView.setVisibility(View.GONE);
             footerView.setVisibility(View.GONE);
         }
         resetData();
@@ -443,18 +447,18 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
         GetCategoryListAsynTask getCategoryListAsynTask = new GetCategoryListAsynTask(categoryListInput, YogaFragment.this, getActivity());
         getCategoryListAsynTask.execute();
 
-        gridView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-                if (gridView.getLastVisiblePosition() >= itemsInServer - 1) {
+                if (listView.getLastVisiblePosition() >= itemsInServer - 1) {
                     footerView.setVisibility(View.GONE);
                     return;
 
                 }
 
-                if (view.getId() == gridView.getId()) {
-                    final int currentFirstVisibleItem = gridView.getFirstVisiblePosition();
+                if (view.getId() == listView.getId()) {
+                    final int currentFirstVisibleItem = listView.getFirstVisiblePosition();
 
                     if (currentFirstVisibleItem > mLastFirstVisibleItem) {
                         mIsScrollingUp = false;
@@ -488,7 +492,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                     if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
                         listSize = itemData.size();
-                        if (gridView.getLastVisiblePosition() >= itemsInServer - 1) {
+                        if (listView.getLastVisiblePosition() >= itemsInServer - 1) {
                             return;
 
                         }
@@ -522,7 +526,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
         });
 
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 img = (ImageView) view.findViewById(R.id.movieImageView);
@@ -599,7 +603,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
 
                 filterView.setVisibility(View.GONE);
-                gridView.setEnabled(true);
+                listView.setEnabled(true);
 
                 if ((filterOrderByStr != null && !filterOrderByStr.equalsIgnoreCase("")) || (genreArray != null && genreArray.size() > 0)) {
                     firstTime = true;
@@ -622,7 +626,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                     if (!NetworkStatus.getInstance().isConnected(getActivity())) {
                         noInternetConnectionLayout.setVisibility(View.VISIBLE);
-                        gridView.setVisibility(View.GONE);
+                        listView.setVisibility(View.GONE);
                         if (filterMenuItem != null) {
 
                             filterMenuItem.setVisible(false);
@@ -847,14 +851,14 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                             if (itemData != null) {
                                 noInternetConnectionLayout.setVisibility(View.GONE);
-                                gridView.setVisibility(View.VISIBLE);
+                                listView.setVisibility(View.VISIBLE);
                                 noDataLayout.setVisibility(View.GONE);
 
 
                             } else {
                                 noInternetConnectionLayout.setVisibility(View.VISIBLE);
                                 noDataLayout.setVisibility(View.GONE);
-                                gridView.setVisibility(View.GONE);
+                                listView.setVisibility(View.GONE);
 
 
                             }
@@ -875,7 +879,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                             noInternetConnectionLayout.setVisibility(View.GONE);
                             noDataLayout.setVisibility(View.VISIBLE);
                             footerView.setVisibility(View.GONE);
-                            gridView.setVisibility(View.GONE);
+                            listView.setVisibility(View.GONE);
 
                         }
                     });
@@ -968,7 +972,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                                     public void run() {
                                         noDataLayout.setVisibility(View.VISIBLE);
                                         noInternetConnectionLayout.setVisibility(View.GONE);
-                                        gridView.setVisibility(View.GONE);
+                                        listView.setVisibility(View.GONE);
                                         footerView.setVisibility(View.GONE);
 
                                     }
@@ -984,7 +988,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                             public void run() {
                                 noDataLayout.setVisibility(View.VISIBLE);
                                 noInternetConnectionLayout.setVisibility(View.GONE);
-                                gridView.setVisibility(View.GONE);
+                                listView.setVisibility(View.GONE);
                                 footerView.setVisibility(View.GONE);
 
 
@@ -999,7 +1003,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                     public void run() {
                         noDataLayout.setVisibility(View.VISIBLE);
                         noInternetConnectionLayout.setVisibility(View.GONE);
-                        gridView.setVisibility(View.GONE);
+                        listView.setVisibility(View.GONE);
                         footerView.setVisibility(View.GONE);
 
                     }
@@ -1024,13 +1028,13 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                     noDataLayout.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
-                    gridView.setVisibility(View.GONE);
+                    listView.setVisibility(View.GONE);
                     footerView.setVisibility(View.GONE);
 
                 }
                 noDataLayout.setVisibility(View.VISIBLE);
                 noInternetConnectionLayout.setVisibility(View.GONE);
-                gridView.setVisibility(View.GONE);
+                listView.setVisibility(View.GONE);
                 footerView.setVisibility(View.GONE);
 
             } else {
@@ -1044,19 +1048,19 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                         noDataLayout.setVisibility(View.VISIBLE);
                         noInternetConnectionLayout.setVisibility(View.GONE);
-                        gridView.setVisibility(View.GONE);
+                        listView.setVisibility(View.GONE);
                         footerView.setVisibility(View.GONE);
 
                     }
                     noDataLayout.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
-                    gridView.setVisibility(View.GONE);
+                    listView.setVisibility(View.GONE);
                     footerView.setVisibility(View.GONE);
 
 
                 } else {
                     footerView.setVisibility(View.GONE);
-                    gridView.setVisibility(View.VISIBLE);
+                    listView.setVisibility(View.VISIBLE);
                     if (filterMenuItem != null) {
 
                         filterMenuItem.setVisible(true);
@@ -1167,7 +1171,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
             if (!NetworkStatus.getInstance().isConnected(getActivity())) {
                 noInternetConnectionLayout.setVisibility(View.VISIBLE);
-                gridView.setVisibility(View.GONE);
+                listView.setVisibility(View.GONE);
                 if (filterMenuItem != null) {
 
                     filterMenuItem.setVisible(false);
@@ -1217,7 +1221,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
             if (!NetworkStatus.getInstance().isConnected(getActivity())) {
                 noInternetConnectionLayout.setVisibility(View.VISIBLE);
                 noDataLayout.setVisibility(View.GONE);
-                gridView.setVisibility(View.GONE);
+                listView.setVisibility(View.GONE);
                 footerView.setVisibility(View.GONE);
             }
             resetData();
@@ -1313,12 +1317,12 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                             if (itemData != null) {
                                 noInternetConnectionLayout.setVisibility(View.GONE);
-                                gridView.setVisibility(View.VISIBLE);
+                                listView.setVisibility(View.VISIBLE);
                                 noDataLayout.setVisibility(View.GONE);
                             } else {
                                 noInternetConnectionLayout.setVisibility(View.VISIBLE);
                                 noDataLayout.setVisibility(View.GONE);
-                                gridView.setVisibility(View.GONE);
+                                listView.setVisibility(View.GONE);
                             }
 
                             footerView.setVisibility(View.GONE);
@@ -1337,7 +1341,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                             noInternetConnectionLayout.setVisibility(View.GONE);
                             noDataLayout.setVisibility(View.VISIBLE);
                             footerView.setVisibility(View.GONE);
-                            gridView.setVisibility(View.GONE);
+                            listView.setVisibility(View.GONE);
                         }
                     });
                     e.printStackTrace();
@@ -1436,7 +1440,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                                     public void run() {
                                         noDataLayout.setVisibility(View.VISIBLE);
                                         noInternetConnectionLayout.setVisibility(View.GONE);
-                                        gridView.setVisibility(View.GONE);
+                                        listView.setVisibility(View.GONE);
                                         footerView.setVisibility(View.GONE);
                                     }
                                 });
@@ -1451,7 +1455,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                             public void run() {
                                 noDataLayout.setVisibility(View.VISIBLE);
                                 noInternetConnectionLayout.setVisibility(View.GONE);
-                                gridView.setVisibility(View.GONE);
+                                listView.setVisibility(View.GONE);
                                 footerView.setVisibility(View.GONE);
                             }
                         });
@@ -1464,7 +1468,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                         public void run() {
                             noDataLayout.setVisibility(View.VISIBLE);
                             noInternetConnectionLayout.setVisibility(View.GONE);
-                            gridView.setVisibility(View.GONE);
+                            listView.setVisibility(View.GONE);
                             footerView.setVisibility(View.GONE);
                         }
                     });
@@ -1492,12 +1496,12 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                     noDataLayout.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
-                    gridView.setVisibility(View.GONE);
+                    listView.setVisibility(View.GONE);
                     footerView.setVisibility(View.GONE);
                 }
                 noDataLayout.setVisibility(View.VISIBLE);
                 noInternetConnectionLayout.setVisibility(View.GONE);
-                gridView.setVisibility(View.GONE);
+                listView.setVisibility(View.GONE);
                 footerView.setVisibility(View.GONE);
             } else {
                 if (itemData.size() <= 0) {
@@ -1510,16 +1514,16 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                         noDataLayout.setVisibility(View.VISIBLE);
                         noInternetConnectionLayout.setVisibility(View.GONE);
-                        gridView.setVisibility(View.GONE);
+                        listView.setVisibility(View.GONE);
                         footerView.setVisibility(View.GONE);
                     }
                     noDataLayout.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
-                    gridView.setVisibility(View.GONE);
+                    listView.setVisibility(View.GONE);
                     footerView.setVisibility(View.GONE);
                 } else {
                     footerView.setVisibility(View.GONE);
-                    gridView.setVisibility(View.VISIBLE);
+                    listView.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
                     noDataLayout.setVisibility(View.GONE);
                     videoImageStrToHeight = movieImageStr;
@@ -1600,44 +1604,44 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
     }
 
 
-    @Override
+   /* @Override
     public void onConfigurationChanged(Configuration newConfig) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-     /*   InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+     *//*   InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-*/
+*//*
 
-        ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = listView.getLayoutParams();
         layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
-        gridView.setLayoutParams(layoutParams);
-        gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
-        gridView.setGravity(Gravity.CENTER_HORIZONTAL);
+        listView.setLayoutParams(layoutParams);
+        listView.setStretchMode(listView.STRETCH_COLUMN_WIDTH);
+        listView.setGravity(Gravity.CENTER_HORIZONTAL);
 
         if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
             if (videoWidth > videoHeight) {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
+                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
             } else {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3);
+                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3);
             }
 
         } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
             if (videoWidth > videoHeight) {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
+                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
             } else {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
+                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
             }
 
         } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
 
-            gridView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
+            listView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
 
 
         } else {
             if (videoWidth > videoHeight) {
-                gridView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3);
+                listView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3);
             } else {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 4);
+                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 4);
             }
 
 
@@ -1645,7 +1649,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
         super.onConfigurationChanged(newConfig);
     }
-
+*/
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -1699,7 +1703,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                     noDataLayout.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
-                    gridView.setVisibility(View.GONE);
+                    listView.setVisibility(View.GONE);
                     if (filterMenuItem != null) {
 
                         filterMenuItem.setVisible(false);
@@ -1708,17 +1712,17 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                     footerView.setVisibility(View.GONE);
                 }
 
-                gridView.smoothScrollToPosition(0);
+                listView.smoothScrollToPosition(0);
                 firstTime = false;
-                ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
+                ViewGroup.LayoutParams layoutParams = listView.getLayoutParams();
                 layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
-                gridView.setLayoutParams(layoutParams);
-                gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
-                gridView.setGravity(Gravity.CENTER_HORIZONTAL);
+                listView.setLayoutParams(layoutParams);
+               /* listView.setStretchMode(listView.STRETCH_COLUMN_WIDTH);
+                listView.setGravity(Gravity.CENTER_HORIZONTAL);*/
 
                 /*if (getActivity()!=null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_large_3) : (int) context.getResources().getDimension(R.dimen.configuration_large_3));
+                        listView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_large_3) : (int) context.getResources().getDimension(R.dimen.configuration_large_3));
                     } else {
                         gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_xlarge_4) : (int) context.getResources().getDimension(R.dimen.configuration_xlarge_4));
                     }
@@ -1751,7 +1755,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                         customGridAdapter = new YogaFilterAdapter(context, R.layout.list_card_item_layout, itemData);
 
                     }
-                    gridView.setAdapter(customGridAdapter);
+                    listView.setAdapter(customGridAdapter);
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new YogaFilterAdapter(context, R.layout.list_card_item_layout, itemData);
@@ -1761,14 +1765,14 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                     }
                     customGridAdapter = new YogaFilterAdapter(context, R.layout.list_card_item_layout, itemData);
-                    gridView.setAdapter(customGridAdapter);
+                    listView.setAdapter(customGridAdapter);
                 }
 
 
             } else {
                 // save RecyclerView state
                 mBundleRecyclerViewState = new Bundle();
-                Parcelable listState = gridView.onSaveInstanceState();
+                Parcelable listState = listView.onSaveInstanceState();
                 mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
 
 
@@ -1780,7 +1784,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                         customGridAdapter = new YogaFilterAdapter(context, R.layout.list_card_item_layout, itemData);
 
                     }
-                    gridView.setAdapter(customGridAdapter);
+                    listView.setAdapter(customGridAdapter);
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new YogaFilterAdapter(context, R.layout.list_card_item_layout, itemData);
@@ -1788,11 +1792,11 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                         customGridAdapter = new YogaFilterAdapter(context, R.layout.list_card_item_layout, itemData);
 
                     }
-                    gridView.setAdapter(customGridAdapter);
+                    listView.setAdapter(customGridAdapter);
                 }
 
                 if (mBundleRecyclerViewState != null) {
-                    gridView.onRestoreInstanceState(listState);
+                    listView.onRestoreInstanceState(listState);
                 }
 
             }
@@ -1806,7 +1810,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
         super.onSaveInstanceState(outState);
         // save RecyclerView state
         mBundleRecyclerViewState = new Bundle();
-        Parcelable listState = gridView.onSaveInstanceState();
+        Parcelable listState = listView.onSaveInstanceState();
         mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
     }
 
@@ -1891,7 +1895,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
 
                 noInternetConnectionLayout.setVisibility(View.GONE);
-                gridView.setEnabled(true);
+                listView.setEnabled(true);
                 startActivity(new Intent(getActivity(), FilterActivity.class));
                 Intent filterIntent = new Intent(getActivity(), FilterActivity.class);
                 filterIntent.putExtra("genreList", genreArray);

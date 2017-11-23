@@ -37,7 +37,7 @@
             android:layout_alignLeft="@+id/itemImage"
             android:layout_alignRight="@+id/itemImage"
             android:ellipsize="end"
-            android:gravity="left"
+            android:gravity="center"
             android:maxLength="18"
             android:text=""
             android:textColor="@color/noInternetColor"

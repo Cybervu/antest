@@ -502,8 +502,8 @@
 
                         <TextView
                             android:id="@+id/colortitle1"
-                            android:layout_width="5dp"
-                            android:layout_height="18dp"
+                            android:layout_width="@dimen/sideTitle_line_width"
+                            android:layout_height="@dimen/sideTitle_line_height"
                             android:layout_marginLeft="@dimen/marginleft10dp"
                             android:layout_marginRight="@dimen/marginleft10dp"
                             android:layout_marginTop="3dp"
@@ -546,8 +546,8 @@
 
                         <TextView
                             android:id="@+id/colortitle"
-                            android:layout_width="5dp"
-                            android:layout_height="18dp"
+                            android:layout_width="@dimen/sideTitle_line_width"
+                            android:layout_height="@dimen/sideTitle_line_height"
                             android:layout_marginLeft="@dimen/marginleft10dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginTop="3dp"
@@ -581,15 +581,18 @@
 
                         <TextView
                             android:id="@+id/detailsTextView"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/detailsTextView"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/marginRight20dp"
                             android:text=""
+                            android:ellipsize="end"
+                            android:maxLines="1"
                             android:textAllCaps="true"
                             android:textColor="@color/videotextColor"
                             android:textSize="@dimen/story_title_text_size"
 
                             />
+
 
                     </RelativeLayout>
 

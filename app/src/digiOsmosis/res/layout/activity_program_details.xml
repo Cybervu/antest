@@ -76,8 +76,8 @@
 
                 <View
                     android:id="@+id/view"
-                    android:layout_width="5dp"
-                    android:layout_height="15dp"
+                    android:layout_width="@dimen/sideTitle_line_width"
+                    android:layout_height="@dimen/sideTitle_line_height"
                     android:layout_alignBottom="@+id/titleTextView"
                     android:layout_alignTop="@+id/titleTextView"
                     android:layout_marginLeft="8dp"
@@ -182,8 +182,8 @@
 
                 <View
                     android:id="@+id/view1"
-                    android:layout_width="5dp"
-                    android:layout_height="1dp"
+                    android:layout_width="@dimen/sideTitle_line_width"
+                    android:layout_height="@dimen/sideTitle_line_height"
                     android:layout_alignBottom="@+id/tutorialTextView"
                     android:layout_alignTop="@+id/tutorialTextView"
                     android:layout_marginLeft="8dp"

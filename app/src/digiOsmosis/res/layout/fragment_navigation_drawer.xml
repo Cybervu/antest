@@ -88,15 +88,15 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/logo"
                 android:layout_width="@dimen/profile_image_width"
                 android:layout_marginTop="10dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 android:layout_height="@dimen/profile_image_height"
                 android:elevation="10dp"
                 android:layout_marginBottom="10dp"
@@ -115,7 +115,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Anuradha Prusty"
+                android:text=""
                 android:id="@+id/edit_name"
                 android:layout_below="@+id/logo"
                 android:gravity="center"
@@ -149,11 +149,11 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/layout_1"
         android:weightSum="2"
-        android:visibility="gone">
+        android:visibility="visible">
 
 
         <LinearLayout
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal"
@@ -171,7 +171,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"
-                android:text="Notification"
+                android:text=""
+                android:id="@+id/notificationTextView"
                 android:gravity="center"
                 android:textColor="@color/appBackgroundColor"/>
 
@@ -192,7 +193,7 @@
                     android:layout_width="20dp"
                     android:layout_height="15dp"
                     android:id="@+id/badge1"
-                    android:text="35"
+                    android:text=""
                     android:gravity="center"
                     android:textColor="#FFF"
                     android:textSize="10sp"
@@ -208,7 +209,7 @@
 
 
         <LinearLayout
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
@@ -228,7 +229,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"
-                android:text="Logout"
+                android:text=""
+                android:id="@+id/logoutTextView"
                 android:gravity="center"
                 android:textColor="@color/appBackgroundColor"/>
         </LinearLayout>
@@ -255,6 +257,7 @@
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:text="Notification"
+            android:id="@+id/noLoginNotificationTextView"
             android:gravity="center"
             android:textColor="@color/appBackgroundColor"/>
 

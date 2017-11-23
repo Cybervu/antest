@@ -8,27 +8,35 @@
     android:layout_margin="@dimen/diet_top_padding"
     android:orientation="horizontal">
 
-        <View
-            android:layout_width="4dp"
-            android:layout_height="25dp"
-            android:layout_below="@+id/toolbar"
-            android:id="@+id/lineView"
-            android:layout_alignBaseline="@+id/categoryTitle"
-            android:layout_alignTop="@+id/categoryTitle"
-            android:layout_marginLeft="@dimen/ppv_margin"
-            android:textColor="@color/pageTitleColor"
-            android:background="@color/colorPrimary"
-            />
-        <TextView
-            android:id="@+id/categoryTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/toolbar"
-            android:layout_marginLeft="@dimen/ppv_margin"
-            android:textColor="@color/pageTitleColor"
-            android:textSize="@dimen/fragment_text_size"
-            android:layout_toRightOf="@+id/lineView"
-            android:textStyle="normal" />
+
+    <TextView
+        android:layout_width="@dimen/sideTitle_line_width"
+        android:layout_height="@dimen/sideTitle_line_height"
+        android:id="@+id/colortitle"
+        android:background="@color/colorPrimary"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/marginleft10dp"
+        />
+
+
+    <TextView
+        android:id="@+id/categoryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sample title"
+        android:textAllCaps="true"
+        android:textColor="@color/videotextColor"
+        android:textSize="@dimen/itemtitle_text_size"
+        android:layout_marginLeft="@dimen/marginleft10dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+
+
 
 </LinearLayout>
 

@@ -372,6 +372,8 @@ public class YogaFilterAdapter extends ArrayAdapter<YogaItem> implements DeleteF
         if (status == 200) {
             // data.get(i).setFavbtnClicked(true);
 
+            Log.v("SUBHA","data yoga item size == "+ data.size());
+
             data.get(i).setIsFavorite(1);
             data.get(i).setFavoriteClicked(true);
             notifyDataSetChanged();
