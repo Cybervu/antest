@@ -2298,7 +2298,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 PlayThroughChromeCast();
 
             } else {
-                watch_status_String = "strat";
+                watch_status_String = "start";
                 Played_Length = 0;
                 PlayThroughChromeCast();
             }
@@ -2321,7 +2321,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
 
             Log.v("pratik", "else conditn called");
-            watch_status_String = "strat";
+            watch_status_String = "start";
             Played_Length = 0;
             PlayThroughChromeCast();
         } else if (resultCode == RESULT_OK && requestCode == 1007) {
@@ -2335,7 +2335,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 togglePlayback();
 
             } else {
-                watch_status_String = "strat";
+                watch_status_String = "start";
                 Played_Length = 0;
                 togglePlayback();
             }

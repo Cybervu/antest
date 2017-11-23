@@ -120,6 +120,8 @@ public class MyDownloads extends AppCompatActivity {
     String SubtitleUrl = "";
     String SubtitleLanguage = "";
     String SubtitleCode = "";
+    String seek_status = "";
+    String resume_time = "0";
 
     LanguagePreference languagePreference;
     PreferenceManager preferenceManager;
@@ -1177,7 +1179,7 @@ public class MyDownloads extends AppCompatActivity {
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id",download.get(Position).getMuviid());
                 jsonObj.put("episode_id",download.get(Position).getStreamId());
-                jsonObj.put("watch_status", "start");
+                jsonObj.put("watch_status", watch_status);
                 jsonObj.put("device_type", "2");
                 jsonObj.put("log_id", "0");
                 jsonObj.put("active_track_index", "0");
@@ -1201,8 +1203,8 @@ public class MyDownloads extends AppCompatActivity {
 
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
-                jsonObj.put("resume_time", "0");
-                jsonObj.put("seek_status", "");
+                jsonObj.put("resume_time",resume_time);
+                jsonObj.put("seek_status",seek_status);
                 // This  Code Is Added For Drm BufferLog By Bibhu ...
 
                 jsonObj.put("resolution", "BEST");
@@ -1247,7 +1249,92 @@ public class MyDownloads extends AppCompatActivity {
             Log.v("BIBHU4", "restrict_stream_id=====33=======111");
 
             togglePlayback();
+        }else{
+            mediaContentType = "videos/mp4";
+            JSONObject jsonObj = null;
+            try {
+                jsonObj = new JSONObject();
+                jsonObj.put("description", download.get(Position).getMUVIID());
+
+                //  This Code Is Added For Video Log By Bibhu..
+
+                jsonObj.put("authToken", Util.authTokenStr.trim());
+                jsonObj.put("user_id",preferenceManager.getUseridFromPref());
+                jsonObj.put("ip_address", ipAddressStr.trim());
+                jsonObj.put("movie_id",download.get(Position).getMuviid());
+                jsonObj.put("episode_id",download.get(Position).getStreamId());
+                jsonObj.put("watch_status", watch_status);
+                jsonObj.put("device_type", "2");
+                jsonObj.put("log_id", "0");
+                jsonObj.put("active_track_index", "0");
+
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                    jsonObj.put("restrict_stream_id", "0");
+                    jsonObj.put("is_streaming_restriction", "1");
+                    Log.v("BIBHU4", "restrict_stream_id============1");
+                } else {
+                    jsonObj.put("restrict_stream_id", "0");
+                    jsonObj.put("is_streaming_restriction", "0");
+                    Log.v("BIBHU4", "restrict_stream_id============0");
+                }
+
+                jsonObj.put("domain_name", Util.rootUrl().trim().substring(0, Util.rootUrl().trim().length() - 6));
+                jsonObj.put("is_log", "1");
+
+                //=====================End===================//
+
+                // This code is changed according to new Video log //
+
+                jsonObj.put("played_length", "0");
+                jsonObj.put("log_temp_id", "0");
+                jsonObj.put("resume_time",resume_time);
+                jsonObj.put("seek_status",seek_status);
+                // This  Code Is Added For Drm BufferLog By Bibhu ...
+
+                jsonObj.put("resolution", "BEST");
+                jsonObj.put("start_time", "0");
+                jsonObj.put("end_time", "0");
+                jsonObj.put("log_unique_id", "0");
+                jsonObj.put("location", "0");
+                jsonObj.put("bandwidth_log_id", "0");
+                jsonObj.put("video_type", "");
+                jsonObj.put("drm_bandwidth_by_sender", "0");
+
+                //====================End=====================//
+
+            } catch (JSONException e) {
+            }
+            List tracks = new ArrayList();
+            Log.v("BIBHU4", "restrict_stream_id============111");
+            if(!SubtitleUrl.equals(""))
+            {
+                Log.v("BIBHU4", "restrict_stream_id======11======111");
+                MediaTrack englishSubtitle = new MediaTrack.Builder(0,
+                        MediaTrack.TYPE_TEXT)
+                        .setName(SubtitleLanguage)
+                        .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                        .setContentId(SubtitleUrl)
+                        .setLanguage(SubtitleCode)
+                        .setContentType("text/vtt")
+                        .build();
+                tracks.add(englishSubtitle);
+            }
+
+
+            mediaInfo = new MediaInfo.Builder(MpdVideoUrl)
+                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                    .setContentType(mediaContentType)
+                    .setMetadata(movieMetadata)
+                    .setCustomData(jsonObj)
+                    .setMediaTracks(tracks)
+                    .build();
+            mSelectedMedia = mediaInfo;
+
+            Log.v("BIBHU4", "restrict_stream_id=====33=======111");
+
+            togglePlayback();
         }
+
     }
 
     @Override
@@ -1258,17 +1345,19 @@ public class MyDownloads extends AppCompatActivity {
         {
             if (data.getStringExtra("yes").equals("1002")) {
                 watch_status = "halfplay";
+                seek_status = "first_time";
+                resume_time = ""+Played_Length/1000;
                 PlayThroughChromeCast();
 
             } else {
-                watch_status = "strat";
+                watch_status = "start";
                 Played_Length = 0;
                 PlayThroughChromeCast();
             }
         }
         else
         {
-            watch_status = "strat";
+            watch_status = "start";
             Played_Length = 0;
             PlayThroughChromeCast();
         }
