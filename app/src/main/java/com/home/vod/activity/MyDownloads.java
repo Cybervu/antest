@@ -1,7 +1,5 @@
 package com.home.vod.activity;
 
-import android.app.DownloadManager;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -80,10 +78,8 @@ import player.utils.Util;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
-import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static java.lang.Thread.sleep;
 
 public class MyDownloads extends AppCompatActivity {
@@ -897,7 +893,7 @@ public class MyDownloads extends AppCompatActivity {
 
                 if (mCastSession != null && mCastSession.isConnected()) {
 
-                    if(!CheckAccessPeriodOfDpwnloadContent())
+                    if(!CheckAccessPeriodOfDownloadContent())
                     {
                         return;
                     }
@@ -954,7 +950,7 @@ public class MyDownloads extends AppCompatActivity {
         }
 
 
-        if(!CheckAccessPeriodOfDpwnloadContent())
+        if(!CheckAccessPeriodOfDownloadContent())
         {
             return;
         }
@@ -1064,7 +1060,7 @@ public class MyDownloads extends AppCompatActivity {
 
     }
 
-    public boolean CheckAccessPeriodOfDpwnloadContent()
+    public boolean CheckAccessPeriodOfDownloadContent()
     {
 
         // following block is responsible for restriction on download content .....

@@ -255,6 +255,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     ArrayList<String> ResolutionUrl = new ArrayList<>();
     ArrayList<String> SubTitleLanguage = new ArrayList<>();
     public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
+    public static final int PAYMENT_REQUESTCODE = 8889;
     // ProgressBarHandler loadEpisodedetailspDialog;
     SharedPreferences pref;
     int previousTotal = 0;
@@ -299,6 +300,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
     String seek_status = "";
     int Played_Length = 0;
     String watch_status_String = "start";
+    String resume_time = "0";
     int offset = 1;
     int limit = 10;
     int listSize = 0;
@@ -757,7 +759,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
-                jsonObj.put("resume_time", "0");
+                jsonObj.put("resume_time", resume_time);
                 jsonObj.put("seek_status", seek_status);
                 // This  Code Is Added For Drm BufferLog By Bibhu ...
 
@@ -819,7 +821,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
-                jsonObj.put("resume_time", "0");
+                jsonObj.put("resume_time",resume_time);
 
 
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
@@ -3057,7 +3059,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 }
 
                 showPaymentIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(showPaymentIntent);
+                startActivityForResult(showPaymentIntent,PAYMENT_REQUESTCODE);
 
             }
         });
@@ -3746,6 +3748,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 watch_status_String = "halfplay";
                 seek_status = "first_time";
                 Played_Length = Util.dataModel.getPlayPos() * 1000;
+                resume_time = ""+Util.dataModel.getPlayPos();
                 PlayThroughChromeCast();
 
             } else {
@@ -3785,6 +3788,8 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         else if(requestCode == VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE && resultCode == RESULT_OK){
             new CheckVoucherOrPpvPaymentHandler(Episode_list_Activity.this).handleVoucherPaymentOrPpvPayment();
             // callValidateUserAPI();
+        } else if(requestCode == PAYMENT_REQUESTCODE && resultCode == RESULT_OK){
+            getVideoInfo();
         }
     }
 
@@ -4362,5 +4367,17 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             ShowPpvPopUp();
         }
 
+    }
+
+    public void getVideoInfo(){
+        GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+        getVideoDetailsInput.setAuthToken(authTokenStr);
+        getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+        getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+        getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+        getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+        getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, Episode_list_Activity.this, Episode_list_Activity.this);
+        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
     }
 }

@@ -286,6 +286,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     int loginresultcode = 0;
     //for resume play
     String seek_status = "";
+    String resume_time = "";
     int Played_Length = 0;
     String watch_status_String = "start";
 
@@ -367,6 +368,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     LanguagePreference languagePreference;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
+    public static final int PAYMENT_REQUESTCODE = 8889;
 
 
     // voucher ends here //
@@ -1018,32 +1020,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         String loggedInStr = preferenceManager.getUseridFromPref();
 
                         if (loggedInStr == null) {
-                            if (mCastSession != null && mCastSession.isConnected()) {
-
-
-                                Toast.makeText(MovieDetailsActivity.this, "chromecast connected and not logegd in", Toast.LENGTH_SHORT).show();
-
-                                final Intent resumeCast = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
-
-                                resumeCast.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                Util.check_for_subscription = 1;
-                                resumeCast.putExtra("PlayerModel", playerModel);
-                                startActivityForResult(resumeCast, 2001);
-
-//                                        startActivity(resumeCast);
-
-
-
-                            } else {
-
-
                                 Util.check_for_subscription = 1;
                                 Intent registerActivity = new LoginRegistrationOnContentClickHandler(MovieDetailsActivity.this).handleClickOnContent();
                                 registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 registerActivity.putExtra("PlayerModel", playerModel);
                                 startActivityForResult(registerActivity,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
-                            }
-                            //showLoginDialog();
                         } else {
 
                             if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
@@ -1684,7 +1665,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             }
             showPaymentIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(showPaymentIntent);
+            startActivityForResult(showPaymentIntent,PAYMENT_REQUESTCODE);
 
         }
     }
@@ -2295,6 +2276,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 watch_status_String = "halfplay";
                 seek_status = "first_time";
                 Played_Length = Util.dataModel.getPlayPos() * 1000;
+                resume_time = ""+Util.dataModel.getPlayPos();
                 PlayThroughChromeCast();
 
             } else {
@@ -2317,14 +2299,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 startActivityForResult(resumeIntent, 1007);
 
             }
-        } else if (requestCode == 2001) {
+            else{
+                Log.v("pratik", "else conditn called");
+                watch_status_String = "start";
+                Played_Length = 0;
+                PlayThroughChromeCast();
+            }
 
-
-            Log.v("pratik", "else conditn called");
-            watch_status_String = "start";
-            Played_Length = 0;
-            PlayThroughChromeCast();
-        } else if (resultCode == RESULT_OK && requestCode == 1007) {
+        }
+         else if (resultCode == RESULT_OK && requestCode == 1007) {
 
             if (data.getStringExtra("yes").equals("1002")) {
 
@@ -2358,7 +2341,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         }
         else if(requestCode == VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE && resultCode == RESULT_OK){
             new CheckVoucherOrPpvPaymentHandler(MovieDetailsActivity.this).handleVoucherPaymentOrPpvPayment();
-            // callValidateUserAPI();
+
+        }
+        else if(requestCode == PAYMENT_REQUESTCODE && resultCode == RESULT_OK){
+            getVideoInfo();
         }
 
 
@@ -2499,14 +2485,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             }else if (status == 428) {
 
 
-                try {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                       
-                    }
-                } catch (IllegalArgumentException ex) {
-                    status = 0;
-                }
                 monetizationHandler.handle428Error(subscription_Str);
 
             }  else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
@@ -2960,7 +2938,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
-                jsonObj.put("resume_time", "0");
+                jsonObj.put("resume_time",resume_time);
                 jsonObj.put("seek_status", seek_status);
                 // This  Code Is Added For Drm BufferLog By Bibhu ...
 
@@ -3022,7 +3000,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
-                jsonObj.put("resume_time", "0");
+                jsonObj.put("resume_time",resume_time);
 
 
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
@@ -3774,5 +3752,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             Log.v("MUVI", "unpaid msg");
             payment_for_single_part();
         }
+    }
+
+    public void getVideoInfo(){
+        GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+        getVideoDetailsInput.setAuthToken(authTokenStr);
+        getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+        getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+        getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+        getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+        getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
+        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
     }
 }

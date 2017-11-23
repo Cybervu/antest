@@ -297,6 +297,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     String seek_status = "";
     int Played_Length = 0;
     String watch_status_String = "start";
+    String resume_time = "0";
 
     /*** rating***///
     String rating = "0";
@@ -305,6 +306,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
     int isRatingThere = 1;
     private EpisodeListOptionMenuHandler episodeListOptionMenuHandler;
     public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
+    public static final int PAYMENT_REQUESTCODE = 8889;
 
 
     int selectedPurchaseType = 0; // selectedPurchaseType = 1(for show),selectedPurchaseType = 2(for season),selectedPurchaseType = 3(for episode)
@@ -1514,7 +1516,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
-                jsonObj.put("resume_time", "0");
+                jsonObj.put("resume_time", resume_time);
                 jsonObj.put("seek_status", seek_status);
                 // This  Code Is Added For Drm BufferLog By Bibhu ...
 
@@ -1576,7 +1578,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
-                jsonObj.put("resume_time", "0");
+                jsonObj.put("resume_time", resume_time);
 
 
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
@@ -2387,95 +2389,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
 
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isLogin == 1) {
-                    String loggedInStr = preferenceManager.getLoginStatusFromPref();
-                    if (loggedInStr == null) {
 
-                        if (mCastSession != null && mCastSession.isConnected()) {
-
-
-                            Toast.makeText(ShowWithEpisodesActivity.this, "chromecast connected and not logegd in", Toast.LENGTH_SHORT).show();
-
-                            final Intent resumeCast = new LoginRegistrationOnContentClickHandler(ShowWithEpisodesActivity.this).handleClickOnContent();
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    resumeCast.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    Util.check_for_subscription = 1;
-                                    resumeCast.putExtra("PlayerModel", playerModel);
-                                    startActivityForResult(resumeCast, 2001);
-
-//                                        startActivity(resumeCast);
-
-                                }
-                            });
-
-                        } else {
-                            Intent registerActivity = new LoginRegistrationOnContentClickHandler(ShowWithEpisodesActivity.this).handleClickOnContent();
-
-                            registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            Util.check_for_subscription = 1;
-                            registerActivity.putExtra("PlayerModel", playerModel);
-                            startActivity(registerActivity);
-                        }
-                        //showLoginDialog();
-                    } else {
-                        if (NetworkStatus.getInstance().isConnected(ShowWithEpisodesActivity.this)) {
-
-                            if (isFreeContent == 1) {
-                                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                getVideoDetailsInput.setAuthToken(authTokenStr);
-                                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                                getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
-                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-
-                            } else {
-                                ValidateUserInput validateUserInput = new ValidateUserInput();
-                                validateUserInput.setAuthToken(authTokenStr);
-                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                                validateUserInput.setMuviUniqueId(movieUniqueId.trim());
-                                validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                                validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                                validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
-                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                            }
-                        } else {
-
-                            Toast.makeText(ShowWithEpisodesActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                } else {
-                    if (NetworkStatus.getInstance().isConnected(ShowWithEpisodesActivity.this)) {
-                        // MUVIlaxmi
-
-                        GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                        getVideoDetailsInput.setAuthToken(authTokenStr);
-                        getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                        getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                        getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                        getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                        getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                        asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
-                        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                    } else {
-                        Util.showToast(ShowWithEpisodesActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
-
-                        // Toast.makeText(ShowWithEpisodesActivity.this, Util.getTextofLanguage(ShowWithEpisodesActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                    }
-                }
-
-
-            }
-        });
         btnmore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -2780,32 +2694,13 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 }
 
             } else {
-                if (mCastSession != null && mCastSession.isConnected()) {
-
-
-                    Toast.makeText(ShowWithEpisodesActivity.this, "chromecast connected and not logegd in", Toast.LENGTH_SHORT).show();
-
-                    final Intent resumeCast = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            resumeCast.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            Util.check_for_subscription = 1;
-                            resumeCast.putExtra("PlayerModel", playerModel);
-                            startActivityForResult(resumeCast, 2001);
-
-//                                        startActivity(resumeCast);
-
-                        }
-                    });
-
-                } else {
 
                     Util.check_for_subscription = 1;
                     Intent registerActivity = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
                     registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     registerActivity.putExtra("PlayerModel", playerModel);
                     startActivityForResult(registerActivity,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
-                }
+
             }
         } else {
             if (NetworkStatus.getInstance().isConnected(this)) {
@@ -3534,7 +3429,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                     }
 
                     showPaymentIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(showPaymentIntent);
+                    startActivityForResult(showPaymentIntent,PAYMENT_REQUESTCODE);
 
                 }
             });
@@ -5448,6 +5343,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 watch_status_String = "halfplay";
                 seek_status = "first_time";
                 Played_Length = Util.dataModel.getPlayPos() * 1000;
+                resume_time = ""+Util.dataModel.getPlayPos();
                 PlayThroughChromeCast();
 
             } else {
@@ -5505,7 +5401,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
         }
         else if(requestCode == VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE && resultCode == RESULT_OK){
             new CheckVoucherOrPpvPaymentHandler(ShowWithEpisodesActivity.this).handleVoucherPaymentOrPpvPayment();
-            // callValidateUserAPI();
+
+        }
+        else if(requestCode == PAYMENT_REQUESTCODE && resultCode == RESULT_OK){
+            getVideoInfo();
         }
 
     }
@@ -5971,5 +5870,17 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             ShowPpvPopUp();
         }
 
+    }
+
+    public void getVideoInfo(){
+        GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+        getVideoDetailsInput.setAuthToken(authTokenStr);
+        getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+        getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+        getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+        getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+        getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
+        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
     }
 }
