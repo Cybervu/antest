@@ -17,9 +17,9 @@ public class LanguagePreference {
      * Language Constant default Key
      */
     public static String INVALID_PHONE_NUMBER = "OOPS_INVALID_PHONE_NUMBER";
-    public static  String DEFAULT_INVALID_PHONE_NUMBER = "Oops ! Invalid Number";
+    public static String DEFAULT_INVALID_PHONE_NUMBER = "Oops ! Invalid Number";
     public static String MOBILE = "MOBILE";
-    public static  String DEFAULT_MOBILE = "Enter Mobile Number";
+    public static String DEFAULT_MOBILE = "Enter Mobile Number";
     public static String DEFAULT_FIRST_NAME = "First Name";
     public static String DEFAULT_LAST_NAME = "Last Name";
     public static String FIRST_NAME = "FIRST_NAME";
@@ -76,9 +76,14 @@ public class LanguagePreference {
     public static final String TRANSACTION_STATUS = "TRANSACTION_STATUS";
     public static final String PLAN_NAME = "PLAN_NAME";
     public static final String SEASON = "SEASON";
+    public static String NEXT = "NEXT";
+    public static String SELECT_PURCHASE_TYPE = "SELECT_PURCHASE_TYPE";
+    public static String COMPLETE_SEASON = "COMPLETE_SEASON";
     public static final String SELECT_PLAN = "SELECT_PLAN";
     public static final String SKIP_BUTTON_TITLE = "SKIP_BUTTON_TITLE";
     public static final String PURCHASE = "PURCHASE";
+    public static String ENTER_VOUCHER_CODE = "ENTER_VOUCHER_CODE";
+    public static String VOUCHER_SUCCESS = "VOUCHER_SUCCESS";
     public static final String CREDIT_CARD_DETAILS = "CREDIT_CARD_DETAILS";
     public static final String CARD_WILL_CHARGE = "CARD_WILL_CHARGE";
     public static final String SAVE_THIS_CARD = "SAVE_THIS_CARD";
@@ -299,6 +304,7 @@ public class LanguagePreference {
     public static final String DEFAULT_TERMS_AND_CONDITIONS = "Termes & Conditions";
     public static final String DEFAULT_ABOUT_US = "About Us";
     public static final String DEFAULT_CONTACT_US = "Contact Us";
+    public static final String CONTACT_US = "CONTACT_US";
 
     public static final String DEFAULT_SEARCH_PLACEHOLDER = "Search";
     public static final String DEFAULT_VIEW_TRAILER = "View Trailer";
@@ -314,8 +320,13 @@ public class LanguagePreference {
     public static final String DEFAULT_LOGOUT = "Logout";
     public static final String DEFAULT_CHANGE_PASSWORD = "Change Password";
     public static final String DEFAULT_SEASON = "Season";
+    public static String DEFAULT_NEXT = "Next";
+    public static String DEFAULT_COMPLETE_SEASON = "Complete Season";
+    public static String DEFAULT_SELECT_PURCHASE_TYPE = "Select Purchase Type";
 
     public static final String DEFAULT_PURCHASE = "Purchase";
+    public static String DEFAULT_ENTER_VOUCHER_CODE = "Enter Voucher Code";
+    public static String DEFAULT_VOUCHER_SUCCESS = "Voucher Applied  Successfully.";
     public static final String DEFAULT_BUTTON_APPLY = "Apply";
     public static final String DEFAULT_BUTTON_OK = "Ok";
     public static final String DEFAULT_OOPS_INVALID_EMAIL = "Oops! Invalid email.";

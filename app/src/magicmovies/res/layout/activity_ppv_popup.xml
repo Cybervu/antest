@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/appBackgroundColor"
@@ -31,9 +31,9 @@
             android:id="@+id/completeSeasonRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/forgotlayout_margin"
-            android:layout_marginRight="@dimen/forgotlayout_margin"
-            android:layout_marginTop="@dimen/forgotlayout_margin">
+            android:layout_marginLeft="@dimen/ppv_margin"
+            android:layout_marginRight="@dimen/ppv_margin"
+            android:layout_marginTop="@dimen/ppv_margin">
 
             <RadioButton
                 android:id="@+id/completeRadioButton"
@@ -61,9 +61,9 @@
             android:id="@+id/seasonRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/forgotlayout_margin"
-            android:layout_marginRight="@dimen/forgotlayout_margin"
-            android:layout_marginTop="@dimen/forgotlayout_margin">
+            android:layout_marginLeft="@dimen/ppv_margin"
+            android:layout_marginRight="@dimen/ppv_margin"
+            android:layout_marginTop="@dimen/ppv_margin">
 
             <RadioButton
                 android:id="@+id/seasonRadioButton"
@@ -91,9 +91,9 @@
             android:id="@+id/episodeRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/forgotlayout_margin"
-            android:layout_marginRight="@dimen/forgotlayout_margin"
-            android:layout_marginTop="@dimen/forgotlayout_margin">
+            android:layout_marginLeft="@dimen/ppv_margin"
+            android:layout_marginRight="@dimen/ppv_margin"
+            android:layout_marginTop="@dimen/ppv_margin">
 
             <RadioButton
                 android:id="@+id/episodeRadioButton"
@@ -138,4 +138,4 @@
             android:layout_height="@dimen/pop_up_view_height"
             android:background="@color/alreadyHaveALoginButtonTextColor" />
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

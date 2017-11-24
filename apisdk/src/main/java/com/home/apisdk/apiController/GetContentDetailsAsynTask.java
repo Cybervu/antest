@@ -402,7 +402,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                             if (currencyJson.has("symbol") && currencyJson.optString("symbol").trim() != null && !currencyJson.optString("symbol").trim().isEmpty() && !currencyJson.optString("symbol").trim().equals("null") && !currencyJson.optString("symbol").trim().matches("")) {
                                 currencyModel.setCurrencySymbol(currencyJson.optString("symbol"));
                             } else {
-                                currencyModel.setCurrencySymbol("");
+                                currencyModel.setCurrencySymbol("$.0");
                             }
                             contentDetailsOutput.setCurrencyDetails(currencyModel);
 

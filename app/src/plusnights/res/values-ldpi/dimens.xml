@@ -166,7 +166,7 @@
     <dimen name="videogrid_height">178dp</dimen>
     <dimen name="videogrid_land_width">190dp</dimen>
     <dimen name="videogrid_land_height">106dp</dimen>
-    <dimen name="testview_text_size">36sp</dimen>
+    <dimen name="testview_text_size">30sp</dimen>
     <dimen name="testview1_text_size">15sp</dimen>
     <dimen name="alreadymember_height">40dp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>

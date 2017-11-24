@@ -510,6 +510,7 @@ public class Util {
         } catch (NoSuchAlgorithmException e) {
 
         }
+
     }
 
     /**
@@ -565,8 +566,10 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, CANCEL_BUTTON, DEFAULT_CANCEL_BUTTON, "btn_cancel", json);
         setTranslationLanguageToPref(languagePreference, RESUME_MESSAGE, DEFAULT_RESUME_MESSAGE, "resume_watching", json);
         setTranslationLanguageToPref(languagePreference, CONTINUE_BUTTON, DEFAULT_CONTINUE_BUTTON, "continue", json);
+        setTranslationLanguageToPref(languagePreference, CONTACT_US, DEFAULT_CONTACT_US, "contact_us", json);
 
 
+        setTranslationLanguageToPref(languagePreference, ENTER_VOUCHER_CODE, DEFAULT_ENTER_VOUCHER_CODE, "enter_voucher_code", json);
         setTranslationLanguageToPref(languagePreference, CONFIRM_PASSWORD, DEFAULT_CONFIRM_PASSWORD, "confirm_password", json);
         setTranslationLanguageToPref(languagePreference, CREDIT_CARD_DETAILS, DEFAULT_CREDIT_CARD_DETAILS, "credit_card_detail", json);
         setTranslationLanguageToPref(languagePreference, DIRECTOR, "", "director", json);
@@ -607,7 +610,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED, "sort_last_uploaded", json);
 
         setTranslationLanguageToPref(languagePreference, LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN, "language_popup_login", json);
-        setTranslationLanguageToPref(languagePreference, LOGIN, DEFAULT_LOGIN, "activity_login", json);
+        setTranslationLanguageToPref(languagePreference, LOGIN, DEFAULT_LOGIN, "login", json);
         setTranslationLanguageToPref(languagePreference, LOGOUT, DEFAULT_LOGOUT, "logout", json);
         setTranslationLanguageToPref(languagePreference, LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS, "logout_success", json);
         setTranslationLanguageToPref(languagePreference, MY_FAVOURITE, DEFAULT_MY_FAVOURITE, "my_favourite", json);

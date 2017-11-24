@@ -16,6 +16,7 @@
     <dimen name="pass_text_size">11sp</dimen>
     <dimen name="forgot_text_size">13sp</dimen>
     <dimen name="login_butn_width">100dp</dimen>
+    <dimen name="testview_text_size">30sp</dimen>
     <dimen name="login_butn_height">30dp</dimen>
     <dimen name="submit_text_size">13sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>

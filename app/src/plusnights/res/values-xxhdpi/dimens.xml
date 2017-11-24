@@ -29,6 +29,7 @@
     <dimen name="sliderLayout_height">230dp</dimen>
     <dimen name="listitemlayout_height">210dp</dimen>
     <dimen name="logout_text_size">19sp</dimen>
+    <dimen name="testview_text_size">30sp</dimen>
     <dimen name="slider_height">200dp</dimen>
     <dimen name="banner_image_height">210dp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>

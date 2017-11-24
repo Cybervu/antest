@@ -5352,3 +5352,4 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         return size;
     }
 }
+
