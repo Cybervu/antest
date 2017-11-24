@@ -36,6 +36,10 @@ import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.images.WebImage;
+import com.home.apisdk.apiController.GetIpAddressAsynTask;
+import com.home.apisdk.apiController.VideoDetailsAsynctask;
+import com.home.apisdk.apiModel.GetVideoDetailsInput;
+import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.vod.R;
 import com.home.vod.adapter.MyDownloadAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -76,13 +80,22 @@ import player.model.ContactModel1;
 import player.utils.DBHelper;
 import player.utils.Util;
 
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_VIDEO_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.NO_VIDEO_AVAILABLE;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.util.Constant.authTokenStr;
 import static java.lang.Thread.sleep;
 
-public class MyDownloads extends AppCompatActivity {
+public class MyDownloads extends AppCompatActivity implements GetIpAddressAsynTask.IpAddressListener, VideoDetailsAsynctask.VideoDetailsListener {
 
 
     String download_id_from_watch_access_table = "";
@@ -95,7 +108,7 @@ public class MyDownloads extends AppCompatActivity {
     SharedPreferences pref;
     String emailIdStr = "";
     DBHelper dbHelper;
-    static String path,filename,_filename,token,title,poster,genre,duration,rdate,movieid,user,uniqid;
+    static String path, filename, _filename, token, title, poster, genre, duration, rdate, movieid, user, uniqid;
     ArrayList<ContactModel1> download;
     ProgressBarHandler pDialog;
     ArrayList<String> SubTitleName = new ArrayList<>();
@@ -148,8 +161,9 @@ public class MyDownloads extends AppCompatActivity {
 
 
     private CastContext mCastContext;
-    private SessionManagerListener<CastSession> mSessionManagerListener =new MySessionManagerListener();
+    private SessionManagerListener<CastSession> mSessionManagerListener = new MySessionManagerListener();
     private CastSession mCastSession;
+
     private class MySessionManagerListener implements SessionManagerListener<CastSession> {
 
         @Override
@@ -205,8 +219,8 @@ public class MyDownloads extends AppCompatActivity {
     int Position = 0;
     public static ProgressBarHandler progressBarHandler;
 
-    AsynLoadVideoUrls asynLoadVideoUrls;
-    AsynGetIpAddress asynGetIpAddress;
+    VideoDetailsAsynctask asynLoadVideoUrls;
+    GetIpAddressAsynTask asynGetIpAddress;
     MediaInfo mediaInfo;
     /*chromecast-------------------------------------*/
 
@@ -214,7 +228,7 @@ public class MyDownloads extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mydownload);
-        dbHelper=new DBHelper(MyDownloads.this);
+        dbHelper = new DBHelper(MyDownloads.this);
 
         languagePreference = LanguagePreference.getLanguagePreference(this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -233,7 +247,6 @@ public class MyDownloads extends AppCompatActivity {
 
         boolean shouldStartPlayback = false;
         int startPosition = 0;
-
 
 
         if (shouldStartPlayback) {
@@ -263,12 +276,11 @@ public class MyDownloads extends AppCompatActivity {
 /***************chromecast**********************/
 
 
-
-        Toolbar mActionBarToolbar= (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
 
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD,DEFAULT_MY_DOWNLOAD));
+        mActionBarToolbar.setTitle(languagePreference.getTextofLanguage(MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD));
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -278,31 +290,31 @@ public class MyDownloads extends AppCompatActivity {
         });
 
 
-        list= (ListView)findViewById(R.id.listView);
-        nodata= (RelativeLayout) findViewById(R.id.noData);
-        noDataTextView= (TextView) findViewById(R.id.noDataTextView);
+        list = (ListView) findViewById(R.id.listView);
+        nodata = (RelativeLayout) findViewById(R.id.noData);
+        noDataTextView = (TextView) findViewById(R.id.noDataTextView);
         //  islogin = preferenceManager.getLoginFeatureFromPref();
-        if (preferenceManager!=null){
-            emailIdStr= preferenceManager.getEmailIdFromPref();
+        if (preferenceManager != null) {
+            emailIdStr = preferenceManager.getEmailIdFromPref();
 
 
-        }else {
+        } else {
             emailIdStr = "";
 
 
         }
 
-        list= (ListView)findViewById(R.id.listView);
-        nodata= (RelativeLayout) findViewById(R.id.noData);
-        noDataTextView= (TextView) findViewById(R.id.noDataTextView);
+        list = (ListView) findViewById(R.id.listView);
+        nodata = (RelativeLayout) findViewById(R.id.noData);
+        noDataTextView = (TextView) findViewById(R.id.noDataTextView);
 
-        download=dbHelper.getContactt(emailIdStr,1);
-        if(download.size()>0) {
+        download = dbHelper.getContactt(emailIdStr, 1);
+        if (download.size() > 0) {
             adapter = new MyDownloadAdapter(MyDownloads.this, android.R.layout.simple_dropdown_item_1line, download);
             list.setAdapter(adapter);
-        }else {
+        } else {
             nodata.setVisibility(View.VISIBLE);
-            noDataTextView.setText(Util.getTextofLanguage(MyDownloads.this,Util.NO_CONTENT,Util.DEFAULT_NO_CONTENT));
+            noDataTextView.setText(Util.getTextofLanguage(MyDownloads.this, Util.NO_CONTENT, Util.DEFAULT_NO_CONTENT));
         }
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -312,13 +324,11 @@ public class MyDownloads extends AppCompatActivity {
                 Position = position;
                 SubtitleUrl = "";
 
-                if(Util.checkNetwork(MyDownloads.this))
-                {
-                    asynGetIpAddress = new AsynGetIpAddress();
+                if (Util.checkNetwork(MyDownloads.this)) {
+                    GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(MyDownloads.this, MyDownloads.this);
                     asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
-                }else
-                {
+                } else {
                     MoveToOfflinePlayer();
                 }
 
@@ -326,16 +336,16 @@ public class MyDownloads extends AppCompatActivity {
         });
     }
 
-    public void visible(){
+    public void visible() {
 
-        if(download.size()>0) {
+        if (download.size() > 0) {
             adapter = new MyDownloadAdapter(MyDownloads.this, android.R.layout.simple_dropdown_item_1line, download);
             list.setAdapter(adapter);
 
-        }else {
+        } else {
 
             nodata.setVisibility(View.VISIBLE);
-            noDataTextView.setText(Util.getTextofLanguage(MyDownloads.this,Util.NO_CONTENT,Util.DEFAULT_NO_CONTENT));
+            noDataTextView.setText(Util.getTextofLanguage(MyDownloads.this, Util.NO_CONTENT, Util.DEFAULT_NO_CONTENT));
         }
     }
 
@@ -388,8 +398,8 @@ public class MyDownloads extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-        MenuItem item,item1,item2,item3,item4,item5,item6,item7,item8;
-        item= menu.findItem(R.id.action_filter);
+        MenuItem item, item1, item2, item3, item4, item5, item6, item7, item8;
+        item = menu.findItem(R.id.action_filter);
         item.setVisible(false);
         /***************chromecast**********************/
 
@@ -403,9 +413,9 @@ public class MyDownloads extends AppCompatActivity {
         item2.setVisible(false);
         item3 = menu.findItem(R.id.action_logout);
         item3.setVisible(false);
-        item4= menu.findItem(R.id.action_login);
+        item4 = menu.findItem(R.id.action_login);
         item4.setVisible(false);
-        item5= menu.findItem(R.id.action_register);
+        item5 = menu.findItem(R.id.action_register);
         item5.setVisible(false);
         item6 = menu.findItem(R.id.action_mydownload);
         item6.setVisible(false);
@@ -435,10 +445,10 @@ public class MyDownloads extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.v("BIBHU1","Onreceive called");
+            Log.v("BIBHU1", "Onreceive called");
 
-            download=dbHelper.getContactt(emailIdStr,1);
-            if(download.size()>0) {
+            download = dbHelper.getContactt(emailIdStr, 1);
+            if (download.size() > 0) {
                 adapter = new MyDownloadAdapter(MyDownloads.this, android.R.layout.simple_dropdown_item_1line, download);
                 list.setAdapter(adapter);
                 nodata.setVisibility(View.GONE);
@@ -449,7 +459,6 @@ public class MyDownloads extends AppCompatActivity {
 
 
     /*****************chromecvast*-------------------------------------*/
-
 
 
     private void setupCastListener() {
@@ -501,7 +510,7 @@ public class MyDownloads extends AppCompatActivity {
                 mLocation = PlaybackLocation.REMOTE;
                 if (null != mSelectedMedia) {
 
-                    if (mPlaybackState ==PlaybackState.PLAYING) {
+                    if (mPlaybackState == PlaybackState.PLAYING) {
                        /* mVideoView.pause();
                         loadRemoteMedia(mSeekbar.getProgress(), true);*/
                         return;
@@ -533,8 +542,8 @@ public class MyDownloads extends AppCompatActivity {
             case PLAYING:
                 break;
             case IDLE:
-                if (mLocation == PlaybackLocation.LOCAL){
-                }else{
+                if (mLocation == PlaybackLocation.LOCAL) {
+                } else {
                 }
                 break;
             case PAUSED:
@@ -596,8 +605,7 @@ public class MyDownloads extends AppCompatActivity {
 //                            loadRemoteMedia(0, true);
                             loadRemoteMedia(Played_Length, true);
                             Log.v("BIBHU4", "restrict_stream_id=====32223=======111");
-                        }
-                        else  {
+                        } else {
                             Log.v("BIBHU4", "restrict_stream_id======33======344433");
                         }
                         break;
@@ -665,7 +673,7 @@ public class MyDownloads extends AppCompatActivity {
 
     /***************chromecast**********************/
 
-    private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
+    /*private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
         String responseStr;
 
 
@@ -739,10 +747,39 @@ public class MyDownloads extends AppCompatActivity {
             progressBarHandler = new ProgressBarHandler(MyDownloads.this);
             progressBarHandler.show();
         }
+    }*/
+    @Override
+    public void onIPAddressPreExecuteStarted() {
+
+        progressBarHandler = new ProgressBarHandler(MyDownloads.this);
+        progressBarHandler.show();
+    }
+
+    @Override
+    public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
+
+        if (progressBarHandler != null && progressBarHandler.isShowing()) {
+            progressBarHandler.hide();
+        }
+
+        if (!ipAddressStr.equals("")) {
+
+            this.ipAddressStr = ipAddressStr;
+
+            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+            getVideoDetailsInput.setAuthToken(authTokenStr);
+            getVideoDetailsInput.setContent_uniq_id(download.get(Position).getMuviid());
+            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+            getVideoDetailsInput.setStream_uniq_id(download.get(Position).getStreamId());
+            getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MyDownloads.this, MyDownloads.this);
+            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+        }
     }
 
 
-    private class AsynLoadVideoUrls extends AsyncTask<Void, Void, Void> {
+   /* private class AsynLoadVideoUrls extends AsyncTask<Void, Void, Void> {
         ProgressBarHandler pDialog;
         String responseStr;
         int statusCode;
@@ -755,22 +792,21 @@ public class MyDownloads extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.loadVideoUrl.trim());
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.loadVideoUrl.trim());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader("authToken", Util.authTokenStr.trim());
                 httppost.addHeader("content_uniq_id", download.get(Position).getMuviid());
                 httppost.addHeader("stream_uniq_id", download.get(Position).getStreamId());
-                httppost.addHeader("internet_speed",MainActivity.internetSpeed.trim());
-                httppost.addHeader("user_id",preferenceManager.getUseridFromPref());
-                httppost.addHeader("lang_code",Util.getTextofLanguage(MyDownloads.this,Util.SELECTED_LANGUAGE_CODE,Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("internet_speed", MainActivity.internetSpeed.trim());
+                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
+                httppost.addHeader("lang_code", Util.getTextofLanguage(MyDownloads.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
-
-                Log.v("SUBHA","authToken = "+Util.authTokenStr.trim());
-                Log.v("SUBHA","content_uniq_id = "+download.get(Position).getMuviid());
-                Log.v("SUBHA","stream_uniq_id = "+download.get(Position).getStreamId());
-                Log.v("SUBHA","user_id = "+preferenceManager.getUseridFromPref());
+                Log.v("SUBHA", "authToken = " + Util.authTokenStr.trim());
+                Log.v("SUBHA", "content_uniq_id = " + download.get(Position).getMuviid());
+                Log.v("SUBHA", "stream_uniq_id = " + download.get(Position).getStreamId());
+                Log.v("SUBHA", "user_id = " + preferenceManager.getUseridFromPref());
 
                 // Execute HTTP Post Request
                 try {
@@ -778,14 +814,14 @@ public class MyDownloads extends AppCompatActivity {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
 
-                } catch (Exception e){
+                } catch (Exception e) {
                     responseStr = "0";
                 }
 
-                Log.v("SUBHA","response = "+responseStr);
-                JSONObject myJson =null;
+                Log.v("SUBHA", "response = " + responseStr);
+                JSONObject myJson = null;
                 JSONArray SubtitleJosnArray = null;
-                if(responseStr!=null){
+                if (responseStr != null) {
                     myJson = new JSONObject(responseStr);
                     SubtitleJosnArray = myJson.optJSONArray("subTitle");
                     statusCode = Integer.parseInt(myJson.optString("code"));
@@ -799,7 +835,7 @@ public class MyDownloads extends AppCompatActivity {
                                 !myJson.getString("videoUrl").trim().equals("null") && !myJson.getString("videoUrl").trim().matches("")) {
                             MpdVideoUrl = myJson.getString("videoUrl").trim();
 
-                            if(MpdVideoUrl.equals(""))
+                            if (MpdVideoUrl.equals(""))
                                 responseStr = "0";
 
                             if ((myJson.has("licenseUrl")) && myJson.getString("licenseUrl").trim() != null && !myJson.getString("licenseUrl").trim().isEmpty() && !myJson.getString("licenseUrl").trim().equals("null") && !myJson.getString("licenseUrl").trim().matches("")) {
@@ -808,7 +844,7 @@ public class MyDownloads extends AppCompatActivity {
 
                             SQLiteDatabase DB = MyDownloads.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
 
-                            String Qry1 = "UPDATE " + DBHelper.RESUME_WATCH + " SET LicenceUrl = '"+licenseUrl+"' , Flag = '1' ,LatestMpdUrl = '"+MpdVideoUrl+"'  WHERE UniqueId = '" + download.get(Position).getUniqueId() + "'";
+                            String Qry1 = "UPDATE " + DBHelper.RESUME_WATCH + " SET LicenceUrl = '" + licenseUrl + "' , Flag = '1' ,LatestMpdUrl = '" + MpdVideoUrl + "'  WHERE UniqueId = '" + download.get(Position).getUniqueId() + "'";
                             DB.execSQL(Qry1);
 
                             if ((myJson.has("played_length")) && myJson.getString("played_length").trim() != null && !myJson.getString("played_length").trim().isEmpty() && !myJson.getString("played_length").trim().equals("null") && !myJson.getString("played_length").trim().matches("")) {
@@ -816,32 +852,26 @@ public class MyDownloads extends AppCompatActivity {
                                 Played_Length = Played_Length * 1000;
                             }
 
-                        }
-                        else
-                        {
+                        } else {
                             responseStr = "0";
                         }
 
-                        if(SubtitleJosnArray!=null)
-                        {
-                            if(SubtitleJosnArray.length()>0)
-                            {
+                        if (SubtitleJosnArray != null) {
+                            if (SubtitleJosnArray.length() > 0) {
 
                                 Chromecast_Subtitle_Url.clear();
                                 Chromecast_Subtitle_Language_Name.clear();
                                 Chromecast_Subtitle_Code.clear();
 
 
-
-                                for(int i=0;i<SubtitleJosnArray.length();i++)
-                                {
+                                for (int i = 0; i < SubtitleJosnArray.length(); i++) {
                                     SubtitleUrl = SubtitleJosnArray.getJSONObject(0).optString("url").trim();
                                     SubtitleLanguage = SubtitleJosnArray.getJSONObject(0).optString("language").trim();
                                     SubtitleCode = SubtitleJosnArray.getJSONObject(0).optString("code").trim();
 
-                                    Log.v("BIBHU","Sutitle name = "+SubtitleJosnArray.getJSONObject(i).optString("language").trim());
-                                    Log.v("BIBHU","Sutitle path = "+SubtitleJosnArray.getJSONObject(i).optString("url").trim());
-                                    Log.v("BIBHU","Sutitle code = "+SubtitleJosnArray.getJSONObject(i).optString("code").trim());
+                                    Log.v("BIBHU", "Sutitle name = " + SubtitleJosnArray.getJSONObject(i).optString("language").trim());
+                                    Log.v("BIBHU", "Sutitle path = " + SubtitleJosnArray.getJSONObject(i).optString("url").trim());
+                                    Log.v("BIBHU", "Sutitle code = " + SubtitleJosnArray.getJSONObject(i).optString("code").trim());
 
                                     Chromecast_Subtitle_Url.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
                                     Chromecast_Subtitle_Language_Name.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
@@ -853,8 +883,7 @@ public class MyDownloads extends AppCompatActivity {
                         // ================================== End ====================================//
                     }
 
-                }
-                else {
+                } else {
                     responseStr = "0";
                 }
             } catch (Exception e1) {
@@ -877,42 +906,37 @@ public class MyDownloads extends AppCompatActivity {
 
             if ((responseStr.trim().equalsIgnoreCase("0"))) {
 
-                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MyDownloads.this,R.style.MyAlertDialogStyle);
-                dlgAlert.setMessage(Util.getTextofLanguage(MyDownloads.this,Util.NO_VIDEO_AVAILABLE,Util.DEFAULT_NO_VIDEO_AVAILABLE));
-                dlgAlert.setTitle(Util.getTextofLanguage(MyDownloads.this,Util.SORRY,Util.DEFAULT_SORRY));
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MyDownloads.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK), null);
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MyDownloads.this, R.style.MyAlertDialogStyle);
+                dlgAlert.setMessage(Util.getTextofLanguage(MyDownloads.this, Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
+                dlgAlert.setTitle(Util.getTextofLanguage(MyDownloads.this, Util.SORRY, Util.DEFAULT_SORRY));
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(MyDownloads.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(MyDownloads.this,Util.BUTTON_OK,Util.DEFAULT_BUTTON_OK),
+                dlgAlert.setPositiveButton(Util.getTextofLanguage(MyDownloads.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
                         });
                 dlgAlert.create().show();
-            } else{
+            } else {
 
                 if (mCastSession != null && mCastSession.isConnected()) {
 
-                    if(!CheckAccessPeriodOfDownloadContent())
-                    {
+                    if (!CheckAccessPeriodOfDownloadContent()) {
                         return;
                     }
 
-                    if((Played_Length)>0)
-                    {
+                    if ((Played_Length) > 0) {
                         Intent resumeIntent = new Intent(MyDownloads.this, ResumePopupActivity.class);
                         startActivityForResult(resumeIntent, 1001);
-                    }else
-                    {
+                    } else {
                         Played_Length = 0;
                         watch_status = "start";
 
                         PlayThroughChromeCast();
                     }
 
-                }
-                else
-                {
+                } else {
                     MoveToOfflinePlayer();
                 }
             }
@@ -923,16 +947,89 @@ public class MyDownloads extends AppCompatActivity {
             pDialog = new ProgressBarHandler(MyDownloads.this);
             pDialog.show();
         }
+    }*/
+
+    @Override
+    public void onVideoDetailsPreExecuteStarted() {
+
+        progressBarHandler = new ProgressBarHandler(MyDownloads.this);
+        progressBarHandler.show();
+    }
+
+    @Override
+    public void onVideoDetailsPostExecuteCompleted(Video_Details_Output _video_details_output, int code, String status, String message) {
+
+        if (progressBarHandler != null && progressBarHandler.isShowing()) {
+            progressBarHandler.hide();
+        }
+
+        if (code == 200) {
+
+            MpdVideoUrl = _video_details_output.getVideoUrl();
+            licenseUrl = _video_details_output.getLicenseUrl();
+
+            upadateResumeWatchTable();
+
+            Played_Length = Util.isDouble(_video_details_output.getPlayed_length());
+            Played_Length = Played_Length * 1000;
+
+            Chromecast_Subtitle_Url.clear();
+            Chromecast_Subtitle_Language_Name.clear();
+            Chromecast_Subtitle_Code.clear();
+
+            if (_video_details_output.getFakeSubTitlePath().size() > 0) {
+
+                SubtitleUrl = _video_details_output.getFakeSubTitlePath().get(0);
+                SubtitleLanguage = _video_details_output.getSubTitleName().get(0);
+                SubtitleCode = _video_details_output.getSubTitleLanguage().get(0);
+            }
+
+            Chromecast_Subtitle_Url = _video_details_output.getFakeSubTitlePath();
+            Chromecast_Subtitle_Language_Name = _video_details_output.getSubTitleName();
+            Chromecast_Subtitle_Code = _video_details_output.getSubTitleLanguage();
+
+
+            if (mCastSession != null && mCastSession.isConnected()) {
+
+                if (!CheckAccessPeriodOfDownloadContent()) {
+                    return;
+                }
+
+                if ((Played_Length) > 0) {
+                    Intent resumeIntent = new Intent(MyDownloads.this, ResumePopupActivity.class);
+                    startActivityForResult(resumeIntent, 1001);
+                } else {
+                    Played_Length = 0;
+                    watch_status = "start";
+                    PlayThroughChromeCast();
+                }
+
+            } else {
+                MoveToOfflinePlayer();
+            }
+        } else {
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MyDownloads.this, R.style.MyAlertDialogStyle);
+            dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, DEFAULT_NO_VIDEO_AVAILABLE));
+            dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            dlgAlert.create().show();
+        }
     }
 
 
-    public void MoveToOfflinePlayer()
-    {
+    public void MoveToOfflinePlayer() {
         SubTitleName.clear();
         SubTitlePath.clear();
 
         SQLiteDatabase DB = MyDownloads.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
-        Cursor cursor = DB.rawQuery("SELECT LANGUAGE,PATH FROM "+DBHelper.TABLE_NAME_SUBTITLE_LUIMERE+" WHERE UID = '"+download.get(Position).getUniqueId()+"'", null);
+        Cursor cursor = DB.rawQuery("SELECT LANGUAGE,PATH FROM " + DBHelper.TABLE_NAME_SUBTITLE_LUIMERE + " WHERE UID = '" + download.get(Position).getUniqueId() + "'", null);
         int count = cursor.getCount();
 
         if (count > 0) {
@@ -942,22 +1039,21 @@ public class MyDownloads extends AppCompatActivity {
                     SubTitlePath.add(cursor.getString(1).trim());
 
 
-                    Log.v("BIBHU3","SubTitleName============"+cursor.getString(0).trim());
-                    Log.v("BIBHU3","SubTitlePath============"+cursor.getString(1).trim());
+                    Log.v("BIBHU3", "SubTitleName============" + cursor.getString(0).trim());
+                    Log.v("BIBHU3", "SubTitlePath============" + cursor.getString(1).trim());
 
                 } while (cursor.moveToNext());
             }
         }
 
 
-        if(!CheckAccessPeriodOfDownloadContent())
-        {
+        if (!CheckAccessPeriodOfDownloadContent()) {
             return;
         }
 
         //This is applicable for resume watch feature on downloaed content
 
-        Cursor cursor11 = DB.rawQuery("SELECT * FROM "+DBHelper.RESUME_WATCH+" WHERE UniqueId = '"+download.get(Position).getUniqueId()+"'", null);
+        Cursor cursor11 = DB.rawQuery("SELECT * FROM " + DBHelper.RESUME_WATCH + " WHERE UniqueId = '" + download.get(Position).getUniqueId() + "'", null);
         int count11 = cursor11.getCount();
 
         if (count11 > 0) {
@@ -965,7 +1061,7 @@ public class MyDownloads extends AppCompatActivity {
                 do {
                     PlayedLength = cursor11.getString(1).trim();
 
-                    Log.v("BIBHU3","PlayedLength============"+PlayedLength);
+                    Log.v("BIBHU3", "PlayedLength============" + PlayedLength);
 
                 } while (cursor11.moveToNext());
             }
@@ -974,22 +1070,21 @@ public class MyDownloads extends AppCompatActivity {
         //==========================================END======================================//
 
 
-
         pDialog = new ProgressBarHandler(MyDownloads.this);
         pDialog.show();
 
-        new Thread(new Runnable(){
-            public void run(){
+        new Thread(new Runnable() {
+            public void run() {
 
-                final String pathh=download.get(Position).getPath();
-                final String titles=download.get(Position).getMUVIID();
-                final String gen=download.get(Position).getGenere();
-                final String tok=download.get(Position).getToken();
-                final String contentid=download.get(Position).getContentid();
-                final String muviid=download.get(Position).getMuviid();
-                final String poster=download.get(Position).getPoster();
-                final String vidduration=download.get(Position).getDuration();
-                final String filename=pathh.substring(pathh.lastIndexOf("/") + 1);
+                final String pathh = download.get(Position).getPath();
+                final String titles = download.get(Position).getMUVIID();
+                final String gen = download.get(Position).getGenere();
+                final String tok = download.get(Position).getToken();
+                final String contentid = download.get(Position).getContentid();
+                final String muviid = download.get(Position).getMuviid();
+                final String poster = download.get(Position).getPoster();
+                final String vidduration = download.get(Position).getDuration();
+                final String filename = pathh.substring(pathh.lastIndexOf("/") + 1);
 
 
                 try {
@@ -1000,7 +1095,7 @@ public class MyDownloads extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                            Intent in=new Intent(MyDownloads.this,MarlinBroadbandExample.class);
+                            Intent in = new Intent(MyDownloads.this, MarlinBroadbandExample.class);
                             Log.v("SUBHA", "PATH" + pathh);
 
 
@@ -1019,19 +1114,17 @@ public class MyDownloads extends AppCompatActivity {
                             in.putExtra("FNAME", filename);
                             in.putExtra("download_id_from_watch_access_table", download_id_from_watch_access_table);
                             in.putExtra("PlayedLength", PlayedLength);
-                            in.putExtra("UniqueId",""+download.get(Position).getUniqueId());
-                            in.putExtra("streamId",""+download.get(Position).getStreamId());
-                            in.putExtra("download_content_type",""+download.get(Position).getDownloadContentType());
+                            in.putExtra("UniqueId", "" + download.get(Position).getUniqueId());
+                            in.putExtra("streamId", "" + download.get(Position).getStreamId());
+                            in.putExtra("download_content_type", "" + download.get(Position).getDownloadContentType());
 
 
-
-                            in.putExtra("Chromecast_Subtitle_Url",Chromecast_Subtitle_Url);
-                            in.putExtra("Chromecast_Subtitle_Language_Name",Chromecast_Subtitle_Language_Name);
-                            in.putExtra("Chromecast_Subtitle_Code",Chromecast_Subtitle_Code);
-
+                            in.putExtra("Chromecast_Subtitle_Url", Chromecast_Subtitle_Url);
+                            in.putExtra("Chromecast_Subtitle_Language_Name", Chromecast_Subtitle_Language_Name);
+                            in.putExtra("Chromecast_Subtitle_Code", Chromecast_Subtitle_Code);
 
 
-                            Log.v("BIBHU1","PlayedLength="+PlayedLength);
+                            Log.v("BIBHU1", "PlayedLength=" + PlayedLength);
 
                             //
                             startActivity(in);
@@ -1060,8 +1153,7 @@ public class MyDownloads extends AppCompatActivity {
 
     }
 
-    public boolean CheckAccessPeriodOfDownloadContent()
-    {
+    public boolean CheckAccessPeriodOfDownloadContent() {
 
         // following block is responsible for restriction on download content .....
 
@@ -1073,7 +1165,7 @@ public class MyDownloads extends AppCompatActivity {
         long initial_played_time = 0;
         long updated_server_current_time = 0;
 
-        Cursor cursor1 = DB.rawQuery("SELECT server_current_time , watch_period , access_period , initial_played_time , updated_server_current_time,download_id FROM "+DBHelper.WATCH_ACCESS_INFO+" WHERE download_id = '"+download.get(Position).getDOWNLOADID()+"'", null);
+        Cursor cursor1 = DB.rawQuery("SELECT server_current_time , watch_period , access_period , initial_played_time , updated_server_current_time,download_id FROM " + DBHelper.WATCH_ACCESS_INFO + " WHERE download_id = '" + download.get(Position).getDOWNLOADID() + "'", null);
         int count1 = cursor1.getCount();
 
         if (count1 > 0) {
@@ -1087,74 +1179,60 @@ public class MyDownloads extends AppCompatActivity {
                     download_id_from_watch_access_table = cursor1.getString(5);
 
 
-                    Log.v("BIBHU3","server_current_time============"+server_current_time);
-                    Log.v("BIBHU3","watch_period============"+watch_period);
-                    Log.v("BIBHU3","access_period============"+access_period);
-                    Log.v("BIBHU3","initial_played_time============"+initial_played_time);
-                    Log.v("BIBHU3","updated_server_current_time============"+updated_server_current_time);
-                    Log.v("BIBHU3","download_id_from_watch_access_table============"+download_id_from_watch_access_table);
+                    Log.v("BIBHU3", "server_current_time============" + server_current_time);
+                    Log.v("BIBHU3", "watch_period============" + watch_period);
+                    Log.v("BIBHU3", "access_period============" + access_period);
+                    Log.v("BIBHU3", "initial_played_time============" + initial_played_time);
+                    Log.v("BIBHU3", "updated_server_current_time============" + updated_server_current_time);
+                    Log.v("BIBHU3", "download_id_from_watch_access_table============" + download_id_from_watch_access_table);
 
                 } while (cursor1.moveToNext());
             }
-        }else
-        {
+        } else {
             return false;
         }
 
-        if(initial_played_time == 0)
-        {
-            if(((server_current_time < System.currentTimeMillis()) && (access_period > System.currentTimeMillis())) || (access_period == -1))
-            {
-                String Qry = "UPDATE " +DBHelper.WATCH_ACCESS_INFO+ " SET initial_played_time = '"+System.currentTimeMillis()+"'" +
-                        " WHERE download_id = '"+download.get(Position).getDOWNLOADID()+"' ";
+        if (initial_played_time == 0) {
+            if (((server_current_time < System.currentTimeMillis()) && (access_period > System.currentTimeMillis())) || (access_period == -1)) {
+                String Qry = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET initial_played_time = '" + System.currentTimeMillis() + "'" +
+                        " WHERE download_id = '" + download.get(Position).getDOWNLOADID() + "' ";
 
                 DB.execSQL(Qry);
                 return true;
-            }
-            else
-            {
+            } else {
                 // Show Restriction Message
                 ShowRestrictionMsg("You don't have access to play this video.");
                 return false;
 
             }
-        }
-        else
-        {
-            if(updated_server_current_time < System.currentTimeMillis())
-            {
-                if(access_period == -1 || (System.currentTimeMillis() < access_period)) // && (((System.currentTimeMillis() - initial_played_time) < watch_period)) || watch_period == -1)
+        } else {
+            if (updated_server_current_time < System.currentTimeMillis()) {
+                if (access_period == -1 || (System.currentTimeMillis() < access_period)) // && (((System.currentTimeMillis() - initial_played_time) < watch_period)) || watch_period == -1)
                 {
-                    String Qry = "UPDATE " +DBHelper.WATCH_ACCESS_INFO+ " SET updated_server_current_time = '"+System.currentTimeMillis()+"'" +
-                            " WHERE download_id = '"+download.get(Position).getDOWNLOADID()+"' ";
+                    String Qry = "UPDATE " + DBHelper.WATCH_ACCESS_INFO + " SET updated_server_current_time = '" + System.currentTimeMillis() + "'" +
+                            " WHERE download_id = '" + download.get(Position).getDOWNLOADID() + "' ";
                     DB.execSQL(Qry);
                     return true;
-                }
-                else
-                {
+                } else {
                     // Show Restriction Meassge
                     ShowRestrictionMsg("You don't have access to play this video.");
                     return false;
                 }
-            }
-            else
-            {
+            } else {
                 // Show Restriction Message
                 ShowRestrictionMsg("You don't have access to play this video.");
                 return false;
             }
         }
-
 
 
         //=====================================END================================================//
     }
 
-    public void PlayThroughChromeCast()
-    {
+    public void PlayThroughChromeCast() {
 
         MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
-        movieMetadata.putString(MediaMetadata.KEY_SUBTITLE,download.get(Position).getStory());
+        movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, download.get(Position).getStory());
         movieMetadata.putString(MediaMetadata.KEY_TITLE, download.get(Position).getMUVIID());
         movieMetadata.addImage(new WebImage(Uri.parse(download.get(Position).getPoster())));
 
@@ -1166,15 +1244,15 @@ public class MyDownloads extends AppCompatActivity {
             try {
                 jsonObj = new JSONObject();
                 jsonObj.put("description", download.get(Position).getMUVIID());
-                jsonObj.put("licenseUrl",licenseUrl);
+                jsonObj.put("licenseUrl", licenseUrl);
 
                 //  This Code Is Added For Video Log By Bibhu..
 
                 jsonObj.put("authToken", Util.authTokenStr.trim());
-                jsonObj.put("user_id",preferenceManager.getUseridFromPref());
+                jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                 jsonObj.put("ip_address", ipAddressStr.trim());
-                jsonObj.put("movie_id",download.get(Position).getMuviid());
-                jsonObj.put("episode_id",download.get(Position).getStreamId());
+                jsonObj.put("movie_id", download.get(Position).getMuviid());
+                jsonObj.put("episode_id", download.get(Position).getStreamId());
                 jsonObj.put("watch_status", watch_status);
                 jsonObj.put("device_type", "2");
                 jsonObj.put("log_id", "0");
@@ -1199,8 +1277,8 @@ public class MyDownloads extends AppCompatActivity {
 
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
-                jsonObj.put("resume_time",resume_time);
-                jsonObj.put("seek_status",seek_status);
+                jsonObj.put("resume_time", resume_time);
+                jsonObj.put("seek_status", seek_status);
                 // This  Code Is Added For Drm BufferLog By Bibhu ...
 
                 jsonObj.put("resolution", "BEST");
@@ -1218,8 +1296,7 @@ public class MyDownloads extends AppCompatActivity {
             }
             List tracks = new ArrayList();
             Log.v("BIBHU4", "restrict_stream_id============111");
-            if(!SubtitleUrl.equals(""))
-            {
+            if (!SubtitleUrl.equals("")) {
                 Log.v("BIBHU4", "restrict_stream_id======11======111");
                 MediaTrack englishSubtitle = new MediaTrack.Builder(0,
                         MediaTrack.TYPE_TEXT)
@@ -1245,7 +1322,7 @@ public class MyDownloads extends AppCompatActivity {
             Log.v("BIBHU4", "restrict_stream_id=====33=======111");
 
             togglePlayback();
-        }else{
+        } else {
             mediaContentType = "videos/mp4";
             JSONObject jsonObj = null;
             try {
@@ -1255,10 +1332,10 @@ public class MyDownloads extends AppCompatActivity {
                 //  This Code Is Added For Video Log By Bibhu..
 
                 jsonObj.put("authToken", Util.authTokenStr.trim());
-                jsonObj.put("user_id",preferenceManager.getUseridFromPref());
+                jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                 jsonObj.put("ip_address", ipAddressStr.trim());
-                jsonObj.put("movie_id",download.get(Position).getMuviid());
-                jsonObj.put("episode_id",download.get(Position).getStreamId());
+                jsonObj.put("movie_id", download.get(Position).getMuviid());
+                jsonObj.put("episode_id", download.get(Position).getStreamId());
                 jsonObj.put("watch_status", watch_status);
                 jsonObj.put("device_type", "2");
                 jsonObj.put("log_id", "0");
@@ -1283,8 +1360,8 @@ public class MyDownloads extends AppCompatActivity {
 
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
-                jsonObj.put("resume_time",resume_time);
-                jsonObj.put("seek_status",seek_status);
+                jsonObj.put("resume_time", resume_time);
+                jsonObj.put("seek_status", seek_status);
                 // This  Code Is Added For Drm BufferLog By Bibhu ...
 
                 jsonObj.put("resolution", "BEST");
@@ -1302,8 +1379,7 @@ public class MyDownloads extends AppCompatActivity {
             }
             List tracks = new ArrayList();
             Log.v("BIBHU4", "restrict_stream_id============111");
-            if(!SubtitleUrl.equals(""))
-            {
+            if (!SubtitleUrl.equals("")) {
                 Log.v("BIBHU4", "restrict_stream_id======11======111");
                 MediaTrack englishSubtitle = new MediaTrack.Builder(0,
                         MediaTrack.TYPE_TEXT)
@@ -1337,12 +1413,11 @@ public class MyDownloads extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK && requestCode == 1001)
-        {
+        if (resultCode == RESULT_OK && requestCode == 1001) {
             if (data.getStringExtra("yes").equals("1002")) {
                 watch_status = "halfplay";
                 seek_status = "first_time";
-                resume_time = ""+Played_Length/1000;
+                resume_time = "" + Played_Length / 1000;
                 PlayThroughChromeCast();
 
             } else {
@@ -1350,9 +1425,7 @@ public class MyDownloads extends AppCompatActivity {
                 Played_Length = 0;
                 PlayThroughChromeCast();
             }
-        }
-        else
-        {
+        } else {
             watch_status = "start";
             Played_Length = 0;
             PlayThroughChromeCast();
@@ -1362,14 +1435,26 @@ public class MyDownloads extends AppCompatActivity {
     @Override
     protected void onStop() {
         try {
-            if(asynGetIpAddress!=null)
+            if (asynGetIpAddress != null)
                 asynGetIpAddress.cancel(true);
-            if(asynLoadVideoUrls!=null)
+            if (asynLoadVideoUrls != null)
                 asynLoadVideoUrls.cancel(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
         super.onStop();
+    }
+
+    public void upadateResumeWatchTable() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                SQLiteDatabase DB = MyDownloads.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
+                String Qry1 = "UPDATE " + DBHelper.RESUME_WATCH + " SET LicenceUrl = '" + licenseUrl + "' , Flag = '1' ,LatestMpdUrl = '" + MpdVideoUrl + "'  WHERE UniqueId = '" + download.get(Position).getUniqueId() + "'";
+                DB.execSQL(Qry1);
+            }
+        }).start();
     }
 }
 

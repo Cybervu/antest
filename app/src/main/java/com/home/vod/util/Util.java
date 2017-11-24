@@ -227,17 +227,16 @@ public class Util {
         }
         return check;
     }
-    public static boolean isValidPhone(String phone)
-    {
 
-        if ((phone.length() >= 10) && (phone.length() <=15))
-        {
+    public static boolean isValidPhone(String phone) {
+
+        if ((phone.length() >= 10) && (phone.length() <= 15)) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
+
     public static boolean isConfirmPassword(String password, String confirmPassword) {
         Pattern pattern = Pattern.compile(password, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(confirmPassword);
@@ -455,7 +454,7 @@ public class Util {
         dlgAlert.create().show();
     }
 
-    public static void showActivateSubscriptionWatchVideoAleart(final Activity mContext,String showMsg) {
+    public static void showActivateSubscriptionWatchVideoAleart(final Activity mContext, String showMsg) {
         LanguagePreference languagePreference = LanguagePreference.getLanguagePreference(mContext);
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
                   /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
@@ -501,8 +500,8 @@ public class Util {
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                 LogUtil.showLog("MUVIshkey:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-                String s=Base64.encodeToString(md.digest(), Base64.DEFAULT);
+                LogUtil.showLog("MUVIshkey:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                String s = Base64.encodeToString(md.digest(), Base64.DEFAULT);
                 LogUtil.showLog("MUVIshkey:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
         } catch (PackageManager.NameNotFoundException e) {
@@ -541,11 +540,11 @@ public class Util {
         //setTranslationLanguageToPref(languagePreference, GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN, "google_fcm_token", json);
 
         setTranslationLanguageToPref(languagePreference, EPISODE_TITLE, DEFAULT_EPISODE_TITLE, "episodes_title", json);
-        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNIN,DEFAULT_GMAIL_SIGNIN,"gmail_signin",json);
+        setTranslationLanguageToPref(languagePreference, GMAIL_SIGNIN, DEFAULT_GMAIL_SIGNIN, "gmail_signin", json);
         setTranslationLanguageToPref(languagePreference, SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z, "sort_alpha_a_z", json);
         setTranslationLanguageToPref(languagePreference, SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A, "sort_alpha_z_a", json);
-        setTranslationLanguageToPref(languagePreference, LOGIN_FACEBOOK,DEFAULT_LOGIN_FACEBOOK,"login_facebook",json);
-        setTranslationLanguageToPref(languagePreference, REGISTER_FACEBOOK,DEFAULT_REGISTER_FACEBOOK,"register_facebook",json);
+        setTranslationLanguageToPref(languagePreference, LOGIN_FACEBOOK, DEFAULT_LOGIN_FACEBOOK, "login_facebook", json);
+        setTranslationLanguageToPref(languagePreference, REGISTER_FACEBOOK, DEFAULT_REGISTER_FACEBOOK, "register_facebook", json);
         setTranslationLanguageToPref(languagePreference, AMOUNT, DEFAULT_AMOUNT, "amount", json);
         setTranslationLanguageToPref(languagePreference, COUPON_CANCELLED, DEFAULT_COUPON_CANCELLED, "coupon_cancelled", json);
         setTranslationLanguageToPref(languagePreference, BUTTON_APPLY, DEFAULT_BUTTON_APPLY, "btn_apply", json);
@@ -790,7 +789,7 @@ public class Util {
         return languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1");
     }
 
-    public static void hideKeyboard(Context context){
+    public static void hideKeyboard(Context context) {
         Activity act = (Activity) context;
         InputMethodManager inputManager = (InputMethodManager)
                 act.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -798,5 +797,5 @@ public class Util {
         inputManager.hideSoftInputFromWindow(act.getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
-
 }
+

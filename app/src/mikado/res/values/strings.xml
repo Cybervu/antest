@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Mikado Series</string>
+
+    <!--App Drawer-->
+    <string name="action_search">Search</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="studio_site">http://mikadoseries.canal-vod.com/</string>
+    <string name="fonts">fonts/Anchor-Semibold.otf</string>
+    <!--
+        <string name="my_link"><a href="http://somesite.com/">Click me!</a></string>
+    -->
+    <string name="dialog_link">Afin de profiter de votre saison intégrale sur mobile :\n\n1. Veuillez-vous connecter sur le site <![CDATA[ <a href="http://mikadoseries.canal-vod.com/">mikadoseries.canal-vod.com</a>]]> avec votre ordinateur PC ou mac\n2. Créez-vous un compte\n3. Rentrez votre code promo\n4. Choisissez votre saison intégrale\n\n
+        Vous pouvez désormais profiter de votre contenu sur mobile !</string>
+
+
+</resources>

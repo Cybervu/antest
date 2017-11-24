@@ -59,15 +59,13 @@ android {
         }
         defaultFlavor_staging_ {
             dimension 'environment'
-           // buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+            // buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
-
         }
         defaultFlavor_Prod_ {
             dimension 'environment'
             //buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
-
         }
         /*Structuring vishwamtv flavour with dimension*/
         vishwamtv {
@@ -326,7 +324,8 @@ android {
             dimension 'vendor'
             applicationId 'com.release.magicmovies'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            buildConfigField "String", "AUTH_TOKEN", "\"3ea7e43c13d8ab6eb505b960217df923\""//Magic Movies
+            buildConfigField "String", "AUTH_TOKEN", "\"3ea7e43c13d8ab6eb505b960217df923\""
+//Magic Movies
             //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             targetSdkVersion 23
             versionCode 1
@@ -358,6 +357,24 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
+        mikado_series {
+            minSdkVersion 16
+            dimension 'vendor'
+            applicationId 'com.release.canal'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"398fe175085c765637c0dc4c02acb3fa\""
+            targetSdkVersion 23
+            versionCode 3
+            versionName '1.0.2'
+        }
+        mikado_series_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+        mikado_series_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
     }
 }
 
@@ -375,57 +392,57 @@ android.variantFilter { variant ->
     /*Avoid defaultFlavor to vishwamtv combination for both debug & release mode.*/
 
     if (vendor.equals('defaultFlavor') && (environment.equals('defaultFlavor_staging_') || environment.equals('defaultFlavor_Prod_'))
-            && (isRelease||isDebug)) {
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('vishwamtv') && (environment.equals('vishwamtv_staging_')||environment.equals('vishwamtv_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('vishwamtv') && (environment.equals('vishwamtv_staging_') || environment.equals('vishwamtv_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('newthoughtchannel') && (environment.equals('newthoughtchannel_staging_')||environment.equals('newthoughtchannel_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('newthoughtchannel') && (environment.equals('newthoughtchannel_staging_') || environment.equals('newthoughtchannel_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('digiOsmosis') && (environment.equals('digiOsmosis_staging_')||environment.equals('digiOsmosis_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('digiOsmosis') && (environment.equals('digiOsmosis_staging_') || environment.equals('digiOsmosis_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('lumiere') && (environment.equals('lumiere_staging_')||environment.equals('lumiere_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('lumiere') && (environment.equals('lumiere_staging_') || environment.equals('lumiere_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('matas') && (environment.equals('matas_staging_')||environment.equals('matas_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('matas') && (environment.equals('matas_staging_') || environment.equals('matas_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('monetizer') && (environment.equals('monetizer_staging_')||environment.equals('monetizer_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('monetizer') && (environment.equals('monetizer_staging_') || environment.equals('monetizer_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('plusnights') && (environment.equals('plusnights_staging_')||environment.equals('plusnights_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('plusnights') && (environment.equals('plusnights_staging_') || environment.equals('plusnights_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('metrox') && (environment.equals('metrox_staging_')||environment.equals('metrox_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('metrox') && (environment.equals('metrox_staging_') || environment.equals('metrox_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('wuntustreaming') && (environment.equals('wuntustreaming_staging_')||environment.equals('wuntustreaming_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('wuntustreaming') && (environment.equals('wuntustreaming_staging_') || environment.equals('wuntustreaming_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('cmax') && (environment.equals('cmax_staging_')||environment.equals('cmax_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('cmax') && (environment.equals('cmax_staging_') || environment.equals('cmax_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('muvinow') && (environment.equals('muvinow_staging_')||environment.equals('muvinow_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('muvinow') && (environment.equals('muvinow_staging_') || environment.equals('muvinow_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('yoteshingo') && (environment.equals('yoteshingo_staging_')||environment.equals('yoteshingo_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('yoteshingo') && (environment.equals('yoteshingo_staging_') || environment.equals('yoteshingo_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-    else if (vendor.equals('magicmovies') && (environment.equals('magicmovies_staging_')||environment.equals('magicmovies_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('magicmovies') && (environment.equals('magicmovies_staging_') || environment.equals('magicmovies_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-    else if (vendor.equals('ubereatsvod') && (environment.equals('ubereatsvod_staging_')||environment.equals('ubereatsvod_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('ubereatsvod') && (environment.equals('ubereatsvod_staging_') || environment.equals('ubereatsvod_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-    else{
+    } else if (vendor.equals('mikado_series') && (environment.equals('mikado_series_staging_') || environment.equals('mikado_series_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    } else {
         variant.setIgnore(true)
     }
-   }
+}
 
 android {
     useLibrary 'org.apache.http.legacy'
