@@ -13,12 +13,11 @@
     <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="colorControlNormal">@color/hint_color</item>
-        <item name="colorControlHighlight">@color/hint_background</item>
         <item name="colorControlActivated">@color/hint_background</item>
         <!--
         <item name="windowActionBar">false</item>
 -->
-
+        <item name="autoCompleteTextViewStyle">@style/cursorColor</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <!--
         status bar color
@@ -136,12 +135,14 @@
         <item name="android:dropDownListViewStyle">@style/mySpinnerStyle</item>
     </style>
 
-
     <style name="customRatingBar" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/rating_custom_bar</item>
         <item name="android:minHeight">30dip</item>
         <item name="android:maxHeight">30dip</item>
 
+    </style>
+    <style name="cursorColor" parent="Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:textCursorDrawable">@drawable/cursor</item>
     </style>
 
 </resources>

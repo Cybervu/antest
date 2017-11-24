@@ -253,7 +253,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text=""
-                    android:textColor="@color/movieTitleColor"
+                    android:textColor="@color/videoTitleTextColor"
                     android:textSize="@dimen/movie_videotitle_size"
                     android:visibility="gone" />
 

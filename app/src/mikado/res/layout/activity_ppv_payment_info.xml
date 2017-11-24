@@ -545,14 +545,14 @@
 
                     <Button
                         android:id="@+id/watch_now"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/payment_watch_now_height"
+                        android:layout_width="@dimen/spinner_width"
+                        android:layout_height="@dimen/coupanbtn_height"
                         android:layout_gravity="right"
                         android:background="@drawable/voucher_inactive_button"
                         android:stateListAnimator="@null"
                         android:text=""
                         android:textAllCaps="false"
-                        android:textColor="#7f7f7f"
+                        android:textColor="@color/buttonTextColor"
                         android:textSize="@dimen/cast_name_text" />
 
                 </LinearLayout>
