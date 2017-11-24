@@ -2648,9 +2648,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             }
 
 
-
-
-
             playerModel.setFakeSubTitlePath(_video_details_output.getFakeSubTitlePath());
             playerModel.setVideoResolution(_video_details_output.getVideoResolution());
             FakeSubTitlePath = _video_details_output.getFakeSubTitlePath();

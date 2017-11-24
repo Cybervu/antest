@@ -186,13 +186,12 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
         SensorOrientationChangeNotifier.getInstance(TrailerActivity.this).addListener(this);
         AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
         asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sdk_activity_video_player);
+        setContentView(R.layout.activity_video_player);
         content_types_id = Util.dataModel.getContentTypesId();
 
         PreviousUsedDataByApp(true);
