@@ -26,6 +26,7 @@ import com.home.vod.R;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
 
@@ -74,6 +75,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
     String contEmail;
     boolean validate = true;
     LanguagePreference languagePreference;
+    PreferenceManager preferenceManager;
 
 
 
@@ -91,6 +93,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         View v = inflater.inflate(R.layout.fragment_contact_us, container, false);
         context = getActivity();
         languagePreference = LanguagePreference.getLanguagePreference(context);
+        preferenceManager = PreferenceManager.getPreferenceManager(context);
 
         TextView categoryTitle = (TextView) v.findViewById(R.id.categoryTitle);
         Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.fonts));
@@ -320,7 +323,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
                 if (isValidEmail) {
                     if (validate){
                         ContactUsInputModel contactUsInputModel=new ContactUsInputModel();
-                        contactUsInputModel.setAuthToken(authTokenStr);
+                        contactUsInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                         contactUsInputModel.setEmail(String.valueOf(regEmailStr));
                         contactUsInputModel.setName(String.valueOf(regNameStr));
                         contactUsInputModel.setMessage(String.valueOf(regMessageStr));

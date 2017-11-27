@@ -290,6 +290,20 @@ public class APIUrlConstant {
     public static final String GetSubCategoryList = "getSubCategoryList";
 
 
+    /* endpoint to get Notification Count Details API*/
+    public static String notificationcount = "GetNoOfUnreadNotification";
+
+    /* endpoint to get Fcmregistration Details API*/
+    public static String fcmregistration = "RegisterMyDevice";
+
+
+    /* endpoint to get Notification Lists Details API*/
+    public static String notificationlists = "NotificationLists";
+
+
+    /* endpoint to get Read All Notification Details API*/
+    public static String readallnotification = "ReadAllNotification";
+
 
     public static final String SHARED_PREF = "ah_firebase";
 
@@ -326,6 +340,23 @@ public class APIUrlConstant {
     public static String getUpdateGoogleid() {
         return BASE_URl + UpdateGoogleid;
     }
+
+    public static String getNotificationcount() {
+        return BASE_URl + notificationcount;
+    }
+
+    public static String getFcmregistration() {
+        return BASE_URl + fcmregistration;
+    }
+
+    public static String getNotificationLists() {
+        return BASE_URl + notificationlists;
+    }
+
+    public static String getReadallnotification() {
+        return BASE_URl + readallnotification;
+    }
+
 
 
     public static String getGetMenusUrl() {
@@ -459,7 +490,7 @@ public class APIUrlConstant {
         return BASE_URl + IS_REGISTRATIONENABLED_URL;
     }
 
-    public static String getGetStudioAuthToken() {
+    public static String getStudioAuthToken() {
         return BASE_URl + GET_STUDIO_AUTH_TOKEN;
     }
 

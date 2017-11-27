@@ -44,6 +44,7 @@ import com.home.apisdk.apiModel.TransactionOutputModel;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -137,6 +138,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
     TextView no_internet_text;
     ProgressBarHandler Ph;
     LanguagePreference languagePreference;
+    PreferenceManager preferenceManager;
 
 
     @Override
@@ -144,6 +146,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_details);
         languagePreference = LanguagePreference.getLanguagePreference(this);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
@@ -274,7 +277,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                     if (NetworkStatus.getInstance().isConnected(TransactionDetailsActivity.this)) {
 
                         GetInvoicePdfInputModel getInvoicePdfInputModel = new GetInvoicePdfInputModel();
-                        getInvoicePdfInputModel.setAuthToken(authTokenStr);
+                        getInvoicePdfInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                         getInvoicePdfInputModel.setUser_id(user_id);
                         getInvoicePdfInputModel.setId(id);
                         getInvoicePdfInputModel.setDevice_type("app");
@@ -594,7 +597,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         noInternet.setVisibility(View.GONE);
         primary_layout.setVisibility(View.VISIBLE);
         TransactionInputModel transactionInputModel=new TransactionInputModel();
-        transactionInputModel.setAuthToken(authTokenStr);
+        transactionInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
         transactionInputModel.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         transactionInputModel.setUser_id(user_id);
         transactionInputModel.setId(id);
@@ -906,7 +909,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                         if (deletevalue == 1) {
                             /*Delete download url from server */
                             DeleteInvoicePdfInputModel deleteInvoicePdfInputModel = new DeleteInvoicePdfInputModel();
-                            deleteInvoicePdfInputModel.setAuthToken(authTokenStr);
+                            deleteInvoicePdfInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                             deleteInvoicePdfInputModel.setFilepath(download_Url);
                             deleteInvoicePdfInputModel.setLanguage_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             DeleteInvoicePdfAsynTask deletepdf = new DeleteInvoicePdfAsynTask(deleteInvoicePdfInputModel, TransactionDetailsActivity.this, TransactionDetailsActivity.this);

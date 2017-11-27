@@ -187,7 +187,7 @@ public class ReviewActivity extends AppCompatActivity implements
                 addContentRatingInputModel.setUser_id(preferenceManager.getUseridFromPref());
                 addContentRatingInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
                 addContentRatingInputModel.setContent_id(getIntent().getStringExtra("muviId"));
-                addContentRatingInputModel.setAuthToken(authTokenStr.trim());
+                addContentRatingInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                 addContentRatingInputModel.setRating(ratingStr);
                 addContentRatingInputModel.setReview(reviewMessage);
 
@@ -261,7 +261,7 @@ public class ReviewActivity extends AppCompatActivity implements
         if(isNetwork) {
             String muviid = getIntent().getStringExtra("muviId");
             ViewContentRatingInputModel viewContentRatingInputModel = new ViewContentRatingInputModel();
-            viewContentRatingInputModel.setAuthToken(authTokenStr);
+            viewContentRatingInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
             viewContentRatingInputModel.setContent_id(muviid);
             viewContentRatingInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             viewContentRatingInputModel.setUser_id(preferenceManager.getUseridFromPref());

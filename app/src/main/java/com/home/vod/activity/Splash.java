@@ -10,7 +10,6 @@ import com.home.vod.R;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.google.ads.interactivemedia.v3.b.b.a.m.R;
 
 
 public class Splash extends AppCompatActivity {

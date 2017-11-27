@@ -85,7 +85,7 @@ public class ManageDevices extends AppCompatActivity implements LoadRegisteredDe
         userId = preferenceManager.getUseridFromPref();
         emailId = preferenceManager.getEmailIdFromPref();
         LoadRegisteredDevicesInput loadRegisteredDevicesInput=new LoadRegisteredDevicesInput();
-        loadRegisteredDevicesInput.setAuthToken(authTokenStr.trim());
+        loadRegisteredDevicesInput.setAuthToken(preferenceManager.getAuthToken());
         loadRegisteredDevicesInput.setDevice(Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID));
         loadRegisteredDevicesInput.setUser_id(userId);
         loadRegisteredDevicesInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));

@@ -295,7 +295,7 @@ public class ProfileActivity extends AppCompatActivity implements
 // =======End ===========================//
 
         Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
-        get_userProfile_input.setAuthToken(authTokenStr);
+        get_userProfile_input.setAuthToken(preferenceManager.getAuthToken().trim());
         get_userProfile_input.setUser_id(preferenceManager.getUseridFromPref());
         get_userProfile_input.setEmail(preferenceManager.getEmailIdFromPref());
         get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
@@ -442,7 +442,7 @@ public class ProfileActivity extends AppCompatActivity implements
     public void UpdateProfile(String name,String phone_No) {
 
         Update_UserProfile_Input update_userProfile_input = new Update_UserProfile_Input();
-        update_userProfile_input.setAuthToken(authTokenStr);
+        update_userProfile_input.setAuthToken(preferenceManager.getAuthToken().trim());
         update_userProfile_input.setUser_id(preferenceManager.getUseridFromPref().trim());
         update_userProfile_input.setName(name);
         update_userProfile_input.setPhone_no(phone_No);

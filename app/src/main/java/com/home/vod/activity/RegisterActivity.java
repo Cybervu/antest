@@ -288,7 +288,7 @@ public class RegisterActivity extends AppCompatActivity implements
                     CheckDeviceInput checkDeviceInput = new CheckDeviceInput();
                     checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
                     checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
-                    checkDeviceInput.setAuthToken(authTokenStr);
+                    checkDeviceInput.setAuthToken(preferenceManager.getAuthToken().trim());
                     checkDeviceInput.setUser_id(preferenceManager.getUseridFromPref());
                     checkDeviceInput.setDevice_type("1");
                     checkDeviceInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
@@ -839,7 +839,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
 
                         Registration_input registration_input = new Registration_input();
-                        registration_input.setAuthToken(authTokenStr);
+                        registration_input.setAuthToken(preferenceManager.getAuthToken().trim());
                         registration_input.setName(name);
                         registration_input.setEmail(regEmailStr);
                         registration_input.setPhone(phone);
@@ -945,7 +945,7 @@ public class RegisterActivity extends AppCompatActivity implements
                 if (languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE).trim().equals("1")) {
                     // Call For Check Api.
                     CheckDeviceInput checkDeviceInput = new CheckDeviceInput();
-                    checkDeviceInput.setAuthToken(authTokenStr);
+                    checkDeviceInput.setAuthToken(preferenceManager.getAuthToken().trim());
                     String userIdStr = preferenceManager.getUseridFromPref();
                     checkDeviceInput.setUser_id(userIdStr);
                     checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
@@ -966,7 +966,7 @@ public class RegisterActivity extends AppCompatActivity implements
                             if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                                 if (Util.dataModel.getIsFreeContent() == 1) {
                                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -1240,7 +1240,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
                                     //  This Code Is Added For Video Log By Bibhu..
 
-                                    jsonObj.put("authToken", authTokenStr);
+                                    jsonObj.put("authToken", preferenceManager.getAuthToken().trim());
                                     jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                                     jsonObj.put("ip_address", ipAddressStr.trim());
                                     jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -1317,7 +1317,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
                                     //  This Code Is Added For Video Log By Bibhu..
 
-                                    jsonObj.put("authToken", authTokenStr);
+                                    jsonObj.put("authToken", preferenceManager.getAuthToken().trim());
                                     jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                                     jsonObj.put("ip_address", ipAddressStr.trim());
                                     jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -1561,7 +1561,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", authTokenStr);
+                jsonObj.put("authToken", preferenceManager.getAuthToken().trim());
                 jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -1639,7 +1639,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", authTokenStr);
+                jsonObj.put("authToken", preferenceManager.getAuthToken().trim());
                 jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -1860,7 +1860,7 @@ public class RegisterActivity extends AppCompatActivity implements
                 } else {
                     if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                        getVideoDetailsInput.setAuthToken(authTokenStr);
+                        getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                         getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -3562,7 +3562,7 @@ public class RegisterActivity extends AppCompatActivity implements
                     CheckDeviceInput checkDeviceInput = new CheckDeviceInput();
                     checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
                     checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
-                    checkDeviceInput.setAuthToken(authTokenStr);
+                    checkDeviceInput.setAuthToken(preferenceManager.getAuthToken().trim());
                     checkDeviceInput.setUser_id(preferenceManager.getUseridFromPref());
                     checkDeviceInput.setDevice_type("1");
                     checkDeviceInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
@@ -3577,7 +3577,7 @@ public class RegisterActivity extends AppCompatActivity implements
                         if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                             if (Util.dataModel.getIsFreeContent() == 1) {
                                 GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                getVideoDetailsInput.setAuthToken(authTokenStr);
+                                getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -3781,7 +3781,7 @@ public class RegisterActivity extends AppCompatActivity implements
             }
 
             SocialAuthInputModel socialAuthInputModel = new SocialAuthInputModel();
-            socialAuthInputModel.setAuthToken(authTokenStr);
+            socialAuthInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
             socialAuthInputModel.setName(fbName.trim());
             socialAuthInputModel.setEmail(fbEmail.trim());
             socialAuthInputModel.setPassword("");
@@ -4272,7 +4272,7 @@ public class RegisterActivity extends AppCompatActivity implements
                     if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                         if (Util.dataModel.getIsFreeContent() == 1) {
                             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                            getVideoDetailsInput.setAuthToken(authTokenStr);
+                            getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                             getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                             getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                             getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -4483,7 +4483,7 @@ public class RegisterActivity extends AppCompatActivity implements
     public void LogOut() {
 
         LogoutInput logoutInput = new LogoutInput();
-        logoutInput.setAuthToken(authTokenStr);
+        logoutInput.setAuthToken(preferenceManager.getAuthToken().trim());
         logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, this, this);
@@ -4666,7 +4666,7 @@ public class RegisterActivity extends AppCompatActivity implements
         this.fbEmail = fbEmail;
         this.fbName = fbName;
         CheckFbUserDetailsInput checkFbUserDetailsInput = new CheckFbUserDetailsInput();
-        checkFbUserDetailsInput.setAuthToken(authTokenStr);
+        checkFbUserDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
         checkFbUserDetailsInput.setFb_userid(fbUserId.trim());
         asynCheckFbUserDetails = new CheckFbUserDetailsAsyn(checkFbUserDetailsInput, RegisterActivity.this, RegisterActivity.this);
         asynCheckFbUserDetails.executeOnExecutor(threadPoolExecutor);
@@ -4694,7 +4694,7 @@ public class RegisterActivity extends AppCompatActivity implements
             gmailLoginInput.setGmail_userid(AuthId);
             gmailLoginInput.setProfile_image(AuthImageUrl);
             gmailLoginInput.setPassword("");
-            gmailLoginInput.setAuthToken(authTokenStr);
+            gmailLoginInput.setAuthToken(preferenceManager.getAuthToken().trim());
             AsyncGmailReg asyncGmailReg = new AsyncGmailReg(gmailLoginInput, this, this);
             asyncGmailReg.executeOnExecutor(threadPoolExecutor);
         }
@@ -4721,7 +4721,7 @@ public class RegisterActivity extends AppCompatActivity implements
             if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
                 if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -4777,7 +4777,7 @@ public class RegisterActivity extends AppCompatActivity implements
                     Log.v("MUVI", "VV VV VV");
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());

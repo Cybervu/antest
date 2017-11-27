@@ -10,6 +10,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -35,6 +37,7 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.apiModel.APVModel;
 import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.PPVModel;
+import com.home.vod.BadgeDrawable;
 import com.home.vod.QueueDataProvider;
 import com.home.vod.R;
 import com.home.vod.activity.LoginActivity;
@@ -512,6 +515,26 @@ public class Util {
         }
     }
 
+
+    public static void setBadgeCount(Context context, LayerDrawable icon, int count) {
+
+        BadgeDrawable badge;
+
+        // Reuse drawable if possible
+        Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
+        if (reuse != null && reuse instanceof BadgeDrawable) {
+            badge = (BadgeDrawable) reuse;
+        } else {
+            badge = new BadgeDrawable(context);
+        }
+
+        badge.setCount(count);
+        icon.mutate();
+        icon.setDrawableByLayerId(R.id.ic_badge, badge);
+    }
+
+
+
     /**
      * Parse language key and store in prefernces.
      *
@@ -611,6 +634,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, LOGOUT, DEFAULT_LOGOUT, "logout", json);
         setTranslationLanguageToPref(languagePreference, LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS, "logout_success", json);
         setTranslationLanguageToPref(languagePreference, MY_FAVOURITE, DEFAULT_MY_FAVOURITE, "my_favourite", json);
+        setTranslationLanguageToPref(languagePreference, NOTIFICATION, DEFAULT_NOTIFICATION, "notification_title", json);
 
         setTranslationLanguageToPref(languagePreference, NEW_PASSWORD, DEFAULT_NEW_PASSWORD, "new_password", json);
         setTranslationLanguageToPref(languagePreference, NEW_HERE_TITLE, DEFAULT_NEW_HERE_TITLE, "new_here_title", json);
@@ -794,6 +818,8 @@ public class Util {
 
         inputManager.hideSoftInputFromWindow(act.getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
+
+
     }
 
 }

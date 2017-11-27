@@ -29,6 +29,7 @@ import com.home.vod.R;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -63,6 +64,7 @@ public class OldContactUsFragment extends Fragment implements ContactUsAsynTask.
     ContactUsAsynTask asynContactUs;
     boolean validate = true;
     LanguagePreference languagePreference;
+    PreferenceManager preferenceManager;
     ProgressBarHandler pDialog;
 
 
@@ -112,6 +114,7 @@ public class OldContactUsFragment extends Fragment implements ContactUsAsynTask.
 
 
         languagePreference = LanguagePreference.getLanguagePreference(context);
+        preferenceManager = PreferenceManager.getPreferenceManager(context);
 
         TextView categoryTitle = (TextView) v.findViewById(R.id.categoryTitle);
         FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),categoryTitle);
@@ -301,7 +304,7 @@ public class OldContactUsFragment extends Fragment implements ContactUsAsynTask.
 
         if (NetworkStatus.getInstance().isConnected(context)){
             ContactUsInputModel contactUsInputModel=new ContactUsInputModel();
-            contactUsInputModel.setAuthToken(authTokenStr);
+            contactUsInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
             contactUsInputModel.setEmail(String.valueOf(regEmailStr));
             contactUsInputModel.setName(String.valueOf(regNameStr));
             contactUsInputModel.setMessage(String.valueOf(regMessageStr));

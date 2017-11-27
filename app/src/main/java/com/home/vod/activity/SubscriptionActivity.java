@@ -23,6 +23,7 @@ import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.model.PlanModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -79,6 +80,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
     String planId;
     TextView subscriptionTitleTextView;
     LanguagePreference languagePreference;
+    PreferenceManager preferenceManager;
     int selected_subscription_plan = 0 ;
     ProgressBarHandler progressBarHandler;
     int prevPosition = 0;
@@ -93,6 +95,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
         Toolbar toolbar= (Toolbar) findViewById(R.id.toolbar);
         subscriptionTitleTextView = (TextView) findViewById(R.id.subscriptionTitleTextView);
         languagePreference = LanguagePreference.getLanguagePreference(SubscriptionActivity.this);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
         skipButton= (Button) findViewById(R.id.skipButton);
 
         if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
@@ -128,7 +131,7 @@ public class SubscriptionActivity extends AppCompatActivity implements GetPlanLi
         mLayoutManager = new LinearLayoutManager(SubscriptionActivity.this, LinearLayoutManager.VERTICAL, false);
         if(NetworkStatus.getInstance().isConnected(this)) {
             SubscriptionPlanInputModel planListInput=new SubscriptionPlanInputModel();
-            planListInput.setAuthToken(authTokenStr);
+            planListInput.setAuthToken(preferenceManager.getAuthToken().trim());
             planListInput.setLang(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             GetPlanListAsynctask asynLoadPlanDetails = new GetPlanListAsynctask(planListInput,this,this);
             asynLoadPlanDetails.executeOnExecutor(threadPoolExecutor);

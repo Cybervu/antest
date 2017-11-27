@@ -99,7 +99,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(BuildConfig.SERVICE_BASE_PATH.trim() + Util.UpdateGoogleid.trim());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", authTokenStr.trim());
+                httppost.addHeader("authToken", preferenceManager.getAuthToken().trim());
                 httppost.addHeader("google_id", refreshedToken);
                 httppost.addHeader("device_id", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
                 httppost.addHeader("user_id", loggedInStr);

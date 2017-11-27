@@ -94,6 +94,7 @@ public class GetIpAddressAsynTask extends AsyncTask<Void, Void, Void> {
 
             // Execute HTTP Post Request
             try {
+                Log.v("ANU","doInBackground");
                 URL url = new URL(APIUrlConstant.getIpAddressUrl());
                 HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
                 InputStream ins = con.getInputStream();
@@ -105,6 +106,7 @@ public class GetIpAddressAsynTask extends AsyncTask<Void, Void, Void> {
                 while ((inputLine = in.readLine()) != null) {
                     System.out.println(inputLine);
                     responseStr = inputLine;
+
                 }
 
                 in.close();
@@ -114,25 +116,30 @@ public class GetIpAddressAsynTask extends AsyncTask<Void, Void, Void> {
                 ipAddressStr = "";
                 statusCode = 0;
                 message = "Failure";
+                Log.v("ANU","catch1");
             } catch (UnsupportedEncodingException e) {
 
                 ipAddressStr = "";
                 statusCode = 0;
                 message = "Failure";
+                Log.v("ANU","catch2");
 
 
             } catch (IOException e) {
                 ipAddressStr = "";
                 statusCode = 0;
                 message = "Failure";
+                Log.v("ANU","catch3");
 
             }
             if (responseStr != null) {
+                Log.v("ANU","ipAddress RESPONSE==="+responseStr);
                 Object json = new JSONTokener(responseStr).nextValue();
                 if (json instanceof JSONObject) {
                     statusCode = 200;
                     message = "Success";
                     ipAddressStr = ((JSONObject) json).optString("ip");
+                    Log.v("ANU","ipAddressSTR==="+ipAddressStr);
 
                 }
 
@@ -142,6 +149,7 @@ public class GetIpAddressAsynTask extends AsyncTask<Void, Void, Void> {
             ipAddressStr = "";
             statusCode = 0;
             message = "Failure";
+            Log.v("ANU","catch");
 
 
         }
@@ -156,12 +164,16 @@ public class GetIpAddressAsynTask extends AsyncTask<Void, Void, Void> {
         Log.v("BKS1", "ip value==" + ipAddressStr);
         Log.v("MUVI","packag name in ip=="+SDKInitializer.getUser_Package_Name_At_Api(context));
         if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
+            Log.v("ANU", "ip value==" + ipAddressStr);
+            Log.v("ANU", "PACKAGE_NAME==" + PACKAGE_NAME);
+            Log.v("ANU", "SDKInitializer.getUser_Package_Name_At_Api(context))==" + SDKInitializer.getUser_Package_Name_At_Api(context));
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onIPAddressPostExecuteCompleted(message, statusCode, ipAddressStr);
             return;
         }
         if (SDKInitializer.getHashKey(context).equals("")) {
+            Log.v("ANU", "ip value1==" + ipAddressStr);
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onIPAddressPostExecuteCompleted(message, statusCode, ipAddressStr);

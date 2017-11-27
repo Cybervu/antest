@@ -143,4 +143,7 @@
     <dimen name="plainrow_text_size">20sp</dimen>
     <dimen name="toolbar_logo_width">108dp</dimen>
     <dimen name="toolbar_logo_height">58dp</dimen>
+
+    <dimen name="badge_text_size">16sp</dimen>
+
 </resources>

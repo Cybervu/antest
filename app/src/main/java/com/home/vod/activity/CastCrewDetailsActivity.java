@@ -238,7 +238,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
     public void GetCastCrewDetails() {
 
         GetCastDetailsInput getCastDetailsInput = new GetCastDetailsInput();
-        getCastDetailsInput.setAuthToken(authTokenStr);
+        getCastDetailsInput.setAuthToken(preferenceManager.getAuthToken());
         getCastDetailsInput.setLimit(String.valueOf(4));
         getCastDetailsInput.setOffset(String.valueOf(0));
         getCastDetailsInput.setPermalink(castpermalinkStr);

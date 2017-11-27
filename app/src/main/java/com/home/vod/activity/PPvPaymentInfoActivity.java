@@ -624,7 +624,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
         GetMonetizationDetailsInputModel getMonetizationDetailsInputModel = new GetMonetizationDetailsInputModel();
         loggedInIdStr = preferenceManager.getUseridFromPref();
-        getMonetizationDetailsInputModel.setAuthToken(authTokenStr);
+        getMonetizationDetailsInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
         getMonetizationDetailsInputModel.setStream_id(Util.dataModel.getStreamUniqueId());
         getMonetizationDetailsInputModel.setMovie_id(Util.dataModel.getMovieUniqueId().trim());
         getMonetizationDetailsInputModel.setUser_id(loggedInIdStr);
@@ -687,7 +687,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
                     // Calling Voucher Subscription Api
                     VoucherSubscriptionInputModel voucherSubscriptionInputModel = new VoucherSubscriptionInputModel();
-                    voucherSubscriptionInputModel.setAuthToken(authTokenStr);
+                    voucherSubscriptionInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                     voucherSubscriptionInputModel.setUser_id(preferenceManager.getUseridFromPref());
                     voucherSubscriptionInputModel.setMovie_id(Util.dataModel.getMovieUniqueId().trim());
                     voucherSubscriptionInputModel.setStream_id(Util.dataModel.getStreamUniqueId().trim());
@@ -922,7 +922,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
                     } else {
                         ValidateCouponCodeInputModel validateCouponCodeInputModel = new ValidateCouponCodeInputModel();
-                        validateCouponCodeInputModel.setAuthToken(authTokenStr);
+                        validateCouponCodeInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                         validateCouponCodeInputModel.setCouponCode(couponCodeStr);
                         validateCouponCodeInputModel.setUser_id(preferenceManager.getUseridFromPref());
                         validateCouponCodeInputModel.setCurrencyId(currencyIdStr.trim());
@@ -967,7 +967,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                         WithouPaymentSubscriptionRegDetailsInput withouPaymentSubscriptionRegDetailsInput = new WithouPaymentSubscriptionRegDetailsInput();
                         String userIdStr = preferenceManager.getUseridFromPref();
                         String emailIdSubStr = preferenceManager.getEmailIdFromPref();
-                        withouPaymentSubscriptionRegDetailsInput.setAuthToken(authTokenStr);
+                        withouPaymentSubscriptionRegDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                         if (isAPV == 1) {
                             withouPaymentSubscriptionRegDetailsInput.setIs_advance("1");
                         }
@@ -1041,7 +1041,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
                         } else {
                             AuthUserPaymentInfoInputModel authUserPaymentInfoInputModel = new AuthUserPaymentInfoInputModel();
-                            authUserPaymentInfoInputModel.setAuthToken(authTokenStr);
+                            authUserPaymentInfoInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                             authUserPaymentInfoInputModel.setEmail(preferenceManager.getEmailIdFromPref());
                             authUserPaymentInfoInputModel.setExpiryMonth(String.valueOf(expiryMonthStr).trim());
                             authUserPaymentInfoInputModel.setExpiryYear(String.valueOf(expiryYearStr).trim());
@@ -1081,7 +1081,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                     WithouPaymentSubscriptionRegDetailsInput withouPaymentSubscriptionRegDetailsInput = new WithouPaymentSubscriptionRegDetailsInput();
                     String userIdStr = preferenceManager.getUseridFromPref();
                     String emailIdSubStr = preferenceManager.getEmailIdFromPref();
-                    withouPaymentSubscriptionRegDetailsInput.setAuthToken(authTokenStr);
+                    withouPaymentSubscriptionRegDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                     if (isAPV == 1) {
                         withouPaymentSubscriptionRegDetailsInput.setIs_advance("1");
                     }
@@ -1128,7 +1128,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
             GetCardListForPPVInputModel getCardListForPPVInputModel = new GetCardListForPPVInputModel();
             String userIdStr = preferenceManager.getUseridFromPref();
             getCardListForPPVInputModel.setUser_id(userIdStr.trim());
-            getCardListForPPVInputModel.setAuthToken(authTokenStr);
+            getCardListForPPVInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
             GetCardListForPPVAsynTask asynLoadCardList = new GetCardListForPPVAsynTask(getCardListForPPVInputModel, this, this);
             asynLoadCardList.executeOnExecutor(threadPoolExecutor);
         }
@@ -1681,7 +1681,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
         GetVoucherPlanInputModel getVoucherPlanInputModel = new GetVoucherPlanInputModel();
         loggedInIdStr = preferenceManager.getUseridFromPref();
-        getVoucherPlanInputModel.setAuthToken(authTokenStr);
+        getVoucherPlanInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
         getVoucherPlanInputModel.setUser_id(loggedInIdStr.trim());
         getVoucherPlanInputModel.setMovie_id(Util.dataModel.getMovieUniqueId().trim());
         getVoucherPlanInputModel.setSeason(Util.dataModel.getSeason_id());
@@ -1738,7 +1738,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
         // Calling Validate Voucher Api
         ValidateVoucherInputModel validateVoucherInputModel = new ValidateVoucherInputModel();
         loggedInIdStr = preferenceManager.getUseridFromPref();
-        validateVoucherInputModel.setAuthToken(authTokenStr);
+        validateVoucherInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
         validateVoucherInputModel.setUser_id(loggedInIdStr.trim());
         validateVoucherInputModel.setVoucher_code(VoucherCode);
         if (Util.dataModel.getContentTypesId() == 3) {
@@ -1809,7 +1809,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
 
             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-            getVideoDetailsInput.setAuthToken(authTokenStr);
+            getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
             getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
             getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
             getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
@@ -1883,7 +1883,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
             } else {
                 RegisterUserPaymentInputModel registerUserPaymentInputModel = new RegisterUserPaymentInputModel();
-                registerUserPaymentInputModel.setAuthToken(authTokenStr);
+                registerUserPaymentInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                 registerUserPaymentInputModel.setCard_name(nameOnCardEditText.getText().toString().trim());
                 registerUserPaymentInputModel.setExp_month(String.valueOf(expiryMonthStr).trim());
                 registerUserPaymentInputModel.setCard_number(cardNumberEditText.getText().toString().trim());
@@ -2195,7 +2195,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
                                 } else {
                                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
@@ -2584,7 +2584,7 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
                                 } else {
                                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());

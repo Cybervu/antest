@@ -15,6 +15,7 @@ import android.text.Spanned;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,26 +27,36 @@ import android.widget.Toast;
 
 import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiController.CheckGeoBlockCountryAsynTask;
+import com.home.apisdk.apiController.FcmNotificationcountAsynTask;
 import com.home.apisdk.apiController.GetGenreListAsynctask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetPlanListAsynctask;
+import com.home.apisdk.apiController.GetStudioAuthkeyAsynTask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.GetUserProfileAsynctask;
 import com.home.apisdk.apiController.IsRegistrationEnabledAsynTask;
+import com.home.apisdk.apiController.SDKInitializer;
 import com.home.apisdk.apiModel.CheckGeoBlockInputModel;
 import com.home.apisdk.apiModel.CheckGeoBlockOutputModel;
+import com.home.apisdk.apiModel.FcmNotificationcountInputModel;
+import com.home.apisdk.apiModel.FcmNotificationcountOutputModel;
 import com.home.apisdk.apiModel.GenreListInput;
 import com.home.apisdk.apiModel.GenreListOutput;
+import com.home.apisdk.apiModel.GetStudioAuthkeyInputModel;
+import com.home.apisdk.apiModel.GetStudioAuthkeyOutputModel;
 import com.home.apisdk.apiModel.Get_UserProfile_Input;
+import com.home.apisdk.apiModel.Get_UserProfile_Output;
 import com.home.apisdk.apiModel.IsRegistrationEnabledInputModel;
 import com.home.apisdk.apiModel.IsRegistrationEnabledOutputModel;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
 import com.home.apisdk.apiModel.SubscriptionPlanInputModel;
 import com.home.apisdk.apiModel.SubscriptionPlanOutputModel;
+import com.home.vod.BuildConfig;
 import com.home.vod.R;
 import com.home.vod.model.LanguageModel;
+import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
@@ -84,10 +95,10 @@ import javax.net.ssl.HttpsURLConnection;
 import player.utils.Util;
 
 import static android.R.attr.filter;
-import static com.google.ads.interactivemedia.v3.b.b.a.m.R;
 import static com.home.apisdk.apiController.HeaderConstants.RATING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_EMPTY_FIELD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_GEO_BLOCKED_ALERT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
@@ -100,6 +111,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_EMIAL;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_TEXT_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.ENTER_EMPTY_FIELD;
 import static com.home.vod.preferences.LanguagePreference.FILTER_BY;
+import static com.home.vod.preferences.LanguagePreference.GEO_BLOCKED_ALERT;
 import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
@@ -119,6 +131,7 @@ import static com.home.vod.util.Constant.authTokenStr;
 import static com.home.vod.util.Util.DEFAULT_GOOGLE_FCM_TOKEN;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
+import static com.home.vod.util.Util.hideKeyboard;
 import static player.utils.Util.HAS_FAVORITE;
 import static player.utils.Util.IS_CHROMECAST;
 import static player.utils.Util.IS_OFFLINE;
@@ -130,7 +143,10 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         GetLanguageListAsynTask.GetLanguageListListener,
         GetGenreListAsynctask.GenreListListener,
         GetUserProfileAsynctask.Get_UserProfileListener,
-        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener {
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener,
+        GetStudioAuthkeyAsynTask.GetStudioAuthkeyListener,
+        FcmNotificationcountAsynTask.FcmNotificationcountListener,
+        SDKInitializer.SDKInitializerListner {
 
     TextView noInternetTextView;
     TextView geoTextView;
@@ -151,9 +167,10 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
     String[] genreArrToSend;
     String[] genreValueArrayToSend;
     private String user_Id = "", email_Id = "", isSubscribed = "0";
+    private String default_Language = "";
+
 
     EditText editEmail,editPassword;
-    Logintest login;
 
     SharedPreferences pref;
     SharedPreferences isLoginPref;
@@ -169,6 +186,7 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
     ArrayList<LanguageModel> languageModels = new ArrayList<>();
     private ArrayList<String> genreArrayList = new ArrayList<String>();
     private ArrayList<String> genreValueArrayList = new ArrayList<String>();
+
 
 
     boolean isNetwork;
@@ -188,6 +206,9 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
+
+        /** Added to close auto keyborad **/
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference((this));
@@ -218,8 +239,16 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
 
         loginbtn= (Button) findViewById(R.id.loginbtn);
         FontUtls.loadFont(Login.this, getResources().getString(R.string.regular_fonts), loginbtn);
-
         loginbtn.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
+
+        noInternetLayout = (RelativeLayout) findViewById(R.id.noInternet);
+        geoBlockedLayout = (RelativeLayout) findViewById(R.id.geoBlocked);
+        noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
+        geoTextView = (TextView) findViewById(R.id.geoBlockedTextView);
+        noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+        geoTextView.setText(languagePreference.getTextofLanguage(GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT));
+        noInternetLayout.setVisibility(View.GONE);
+        geoBlockedLayout.setVisibility(View.GONE);
 
 
         buildingAppText= (TextView) findViewById(R.id.building);
@@ -232,6 +261,15 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         isLoginPref = getSharedPreferences(Util.IS_LOGIN_SHARED_PRE,0);
         isNetwork = Util.checkNetwork(Login.this);
 
+
+        /*if (NetworkStatus.getInstance().isConnected(this)) {
+            SDKInitializer.getInstance().init(this, this, authTokenStr);
+        } else {
+            noInternetLayout.setVisibility(View.VISIBLE);
+            geoBlockedLayout.setVisibility(View.GONE);
+        }*/
+
+
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -240,14 +278,25 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
                 email=editEmail.getText().toString();
                 password=editPassword.getText().toString();
 
+
                 if(email.length()!=0 && password.length()!=0){
 
                     if (isNetwork == true ) {
+                        Log.v("ANU","GetStudioAuthkeyAsynTask called");
+                        Log.v("ANU","isNetwork ==="+isNetwork);
 
-                        login  = new Logintest();
-                        login.execute();
+
+                        if (NetworkStatus.getInstance().isConnected(Login.this)) {
+                            SDKInitializer.getInstance().init(Login.this, Login.this, authTokenStr);
+                        } else {
+                            noInternetLayout.setVisibility(View.VISIBLE);
+                            geoBlockedLayout.setVisibility(View.GONE);
+                        }
+
                         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+
 
                     }else{
 
@@ -272,41 +321,8 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
             }
         });
 
-
-//        asynFcmNotificationcount= new AsynFcmNotificationcount();
-//                  asynFcmNotificationcount.executeOnExecutor(threadPoolExecutor);
-
-//        AsynGetPlanId asynGetPlanId = new AsynGetPlanId();
-//        asynGetPlanId.executeOnExecutor(threadPoolExecutor);
     }
-//
-//    public void login(View view){
-//
-//        emil=et.getText().toString();
-//        pass=et1.getText().toString();
-//
-//        if(emil.length()!=0 && pass.length()!=0){
-//
-//            if (isNetwork == true ) {
-//
-//                login  = new Logintest();
-//                login.execute();
-//                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-//
-//            }else{
-//
-//                taoast(getResources().getString(R.string.internet));
-//
-//            }
-//
-//        }else {
-//
-//            taoast(getResources().getString(R.string.toastmessage));
-//        }
-//
-//
-//    }
+
 
     private void toastMsg(String msgs) {
 
@@ -332,130 +348,99 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
     }
 
 
-    private class Logintest extends AsyncTask<Void, Void, Void> {
 
 
-        String responseStr;
-        int status;
-        String response;
-        String sta;
+    @Override
+    public void onGetStudioAuthkeyPreExecuteStarted() {
+        Log.v("ANU","onGetStudioAuthkeyPreExecuteStarted called");
+
+        linearLayout.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        buildingAppText.setVisibility(View.VISIBLE);
+
+    }
 
 
-        @Override
-        protected void onPreExecute() {
-            linearLayout.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-            buildingAppText.setVisibility(View.VISIBLE);
-//            pDialog = new ProgressDialog(Login.this);
-//            pDialog.setCancelable(false);
-//            pDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Large_Inverse);
-//            pDialog.setIndeterminate(false);
-//
-//            pDialog.setIndeterminateDrawable(getResources().getDrawable(R.drawable.progress_rawable));
-//            pDialog.show();
+    @Override
+    public void onGetStudioAuthkeyPostExecuteCompleted(GetStudioAuthkeyOutputModel getStudioAuthkeyOutputModel,String status, String response, String authToken, String message) {
 
-        }
+        Log.v("ANU","onGetStudioAuthkeyPostExecuteCompleted called");
+        Log.v("ANU","response ===="+response);
+        Log.v("ANU","status ===="+status);
+        Log.v("ANU","authToken ===="+authToken);
+        Log.v("ANU","message ===="+message);
 
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList = APIUrlConstant.getGetStudioAuthToken();
-
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("email", email);
-                httppost.addHeader("password", password);
-
-                // Execute HTTP Post Request
-                try {
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+       if (response != null) {
 
 
-                } catch (IOException e) {
+           if (status.equals("OK")) {
+
+               preferenceManager.setAuthToken(authToken);
+
+               GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+               asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+
+           }
+           else {
 
 
-                    e.printStackTrace();
-                }
+               toastMsg(message);
 
+               Intent i=new Intent(Login.this,Login.class);
+               i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+               i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+               startActivity(i);
+               finish();
+               overridePendingTransition(0,0);
 
-            } catch (Exception e) {
-
-                e.printStackTrace();
-
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-
-
-            if(responseStr!=null){
-
-
-
-                try {
-                    jsonObject = new JSONObject(responseStr);
-                    response=jsonObject.getString("msg");
-                    if (jsonObject.getString("status").equals("OK")){
-
-
-                        key=jsonObject.getString("authToken");
-                        Util.authTokenStr=key;
-//                        AsynGetPlanId asynGetPlanId = new AsynGetPlanId();
-//                        asynGetPlanId.executeOnExecutor(threadPoolExecutor);
-
-                        GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-                        asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
-
-                    }else if (jsonObject.getString("status").equals("Failure")){
-
-
-                        toastMsg(response);
-
-
-                        Intent i=new Intent(Login.this,Login.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(i);
-                        finish();
-                        overridePendingTransition(0,0);
-
-                    }
-
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+           }
 
 
 
 
+       } else {
+           toastMsg("Network problem try again");
 
-            }else{
+           Intent i=new Intent(Login.this,Login.class);
+           i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+           i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+           startActivity(i);
+           finish();
+           overridePendingTransition(0,0);
+       }
+
+    }
 
 
-                toastMsg("Network problem try again");
-                //showCustomAlert("Network problem try again");
-                //Toast.makeText(Login.this,"Network problem try again",Toast.LENGTH_LONG).show();
-                Intent i=new Intent(Login.this,Login.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(i);
-                finish();
-                overridePendingTransition(0,0);
-            }
+    @Override
+    public void onPreExexuteListner() {
 
+        Log.v("ANU","SDK called");
+    }
+
+    @Override
+    public void onPostExecuteListner() {
+        SDKInitializer.setData(this);
+        if (NetworkStatus.getInstance().isConnected(this)) {
+            Log.v("ANU","GetIpAddressAsynTask called");
+
+            GetStudioAuthkeyInputModel getStudioAuthkeyInputModel = new GetStudioAuthkeyInputModel();
+            getStudioAuthkeyInputModel.setEmail(email);
+            getStudioAuthkeyInputModel.setPassword(password);
+            Log.v("ANU","email called"+email);
+            Log.v("ANU","password called"+password);
+            Log.v("ANU","email in model"+getStudioAuthkeyInputModel.getEmail());
+            Log.v("ANU","password in model"+getStudioAuthkeyInputModel.getPassword());
+            GetStudioAuthkeyAsynTask getStudioAuthkeyAsynTask = new GetStudioAuthkeyAsynTask(getStudioAuthkeyInputModel, Login.this, Login.this);
+            getStudioAuthkeyAsynTask.executeOnExecutor(threadPoolExecutor);
+
+        } else {
+            noInternetLayout.setVisibility(View.VISIBLE);
+            geoBlockedLayout.setVisibility(View.GONE);
         }
 
     }
+
 
     @Override
     public void onIPAddressPreExecuteStarted() {
@@ -465,16 +450,26 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
     @Override
     public void onIPAddressPostExecuteCompleted(String message, int statusCode, String ipAddressStr) {
         if (ipAddressStr.equals("")) {
+            Log.v("ANU","ipAddressStr==="+ipAddressStr);
+            Log.v("ANU","message==="+message);
+            Log.v("ANU","statusCode==="+statusCode);
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
         } else {
             this.ipAddressStr = ipAddressStr;
             CheckGeoBlockInputModel checkGeoBlockInputModel = new CheckGeoBlockInputModel();
-            checkGeoBlockInputModel.setAuthToken(authTokenStr);
+            checkGeoBlockInputModel.setAuthToken(preferenceManager.getAuthToken());
             checkGeoBlockInputModel.setIp(ipAddressStr);
+            Log.v("ANU","CheckGeoBlockCountryAsynTask called");
             CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel, this, this);
             asynGetCountry.executeOnExecutor(threadPoolExecutor);
         }
+        Log.v("ANU","FcmNotificationcountAsynTask called");
+        FcmNotificationcountInputModel fcmNotificationcountInputModel = new FcmNotificationcountInputModel();
+        fcmNotificationcountInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
+        fcmNotificationcountInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        FcmNotificationcountAsynTask fcmNotificationcountAsynTask = new FcmNotificationcountAsynTask(fcmNotificationcountInputModel,this,this);
+        fcmNotificationcountAsynTask.executeOnExecutor(threadPoolExecutor);
     }
 
 
@@ -493,8 +488,9 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
             if (status > 0 && status == 200) {
                 preferenceManager.setCountryCodeToPref(checkGeoBlockOutputModel.getCountrycode().trim());
                 SubscriptionPlanInputModel planListInput = new SubscriptionPlanInputModel();
-                planListInput.setAuthToken(authTokenStr);
+                planListInput.setAuthToken(preferenceManager.getAuthToken());
                 planListInput.setLang(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                Log.v("ANU","GetPlanListAsynctask called");
                 GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, Login.this, Login.this);
                 asynGetPlanid.executeOnExecutor(threadPoolExecutor);
 
@@ -506,6 +502,20 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
 
     }
 
+    @Override
+    public void onFcmNotificationcountPreExecuteStarted() {
+
+
+    }
+
+    @Override
+    public void onFcmNotificationcountPostExecuteCompleted(FcmNotificationcountOutputModel fcmNotificationcountOutputModel, int count, String msg) {
+
+        preferenceManager.setNOTI_COUNT(count);
+        LogUtil.showLog("ANU","COUNT======="+count);
+        LogUtil.showLog("ANU","device_id======="+Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+
+    }
 
     @Override
     public void onGetPlanListPreExecuteStarted() {
@@ -523,9 +533,10 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
                 LogUtil.showLog("MUVI", "responsestring of plan id = 0");
             }
         }
+        Log.v("ANU","IsRegistrationEnabledAsynTask called");
 
         IsRegistrationEnabledInputModel isRegistrationEnabledInputModel = new IsRegistrationEnabledInputModel();
-        isRegistrationEnabledInputModel.setAuthToken(authTokenStr);
+        isRegistrationEnabledInputModel.setAuthToken(preferenceManager.getAuthToken());
         IsRegistrationEnabledAsynTask asynIsRegistrationEnabled = new IsRegistrationEnabledAsynTask(isRegistrationEnabledInputModel, this, this);
         asynIsRegistrationEnabled.executeOnExecutor(threadPoolExecutor);
     }
@@ -556,7 +567,8 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         LogUtil.showLog("MUVI", "Splash setLoginFeatureToPref ::" + isRegistrationEnabledOutputModel.getIs_login());
 
         LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-        languageListInputModel.setAuthToken(authTokenStr);
+        languageListInputModel.setAuthToken(preferenceManager.getAuthToken());
+        Log.v("ANU","GetLanguageListAsynTask called");
         GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
         asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
 
@@ -602,8 +614,9 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         //                  Call For Language Translation.
 
         LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-        languageListInputModel.setAuthToken(authTokenStr);
+        languageListInputModel.setAuthToken(preferenceManager.getAuthToken());
         languageListInputModel.setLangCode(defaultLanguage);
+        Log.v("ANU","GetTranslateLanguageAsync called");
         GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel, this, this);
         asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
 
@@ -633,9 +646,9 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         }
 
         GenreListInput genreListInput = new GenreListInput();
-        genreListInput.setAuthToken(authTokenStr);
-
-        GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput, SplashScreen.this, SplashScreen.this);
+        genreListInput.setAuthToken(preferenceManager.getAuthToken());
+        Log.v("ANU","GetGenreListAsynctask called");
+        GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput, Login.this, Login.this);
         asynGetGenreList.executeOnExecutor(threadPoolExecutor);
     }
 
@@ -768,10 +781,11 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
 
                 if (user_Id != null && email_Id != null) {
                     Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
-                    get_userProfile_input.setAuthToken(authTokenStr);
+                    get_userProfile_input.setAuthToken(preferenceManager.getAuthToken());
                     get_userProfile_input.setEmail(email_Id);
                     get_userProfile_input.setUser_id(user_Id);
                     get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    Log.v("ANU","GetUserProfileAsynctask called");
                     GetUserProfileAsynctask asynLoadProfileDetails = new GetUserProfileAsynctask(get_userProfile_input, this, this);
                     asynLoadProfileDetails.executeOnExecutor(threadPoolExecutor);
 
@@ -786,7 +800,22 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         }
     }
 
+    @Override
+    public void onGet_UserProfilePreExecuteStarted() {
 
+    }
+
+    @Override
+    public void onGet_UserProfilePostExecuteCompleted(Get_UserProfile_Output get_userProfile_output, int code, String message, String status) {
+        if (status == null) {
+            isSubscribed = "0";
+        }
+        if (code==200){
+            isSubscribed=get_userProfile_output.getIsSubscribed();
+        }
+
+        Call_One_Step_Procedure();
+    }
 
     public void Call_One_Step_Procedure() {
 
@@ -825,6 +854,7 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
                 .trim()).equals("1")) {
             if (loggedInStr != null) {
                 if (isSubscribed.trim().equals("1")) {
+                    Log.v("ANU","MainActivity===1");
                     mIntent = new Intent(Login.this, MainActivity.class);
                     mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(mIntent);
@@ -846,7 +876,7 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
             }
 
         } else {
-
+            Log.v("ANU","MainActivity===2");
             mIntent = new Intent(Login.this, MainActivity.class);
             mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(mIntent);
@@ -856,1134 +886,6 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
     }
 
 
-
-    //Verify the IP
-    private class AsynGetIpAddress extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-
-                // Execute HTTP Post Request
-                try {
-                    URL myurl = new URL(Util.loadIPUrl);
-                    HttpsURLConnection con = (HttpsURLConnection)myurl.openConnection();
-                    InputStream ins = con.getInputStream();
-                    InputStreamReader isr = new InputStreamReader(ins);
-                    BufferedReader in = new BufferedReader(isr);
-
-                    String inputLine;
-
-                    while ((inputLine = in.readLine()) != null)
-                    {
-                        System.out.println(inputLine);
-                        responseStr = inputLine;
-                    }
-
-                    in.close();
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
-                    ipAddressStr = "";
-
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            noInternetLayout.setVisibility(View.VISIBLE);
-                            geoBlockedLayout.setVisibility(View.GONE);
-
-                        }
-                    });
-                } catch (UnsupportedEncodingException e) {
-
-                    ipAddressStr = "";
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            noInternetLayout.setVisibility(View.VISIBLE);
-                            geoBlockedLayout.setVisibility(View.GONE);
-
-                        }
-                    });
-                }catch (IOException e) {
-                    ipAddressStr = "";
-
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            noInternetLayout.setVisibility(View.VISIBLE);
-                            geoBlockedLayout.setVisibility(View.GONE);
-
-                        }
-                    });
-                }
-                if(responseStr!=null){
-                    Object json = new JSONTokener(responseStr).nextValue();
-                    if (json instanceof JSONObject){
-                        ipAddressStr = ((JSONObject) json).getString("ip");
-
-                    }
-
-                }
-
-            }
-            catch (Exception e) {
-                ipAddressStr = "";
-
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        noInternetLayout.setVisibility(View.VISIBLE);
-                        geoBlockedLayout.setVisibility(View.GONE);
-
-                    }
-                });
-
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if(responseStr == null){
-                ipAddressStr = "";
-                noInternetLayout.setVisibility(View.VISIBLE);
-                geoBlockedLayout.setVisibility(View.GONE);
-            }else{
-                AsynGetCountry asynGetCountry = new AsynGetCountry();
-                asynGetCountry.executeOnExecutor(threadPoolExecutor);
-
-            }
-
-        }
-
-        protected void onPreExecute() {
-
-        }
-    }
-    //Verify the IP
-    private class AsynGetCountry extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        String countryCode;
-        int status;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList =Util.rootUrl().trim()+Util.loadCountryUrl.trim();
-
-            try {
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpGet httppost = new HttpGet(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                httppost.addHeader("ip", ipAddressStr.trim());
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
-                    countryCode = "";
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            noInternetLayout.setVisibility(View.GONE);
-                            geoBlockedLayout.setVisibility(View.VISIBLE);
-
-                        }
-                    });
-
-                } catch (UnsupportedEncodingException e) {
-
-                    countryCode = "";
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            noInternetLayout.setVisibility(View.GONE);
-                            geoBlockedLayout.setVisibility(View.VISIBLE);
-
-                        }
-                    });
-
-                }catch (IOException e) {
-                    countryCode = "";
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            noInternetLayout.setVisibility(View.GONE);
-                            geoBlockedLayout.setVisibility(View.VISIBLE);
-
-                        }
-                    });
-
-                }
-                if(responseStr!=null){
-                    Object json = new JSONTokener(responseStr).nextValue();
-                    if (json instanceof JSONObject){
-                        String statusStr = ((JSONObject) json).getString("code");
-                        status = Integer.parseInt(statusStr);
-                        if (status == 200){
-                            countryCode = ((JSONObject) json).getString("country");
-                        }
-
-                    }
-
-                }
-
-            }
-            catch (Exception e) {
-                countryCode = "";
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        noInternetLayout.setVisibility(View.GONE);
-                        geoBlockedLayout.setVisibility(View.VISIBLE);
-
-                    }
-                });
-
-
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if(responseStr == null){
-                countryCode = "";
-                noInternetLayout.setVisibility(View.GONE);
-                geoBlockedLayout.setVisibility(View.VISIBLE);
-            }else{
-                if (status > 0 && status == 200) {
-                    if (countryPref != null) {
-                        SharedPreferences.Editor countryEditor = countryPref.edit();
-                        countryEditor.putString("countryCode", countryCode.trim());
-
-                        countryEditor.commit();
-                        AsynGetPlanId asynGetPlanId = new AsynGetPlanId();
-                        asynGetPlanId.executeOnExecutor(threadPoolExecutor);
-                    }
-
-                }else{
-                    noInternetLayout.setVisibility(View.GONE);
-                    geoBlockedLayout.setVisibility(View.VISIBLE);
-                }
-            }
-
-        }
-
-        protected void onPreExecute() {
-
-        }
-    }
-
-
-    private class AsynGetPlanId extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int status;
-
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList =Util.rootUrl().trim()+Util.getStudioPlanLists.trim();
-
-            try {
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpGet httppost = new HttpGet(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken",Util.authTokenStr.trim());
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-
-                        }
-                    });
-
-                } catch (UnsupportedEncodingException e) {
-
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-
-                        }
-                    });
-
-                }catch (IOException e) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-
-                        }
-                    });
-
-                }
-                JSONObject myJson =null;
-                if(responseStr!=null){
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                }
-
-                if (status > 0) {
-                    if (status == 200) {
-                        Util.setLanguageSharedPrefernce(Login.this,Util.PLAN_ID,"1");
-
-                    }
-                    else{
-                        Util.setLanguageSharedPrefernce(Login.this,Util.PLAN_ID,"0");
-
-                    }
-                }
-
-            }
-            catch (final Exception e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                    }
-                });
-
-
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            AsynIsRegistrationEnabled asynIsRegistrationEnabled = new AsynIsRegistrationEnabled();
-            asynIsRegistrationEnabled.executeOnExecutor(threadPoolExecutor);
-        }
-
-        protected void onPreExecute() {
-
-        }
-    }
-
-    //subhashree genre
-
-    private class AsynGetGenreList extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int status;
-        ArrayList<String> genreArrayList = new ArrayList<String>();
-        ArrayList<String> genreValueArrayList = new ArrayList<String>();
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList =Util.rootUrl().trim()+Util.getGenreListUrl.trim();
-
-            try {
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpGet httppost = new HttpGet(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-
-                        }
-                    });
-
-                } catch (UnsupportedEncodingException e) {
-
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-
-                        }
-                    });
-
-                }catch (IOException e) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-
-                        }
-                    });
-
-                }
-                JSONObject myJson =null;
-                if(responseStr!=null){
-                    myJson = new JSONObject(responseStr);
-                    status = Integer.parseInt(myJson.optString("code"));
-                }
-
-                if (status > 0) {
-                    if (status == 200) {
-
-                        JSONArray jsonMainNode = myJson.getJSONArray("genre_list");
-
-                        int lengthJsonArr = jsonMainNode.length();
-                        if (lengthJsonArr > 0){
-                            genreArrayList.add(0,Util.getTextofLanguage(Login.this,Util.FILTER_BY,Util.DEFAULT_FILTER_BY));
-
-
-                            genreValueArrayList.add(0,"");
-
-                        }
-                        for(int i=0; i < lengthJsonArr; i++) {
-                            genreArrayList.add(jsonMainNode.get(i).toString());
-                            genreValueArrayList.add(jsonMainNode.get(i).toString());
-
-
-                        }
-
-                        if (genreArrayList.size() > 1){
-
-                            genreArrayList.add(genreArrayList.size(),Util.getTextofLanguage(Login.this,Util.SORT_BY,Util.DEFAULT_SORT_BY));
-                            genreValueArrayList.add(genreValueArrayList.size(),"");
-
-
-                            genreArrayList.add(genreArrayList.size(),Util.getTextofLanguage(Login.this, Util.SORT_LAST_UPLOADED, Util.DEFAULT_SORT_LAST_UPLOADED));
-                            genreValueArrayList.add(genreValueArrayList.size(),"lastupload");
-
-                            genreArrayList.add(genreArrayList.size(),Util.getTextofLanguage(Login.this, Util.SORT_RELEASE_DATE, Util.DEFAULT_SORT_RELEASE_DATE));
-                            genreValueArrayList.add(genreValueArrayList.size(),"releasedate");
-
-                            genreArrayList.add(genreArrayList.size(),Util.getTextofLanguage(Login.this, Util.SORT_ALPHA_A_Z, Util.DEFAULT_SORT_ALPHA_A_Z));
-                            genreValueArrayList.add(genreValueArrayList.size(),"sortasc");
-
-                            genreArrayList.add(genreArrayList.size(),Util.getTextofLanguage(Login.this, Util.SORT_ALPHA_Z_A, Util.DEFAULT_SORT_ALPHA_Z_A));
-                            genreValueArrayList.add(genreValueArrayList.size(),"sortdesc");
-
-
-
-
-
-
-                        }
-
-                    }
-                    else{
-                        responseStr = "0";
-
-                    }
-                }
-
-            }
-            catch (final Exception e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                    }
-                });
-
-
-
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if(responseStr == null){
-
-            }else{
-                if (status > 0 && status == 200) {
-                    genreArrToSend = new String[genreArrayList.size()];
-                    genreArrToSend = genreArrayList.toArray(genreArrToSend);
-
-
-                    genreValueArrayToSend = new String[genreValueArrayList.size()];
-                    genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
-
-
-
-
-                }else{
-                   /* genreArrToSend = new String[0];
-                    genreArrToSend = genreArrayList.toArray(genreArrToSend);
-
-
-                    genreValueArrayToSend = new String[0];
-                    genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);*/
-
-
-                    genreArrayList.add(genreArrayList.size(),Util.getTextofLanguage(Login.this, Util.SORT_BY, Util.DEFAULT_SORT_BY));
-                    genreValueArrayList.add(genreValueArrayList.size(),"");
-
-
-                    genreArrayList.add(genreArrayList.size(),Util.getTextofLanguage(Login.this, Util.SORT_LAST_UPLOADED, Util.DEFAULT_SORT_LAST_UPLOADED));
-                    genreValueArrayList.add(genreValueArrayList.size(),"lastupload");
-
-                    genreArrayList.add(genreArrayList.size(),Util.getTextofLanguage(Login.this, Util.SORT_RELEASE_DATE, Util.DEFAULT_SORT_RELEASE_DATE));
-                    genreValueArrayList.add(genreValueArrayList.size(),"releasedate");
-
-                    genreArrayList.add(genreArrayList.size(),Util.getTextofLanguage(Login.this, Util.SORT_ALPHA_A_Z, Util.DEFAULT_SORT_ALPHA_A_Z));
-                    genreValueArrayList.add(genreValueArrayList.size(),"sortasc");
-
-                    genreArrayList.add(genreArrayList.size(),Util.getTextofLanguage(Login.this, Util.SORT_ALPHA_Z_A, Util.DEFAULT_SORT_ALPHA_Z_A));
-                    genreValueArrayList.add(genreValueArrayList.size(),"sortdesc");
-
-                    genreArrToSend = new String[genreArrayList.size()];
-                    genreArrToSend = genreArrayList.toArray(genreArrToSend);
-
-
-                    genreValueArrayToSend = new String[genreValueArrayList.size()];
-                    genreValueArrayToSend = genreValueArrayList.toArray(genreValueArrayToSend);
-
-
-                }
-
-            }
-
-            SharedPreferences.Editor isLoginPrefEditor = isLoginPref.edit();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < genreArrToSend.length; i++) {
-                sb.append(genreArrToSend[i]).append(",");
-            }
-            isLoginPrefEditor.putString(Util.GENRE_ARRAY_PREF_KEY, sb.toString());
-            StringBuilder sb1 = new StringBuilder();
-            for (int i = 0; i < genreValueArrayToSend.length; i++) {
-                sb1.append(genreValueArrayToSend[i]).append(",");
-            }
-            isLoginPrefEditor.putString(Util.GENRE_VALUES_ARRAY_PREF_KEY, sb1.toString());
-            isLoginPrefEditor.commit();
-
-
-            //============================Added For FCM===========================//
-
-
-            if(!Util.getTextofLanguage(Login.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN).equals("0"))
-            {
-
-
-
-                Intent i = new Intent(Login.this, MainActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(i);
-                finish();
-                overridePendingTransition(0,0);
-            }
-            else
-            {
-                GoogleIdGeneraterTimer = new Timer();
-                GoogleIdGeneraterTimer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if(!Util.getTextofLanguage(Login.this,Util.GOOGLE_FCM_TOKEN,Util.DEFAULT_GOOGLE_FCM_TOKEN).equals("0"))
-                        {
-                            GoogleIdGeneraterTimer.cancel();
-                            GoogleIdGeneraterTimer.purge();
-
-
-
-                            Intent i = new Intent(Login.this, MainActivity.class);
-                            i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(i);
-                            finish();
-                            overridePendingTransition(0,0);
-                        }
-                    }
-                },0,1000);
-            }
-
-            //============================End Added For FCM===========================//
-
-        }
-        protected void onPreExecute() {
-
-        }
-    }
-
-
-    private class AsynIsRegistrationEnabled extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int statusCode;
-        private int isLogin = 0;
-        private String IsMyLibrary = "0";
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(Util.rootUrl()+Util.isRegistrationEnabledurl.trim());
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = EntityUtils.toString(response.getEntity());
-
-
-                } catch (org.apache.http.conn.ConnectTimeoutException e){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                        }
-
-                    });
-
-                }catch (IOException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-
-                        }
-
-                    });
-                    e.printStackTrace();
-                }
-
-
-                JSONObject myJson =null;
-                if(responseStr!=null){
-                    myJson = new JSONObject(responseStr);
-                    statusCode = Integer.parseInt(myJson.optString("code"));
-
-                }
-
-                if (statusCode > 0) {
-                    if (statusCode == 200) {
-                        if ((myJson.has("is_login")) && myJson.getString("is_login").trim() != null && !myJson.getString("is_login").trim().isEmpty() && !myJson.getString("is_login").trim().equals("null") && !myJson.getString("is_login").trim().matches("")) {
-                            isLogin = Integer.parseInt(myJson.getString("is_login"));
-
-
-                            //Adder Later By Bibhu
-                            //This code is used for the 'My Library Feature'
-
-                            if(isLogin == 1)
-
-                            {
-                                if((myJson.optString("isMylibrary")).trim().equals("1"))
-                                {
-                                    IsMyLibrary = "1";
-                                }
-                            }
-                            else
-                            {
-                                IsMyLibrary = "0";
-                            }
-
-                        } else {
-                            isLogin = 0;
-                        }
-
-                    }else{
-                        isLogin = 0;
-                    }
-                }
-                else {
-                    responseStr = "0";
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            isLogin = 0;
-
-
-                        }
-                    });
-                }
-            } catch (JSONException e1) {
-                try {
-                }
-                catch(IllegalArgumentException ex)
-                {
-                    responseStr = "0";
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            isLogin = 0;
-
-
-                        }
-                    });
-                    e1.printStackTrace();
-                }
-            }
-
-            catch (Exception e)
-            {
-                try {
-
-                }
-                catch(IllegalArgumentException ex)
-                {
-                    responseStr = "0";
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            isLogin = 0;
-
-
-                        }
-                    });
-                    e.printStackTrace();
-                }
-
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Void result) {
-
-
-            try {
-
-            }catch (IllegalArgumentException e){
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        isLogin = 0;
-
-
-
-                    }
-                });
-            }
-
-            if(responseStr == null) {
-                isLogin = 0;
-
-
-            }
-            if ((responseStr.trim().equalsIgnoreCase("0"))){
-                isLogin = 0;
-
-            }
-
-            Util.setLanguageSharedPrefernce(Login.this,Util.IS_MYLIBRARY,IsMyLibrary);
-            SharedPreferences.Editor isLoginPrefEditor = isLoginPref.edit();
-            isLoginPrefEditor.putInt(Util.IS_LOGIN_PREF_KEY, isLogin);
-
-            isLoginPrefEditor.commit();
-            AsynGetLanguageList asynGetLanguageList = new AsynGetLanguageList();
-            asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
-
-
-            /*AsynGetGenreList asynGetGenreList = new AsynGetGenreList();
-            asynGetGenreList.executeOnExecutor(threadPoolExecutor);*/
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-
-    }
-    private class AsynGetLanguageList extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int status;
-
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-//          String urlRouteList =Util.rootUrl().trim()+Util.LanguageList.trim();
-            String urlRouteList = Util.rootUrl().trim()+Util.LanguageList.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr);
-
-
-                // Execute HTTP Post Request
-                try {
-
-
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = (EntityUtils.toString(response.getEntity())).trim();
-                } catch (Exception e) {
-                }
-                if (responseStr != null) {
-                    JSONObject json = new JSONObject(responseStr);
-                    try {
-                        status = Integer.parseInt(json.optString("code"));
-                        Default_Language = json.optString("default_lang");
-                    } catch (Exception e) {
-                        status = 0;
-                    }
-                }
-
-            } catch (Exception e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        noInternetLayout.setVisibility(View.GONE);
-                        geoBlockedLayout.setVisibility(View.VISIBLE);
-
-                    }
-                });
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-            if (responseStr == null) {
-                noInternetLayout.setVisibility(View.GONE);
-                geoBlockedLayout.setVisibility(View.VISIBLE);
-            } else {
-                if (status > 0 && status == 200) {
-
-                    try {
-                        JSONObject json = new JSONObject(responseStr);
-                        JSONArray jsonArray = json.getJSONArray("lang_list");
-
-
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            String language_id = jsonArray.getJSONObject(i).optString("code").trim();
-                            String language_name = jsonArray.getJSONObject(i).optString("language").trim();
-
-
-                            LanguageModel languageModel = new LanguageModel();
-                            languageModel.setLanguageId(language_id);
-                            languageModel.setLanguageName(language_name);
-                            if (Default_Language.equalsIgnoreCase(language_id)){
-                                languageModel.setIsSelected(true);
-
-                            }else {
-                                languageModel.setIsSelected(false);
-                            }
-
-                            languageModels.add(languageModel);
-                        }
-
-                        Util.languageModel = languageModels;
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        noInternetLayout.setVisibility(View.GONE);
-                        geoBlockedLayout.setVisibility(View.VISIBLE);
-                    }
-                    Util.languageModel = languageModels;
-
-                    if(languageModels.size()==1)
-                    {
-                        SharedPreferences.Editor countryEditor = language_list_pref.edit();
-                        countryEditor.putString("total_language","1");
-                        countryEditor.commit();
-                    }
-                    if (Util.getTextofLanguage(Login.this,Util.SELECTED_LANGUAGE_CODE,"").equalsIgnoreCase("")){
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SELECTED_LANGUAGE_CODE,Default_Language);
-                    }
-                    AsynGetTransalatedLanguage asynGetGenreList = new AsynGetTransalatedLanguage();
-                    asynGetGenreList.executeOnExecutor(threadPoolExecutor);
-                   /* if(!Default_Language.equals("en")) {
-                        //                  Call For Language Translation.
-                        AsynGetTransalatedLanguage asynGetTransalatedLanguage = new AsynGetTransalatedLanguage();
-                        asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
-
-                    }else{
-                        AsynGetGenreList asynGetGenreList = new AsynGetGenreList();
-                        asynGetGenreList.executeOnExecutor(threadPoolExecutor);
-                    }*/
-
-                } else {
-                    noInternetLayout.setVisibility(View.GONE);
-                    geoBlockedLayout.setVisibility(View.VISIBLE);
-                }
-            }
-
-        }
-
-        protected void onPreExecute() {
-
-        }
-    }
-
-
-
-    private class AsynGetTransalatedLanguage extends AsyncTask<Void, Void, Void> {
-        String responseStr;
-        int status;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            String urlRouteList =Util.rootUrl().trim()+Util.LanguageTranslation.trim();
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(urlRouteList);
-                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken",Util.authTokenStr);
-                httppost.addHeader("lang_code",Default_Language);
-
-
-                // Execute HTTP Post Request
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    responseStr = (EntityUtils.toString(response.getEntity())).trim();
-                } catch (Exception e) {
-                }
-                if (responseStr != null) {
-                    JSONObject json = new JSONObject(responseStr);
-                    try {
-                        status = Integer.parseInt(json.optString("code"));
-                    } catch (Exception e) {
-                        status = 0;
-                    }
-                }
-
-            } catch (Exception e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        noInternetLayout.setVisibility(View.GONE);
-
-                    }
-                });
-            }
-
-            return null;
-        }
-
-
-        protected void onPostExecute(Void result) {
-
-
-
-            if (responseStr == null) {
-                noInternetLayout.setVisibility(View.GONE);
-            } else {
-                if (status > 0 && status == 200) {
-
-                    try {
-                        JSONObject parent_json = new JSONObject(responseStr);
-                        JSONObject json = parent_json.getJSONObject("translation");
-
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.ALREADY_MEMBER,json.optString("already_member").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.ACTIAVTE_PLAN_TITLE,json.optString("activate_plan_title").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.TRANSACTION_STATUS_ACTIVE,json.optString("transaction_status_active").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.ADD_TO_FAV,json.optString("add_to_fav").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.ADDED_TO_FAV,json.optString("added_to_fav").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.ENTER_EMPTY_FIELD,json.optString("enter_register_fields_data").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.ADVANCE_PURCHASE,json.optString("advance_purchase").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.ALERT,json.optString("alert").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.EPISODE_TITLE,json.optString("episodes_title").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SORT_ALPHA_A_Z,json.optString("sort_alpha_a_z").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SORT_ALPHA_Z_A,json.optString("sort_alpha_z_a").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.AMOUNT,json.optString("amount").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.COUPON_CANCELLED,json.optString("coupon_cancelled").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.BUTTON_APPLY,json.optString("btn_apply").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SIGN_OUT_WARNING,json.optString("sign_out_warning").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.DISCOUNT_ON_COUPON,json.optString("discount_on_coupon").trim());
-                        Util.setLanguageSharedPrefernce(Login.this, Util.MY_LIBRARY, json.optString("my_library").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.CREDIT_CARD_CVV_HINT,json.optString("credit_card_cvv_hint").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.CAST,json.optString("cast").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.CAST_CREW_BUTTON_TITLE,json.optString("cast_crew_button_title").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.CENSOR_RATING,json.optString("censor_rating").trim());
-                        if(json.optString("change_password").trim()==null || json.optString("change_password").trim().equals("")) {
-                            Util.setLanguageSharedPrefernce(Login.this, Util.CHANGE_PASSWORD, Util.DEFAULT_CHANGE_PASSWORD);
-                        }
-                        else {
-                            Util.setLanguageSharedPrefernce(Login.this, Util.CHANGE_PASSWORD, json.optString("change_password").trim());
-                        }
-                        Util.setLanguageSharedPrefernce(Login.this, Util.CANCEL_BUTTON, json.optString("btn_cancel").trim());
-                        Util.setLanguageSharedPrefernce(Login.this, Util.RESUME_MESSAGE, json.optString("resume_watching").trim());
-                        Util.setLanguageSharedPrefernce(Login.this, Util.CONTINUE_BUTTON, json.optString("continue").trim());
-
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.CONFIRM_PASSWORD,json.optString("confirm_password").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.CREDIT_CARD_DETAILS,json.optString("credit_card_detail").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.DIRECTOR,json.optString("director").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.DOWNLOAD_BUTTON_TITLE,json.optString("download_button_title").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.DESCRIPTION,json.optString("description").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.HOME,json.optString("home").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.EMAIL_EXISTS,json.optString("email_exists").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.EMAIL_DOESNOT_EXISTS,json.optString("email_does_not_exist").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.EMAIL_PASSWORD_INVALID,json.optString("email_password_invalid").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.COUPON_CODE_HINT,json.optString("coupon_code_hint").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SEARCH_ALERT,json.optString("search_alert").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.CREDIT_CARD_NUMBER_HINT,json.optString("credit_card_number_hint").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.TEXT_EMIAL,json.optString("text_email").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.NAME_HINT,json.optString("name_hint").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.CREDIT_CARD_NAME_HINT,json.optString("credit_card_name_hint").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.TEXT_PASSWORD,json.optString("text_password").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.ERROR_IN_PAYMENT_VALIDATION,json.optString("error_in_payment_validation").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.ERROR_IN_REGISTRATION,json.optString("error_in_registration").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.TRANSACTION_STATUS_EXPIRED,json.optString("transaction_status_expired").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.DETAILS_NOT_FOUND_ALERT,json.optString("details_not_found_alert").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.FAILURE,json.optString("failure").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.FILTER_BY,json.optString("filter_by").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.FORGOT_PASSWORD,json.optString("forgot_password").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.GENRE,json.optString("genre").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.AGREE_TERMS,json.optString("agree_terms").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.INVALID_COUPON,json.optString("invalid_coupon").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.INVOICE,json.optString("invoice").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.LANGUAGE_POPUP_LANGUAGE,json.optString("language_popup_language").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SORT_LAST_UPLOADED,json.optString("sort_last_uploaded").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.LANGUAGE_POPUP_LOGIN,json.optString("language_popup_login").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.LOGIN,json.optString("login").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.LOGOUT,json.optString("logout").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.LOGOUT_SUCCESS,json.optString("logout_success").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.MY_FAVOURITE,json.optString("my_favourite").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.NEW_PASSWORD,json.optString("new_password").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.NEW_HERE_TITLE,json.optString("new_here_title").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.NO,json.optString("no").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.NO_DATA,json.optString("no_data").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.NO_INTERNET_CONNECTION,json.optString("no_internet_connection").trim());
-                        Util.setLanguageSharedPrefernce(Login.this, Util.ENTER_REGISTER_FIELDS_DATA, json.optString("enter_register_fields_data").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.NO_INTERNET_NO_DATA,json.optString("no_internet_no_data").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.NO_DETAILS_AVAILABLE,json.optString("no_details_available").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.BUTTON_OK,json.optString("btn_ok").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.OLD_PASSWORD,json.optString("old_password").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.OOPS_INVALID_EMAIL,json.optString("oops_invalid_email").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.ORDER,json.optString("order").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.TRANSACTION_DETAILS_ORDER_ID,json.optString("transaction_detail_order_id").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.PASSWORD_RESET_LINK,json.optString("password_reset_link").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.PASSWORDS_DO_NOT_MATCH,json.optString("password_donot_match").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.PAY_BY_PAYPAL,json.optString("pay_by_paypal").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.BTN_PAYNOW,json.optString("btn_paynow").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.PAY_WITH_CREDIT_CARD,json.optString("pay_with_credit_card").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.PAYMENT_OPTIONS_TITLE,json.optString("payment_options_title").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.PLAN_NAME,json.optString("plan_name").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.ACTIVATE_SUBSCRIPTION_WATCH_VIDEO,json.optString("activate_subscription_watch_video").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.COUPON_ALERT,json.optString("coupon_alert").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.VALID_CONFIRM_PASSWORD,json.optString("valid_confirm_password").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.PROFILE,json.optString("profile").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.PROFILE_UPDATED,json.optString("profile_updated").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.PURCHASE,json.optString("purchase").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.TRANSACTION_DETAIL_PURCHASE_DATE,json.optString("transaction_detail_purchase_date").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.PURCHASE_HISTORY,json.optString("purchase_history").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.BTN_REGISTER,json.optString("btn_register").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SORT_RELEASE_DATE,json.optString("sort_release_date").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SAVE_THIS_CARD,json.optString("save_this_card").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.TEXT_SEARCH_PLACEHOLDER,json.optString("text_search_placeholder").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SEASON,json.optString("season").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SELECT_OPTION_TITLE,json.optString("select_option_title").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SELECT_PLAN,json.optString("select_plan").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SIGN_UP_TITLE,json.optString("signup_title").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SLOW_INTERNET_CONNECTION,json.optString("slow_internet_connection").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SLOW_ISSUE_INTERNET_CONNECTION,json.optString("slow_issue_internet_connection").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SORRY,json.optString("sorry").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.GEO_BLOCKED_ALERT,json.optString("geo_blocked_alert").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SIGN_OUT_ERROR,json.optString("sign_out_error").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.ALREADY_PURCHASE_THIS_CONTENT,json.optString("already_purchase_this_content").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.CROSSED_MAXIMUM_LIMIT,json.optString("crossed_max_limit_of_watching").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SORT_BY,json.optString("sort_by").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.STORY_TITLE,json.optString("story_title").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.BTN_SUBMIT,json.optString("btn_submit").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.TRANSACTION_STATUS,json.optString("transaction_success").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.VIDEO_ISSUE,json.optString("video_issue").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.NO_CONTENT,json.optString("no_content").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.NO_VIDEO_AVAILABLE,json.optString("no_video_available").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY,json.optString("content_not_available_in_your_country").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.TRANSACTION_DATE,json.optString("transaction_date").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.TRANASCTION_DETAIL,json.optString("transaction_detail").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.TRANSACTION_STATUS,json.optString("transaction_status").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.TRANSACTION,json.optString("transaction").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.TRY_AGAIN,json.optString("try_again").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.UNPAID,json.optString("unpaid").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.USE_NEW_CARD,json.optString("use_new_card").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.VIEW_MORE,json.optString("view_more").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.VIEW_TRAILER,json.optString("view_trailer").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.WATCH,json.optString("watch").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.WATCH_NOW,json.optString("watch_now").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SIGN_OUT_ALERT,json.optString("sign_out_alert").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.UPDATE_PROFILE_ALERT,json.optString("update_profile_alert").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.YES,json.optString("yes").trim());
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.PURCHASE_SUCCESS_ALERT,json.optString("purchase_success_alert").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.CARD_WILL_CHARGE,json.optString("card_will_charge").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SEARCH_HINT,json.optString("search_hint").trim());
-                        Util.setLanguageSharedPrefernce(Login.this, Util.TERMS, json.optString("terms").trim());
-                        Util.setLanguageSharedPrefernce(Login.this, Util.UPDATE_PROFILE, json.optString("btn_update_profile").trim());
-                        Util.setLanguageSharedPrefernce(Login.this, Util.APP_ON, json.optString("app_on").trim());
-                        Util.setLanguageSharedPrefernce(Login.this, Util.APP_SELECT_LANGUAGE, json.optString("app_select_language").trim());
-                        Util.setLanguageSharedPrefernce(Login.this, Util.FILL_FORM_BELOW, json.optString("fill_form_below").trim());
-                        Util.setLanguageSharedPrefernce(Login.this, Util.MESSAGE, json.optString("text_message").trim());
-
-
-                        Util.setLanguageSharedPrefernce(Login.this, Util.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE, json.optString("simultaneous_logout_message").trim());
-                        Util.setLanguageSharedPrefernce(Login.this, Util.LOGIN_STATUS_MESSAGE, json.optString("login_status_message").trim());
-                        Util.setLanguageSharedPrefernce(Login.this, Util.FILL_FORM_BELOW, json.optString("fill_form_below").trim());
-                        Util.setLanguageSharedPrefernce(Login.this, Util.MESSAGE, json.optString("text_message").trim());
-
-
-                        Util.setLanguageSharedPrefernce(Login.this,Util.SIMULTANEOUS_LOGOUT_SUCCESS_MESSAGE,json.optString("logged_out_from_all_devices").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.ANDROID_VERSION,json.optString("android_version").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.MANAGE_DEVICE,json.optString("manage_device").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.YOUR_DEVICE,json.optString("your_device").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.DEREGISTER,json.optString("deregister").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.LOGIN_STATUS_MESSAGE,json.optString("oops_you_have_no_access").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.UPADTE_TITLE,json.optString("update_title").trim());
-                        Util.setLanguageSharedPrefernce(Login.this,Util.UPADTE_MESSAGE,json.optString("update_message").trim());
-                        Util.getTextofLanguage(Login.this, Util.PURCHASE, Util.DEFAULT_PURCHASE);
-                        Util.setLanguageSharedPrefernce(Login.this, Util.SELECTED_LANGUAGE_CODE, Default_Language);
-
-                        //Call For Language PopUp Dialog
-
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        noInternetLayout.setVisibility(View.GONE);
-                    }
-                    // Call For Other Methods.
-
-
-                } else {
-                    noInternetLayout.setVisibility(View.GONE);
-                }
-            }
-            AsynGetGenreList asynGetGenreList = new AsynGetGenreList();
-            asynGetGenreList.executeOnExecutor(threadPoolExecutor);
-
-
-
-        }
-        protected void onPreExecute() {
-
-        }
-    }
 
 
 /*

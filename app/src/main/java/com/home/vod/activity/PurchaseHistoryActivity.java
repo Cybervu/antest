@@ -171,7 +171,7 @@ LanguagePreference languagePreference;
         primary_layout.setVisibility(View.VISIBLE);
         PurchaseHistoryInputModel purchaseHistoryInputModel=new PurchaseHistoryInputModel();
         purchaseHistoryInputModel.setUser_id(user_id);
-        purchaseHistoryInputModel.setAuthToken(authTokenStr);
+        purchaseHistoryInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
         purchaseHistoryInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
         PurchaseHistoryAsyntask asynGetPurchaseDetail = new PurchaseHistoryAsyntask(purchaseHistoryInputModel,this,this);
         asynGetPurchaseDetail.executeOnExecutor(threadPoolExecutor);

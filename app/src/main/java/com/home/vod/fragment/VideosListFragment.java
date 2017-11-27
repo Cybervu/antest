@@ -725,7 +725,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         asynLoadVideos.executeOnExecutor(threadPoolExecutor);*/
 
         ContentListInput contentListInput=new ContentListInput();
-        contentListInput.setAuthToken(authTokenStr);
+        contentListInput.setAuthToken(preferenceManager.getAuthToken().trim());
         contentListInput.setPermalink(strtext.trim());
         contentListInput.setLimit(String.valueOf(limit));
         contentListInput.setOffset(String.valueOf(offset));
@@ -801,7 +801,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
                                 LoadFilterVideoInput loadFilterVideoInput=new LoadFilterVideoInput();
                                 loadFilterVideoInput.setGenreArray(genreArray);
-                                loadFilterVideoInput.setAuthToken(authTokenStr);
+                                loadFilterVideoInput.setAuthToken(preferenceManager.getAuthToken().trim());
                                 loadFilterVideoInput.setPermalink(strtext.trim());
                                 loadFilterVideoInput.setLimit(String.valueOf(limit));
                                 loadFilterVideoInput.setOffset(String.valueOf(offset));
@@ -823,7 +823,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                                 asynLoadVideos = new AsynLoadVideos();
                                 asynLoadVideos.executeOnExecutor(threadPoolExecutor);*/
                                 ContentListInput contentListInput=new ContentListInput();
-                                contentListInput.setAuthToken(authTokenStr);
+                                contentListInput.setAuthToken(preferenceManager.getAuthToken().trim());
                                 contentListInput.setPermalink(strtext.trim());
                                 contentListInput.setLimit(String.valueOf(limit));
                                 contentListInput.setOffset(String.valueOf(offset));
@@ -965,7 +965,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                         asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
                         LoadFilterVideoInput loadFilterVideoInput=new LoadFilterVideoInput();
                         loadFilterVideoInput.setGenreArray(genreArray);
-                        loadFilterVideoInput.setAuthToken(authTokenStr);
+                        loadFilterVideoInput.setAuthToken(preferenceManager.getAuthToken().trim());
                         loadFilterVideoInput.setPermalink(strtext.trim());
                         loadFilterVideoInput.setLimit(String.valueOf(limit));
                         loadFilterVideoInput.setOffset(String.valueOf(offset));
@@ -1537,7 +1537,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
                 LoadFilterVideoInput loadFilterVideoInput=new LoadFilterVideoInput();
                 loadFilterVideoInput.setGenreArray(genreArray);
-                loadFilterVideoInput.setAuthToken(authTokenStr);
+                loadFilterVideoInput.setAuthToken(preferenceManager.getAuthToken().trim());
                 loadFilterVideoInput.setPermalink(strtext.trim());
                 loadFilterVideoInput.setLimit(String.valueOf(limit));
                 loadFilterVideoInput.setOffset(String.valueOf(offset));
@@ -1577,7 +1577,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
             }
 
             ContentListInput contentListInput=new ContentListInput();
-            contentListInput.setAuthToken(authTokenStr);
+            contentListInput.setAuthToken(preferenceManager.getAuthToken().trim());
             contentListInput.setPermalink(strtext.trim());
             contentListInput.setLimit(String.valueOf(limit));
             contentListInput.setOffset(String.valueOf(offset));

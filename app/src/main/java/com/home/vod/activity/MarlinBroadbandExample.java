@@ -1920,7 +1920,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					HttpClient httpclient = new DefaultHttpClient();
 					HttpPost httppost = new HttpPost(APIUrlConstant.VIDEO_DETAILS_URL);
 					httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-					httppost.addHeader("authToken", authTokenStr.trim());
+					httppost.addHeader("authToken", preferenceManager.getAuthToken());
 					httppost.addHeader("content_uniq_id", muviid);
 					httppost.addHeader("stream_uniq_id", streamId);
 					httppost.addHeader("internet_speed", MainActivity.internetSpeed.trim());
@@ -1928,7 +1928,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 					httppost.addHeader("lang_code", player.utils.Util.getTextofLanguage(MarlinBroadbandExample.this, player.utils.Util.SELECTED_LANGUAGE_CODE, player.utils.Util.DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
-					Log.v("SUBHA", "authToken = " + authTokenStr.trim());
+					Log.v("SUBHA", "authToken = " + preferenceManager.getAuthToken());
 					Log.v("SUBHA", "content_uniq_id = " + muviid);
 					Log.v("SUBHA", "stream_uniq_id = " + streamId);
 					Log.v("SUBHA", "user_id = " +userIdStr);
@@ -2404,7 +2404,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 					//  This Code Is Added For Video Log By Bibhu..
 
-					jsonObj.put("authToken", authTokenStr.trim());
+					jsonObj.put("authToken", preferenceManager.getAuthToken());
 					jsonObj.put("user_id", userIdStr);
 					jsonObj.put("ip_address", ipAddressStr.trim());
 					jsonObj.put("movie_id", muviid);
@@ -2496,7 +2496,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
 
 					//  This Code Is Added For Video Log By Bibhu..
 
-					jsonObj.put("authToken", authTokenStr.trim());
+					jsonObj.put("authToken", preferenceManager.getAuthToken());
 					jsonObj.put("user_id", userIdStr);
 					jsonObj.put("ip_address", ipAddressStr.trim());
 					jsonObj.put("movie_id", muviid);

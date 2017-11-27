@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.home.apisdk.apiController.AboutUsAsync;
 import com.home.apisdk.apiModel.AboutUsInput;
 import com.home.vod.R;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.activity.MainActivity;
@@ -44,6 +45,7 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
     ProgressBarHandler pDialog;
     AboutUsAsync asyncAboutUS;
     LanguagePreference languagePreference;
+    PreferenceManager preferenceManager;
 
 
     public AboutUsFragment() {
@@ -61,10 +63,11 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         View view = inflater.inflate(R.layout.fragment_about_us, container, false);
         context = getActivity();
         languagePreference = LanguagePreference.getLanguagePreference(context);
+        preferenceManager = PreferenceManager.getPreferenceManager(context);
         progresBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         webView = (WebView) view.findViewById(R.id.aboutUsWebView);
         AboutUsInput aboutUsInput = new AboutUsInput();
-        aboutUsInput.setAuthToken(authTokenStr);
+        aboutUsInput.setAuthToken(preferenceManager.getAuthToken().trim());
         aboutUsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         String strtext = getArguments().getString("item");
         aboutUsInput.setPermalink(strtext);

@@ -77,6 +77,10 @@
                 android:icon="@drawable/action_download"
                 android:title="My Download"/>
             <item
+                android:id="@+id/action_notification"
+                android:icon="@drawable/ic_menu_notification1"
+                android:title="Notification"/>
+            <item
                 android:id="@+id/action_logout"
                 android:icon="@drawable/logout"
                 android:title="Logout"/>

@@ -24,6 +24,7 @@ import com.home.apisdk.apiModel.Forgotpassword_output;
 import com.home.vod.R;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -80,6 +81,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
     LanguagePreference languagePreference;
+    PreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setContentView(R.layout.activity_forgot_password);
         languagePreference = LanguagePreference.getLanguagePreference(this);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
@@ -183,7 +186,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Forgotp
             boolean isValidEmail = Util.isValidMail(loginEmailStr);
             if (isValidEmail == true) {
                 Forgotpassword_input forgotpassword_input=new Forgotpassword_input();
-                forgotpassword_input.setAuthToken(authTokenStr);
+                forgotpassword_input.setAuthToken(preferenceManager.getAuthToken());
                 forgotpassword_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
                 forgotpassword_input.setEmail(loginEmailStr);
                 ForgotpassAsynTask asyncPasswordForgot = new ForgotpassAsynTask(forgotpassword_input,this,this);

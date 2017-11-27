@@ -577,7 +577,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                         cardNumberStr = cardNumberEditText.getText().toString().trim();
                         securityCodeStr = securityCodeEditText.getText().toString().trim();
                         AuthUserPaymentInfoInputModel authUserPaymentInfoInputModel = new AuthUserPaymentInfoInputModel();
-                        authUserPaymentInfoInputModel.setAuthToken(authTokenStr);
+                        authUserPaymentInfoInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                         authUserPaymentInfoInputModel.setName_on_card(nameOnCardStr);
                         authUserPaymentInfoInputModel.setExpiryMonth(String.valueOf(expiryMonthStr).trim());
                         authUserPaymentInfoInputModel.setExpiryYear(String.valueOf(expiryYearStr).trim());
@@ -937,7 +937,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
 
             } else {
                 RegisterUserPaymentInputModel registerUserPaymentInputModel = new RegisterUserPaymentInputModel();
-                registerUserPaymentInputModel.setAuthToken(authTokenStr);
+                registerUserPaymentInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                 registerUserPaymentInputModel.setCard_name(nameOnCardEditText.getText().toString().trim());
                 registerUserPaymentInputModel.setExp_month(String.valueOf(expiryMonthStr).trim());
                 registerUserPaymentInputModel.setCard_number(cardNumberEditText.getText().toString().trim());
@@ -1220,7 +1220,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                     if (NetworkStatus.getInstance().isConnected(this)) {
 
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                        getVideoDetailsInput.setAuthToken(authTokenStr);
+                        getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                         getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());

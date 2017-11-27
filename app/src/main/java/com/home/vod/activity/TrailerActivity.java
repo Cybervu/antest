@@ -844,7 +844,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", authTokenStr.trim());
+                httppost.addHeader("authToken", preferenceManager.getAuthToken().trim());
                 httppost.addHeader("user_id", userIdStr.trim());
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
@@ -854,7 +854,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                 httppost.addHeader("content_type", "2");
                 httppost.addHeader("log_id", videoLogId);
 
-                Log.v("BIBHU6", "authToken=" + authTokenStr.trim());
+                Log.v("BIBHU6", "authToken=" + preferenceManager.getAuthToken().trim());
                 Log.v("BIBHU6", "user_id=" + userIdStr.trim());
                 Log.v("BIBHU6", "ip_address=" + ipAddressStr.trim());
                 Log.v("BIBHU6", "movie_id=" + movieId.trim());
@@ -1037,7 +1037,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", authTokenStr.trim());
+                httppost.addHeader("authToken", preferenceManager.getAuthToken().trim());
                 httppost.addHeader("user_id", userIdStr);
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
@@ -1640,7 +1640,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", authTokenStr.trim());
+                httppost.addHeader("authToken", preferenceManager.getAuthToken().trim());
                 httppost.addHeader("user_id", userIdStr.trim());
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
@@ -1768,7 +1768,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", authTokenStr.trim());
+                httppost.addHeader("authToken", preferenceManager.getAuthToken().trim());
                 httppost.addHeader("user_id", userIdStr);
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());

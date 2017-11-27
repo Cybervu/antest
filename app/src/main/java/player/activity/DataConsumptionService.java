@@ -195,7 +195,7 @@ public class DataConsumptionService extends Service {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", preferenceManager.getAuthToken().trim());
                 httppost.addHeader("ip_address", Data[0]);
                 httppost.addHeader("movie_id", Data[1]);
                 httppost.addHeader("episode_id",Data[2]);

@@ -172,6 +172,7 @@ public class LanguagePreference {
     public static final String TEXT_EMIAL = "TEXT_EMIAL";
     public static final String TEXT_PASSWORD = "TEXT_PASSWORD";
     public static final String MY_FAVOURITE = "MY_FAVOURITE";
+    public static final String NOTIFICATION = "NOTIFICATION";
     public static final String TRANSACTION_DETAILS_ORDER_ID = "TRANSACTION_DETAILS_ORDER_ID";
     public static final String PAY_BY_PAYPAL = "PAY_BY_PAYPAL";
     public static final String BTN_PAYNOW = "BTN_PAYNOW";
@@ -183,6 +184,9 @@ public class LanguagePreference {
     public static final String SLOW_ISSUE_INTERNET_CONNECTION = "SLOW_ISSUE_INTERNET_CONNECTION";
     public static final String SIGN_OUT_ERROR = "SIGN_OUT_ERROR";
     public static final String BTN_SUBMIT = "BTN_SUBMIT";
+
+
+
 
 
     public static final String TRANASCTION_DETAIL = "TRANASCTION_DETAIL";
@@ -283,7 +287,12 @@ public class LanguagePreference {
     public static final String DEFAULT_APP_SELECT_LANGUAGE = "Select Language";
     public static final String DEFAULT_DETAILS_NOT_FOUND_ALERT = "Failed to find details.";
     public static final String DEFAULT_MY_FAVOURITE = "My Favourite";
+    public static final String DEFAULT_NOTIFICATION = "Notification";
     public static final String DEFAULT_GOOGLE_FCM_TOKEN = "0";
+
+
+
+
 
     //ADD LATER FOR PURCHASE AND TRANSACTION DETAILS
 
@@ -412,6 +421,13 @@ public class LanguagePreference {
     public static String DEFAULT_DURATION_TITLE = " Duration";
     public static String RESUME_MESSAGE = "RESUME_MESSAGE";
     public static String DEFAULT_RESUME_MESSAGE = "Continue watching where you left?";
+
+
+    //********Notification***********
+    public static String NO_NOTIFICATION = "NO_NOTIFICATION";
+    public static String NOTIFICATION_TITLE = "NOTIFICATION_TITLE";
+    public static  String DEFAULT_NO_NOTIFICATION = "No notification Sent.";
+    public static  String DEFAULT_NOTIFICATION_TITLE = "Notification (s)";
 
 
     /**

@@ -492,7 +492,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
             if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
                 MyLibraryInputModel myLibraryInputModel = new MyLibraryInputModel();
-                myLibraryInputModel.setAuthToken(authTokenStr);
+                myLibraryInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                 myLibraryInputModel.setUser_id(preferenceManager.getUseridFromPref());
                 myLibraryInputModel.setLimit(String.valueOf(limit));
                 myLibraryInputModel.setOffset(String.valueOf(offset));
@@ -565,7 +565,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
                             // default data
                             MyLibraryInputModel myLibraryInputModel = new MyLibraryInputModel();
-                            myLibraryInputModel.setAuthToken(authTokenStr);
+                            myLibraryInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                             myLibraryInputModel.setUser_id(preferenceManager.getUseridFromPref());
                             myLibraryInputModel.setLimit(String.valueOf(limit));
                             myLibraryInputModel.setOffset(String.valueOf(offset));
@@ -645,7 +645,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         // Call Load Videos Url to play the Video
 
                             ValidateUserInput validateUserInput = new ValidateUserInput();
-                            validateUserInput.setAuthToken(authTokenStr);
+                            validateUserInput.setAuthToken(preferenceManager.getAuthToken().trim());
                             validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                             validateUserInput.setMuviUniqueId(movieUniqueId.trim());
                             validateUserInput.setPurchaseType("episode");
@@ -965,7 +965,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
                                 //  This Code Is Added For Video Log By Bibhu..
 
-                                jsonObj.put("authToken", Constant.authTokenStr.trim());
+                                jsonObj.put("authToken", preferenceManager.getAuthToken().trim());
                                 jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                                 jsonObj.put("ip_address", ipAddressStr.trim());
                                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -1035,7 +1035,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
                                 //  This Code Is Added For Video Log By Bibhu..
 
-                                jsonObj.put("authToken", Constant.authTokenStr.trim());
+                                jsonObj.put("authToken", preferenceManager.getAuthToken().trim());
                                 jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                                 jsonObj.put("ip_address", ipAddressStr.trim());
                                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -1723,7 +1723,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
 
                     {
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                        getVideoDetailsInput.setAuthToken(authTokenStr);
+                        getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                         getVideoDetailsInput.setContent_uniq_id(movieUniqueId);
                         getVideoDetailsInput.setStream_uniq_id(movieStreamUniqueId);
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -2520,7 +2520,7 @@ public class MyLibraryFragment extends Fragment implements VideoDetailsAsynctask
                         if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
                             MyLibraryInputModel myLibraryInputModel = new MyLibraryInputModel();
-                            myLibraryInputModel.setAuthToken(authTokenStr);
+                            myLibraryInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                             myLibraryInputModel.setUser_id(preferenceManager.getUseridFromPref());
                             myLibraryInputModel.setLimit(String.valueOf(limit));
                             myLibraryInputModel.setOffset(String.valueOf(offset));

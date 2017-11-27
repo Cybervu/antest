@@ -74,6 +74,7 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
     String child_language_parent_id;
     String isSubcategoryPresent;
     String category_id;
+    String privacy_policy_url = "";
 
 
     /**
@@ -100,7 +101,7 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
          * @param message          On Success Message
          */
 
-        void onGetMenusPostExecuteCompleted(MenusOutputModel menusOutputModel, int status, String message);
+        void onGetMenusPostExecuteCompleted(MenusOutputModel menusOutputModel, int status, String message, String privacy_policy_url);
     }
 
 
@@ -397,6 +398,9 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                                     furl = jsonFooterMenu.getJSONObject(i).optString("url").toString().trim();
                                     footerMenu.setUrl(furl);
                                 }
+                                if (fpermalink.equalsIgnoreCase("terms-privacy-policy")) {
+                                    privacy_policy_url = furl;
+                                }
 
                                 footerMenuArrayList.add(footerMenu);
 
@@ -434,13 +438,13 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
         if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
             this.cancel(true);
             message = "Packge Name Not Matched";
-            listener.onGetMenusPostExecuteCompleted(menusOutputModel, status, message);
+            listener.onGetMenusPostExecuteCompleted(menusOutputModel, status, message, privacy_policy_url);
             return;
         }
         if (SDKInitializer.getHashKey(context).equals("")) {
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
-            listener.onGetMenusPostExecuteCompleted(menusOutputModel, status, message);
+            listener.onGetMenusPostExecuteCompleted(menusOutputModel, status, message, privacy_policy_url);
         }
 
     }
@@ -448,7 +452,7 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-        listener.onGetMenusPostExecuteCompleted(menusOutputModel, status, message);
+        listener.onGetMenusPostExecuteCompleted(menusOutputModel, status, message, privacy_policy_url);
 
     }
 }

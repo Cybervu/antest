@@ -458,7 +458,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                             // default data
 
                             ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
-                            viewFavouriteInputModel.setAuthToken(authTokenStr);
+                            viewFavouriteInputModel.setAuthToken(preferenceManager.getAuthToken());
                             viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
                             asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,FavoriteActivity.this,FavoriteActivity.this);
@@ -516,13 +516,13 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
         LogUtil.showLog("MUVI","favorite calling");
         ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
-        viewFavouriteInputModel.setAuthToken(authTokenStr);
+        viewFavouriteInputModel.setAuthToken(preferenceManager.getAuthToken());
         viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
         asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,FavoriteActivity.this,FavoriteActivity.this);
         asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
 
-        LogUtil.showLog("MUVI","authtokenn = "+ authTokenStr);
+        LogUtil.showLog("MUVI","authtokenn = "+ preferenceManager.getAuthToken());
         LogUtil.showLog("MUVI","user id = "+preferenceManager.getUseridFromPref());
 
 
@@ -1090,7 +1090,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
                 } else {
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-                    languageListInputModel.setAuthToken(authTokenStr);
+                    languageListInputModel.setAuthToken(preferenceManager.getAuthToken());
                     GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
@@ -1118,6 +1118,12 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 startActivity(purchaseintent);
                 // Not implemented here
                 return false;
+            case R.id.action_notification:
+
+                Intent notificationIntent = new Intent(FavoriteActivity.this, Notification.class);
+                startActivity(notificationIntent);
+
+                return false;
             case R.id.action_logout:
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(FavoriteActivity.this, R.style.MyAlertDialogStyle);
@@ -1131,7 +1137,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
                         // dialog.cancel();
                         LogoutInput logoutInput = new LogoutInput();
-                        logoutInput.setAuthToken(authTokenStr);
+                        logoutInput.setAuthToken(preferenceManager.getAuthToken());
                         logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
                         logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, FavoriteActivity.this, FavoriteActivity.this);
@@ -1258,7 +1264,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
 
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-                    languageListInputModel.setAuthToken(authTokenStr);
+                    languageListInputModel.setAuthToken(preferenceManager.getAuthToken());
                     languageListInputModel.setLangCode(Default_Language);
 
                     GetTranslateLanguageAsync getTranslateLanguageAsync = new GetTranslateLanguageAsync(languageListInputModel,FavoriteActivity.this,FavoriteActivity.this);
@@ -1342,7 +1348,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         movieUniqueId = gridItem.getMovieUniqueId();
 
         DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
-        deleteFavInputModel.setAuthTokenStr(authTokenStr);
+        deleteFavInputModel.setAuthTokenStr(preferenceManager.getAuthToken());
         deleteFavInputModel.setIsEpisode(isEpisodeStr);
         deleteFavInputModel.setMovieUniqueId(movieUniqueId);
         deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());

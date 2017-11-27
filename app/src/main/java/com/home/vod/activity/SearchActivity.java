@@ -359,7 +359,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
                             // default data
                             Search_Data_input search_data_input = new Search_Data_input();
-                            search_data_input.setAuthToken(authTokenStr);
+                            search_data_input.setAuthToken(preferenceManager.getAuthToken().trim());
                             search_data_input.setLimit(String.valueOf(limit));
                             search_data_input.setOffset(String.valueOf(offset));
                             search_data_input.setQ(searchTextStr.trim());
@@ -980,7 +980,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
                         } else {
                             Search_Data_input search_data_input = new Search_Data_input();
-                            search_data_input.setAuthToken(authTokenStr);
+                            search_data_input.setAuthToken(preferenceManager.getAuthToken().trim());
                             search_data_input.setLimit(String.valueOf(limit));
                             search_data_input.setOffset(String.valueOf(offset));
                             search_data_input.setQ(searchTextStr.trim());

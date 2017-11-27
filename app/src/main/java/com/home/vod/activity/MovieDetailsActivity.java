@@ -369,7 +369,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         /**FAVORITE*/
         if (Util.favorite_clicked == true) {
             ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-            contentDetailsInput.setAuthToken(authTokenStr);
+            contentDetailsInput.setAuthToken(preferenceManager.getAuthToken());
             contentDetailsInput.setPermalink(permalinkStr);
             contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
             contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
@@ -445,7 +445,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 } else {
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-                    languageListInputModel.setAuthToken(authTokenStr);
+                    languageListInputModel.setAuthToken(preferenceManager.getAuthToken());
                     GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
@@ -465,7 +465,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 startActivity(purchaseintent);
                 // Not implemented here
                 return false;
+            case R.id.action_notification:
 
+                Intent notificationIntent = new Intent(MovieDetailsActivity.this, Notification.class);
+                startActivity(notificationIntent);
+
+                return false;
             case R.id.action_logout:
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MovieDetailsActivity.this, R.style.MyAlertDialogStyle);
@@ -479,7 +484,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                         // dialog.cancel();
                         LogoutInput logoutInput = new LogoutInput();
-                        logoutInput.setAuthToken(authTokenStr);
+                        logoutInput.setAuthToken(preferenceManager.getAuthToken());
                         logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
                         logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
@@ -782,7 +787,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         Log.v("goofy", "Item deleted");
 
                         DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
-                        deleteFavInputModel.setAuthTokenStr(authTokenStr);
+                        deleteFavInputModel.setAuthTokenStr(preferenceManager.getAuthToken());
                         deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
                         deleteFavInputModel.setMovieUniqueId(movieUniqueId);
                         deleteFavInputModel.setIsEpisode(isEpisode);
@@ -794,7 +799,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     } else {
 
                         AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-                        addToFavInputModel.setAuthToken(authTokenStr);
+                        addToFavInputModel.setAuthToken(preferenceManager.getAuthToken());
                         addToFavInputModel.setMovie_uniq_id(movieUniqueId);
                         addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
                         addToFavInputModel.setIsEpisodeStr(isEpisode);
@@ -832,7 +837,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 playerModel.setMovieUniqueId(movieUniqueId);
                 playerModel.setUserId(preferenceManager.getUseridFromPref());
                 playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
-                playerModel.setAuthTokenStr(authTokenStr.trim());
+                playerModel.setAuthTokenStr(preferenceManager.getAuthToken().trim());
                 playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH);
                 playerModel.setEpisode_id("0");
                 playerModel.setIsFreeContent(isFreeContent);
@@ -919,7 +924,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                                     Log.v("MUVI", "video details");
                                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -952,7 +957,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                         Log.v("MUVI", "VV");
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                        getVideoDetailsInput.setAuthToken(authTokenStr);
+                        getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                         getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                         getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -1051,7 +1056,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                                     if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
 
                                         ValidateUserInput validateUserInput = new ValidateUserInput();
-                                        validateUserInput.setAuthToken(authTokenStr);
+                                        validateUserInput.setAuthToken(preferenceManager.getAuthToken());
                                         if (preferenceManager != null) {
                                             loggedInIdStr = preferenceManager.getUseridFromPref();
                                         }
@@ -1093,7 +1098,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         // MUVIlaxmi
 
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                        getVideoDetailsInput.setAuthToken(authTokenStr);
+                        getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                         getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                         getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -1192,7 +1197,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                                 //  This Code Is Added For Video Log By Bibhu..
 
-                                jsonObj.put("authToken", authTokenStr.trim());
+                                jsonObj.put("authToken", preferenceManager.getAuthToken());
                                 jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                                 jsonObj.put("ip_address", ipAddressStr.trim());
                                 jsonObj.put("movie_id", movieUniqueId);
@@ -1334,7 +1339,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
 
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                contentDetailsInput.setAuthToken(authTokenStr);
+                contentDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                 contentDetailsInput.setPermalink(permalinkStr);
                 contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                 contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
@@ -1465,7 +1470,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                         if (NetworkStatus.getInstance().isConnected(MovieDetailsActivity.this)) {
 
                             ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                            contentDetailsInput.setAuthToken(authTokenStr);
+                            contentDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                             contentDetailsInput.setPermalink(permalinkStr);
                             contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                             contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
@@ -1641,7 +1646,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 alert.dismiss();
 
                 LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-                languageListInputModel.setAuthToken(authTokenStr);
+                languageListInputModel.setAuthToken(preferenceManager.getAuthToken());
                 languageListInputModel.setLangCode(default_Language);
 
                 if (!Previous_Selected_Language.equals(default_Language)) {
@@ -2206,7 +2211,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         } else if (resultCode == RESULT_OK && requestCode == 30060) {
             if (NetworkStatus.getInstance().isConnected(this)) {
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                contentDetailsInput.setAuthToken(authTokenStr);
+                contentDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                 contentDetailsInput.setPermalink(permalinkStr);
                 contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                 contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
@@ -2239,7 +2244,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
 
         ViewContentRatingInputModel viewContentRatingInputModel = new ViewContentRatingInputModel();
-        viewContentRatingInputModel.setAuthToken(authTokenStr);
+        viewContentRatingInputModel.setAuthToken(preferenceManager.getAuthToken());
         viewContentRatingInputModel.setUser_id(preferenceManager.getUseridFromPref());
 //        viewContentRatingInputModel.setUser_id("142026");
         viewContentRatingInputModel.setContent_id(movieIdStr.trim());
@@ -2398,7 +2403,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                     Log.v("MUVI", "VV vv vv vvvv");
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -2794,7 +2799,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", authTokenStr);
+                jsonObj.put("authToken", preferenceManager.getAuthToken());
                 jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -2872,7 +2877,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", authTokenStr);
+                jsonObj.put("authToken", preferenceManager.getAuthToken().trim());
                 jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -3277,7 +3282,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                 Util.favorite_clicked = false;
                 AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-                addToFavInputModel.setAuthToken(authTokenStr);
+                addToFavInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                 addToFavInputModel.setMovie_uniq_id(movieUniqueId);
                 addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
                 addToFavInputModel.setIsEpisodeStr(isEpisode);
@@ -3365,7 +3370,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     Log.v("MUVI", "VV VV VV");
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -3408,7 +3413,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                     Log.v("MUVI", "VV VV VV");
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -3437,7 +3442,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         Log.v("MUVI", "validate user details");
 
         ValidateUserInput validateUserInput = new ValidateUserInput();
-        validateUserInput.setAuthToken(authTokenStr);
+        validateUserInput.setAuthToken(preferenceManager.getAuthToken().trim());
         if (preferenceManager != null) {
             loggedInIdStr = preferenceManager.getUseridFromPref();
         }

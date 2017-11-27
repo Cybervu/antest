@@ -403,7 +403,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
                             // default data
                             FeatureContentInputModel featureContentInputModel = new FeatureContentInputModel();
-                            featureContentInputModel.setAuthToken(authTokenStr);
+                            featureContentInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                             featureContentInputModel.setSection_id(sectionId.trim());
                             featureContentInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                             GetFeatureContentAsynTask asyncLoadVideos = new GetFeatureContentAsynTask(featureContentInputModel,ViewMoreActivity.this,ViewMoreActivity.this);
@@ -456,7 +456,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
         scrolling = false;
 
         FeatureContentInputModel featureContentInputModel = new FeatureContentInputModel();
-        featureContentInputModel.setAuthToken(authTokenStr);
+        featureContentInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
         featureContentInputModel.setSection_id(sectionId.trim());
         featureContentInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         GetFeatureContentAsynTask asyncLoadVideos = new GetFeatureContentAsynTask(featureContentInputModel,ViewMoreActivity.this,ViewMoreActivity.this);
@@ -1712,7 +1712,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
                 } else {
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-                    languageListInputModel.setAuthToken(authTokenStr);
+                    languageListInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                     GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
@@ -1731,6 +1731,12 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 startActivity(purchaseintent);
                 // Not implemented here
                 return false;
+            case R.id.action_notification:
+
+                Intent notificationIntent = new Intent(ViewMoreActivity.this, Notification.class);
+                startActivity(notificationIntent);
+
+                return false;
             case R.id.action_logout:
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ViewMoreActivity.this, R.style.MyAlertDialogStyle);
@@ -1744,7 +1750,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
                         // dialog.cancel();
                         LogoutInput logoutInput = new LogoutInput();
-                        logoutInput.setAuthToken(authTokenStr);
+                        logoutInput.setAuthToken(preferenceManager.getAuthToken().trim());
                         logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
                         logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, ViewMoreActivity.this, ViewMoreActivity.this);
@@ -2015,7 +2021,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
                     languageListInputModel.setLangCode(Default_Language);
-                    languageListInputModel.setAuthToken(authTokenStr);
+                    languageListInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                     GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel, ViewMoreActivity.this, ViewMoreActivity.this);
                     asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
                 }

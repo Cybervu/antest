@@ -548,6 +548,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/payment_watch_now_height"
                         android:layout_gravity="right"
+                        android:padding="6dp"
                         android:background="@drawable/voucher_inactive_button"
                         android:stateListAnimator="@null"
                         android:text=""

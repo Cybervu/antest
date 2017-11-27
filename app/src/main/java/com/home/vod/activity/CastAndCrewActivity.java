@@ -24,6 +24,7 @@ import com.home.vod.adapter.CastCrewAdapter;
 import com.home.vod.model.GetCastCrewItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
@@ -64,6 +65,8 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
     CastCrewAdapter castCrewAdapter;
     GridView cast_crew_crid;
 
+    PreferenceManager preferenceManager;
+
     RelativeLayout noInternetLayout;
     RelativeLayout noDataLayout;
     TextView noDataTextView;
@@ -88,6 +91,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cast_and_crew);
         languagePreference = LanguagePreference.getLanguagePreference(this);
+        preferenceManager = PreferenceManager.getPreferenceManager(this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
@@ -150,7 +154,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         primary_layout.setVisibility(View.VISIBLE);
 
         CelibrityInputModel celibrityInputModel = new CelibrityInputModel();
-        celibrityInputModel.setAuthToken(authTokenStr);
+        celibrityInputModel.setAuthToken(preferenceManager.getAuthToken());
         celibrityInputModel.setMovie_id(getIntent().getStringExtra("cast_movie_id"));
         celibrityInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         GetCelibrityAsyntask asynGetCsatDetails = new GetCelibrityAsyntask(celibrityInputModel, this, this);

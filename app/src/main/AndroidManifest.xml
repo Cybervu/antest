@@ -150,6 +150,14 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.Login"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Notification"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.RegisterActivity"
             android:label=""
             android:screenOrientation="portrait" />

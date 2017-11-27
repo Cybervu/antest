@@ -154,7 +154,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
 
         ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
 
-        contentDetailsInput.setAuthToken(authTokenStr);
+        contentDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
         if (preferenceManager != null) {
             String countryPref = preferenceManager.getCountryCodeFromPref();
             contentDetailsInput.setCountry(countryPref);

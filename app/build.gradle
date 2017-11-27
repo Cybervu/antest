@@ -339,7 +339,7 @@ android {
             dimension 'vendor'
             applicationId 'com.release.muvionyx1'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            buildConfigField "String", "AUTH_TOKEN", "\"\""
+            buildConfigField "String", "AUTH_TOKEN", "\"3ea7e43c13d8ab6eb505b960217df923\""
             targetSdkVersion 23
             versionCode 1
             versionName '1.0'

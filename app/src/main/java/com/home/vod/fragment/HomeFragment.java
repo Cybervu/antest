@@ -42,6 +42,7 @@ import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
@@ -93,6 +94,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
     TextView noDataTextView;
     TextView noInternetTextView;
     LanguagePreference languagePreference;
+    PreferenceManager preferenceManager;
 
     RecyclerView my_recycler_view;
     Context context;
@@ -133,7 +135,8 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
         context = getActivity();
         setHasOptionsMenu(true);
         Util.image_orentiation.clear();
-        languagePreference = LanguagePreference.getLanguagePreference(getActivity());
+        languagePreference = LanguagePreference.getLanguagePreference(context);
+        preferenceManager = PreferenceManager.getPreferenceManager(context);
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
         String GOOGLE_FCM_TOKEN;
         // LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage( GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
@@ -191,7 +194,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
             url_maps = new ArrayList<String>();
 
             HomePageInputModel homePageInputModel = new HomePageInputModel();
-            homePageInputModel.setAuthToken(authTokenStr);
+            homePageInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
             homePageInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynLoadMenuItems = new GetAppHomePageAsync(homePageInputModel, this, context);
             asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
@@ -449,7 +452,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
                     // default data
                     LoadVideoInput loadVideoInput = new LoadVideoInput();
-                    loadVideoInput.setAuthToken(authTokenStr);
+                    loadVideoInput.setAuthToken(preferenceManager.getAuthToken().trim());
                     loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
                     asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
@@ -529,7 +532,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
 
                 LoadVideoInput loadVideoInput = new LoadVideoInput();
-                loadVideoInput.setAuthToken(authTokenStr);
+                loadVideoInput.setAuthToken(preferenceManager.getAuthToken().trim());
                 loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                 loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
                 asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);

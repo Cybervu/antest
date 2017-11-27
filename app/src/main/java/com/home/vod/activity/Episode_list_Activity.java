@@ -679,7 +679,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", authTokenStr);
+                jsonObj.put("authToken", preferenceManager.getAuthToken());
                 jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -757,7 +757,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", authTokenStr);
+                jsonObj.put("authToken", preferenceManager.getAuthToken());
                 jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -951,7 +951,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             } else {
                 if (NetworkStatus.getInstance().isConnected(this)) {
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -1393,7 +1393,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 //Call whatever you want
                 if (isNetwork) {
                     Episode_Details_input episodeDetailsInput = new Episode_Details_input();
-                    episodeDetailsInput.setAuthtoken(authTokenStr);
+                    episodeDetailsInput.setAuthtoken(preferenceManager.getAuthToken());
                     episodeDetailsInput.setPermalink(permalinkStr);
                     episodeDetailsInput.setSeries_number(getIntent().getStringExtra(SEASON_INTENT_KEY));
                     episodeDetailsInput.setLimit(String.valueOf(limit));
@@ -1447,7 +1447,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     if (NetworkStatus.getInstance().isConnected(Episode_list_Activity.this)) {
                         // default data
                         Episode_Details_input episodeDetailsInput = new Episode_Details_input();
-                        episodeDetailsInput.setAuthtoken(authTokenStr);
+                        episodeDetailsInput.setAuthtoken(preferenceManager.getAuthToken());
                         episodeDetailsInput.setPermalink(permalinkStr);
                         episodeDetailsInput.setSeries_number(getIntent().getStringExtra(SEASON_INTENT_KEY));
                         episodeDetailsInput.setLimit(String.valueOf(limit));
@@ -1607,7 +1607,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             playerModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
             playerModel.setUserId(preferenceManager.getUseridFromPref());
             playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
-            playerModel.setAuthTokenStr(authTokenStr.trim());
+            playerModel.setAuthTokenStr(preferenceManager.getAuthToken());
             playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH);
             playerModel.setEpisode_id(item.getEpisodeStreamUniqueId());
             playerModel.setVideoTitle(item.getEpisodeTitle());
@@ -1691,7 +1691,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     // MUVIlaxmi
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -2903,7 +2903,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 } else {
                     LanguageListInputModel languageListInputMode = new LanguageListInputModel();
-                    languageListInputMode.setAuthToken(authTokenStr);
+                    languageListInputMode.setAuthToken(preferenceManager.getAuthToken());
                     GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputMode, this, this);
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
@@ -2922,6 +2922,12 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 startActivity(purchaseintent);*/
                 // Not implemented here
                 return false;
+            case R.id.action_notification:
+
+                Intent notificationIntent = new Intent(Episode_list_Activity.this, Notification.class);
+                startActivity(notificationIntent);
+
+                return false;
             case R.id.action_logout:
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this, R.style.MyAlertDialogStyle);
@@ -2935,7 +2941,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                         // dialog.cancel();
                         LogoutInput logoutInput = new LogoutInput();
-                        logoutInput.setAuthToken(authTokenStr);
+                        logoutInput.setAuthToken(preferenceManager.getAuthToken());
                         logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
                         logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, Episode_list_Activity.this, Episode_list_Activity.this);
@@ -3060,7 +3066,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 if (!Previous_Selected_Language.equals(default_Language)) {
 
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-                    languageListInputModel.setAuthToken(authTokenStr);
+                    languageListInputModel.setAuthToken(preferenceManager.getAuthToken());
                     languageListInputModel.setLangCode(default_Language);
                     GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel, Episode_list_Activity.this, Episode_list_Activity.this);
                     asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
@@ -3498,7 +3504,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         //Call whatever you want
                         if (NetworkStatus.getInstance().isConnected(Episode_list_Activity.this)) {
                             Episode_Details_input episodeDetailsInput = new Episode_Details_input();
-                            episodeDetailsInput.setAuthtoken(authTokenStr);
+                            episodeDetailsInput.setAuthtoken(preferenceManager.getAuthToken());
                             episodeDetailsInput.setPermalink(permalinkStr);
                             episodeDetailsInput.setSeries_number(getIntent().getStringExtra(SEASON_INTENT_KEY));
                             episodeDetailsInput.setLimit(String.valueOf(limit));
@@ -3707,7 +3713,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
                 if (NetworkStatus.getInstance().isConnected(Episode_list_Activity.this)) {
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -3746,7 +3752,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                     Log.v("MUVI", "VV VV VV");
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -3783,7 +3789,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
         asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
         ValidateUserInput validateUserInput = new ValidateUserInput();
-        validateUserInput.setAuthToken(authTokenStr);
+        validateUserInput.setAuthToken(preferenceManager.getAuthToken());
         validateUserInput.setUserId(preferenceManager.getUseridFromPref());
         validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
         validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());

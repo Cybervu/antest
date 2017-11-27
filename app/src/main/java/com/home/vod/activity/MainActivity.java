@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -44,12 +46,15 @@ import com.google.android.gms.cast.framework.CastStateListener;
 import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+import com.home.apisdk.apiController.FcmRegistrationDetailsAsynTask;
 import com.home.apisdk.apiController.GetAppMenuAsync;
 import com.home.apisdk.apiController.GetImageForDownloadAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetTranslateLanguageAsync;
 import com.home.apisdk.apiController.LogoutAsynctask;
 import com.home.apisdk.apiController.SDKInitializer;
+import com.home.apisdk.apiModel.FcmRegistrationDetailsInputModel;
+import com.home.apisdk.apiModel.FcmRegistrationDetailsOutputModel;
 import com.home.apisdk.apiModel.GetMenusInputModel;
 import com.home.apisdk.apiModel.LanguageListInputModel;
 import com.home.apisdk.apiModel.LanguageListOutputModel;
@@ -123,7 +128,7 @@ import static com.home.vod.util.Util.languageModel;
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,
         LogoutAsynctask.LogoutListener,
         GetLanguageListAsynTask.GetLanguageListListener,
-        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, GetAppMenuAsync.GetMenusListener {
+        GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, GetAppMenuAsync.GetMenusListener, FcmRegistrationDetailsAsynTask.FcmRegistrationDetailsListener {
 
 
     public MainActivity() {
@@ -329,7 +334,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 asynLoadMenuItems = null;
             }
             GetMenusInputModel menuListInput = new GetMenusInputModel();
-            menuListInput.setAuthToken(authTokenStr);
+            menuListInput.setAuthToken(preferenceManager.getAuthToken());
             menuListInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynLoadMenuItems = new GetAppMenuAsync(menuListInput, this, this);
             asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
@@ -396,7 +401,13 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        Log.v("ANU","item.getItemId()==="+item.getItemId());
+        Log.v("ANU","item.getItemId()==="+item);
+
         switch (item.getItemId()) {
+
+
 
             case R.id.action_search:
                 final Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
@@ -450,7 +461,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
                 } else {
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-                    languageListInputModel.setAuthToken(authTokenStr);
+                    languageListInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                     GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
@@ -469,6 +480,13 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 startActivity(purchaseintent);
                 // Not implemented here
                 return false;
+            case R.id.action_notification:
+
+                Intent notificationIntent = new Intent(MainActivity.this, Notification.class);
+                startActivity(notificationIntent);
+
+                return false;
+
             case R.id.action_logout:
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
@@ -482,8 +500,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
                         // dialog.cancel();
                         LogoutInput logoutInput = new LogoutInput();
-                        logoutInput.setAuthToken(authTokenStr);
-                        LogUtil.showLog("Abhi", authTokenStr);
+                        logoutInput.setAuthToken(preferenceManager.getAuthToken());
+                        LogUtil.showLog("Abhi", preferenceManager.getAuthToken());
                         String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
                         logoutInput.setLogin_history_id(loginHistoryIdStr);
                         logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
@@ -786,13 +804,24 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     }
 
     @Override
-    public void onGetMenusPostExecuteCompleted(MenusOutputModel menusOutputModel, int status, String message) {
+    public void onGetMenusPostExecuteCompleted(MenusOutputModel menusOutputModel, int status, String message, String privacy_policy_url) {
 
         if (pDialog != null && pDialog.isShowing()) {
             pDialog.hide();
             pDialog = null;
 
         }
+
+        preferenceManager.setPrivacy_policy_url(privacy_policy_url);
+
+        FcmRegistrationDetailsInputModel fcmRegistrationDetailsInputModel = new FcmRegistrationDetailsInputModel();
+        fcmRegistrationDetailsInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
+        fcmRegistrationDetailsInputModel.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        fcmRegistrationDetailsInputModel.setDevice_type(1);
+        fcmRegistrationDetailsInputModel.setFcm_token(preferenceManager.getSharedPref());
+        FcmRegistrationDetailsAsynTask fcmRegistrationDetailsAsynTask = new FcmRegistrationDetailsAsynTask(fcmRegistrationDetailsInputModel,this,this);
+        fcmRegistrationDetailsAsynTask.executeOnExecutor(threadPoolExecutor);
+
 
         LogUtil.showLog("Alok", "onGetMenusPostExecuteCompleted");
         if (status == 0) {
@@ -854,6 +883,30 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
 
     }
+
+
+    @Override
+    public void onFcmRegistrationDetailsPreExecuteStarted() {
+        pDialog = new ProgressBarHandler(MainActivity.this);
+        pDialog.show();
+    }
+
+    @Override
+    public void onFcmRegistrationDetailsPostExecuteCompleted(FcmRegistrationDetailsOutputModel fcmRegistrationDetailsOutputModel, String message) {
+
+
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.hide();
+            pDialog = null;
+
+        }
+
+        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+
+
+
+    }
+
 
     /*@Override
     public void onGetMenuListPreExecuteStarted() {
@@ -1911,7 +1964,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
                     languageListInputModel.setLangCode(Default_Language);
-                    languageListInputModel.setAuthToken(authTokenStr);
+                    languageListInputModel.setAuthToken(preferenceManager.getAuthToken());
                     GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel, MainActivity.this, MainActivity.this);
                     asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
                 }

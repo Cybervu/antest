@@ -1566,7 +1566,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken",preferenceManager.getAuthToken().trim());
                 httppost.addHeader("user_id", userIdStr.trim());
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
@@ -1575,7 +1575,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("device_type", "2");
                 httppost.addHeader("log_id", videoLogId);
 
-                Log.v("BIBHU6", "authToken=" + Util.authTokenStr.trim());
+                Log.v("BIBHU6", "authToken=" + preferenceManager.getAuthToken().trim());
                 Log.v("BIBHU6", "user_id=" + userIdStr.trim());
                 Log.v("BIBHU6", "ip_address=" + ipAddressStr.trim());
                 Log.v("BIBHU6", "movie_id=" + movieId.trim());
@@ -1779,7 +1779,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", preferenceManager.getAuthToken().trim());
                 httppost.addHeader("user_id", userIdStr);
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
@@ -2554,7 +2554,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", preferenceManager.getAuthToken().trim());
                 httppost.addHeader("user_id", userIdStr.trim());
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
@@ -2706,7 +2706,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", preferenceManager.getAuthToken().trim());
                 httppost.addHeader("user_id", userIdStr.trim());
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
@@ -3460,7 +3460,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", preferenceManager.getAuthToken().trim());
                 httppost.addHeader("user_id", userIdStr);
                 httppost.addHeader("ip_address", ipAddressStr.trim());
                 httppost.addHeader("movie_id", movieId.trim());
@@ -3573,7 +3573,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr);
+                httppost.addHeader("authToken", preferenceManager.getAuthToken().trim());
                 httppost.addHeader("stream_unique_id", playerModel.getStreamUniqueId());
 
 
@@ -4078,7 +4078,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         SQLiteDatabase DB = ExoPlayerActivity.this.openOrCreateDatabase(DBHelper.DATABASE_NAME, MODE_PRIVATE, null);
         String query1 = "INSERT INTO " + DBHelper.DOWNLOAD_CONTENT_INFO + "(download_contnet_id,log_id,authtoken,email," +
                 "ipaddress,movie_id,episode_id,device_type,download_status,server_sending_final_status) VALUES" +
-                "('" + enqueue + "','0','" + Util.authTokenStr.trim() + "','" + emailIdStr.trim() + "','" + ipAddressStr + "'," +
+                "('" + enqueue + "','0','" + preferenceManager.getAuthToken().trim() + "','" + emailIdStr.trim() + "','" + ipAddressStr + "'," +
                 "'" + playerModel.getMovieUniqueId().trim() + "','" + playerModel.getStreamUniqueId().trim() + "'," +
                 "'" + 2 + "','2','0')";
 
@@ -4690,7 +4690,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", Util.authTokenStr.trim());
+                jsonObj.put("authToken", preferenceManager.getAuthToken().trim());
                 jsonObj.put("user_id", userIdStr.trim());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -4790,7 +4790,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", Util.authTokenStr.trim());
+                jsonObj.put("authToken", preferenceManager.getAuthToken().trim());
                 jsonObj.put("user_id", userIdStr.trim());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -5065,7 +5065,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(urlRouteList);
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", preferenceManager.getAuthToken().trim());
                 httppost.addHeader("stream_uniq_id", Stream_Id);
                 httppost.addHeader("watch_remaining_time", "0");
                 httppost.addHeader("device_id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));

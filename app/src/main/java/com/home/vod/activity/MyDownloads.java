@@ -760,7 +760,7 @@ public class MyDownloads extends AppCompatActivity {
                 HttpClient httpclient=new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(Util.rootUrl().trim()+Util.loadVideoUrl.trim());
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-                httppost.addHeader("authToken", Util.authTokenStr.trim());
+                httppost.addHeader("authToken", preferenceManager.getAuthToken().trim());
                 httppost.addHeader("content_uniq_id", download.get(Position).getMuviid());
                 httppost.addHeader("stream_uniq_id", download.get(Position).getStreamId());
                 httppost.addHeader("internet_speed",MainActivity.internetSpeed.trim());
@@ -769,7 +769,6 @@ public class MyDownloads extends AppCompatActivity {
 
 
 
-                Log.v("SUBHA","authToken = "+Util.authTokenStr.trim());
                 Log.v("SUBHA","content_uniq_id = "+download.get(Position).getMuviid());
                 Log.v("SUBHA","stream_uniq_id = "+download.get(Position).getStreamId());
                 Log.v("SUBHA","user_id = "+preferenceManager.getUseridFromPref());
@@ -1172,7 +1171,7 @@ public class MyDownloads extends AppCompatActivity {
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", Util.authTokenStr.trim());
+                jsonObj.put("authToken", preferenceManager.getAuthToken().trim());
                 jsonObj.put("user_id",preferenceManager.getUseridFromPref());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id",download.get(Position).getMuviid());

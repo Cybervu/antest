@@ -988,7 +988,7 @@ MonetizationHandler monetizationHandler;
             } else {
                 if (NetworkStatus.getInstance().isConnected(this)) {
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -1139,7 +1139,7 @@ MonetizationHandler monetizationHandler;
 
                 Util.favorite_clicked = false;
                 AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-                addToFavInputModel.setAuthToken(authTokenStr);
+                addToFavInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                 addToFavInputModel.setMovie_uniq_id(movieUniqueId);
                 addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
                 addToFavInputModel.setIsEpisodeStr(isEpisode);
@@ -1444,7 +1444,7 @@ MonetizationHandler monetizationHandler;
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", authTokenStr);
+                jsonObj.put("authToken", preferenceManager.getAuthToken().trim());
                 jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                 jsonObj.put("ip_address", ipAddres.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -1522,7 +1522,7 @@ MonetizationHandler monetizationHandler;
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", authTokenStr);
+                jsonObj.put("authToken", preferenceManager.getAuthToken().trim());
                 jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                 jsonObj.put("ip_address", ipAddres.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -1873,7 +1873,7 @@ MonetizationHandler monetizationHandler;
                 LogUtil.showLog("MUVI", "episode details  call 1");
 
                 Episode_Details_input episodeDetailsInput = new Episode_Details_input();
-                episodeDetailsInput.setAuthtoken(authTokenStr);
+                episodeDetailsInput.setAuthtoken(preferenceManager.getAuthToken().trim());
                 episodeDetailsInput.setPermalink(permalinkStr.trim());
                 episodeDetailsInput.setLimit("4");
                 episodeDetailsInput.setOffset("1");
@@ -1965,7 +1965,7 @@ MonetizationHandler monetizationHandler;
                     if (isFavorite == 1) {
 
                         DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
-                        deleteFavInputModel.setAuthTokenStr(authTokenStr);
+                        deleteFavInputModel.setAuthTokenStr(preferenceManager.getAuthToken().trim());
                         deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
                         deleteFavInputModel.setMovieUniqueId(movieUniqueId);
                         deleteFavInputModel.setIsEpisode(isEpisode);
@@ -1978,7 +1978,7 @@ MonetizationHandler monetizationHandler;
                     } else {
                         LogUtil.showLog("MUVI", "favorite");
                         AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-                        addToFavInputModel.setAuthToken(authTokenStr);
+                        addToFavInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                         addToFavInputModel.setMovie_uniq_id(movieUniqueId);
                         addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
                         addToFavInputModel.setIsEpisodeStr(isEpisode);
@@ -2063,7 +2063,7 @@ MonetizationHandler monetizationHandler;
 
                             //  This Code Is Added For Video Log By Bibhu..
 
-                            jsonObj.put("authToken", authTokenStr.trim());
+                            jsonObj.put("authToken", preferenceManager.getAuthToken().trim());
                             jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                             jsonObj.put("ip_address", ipAddres.trim());
                             jsonObj.put("movie_id", movieUniqueId);
@@ -2225,7 +2225,7 @@ MonetizationHandler monetizationHandler;
 
                             if (isFreeContent == 1) {
                                 GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                getVideoDetailsInput.setAuthToken(authTokenStr);
+                                getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -2236,7 +2236,7 @@ MonetizationHandler monetizationHandler;
 
                             } else {
                                 ValidateUserInput validateUserInput = new ValidateUserInput();
-                                validateUserInput.setAuthToken(authTokenStr);
+                                validateUserInput.setAuthToken(preferenceManager.getAuthToken().trim());
                                 validateUserInput.setUserId(preferenceManager.getUseridFromPref());
                                 validateUserInput.setMuviUniqueId(movieUniqueId.trim());
                                 validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
@@ -2257,7 +2257,7 @@ MonetizationHandler monetizationHandler;
                         // MUVIlaxmi
 
                         GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                        getVideoDetailsInput.setAuthToken(authTokenStr);
+                        getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                         getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -2341,7 +2341,7 @@ MonetizationHandler monetizationHandler;
             if (NetworkStatus.getInstance().isConnected(ShowWithEpisodesActivity.this)) {
 
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                contentDetailsInput.setAuthToken(authTokenStr);
+                contentDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                 contentDetailsInput.setPermalink(permalinkStr);
                 contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                 contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
@@ -2534,7 +2534,7 @@ MonetizationHandler monetizationHandler;
         playerModel.setMovieUniqueId(item.getEpisodeMuviUniqueId());
         playerModel.setUserId(preferenceManager.getUseridFromPref());
         playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
-        playerModel.setAuthTokenStr(authTokenStr.trim());
+        playerModel.setAuthTokenStr(preferenceManager.getAuthToken().trim());
         playerModel.setRootUrl(BuildConfig.SERVICE_BASE_PATH.trim());
         playerModel.setEpisode_id(item.getEpisodeStreamUniqueId());
         playerModel.setVideoTitle(movieNameStr);
@@ -2605,7 +2605,7 @@ MonetizationHandler monetizationHandler;
                 // MUVIlaxmi
 
                 GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                getVideoDetailsInput.setAuthToken(authTokenStr);
+                getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                 getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                 getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                 getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -3404,7 +3404,7 @@ MonetizationHandler monetizationHandler;
 
                 } else {
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-                    languageListInputModel.setAuthToken(authTokenStr);
+                    languageListInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                     GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
                     asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
                 }
@@ -3439,6 +3439,12 @@ MonetizationHandler monetizationHandler;
                 startActivity(mydownload);
                 // Not implemented here
                 return false;*/
+            case R.id.action_notification:
+
+                Intent notificationIntent = new Intent(ShowWithEpisodesActivity.this, Notification.class);
+                startActivity(notificationIntent);
+
+                return false;
             case R.id.action_logout:
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ShowWithEpisodesActivity.this, R.style.MyAlertDialogStyle);
@@ -3452,7 +3458,7 @@ MonetizationHandler monetizationHandler;
 
                         // dialog.cancel();
                         LogoutInput logoutInput = new LogoutInput();
-                        logoutInput.setAuthToken(authTokenStr);
+                        logoutInput.setAuthToken(preferenceManager.getAuthToken().trim());
                         logoutInput.setLogin_history_id(preferenceManager.getLoginHistIdFromPref());
                         logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
@@ -3592,7 +3598,7 @@ MonetizationHandler monetizationHandler;
                 if (!Previous_Selected_Language.equals(Default_Language)) {
 
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-                    languageListInputModel.setAuthToken(authTokenStr);
+                    languageListInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                     languageListInputModel.setLangCode(Default_Language);
                     GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
                     asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
@@ -3664,7 +3670,7 @@ MonetizationHandler monetizationHandler;
         if (Util.favorite_clicked == true) {
 
             ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-            contentDetailsInput.setAuthToken(authTokenStr);
+            contentDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
             contentDetailsInput.setPermalink(permalinkStr);
             contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
             contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
@@ -4236,7 +4242,7 @@ MonetizationHandler monetizationHandler;
 
                         if (NetworkStatus.getInstance().isConnected(this)) {
                             ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                            contentDetailsInput.setAuthToken(authTokenStr);
+                            contentDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                             contentDetailsInput.setPermalink(permalinkStr);
                             contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                             contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
@@ -5289,7 +5295,7 @@ MonetizationHandler monetizationHandler;
 
                 LogUtil.showLog("MUVI", "CODE");
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                contentDetailsInput.setAuthToken(authTokenStr);
+                contentDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                 contentDetailsInput.setPermalink(permalinkStr);
                 contentDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                 contentDetailsInput.setCountry(preferenceManager.getCountryCodeFromPref());
@@ -5325,7 +5331,7 @@ MonetizationHandler monetizationHandler;
     public void GetReviewDetails() {
 
         ViewContentRatingInputModel viewContentRatingInputModel = new ViewContentRatingInputModel();
-        viewContentRatingInputModel.setAuthToken(authTokenStr);
+        viewContentRatingInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
         viewContentRatingInputModel.setUser_id(preferenceManager.getUseridFromPref());
         viewContentRatingInputModel.setContent_id(movieIdStr.trim());
         viewContentRatingInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
@@ -5341,7 +5347,7 @@ MonetizationHandler monetizationHandler;
             if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
                 if (NetworkStatus.getInstance().isConnected(this)) {
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -5382,7 +5388,7 @@ MonetizationHandler monetizationHandler;
                     LogUtil.showLog("MUVI", "VV VV VV");
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -5413,7 +5419,7 @@ MonetizationHandler monetizationHandler;
     private void callValidateUserAPI(){
         Log.v("MUVI", "validate user details");
         ValidateUserInput validateUserInput = new ValidateUserInput();
-        validateUserInput.setAuthToken(authTokenStr);
+        validateUserInput.setAuthToken(preferenceManager.getAuthToken().trim());
         validateUserInput.setUserId(preferenceManager.getUseridFromPref());
         validateUserInput.setMuviUniqueId(movieUniqueId.trim());
         validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());

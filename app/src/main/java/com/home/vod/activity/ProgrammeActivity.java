@@ -288,7 +288,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
         useridStr = preferenceManager.getUseridFromPref();
 
-        contentDetailsInput.setAuthToken(authTokenStr);
+        contentDetailsInput.setAuthToken(preferenceManager.getAuthToken().trim());
         if (preferenceManager != null) {
             String countryPref = preferenceManager.getCountryCodeFromPref();
             contentDetailsInput.setCountry(countryPref);
@@ -318,7 +318,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
                     if (isFavorite == 1) {
 
                         DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
-                        deleteFavInputModel.setAuthTokenStr(authTokenStr);
+                        deleteFavInputModel.setAuthTokenStr(preferenceManager.getAuthToken().trim());
                         deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
                         deleteFavInputModel.setMovieUniqueId(movieUniqueId);
                         deleteFavInputModel.setIsEpisode(isEpisode);
@@ -331,7 +331,7 @@ public class ProgrammeActivity extends AppCompatActivity implements GetContentDe
                     } else {
                         LogUtil.showLog("MUVI", "favorite");
                         AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-                        addToFavInputModel.setAuthToken(authTokenStr);
+                        addToFavInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                         addToFavInputModel.setMovie_uniq_id(movieUniqueId);
                         addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
                         addToFavInputModel.setIsEpisodeStr(isEpisode);

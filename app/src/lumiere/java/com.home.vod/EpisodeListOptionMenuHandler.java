@@ -122,7 +122,6 @@ public class EpisodeListOptionMenuHandler{
 
 
 
-
             logout_menu.setVisible(true);
 
 

@@ -278,7 +278,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         }
                         checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
                         checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
-                        checkDeviceInput.setAuthToken(authTokenStr);
+                        checkDeviceInput.setAuthToken(preferenceManager.getAuthToken());
                         checkDeviceInput.setUser_id(preferenceManager.getUseridFromPref());
                         checkDeviceInput.setDevice_type("1");
                         checkDeviceInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
@@ -515,7 +515,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 if (NetworkStatus.getInstance().isConnected(this)) {
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                     getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
                     getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
                     getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
@@ -763,7 +763,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                                     //  This Code Is Added For Video Log By Bibhu..
 
-                                    jsonObj.put("authToken", authTokenStr);
+                                    jsonObj.put("authToken", preferenceManager.getAuthToken());
                                     jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                                     jsonObj.put("ip_address", ipAddressStr.trim());
                                     jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -840,7 +840,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                                     //  This Code Is Added For Video Log By Bibhu..
 
-                                    jsonObj.put("authToken", authTokenStr);
+                                    jsonObj.put("authToken", preferenceManager.getAuthToken());
                                     jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                                     jsonObj.put("ip_address", ipAddressStr.trim());
                                     jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -1084,7 +1084,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", authTokenStr);
+                jsonObj.put("authToken", preferenceManager.getAuthToken());
                 jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -1162,7 +1162,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", authTokenStr);
+                jsonObj.put("authToken", preferenceManager.getAuthToken());
                 jsonObj.put("user_id", preferenceManager.getUseridFromPref());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
@@ -1872,7 +1872,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                     LogUtil.showLog("MUVI", "activity_login valid");
                     Login_input login_input = new Login_input();
-                    login_input.setAuthToken(authTokenStr);
+                    login_input.setAuthToken(preferenceManager.getAuthToken());
                     login_input.setEmail(regEmailStr);
                     login_input.setPassword(regPasswordStr);
                     login_input.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
@@ -3934,7 +3934,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 pDialog = null;
             }
             SocialAuthInputModel socialAuthInputModel = new SocialAuthInputModel();
-            socialAuthInputModel.setAuthToken(authTokenStr);
+            socialAuthInputModel.setAuthToken(preferenceManager.getAuthToken());
             socialAuthInputModel.setName(fbName.trim());
             socialAuthInputModel.setEmail(fbEmail.trim());
             socialAuthInputModel.setPassword("");
@@ -4158,7 +4158,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         }
                         checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
                         checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
-                        checkDeviceInput.setAuthToken(authTokenStr);
+                        checkDeviceInput.setAuthToken(preferenceManager.getAuthToken());
                         checkDeviceInput.setUser_id(preferenceManager.getUseridFromPref());
                         checkDeviceInput.setDevice_type("1");
                         checkDeviceInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
@@ -4173,7 +4173,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             if (NetworkStatus.getInstance().isConnected(this)) {
                                 if (Util.dataModel.getIsFreeContent() == 1) {
                                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                                     getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
                                     getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
                                     getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
@@ -4531,7 +4531,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                         // Call Api For Simultaneous Logout
                         SimultaneousLogoutInput simultaneousLogoutInput = new SimultaneousLogoutInput();
-                        simultaneousLogoutInput.setAuthToken(authTokenStr);
+                        simultaneousLogoutInput.setAuthToken(preferenceManager.getAuthToken());
                         simultaneousLogoutInput.setDevice_type("1");
                         simultaneousLogoutInput.setEmail_id(regEmailStr);
                         GetSimultaneousLogoutAsync asynSimultaneousLogout = new GetSimultaneousLogoutAsync(simultaneousLogoutInput, LoginActivity.this, LoginActivity.this);
@@ -5049,7 +5049,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     if (NetworkStatus.getInstance().isConnected(this)) {
                         if (Util.dataModel.getIsFreeContent() == 1) {
                             GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                            getVideoDetailsInput.setAuthToken(authTokenStr);
+                            getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                             getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                             getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                             getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
@@ -5253,7 +5253,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
         LogUtil.showLog("MUVI3", "logout Called");
         LogoutInput logoutInput = new LogoutInput();
-        logoutInput.setAuthToken(authTokenStr);
+        logoutInput.setAuthToken(preferenceManager.getAuthToken());
         logoutInput.setLogin_history_id(loginHistoryIdStr);
         logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, this, this);
@@ -5427,7 +5427,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             gmailLoginInput.setGmail_userid(AuthId);
             gmailLoginInput.setProfile_image(AuthImageUrl);
             gmailLoginInput.setPassword("");
-            gmailLoginInput.setAuthToken(authTokenStr);
+            gmailLoginInput.setAuthToken(preferenceManager.getAuthToken());
             AsyncGmailReg asyncGmailReg = new AsyncGmailReg(gmailLoginInput, this, this);
             asyncGmailReg.executeOnExecutor(threadPoolExecutor);
         }
@@ -5726,7 +5726,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     CheckDeviceInput checkDeviceInput = new CheckDeviceInput();
                     checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
                     checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
-                    checkDeviceInput.setAuthToken(authTokenStr);
+                    checkDeviceInput.setAuthToken(preferenceManager.getAuthToken());
                     checkDeviceInput.setUser_id(preferenceManager.getUseridFromPref());
                     checkDeviceInput.setDevice_type("1");
                     checkDeviceInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
@@ -5817,7 +5817,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         this.fbEmail = fbEmail;
         this.fbName = fbName;
         CheckFbUserDetailsInput checkFbUserDetailsInput = new CheckFbUserDetailsInput();
-        checkFbUserDetailsInput.setAuthToken(authTokenStr);
+        checkFbUserDetailsInput.setAuthToken(preferenceManager.getAuthToken());
         checkFbUserDetailsInput.setFb_userid(fbUserId.trim());
         asynCheckFbUserDetails = new CheckFbUserDetailsAsyn(checkFbUserDetailsInput, LoginActivity.this, LoginActivity.this);
         asynCheckFbUserDetails.executeOnExecutor(threadPoolExecutor);
@@ -5830,7 +5830,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             if ((validUserStr.trim().equalsIgnoreCase("OK")) || (validUserStr.trim().matches("OK")) || (validUserStr.trim().equals("OK"))) {
                 if (NetworkStatus.getInstance().isConnected(this)) {
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
@@ -5883,7 +5883,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     Log.v("MUVI", "VV VV VV");
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                    getVideoDetailsInput.setAuthToken(preferenceManager.getAuthToken());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
