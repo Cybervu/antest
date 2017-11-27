@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="appBackgroundColor">#fff</color>
+    <color name="appBackgroundColor">#FEF0E3</color>
     <color name="videotextColor">#784128</color>
     <color name="videotitleColor">#000000</color>
     <color name="loginTextViewColor">#784128</color>
-    <color name="buttonTextColor">#F1F3DC</color>
+    <color name="buttonTextColor">#fff</color>
     <color name="casttextColor">#60008C</color>
-    <color name="borderColor">#60008C</color>
+    <color name="borderColor">#784128</color>
     <color name="checkboxcolor">#000</color>
     <color name="toolbarTitleColor">#fff</color>
     <color name="aboutustestcolor">#fff</color>
@@ -32,9 +32,9 @@
     <color name="edit_color2">#00FFFFFF</color>
     <color name="alreadyMemberTextColor">#757575</color>
     <color name="alreadyHaveALoginButtonTextColor">#60008C</color>
-    <color name="border_color">#60008C</color>
+    <color name="border_color">#784128</color>
     <color name="cancel_button_text_color">#264177</color>
-    <color name="castCrewTitleTextColor">#60008C</color>
+    <color name="castCrewTitleTextColor">#784128</color>
     <color name="subtitleListColor">#fff</color>
     <color name="pageTitleColor">#784128</color>
     <color name="preOrderButtonTextColor">#DDD</color>
@@ -43,7 +43,7 @@
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#50696969</color>
     <color name="filtertextcolor">#5c6873</color>
-    <color name="nav_drawer_lineColor">#000</color>
+    <color name="nav_drawer_lineColor">#784128</color>
     <color name="nav_lineColor">#264177</color>
     <color name="nav_drawer_text_Color">#000000</color>
     <color name="button_background">#E89B4C</color>
@@ -58,11 +58,11 @@
     <color name="censorRatingBackground">#80000000</color>
     <color name="loader_color">#60008C</color>
     <color name="hint_background">#60008C</color>
-    <color name="noInternetColor">#5c6873</color>
+    <color name="noInternetColor">#000</color>
     <color name="editTextColor">#784128</color>
     <color name="voucher_inactive_button">#60008C</color>
     <color name="movieTitleColor">#fff</color>
-    <color name="cast_crew_titleCololr">#60008C</color>
+    <color name="cast_crew_titleCololr">#784128</color>
     <color name="videoTitleTextColor">#000</color>
     <color name="videomovieTitleColor">#3f444a</color>
     <color name="resumePopupColor">#fff</color>
@@ -82,7 +82,7 @@
 
     <color name="disableTextColor">#50757575</color>
     <color name="OsTextColor">#757575</color>
-    <color name="cast_crew_textcolor">#60008C</color>
+    <color name="cast_crew_textcolor">#784128</color>
     <color name="purchaseBackgroundColor">#3f444a</color>
     <color name="purchaseTextColor">#757575</color>
 

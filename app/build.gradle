@@ -362,18 +362,18 @@ android {
             dimension 'vendor'
             applicationId 'com.release.canal'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            buildConfigField "String", "AUTH_TOKEN", "\"398fe175085c765637c0dc4c02acb3fa\""
             targetSdkVersion 23
             versionCode 3
             versionName '1.0.2'
         }
         mikado_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
         mikado_Prod_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
         }
     }
 }

@@ -47,7 +47,7 @@
                 android:paddingLeft="@dimen/login_new_user_padding"
                 android:paddingTop="@dimen/Login_drawing_padding"
                 android:text=""
-                android:textColor="@color/contactFormTitle"
+                android:textColor="@color/pageTitleColor"
                 android:textSize="@dimen/vdiotitle1_text_size" />
 
             <EditText
@@ -103,7 +103,7 @@
                 android:id="@+id/submit_cont"
                 android:layout_width="@dimen/submitcontact_width"
                 android:layout_height="@dimen/submitcontact_height"
-                android:layout_gravity="center"
+                android:layout_gravity="end"
                 android:layout_marginLeft="@dimen/ppv_margin"
                 android:layout_marginRight="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/payment_margin_btn_top"
