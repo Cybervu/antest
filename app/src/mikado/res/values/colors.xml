@@ -41,12 +41,12 @@
     <color name="spinnerDropDownListColor">#fff</color>
     <color name="navlogobackgroundcolor">#FEF0E3</color>
     <color name="languagePopupColor">#fff</color>
-    <color name="languagePopupFadeColor">#50696969</color>
+    <color name="languagePopupFadeColor">#FEF0E3</color>
     <color name="filtertextcolor">#5c6873</color>
     <color name="nav_drawer_lineColor">#784128</color>
     <color name="nav_lineColor">#264177</color>
     <color name="nav_drawer_text_Color">#000000</color>
-    <color name="button_background">#E89B4C</color>
+    <color name="button_background">#784128</color>
     <color name="button_background_plan_textview">#264177</color>
     <color name="cancel_button_background">#DDD</color>
     <color name="pre_order_button_background">#fff</color>
