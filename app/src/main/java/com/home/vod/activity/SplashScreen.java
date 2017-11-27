@@ -94,15 +94,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private ArrayList<String> genreValueArrayList = new ArrayList<String>();
     private String user_Id = "", email_Id = "", isSubscribed = "0";
 
- /*   private boolean isPlanlistAsyncComleted = false;
-    private boolean isRegEnableAsyncComleted = false;
-    private boolean isLanguagelistAsyncComleted = false;
-    private boolean isTranslateAsyncComleted = false;
-    private boolean isGenreAsyncComleted = false;
-    private boolean isProfileAsyncComleted = false;*/
-
-    //============================Added For FCM===========================//
-    Timer GoogleIdGeneraterTimer;
+     Timer GoogleIdGeneraterTimer;
 
     /*Asynctask on background thread*/
     String ipAddressStr;
