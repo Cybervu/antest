@@ -7,6 +7,7 @@ package com.home.apisdk.apiController;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.home.apisdk.APIUrlConstant;
 import com.home.apisdk.apiModel.FcmRegistrationDetailsInputModel;
@@ -103,10 +104,14 @@ public class FcmRegistrationDetailsAsynTask extends AsyncTask<FcmRegistrationDet
             httppost.addHeader(HeaderConstants.DEVICE_ID, this.fcmRegistrationDetailsInputModel.getDevice_id().trim());
             httppost.addHeader(HeaderConstants.FCM_TOKEN, this.fcmRegistrationDetailsInputModel.getFcm_token().trim());
             httppost.addHeader(HeaderConstants.DEVICE_TYPE, "1");
+            Log.v("ANU","fcmRegistrationDetailsInputModel.getAuthToken().trim()===="+fcmRegistrationDetailsInputModel.getAuthToken().trim());
+            Log.v("ANU","fcmRegistrationDetailsInputModel.getDevice_id().trim()===="+fcmRegistrationDetailsInputModel.getDevice_id().trim());
+            Log.v("ANU","fcmRegistrationDetailsInputModel.getFcm_token().trim()===="+fcmRegistrationDetailsInputModel.getFcm_token().trim());
 
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
+                Log.v("ANU","responseStr===="+responseStr);
 
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {

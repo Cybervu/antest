@@ -69,7 +69,7 @@ public class RegisterUIHandler {
 
 
     }
-    public void setTermsTextView(LanguagePreference languagePreference){
+    public void setTermsTextView(LanguagePreference languagePreference, final PreferenceManager preferenceManager){
         termsTextView1.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
         termsTextView.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
         FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName);
@@ -78,7 +78,7 @@ public class RegisterUIHandler {
         termsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://cmaxtv.com/politicas-de-privacidad"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(preferenceManager.getPrivacy_policy_url()));
                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 context.startActivity(browserIntent);
             }

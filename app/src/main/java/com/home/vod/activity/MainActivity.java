@@ -813,6 +813,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
 
         preferenceManager.setPrivacy_policy_url(privacy_policy_url);
+        Log.v("ANU","pp===="+privacy_policy_url);
 
         FcmRegistrationDetailsInputModel fcmRegistrationDetailsInputModel = new FcmRegistrationDetailsInputModel();
         fcmRegistrationDetailsInputModel.setAuthToken(preferenceManager.getAuthToken().trim());

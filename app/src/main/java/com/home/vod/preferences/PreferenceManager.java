@@ -182,7 +182,7 @@ public class PreferenceManager {
     }
 
     public String getSharedPref() {
-        return mSharedPreferences.getString(SHARED_PREF,null);
+        return mSharedPreferences.getString(SHARED_PREF,"0");
     }
 
     public void setSharedPref(String s) {
@@ -191,7 +191,7 @@ public class PreferenceManager {
     }
 
     public String getAuthToken() {
-        return mSharedPreferences.getString(authToken,null);
+        return mSharedPreferences.getString(authToken,"0");
     }
 
     public void setAuthToken(String s) {
@@ -209,13 +209,14 @@ public class PreferenceManager {
     }
 
     public String getPrivacy_policy_url() {
-        return mSharedPreferences.getString(privacy_policy_url,null);
+        return mSharedPreferences.getString(privacy_policy_url,"0");
     }
 
-    public void setPrivacy_policy_url(String s) {
-        mEditor.putString(privacy_policy_url,s);
+    public void setPrivacy_policy_url(String s1) {
+        mEditor.putString(privacy_policy_url,s1);
         mEditor.commit();
     }
+
 
 
     public void clearLoginPref(){
