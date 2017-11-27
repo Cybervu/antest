@@ -25,7 +25,9 @@ public class ProgressBarHandler extends Dialog {
         View view = LayoutInflater.from(mContext).inflate(R.layout.progress_bar_layout, null);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(view);
+        getWindow().setDimAmount(0f);
         getWindow().setBackgroundDrawableResource(R.color.transparent);
+        getWindow().setDimAmount(0f);
         getWindow().setGravity(Gravity.CENTER);
         setCancelable(false);
         setCanceledOnTouchOutside(false);

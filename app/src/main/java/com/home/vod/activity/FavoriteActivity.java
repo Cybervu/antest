@@ -83,7 +83,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 
-
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
@@ -132,9 +131,9 @@ import static player.utils.Util.HAS_FAVORITE;
 import static player.utils.Util.IS_CHROMECAST;
 import static player.utils.Util.IS_OFFLINE;
 
-public class FavoriteActivity extends AppCompatActivity implements GetLanguageListAsynTask.GetLanguageListListener,ViewFavouriteAsynTask.ViewFavouriteListener,
+public class FavoriteActivity extends AppCompatActivity implements GetLanguageListAsynTask.GetLanguageListListener, ViewFavouriteAsynTask.ViewFavouriteListener,
         LogoutAsynctask.LogoutListener, GetTranslateLanguageAsync.GetTranslateLanguageInfoListener
-        ,DeleteFavAsync.DeleteFavListener{
+        , DeleteFavAsync.DeleteFavListener {
 
     public static ProgressBarHandler progressBarHandler;
     String email, id;
@@ -212,7 +211,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     PreferenceManager preferenceManager;
     //Adapter for GridView
     private FavoriteAdapter customGridAdapter;
-    boolean a=false;
+    boolean a = false;
 
 
     //Model for GridView
@@ -254,13 +253,13 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
         }
 
-        loggedInStr =preferenceManager.getUseridFromPref();
-        episodeListOptionMenuHandler=new EpisodeListOptionMenuHandler(this);
+        loggedInStr = preferenceManager.getUseridFromPref();
+        episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
 
         isLogin = preferenceManager.getLoginFeatureFromPref();
 
         sectionTitle = (TextView) findViewById(R.id.sectionTitle);
-        FontUtls.loadFont(FavoriteActivity.this, getResources().getString(R.string.regular_fonts),sectionTitle);
+        FontUtls.loadFont(FavoriteActivity.this, getResources().getString(R.string.regular_fonts), sectionTitle);
         if (getIntent().getStringExtra("sectionName") != null) {
             sectionName = getIntent().getStringExtra("sectionName");
             sectionTitle.setText(sectionName);
@@ -319,8 +318,8 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                a=true;
-                index = i  ;
+                a = true;
+                index = i;
                 if (customGridAdapter.getItem(i).isSelected() == false) {
 
                     customGridAdapter.getItem(i).setSelected(true);
@@ -328,10 +327,10 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
                     data_send = itemData.get(i);
 
-                    String url =data_send.getImage();
+                    String url = data_send.getImage();
 
 
-                }else{
+                } else {
                     customGridAdapter.getItem(i).setSelected(false);
 
                 }
@@ -352,19 +351,18 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 String moviePermalink = item.getPermalink();
 
 
-                LogUtil.showLog("bibhu","moviePermalink ="+moviePermalink);
+                LogUtil.showLog("bibhu", "moviePermalink =" + moviePermalink);
                 String movieTypeId = item.getVideoTypeId();
-                if (a){
-                    a=false;
+                if (a) {
+                    a = false;
                     return;
-                }
-                else{
+                } else {
 
                     if (moviePermalink.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(FavoriteActivity.this);
                         dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
                         dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
-                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK,DEFAULT_BUTTON_OK), null);
+                        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                         dlgAlert.setCancelable(false);
                         dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                                 new DialogInterface.OnClickListener() {
@@ -400,7 +398,6 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                         }
                     }
                 }
-
 
 
             }
@@ -461,10 +458,8 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                             viewFavouriteInputModel.setAuthToken(authTokenStr);
                             viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
-                            asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,FavoriteActivity.this,FavoriteActivity.this);
+                            asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel, FavoriteActivity.this, FavoriteActivity.this);
                             asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
-
-
 
 
                             scrolling = false;
@@ -514,23 +509,19 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         scrolling = false;
 
 
-        LogUtil.showLog("MUVI","favorite calling");
+        LogUtil.showLog("MUVI", "favorite calling");
         ViewFavouriteInputModel viewFavouriteInputModel = new ViewFavouriteInputModel();
         viewFavouriteInputModel.setAuthToken(authTokenStr);
         viewFavouriteInputModel.setUser_id(preferenceManager.getUseridFromPref());
 
-        asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel,FavoriteActivity.this,FavoriteActivity.this);
+        asyncViewFavorite = new ViewFavouriteAsynTask(viewFavouriteInputModel, FavoriteActivity.this, FavoriteActivity.this);
         asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
 
-        LogUtil.showLog("MUVI","authtokenn = "+ authTokenStr);
-        LogUtil.showLog("MUVI","user id = "+preferenceManager.getUseridFromPref());
-
-
+        LogUtil.showLog("MUVI", "authtokenn = " + authTokenStr);
+        LogUtil.showLog("MUVI", "user id = " + preferenceManager.getUseridFromPref());
 
 
     }
-
-
 
 
     @Override
@@ -583,7 +574,6 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     }
 
 
-
     @Override
     public void onLogoutPreExecuteStarted() {
         pDialog = new ProgressBarHandler(FavoriteActivity.this);
@@ -604,7 +594,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         if (code > 0) {
             if (code == 200) {
                 preferenceManager.clearLoginPref();
-                if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION,DEFAULT_IS_ONE_STEP_REGISTRATION)
+                if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
                     final Intent startIntent = new Intent(FavoriteActivity.this, SplashScreen.class);
                     runOnUiThread(new Runnable() {
@@ -624,7 +614,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(startIntent);
-                            Toast.makeText(FavoriteActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS,DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
+                            Toast.makeText(FavoriteActivity.this, languagePreference.getTextofLanguage(LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
                             finish();
 
                         }
@@ -682,7 +672,6 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     }
 
 
-
     @Override
     public void onViewFavouritePreExecuteStarted() {
         pDialog = new ProgressBarHandler(FavoriteActivity.this);
@@ -692,18 +681,18 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     @Override
     public void onViewFavouritePostExecuteCompleted(ArrayList<ViewFavouriteOutputModel> viewFavouriteOutputModelArray, int status, int totalItems, String message) {
 
-        LogUtil.showLog("MUVI","item data =="+ itemData);
+        LogUtil.showLog("MUVI", "item data ==" + itemData);
 
         try {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.hide();
                 pDialog = null;
             }
-        }catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
 
         }
 
-        String movieImageStr="";
+        String movieImageStr = "";
 
         for (int i = 0; i < viewFavouriteOutputModelArray.size(); i++) {
 
@@ -713,8 +702,8 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             String moviePermalinkStr = viewFavouriteOutputModelArray.get(i).getPermalink();
             isEpisodeStr = viewFavouriteOutputModelArray.get(i).getIsEpisodeStr();
             movieUniqueId = viewFavouriteOutputModelArray.get(i).getMovieId();
-            itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, "", "", moviePermalinkStr,isEpisodeStr,movieUniqueId,"",0,0,0));
-            LogUtil.showLog("MUVI","item data =="+ itemData);
+            itemData.add(new GridItem(movieImageStr, movieName, "", contentTypesId, "", "", moviePermalinkStr, isEpisodeStr, movieUniqueId, "", 0, 0, 0));
+            LogUtil.showLog("MUVI", "item data ==" + itemData);
 
         }
         if (itemData.size() <= 0) {
@@ -790,14 +779,14 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         if (pDialog.isShowing() && pDialog != null) {
             pDialog.hide();
         }
-        if (status==200) {
+        if (status == 200) {
 
-            FavoriteActivity.this.sucessMsg=sucessMsg;
+            FavoriteActivity.this.sucessMsg = sucessMsg;
             showToast();
 
             LogUtil.showLog("ANU", "REMOVED");
-            if(itemData!=null&&itemData.size()>0)
-            itemData.remove(index);
+            if (itemData != null && itemData.size() > 0)
+                itemData.remove(index);
             gridView.invalidateViews();
             customGridAdapter.notifyDataSetChanged();
             gridView.setAdapter(customGridAdapter);
@@ -943,7 +932,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     public boolean onCreateOptionsMenu(Menu menu) {
         id = preferenceManager.getUseridFromPref();
         email = preferenceManager.getEmailIdFromPref();
-        episodeListOptionMenuHandler.createOptionMenu(menu,preferenceManager,languagePreference);
+        episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
         MenuItem favorite_menu;
         favorite_menu = menu.findItem(R.id.menu_item_favorite);
         favorite_menu.setVisible(false);
@@ -1031,15 +1020,6 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     /*****************chromecvast*-------------------------------------*/
 
 
-
-
-
-
-
-
-
-
-
     /***************chromecast**********************/
     @Override
     protected void onResume() {
@@ -1070,6 +1050,12 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 startActivity(loginIntent);
                 // Not implemented here
                 return false;
+            case R.id.action_mydownload:
+
+                Intent mydownload = new Intent(FavoriteActivity.this, MyDownloads.class);
+                startActivity(mydownload);
+                // Not implemented here
+                return false;
             case R.id.action_register:
 
                 Intent registerIntent = new Intent(FavoriteActivity.this, RegisterActivity.class);
@@ -1083,7 +1069,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 Default_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
                 Previous_Selected_Language = languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE);
 
-                if (languageModel!=null && languageModel.size() > 0){
+                if (languageModel != null && languageModel.size() > 0) {
 
 
                     ShowLanguagePopup();
@@ -1256,12 +1242,11 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                 if (!Previous_Selected_Language.equals(Default_Language)) {
 
 
-
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
                     languageListInputModel.setAuthToken(authTokenStr);
                     languageListInputModel.setLangCode(Default_Language);
 
-                    GetTranslateLanguageAsync getTranslateLanguageAsync = new GetTranslateLanguageAsync(languageListInputModel,FavoriteActivity.this,FavoriteActivity.this);
+                    GetTranslateLanguageAsync getTranslateLanguageAsync = new GetTranslateLanguageAsync(languageListInputModel, FavoriteActivity.this, FavoriteActivity.this);
                     getTranslateLanguageAsync.executeOnExecutor(threadPoolExecutor);
 
                 }
@@ -1326,7 +1311,6 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     }
 
 
-
     public interface ClickListener1 {
         void onClick(View view, int position);
 
@@ -1334,10 +1318,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
     }
 
 
-
-
-
-    public  void removeFavorite(GridItem gridItem,int pos){
+    public void removeFavorite(GridItem gridItem, int pos) {
         index = pos;
         movieUniqueId = gridItem.getMovieUniqueId();
 
@@ -1347,13 +1328,13 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         deleteFavInputModel.setMovieUniqueId(movieUniqueId);
         deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
 
-        DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel,FavoriteActivity.this,FavoriteActivity.this);
+        DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, FavoriteActivity.this, FavoriteActivity.this);
         deleteFavAsync.executeOnExecutor(threadPoolExecutor);
 
 
     }
-    public void showToast()
-    {
+
+    public void showToast() {
 
         Context context = getApplicationContext();
         // Create layout inflator object to inflate toast.xml file
@@ -1361,7 +1342,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
 
         // Call toast.xml file for toast layout
         View toastRoot = inflater.inflate(R.layout.custom_toast, null);
-        TextView customToastMsg=(TextView) toastRoot.findViewById(R.id.toastMsg) ;
+        TextView customToastMsg = (TextView) toastRoot.findViewById(R.id.toastMsg);
         customToastMsg.setText(sucessMsg);
         Toast toast = new Toast(context);
 

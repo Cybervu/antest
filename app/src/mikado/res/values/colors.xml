@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="appBackgroundColor">#fff</color>
+    <color name="videotextColor">#784128</color>
+    <color name="videotitleColor">#000000</color>
+    <color name="loginTextViewColor">#784128</color>
+    <color name="buttonTextColor">#F1F3DC</color>
+    <color name="casttextColor">#60008C</color>
+    <color name="borderColor">#60008C</color>
+    <color name="checkboxcolor">#000</color>
+    <color name="toolbarTitleColor">#fff</color>
+    <color name="aboutustestcolor">#fff</color>
+    <color name="lollipop_spiner_color">#e2e1e1</color>
+    <color name="lollipop_spiner_color2">#7a7a7a</color>
+    <color name="spinner_card_color">#FF0000</color>
+    <color name="style_circular_color">#999999</color>
+    <color name="style_circular_color_2">#60008C</color>
+    <color name="spinner_card_color2">#FAFAFA</color>
+    <color name="forgotPasswordTextViewColor">#60008C</color>
+    <color name="iv_check_box_default_color">#5c6873</color>
+    <color name="layout_background_color">#fdf3f3</color>
+    <color name="login_new_user_text_color">#737373</color>
+    <color name="card_backgroud_drawable">#303030</color>
+    <color name="edit_text_background">#EDEDED</color>
+    <color name="ic_radio_button_default">#5c6873</color>
+    <color name="favorite_color">#878282</color>
+    <color name="favorite_unselected_color">#a30c0c</color>
+    <color name="sign_up_text_color">#60008C</color>
+    <color name="edit_color">#dadada</color>
+    <color name="hint_color">#8e8e8e</color>
+    <color name="edit_color2">#00FFFFFF</color>
+    <color name="alreadyMemberTextColor">#757575</color>
+    <color name="alreadyHaveALoginButtonTextColor">#60008C</color>
+    <color name="border_color">#60008C</color>
+    <color name="cancel_button_text_color">#264177</color>
+    <color name="castCrewTitleTextColor">#60008C</color>
+    <color name="subtitleListColor">#fff</color>
+    <color name="pageTitleColor">#784128</color>
+    <color name="preOrderButtonTextColor">#DDD</color>
+    <color name="spinnerDropDownListColor">#fff</color>
+    <color name="navlogobackgroundcolor">#FEF0E3</color>
+    <color name="languagePopupColor">#fff</color>
+    <color name="languagePopupFadeColor">#50696969</color>
+    <color name="filtertextcolor">#5c6873</color>
+    <color name="nav_drawer_lineColor">#000</color>
+    <color name="nav_lineColor">#264177</color>
+    <color name="nav_drawer_text_Color">#000000</color>
+    <color name="button_background">#E89B4C</color>
+    <color name="button_background_plan_textview">#264177</color>
+    <color name="cancel_button_background">#DDD</color>
+    <color name="pre_order_button_background">#fff</color>
+    <color name="fb_button_background">#3b5998</color>
+    <color name="selected_color">#000</color>
+    <color name="unselected_color">#fff</color>
+
+    <color name="filter_text_color">#000</color>
+    <color name="censorRatingBackground">#80000000</color>
+    <color name="loader_color">#60008C</color>
+    <color name="hint_background">#60008C</color>
+    <color name="noInternetColor">#5c6873</color>
+    <color name="editTextColor">#784128</color>
+    <color name="voucher_inactive_button">#60008C</color>
+    <color name="movieTitleColor">#fff</color>
+    <color name="cast_crew_titleCololr">#60008C</color>
+    <color name="videoTitleTextColor">#000</color>
+    <color name="videomovieTitleColor">#3f444a</color>
+    <color name="resumePopupColor">#fff</color>
+    <color name="dividerColor">#264177</color>
+    <color name="playerColor">#000000</color>
+    <color name="playPauseColor">#00000000</color>
+    <color name="waterMarkTextColor">#80ffffff</color>
+    <color name="seekTimeTextColor">#80ffffff</color>
+    <color name="subTitleTextColor">#F1F3DC</color>
+    <color name="totalTimeTxtColor">#ffffff</color>
+    <color name="contentTitleColor">#ffffff</color>
+    <color name="languageTextColor">#000</color>
+    <color name="spinnerTextColor">#fff</color>
+    <color name="filterBgColor">#fff</color>
+    <color name="alertPopupColor">#fff</color>
+    <color name="contactFormTitle">#333</color>
+
+    <color name="disableTextColor">#50757575</color>
+    <color name="OsTextColor">#757575</color>
+    <color name="cast_crew_textcolor">#60008C</color>
+    <color name="purchaseBackgroundColor">#3f444a</color>
+    <color name="purchaseTextColor">#757575</color>
+
+    <!-- status bar color-->
+    <color name="colorPrimary">#5c3c1d</color>
+
+    <color name="colorPrimaryDark">#1a1a1a</color>
+    <color name="textColorPrimary">#000000</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- movie Detais Page color -->
+
+    <color name="paragraph_text">#757575</color>
+    <color name="title">#000000</color>
+    <color name="button_bg">#913b28</color>
+    <color name="watchnow_button_bg">#FFFFFF</color>
+    <color name="watchnow_button_title">#da241a</color>
+    <color name="button_title">#FFFFFF</color>
+
+    <!-- Overlay color-->
+    <color name="color_overlay_bar">#000000</color>
+    <color name="progressdialog_showtitle">#db6715</color>
+
+
+    <!-- loading, checkbox color-->
+    <color name="colorAccent">#4f1114</color>
+    <color name="blue">#00abea</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+
+    <color name="even">#FFFFFF</color>
+    <color name="odd">#eeeeee</color>
+    <color name="text_color">#000000</color>
+    <integer-array name="colors">
+        <item>@color/holo_blue_dark</item>
+        <item>@color/holo_yellow_dark</item>
+        <item>@color/holo_green_dark</item>
+        <item>@color/holo_purple_dark</item>
+        <item>@color/holo_red_dark</item>
+    </integer-array>
+
+    <integer-array name="gplus_colors">
+        <item>@color/gplus_color_1</item>
+        <item>@color/gplus_color_2</item>
+        <item>@color/gplus_color_3</item>
+        <item>@color/gplus_color_4</item>
+    </integer-array>
+
+    <integer-array name="pocket_bar_colors">
+        <item>@color/pocket_color_1</item>
+        <item>@color/pocket_color_1</item>
+        <item>@color/pocket_color_1</item>
+        <item>@color/pocket_color_1</item>
+        <item>@color/pocket_color_2</item>
+        <item>@color/pocket_color_2</item>
+        <item>@color/pocket_color_2</item>
+        <item>@color/pocket_color_2</item>
+        <item>@color/pocket_color_3</item>
+        <item>@color/pocket_color_3</item>
+        <item>@color/pocket_color_3</item>
+        <item>@color/pocket_color_3</item>
+        <item>@color/pocket_color_4</item>
+        <item>@color/pocket_color_4</item>
+        <item>@color/pocket_color_4</item>
+        <item>@color/pocket_color_4</item>
+    </integer-array>
+
+    <integer-array name="pocket_background_colors">
+        <item>@color/pocket_color_1</item>
+        <item>@color/pocket_color_2</item>
+        <item>@color/pocket_color_3</item>
+        <item>@color/pocket_color_4</item>
+    </integer-array>
+
+    <color name="pocket_color_1">#85edb9</color>
+    <color name="pocket_color_2">#34bdb7</color>
+    <color name="pocket_color_3">#ee4458</color>
+    <color name="pocket_color_4">#fcb74d</color>
+
+    <color name="gplus_color_1">#3e802f</color>
+    <color name="gplus_color_2">#f4b400</color>
+    <color name="gplus_color_3">#427fed</color>
+    <color name="gplus_color_4">#b23424</color>
+
+    <color name="holo_blue_dark">#0099cc</color>
+    <color name="holo_yellow_dark">#ff8800</color>
+    <color name="holo_green_dark">#669900</color>
+    <color name="holo_purple_dark">#9933cc</color>
+    <color name="holo_red_dark">#cc0000</color>
+    <color name="color_primary">#FFFFFF</color>
+    <color name="color_orange">#c94038</color>
+    <color name="color_orange1">#c94038</color>
+    <color name="color_card_background">#333</color>
+    <color name="color_date">#999</color>
+    <color name="color_description">#444</color>
+    <color name="progress_bar_loader">#3593d9</color>
+
+
+    <color name="teal_100">#FFCDD2</color>
+    <color name="teal_500">#F44336</color>
+
+    <color name="hint_text_background">#737373</color>
+    <color name="hint_text_color">#8e8e8e</color>
+    <color name="transaction_text_color">#784128</color>
+    <color name="transaction_purchase_text_color">#f4f4f4</color>
+    <color name="transaction_active_alert">#197b30</color>
+    <color name="transaction_card_color">#202020</color>
+    <color name="filter_genre_color">#353434</color>
+    <color name="content_background_color">#080808</color>
+    <color name="active_text_color">#197b30</color>
+    <color name="expired_text_color">#6c6c6c</color>
+    <color name="plan_unselected_color">#202020</color>
+    <color name="plan_unselected_plans_color">#111111</color>
+    <color name="plan_selected_color">#b5b4b4</color>
+    <color name="plan_selected__plan_color">#930f18</color>
+    <color name="purchase_details_text_color">#737373</color>
+    <color name="buttonbg">#E89B4C</color>
+    <color name="details_story_color">#784128</color>
+    <color name="nav_drawer_text_color">#525252</color>
+    <color name="bar_color">#784128</color>
+    <color name="background">#FEF0E3</color>
+    <color name="textColor">#784128</color>
+    <color name="toolbarColor">#784128</color>
+    <color name="episodeLinearColor">#f2dfcd</color>
+    <color name="textShadowColor">#333</color>
+    <color name="languagePopup">#1a1a1a</color>
+    <color name="languagePopupFade">#50696969</color>
+    <color name="languagePopupBottom">#784128</color>
+
+    <color name="episodeBackgroundColor">#f2dfcd</color>
+    <color name="leftMenuBackground">#ffffff</color>
+    <color name="genre_color">#eee</color>
+
+    <color name="fb_bg">#0d101d</color>
+    <color name="fb_text_color">#5a6068</color>
+    <color name="ccbuttonbg">#cd7c4b</color>
+    <color name="resume_title_text_color">#ffffff</color>
+    <color name="resume_popup_button_continue_bg_color">#784128</color>
+    <color name="resume_popup_button_cancel_bg_color">#DDD</color>
+    <color name="resume_popup_color">#454444</color>
+    <color name="pre_orderbutton_title">#784128</color>
+    <color name="editunselected">#dec6af</color>
+    <color name="listTitleContentColor">#ffffff</color>
+
+</resources>
