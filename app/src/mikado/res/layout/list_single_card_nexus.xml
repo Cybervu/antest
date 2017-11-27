@@ -41,7 +41,7 @@
             android:layout_width="@dimen/itemTitle_widht"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:background="@color/transparent"
+            android:background="@color/buttonbg"
             android:clickable="false"
             android:ellipsize="end"
             android:focusable="false"

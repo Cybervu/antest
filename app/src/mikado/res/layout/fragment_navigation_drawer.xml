@@ -64,13 +64,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:background="@color/leftMenuBackground"
+        android:background="@color/navlogobackgroundcolor"
         android:paddingBottom="10dp"
         />
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/textColor"
         android:layout_below="@+id/toolbar"/>
 
     <android.support.v7.widget.Toolbar

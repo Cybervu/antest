@@ -2,9 +2,9 @@
 <resources>
 
     <color name="appBackgroundColor">#fff</color>
-    <color name="videotextColor">#000000</color>
+    <color name="videotextColor">#784128</color>
     <color name="videotitleColor">#000000</color>
-    <color name="loginTextViewColor">#60008C</color>
+    <color name="loginTextViewColor">#784128</color>
     <color name="buttonTextColor">#F1F3DC</color>
     <color name="casttextColor">#60008C</color>
     <color name="borderColor">#60008C</color>
@@ -28,7 +28,7 @@
     <color name="favorite_unselected_color">#a30c0c</color>
     <color name="sign_up_text_color">#60008C</color>
     <color name="edit_color">#dadada</color>
-    <color name="hint_color">#999</color>
+    <color name="hint_color">#8e8e8e</color>
     <color name="edit_color2">#00FFFFFF</color>
     <color name="alreadyMemberTextColor">#757575</color>
     <color name="alreadyHaveALoginButtonTextColor">#60008C</color>
@@ -36,17 +36,17 @@
     <color name="cancel_button_text_color">#264177</color>
     <color name="castCrewTitleTextColor">#60008C</color>
     <color name="subtitleListColor">#fff</color>
-    <color name="pageTitleColor">#3f444a</color>
+    <color name="pageTitleColor">#784128</color>
     <color name="preOrderButtonTextColor">#DDD</color>
-    <color name="spinnerDropDownListColor">#000</color>
-    <color name="navlogobackgroundcolor">#FFFFFF</color>
+    <color name="spinnerDropDownListColor">#fff</color>
+    <color name="navlogobackgroundcolor">#FEF0E3</color>
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#50696969</color>
     <color name="filtertextcolor">#5c6873</color>
     <color name="nav_drawer_lineColor">#000</color>
     <color name="nav_lineColor">#264177</color>
     <color name="nav_drawer_text_Color">#000000</color>
-    <color name="button_background">#60008C</color>
+    <color name="button_background">#E89B4C</color>
     <color name="button_background_plan_textview">#264177</color>
     <color name="cancel_button_background">#DDD</color>
     <color name="pre_order_button_background">#fff</color>
@@ -59,7 +59,7 @@
     <color name="loader_color">#60008C</color>
     <color name="hint_background">#60008C</color>
     <color name="noInternetColor">#5c6873</color>
-    <color name="editTextColor">#5c6873</color>
+    <color name="editTextColor">#784128</color>
     <color name="voucher_inactive_button">#60008C</color>
     <color name="movieTitleColor">#fff</color>
     <color name="cast_crew_titleCololr">#60008C</color>
@@ -73,7 +73,7 @@
     <color name="seekTimeTextColor">#80ffffff</color>
     <color name="subTitleTextColor">#F1F3DC</color>
     <color name="totalTimeTxtColor">#ffffff</color>
-    <color name="contentTitleColor">#F1F3DC</color>
+    <color name="contentTitleColor">#ffffff</color>
     <color name="languageTextColor">#000</color>
     <color name="spinnerTextColor">#fff</color>
     <color name="filterBgColor">#fff</color>
@@ -214,7 +214,7 @@
     <color name="languagePopupFade">#50696969</color>
     <color name="languagePopupBottom">#784128</color>
 
-    <color name="episodeBackgroundColor">#080808</color>
+    <color name="episodeBackgroundColor">#f2dfcd</color>
     <color name="leftMenuBackground">#ffffff</color>
     <color name="genre_color">#eee</color>
 

@@ -117,7 +117,7 @@
                     android:layout_marginRight="@dimen/terms_text_view_margin_right"
                     android:clickable="true"
                     android:text="By Clicking on Register,I agree "
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/paragraph_text"
                     android:textSize="@dimen/playbtn_text_size" />
 
                 <TextView
@@ -129,8 +129,9 @@
                     android:maxLines="3"
                     android:singleLine="false"
                     android:text="terms"
-                    android:textColor="@color/button_background"
-                    android:textSize="@dimen/applybtn_text_size" />
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/applybtn_text_size"
+                    android:textStyle="bold"/>
             </LinearLayout>
 
             <Button
@@ -222,7 +223,7 @@
                     android:layout_height="@dimen/offlinebtn_height"
                     android:layout_marginRight="@dimen/ppv_margin"
                     android:text="already member"
-                    android:textColor="@color/alreadyMemberTextColor"
+                    android:textColor="@color/paragraph_text"
                     android:textSize="@dimen/alreadymember_text_size" />
 
 
@@ -236,7 +237,7 @@
                     android:maxLines="3"
                     android:singleLine="false"
                     android:text="Login"
-                    android:textColor="@color/alreadyHaveALoginButtonTextColor"
+                    android:textColor="@color/textColor"
                     android:textSize="@dimen/already_login_size"
                     android:textStyle="bold" />
 

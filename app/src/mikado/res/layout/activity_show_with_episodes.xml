@@ -264,7 +264,7 @@
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:text=""
-                        android:textColor="@color/videoTitleTextColor"
+                        android:textColor="@color/details_story_color"
                         android:textSize="@dimen/movie_videotitle_size"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:visibility="gone"
@@ -366,7 +366,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:layout_marginTop="@dimen/textColor_margin"
-                        android:textColor="@color/castCrewTitleTextColor"
+                        android:textColor="@color/transaction_text_color"
                         android:textSize="@dimen/forgot_text_size"
                         android:textStyle="bold" />
 
@@ -421,7 +421,7 @@
                     android:background="@drawable/spinner_theme"
                     android:overlapAnchor="false"
                     android:paddingRight="0dip"
-                    android:popupBackground="@color/appBackgroundColor"
+                    android:popupBackground="@color/buttonbg"
                     android:spinnerMode="dropdown"
                     android:theme="@style/applicationTheme"
                     android:visibility="gone" />

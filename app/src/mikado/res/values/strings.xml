@@ -1,19 +1,27 @@
 <resources>
-    <string name="app_name"> Magic Movies </string>
-    <string name="regular_fonts">fonts/AvenirNextLTPro-Regular.ttf</string>
-    <string name="light_fonts">fonts/AvenirNextLTProDemi.ttf</string>
-
+    <string name="app_name">Mikado Series</string>
+    <string name="regular_fonts">fonts/Anchor-Semibold.otf</string>
+    <string name="light_fonts">fonts/Anchor-Semibold.otf</string>
     <!--App Drawer-->
     <string name="action_search">Search</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-    <string name="studio_site">https://monetiser-digital.muvi.com/</string>
     <string name="title_activity_resume_popup">ResumePopupActivity</string>
     <string name="facebook_app_id">197890110740115</string>
     <string name="fb_login_protocol_scheme">fb197890110740115</string>
     <string name="fb_login_text">Login With Facebook</string>
     <string name="fb_registration_text">Register With Facebook</string>
 
+
+    <!--App Drawer-->
+
+    <string name="studio_site">http://mikadoseries.canal-vod.com/</string>
+
+    <!--
+        <string name="my_link"><a href="http://somesite.com/">Click me!</a></string>
+    -->
+    <string name="dialog_link">Afin de profiter de votre saison intégrale sur mobile :\n\n1. Veuillez-vous connecter sur le site <![CDATA[ <a href="http://mikadoseries.canal-vod.com/">mikadoseries.canal-vod.com</a>]]> avec votre ordinateur PC ou mac\n2. Créez-vous un compte\n3. Rentrez votre code promo\n4. Choisissez votre saison intégrale\n\n
+Vous pouvez désormais profiter de votre contenu sur mobile !</string>
     <!--
         <string name="facebook_app_id">143293746197101</string>
     -->

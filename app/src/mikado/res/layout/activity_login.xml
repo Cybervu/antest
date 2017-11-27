@@ -83,7 +83,7 @@
                     android:id="@+id/forgotPasswordTextView"
                     android:layout_width="@dimen/login_text_height"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/forgotPasswordTextViewColor"
+                    android:textColor="@color/textColor"
                     android:gravity="center"
                     android:maxLines="4"
                     android:textSize="@dimen/forgot_text_size" />
@@ -215,7 +215,7 @@
                     android:maxLines="3"
                     android:singleLine="false"
                     android:text="sign up"
-                    android:textColor="@color/sign_up_text_color"
+                    android:textColor="@color/textColor"
                     android:textSize="@dimen/signup_textsize"
                     android:textStyle="bold" />
             </RelativeLayout>
