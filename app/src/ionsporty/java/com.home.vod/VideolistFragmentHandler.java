@@ -18,9 +18,12 @@ public class VideolistFragmentHandler {
 
     public void handleMenuFilter(Menu menu){
 
-        MenuItem item;
+        MenuItem item,itemsearch;
         item= menu.findItem(R.id.action_filter);
+       // itemsearch=menu.findItem(R.id.action_search);
          item.setVisible(true);
+        //itemsearch.setVisible(true);
+
 
     }
 }

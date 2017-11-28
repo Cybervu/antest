@@ -158,6 +158,8 @@ public class Util {
     public static String Dwonload_pdf_rootUrl = final_pdf_url +""+ "docs/";
 
     public static boolean app_is_in_player_context = false;
+    public static ArrayList<String> drawer_collapse_expand_imageview = new ArrayList<>();
+    public static int image_compressed = 3;
 
    /*public static boolean checkNetwork(Context context) {
       ConnectivityManager cm =

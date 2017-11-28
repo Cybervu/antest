@@ -197,6 +197,7 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                         footerMenuArrayList = new ArrayList<>();
 
 
+
                         for (int i = 0; i < jsonMainMenu.length(); i++) {
                             mainMenu = new MenusOutputModel().new MainMenu();
                             footerMenu = new MenusOutputModel().new FooterMenu();
@@ -270,7 +271,7 @@ public class GetAppMenuAsync extends AsyncTask<GetMenusInputModel, Void, Void> {
                             if (jsonMainMenu.getJSONObject(i).has("child")) {
 
                                 try {
-                                    mainMenuChildArrayList=new ArrayList<MenusOutputModel.MainMenu.MainMenuChild>();
+                                    mainMenuChildArrayList= new ArrayList<>();
 
 
                                     JSONArray jsonChildNode = jsonMainMenu.getJSONObject(i).getJSONArray("child");

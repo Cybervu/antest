@@ -69,4 +69,6 @@
  <color name="navlogobackgroundcolor">#000</color>
  <color name="cast_crew_textcolor">#fff</color>
  <color name="casttextColor">#fff</color>
+ <color name="nav_lineColor">#930f18</color>
+ <color name="resumepopupcolor">#fff</color>
 </resources>

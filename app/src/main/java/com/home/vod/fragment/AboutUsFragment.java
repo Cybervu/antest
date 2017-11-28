@@ -29,6 +29,7 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.util.Constant.authTokenStr;
 
@@ -61,6 +62,9 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         View view = inflater.inflate(R.layout.fragment_about_us, container, false);
         context = getActivity();
         languagePreference = LanguagePreference.getLanguagePreference(context);
+
+
+
         progresBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         webView = (WebView) view.findViewById(R.id.aboutUsWebView);
         AboutUsInput aboutUsInput = new AboutUsInput();
