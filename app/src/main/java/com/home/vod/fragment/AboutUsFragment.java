@@ -8,13 +8,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -44,6 +48,7 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
     ProgressBarHandler pDialog;
     AboutUsAsync asyncAboutUS;
     LanguagePreference languagePreference;
+    boolean returnValue = false ;
 
 
     public AboutUsFragment() {
@@ -58,11 +63,46 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
        /* getActionBar().setTitle(getArguments().getString(""));
         setHasOptionsMenu(true);*/
 
-        View view = inflater.inflate(R.layout.fragment_about_us, container, false);
+        final View view = inflater.inflate(R.layout.fragment_about_us, container, false);
         context = getActivity();
         languagePreference = LanguagePreference.getLanguagePreference(context);
         progresBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+
+
         webView = (WebView) view.findViewById(R.id.aboutUsWebView);
+
+
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setAppCacheEnabled(true);
+//        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+
+        webView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView webView, int progress) {
+                progresBar.setVisibility(View.VISIBLE);
+              /*  view.setFocusableInTouchMode(true);
+                view.requestFocus();*/
+                if (progress == 100){
+                    progresBar.setVisibility(View.GONE);
+                  /*  view.setFocusableInTouchMode(true);
+                    view.requestFocus();*/
+                }
+            }
+        });
+
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                // Handle the error
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView webView, String url) {
+                webView.loadUrl(url);
+                return true;
+            }
+        });
+
+
         AboutUsInput aboutUsInput = new AboutUsInput();
         aboutUsInput.setAuthToken(authTokenStr);
         aboutUsInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
@@ -78,33 +118,64 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
 
         view.setFocusableInTouchMode(true);
         view.requestFocus();
-        view.setOnKeyListener(new View.OnKeyListener() {
+
+        webView.setFocusableInTouchMode(true);
+        webView.requestFocus();
+
+
+
+        webView.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-                        final Intent startIntent = new Intent(getActivity(), MainActivity.class);
+                        if (webView.canGoBack()) {
+                            webView.goBack();
+                            returnValue = true;
+                        } else {
+                            final Intent startIntent = new Intent(getActivity(), MainActivity.class);
 
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                getActivity().startActivity(startIntent);
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    getActivity().startActivity(startIntent);
+                                    getActivity().finish();
 
-                                getActivity().finish();
-
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
                 }
-                return false;
+                return returnValue;
             }
         });
 
         return view;
 
     }
+
+ /*   @Override
+    public void onStop() {
+        super.onStop();
+        Log.v("BIBHU11","onStop pressed");
+
+        if (webView.canGoBack()) {
+            webView.goBack();
+        } else {
+            final Intent startIntent = new Intent(getActivity(), MainActivity.class);
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    getActivity().startActivity(startIntent);
+                    getActivity().finish();
+
+                }
+            });
+        }
+    }*/
 
     private ActionBar getActionBar() {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
@@ -142,7 +213,7 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         int color = getResources().getColor(R.color.aboutustextcolor);
         String aboutUSTextColor = "#" + Integer.toHexString(color & 0x00FFFFFF);
         String text = "<html><head>"
-                + "<style type=\"text/css\" >body{color:"+aboutUSTextColor+";}"
+                + "<style type=\"text/css\" >body{color:" + aboutUSTextColor + ";}"
                 + "</style></head>"
                 + "<body style >"
                 + about

@@ -609,7 +609,8 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
                 FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.light_fonts), videoStoryTextView);
 
-                videoStoryTextView.setText(movieDetailsStr.trim());
+//                videoStoryTextView.setText(movieDetailsStr.trim());
+                videoStoryTextView.setText(Util.getTextViewTextFromApi(contentDetailsOutput.getStory()));
                 ResizableCustomView.doResizeTextView(ShowWithEpisodesActivity.this, videoStoryTextView, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
 
             }

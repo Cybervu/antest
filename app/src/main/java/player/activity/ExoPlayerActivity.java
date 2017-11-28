@@ -872,7 +872,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (playerModel.getVideoStory().trim() != null && !playerModel.getVideoStory().trim().matches(""))
 
         {
-            story.setText(playerModel.getVideoStory());
+//            story.setText(playerModel.getVideoStory());
+            story.setText(com.home.vod.util.Util.getTextViewTextFromApi(playerModel.getVideoStory()));
             story.setVisibility(View.VISIBLE);
             ResizableCustomView.doResizeTextView(ExoPlayerActivity.this, story, MAX_LINES, Util.getTextofLanguage(ExoPlayerActivity.this, Util.VIEW_MORE, Util.DEFAULT_VIEW_MORE), true);
         } else {
@@ -3307,7 +3308,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     }
 
     private void showSystemUI() {
-        story.setText(playerModel.getVideoStory());
+//        story.setText(playerModel.getVideoStory());
+        story.setText(com.home.vod.util.Util.getTextViewTextFromApi(playerModel.getVideoStory()));
         ResizableCustomView.doResizeTextView(ExoPlayerActivity.this, story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
 
         View decorView = getWindow().getDecorView();

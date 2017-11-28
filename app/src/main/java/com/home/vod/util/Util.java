@@ -12,9 +12,11 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -797,5 +799,20 @@ public class Util {
         inputManager.hideSoftInputFromWindow(act.getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
+
+    /**
+     * This method will return a string format text which comes form API end , if it contains any html contnet.
+     * @param input
+     * @return
+     */
+    public static String getTextViewTextFromApi(String input)
+    {
+        if (Build.VERSION.SDK_INT >= 24) {
+           return ""+(Html.fromHtml(input,Html.FROM_HTML_MODE_LEGACY)); // for 24 api and more
+        } else {
+            return ""+(Html.fromHtml(input)); // or for older api
+        }
+    }
+
 }
 
