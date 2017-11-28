@@ -3219,7 +3219,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 videoStoryTextView.setVisibility(View.VISIBLE);
                 Typeface videoGenreTextViewTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.light_fonts));
                 videoStoryTextView.setTypeface(videoGenreTextViewTypeface);
-                videoStoryTextView.setText(contentDetailsOutput.getStory());
+                videoStoryTextView.setText(Util.getTextViewTextFromApi(contentDetailsOutput.getStory()));
                 ResizableCustomView.doResizeTextView(MovieDetailsActivity.this, videoStoryTextView, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
             }
 
