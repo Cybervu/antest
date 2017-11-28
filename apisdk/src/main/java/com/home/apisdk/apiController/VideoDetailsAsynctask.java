@@ -44,7 +44,7 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
     private ArrayList<String> adnetworkid = new ArrayList<>();
     private ArrayList<String> offline_url = new ArrayList<>();
     private ArrayList<String> offline_language = new ArrayList<>();
-    private ArrayList<String> SubTitleLanguage = new ArrayList<>();
+    private ArrayList<String> subtitle_code = new ArrayList<>();
     private ArrayList<String> ResolutionUrl = new ArrayList<>();
     private String PACKAGE_NAME;
     private String message;
@@ -196,18 +196,22 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                 if (SubtitleJosnArray != null) {
                     if (SubtitleJosnArray.length() > 0) {
                         for (int i = 0; i < SubtitleJosnArray.length(); i++) {
+
+
                             SubTitleName.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
                             FakeSubTitlePath.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
-                            SubTitleLanguage.add(SubtitleJosnArray.getJSONObject(i).optString("code").trim());
+                            subtitle_code.add(SubtitleJosnArray.getJSONObject(i).optString("code").trim());
                             offline_url.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
                             offline_language.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
+
+
 
 
                         }
 
                         _video_details_output.setSubTitleName(SubTitleName);
                         _video_details_output.setFakeSubTitlePath(FakeSubTitlePath);
-                        _video_details_output.setSubTitleLanguage(SubTitleLanguage);
+                        _video_details_output.setSubTitleLanguage(subtitle_code);
                         _video_details_output.setOfflineUrl(offline_url);
                         _video_details_output.setOfflineLanguage(offline_language);
                     }
