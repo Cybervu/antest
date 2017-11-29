@@ -2083,7 +2083,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
 
         FontUtls.loadFont(ShowWithEpisodesActivity.this, getResources().getString(R.string.regular_fonts), btnmore);
 
-        btnmore.setText(languagePreference.getTextofLanguage(VIEW_ALL, DEFAULT_VIEW_ALL));
+        btnmore.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
 
         btnmore.setVisibility(View.GONE);
         playButton = (ImageView) findViewById(R.id.playButton);

@@ -167,8 +167,8 @@
 
                     <Button
                         android:id="@+id/viewTrailerButton"
-                        android:layout_width="@dimen/preorderbtn_width"
-                        android:layout_height="@dimen/preorderbtn_height"
+                        android:layout_width="@dimen/btnmore_width"
+                        android:layout_height="@dimen/btnmore_height"
                         android:layout_alignParentRight="true"
                         android:background="@drawable/button_radious"
                         android:padding="@dimen/payment_spinner_padding"

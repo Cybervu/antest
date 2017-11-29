@@ -550,6 +550,8 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, AMOUNT, DEFAULT_AMOUNT, "amount", json);
         setTranslationLanguageToPref(languagePreference, COUPON_CANCELLED, DEFAULT_COUPON_CANCELLED, "coupon_cancelled", json);
         setTranslationLanguageToPref(languagePreference, BUTTON_APPLY, DEFAULT_BUTTON_APPLY, "btn_apply", json);
+        setTranslationLanguageToPref(languagePreference, CHK_OVER_18, DEFAULT_CHK_OVER_18, "chk_over_18", json);
+
         setTranslationLanguageToPref(languagePreference, SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING, "sign_out_warning", json);
         setTranslationLanguageToPref(languagePreference, DISCOUNT_ON_COUPON, DEFAULT_DISCOUNT_ON_COUPON, "discount_on_coupon", json);
         setTranslationLanguageToPref(languagePreference, MY_LIBRARY, DEFAULT_MY_LIBRARY, "my_library", json);
@@ -612,6 +614,8 @@ public class Util {
 
         setTranslationLanguageToPref(languagePreference, LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN, "language_popup_login", json);
         setTranslationLanguageToPref(languagePreference, LOGIN, DEFAULT_LOGIN, "login", json);
+        setTranslationLanguageToPref(languagePreference, FIRST_NAME, DEFAULT_FIRST_NAME, "first_name", json);
+        setTranslationLanguageToPref(languagePreference, LAST_NAME, DEFAULT_LAST_NAME, "last_name", json);
         setTranslationLanguageToPref(languagePreference, LOGOUT, DEFAULT_LOGOUT, "logout", json);
         setTranslationLanguageToPref(languagePreference, LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS, "logout_success", json);
         setTranslationLanguageToPref(languagePreference, MY_FAVOURITE, DEFAULT_MY_FAVOURITE, "my_favourite", json);
@@ -639,11 +643,13 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, PAY_WITH_CREDIT_CARD, "", "pay_with_credit_card", json);
         setTranslationLanguageToPref(languagePreference, PAYMENT_OPTIONS_TITLE, DEFAULT_PAYMENT_OPTIONS_TITLE, "payment_options_title", json);
         setTranslationLanguageToPref(languagePreference, PLAN_NAME, DEFAULT_PLAN_NAME, "plan_name", json);
+        setTranslationLanguageToPref(languagePreference, PLAN_NAME, DEFAULT_PLAN_NAME, "plan_name", json);
         setTranslationLanguageToPref(languagePreference, ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, "activate_subscription_watch_video", json);
 
         setTranslationLanguageToPref(languagePreference, COUPON_ALERT, "", "coupon_alert", json);
         setTranslationLanguageToPref(languagePreference, VALID_CONFIRM_PASSWORD, "", "valid_confirm_password", json);
         setTranslationLanguageToPref(languagePreference, PROFILE, DEFAULT_PROFILE, "profile", json);
+        setTranslationLanguageToPref(languagePreference, BUTTON_RESET, DEFAULT_BUTTON_RESET, "profile", json);
         setTranslationLanguageToPref(languagePreference, PROFILE_UPDATED, DEFAULT_PROFILE_UPDATED, "profile_updated", json);
 
         setTranslationLanguageToPref(languagePreference, PURCHASE, DEFAULT_PURCHASE, "purchase", json);

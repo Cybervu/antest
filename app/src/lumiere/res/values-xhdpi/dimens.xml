@@ -35,7 +35,7 @@
     <dimen name="submit_text_size">16sp</dimen>
     <dimen name="listitemlayout_height">330dp</dimen>
     <dimen name="slider_height">200dp</dimen>
-    <dimen name="cancelbtn_text_size">13sp</dimen>
+    <dimen name="cancelbtn_text_size">10sp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
     <dimen name="banner_image_height">210dp</dimen>
     <dimen name="submit_height_size">45sp</dimen>

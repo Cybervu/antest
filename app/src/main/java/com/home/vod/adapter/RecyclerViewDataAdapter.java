@@ -274,10 +274,9 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
 /*
             Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
             this.btnMore.setTypeface(watchTrailerButtonTypeface);*/
-            this.btnMore.setText(languagePreference.getTextofLanguage(VIEW_ALL, DEFAULT_VIEW_ALL));
+            this.btnMore.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
             mDemoSlider = (SliderLayout) view.findViewById(R.id.sliderLayout);
             mDemoSliderLayout = (RelativeLayout) view.findViewById(R.id.sliderRelativeLayout);
-
 
             if (!firstTime) {
                 firstTime = true;

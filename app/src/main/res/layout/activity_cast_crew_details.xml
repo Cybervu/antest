@@ -57,13 +57,13 @@
 
             <Button
                 android:id="@+id/btnMore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/review_btn_width"
+                android:layout_height="@dimen/review_btn_height"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="right"
                 android:layout_marginTop="@dimen/ppv_margin"
-                android:background="@drawable/view_more_button_background"
+                android:background="@drawable/button_radious"
                 android:minHeight="@dimen/btnMore_min_height"
                 android:stateListAnimator="@null"
                 android:textAllCaps="false"
@@ -75,7 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/border_line_height"
                 android:layout_marginTop="@dimen/ppv_margin"
-                android:background="@color/border_color"
+                android:background="@color/button_background"
                 android:paddingLeft="@dimen/Login_drawing_padding"
                 android:paddingRight="@dimen/Login_drawing_padding"
 
