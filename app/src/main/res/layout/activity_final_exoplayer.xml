@@ -295,7 +295,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text=""
-                        android:textColor="@color/videoTitleTextColor"
+                        android:textColor="@color/textColor"
                         android:textSize="@dimen/videotitle_text_size"
                         android:textStyle="bold" />
 

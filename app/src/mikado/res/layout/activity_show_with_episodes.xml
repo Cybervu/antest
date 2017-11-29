@@ -437,7 +437,7 @@
                     android:stateListAnimator="@null"
                     android:padding="@dimen/payment_spinner_padding"
                     android:layout_marginRight="@dimen/ppv_margin"
-                    android:background="@color/button_background"
+                    android:background="@drawable/button_radious"
                     android:textAllCaps="false"
                     android:textColor="@color/buttonTextColor"
                     android:textSize="@dimen/preorderbtn_text_size" />

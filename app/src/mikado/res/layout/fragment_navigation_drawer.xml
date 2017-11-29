@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:background="@color/navlogobackgroundcolor"
+        android:background="@color/white"
         android:paddingBottom="10dp"
         />
     <View
