@@ -454,6 +454,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         email = preferenceManager.getEmailIdFromPref();
         episodeListOptionMenuHandler.createOptionMenu(menu, preferenceManager, languagePreference);
 
+        MenuItem filter_menu;
+        filter_menu = menu.findItem(R.id.action_filter);
+        filter_menu.setVisible(false);
         return true;
     }
 
@@ -959,7 +962,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             if (menusOutputModel.getMainMenuModel() != null && menusOutputModel.getMainMenuModel().size() > 0) {
 
                 for (MenusOutputModel.MainMenu menuListOutput : menusOutputModel.getMainMenuModel()) {
-                    LogUtil.showLog("Alok", "menuListOutputList ::" + menuListOutput.getPermalink());
+                    LogUtil.showLog("SUBHAA", "menuListOutputList ::" + menuListOutput.getTitle());
                     if (menuListOutput.getLink_type() != null && !menuListOutput.getLink_type().equalsIgnoreCase("") && menuListOutput.getLink_type().equalsIgnoreCase("0")) {
                         menuList.add(new NavDrawerItem(menuListOutput.getTitle(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getLink_type()));
                     }
@@ -972,14 +975,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
             LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
 
-            if (menusOutputModel.getFooterMenuModel() != null && menusOutputModel.getFooterMenuModel().size() > 0) {
+          /*  if (menusOutputModel.getFooterMenuModel() != null && menusOutputModel.getFooterMenuModel().size() > 0) {
                 for (MenusOutputModel.FooterMenu menuListOutput : menusOutputModel.getFooterMenuModel()) {
                     LogUtil.showLog("Alok", "footermenuListOutputList ::" + menuListOutput.getPermalink());
                     if (menuListOutput.getUrl() != null && !menuListOutput.getUrl().equalsIgnoreCase("")) {
                         menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getUrl()));
                     }
                 }
-            }
+            }*/
+            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage("Contact Us", "Contact Us"), "contactus", false, "contactus"));
 
             originalMenuList = new ArrayList<>(menuList);
 
@@ -2884,6 +2888,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         mCastContext.removeCastStateListener(mCastStateListener);
         mCastContext.getSessionManager().removeSessionManagerListener(
                 mSessionManagerListener, CastSession.class);
+       // unregisterReceiver(SUCCESS);
         super.onPause();
     }
 

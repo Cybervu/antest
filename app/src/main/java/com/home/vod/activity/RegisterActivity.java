@@ -301,7 +301,20 @@ public class RegisterActivity extends AppCompatActivity implements
                 } else {
                     if (getIntent().getStringExtra("from") != null) {
                         //** review **//*
-                        onBackPressed();
+//                        onBackPressed();
+
+                        if(Util.favorite_clicked == true) {
+
+                            Intent intent = new Intent();
+
+                            setResult(RESULT_OK, intent);
+
+                            onBackPressed();
+                        }else{
+                            onBackPressed();
+
+                        }
+
                     } else {
                         if (Util.check_for_subscription == 1) {
                             //go to subscription page
@@ -974,7 +987,19 @@ public class RegisterActivity extends AppCompatActivity implements
                 } else {
                     if (getIntent().getStringExtra("from") != null) {
                         /** review **/
-                        onBackPressed();
+                        if(Util.favorite_clicked == true) {
+
+                            Intent intent = new Intent();
+
+                            setResult(RESULT_OK, intent);
+
+                            onBackPressed();
+                        }else{
+                            onBackPressed();
+
+                        }
+
+
                     } else {
                         if (Util.check_for_subscription == 1) {
                             // Go for subscription
@@ -3196,8 +3221,6 @@ public class RegisterActivity extends AppCompatActivity implements
 
         removeFocusFromViews();
 
-
-
         finish();
         overridePendingTransition(0, 0);
     }
@@ -3587,22 +3610,38 @@ public class RegisterActivity extends AppCompatActivity implements
                     CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
                     asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                 }else{
+                    if (getIntent().getStringExtra("from") != null) {
+                        //** review **//*
+//                        onBackPressed();
 
-                    if (Util.check_for_subscription == 1) {
-                        // Go for subscription
+                        if(Util.favorite_clicked == true) {
 
-                        if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
-                            if (Util.dataModel.getIsFreeContent() == 1) {
-                                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                getVideoDetailsInput.setAuthToken(authTokenStr);
-                                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                                getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-                                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
-                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                            } else {
+                            Intent intent = new Intent();
+
+                            setResult(RESULT_OK, intent);
+
+                            onBackPressed();
+                        }else{
+                            onBackPressed();
+
+                        }
+
+                    }else {
+                        if (Util.check_for_subscription == 1) {
+                            // Go for subscription
+
+                            if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
+                                if (Util.dataModel.getIsFreeContent() == 1) {
+                                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
+                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                                } else {
                               /*  ValidateUserInput validateUserInput = new ValidateUserInput();
                                 validateUserInput.setAuthToken(authTokenStr);
                                 validateUserInput.setUserId(preferenceManager.getUseridFromPref());
@@ -3614,23 +3653,24 @@ public class RegisterActivity extends AppCompatActivity implements
                                 asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, RegisterActivity.this, RegisterActivity.this);
                                 asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
 
-                                Intent intent = new Intent();
-                                setResult(RESULT_OK,intent);
-                                finish();
+                                    Intent intent = new Intent();
+                                    setResult(RESULT_OK, intent);
+                                    onBackPressed();
+                                }
+                            } else {
+                                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                             }
-                        } else {
-                            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                        }
 
-                    } else {
-                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                        removeFocusFromViews();
-                        startActivity(intent);
-                        if (LoginActivity.loginA != null) {
-                            LoginActivity.loginA.finish();
+                        } else {
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                            removeFocusFromViews();
+                            startActivity(intent);
+                            if (LoginActivity.loginA != null) {
+                                LoginActivity.loginA.finish();
+                            }
+                            finish();
+                            overridePendingTransition(0, 0);
                         }
-                        finish();
-                        overridePendingTransition(0, 0);
                     }
                 }
 

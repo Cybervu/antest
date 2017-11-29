@@ -592,6 +592,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             playerModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
 
 
+
             if (playerModel.getVideoUrl() == null ||
                     playerModel.getVideoUrl().matches("")) {
 
@@ -614,13 +615,16 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 // condition for checking if the response has third party url or not.
                 if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
+                    Log.v("pratik","tymg=="+playerModel.getPlayPos());
+                    Log.v("pratik","tym=h="+Util.dataModel.getPlayPos());
 
-                    if (mCastSession != null && mCastSession.isConnected()) {
+                    if (mCastSession != null &&
+                            mCastSession.isConnected()) {
 
                             ///Added for resume cast watch
-                        Log.v("pratik","tym=="+Util.dataModel.getPlayPos()*1000);
+                        Log.v("pratik","tym=="+playerModel.getPlayPos()*1000);
                         if ((Util.dataModel.getPlayPos() * 1000) > 0) {
-                            Util.dataModel.setPlayPos(Util.dataModel.getPlayPos());
+                            Util.dataModel.setPlayPos(playerModel.getPlayPos());
                             Intent resumeIntent = new Intent(ProgramDetailsActivity.this, ResumePopupActivity.class);
                             startActivityForResult(resumeIntent, 1001);
                             Log.v("pratik","tym==>0");
@@ -1312,7 +1316,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         Log.v("SUBHA", "duration in time === " + Util.getCountDownStringInMinutes(Integer.parseInt(durationText)));
 
 
-        if (durationText.matches("")) {
+        if (durationText.matches("") || durationText.equalsIgnoreCase("0") ) {
             durationTitleTextView.setVisibility(View.GONE);
         } else {
 
@@ -1682,6 +1686,8 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
                     case REMOTE:
 
+                        Log.v("SUBHA","Toggle play back === played length == "+Played_Length );
+
                         loadRemoteMedia(Played_Length, true);
 
                         break;
@@ -1714,7 +1720,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                         if (mCastSession != null && mCastSession.isConnected()) {
                             // watchMovieButton.setText(getResources().getString(R.string.movie_details_cast_now_button_title));
                             loadRemoteMedia(Played_Length, true);
-
+                            Log.v("SUBHA","Toggle play back  1233 === played length == "+Played_Length );
 
                             // Utils.showQueuePopup(this, mPlayCircle, mSelectedMedia);
                         } else {
@@ -2289,7 +2295,15 @@ private void PlayThroughChromeCast(){
             jsonObj.put("user_id", preferenceManager.getUseridFromPref());
             jsonObj.put("ip_address", ipAddres.trim());
             jsonObj.put("movie_id", playerModel.getMovieUniqueId());
-            jsonObj.put("episode_id", playerModel.getEpisode_id());
+
+            if (contentTypesId == 3){
+                jsonObj.put("episode_id", playerModel.getStreamUniqueId());
+            }
+            else{
+                jsonObj.put("episode_id", playerModel.getEpisode_id());
+
+            }
+
             jsonObj.put("watch_status", watch_status_String);
 
             jsonObj.put("device_type", "2");
@@ -2299,11 +2313,9 @@ private void PlayThroughChromeCast(){
             if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                 jsonObj.put("restrict_stream_id", "0");
                 jsonObj.put("is_streaming_restriction", "1");
-                Log.v("BIBHU4", "restrict_stream_id============1");
             } else {
                 jsonObj.put("restrict_stream_id", "0");
                 jsonObj.put("is_streaming_restriction", "0");
-                Log.v("BIBHU4", "restrict_stream_id============0");
             }
 
             jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
@@ -2327,6 +2339,16 @@ private void PlayThroughChromeCast(){
             jsonObj.put("bandwidth_log_id", "0");
             jsonObj.put("video_type", "mped_dash");
             jsonObj.put("drm_bandwidth_by_sender", "0");
+
+
+            Log.v("SUBHASHREE","authTokenStr" + authTokenStr);
+            Log.v("SUBHASHREE","user_id" + preferenceManager.getUseridFromPref());
+            Log.v("SUBHASHREE","ipAddres " + ipAddres.trim());
+            Log.v("SUBHASHREE","playerModel.getMovieUniqueId()" + playerModel.getMovieUniqueId());
+            Log.v("SUBHASHREE","watch_status_String" + watch_status_String);
+            Log.v("SUBHASHREE","seek_status" + seek_status);
+            Log.v("SUBHASHREE","domain_name" + BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+
 
             //====================End=====================//
 
@@ -2368,7 +2390,7 @@ private void PlayThroughChromeCast(){
             jsonObj.put("user_id", preferenceManager.getUseridFromPref());
             jsonObj.put("ip_address", ipAddres.trim());
             jsonObj.put("movie_id", playerModel.getMovieUniqueId());
-            jsonObj.put("episode_id", playerModel.getEpisode_id());
+            jsonObj.put("episode_id", playerModel.getStreamUniqueId());
             jsonObj.put("watch_status", watch_status_String);
             jsonObj.put("device_type", "2");
             jsonObj.put("log_id", "0");
@@ -2448,11 +2470,11 @@ private void PlayThroughChromeCast(){
             if (data.getStringExtra("yes").equals("1002")) {
                 watch_status_String = "halfplay";
                 seek_status = "first_time";
-                Played_Length = Util.dataModel.getPlayPos() * 1000;
+                Played_Length =playerModel.getPlayPos() * 1000;
                 PlayThroughChromeCast();
 
             } else {
-                watch_status_String = "strat";
+                watch_status_String = "start";
                 Played_Length = 0;
                 PlayThroughChromeCast();
             }
@@ -2475,7 +2497,7 @@ private void PlayThroughChromeCast(){
 
 
             Log.v("pratik", "else conditn called");
-            watch_status_String = "strat";
+            watch_status_String = "start";
             Played_Length = 0;
             PlayThroughChromeCast();
         } else if (resultCode == RESULT_OK && requestCode == 1007) {
@@ -2485,11 +2507,11 @@ private void PlayThroughChromeCast(){
                 Log.v("pratik", "resumed...");
                 watch_status_String = "halfplay";
                 seek_status = "first_time";
-                Played_Length = Util.dataModel.getPlayPos() * 1000;
+                Played_Length = playerModel.getPlayPos() * 1000;
                 togglePlayback();
 
             } else {
-                watch_status_String = "strat";
+                watch_status_String = "start";
                 Played_Length = 0;
                 togglePlayback();
             }

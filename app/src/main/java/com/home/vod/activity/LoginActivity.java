@@ -297,7 +297,17 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                         if (getIntent().getStringExtra("from") != null) {
                             /** review **/
-                            onBackPressed();
+                            if(Util.favorite_clicked == true) {
+
+                                Intent intent = new Intent();
+
+                                setResult(RESULT_OK, intent);
+
+                                onBackPressed();
+                            }else{
+                                onBackPressed();
+
+                            }
                         } else {
                             if (Util.check_for_subscription == 1) {
                                 //go to subscription page
@@ -4088,21 +4098,38 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                     }else {
 
+                        if (getIntent().getStringExtra("from") != null) {
+                            //** review **//*
+//                        onBackPressed();
 
-                        if (Util.check_for_subscription == 1) {
-                            //go to subscription page
-                            if (NetworkStatus.getInstance().isConnected(this)) {
-                                if (Util.dataModel.getIsFreeContent() == 1) {
-                                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(authTokenStr);
-                                    getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
-                                    getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
-                                    getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
-                                    getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
-                                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
-                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                } else {
+                            if(Util.favorite_clicked == true) {
+
+                                Intent intent = new Intent();
+
+                                setResult(RESULT_OK, intent);
+
+                                onBackPressed();
+                            }else{
+                                onBackPressed();
+
+                            }
+
+                        }else {
+
+                            if (Util.check_for_subscription == 1) {
+                                //go to subscription page
+                                if (NetworkStatus.getInstance().isConnected(this)) {
+                                    if (Util.dataModel.getIsFreeContent() == 1) {
+                                        GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                                        getVideoDetailsInput.setAuthToken(authTokenStr);
+                                        getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
+                                        getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
+                                        getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
+                                        getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
+                                        getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                                        VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
+                                        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                                    } else {
                                     /*ValidateUserInput validateUserInput = new ValidateUserInput();
                                     validateUserInput.setAuthToken(authTokenStr);
                                     validateUserInput.setUserId(validateUserInput.getUserId());
@@ -4114,22 +4141,23 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
                                     asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
 
-                                    Intent intent = new Intent();
-                                    setResult(RESULT_OK,intent);
-                                    finish();
+                                        Intent intent = new Intent();
+                                        setResult(RESULT_OK, intent);
+                                        finish();
+                                    }
+                                } else {
+                                    Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                                 }
+
                             } else {
-                                Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+
+                                Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(in);
+
+                                onBackPressed();
                             }
-
-                        } else {
-
-                            Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(in);
-
-                            onBackPressed();
                         }
                     }
 
@@ -5631,7 +5659,17 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 } else {
                     if (getIntent().getStringExtra("from") != null) {
                         //** review **//*
-                        onBackPressed();
+                        if(Util.favorite_clicked == true) {
+
+                            Intent intent = new Intent();
+
+                            setResult(RESULT_OK, intent);
+
+                            onBackPressed();
+                        }else{
+                            onBackPressed();
+
+                        }
                     } else {
                         if (Util.check_for_subscription == 1) {
                             //go to subscription page

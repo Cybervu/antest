@@ -302,7 +302,7 @@
                     android:ellipsize="end"
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/itemtitle_text_size"
-                    android:layout_marginLeft="@dimen/marginRight20dp"
+                    android:layout_marginLeft="@dimen/marginleft10dp"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />

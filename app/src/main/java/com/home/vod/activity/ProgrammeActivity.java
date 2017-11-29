@@ -2041,23 +2041,9 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         Log.v("BKS", "elseclickedddddd");
-        /*loginresultcode = requestCode;
-        if (requestCode == 40500) {
-            if (resultCode == RESULT_OK) {
-                Util.favorite_clicked = false;
 
-                loggedInStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-
-                AsynLoadMovieDetails asyncViewFavorite = new AsynLoadMovieDetails();
-                asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
-            } else {
-                Log.v("BKS", "elseclickedddddd");
-                Util.favorite_clicked = false;
-            }
-
-        }*/
-//
         if (requestCode == 30060 && resultCode == RESULT_OK) {
             if (NetworkStatus.getInstance().isConnected(this)) {
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();

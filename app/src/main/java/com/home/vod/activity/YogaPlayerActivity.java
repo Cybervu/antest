@@ -1395,17 +1395,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 progressView.setVisibility(View.VISIBLE);
 
 
-                ////
+
                 preLoadVideos(contentDetailsOutputModel);
-                //added condition for check movieTrailerurl null or not .....by nihar #30-10-2017
-               /* movieUrl.replace("\\", "");
-                if (movieUrl != null) {
-                    Log.v("Niihar_url", movieUrl);
-                    emVideoView.setVideoURI(Uri.parse(movieUrl));
-
-                }*/
-
-//                emVideoView.setVideoURI(Uri.parse("https://d16wkdkbh7je0c.cloudfront.net/uploads/trailers/28506/Yoga_for_Weight_Loss.mp4?Expires=1509108246&Signature=IlwLU1x8mWyuE9LZaq1SdHsXG31sJzNcUB6902WnFIM3iswG589u2~syrZ138yYRHIh4SFfKOs7pDqljNWO8BLvsVrux09StsUuBOYyCuBuKTPvzeRj57E73SjS8mwFw-OD9AaQ~sdQ8n0175ghOyEdfyQl7A5dcGYZHD38wInWEYVm70X5YHvdzOqOtf5hf~XOOZ5a~7eM0So~pomwuF~LDvrEY1~2EBGwyiDQ-YnkLv6l2sSjxPGwQ0IFSSOnFUhxiHqbX4vgfmjAZpbZrGHLfawUlsxDV5rRsSy~Pw19jMFzCRVmGvAbQnCZ43acEXyEbgYUb8RXP2EtstM5WkQ__&Key-Pair-Id=APKAJYIDWFG3D6CNOYVA"));
             }
         });
 
@@ -2211,6 +2202,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
     @Override
     public void onResume() {
         super.onResume();
+        LogUtil.showLog("SUBHA", "onResume");
 
 //        SensorOrientationChangeNotifier.getInstance(YogaPlayerActivity.this).addListener(this);
 
@@ -2439,8 +2431,10 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             public void onSessionEnding(CastSession session) {
 
 
-                cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
-                Log.v("ANU","cast_disconnected_position"+cast_disconnected_position);
+                if (session!= null) {
+                    cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
+                    Log.v("ANU", "cast_disconnected_position" + cast_disconnected_position);
+                }
 
             }
 
@@ -3062,12 +3056,14 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                 PlayThroughChromeCast();
 
             } else {
-                watch_status_String = "strat";
+                watch_status_String = "start";
                 Played_Length = 0;
                 PlayThroughChromeCast();
             }
         } else if (resultCode == RESULT_OK && requestCode == 2001) {
-            if (data.getStringExtra("yes").equals("2002")) {
+
+            if (data != null && data.getStringExtra("yes").equals("2002")) {
+
 
                 mSelectedMedia = Util.mSendingMedia;
                 Intent resumeIntent = new Intent(YogaPlayerActivity.this, ResumePopupActivity.class);
@@ -3661,7 +3657,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         resumeCast.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         Util.check_for_subscription = 1;
                         resumeCast.putExtra("PlayerModel", playerModel);
-                        startActivityForResult(resumeCast, 2001);
+                        startActivityForResult(resumeCast,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
 
 //                                        startActivity(resumeCast);
 
@@ -3675,6 +3671,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         registerActivity.putExtra("PlayerModel", playerModel);
                         startActivityForResult(registerActivity,VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
+
                     }
                     //showLoginDialog();
                 } else {
@@ -4081,7 +4078,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             if (_video_details_output.getPlayed_length() != null && !_video_details_output.getPlayed_length().equals(""))
                 playerModel.setPlayPos((com.home.vod.util.Util.isDouble(_video_details_output.getPlayed_length())));
 
-
+            Log.v("Yoga","Played length tyymm==="+com.home.vod.util.Util.isDouble(_video_details_output.getPlayed_length()));
             //dependency for datamodel
 
             SubTitleName = new ArrayList<>(_video_details_output.getSubTitleName());
@@ -4130,7 +4127,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             com.home.vod.util.Util.dataModel.setMidRoll(_video_details_output.getMidRoll());
             com.home.vod.util.Util.dataModel.setAdDetails(_video_details_output.getAdDetails());
             com.home.vod.util.Util.dataModel.setPlayPos(isDouble(_video_details_output.getPlayed_length()));
-            Log.v("pratik","plps tyymm==="+dataModel.getPlayPos()*1000);
+            Log.v("Yoga","plps tyymm==="+dataModel.getPlayPos()*1000);
 
             //player model set
             playerModel.setAdDetails(_video_details_output.getAdDetails());
@@ -4150,7 +4147,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
             playerModel.setOfflineUrl(_video_details_output.getOfflineUrl());
             playerModel.setOfflineLanguage(_video_details_output.getOfflineLanguage());
             playerModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
-            Log.v("pratik","plps tyymm==="+playerModel.getPlayPos()*1000);
+            Log.v("Yoga","plps tyymm==="+playerModel.getPlayPos()*1000);
 
 
 
@@ -4188,8 +4185,8 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
                         Log.v("ANU","doing -1=========");
                         progressView.setVisibility(View.GONE);
 
-                        Log.v("pratik","pl len="+Util.dataModel.getPlayPos() * 1000);
-                        Log.v("pratik","played_length len="+played_length);
+                        Log.v("Yoga","pl len="+Util.dataModel.getPlayPos() * 1000);
+                        Log.v("Yoga","played_length len="+playerModel.getPlayPos());
                         ///Added for resume cast watch
                         if (Util.dataModel.getPlayPos() * 1000 > 0) {
                             Util.dataModel.setPlayPos(Util.dataModel.getPlayPos());
