@@ -211,7 +211,7 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.plusnights'
-            versionCode 3
+            versionCode 4
             targetSdkVersion 25
             versionName "1.3.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
