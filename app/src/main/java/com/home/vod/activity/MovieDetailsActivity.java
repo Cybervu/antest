@@ -289,6 +289,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     String movieDetailsStr = "";
     String Video_Url = "";
     String movieThirdPartyUrl = "";
+    Player trailer_player;
+
 
 
 //     ///****rating****///
@@ -748,6 +750,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         // isLogin = ((Global) getApplicationContext()).getIsLogin();
 
         isLogin = preferenceManager.getLoginFeatureFromPref();
+        trailer_player = new Player();
 
         ppvmodel = new PPVModel();
         advmodel = new APVModel();
@@ -1246,19 +1249,18 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                             togglePlayback();
                         } else {
 
-                            final Player player = new Player();
-                            player.setUserId(id);
-                            player.setAuthToken(authTokenStr);
-                            player.setEmailId(email);
-                            player.setVideoUrl(Util.dataModel.getVideoUrl());
-                            player.setAppName(getResources().getString(R.string.app_name));
+                            trailer_player.setUserId(id);
+                            trailer_player.setAuthToken(authTokenStr);
+                            trailer_player.setEmailId(email);
+                            trailer_player.setVideoUrl(Util.dataModel.getVideoUrl());
+                            trailer_player.setAppName(getResources().getString(R.string.app_name));
 
                             final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, Sdk_TrailerActivity.class);
 
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    playVideoIntent.putExtra("PlayerModel",player);
+                                    playVideoIntent.putExtra("PlayerModel",trailer_player);
                                     startActivity(playVideoIntent);
 
                                 }
@@ -3055,6 +3057,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             Util.currencyModel = contentDetailsOutput.getCurrencyDetails();
             Util.apvModel = contentDetailsOutput.getApvDetails();
             Util.ppvModel = contentDetailsOutput.getPpvDetails();
+
+
+            trailer_player.setVideoTitle(movieNameStr);
+            trailer_player.setVideoGenre(movieTypeStr);
+            trailer_player.setVideoDuration(videoduration);
+            trailer_player.setCensorRating(censorRatingStr);
+            trailer_player.setVideoReleaseDate(contentDetailsOutput.getReleaseDate());
+            trailer_player.setVideoStory(contentDetailsOutput.getStory());
+            trailer_player.setCastCrew(contentDetailsOutput.getCastStr());
 
             Log.v("MUVI", "rattting === " + rating);
             Log.v("MUVI", "reviewwww === " + reviews);
