@@ -808,16 +808,14 @@ public class Util {
 
     /**
      * This method will return a string format text which comes form API end , if it contains any html contnet.
+     *
      * @param input
      * @return
      */
-    public static String getTextViewTextFromApi(String input)
-    {
-        if (Build.VERSION.SDK_INT >= 24) {
-           return ""+(Html.fromHtml(input,Html.FROM_HTML_MODE_LEGACY)); // for 24 api and more
-        } else {
-            return ""+(Html.fromHtml(input)); // or for older api
-        }
+    public static String getTextViewTextFromApi(String input) {
+
+        return "" + (input.replace("\\r\\n", "<br>").replace("\\n", "<br>").replace("\\", ""));
+
     }
 
 }
