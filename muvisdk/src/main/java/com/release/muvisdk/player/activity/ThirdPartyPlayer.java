@@ -16,6 +16,7 @@ import android.webkit.WebViewClient;
 
 
 import com.release.muvi.muvisdk.R;
+import com.release.muvisdk.player.model.Player;
 import com.release.muvisdk.player.utils.ProgressBarHandler;
 
 import org.apache.http.HttpResponse;
@@ -68,8 +69,6 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
         setContentView(R.layout.activity_third_party_player);
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-
-
     /*    mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mActionBarToolbar != null) {
             setSupportActionBar(mActionBarToolbar);
@@ -86,6 +85,7 @@ public class  ThirdPartyPlayer extends ActionBarActivity {
 
         // getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 //        getSupportActionBar().hide();
+//        playerModel=new Player(ThirdPartyPlayer.this);
         playerModel=new Player();
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
 

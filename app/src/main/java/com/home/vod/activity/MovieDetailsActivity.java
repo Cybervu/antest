@@ -105,7 +105,8 @@ import com.home.vod.util.Util;
 
 
 import com.release.muvisdk.player.activity.AdPlayerActivity;
-import com.release.muvisdk.player.activity.Player;
+import com.release.muvisdk.player.activity.Sdk_TrailerActivity;
+import com.release.muvisdk.player.model.Player;
 import com.release.muvisdk.player.activity.PlayerActivity;
 import com.release.muvisdk.player.activity.ResumePopupActivity;
 import com.release.muvisdk.player.activity.ThirdPartyPlayer;
@@ -1244,11 +1245,20 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
                             togglePlayback();
                         } else {
-                            final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, TrailerActivity.class);
+
+                            final Player player = new Player();
+                            player.setUserId(id);
+                            player.setAuthToken(authTokenStr);
+                            player.setEmailId(email);
+                            player.setVideoUrl(Util.dataModel.getVideoUrl());
+                            player.setAppName(getResources().getString(R.string.app_name));
+
+                            final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, Sdk_TrailerActivity.class);
 
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    playVideoIntent.putExtra("PlayerModel",player);
                                     startActivity(playVideoIntent);
 
                                 }

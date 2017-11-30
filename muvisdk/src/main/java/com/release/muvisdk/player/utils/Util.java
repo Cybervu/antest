@@ -17,12 +17,10 @@ import java.util.Timer;
  */
 public class Util {
 
+
+
     public static String LANGUAGE_SHARED_PRE = "SdkLanguage";
     public static String DOWNLOAD_INFO_PREF = "download_info_pref";
-/*
-    public static final String loadVideoUrl = APIUrlConstant.VIDEO_DETAILS_URL;
-    public static final String videoLogUrl = APIUrlConstant.VIDEO_LOGS_URL;
-    public static final String bufferLogUrl = "bufferLogs";*/
     public static final String morlineBB = "getMarlinBBOffline";
     public static final String GetOfflineViewRemainingTime = "GetOfflineViewRemainingTime";
 
@@ -184,5 +182,12 @@ public class Util {
         }
         return true;
     }
+
+    public static int converToInt(String str) {
+        Double d = Double.parseDouble(str);
+        int i = d.intValue();
+        return i;
+    }
+
 
 }

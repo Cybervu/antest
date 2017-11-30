@@ -92,9 +92,11 @@ import com.intertrust.wasabi.media.PlaylistProxy;
 import com.intertrust.wasabi.media.PlaylistProxyListener;
 import com.release.muvi.muvisdk.R;
 import com.release.muvisdk.api.APIUrlConstant;
+import com.release.muvisdk.api.apiController.SDKInitializer;
 import com.release.muvisdk.player.adapter.DownloadOptionAdapter;
 import com.release.muvisdk.player.controller.WebApiController;
 import com.release.muvisdk.player.model.DownloadContentModel;
+import com.release.muvisdk.player.model.Player;
 import com.release.muvisdk.player.model.SubtitleModel;
 import com.release.muvisdk.player.service.DataConsumptionService;
 import com.release.muvisdk.player.service.PopUpService;
@@ -169,8 +171,10 @@ import static com.release.muvisdk.player.utils.Constants.ASYNC_RESUME_VODEOLOG_D
 import static com.release.muvisdk.player.utils.Constants.ASYNC_VODEOLOG_DETAILS;
 import static com.release.muvisdk.player.utils.Constants.CHECK_USER_ID_MSG;
 import static com.release.muvisdk.player.utils.Constants.DOMAIN_NAME_MSG;
+import static com.release.muvisdk.player.utils.Constants.HASH_KEY_MSG;
 import static com.release.muvisdk.player.utils.Constants.LIVE_STREAM;
 import static com.release.muvisdk.player.utils.Constants.OVERLAY_PERMISSION_REQUEST_CODE;
+import static com.release.muvisdk.player.utils.Constants.PACKAGE_NAME_MSG;
 import static com.release.muvisdk.player.utils.Constants.RESUME_VIDEO_REQUEST_CODE;
 import static com.release.muvisdk.player.utils.Constants.SECOND_ADD_REQUEST_CODE;
 import static com.release.muvisdk.player.utils.Constants.SUBTITLE_REQUEST_CODE;
@@ -253,6 +257,7 @@ public class PlayerActivity extends AppCompatActivity implements SensorOrientati
     String Dwonload_Complete_Msg = "";
     String authToken = "";
     String rootUrl = "";
+    String packgeName = "";
 
     boolean censor_layout = true;
     boolean video_completed = false;
@@ -371,6 +376,8 @@ public class PlayerActivity extends AppCompatActivity implements SensorOrientati
     public TimedTextObject srt;
     private EMVideoView emVideoView;
 
+    Context context;
+
     @Override
     public void getCastCrewDetails(String movieId) {
         // Notthing to do.
@@ -389,7 +396,7 @@ public class PlayerActivity extends AppCompatActivity implements SensorOrientati
     protected void onResume() {
         super.onResume();
 
-
+//        getSupportActionBar().hide();
 
         Util.call_finish_at_onUserLeaveHint = true;
 
@@ -504,6 +511,10 @@ public class PlayerActivity extends AppCompatActivity implements SensorOrientati
 
         _init();
 
+        try{
+            getSupportActionBar().hide();
+        }catch(Exception e){}
+
         /*
          This code is responsible for change volume and brightness using swipe control .. & Player center buton animation.
           */
@@ -553,10 +564,26 @@ public class PlayerActivity extends AppCompatActivity implements SensorOrientati
             return;
         }*/
 
+
+      /*  packgeName = getApplicationContext().getPackageName();
+
+        if (!packgeName.equals(SDKInitializer.getUser_Package_Name_At_Api(getApplicationContext()))) {
+            Toast.makeText(PlayerActivity.this, PACKAGE_NAME_MSG, Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        } else {
+            if (SDKInitializer.getHashKey(getApplicationContext()).equals("")) {
+                Toast.makeText(PlayerActivity.this, HASH_KEY_MSG, Toast.LENGTH_LONG).show();
+                finish();
+                return;
+            }
+        }*/
+
+
         rootUrl = APIUrlConstant.BASE_URl;
 
-        if (playerModel != null && playerModel.getAuthTokenStr() != null && !playerModel.getAuthTokenStr().trim().matches("")) {
-            authToken = playerModel.getAuthTokenStr();
+        if (playerModel != null && playerModel.getAuthToken() != null && !playerModel.getAuthToken().trim().matches("")) {
+            authToken = playerModel.getAuthToken();
         } else {
             Toast.makeText(PlayerActivity.this,VALID_AUTHTOKEN, Toast.LENGTH_LONG).show();
             finish();
@@ -676,7 +703,7 @@ public class PlayerActivity extends AppCompatActivity implements SensorOrientati
             }
         }
 
-        if (content_types_id!=LIVE_STREAM && playerModel.getDownloadStatus) {
+        if (content_types_id!=LIVE_STREAM && playerModel.getDownloadStatus()) {
             download_layout.setVisibility(View.VISIBLE);
         }
 
@@ -927,8 +954,7 @@ public class PlayerActivity extends AppCompatActivity implements SensorOrientati
                     }
 
 
-                } catch (Exception e) {
-                }
+                } catch (Exception e) { }
 
             }
         });
@@ -2844,29 +2870,38 @@ public class PlayerActivity extends AppCompatActivity implements SensorOrientati
     }
 
     private void hideSystemUI() {
-        story.setText("");
-        // Set the IMMERSIVE flag.
-        // Set the content to appear under the system bars so that the content
-        // doesn't resize when the system bars hide and show.
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+        try{
+            story.setText("");
+            // Set the IMMERSIVE flag.
+            // Set the content to appear under the system bars so that the content
+            // doesn't resize when the system bars hide and show.
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }catch(Exception e){}
+
+
     }
 
     private void showSystemUI() {
-        story.setText(playerModel.getVideoStory());
-        ResizableCustomView.doResizeTextView(PlayerActivity.this, story, MAX_LINES, Util.getTextofLanguage(PlayerActivity.this,Util.VIEW_MORE,Util.DEFAULT_VIEW_MORE), true);
 
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        try{
+            story.setText(playerModel.getVideoStory());
+            ResizableCustomView.doResizeTextView(PlayerActivity.this, story, MAX_LINES, Util.getTextofLanguage(PlayerActivity.this,Util.VIEW_MORE,Util.DEFAULT_VIEW_MORE), true);
 
-        );
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+
+            );
+        }catch(Exception e){}
+
     }
 
 
@@ -3666,7 +3701,6 @@ public class PlayerActivity extends AppCompatActivity implements SensorOrientati
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
-
             return null;
         }
 
@@ -3844,6 +3878,8 @@ public class PlayerActivity extends AppCompatActivity implements SensorOrientati
                                     e.printStackTrace();
                                 }
                             }
+
+
                         }
                     });
                 } catch (IOException e) {
@@ -5139,10 +5175,6 @@ public class PlayerActivity extends AppCompatActivity implements SensorOrientati
 
 
 
-
-
-
-
         Rect rectf = new Rect();
         emVideoView.getLocalVisibleRect(rectf);
         int mainLayout_width = rectf.width() - 50;
@@ -5161,41 +5193,43 @@ public class PlayerActivity extends AppCompatActivity implements SensorOrientati
         while (show) {
 
             Random r = new Random();
-            final int xLeft = r.nextInt(mainLayout_width - 10) + 10;
-
-            final int min = 10;
-            final int max = mainLayout_height;
-            final int yUp = new Random().nextInt((max - min) + 1) + min;
+            try {
+                final int xLeft = r.nextInt(mainLayout_width - 10) + 10;
 
 
-            Log.v(TAG, "==========================================" + "\n");
-
-            Log.v(TAG, "mainLayout_width  ===" + mainLayout_width);
-            Log.v(TAG, "mainLayout_height  ===" + mainLayout_height);
-
-            Log.v(TAG, "childLayout_width  ===" + childLayout_width);
-            Log.v(TAG, "childLayout_height  ===" + childLayout_height);
+                final int min = 10;
+                final int max = mainLayout_height;
+                final int yUp = new Random().nextInt((max - min) + 1) + min;
 
 
-            Log.v(TAG, "xLeft  ===" + xLeft);
-            Log.v(TAG, "yUp  ===" + yUp);
+                Log.v(TAG, "==========================================" + "\n");
 
-            Log.v(TAG, "width addition  ===" + (childLayout_width + xLeft));
-            Log.v(TAG, "height addition   ===" + (childLayout_height + yUp));
+                Log.v(TAG, "mainLayout_width  ===" + mainLayout_width);
+                Log.v(TAG, "mainLayout_height  ===" + mainLayout_height);
 
-            if ((mainLayout_width > (childLayout_width + xLeft)) && (mainLayout_height > (childLayout_height + yUp))) {
-                show = false;
-            }
+                Log.v(TAG, "childLayout_width  ===" + childLayout_width);
+                Log.v(TAG, "childLayout_height  ===" + childLayout_height);
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
 
-                    linearLayout1.setX(xLeft);
-                    linearLayout1.setY(yUp);
+                Log.v(TAG, "xLeft  ===" + xLeft);
+                Log.v(TAG, "yUp  ===" + yUp);
+
+                Log.v(TAG, "width addition  ===" + (childLayout_width + xLeft));
+                Log.v(TAG, "height addition   ===" + (childLayout_height + yUp));
+
+                if ((mainLayout_width > (childLayout_width + xLeft)) && (mainLayout_height > (childLayout_height + yUp))) {
+                    show = false;
                 }
-            });
 
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        linearLayout1.setX(xLeft);
+                        linearLayout1.setY(yUp);
+                    }
+                });
+            }catch (Exception e){}
 
         }
     }

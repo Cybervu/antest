@@ -12,6 +12,7 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.release.muvi.muvisdk.R;
+import com.release.muvisdk.player.model.Player;
 import com.release.muvisdk.player.utils.SensorOrientationChangeNotifier;
 
 
@@ -73,6 +74,7 @@ public class YouTubeAPIActivity extends YouTubeBaseActivity implements
         fragmentYoutube = (YouTubePlayerFragment)getFragmentManager().findFragmentById(R.id.youtubeplayerfragment);
 
         fragmentYoutube.initialize(YoutubeDeveloperKey, YouTubeAPIActivity.this);
+//        playerModel=new Player(YouTubeAPIActivity.this);
         playerModel=new Player();
         playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
 
