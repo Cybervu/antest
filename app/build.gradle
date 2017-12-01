@@ -155,6 +155,8 @@ android {
             applicationId 'com.release.teststreamingapp'
             versionCode 11
             targetSdkVersion 25
+
+            
             versionName '2.2.4'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
