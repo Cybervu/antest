@@ -383,9 +383,13 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
         then set thirdpartyurl true here and assign the url to videourl*/
 
-        if (pDialog != null && pDialog.isShowing()) {
-            pDialog.hide();
-            pDialog = null;
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+            }
+        } catch (IllegalArgumentException ex) {
+            playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
+            // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
         }
 
         boolean play_video = true;
@@ -403,11 +407,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         }
         if (!play_video) {
 
-            try {
-                if (pDialog.isShowing())
-                    pDialog.hide();
-            } catch (IllegalArgumentException ex) {
-            }
+
 
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(message);
@@ -521,14 +521,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
             if (playerModel.getVideoUrl() == null ||
                     playerModel.getVideoUrl().matches("")) {
-                try {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                } catch (IllegalArgumentException ex) {
-                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
-                }
+
                 Util.showNoDataAlert(Episode_list_Activity.this);
               /*  AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(languagePreference.getTextofLanguage( Util.NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
@@ -543,14 +536,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                         });
                 dlgAlert.create().show();*/
             } else {
-                try {
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
-                } catch (IllegalArgumentException ex) {
-                    playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
-                }
+
 
 
                 // condition for checking if the response has third party url or not.
@@ -685,15 +671,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
         } else {
 
             playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
-            try {
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.hide();
-                    pDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
-                playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
-                // movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
-            }
+
             playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
             //movieThirdPartyUrl = getResources().getString(R.string.no_data_str);
           /*  AlertDialog.Builder dlgAlert = new AlertDialog.Builder(Episode_list_Activity.this, R.style.MyAlertDialogStyle);
@@ -1926,31 +1904,12 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
 
                 } else {
 
-                    if (mCastSession != null && mCastSession.isConnected()) {
-
-
-                        Toast.makeText(Episode_list_Activity.this, "chromecast connected and not logegd in", Toast.LENGTH_SHORT).show();
-
-                        final Intent resumeCast = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                resumeCast.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                Util.check_for_subscription = 1;
-                                resumeCast.putExtra("PlayerModel", playerModel);
-                                startActivityForResult(resumeCast, 2001);
-
-//                                        startActivity(resumeCast);
-
-                            }
-                        });
-
-                    } else {
                         Util.check_for_subscription = 1;
                         Intent registerActivity = new LoginRegistrationOnContentClickHandler(this).handleClickOnContent();
                         registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         registerActivity.putExtra("PlayerModel", playerModel);
                         startActivityForResult(registerActivity, VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE);
-                    }
+
                 }
             } else {
                 if (NetworkStatus.getInstance().isConnected(this)) {
@@ -3807,19 +3766,6 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 Played_Length = 0;
                 PlayThroughChromeCast();
             }
-        } else if (resultCode == RESULT_OK && requestCode == 2001) {
-            if (data.getStringExtra("yes").equals("2002")) {
-
-                mSelectedMedia = Util.mSendingMedia;
-                Intent resumeIntent = new Intent(Episode_list_Activity.this, ResumePopupActivity.class);
-                startActivityForResult(resumeIntent, 1007);
-
-            }
-        } else if (requestCode == 2001) {
-            Log.v("pratik", "else conditn called");
-            watch_status_String = "strat";
-            Played_Length = 0;
-            PlayThroughChromeCast();
         } else if (resultCode == RESULT_OK && requestCode == 1007) {
 
             if (data.getStringExtra("yes").equals("1002")) {

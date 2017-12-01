@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -44,6 +46,8 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
@@ -535,9 +539,38 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
                     videoImageStrToHeight = videoImageStr;
 
+                    if (firstTime == true){
+                        Picasso.with(SearchActivity.this).load(videoImageStrToHeight
+                        ).error(R.drawable.no_image).into(new Target() {
 
-                    AsynLOADUI loadui = new AsynLOADUI();
-                    loadui.executeOnExecutor(threadPoolExecutor);
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                videoWidth = bitmap.getWidth();
+                                videoHeight = bitmap.getHeight();
+                                AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);
+                            }
+
+                            @Override
+                            public void onBitmapFailed(final Drawable errorDrawable) {
+                                videoImageStrToHeight = "https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png";
+                                videoWidth = errorDrawable.getIntrinsicWidth();
+                                videoHeight = errorDrawable.getIntrinsicHeight();
+                                AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);
+
+                            }
+
+                            @Override
+                            public void onPrepareLoad(final Drawable placeHolderDrawable) {
+
+                            }
+                        });
+
+                    }else {
+                        AsynLOADUI loadUI = new AsynLOADUI();
+                        loadUI.executeOnExecutor(threadPoolExecutor);
+                    }
 
                 } else {
 

@@ -2276,27 +2276,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 Played_Length = 0;
                 PlayThroughChromeCast();
             }
-        } else if (resultCode == RESULT_OK && requestCode == 2001) {
-            if (data.getStringExtra("yes").equals("2002")) {
-
-                mSelectedMedia = Util.mSendingMedia;
-
-
-//                Toast.makeText(this, "Now again in details", Toast.LENGTH_SHORT).show();
-             /*   Log.v("bijay",""+mReceivedMedia.getStreamType());
-                Log.v("bijay",""+mReceivedMedia.getContentId());
-                Log.v("bijay",""+mReceivedMedia.getStreamDuration());*/
-
-                Intent resumeIntent = new Intent(MovieDetailsActivity.this, ResumePopupActivity.class);
-                startActivityForResult(resumeIntent, 1007);
-
-            } else {
-                Log.v("pratik", "else conditn called");
-                watch_status_String = "start";
-                Played_Length = 0;
-                PlayThroughChromeCast();
-            }
-
         } else if (resultCode == RESULT_OK && requestCode == 1007) {
 
             if (data.getStringExtra("yes").equals("1002")) {
@@ -3314,53 +3293,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             }
 
 
-            if (contentDetailsOutput.getBanner().trim().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
-
-                if (contentDetailsOutput.getPoster().trim().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
-
-                    moviePoster.setImageResource(R.drawable.logo);
-                } else {
-
-
-                   /* ImageLoader imageLoader = ImageLoader.getInstance();
-                    imageLoader.init(ImageLoaderConfiguration.createDefault(MovieDetailsActivity.this));
-
-                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                            .cacheOnDisc(true).resetViewBeforeLoading(true)
-                            .showImageForEmptyUri(R.drawable.logo)
-                            .showImageOnFail(R.drawable.logo)
-                            .showImageOnLoading(R.drawable.logo).build();
-                    imageLoader.displayImage(contentDetailsOutput.getPoster(), moviePoster, options);
-*/
-                    Picasso.with(MovieDetailsActivity.this)
-                            .load(contentDetailsOutput.getPoster().trim())
-                            .error(R.drawable.logo)
-                            .placeholder(R.drawable.logo)
-                            .into(moviePoster);
-
-                }
-
-            } else {
+            String bannerUrl = contentDetailsOutput.getBanner().trim().equals("")?contentDetailsOutput.getPoster().trim():contentDetailsOutput.getBanner().trim();
+            Picasso.with(MovieDetailsActivity.this)
+                    .load(bannerUrl)
+                    .error(R.drawable.logo)
+                    .placeholder(R.drawable.logo)
+                    .into(moviePoster);
 
 
-                /*ImageLoader imageLoader = ImageLoader.getInstance();
-                imageLoader.init(ImageLoaderConfiguration.createDefault(MovieDetailsActivity.this));
-
-                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                        .cacheOnDisc(true).resetViewBeforeLoading(true)
-                        .showImageForEmptyUri(R.drawable.logo)
-                        .showImageOnFail(R.drawable.logo)
-                        .showImageOnLoading(R.drawable.logo).build();
-                imageLoader.displayImage(contentDetailsOutput.getPoster().trim(), moviePoster, options);
-*/
-                Picasso.with(MovieDetailsActivity.this)
-                        .load(contentDetailsOutput.getPoster().trim())
-                        .error(R.drawable.logo)
-                        .placeholder(R.drawable.logo)
-                        .into(moviePoster);
-
-
-            }
 
         } else {
             noInternetConnectionLayout.setVisibility(View.GONE);
