@@ -3,9 +3,13 @@
     <color name="teal_100">#FFCDD2</color>
     <color name="teal_500">#F44336</color>
     <color name="disableTextColor">#50757575</color>
+    <color name="loader_color">#2acb99</color>
+    <color name="textColor">#2acb99</color>
     <color name="OsTextColor">#757575</color>
     <color name="colorPrimary">#1e292d</color>
+    <color name="border_color">#000</color>
     <color name="navlogobackgroundcolor">#1e292d</color>
+    <color name="nav_drawer_lineColor">#666</color>
     <color name="colorPrimaryDark">#1e292d</color>
     <color name="appBackgroundColor">#fff</color>
     <color name="cast_crew_titleCololr">#2acb99</color>

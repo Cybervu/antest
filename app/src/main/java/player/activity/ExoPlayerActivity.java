@@ -161,10 +161,48 @@ import static android.R.attr.format;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.BTN_DISCARD;
+import static com.home.vod.preferences.LanguagePreference.BTN_KEEP;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
+import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_DISCARD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_KEEP;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CANCEL_BUTTON;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_CANCELLED;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_DOWNLOAD_INTERRUPTED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SLOW_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_STOP_SAVING_THIS_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_WANT_TO_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_YOUR_VIDEO_WONT_BE_SAVED;
+import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_CANCELLED;
+import static com.home.vod.preferences.LanguagePreference.DOWNLOAD_INTERRUPTED;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
+import static com.home.vod.preferences.LanguagePreference.NO_DATA;
+import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.SIGN_OUT_ERROR;
+import static com.home.vod.preferences.LanguagePreference.SLOW_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SORRY;
+import static com.home.vod.preferences.LanguagePreference.STOP_SAVING_THIS_VIDEO;
 import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
+import static com.home.vod.preferences.LanguagePreference.WANT_TO_DOWNLOAD;
+import static com.home.vod.preferences.LanguagePreference.YOUR_VIDEO_WONT_BE_SAVED;
+import static player.utils.Util.DEFAULT_SAVE;
+import static player.utils.Util.DEFAULT_SAVE_OFFLINE_VIDEO;
+import static player.utils.Util.SAVE;
+import static player.utils.Util.SAVE_OFFLINE_VIDEO;
 
 
 enum ContentTypes2 {
@@ -672,7 +710,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
         Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
         videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
-        videoCastCrewTitleTextView.setText(Util.getTextofLanguage(ExoPlayerActivity.this, Util.CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
+        videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE,DEFAULT_CAST_CREW_BUTTON_TITLE));
 
         // ExoPlayerActivity.this is changed for the new requirement of Offline Viewing.
         ExoPlayerActivity.this.startService(new Intent(ExoPlayerActivity.this, DataConsumptionService.class));
@@ -850,7 +888,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             videoCensorRatingTextView.setVisibility(View.GONE);
             videoCensorRatingTextView1.setVisibility(View.GONE);
         }
-        if (playerModel.getCensorRating().trim() != null && playerModel.getCensorRating().trim().equalsIgnoreCase(Util.getTextofLanguage(ExoPlayerActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA))) {
+        if (playerModel.getCensorRating().trim() != null && playerModel.getCensorRating().trim().equalsIgnoreCase(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
             videoCensorRatingTextView.setVisibility(View.GONE);
             videoCensorRatingTextView1.setVisibility(View.GONE);
         }
@@ -875,7 +913,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 //            story.setText(playerModel.getVideoStory());
             story.setText(com.home.vod.util.Util.getTextViewTextFromApi(playerModel.getVideoStory()));
             story.setVisibility(View.VISIBLE);
-            ResizableCustomView.doResizeTextView(ExoPlayerActivity.this, story, MAX_LINES, Util.getTextofLanguage(ExoPlayerActivity.this, Util.VIEW_MORE, Util.DEFAULT_VIEW_MORE), true);
+            ResizableCustomView.doResizeTextView(ExoPlayerActivity.this, story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
         } else {
             story.setVisibility(View.GONE);
         }
@@ -925,7 +963,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(detailsIntent);
                 } else {
-                    Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ExoPlayerActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -1485,20 +1523,20 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                         @Override
                                         public void onClick(View v) {
                                             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ExoPlayerActivity.this, R.style.MyAlertDialogStyle);
-                                            dlgAlert.setTitle(Util.getTextofLanguage(ExoPlayerActivity.this, Util.STOP_SAVING_THIS_VIDEO, Util.DEFAULT_STOP_SAVING_THIS_VIDEO));
-                                            dlgAlert.setMessage(Util.getTextofLanguage(ExoPlayerActivity.this, Util.YOUR_VIDEO_WONT_BE_SAVED, Util.DEFAULT_YOUR_VIDEO_WONT_BE_SAVED));
-                                            dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_KEEP, Util.DEFAULT_BTN_KEEP), null);
+                                            dlgAlert.setTitle(languagePreference.getTextofLanguage(STOP_SAVING_THIS_VIDEO, DEFAULT_STOP_SAVING_THIS_VIDEO));
+                                            dlgAlert.setMessage(languagePreference.getTextofLanguage(YOUR_VIDEO_WONT_BE_SAVED, DEFAULT_YOUR_VIDEO_WONT_BE_SAVED));
+                                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BTN_KEEP, DEFAULT_BTN_KEEP), null);
                                             dlgAlert.setCancelable(false);
-                                            dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_KEEP, Util.DEFAULT_BTN_KEEP),
+                                            dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BTN_KEEP, DEFAULT_BTN_KEEP),
                                                     new DialogInterface.OnClickListener() {
                                                         public void onClick(DialogInterface dialog, int id) {
                                                             dialog.cancel();
 
                                                         }
                                                     });
-                                            dlgAlert.setNegativeButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_DISCARD, Util.DEFAULT_BTN_DISCARD), null);
+                                            dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(BTN_DISCARD, DEFAULT_BTN_DISCARD), null);
                                             dlgAlert.setCancelable(false);
-                                            dlgAlert.setNegativeButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BTN_DISCARD, Util.DEFAULT_BTN_DISCARD),
+                                            dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(BTN_DISCARD, DEFAULT_BTN_DISCARD),
                                                     new DialogInterface.OnClickListener() {
                                                         public void onClick(DialogInterface dialog, int id) {
                                                             dialog.cancel();
@@ -1534,7 +1572,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                                                 }
                                                             });
 
-                                                            Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ExoPlayerActivity.this, Util.DOWNLOAD_CANCELLED, Util.DEFAULT_DOWNLOAD_CANCELLED), Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(DOWNLOAD_CANCELLED, DEFAULT_DOWNLOAD_CANCELLED), Toast.LENGTH_SHORT).show();
 
                                                         }
                                                     });
@@ -2204,7 +2242,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                                     /**ad **/
 
                                 } else {
-                                    Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ExoPlayerActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                                 }
                                 break;
                             }
@@ -2815,9 +2853,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
         dlgAlert.setMessage(msg);
         dlgAlert.setTitle(Title);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
         dlgAlert.setCancelable(false);
-        dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+        dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -2971,7 +3009,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                             startActivityForResult(adIntent, 8002);
                             /**ad **/
                         } else {
-                            Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ExoPlayerActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
                     } else {
                         emVideoView.start();
@@ -3604,7 +3642,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                             Log.v("MUVI", mlvfile);
                         } else {
-                            mlvfile = Util.getTextofLanguage(ExoPlayerActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+                            mlvfile = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
                         }
 
                         if ((mainJson.has("token")) && mainJson.getString("token").trim() != null && !mainJson.getString("token").trim().isEmpty() && !mainJson.getString("token").trim().equals("null") && !mainJson.getString("token").trim().matches("")) {
@@ -3612,7 +3650,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                             Log.v("MUVI", "token" + token);
 
                         } else {
-                            token = Util.getTextofLanguage(ExoPlayerActivity.this, Util.NO_DATA, Util.DEFAULT_NO_DATA);
+                            token = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
                         }
 
 
@@ -3726,7 +3764,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
             } catch (IllegalArgumentException ex) {
-                Toast.makeText(ExoPlayerActivity.this, Util.getTextofLanguage(ExoPlayerActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+                Toast.makeText(ExoPlayerActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
             }
 
@@ -3799,11 +3837,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 if (lengh.toString().equals("0.0")) {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ExoPlayerActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(ExoPlayerActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION));
-                    dlgAlert.setTitle(Util.getTextofLanguage(ExoPlayerActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -3814,11 +3852,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 }
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ExoPlayerActivity.this, R.style.MyAlertDialogStyle);
-                dlgAlert.setTitle(Util.getTextofLanguage(ExoPlayerActivity.this, Util.WANT_TO_DOWNLOAD, Util.DEFAULT_WANT_TO_DOWNLOAD));
+                dlgAlert.setTitle(languagePreference.getTextofLanguage(WANT_TO_DOWNLOAD, DEFAULT_WANT_TO_DOWNLOAD));
                 dlgAlert.setMessage(playerModel.getVideoTitle() + " " + "(" + lengh + "MB)");
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.DOWNLOAD_BUTTON_TITLE, Util.DEFAULT_DOWNLOAD_BUTTON_TITLE), null);
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(DOWNLOAD_BUTTON_TITLE, DEFAULT_DOWNLOAD_BUTTON_TITLE), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.DOWNLOAD_BUTTON_TITLE, Util.DEFAULT_DOWNLOAD_BUTTON_TITLE),
+                dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(DOWNLOAD_BUTTON_TITLE, DEFAULT_DOWNLOAD_BUTTON_TITLE),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -3833,9 +3871,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                             }
                         });
-                dlgAlert.setNegativeButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.CANCEL_BUTTON, Util.DEFAULT_CANCEL_BUTTON), null);
+                dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(CANCEL_BUTTON, DEFAULT_CANCEL_BUTTON), null);
                 dlgAlert.setCancelable(false);
-                dlgAlert.setNegativeButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.CANCEL_BUTTON, Util.DEFAULT_CANCEL_BUTTON),
+                dlgAlert.setNegativeButton(languagePreference.getTextofLanguage(CANCEL_BUTTON, DEFAULT_CANCEL_BUTTON),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -3846,7 +3884,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
 
             } catch (IllegalArgumentException ex) {
-                Toast.makeText(ExoPlayerActivity.this, Util.getTextofLanguage(ExoPlayerActivity.this, Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
+                Toast.makeText(ExoPlayerActivity.this, languagePreference.getTextofLanguage(SIGN_OUT_ERROR, DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
 
             }
 
@@ -4171,7 +4209,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 }*/
 
             } else {
-                Toast.makeText(ExoPlayerActivity.this, Util.getTextofLanguage(ExoPlayerActivity.this, Util.DOWNLOAD_INTERRUPTED, Util.DEFAULT_DOWNLOAD_INTERRUPTED), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ExoPlayerActivity.this, languagePreference.getTextofLanguage(DOWNLOAD_INTERRUPTED, DEFAULT_DOWNLOAD_INTERRUPTED), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -4940,11 +4978,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                     ShowDownloadOptionPopUp();
                 } else {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ExoPlayerActivity.this, R.style.MyAlertDialogStyle);
-                    dlgAlert.setMessage(Util.getTextofLanguage(ExoPlayerActivity.this, Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION));
-                    dlgAlert.setTitle(Util.getTextofLanguage(ExoPlayerActivity.this, Util.SORRY, Util.DEFAULT_SORRY));
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK), null);
+                    dlgAlert.setMessage(languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION));
+                    dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
                     dlgAlert.setCancelable(false);
-                    dlgAlert.setPositiveButton(Util.getTextofLanguage(ExoPlayerActivity.this, Util.BUTTON_OK, Util.DEFAULT_BUTTON_OK),
+                    dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
@@ -4973,9 +5011,9 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         Button save = (Button) convertView.findViewById(R.id.save);
         Button cancel = (Button) convertView.findViewById(R.id.cancel);
 
-        save.setText(Util.getTextofLanguage(ExoPlayerActivity.this, Util.SAVE, Util.DEFAULT_SAVE));
-        cancel.setText(Util.getTextofLanguage(ExoPlayerActivity.this, Util.CANCEL_BUTTON, Util.DEFAULT_CANCEL_BUTTON));
-        title_text.setText(Util.getTextofLanguage(ExoPlayerActivity.this, Util.SAVE_OFFLINE_VIDEO, Util.DEFAULT_SAVE_OFFLINE_VIDEO));
+        save.setText(languagePreference.getTextofLanguage(SAVE, DEFAULT_SAVE));
+        cancel.setText(languagePreference.getTextofLanguage(CANCEL_BUTTON, DEFAULT_CANCEL_BUTTON));
+        title_text.setText(languagePreference.getTextofLanguage(SAVE_OFFLINE_VIDEO, DEFAULT_SAVE_OFFLINE_VIDEO));
 
         DownloadOptionAdapter adapter = new DownloadOptionAdapter(ExoPlayerActivity.this, List_Of_FileSize, List_Of_Resolution_Format);
         resolution_list.setAdapter(adapter);
@@ -5074,7 +5112,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
                 httppost.addHeader("user_id", userIdStr);
                 httppost.addHeader("device_type", "2");
                 httppost.addHeader("request_data", "");
-                httppost.addHeader("lang_code", Util.getTextofLanguage(ExoPlayerActivity.this, Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
+                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
 
                 // Execute HTTP Post Request
