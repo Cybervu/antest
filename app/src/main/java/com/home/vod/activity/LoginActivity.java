@@ -118,7 +118,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.release.muvisdk.player.activity.AdPlayerActivity;
 import com.release.muvisdk.player.activity.PlayerActivity;
-import com.release.muvisdk.player.model.Player;
+import com.release.muvisdk.player.activity.Player;
 import com.release.muvisdk.player.activity.ResumePopupActivity;
 
 import static com.home.vod.preferences.LanguagePreference.ANDROID_VERSION;
@@ -4134,32 +4134,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         if (Util.check_for_subscription == 1) {
                             //go to subscription page
                             if (NetworkStatus.getInstance().isConnected(this)) {
-                                if (Util.dataModel.getIsFreeContent() == 1) {
-                                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(authTokenStr);
-                                    getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
-                                    getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
-                                    getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
-                                    getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
-                                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
-                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                } else {
-                                    /*ValidateUserInput validateUserInput = new ValidateUserInput();
-                                    validateUserInput.setAuthToken(authTokenStr);
-                                    validateUserInput.setUserId(validateUserInput.getUserId());
-                                    validateUserInput.setMuviUniqueId(validateUserInput.getMuviUniqueId());
-                                    validateUserInput.setEpisodeStreamUniqueId(validateUserInput.getEpisodeStreamUniqueId());
-                                    validateUserInput.setSeasonId(validateUserInput.getSeasonId());
-                                    validateUserInput.setLanguageCode(validateUserInput.getLanguageCode());
-                                    validateUserInput.setPurchaseType(validateUserInput.getPurchaseType());
-                                    GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
-                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
 
                                     Intent intent = new Intent();
                                     setResult(RESULT_OK,intent);
                                     finish();
-                                }
+
                             } else {
                                 Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                             }
@@ -5010,34 +4989,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 if (Util.check_for_subscription == 1) {
                     //go to subscription page
                     if (NetworkStatus.getInstance().isConnected(this)) {
-                        if (Util.dataModel.getIsFreeContent() == 1) {
-                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                            getVideoDetailsInput.setAuthToken(authTokenStr);
-                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                            getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                            VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                        } else {
-                           /* ValidateUserInput validateUserInput = new ValidateUserInput();
-                            validateUserInput.setAuthToken(authTokenStr);
-                            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                            validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                            validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                            validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                            validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                            GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
-                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
 
                             Intent intent = new Intent();
                             setResult(RESULT_OK,intent);
                             finish();
 
-
-                        }
                     } else {
                         Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
@@ -5704,17 +5660,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         if (Util.check_for_subscription == 1) {
                             //go to subscription page
                             if (NetworkStatus.getInstance().isConnected(LoginActivity.this)) {
-
-                               /* ValidateUserInput validateUserInput = new ValidateUserInput();
-                                validateUserInput.setAuthToken(authTokenStr);
-                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                                validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                                validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                                validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                                GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
-                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
 
                                 Intent intent = new Intent();
                                 setResult(RESULT_OK,intent);

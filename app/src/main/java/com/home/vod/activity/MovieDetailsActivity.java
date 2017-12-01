@@ -105,8 +105,8 @@ import com.home.vod.util.Util;
 
 
 import com.release.muvisdk.player.activity.AdPlayerActivity;
-import com.release.muvisdk.player.activity.Sdk_TrailerActivity;
-import com.release.muvisdk.player.model.Player;
+//import com.release.muvisdk.player.activity.Sdk_TrailerActivity;
+import com.release.muvisdk.player.activity.Player;
 import com.release.muvisdk.player.activity.PlayerActivity;
 import com.release.muvisdk.player.activity.ResumePopupActivity;
 import com.release.muvisdk.player.activity.ThirdPartyPlayer;
@@ -289,7 +289,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
     String movieDetailsStr = "";
     String Video_Url = "";
     String movieThirdPartyUrl = "";
-    Player trailer_player;
+//    Player trailer_player;
 
 
 
@@ -750,7 +750,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         // isLogin = ((Global) getApplicationContext()).getIsLogin();
 
         isLogin = preferenceManager.getLoginFeatureFromPref();
-        trailer_player = new Player();
+//        trailer_player = new Player();
 
         ppvmodel = new PPVModel();
         advmodel = new APVModel();
@@ -1249,18 +1249,18 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                             togglePlayback();
                         } else {
 
-                            trailer_player.setUserId(id);
+                           /* trailer_player.setUserId(id);
                             trailer_player.setAuthToken(authTokenStr);
                             trailer_player.setEmailId(email);
                             trailer_player.setVideoUrl(Util.dataModel.getVideoUrl());
-                            trailer_player.setAppName(getResources().getString(R.string.app_name));
+                            trailer_player.setAppName(getResources().getString(R.string.app_name));*/
 
-                            final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, Sdk_TrailerActivity.class);
+                            final Intent playVideoIntent = new Intent(MovieDetailsActivity.this, TrailerActivity.class);
 
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    playVideoIntent.putExtra("PlayerModel",trailer_player);
+//                                    playVideoIntent.putExtra("PlayerModel",trailer_player);
                                     startActivity(playVideoIntent);
 
                                 }
@@ -3059,13 +3059,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             Util.ppvModel = contentDetailsOutput.getPpvDetails();
 
 
-            trailer_player.setVideoTitle(movieNameStr);
+          /*  trailer_player.setVideoTitle(movieNameStr);
             trailer_player.setVideoGenre(movieTypeStr);
             trailer_player.setVideoDuration(videoduration);
             trailer_player.setCensorRating(censorRatingStr);
             trailer_player.setVideoReleaseDate(contentDetailsOutput.getReleaseDate());
             trailer_player.setVideoStory(contentDetailsOutput.getStory());
             trailer_player.setCastCrew(contentDetailsOutput.getCastStr());
+            trailer_player.setContentTypesId(1);
+            trailer_player.setMovieUniqueId(movieUniqueId);
+            trailer_player.setEpisode_id(movieStreamUniqueId);*/
+
 
             Log.v("MUVI", "rattting === " + rating);
             Log.v("MUVI", "reviewwww === " + reviews);
@@ -3491,6 +3495,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
     private void callValidateUserAPI(){
         Log.v("MUVI", "validate user details");
+
+        try{
+            playerModel.setUserId(preferenceManager.getUseridFromPref());
+            playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
+        }catch(Exception e){}
+
 
         ValidateUserInput validateUserInput = new ValidateUserInput();
         validateUserInput.setAuthToken(authTokenStr);

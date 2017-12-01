@@ -87,7 +87,7 @@ import com.home.vod.util.Util;
 
 import com.release.muvisdk.player.activity.AdPlayerActivity;
 import com.release.muvisdk.player.activity.PlayerActivity;
-import com.release.muvisdk.player.model.Player;
+import com.release.muvisdk.player.activity.Player;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

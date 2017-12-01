@@ -49,12 +49,12 @@ android {
             applicationId 'com.release.muvisdk'
             minSdkVersion 21
             targetSdkVersion 23
-            versionCode 3
-            versionName "1.03"
+            versionCode 4
+            versionName "1.04"
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"e8ae05a2ef3fd0c6688952c8f7557823\""
-            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
-//            buildConfigField "String", "AUTH_TOKEN", "\"d05f7578a39a20c0ac222c4ba388c930\""
+//            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
+            buildConfigField "String", "AUTH_TOKEN", "\"d05f7578a39a20c0ac222c4ba388c930\""
             //  buildConfigField "String", "AUTH_TOKEN", "\"d2d529d95240ed416ead6684bd888c0f\""//idogic test
         }
         defaultFlavor_staging_ {
@@ -2436,9 +2436,9 @@ dependencies {
     }
 //    compile project(':apisdk')
 //    compile project(':muviplayersdk')
-    compile project(':muvisdk')
+//    compile project(':muvisdk')
 
-//    compile 'com.muvi:MUVISDK:v1.03'
+    compile 'com.muvi:MUVISDK:v1.03'
 
     compile files('libs/wasabi.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')

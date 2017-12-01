@@ -91,7 +91,7 @@ import com.home.vod.util.Util;
 import com.release.muvisdk.player.activity.AdPlayerActivity;
 import com.release.muvisdk.player.activity.MyActivity;
 import com.release.muvisdk.player.activity.PlayerActivity;
-import com.release.muvisdk.player.model.Player;
+import com.release.muvisdk.player.activity.Player;
 
 
 import org.json.JSONException;
@@ -942,34 +942,12 @@ public class RegisterActivity extends AppCompatActivity implements
                             // Go for subscription
 
                             if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
-                                if (Util.dataModel.getIsFreeContent() == 1) {
-                                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(authTokenStr);
-                                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
-                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                } else {
-                                   /* ValidateUserInput validateUserInput = new ValidateUserInput();
-                                    validateUserInput.setAuthToken(authTokenStr);
-                                    validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                                    validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                                    validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                                    validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                                    validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                    validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                    asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, RegisterActivity.this, RegisterActivity.this);
-                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
-
 
                                     Intent intent = new Intent();
                                     setResult(RESULT_OK,intent);
                                     finish();
 
-                                }
+
                             } else {
                                 Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                             }
@@ -3561,32 +3539,11 @@ public class RegisterActivity extends AppCompatActivity implements
                         // Go for subscription
 
                         if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
-                            if (Util.dataModel.getIsFreeContent() == 1) {
-                                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                getVideoDetailsInput.setAuthToken(authTokenStr);
-                                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                                getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
-                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                            } else {
-                              /*  ValidateUserInput validateUserInput = new ValidateUserInput();
-                                validateUserInput.setAuthToken(authTokenStr);
-                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                                validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                                validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                                validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                                validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, RegisterActivity.this, RegisterActivity.this);
-                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
 
                                 Intent intent = new Intent();
                                 setResult(RESULT_OK,intent);
                                 finish();
-                            }
+
                         } else {
                             Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
@@ -4255,33 +4212,10 @@ public class RegisterActivity extends AppCompatActivity implements
                     // Go for subscription
 
                     if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
-                        if (Util.dataModel.getIsFreeContent() == 1) {
-                            GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                            getVideoDetailsInput.setAuthToken(authTokenStr);
-                            getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                            getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                            getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                            getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                            getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                            asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
-                            asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                        } else {
-                            /*ValidateUserInput validateUserInput = new ValidateUserInput();
-                            validateUserInput.setAuthToken(authTokenStr);
-                            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                            validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                            validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                            validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                            validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                            asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, RegisterActivity.this, RegisterActivity.this);
-                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
-
 
                             Intent intent = new Intent();
                             setResult(RESULT_OK,intent);
                             finish();
-                        }
                     } else {
                         Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }

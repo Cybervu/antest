@@ -124,7 +124,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import com.release.muvisdk.player.activity.AdPlayerActivity;
 import com.release.muvisdk.player.activity.PlayerActivity;
-import com.release.muvisdk.player.model.Player;
+import com.release.muvisdk.player.activity.Player;
 import com.release.muvisdk.player.activity.ResumePopupActivity;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
@@ -3070,17 +3070,12 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
      */
 
     private void callValidateUserAPI(){
-        Log.v("MUVI", "validate user details");
-       /* ValidateUserInput validateUserInput = new ValidateUserInput();
-        validateUserInput.setAuthToken(authTokenStr);
-        validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-        validateUserInput.setMuviUniqueId(movieUniqueId.trim());
-        validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-        validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-        validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-        validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ShowWithEpisodesActivity.this, ShowWithEpisodesActivity.this);
-        asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
+
+        try{
+            playerModel.setUserId(preferenceManager.getUseridFromPref());
+            playerModel.setEmailId(preferenceManager.getEmailIdFromPref());
+        }catch(Exception e){}
+
         ValidateUserInput validateUserInput = new ValidateUserInput();
         validateUserInput.setAuthToken(authTokenStr);
         validateUserInput.setUserId(preferenceManager.getUseridFromPref());
