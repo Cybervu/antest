@@ -124,7 +124,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import com.release.muvisdk.player.activity.AdPlayerActivity;
 import com.release.muvisdk.player.activity.PlayerActivity;
-import com.release.muvisdk.player.activity.Player;
+import com.release.muvisdk.player.model.Player;
 import com.release.muvisdk.player.activity.ResumePopupActivity;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;

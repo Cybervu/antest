@@ -91,7 +91,7 @@ import com.home.vod.util.Util;
 import com.release.muvisdk.player.activity.AdPlayerActivity;
 import com.release.muvisdk.player.activity.MyActivity;
 import com.release.muvisdk.player.activity.PlayerActivity;
-import com.release.muvisdk.player.activity.Player;
+import com.release.muvisdk.player.model.Player;
 
 
 import org.json.JSONException;

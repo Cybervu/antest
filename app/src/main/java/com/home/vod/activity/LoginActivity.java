@@ -118,7 +118,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.release.muvisdk.player.activity.AdPlayerActivity;
 import com.release.muvisdk.player.activity.PlayerActivity;
-import com.release.muvisdk.player.activity.Player;
+import com.release.muvisdk.player.model.Player;
 import com.release.muvisdk.player.activity.ResumePopupActivity;
 
 import static com.home.vod.preferences.LanguagePreference.ANDROID_VERSION;

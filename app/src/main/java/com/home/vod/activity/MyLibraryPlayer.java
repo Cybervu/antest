@@ -135,7 +135,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import com.release.muvisdk.player.activity.AdPlayerActivity;
 import com.release.muvisdk.player.service.DataConsumptionService;
-import com.release.muvisdk.player.activity.Player;
+import com.release.muvisdk.player.model.Player;
 import com.release.muvisdk.player.activity.ResumePopupActivity;
 import com.release.muvisdk.player.activity.SubtitleList;
 import com.release.muvisdk.player.activity.Subtitle_Resolution;
