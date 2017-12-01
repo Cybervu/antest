@@ -75,7 +75,7 @@
     <dimen name="payment_spinner_padding">6dp</dimen>
     <dimen name="payment_spinner_padding_left">12dp</dimen>
     <dimen name="payment_left_margin">50dp</dimen>
-    <dimen name="ppv_margin">10dp</dimen>
+    <dimen name="ppv_margin">15dp</dimen>
     <dimen name="login_text_height">100dp</dimen>
     <dimen name="list_single_card_small_width">102dp</dimen>
     <dimen name="loginImageViewMarging_top_padding">2dp</dimen>

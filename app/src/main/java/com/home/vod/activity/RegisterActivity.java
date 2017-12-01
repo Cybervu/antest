@@ -214,7 +214,7 @@ public class RegisterActivity extends AppCompatActivity implements
     String fbUserId = "";
     String fbEmail = "";
     String fbName = "";
-    private LinearLayout btnLogin;
+    private LinearLayout btnLogin,terms_layout;
     private ProgressBarHandler progressDialog;
     private CallbackManager callbackManager;
     CheckFbUserDetailsAsyn asynCheckFbUserDetails;
@@ -567,6 +567,9 @@ public class RegisterActivity extends AppCompatActivity implements
         alreadyMemmberText = (TextView) findViewById(R.id.alreadyMemberText);
         loginTextView = (TextView) findViewById(R.id.alreadyHaveALoginButton);
 
+
+
+
         /*FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName_first);
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName_last);
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName);*/
@@ -683,7 +686,7 @@ public class RegisterActivity extends AppCompatActivity implements
         /************fb************/
         callbackManager = CallbackManager.Factory.create();
 
-        registerUIHandler = new RegisterUIHandler(this);
+        registerUIHandler = new RegisterUIHandler(this,preferenceManager);
         registerUIHandler.setCountryList(preferenceManager);
         registerUIHandler.setTermsTextView(languagePreference,preferenceManager);
         //registerUIHandler.setEmailText(languagePreference);

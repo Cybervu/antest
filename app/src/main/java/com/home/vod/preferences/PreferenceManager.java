@@ -30,9 +30,10 @@ public class PreferenceManager {
     public  final String PREFS_LOGIN_HISTORYID_KEY = "loginHistId";
     public  final String PREFS_LOGIN_DATE = "date";
     public  final String NOTI_COUNT = "noti_count";
+    public static final String privacy_policy_url = "privacy_policy_url";
     public static final String SHARED_PREF = "ah_firebase";
-    public static final String authToken = "";
-    public static final String privacy_policy_url = "";
+    public static final String authToken = "authToken";
+
 
 
 
@@ -182,7 +183,7 @@ public class PreferenceManager {
     }
 
     public String getSharedPref() {
-        return mSharedPreferences.getString(SHARED_PREF,"0");
+        return mSharedPreferences.getString(SHARED_PREF,"");
     }
 
     public void setSharedPref(String s) {
@@ -190,8 +191,8 @@ public class PreferenceManager {
         mEditor.commit();
     }
 
-    public String getAuthToken() {
-        return mSharedPreferences.getString(authToken,"0");
+    public  String getAuthToken() {
+        return mSharedPreferences.getString(authToken,"");
     }
 
     public void setAuthToken(String s) {
@@ -209,7 +210,7 @@ public class PreferenceManager {
     }
 
     public String getPrivacy_policy_url() {
-        return mSharedPreferences.getString(privacy_policy_url,"0");
+        return mSharedPreferences.getString(privacy_policy_url,"");
     }
 
     public void setPrivacy_policy_url(String s1) {

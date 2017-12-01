@@ -95,7 +95,7 @@
     <dimen name="movieimg_height">200dp</dimen>
     <dimen name="video280_width">185dp</dimen>
     <dimen name="video280_height">100dp</dimen>
-    <dimen name="listitemlayout_height">310dp</dimen>
+    <dimen name="listitemlayout_height">410dp</dimen>
     <dimen name="itemtitle_text_size">16sp</dimen>
     <dimen name="left_padding">10dp</dimen>
     <dimen name="right_padding">10dp</dimen>

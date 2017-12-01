@@ -78,6 +78,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         super.onTokenRefresh();
         refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
+        Log.v("ANU","refreshedToken==="+refreshedToken);
         // Saving reg id to shared preferences
         languagePreference.setLanguageSharedPrefernce(GOOGLE_FCM_TOKEN, refreshedToken);
         Log.e(TAG, "sendRegistrationToServer: " + refreshedToken);

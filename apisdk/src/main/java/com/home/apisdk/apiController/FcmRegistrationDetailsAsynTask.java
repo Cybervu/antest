@@ -111,7 +111,7 @@ public class FcmRegistrationDetailsAsynTask extends AsyncTask<FcmRegistrationDet
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("ANU","responseStr===="+responseStr);
+                Log.v("ANU","responseStr====1"+responseStr);
 
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {

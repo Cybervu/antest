@@ -144,10 +144,15 @@ public class SDKInitializer {
                 httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
                 httppost.addHeader(HeaderConstants.AUTH_TOKEN, authToken);
                 httppost.addHeader(HeaderConstants.PACKAGE_NAME, context.getPackageName());
+
+                Log.v("ANUU","PACKAGE_NAME==="+context.getPackageName());
+                Log.v("ANUU","AUTH_TOKEN==="+authToken);
+
                 // Execute HTTP Post Request
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
+                    Log.v("ANUU","responseStrA==="+responseStr);
 
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {

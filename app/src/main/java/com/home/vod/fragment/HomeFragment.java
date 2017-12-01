@@ -12,6 +12,7 @@ import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -193,6 +194,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
             url_maps = new ArrayList<String>();
 
+            Log.v("ANU","GetAppHomePageAsync called====");
             HomePageInputModel homePageInputModel = new HomePageInputModel();
             homePageInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
             homePageInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));

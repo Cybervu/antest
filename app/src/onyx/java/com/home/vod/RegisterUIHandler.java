@@ -48,28 +48,37 @@ public class RegisterUIHandler {
     private Activity context;
     private TextView termsTextView,termsTextView1,gmailTest;
     private EditText editName;
-    private LinearLayout btnLogin;
+    private LinearLayout btnLogin,terms_layout;
     public  String selected_Language_Id="", selected_Country_Id="",regNameStr,regPhone="";
     private Button loginButton;
     private RelativeLayout googleSignView;
     private LanguagePreference languagePreference;
 
-    public RegisterUIHandler(Activity context){
+    public RegisterUIHandler(Activity context,PreferenceManager preferenceManager){
         this.context=context;
         gmailTest=(TextView) context.findViewById(R.id.textView);
         googleSignView = (RelativeLayout) context.findViewById(R.id.sign_in_button);
+        terms_layout = (LinearLayout) context.findViewById(R.id.ll);
         termsTextView = (TextView) context.findViewById(R.id.termsTextView);
         termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
         editName = (EditText) context.findViewById(R.id.editNameStr);
         btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
         btnLogin.setVisibility(View.GONE);
         languagePreference = LanguagePreference.getLanguagePreference(context);
+        preferenceManager = PreferenceManager.getPreferenceManager(context);
+
+        if (preferenceManager.getPrivacy_policy_url().equals(null) || preferenceManager.getPrivacy_policy_url().equals("null") || preferenceManager.getPrivacy_policy_url().equals("")) {
+            terms_layout.setVisibility(View.GONE);
+        }
+
+
     }
     public void setCountryList(PreferenceManager preferenceManager){
 
 
     }
     public void setTermsTextView(LanguagePreference languagePreference, final PreferenceManager preferenceManager){
+
         termsTextView1.setText(languagePreference.getTextofLanguage(AGREE_TERMS, DEFAULT_AGREE_TERMS));
         termsTextView.setText(languagePreference.getTextofLanguage(TERMS, DEFAULT_TERMS));
         FontUtls.loadFont(context, context.getResources().getString(R.string.light_fonts), editName);

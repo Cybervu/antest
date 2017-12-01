@@ -94,6 +94,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import player.utils.Util;
 
+import static android.R.attr.alertDialogTheme;
 import static android.R.attr.filter;
 import static com.home.apisdk.apiController.HeaderConstants.RATING;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ENTER_EMPTY_FIELD;
@@ -169,6 +170,7 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
     private String user_Id = "", email_Id = "", isSubscribed = "0";
     private String default_Language = "";
 
+    public static String auth = "";
 
     EditText editEmail,editPassword;
 
@@ -262,12 +264,6 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         isNetwork = Util.checkNetwork(Login.this);
 
 
-        /*if (NetworkStatus.getInstance().isConnected(this)) {
-            SDKInitializer.getInstance().init(this, this, authTokenStr);
-        } else {
-            noInternetLayout.setVisibility(View.VISIBLE);
-            geoBlockedLayout.setVisibility(View.GONE);
-        }*/
 
 
         loginbtn.setOnClickListener(new View.OnClickListener() {
@@ -286,12 +282,18 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
                         Log.v("ANU","isNetwork ==="+isNetwork);
 
 
-                        if (NetworkStatus.getInstance().isConnected(Login.this)) {
-                            SDKInitializer.getInstance().init(Login.this, Login.this, authTokenStr);
-                        } else {
-                            noInternetLayout.setVisibility(View.VISIBLE);
-                            geoBlockedLayout.setVisibility(View.GONE);
-                        }
+
+                        GetStudioAuthkeyInputModel getStudioAuthkeyInputModel = new GetStudioAuthkeyInputModel();
+                        getStudioAuthkeyInputModel.setEmail(email);
+                        getStudioAuthkeyInputModel.setPassword(password);
+                        Log.v("ANU","email called"+email);
+                        Log.v("ANU","password called"+password);
+                        Log.v("ANU","email in model"+getStudioAuthkeyInputModel.getEmail());
+                        Log.v("ANU","password in model"+getStudioAuthkeyInputModel.getPassword());
+                        GetStudioAuthkeyAsynTask getStudioAuthkeyAsynTask = new GetStudioAuthkeyAsynTask(getStudioAuthkeyInputModel, Login.this, Login.this);
+                        getStudioAuthkeyAsynTask.executeOnExecutor(threadPoolExecutor);
+
+
 
                         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
@@ -374,11 +376,15 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
 
 
            if (status.equals("OK")) {
-
                preferenceManager.setAuthToken(authToken);
 
-               GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-               asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+               if (NetworkStatus.getInstance().isConnected(Login.this)) {
+                   SDKInitializer.getInstance().init(Login.this, Login.this, preferenceManager.getAuthToken().trim());
+               } else {
+                   noInternetLayout.setVisibility(View.VISIBLE);
+                   geoBlockedLayout.setVisibility(View.GONE);
+               }
+
 
            }
            else {
@@ -424,15 +430,8 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         if (NetworkStatus.getInstance().isConnected(this)) {
             Log.v("ANU","GetIpAddressAsynTask called");
 
-            GetStudioAuthkeyInputModel getStudioAuthkeyInputModel = new GetStudioAuthkeyInputModel();
-            getStudioAuthkeyInputModel.setEmail(email);
-            getStudioAuthkeyInputModel.setPassword(password);
-            Log.v("ANU","email called"+email);
-            Log.v("ANU","password called"+password);
-            Log.v("ANU","email in model"+getStudioAuthkeyInputModel.getEmail());
-            Log.v("ANU","password in model"+getStudioAuthkeyInputModel.getPassword());
-            GetStudioAuthkeyAsynTask getStudioAuthkeyAsynTask = new GetStudioAuthkeyAsynTask(getStudioAuthkeyInputModel, Login.this, Login.this);
-            getStudioAuthkeyAsynTask.executeOnExecutor(threadPoolExecutor);
+            GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+            asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
 
         } else {
             noInternetLayout.setVisibility(View.VISIBLE);
@@ -458,7 +457,7 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         } else {
             this.ipAddressStr = ipAddressStr;
             CheckGeoBlockInputModel checkGeoBlockInputModel = new CheckGeoBlockInputModel();
-            checkGeoBlockInputModel.setAuthToken(preferenceManager.getAuthToken());
+            checkGeoBlockInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
             checkGeoBlockInputModel.setIp(ipAddressStr);
             Log.v("ANU","CheckGeoBlockCountryAsynTask called");
             CheckGeoBlockCountryAsynTask asynGetCountry = new CheckGeoBlockCountryAsynTask(checkGeoBlockInputModel, this, this);
@@ -488,7 +487,7 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
             if (status > 0 && status == 200) {
                 preferenceManager.setCountryCodeToPref(checkGeoBlockOutputModel.getCountrycode().trim());
                 SubscriptionPlanInputModel planListInput = new SubscriptionPlanInputModel();
-                planListInput.setAuthToken(preferenceManager.getAuthToken());
+                planListInput.setAuthToken(preferenceManager.getAuthToken().trim());
                 planListInput.setLang(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                 Log.v("ANU","GetPlanListAsynctask called");
                 GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, Login.this, Login.this);
@@ -536,7 +535,7 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         Log.v("ANU","IsRegistrationEnabledAsynTask called");
 
         IsRegistrationEnabledInputModel isRegistrationEnabledInputModel = new IsRegistrationEnabledInputModel();
-        isRegistrationEnabledInputModel.setAuthToken(preferenceManager.getAuthToken());
+        isRegistrationEnabledInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
         IsRegistrationEnabledAsynTask asynIsRegistrationEnabled = new IsRegistrationEnabledAsynTask(isRegistrationEnabledInputModel, this, this);
         asynIsRegistrationEnabled.executeOnExecutor(threadPoolExecutor);
     }
@@ -567,7 +566,7 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         LogUtil.showLog("MUVI", "Splash setLoginFeatureToPref ::" + isRegistrationEnabledOutputModel.getIs_login());
 
         LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-        languageListInputModel.setAuthToken(preferenceManager.getAuthToken());
+        languageListInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
         Log.v("ANU","GetLanguageListAsynTask called");
         GetLanguageListAsynTask asynGetLanguageList = new GetLanguageListAsynTask(languageListInputModel, this, this);
         asynGetLanguageList.executeOnExecutor(threadPoolExecutor);
@@ -614,7 +613,7 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         //                  Call For Language Translation.
 
         LanguageListInputModel languageListInputModel = new LanguageListInputModel();
-        languageListInputModel.setAuthToken(preferenceManager.getAuthToken());
+        languageListInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
         languageListInputModel.setLangCode(defaultLanguage);
         Log.v("ANU","GetTranslateLanguageAsync called");
         GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel, this, this);
@@ -646,7 +645,7 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
         }
 
         GenreListInput genreListInput = new GenreListInput();
-        genreListInput.setAuthToken(preferenceManager.getAuthToken());
+        genreListInput.setAuthToken(preferenceManager.getAuthToken().trim());
         Log.v("ANU","GetGenreListAsynctask called");
         GetGenreListAsynctask asynGetGenreList = new GetGenreListAsynctask(genreListInput, Login.this, Login.this);
         asynGetGenreList.executeOnExecutor(threadPoolExecutor);
@@ -781,7 +780,7 @@ public class Login extends Activity implements  GetIpAddressAsynTask.IpAddressLi
 
                 if (user_Id != null && email_Id != null) {
                     Get_UserProfile_Input get_userProfile_input = new Get_UserProfile_Input();
-                    get_userProfile_input.setAuthToken(preferenceManager.getAuthToken());
+                    get_userProfile_input.setAuthToken(preferenceManager.getAuthToken().trim());
                     get_userProfile_input.setEmail(email_Id);
                     get_userProfile_input.setUser_id(user_Id);
                     get_userProfile_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));

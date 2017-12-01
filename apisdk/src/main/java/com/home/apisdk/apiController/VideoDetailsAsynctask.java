@@ -134,7 +134,7 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("MUVISDK", "RES" + responseStr);
+                Log.v("MUVISDK", "RESPONSE==" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 code = 0;

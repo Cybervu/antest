@@ -140,7 +140,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="@dimen/payment_spinner_padding"
                             android:layout_marginTop="@dimen/linear_text_margin"
-                            android:text=""
+                            android:text="/"
                             android:textColor="@color/alreadyHaveALoginButtonTextColor"
                             android:textSize="@dimen/yearline_text_size"
                             android:textStyle="normal" />
@@ -194,8 +194,8 @@
                         android:layout_marginTop="@dimen/ppv_margin"
                         android:button="@drawable/savecard_style"
                         android:text=""
-                        android:textColor="@color/checkboxcolor"
-                        android:textSize="@dimen/savecard_text_size"
+                        android:textColor="@color/buttonTextColor"
+                        android:textSize="16dp"
                         android:visibility="visible" />
 
                     <Button

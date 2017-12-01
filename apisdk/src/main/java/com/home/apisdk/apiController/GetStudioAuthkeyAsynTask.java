@@ -188,7 +188,7 @@ public class GetStudioAuthkeyAsynTask extends AsyncTask<GetStudioAuthkeyInputMod
         super.onPreExecute();
         listener.onGetStudioAuthkeyPreExecuteStarted();
         statusMsg = "";
-        if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
+        /*if (!PACKAGE_NAME.equals(SDKInitializer.getUser_Package_Name_At_Api(context))) {
             this.cancel(true);
             message = "Packge Name Not Matched";
             listener.onGetStudioAuthkeyPostExecuteCompleted(getStudioAuthkeyOutputModel, statusMsg, responseStr, authToken, message);
@@ -198,7 +198,7 @@ public class GetStudioAuthkeyAsynTask extends AsyncTask<GetStudioAuthkeyInputMod
             this.cancel(true);
             message = "Hash Key Is Not Available. Please Initialize The SDK";
             listener.onGetStudioAuthkeyPostExecuteCompleted(getStudioAuthkeyOutputModel, statusMsg, responseStr, authToken, message);
-        }
+        }*/
     }
 
     @Override

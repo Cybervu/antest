@@ -2576,9 +2576,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             Util.dataModel.setPostRoll(_video_details_output.getPostRoll());
             Util.dataModel.setMidRoll(_video_details_output.getMidRoll());
             Util.dataModel.setPlayPos(Util.isDouble(_video_details_output.getPlayed_length()));
+            Util.dataModel.setAdDetails(_video_details_output.getAdDetails());
 
 
             //player model set
+            playerModel.setAdDetails(_video_details_output.getAdDetails());
             playerModel.setMidRoll(_video_details_output.getMidRoll());
             playerModel.setPostRoll(_video_details_output.getPostRoll());
             playerModel.setChannel_id(_video_details_output.getChannel_id());

@@ -70,6 +70,7 @@ import com.home.vod.fragment.ContactUsFragment;
 import com.home.vod.fragment.FragmentDrawer;
 import com.home.vod.fragment.HomeFragment;
 import com.home.vod.fragment.MyLibraryFragment;
+import com.home.vod.fragment.NavigationDrawerFragment;
 import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.model.LanguageModel;
 import com.home.vod.model.NavDrawerItem;
@@ -126,6 +127,7 @@ import static com.home.vod.util.Util.languageModel;
 
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener,
+        NavigationDrawerFragment.NavigationDrawerCallbacks ,
         LogoutAsynctask.LogoutListener,
         GetLanguageListAsynTask.GetLanguageListListener,
         GetTranslateLanguageAsync.GetTranslateLanguageInfoListener, GetAppMenuAsync.GetMenusListener, FcmRegistrationDetailsAsynTask.FcmRegistrationDetailsListener {
@@ -136,6 +138,13 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     LanguagePreference languagePreference;
     FooterMenuHandler fooerMenuHandler;
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        check = position;
+        Toast.makeText(MainActivity.this,"ckjw", Toast.LENGTH_SHORT).show();
+        displayView(position);
+    }
 
 
     //*** chromecast**************//*
@@ -217,6 +226,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     /*** chromecast**************/
 
+    private NavigationDrawerFragment mNavigationDrawerFragment;
+    public CharSequence mTitle;
+    public DrawerLayout mDrawerLayout;
+
 
     public static int vertical = 0;
     private String lang_code = "";
@@ -268,6 +281,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         LogUtil.showLog("BKS", "packagenameMAINactivity1===" + SDKInitializer.user_Package_Name_At_Api);
+
+        Util.drawer_collapse_expand_imageview.clear();
 
         if (menuList != null && menuList.size() > 0) {
             menuList.clear();
@@ -330,14 +345,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
         if (NetworkStatus.getInstance().isConnected(MainActivity.this)) {
-            if (asynLoadMenuItems != null) {
-                asynLoadMenuItems = null;
-            }
-            GetMenusInputModel menuListInput = new GetMenusInputModel();
-            menuListInput.setAuthToken(preferenceManager.getAuthToken());
-            menuListInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-            asynLoadMenuItems = new GetAppMenuAsync(menuListInput, this, this);
-            asynLoadMenuItems.executeOnExecutor(threadPoolExecutor);
+            //********new expandable navigation drawer  by bishal***************
+            mNavigationDrawerFragment = (NavigationDrawerFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+            mTitle = getTitle();
+
+            mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
+                    (DrawerLayout) findViewById(R.id.drawer_layout));
+
+            mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         } else {
             noInternetLayout.setVisibility(View.VISIBLE);
@@ -500,8 +516,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
                         // dialog.cancel();
                         LogoutInput logoutInput = new LogoutInput();
-                        logoutInput.setAuthToken(preferenceManager.getAuthToken());
-                        LogUtil.showLog("Abhi", preferenceManager.getAuthToken());
+                        logoutInput.setAuthToken(preferenceManager.getAuthToken().trim());
                         String loginHistoryIdStr = preferenceManager.getLoginHistIdFromPref();
                         logoutInput.setLogin_history_id(loginHistoryIdStr);
                         logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
@@ -591,12 +606,122 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     //Display View based on selection of menu item
 
+
     private void displayView(int position) {
 
         isNavigated = 1;
 
         String title = getString(R.string.app_name);
      /*   SharedPreferences.Editor dataEditor = dataPref.edit();*/
+        Bundle bundle = new Bundle();
+        String str = menuList.get(position).getPermalink();
+        String titleStr = menuList.get(position).getTitle();
+        // state = position;
+
+        if (internetSpeedDialog!=null && internetSpeedDialog.isShowing()){
+            internetSpeedDialog.hide();
+            internetSpeedDialog = null;
+
+        }
+        if (pDialog!=null && pDialog.isShowing()){
+            pDialog.hide();
+            pDialog = null;
+
+        }
+        if (str !=null && !str.equalsIgnoreCase("") && !str.isEmpty() && menuList.get(position).getLinkType().equalsIgnoreCase("-101")){
+
+            fragment = new HomeFragment();
+            bundle.putString("item", str);
+
+
+        }
+        else if (menuList.get(position).getLinkType().equalsIgnoreCase("102")){
+
+            fragment = new MyLibraryFragment();
+            bundle.putString("title",titleStr);
+
+        }
+        else if (menuList.get(position).getIsEnabled() == false){
+
+            if(str.equals("contactus"))
+            {
+
+                fragment = new ContactUsFragment();
+                bundle.putString("title",titleStr);
+
+
+            }
+            else{
+
+
+              /*  if (menuList.get(position).getLinkType().trim().equalsIgnoreCase("external")){
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menuList.get(position).getUrl().trim()));
+                    browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(browserIntent);
+                    return;
+                }else {
+                    fragment = new AboutUs();
+                    bundle.putString("item", str);
+                    bundle.putString("title", titleStr);
+                }*/
+
+
+                fragment = new AboutUsFragment();
+                bundle.putString("item",str);
+                bundle.putString("title",titleStr);
+
+                Log.v("ANU","item======"+str);
+                Log.v("ANU","title======"+titleStr);
+
+            }
+
+
+        }
+        else if (menuList.get(position).getIsEnabled() == true) {
+
+            fragment = new VideosListFragment();
+            bundle.putString("item", str);
+            bundle.putString("title",titleStr);
+
+
+        }
+       /* else if (menuList.get(position).getIsEnabled() == false) {
+
+            fragment = new WebViewFragment();
+            bundle.putString("item", getResources().getString(R.string.studio_site)+str);
+
+        }*/
+        fragment.setArguments(bundle);
+
+      /*  dataEditor.putString("state", String.valueOf(state));
+                dataEditor.commit();*/
+
+
+
+      /*  if (fragment != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, fragment);
+            View view = this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+            fragmentTransaction.commit();
+
+            // set the toolbar title
+            getSupportActionBar().setTitle(title);
+        }*/
+    }
+
+
+
+  /*  private void displayView(int position) {
+
+        isNavigated = 1;
+
+        String title = getString(R.string.app_name);
+     *//*   SharedPreferences.Editor dataEditor = dataPref.edit();*//*
         Bundle bundle = new Bundle();
         String str = menuList.get(position).getPermalink();
         String titleStr = menuList.get(position).getTitle();
@@ -658,16 +783,16 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
         }
-       /* else if (menuList.get(position).getIsEnabled() == false) {
+       *//* else if (menuList.get(position).getIsEnabled() == false) {
 
             fragment = new WebViewFragment();
             bundle.putString("item", getResources().getString(R.string.studio_site)+str);
 
-        }*/
+        }*//*
         fragment.setArguments(bundle);
 
-      /*  dataEditor.putString("state", String.valueOf(state));
-                dataEditor.commit();*/
+      *//*  dataEditor.putString("state", String.valueOf(state));
+                dataEditor.commit();*//*
 
 
         if (fragment != null) {
@@ -684,7 +809,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             // set the toolbar title
             getSupportActionBar().setTitle(title);
         }
-    }
+    }*/
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -804,7 +929,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     }
 
     @Override
-    public void onGetMenusPostExecuteCompleted(MenusOutputModel menusOutputModel, int status, String message, String privacy_policy_url) {
+    public void onGetMenusPostExecuteCompleted(MenusOutputModel menusOutputModel, int status, String message) {
 
         if (pDialog != null && pDialog.isShowing()) {
             pDialog.hide();
@@ -812,8 +937,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         }
 
-        preferenceManager.setPrivacy_policy_url(privacy_policy_url);
-        Log.v("ANU","pp===="+privacy_policy_url);
+
 
         FcmRegistrationDetailsInputModel fcmRegistrationDetailsInputModel = new FcmRegistrationDetailsInputModel();
         fcmRegistrationDetailsInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
@@ -844,6 +968,17 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 }
             }
 
+
+            if(menusOutputModel.getFooterMenuModel()!=null && menusOutputModel.getFooterMenuModel().size()>0)
+            {
+                for (MenusOutputModel.FooterMenu footerMenu : menusOutputModel.getFooterMenuModel()) {
+                    if (footerMenu.getPermalink().equalsIgnoreCase("terms-privacy-policy")) {
+                        preferenceManager.setPrivacy_policy_url(footerMenu.getUrl());
+                        LogUtil.showLog("BIBHU11", "menuListOutputList ::" +footerMenu.getUrl());
+                    }
+                }
+            }
+
             menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102", ""));
             LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
 
@@ -869,12 +1004,12 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 internetSpeed = "0";
             }
 
-            drawerFragment = (FragmentDrawer)
+           /* drawerFragment = (FragmentDrawer)
                     getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
             drawerFragment.setData(menuList);
             drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
             drawerFragment.setDrawerListener(MainActivity.this);
-            displayView(0);
+            displayView(0);*/
         }
 
         if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
@@ -882,6 +1017,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             internetSpeedDialog = null;
 
         }
+
+
+
 
     }
 
@@ -908,969 +1046,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     }
 
-
-    /*@Override
-    public void onGetMenuListPreExecuteStarted() {
-        try {
-             *//*   internetSpeedDialog = new ProgressDialog(MainActivity.this);
-                internetSpeedDialog.setMessage(getResources().getString(R.string.loading_str));
-                internetSpeedDialog.setIndeterminate(false);
-                internetSpeedDialog.setCancelable(false);
-                internetSpeedDialog.show();*//*
-
-            internetSpeedDialog = new ProgressBarHandler(MainActivity.this);
-            internetSpeedDialog.show();
-            LogUtil.showLog("Alok", "onGetMenuListPreExecuteStarted");
-
-
-        } catch (IllegalArgumentException ex) {
-
-            noInternetLayout.setVisibility(View.VISIBLE);
-            DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-            dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            LogUtil.showLog("Alok", "onGetMenuListPreExecuteStarted IllegalArgumentException");
-        }
-    }
-
-    @Override
-    public void onGetMenuListPostExecuteCompleted(ArrayList<MenuListOutput> menuListOutputList, ArrayList<MenuListOutput> footermenuListOutputList, int status, String message) {
-        LogUtil.showLog("BKS", "packagenameMAINactivity===" + SDKInitializer.user_Package_Name_At_Api);
-
-        LogUtil.showLog("Alok", "onGetMenuListPostExecuteCompleted");
-        if (status == 0) {
-            noInternetLayout.setVisibility(View.VISIBLE);
-            DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-            dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
-
-        } else {
-            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(HOME, DEFAULT_HOME), "-101", true, "-101"));
-            for (MenuListOutput menuListOutput : menuListOutputList) {
-                LogUtil.showLog("Alok", "menuListOutputList ::" + menuListOutput.getPermalink());
-                if (menuListOutput.getLink_type() != null && !menuListOutput.getLink_type().equalsIgnoreCase("") && menuListOutput.getLink_type().equalsIgnoreCase("0")) {
-                    menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getLink_type()));
-                }
-            }
-
-            menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage(MY_LIBRARY, DEFAULT_MY_LIBRARY), "102", true, "102"));
-            LogUtil.showLog("Alok", "getTextofLanguage MY_LIBRARY");
-
-            for (MenuListOutput menuListOutput : footermenuListOutputList) {
-                LogUtil.showLog("Alok", "footermenuListOutputList ::" + menuListOutput.getPermalink());
-                if (menuListOutput.getUrl() != null && !menuListOutput.getUrl().equalsIgnoreCase("")) {
-                    menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getUrl()));
-                }
-            }
-
-
-            imageUrlStr = "https://dadc-muvi.s3-eu-west-1.amazonaws.com/check-download-speed.jpg";
-            if (NetworkStatus.getInstance().isConnected(MainActivity.this)) {
-
-                new Thread(mWorker).start();
-            } else {
-                internetSpeed = "0";
-            }
-
-            drawerFragment = (FragmentDrawer)
-                    getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-            drawerFragment.setData(menuList);
-            drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
-            drawerFragment.setDrawerListener(MainActivity.this);
-            displayView(0);
-        }
-
-        if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-            internetSpeedDialog.hide();
-            internetSpeedDialog = null;
-
-        }
-
-    }
-*/
-//    private class AsynLoadImageUrls extends AsyncTask<Void, Void, Void> {
-//        String responseStr;
-//        int statusCode;
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//
-//            try {
-//                HttpClient httpclient=new DefaultHttpClient();
-//                HttpPost httppost = new HttpPost(Util.rootUrl()+Util.downloadImageUrl.trim());
-//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
-//                // Execute HTTP Post Request
-//                try {
-//
-//                    HttpResponse response = httpclient.execute(httppost);
-//                    responseStr = EntityUtils.toString(response.getEntity());
-//
-//
-//                } catch (org.apache.http.conn.ConnectTimeoutException e){
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            try {
-//                                if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-//                                    internetSpeedDialog.hide();
-//                                    internetSpeedDialog = null;
-//
-//                                }
-//
-//                            } catch (IllegalArgumentException ex) {
-//                                responseStr = "0";
-//                                noInternetLayout.setVisibility(View.VISIBLE);
-//                                DrawerLayout dl =  (DrawerLayout) findViewById(R.id.drawer_layout);
-//                                dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//                            }
-//
-//                        }
-//
-//                    });
-//
-//                }catch (IOException e) {
-//                    try {
-//                        if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-//                            internetSpeedDialog.hide();
-//                            internetSpeedDialog = null;
-//
-//                        }
-//
-//                    }
-//                    catch(IllegalArgumentException ex)
-//                    {
-//                        responseStr = "0";
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                noInternetLayout.setVisibility(View.VISIBLE);
-//                                DrawerLayout dl =  (DrawerLayout) findViewById(R.id.drawer_layout);
-//                                dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//                            }
-//                        });
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//                JSONObject myJson =null;
-//                if(responseStr!=null){
-//                    myJson = new JSONObject(responseStr);
-//                    statusCode = Integer.parseInt(myJson.optString("code"));
-//
-//                }
-//
-//                if (statusCode > 0) {
-//                    if (statusCode == 200) {
-//                        if ((myJson.has("image_url")) && myJson.getString("image_url").trim() != null && !myJson.getString("image_url").trim().isEmpty() && !myJson.getString("image_url").trim().equals("null") && !myJson.getString("image_url").trim().matches("")) {
-//                            imageUrlStr = myJson.getString("image_url");
-//                        }
-//                        else{
-//
-//                            responseStr = "0";
-//
-//                        }
-//                    }
-//                }
-//                else {
-//                    responseStr = "0";
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//                            noInternetLayout.setVisibility(View.VISIBLE);
-//                            DrawerLayout dl =  (DrawerLayout) findViewById(R.id.drawer_layout);
-//                            dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//                        }
-//                    });
-//                }
-//            } catch (JSONException e1) {
-//                try {
-//                    if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-//                        internetSpeedDialog.hide();
-//                        internetSpeedDialog = null;
-//
-//                    }
-//
-//                }
-//                catch(IllegalArgumentException ex)
-//                {
-//                    responseStr = "0";
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//                            noInternetLayout.setVisibility(View.VISIBLE);
-//                            DrawerLayout dl =  (DrawerLayout) findViewById(R.id.drawer_layout);
-//                            dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//                        }
-//                    });
-//                    e1.printStackTrace();
-//                }
-//            }
-//
-//            catch (Exception e)
-//            {
-//                try {
-//                    if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-//                        internetSpeedDialog.hide();
-//                        internetSpeedDialog = null;
-//
-//                    }
-//
-//                }
-//                catch(IllegalArgumentException ex)
-//                {
-//                    responseStr = "0";
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//                            noInternetLayout.setVisibility(View.VISIBLE);
-//                            DrawerLayout dl =  (DrawerLayout) findViewById(R.id.drawer_layout);
-//                            dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//                        }
-//                    });
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//            return null;
-//
-//        }
-//
-//        protected void onPostExecute(Void result) {
-//
-//
-//            try {
-//
-//            }catch (IllegalArgumentException e){
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        noInternetLayout.setVisibility(View.VISIBLE);
-//                        DrawerLayout dl =  (DrawerLayout) findViewById(R.id.drawer_layout);
-//                        dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//
-//                    }
-//                });
-//            }
-//
-//            if(responseStr == null) {
-//                boolean isNetwork = Util.checkNetwork(MainActivity.this);
-//                if (isNetwork == true) {
-//                    new Thread(mWorker).start();
-//                }else{
-//                    internetSpeed = "0";
-//
-//                }
-//                drawerFragment = (FragmentDrawer)
-//                        getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-//                drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
-//                drawerFragment.setDrawerListener(MainActivity.this);
-//
-//               /* if (dataPref != null) {
-//
-//                    String stateStr = dataPref.getString("state", null);
-//
-//                    if (stateStr !=null) {
-//                        int stateInt = Integer.parseInt(stateStr);
-//                        displayView(stateInt);
-//                    }else{
-//                        displayView(0);
-//
-//                    }
-//                }else{
-//                    displayView(0);
-//                }*/
-//                displayView(0);
-//
-//
-//            }
-//            if ((responseStr.trim().equalsIgnoreCase("0"))){
-//                boolean isNetwork = Util.checkNetwork(MainActivity.this);
-//                if (isNetwork == true) {
-//                    new Thread(mWorker).start();
-//                }else{
-//                    internetSpeed = "0";
-//                }
-//                drawerFragment = (FragmentDrawer)
-//                        getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-//                drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
-//                drawerFragment.setDrawerListener(MainActivity.this);
-//               /* if (dataPref != null) {
-//
-//                    String stateStr = dataPref.getString("state", null);
-//
-//                    if (stateStr !=null) {
-//                        int stateInt = Integer.parseInt(stateStr);
-//                        displayView(stateInt);
-//                    }else{
-//                        displayView(0);
-//
-//                    }
-//                }else{
-//                    displayView(0);
-//                }*/
-//                displayView(0);
-//
-//
-//            }else{
-//
-//                boolean isNetwork = Util.checkNetwork(MainActivity.this);
-//                if (isNetwork == true) {
-//
-//                    new Thread(mWorker).start();
-//                }else{
-//                    internetSpeed = "0";
-//                }
-//                drawerFragment = (FragmentDrawer)
-//                        getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-//                drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
-//                drawerFragment.setDrawerListener(MainActivity.this);
-//               /* if (dataPref != null) {
-//
-//                    String stateStr = dataPref.getString("state", null);
-//
-//                    if (stateStr !=null) {
-//                        int stateInt = Integer.parseInt(stateStr);
-//                        displayView(stateInt);
-//                    }else{
-//                        displayView(0);
-//
-//                    }
-//                }else{
-//                    displayView(0);
-//                }*/
-//                displayView(0);
-//
-//
-//            }
-//if(pDialog!=null && pDialog.isShowing()){
-//    pDialog.hide();
-//    pDialog = null;
-//}
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            if (internetSpeedDialog!=null && internetSpeedDialog.isShowing()){
-//                pDialog = internetSpeedDialog;
-//            }else{
-//                pDialog = new ProgressBarHandler(MainActivity.this);
-//                pDialog.show();
-//            }
-//
-//        }
-//
-//
-//    }
-
-    //logout
-
-//    private class AsynLogoutDetails extends AsyncTask<Void, Void, Void> {
-//        ProgressBarHandler pDialog;
-//        int responseCode;
-//        String loginHistoryIdStr = pref.getString("PREFS_LOGIN_HISTORYID_KEY", null);
-//        String responseStr;
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//
-//
-//            String urlRouteList = Util.rootUrl().trim() + Util.logoutUrl.trim();
-//            try {
-//                HttpClient httpclient = new DefaultHttpClient();
-//                HttpPost httppost = new HttpPost(urlRouteList);
-//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
-//                httppost.addHeader("login_history_id", loginHistoryIdStr);
-//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage( Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-//
-//
-//                try {
-//                    HttpResponse response = httpclient.execute(httppost);
-//                    responseStr = EntityUtils.toString(response.getEntity());
-//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (pDialog != null && pDialog.isShowing()) {
-//                                pDialog.hide();
-//                                pDialog = null;
-//                            }
-//                            responseCode = 0;
-//                            Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( Util.SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-//
-//                        }
-//
-//                    });
-//
-//                } catch (IOException e) {
-//                    if (pDialog != null && pDialog.isShowing()) {
-//                        pDialog.hide();
-//                        pDialog = null;
-//                    }
-//                    responseCode = 0;
-//                    e.printStackTrace();
-//                }
-//                if (responseStr != null) {
-//                    JSONObject myJson = new JSONObject(responseStr);
-//                    responseCode = Integer.parseInt(myJson.optString("code"));
-//                }
-//
-//            } catch (Exception e) {
-//                if (pDialog != null && pDialog.isShowing()) {
-//                    pDialog.hide();
-//                    pDialog = null;
-//                }
-//                responseCode = 0;
-//
-//            }
-//
-//            return null;
-//        }
-//
-//
-//        protected void onPostExecute(Void result) {
-//            try {
-//                if (pDialog != null && pDialog.isShowing()) {
-//                    pDialog.hide();
-//                    pDialog = null;
-//
-//                }
-//            } catch (IllegalArgumentException ex) {
-//                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-//
-//            }
-//            if (responseStr == null) {
-//                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-//
-//            }
-//            if (responseCode == 0) {
-//                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-//
-//            }
-//            if (responseCode > 0) {
-//                if (responseCode == 200) {
-//                    SharedPreferences.Editor editor = pref.edit();
-//                    editor.clear();
-//                    editor.commit();
-//                    SharedPreferences loginPref = getSharedPreferences(Util.LOGIN_PREF, 0); // 0 - for private mode
-//                    if (loginPref != null) {
-//                        SharedPreferences.Editor countryEditor = loginPref.edit();
-//                        countryEditor.clear();
-//                        countryEditor.commit();
-//                    }
-//                 /*   SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-//                    if (countryPref!=null) {
-//                        SharedPreferences.Editor countryEditor = countryPref.edit();
-//                        countryEditor.clear();
-//                        countryEditor.commit();
-//                    }*/
-//
-//                    if ((languagePreference.getTextofLanguage( Util.IS_ONE_STEP_REGISTRATION, Util.DEFAULT_IS_ONE_STEP_REGISTRATION)
-//                            .trim()).equals("1")) {
-//                        final Intent startIntent = new Intent(MainActivity.this, SplashScreen.class);
-//                        runOnUiThread(new Runnable() {
-//                            public void run() {
-//                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                                startActivity(startIntent);
-//                                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
-//
-//                                finish();
-//
-//                            }
-//                        });
-//                    } else {
-//                        final Intent startIntent = new Intent(MainActivity.this, MainActivity.class);
-//                        runOnUiThread(new Runnable() {
-//                            public void run() {
-//                                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                                startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                                startActivity(startIntent);
-//                                Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( Util.LOGOUT_SUCCESS, Util.DEFAULT_LOGOUT_SUCCESS), Toast.LENGTH_LONG).show();
-//
-//                                finish();
-//
-//                            }
-//                        });
-//                    }
-//
-//
-//                } else {
-//                    Toast.makeText(MainActivity.this, languagePreference.getTextofLanguage( Util.SIGN_OUT_ERROR, Util.DEFAULT_SIGN_OUT_ERROR), Toast.LENGTH_LONG).show();
-//
-//                }
-//            }
-//
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//
-//            pDialog = new ProgressBarHandler(MainActivity.this);
-//            pDialog.show();
-//        }
-//    }
-
-    //=========
-//    private class AsynLoadMenuItems extends AsyncTask<Void, Void, Void> {
-//        String responseStr;
-//        int statusCode;
-//        String permalink = null;
-//        String displayName = null;
-//        String menuLinkType = null;
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            try {
-//                HttpClient httpclient = new DefaultHttpClient();
-//                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.loadMenuUrl.trim());
-//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
-//                SharedPreferences countryPref = getSharedPreferences(Util.COUNTRY_PREF, 0); // 0 - for private mode
-//                if (countryPref != null) {
-//                    String countryCodeStr = countryPref.getString("countryCode", null);
-//                    httppost.addHeader("country", countryCodeStr);
-//                } else {
-//                    httppost.addHeader("country", "IN");
-//
-//                }
-//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage( Util.SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-//
-//                // Execute HTTP Post Request
-//                try {
-//
-//                    HttpResponse response = httpclient.execute(httppost);
-//                    responseStr = EntityUtils.toString(response.getEntity());
-//
-//
-//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-//                                internetSpeedDialog.hide();
-//                                internetSpeedDialog = null;
-//
-//                            }
-//                            responseStr = "0";
-//                            menuList = null;
-//
-//                            noInternetLayout.setVisibility(View.VISIBLE);
-//                            DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                            dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//                        }
-//
-//                    });
-//
-//                } catch (IOException e) {
-//                    if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-//                        internetSpeedDialog.hide();
-//                        internetSpeedDialog = null;
-//                    }
-//                    responseStr = "0";
-//                    menuList = null;
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//                            noInternetLayout.setVisibility(View.VISIBLE);
-//                            DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                            dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//                        }
-//                    });
-//                    e.printStackTrace();
-//                }
-//
-//                JSONObject myJson = null;
-//                if (responseStr != null) {
-//                    myJson = new JSONObject(responseStr);
-//                    statusCode = Integer.parseInt(myJson.optString("code"));
-//                }
-//
-//                if (statusCode > 0) {
-//                    if (statusCode == 200) {
-//                        menuList = new ArrayList<NavDrawerItem>();
-//                        JSONArray jsonMainNode = myJson.getJSONArray("menu");
-//                        JSONArray jsonFooterNode = myJson.getJSONArray("footer_menu");
-//                        int jsonFooterNodeArr = jsonFooterNode.length();
-//
-//                        int lengthJsonArr = jsonMainNode.length();
-//                        for (int i = 0; i < lengthJsonArr; i++) {
-//                            JSONObject jsonChildNode;
-//                            try {
-//                                jsonChildNode = jsonMainNode.getJSONObject(i);
-//
-//                                if ((jsonChildNode.has("display_name")) && jsonChildNode.getString("display_name").trim() != null && !jsonChildNode.getString("display_name").trim().isEmpty() && !jsonChildNode.getString("display_name").trim().equals("null") && !jsonChildNode.getString("display_name").trim().matches("")) {
-//                                    displayName = jsonChildNode.getString("display_name");
-//
-//                                }
-//
-//
-//                                if ((jsonChildNode.has("link_type")) && jsonChildNode.getString("link_type").trim() != null && !jsonChildNode.getString("link_type").trim().isEmpty() && !jsonChildNode.getString("link_type").trim().equals("null") && !jsonChildNode.getString("link_type").trim().matches("")) {
-//                                    menuLinkType = jsonChildNode.getString("link_type");
-//
-//                                } else {
-//                                    menuLinkType = "0";
-//                                }
-//                               /* if (menuLinkType!=null && !menuLinkType.equalsIgnoreCase("")) {
-//                                    if ((menuLinkType.equalsIgnoreCase("1")) || (menuLinkType.equalsIgnoreCase("3"))){
-//                                        if ((jsonChildNode.has("web_url")) && jsonChildNode.getString("web_url").trim() != null && !jsonChildNode.getString("web_url").trim().isEmpty() && !jsonChildNode.getString("web_url").trim().equals("null") && !jsonChildNode.getString("web_url").trim().matches("")) {
-//                                            permalink = jsonChildNode.getString("web_url");
-//
-//                                        }
-//                                    }else if ((menuLinkType.equalsIgnoreCase("2")) && (menuLinkType.equalsIgnoreCase("3"))){
-//                                        if ((jsonChildNode.has("web_url")) && jsonChildNode.getString("web_url").trim() != null && !jsonChildNode.getString("web_url").trim().isEmpty() && !jsonChildNode.getString("web_url").trim().equals("null") && !jsonChildNode.getString("web_url").trim().matches("")) {
-//                                            permalink = jsonChildNode.getString("web_url");
-//
-//                                        }
-//                                    }else{
-//                                        if ((jsonChildNode.has("permalink")) && jsonChildNode.getString("permalink").trim() != null && !jsonChildNode.getString("permalink").trim().isEmpty() && !jsonChildNode.getString("permalink").trim().equals("null") && !jsonChildNode.getString("permalink").trim().matches("")) {
-//                                            permalink = jsonChildNode.getString("permalink");
-//
-//                                        }
-//                                    }
-//                                }*/
-//                                if (menuLinkType != null && !menuLinkType.equalsIgnoreCase("")) {
-//                                    if ((jsonChildNode.has("permalink")) && jsonChildNode.getString("permalink").trim() != null && !jsonChildNode.getString("permalink").trim().isEmpty() && !jsonChildNode.getString("permalink").trim().equals("null") && !jsonChildNode.getString("permalink").trim().matches("")) {
-//                                        permalink = jsonChildNode.getString("permalink");
-//                                    }
-//                                }
-//
-//
-//                               /* if ((jsonChildNode.has("permalink")) && jsonChildNode.getString("permalink").trim() != null && !jsonChildNode.getString("permalink").trim().isEmpty() && !jsonChildNode.getString("permalink").trim().equals("null") && !jsonChildNode.getString("permalink").trim().matches("")) {
-//                                    permalink = jsonChildNode.getString("permalink");
-//
-//                                }*/
-//                             /*   if (menuLinkType!=null && !menuLinkType.equalsIgnoreCase("")) {
-//                                    if ((menuLinkType.equalsIgnoreCase("1")) || (menuLinkType.equalsIgnoreCase("3"))){
-//                                        if ((jsonChildNode.has("web_url")) && jsonChildNode.getString("web_url").trim() != null && !jsonChildNode.getString("web_url").trim().isEmpty() && !jsonChildNode.getString("web_url").trim().equals("null") && !jsonChildNode.getString("web_url").trim().matches("")) {
-//                                            permalink = jsonChildNode.getString("web_url");
-//
-//                                        }
-//                                    }
-//                                    else if ((menuLinkType.equalsIgnoreCase("0"))){
-//                                        if ((jsonChildNode.has("permalink")) && jsonChildNode.getString("permalink").trim() != null && !jsonChildNode.getString("permalink").trim().isEmpty() && !jsonChildNode.getString("permalink").trim().equals("null") && !jsonChildNode.getString("permalink").trim().matches("")) {
-//                                            permalink = jsonChildNode.getString("permalink");
-//
-//                                        }
-//                                    }
-//                                }
-//                                if ((jsonChildNode.has("permalink")) && jsonChildNode.getString("permalink").trim() != null && !jsonChildNode.getString("permalink").trim().isEmpty() && !jsonChildNode.getString("permalink").trim().equals("null") && !jsonChildNode.getString("permalink").trim().matches("")) {
-//                                    permalink = jsonChildNode.getString("permalink");
-//
-//                                }*/
-//                              /*  if (menuLinkType!=null && !menuLinkType.equalsIgnoreCase("") && !menuLinkType.equalsIgnoreCase("2")) {
-//
-//                                    if (menuLinkType.equalsIgnoreCase("1") || menuLinkType.equalsIgnoreCase("3")) {
-//                                        menuList.add(new NavDrawerItem(displayName, permalink, false, menuLinkType));
-//                                    }else{
-//                                        menuList.add(new NavDrawerItem(displayName, permalink,true,menuLinkType));
-//                                    }
-//                                }*/
-//                               /* if (menuLinkType!=null && !menuLinkType.equalsIgnoreCase("") && !menuLinkType.equalsIgnoreCase("2")) {
-//
-//                                    menuList.add(new NavDrawerItem(displayName, permalink,false,menuLinkType));
-//                                }*/
-//                                if (menuLinkType != null && !menuLinkType.equalsIgnoreCase("") && menuLinkType.equalsIgnoreCase("0")) {
-//                                    menuList.add(new NavDrawerItem(displayName, permalink, true, menuLinkType));
-//                                }
-//
-//
-//                            } catch (Exception e) {
-//                                runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//
-//                                        noInternetLayout.setVisibility(View.VISIBLE);
-//                                        DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                                        dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//                                    }
-//                                });
-//                                // TODO Auto-generated catch block
-//                                e.printStackTrace();
-//                            }
-//                        }
-//
-//                        menuList.add(new NavDrawerItem(languagePreference.getTextofLanguage( Util.MY_LIBRARY, Util.DEFAULT_MY_LIBRARY), "102", true, "102"));
-//
-//
-//                        /*** footer menu******/
-//                        for (int i = 0; i < jsonFooterNodeArr; i++) {
-//                            JSONObject jsonChildNode;
-//                            try {
-//                                jsonChildNode = jsonFooterNode.getJSONObject(i);
-//
-//                                if ((jsonChildNode.has("display_name")) && jsonChildNode.getString("display_name").trim() != null && !jsonChildNode.getString("display_name").trim().isEmpty() && !jsonChildNode.getString("display_name").trim().equals("null") && !jsonChildNode.getString("display_name").trim().matches("")) {
-//                                    displayName = jsonChildNode.getString("display_name");
-//
-//                                }
-//                                if ((jsonChildNode.has("url")) && jsonChildNode.getString("url").trim() != null && !jsonChildNode.getString("url").trim().isEmpty() && !jsonChildNode.getString("url").trim().equals("null") && !jsonChildNode.getString("url").trim().matches("")) {
-//                                    menuLinkType = jsonChildNode.getString("url");
-//
-//                                }
-//                                if ((jsonChildNode.has("permalink")) && jsonChildNode.getString("permalink").trim() != null && !jsonChildNode.getString("permalink").trim().isEmpty() && !jsonChildNode.getString("permalink").trim().equals("null") && !jsonChildNode.getString("permalink").trim().matches("")) {
-//                                    permalink = jsonChildNode.getString("permalink");
-//                                }
-//                                if (menuLinkType != null && !menuLinkType.equalsIgnoreCase("")) {
-//                                    menuList.add(new NavDrawerItem(displayName, permalink, false, menuLinkType));
-//                                }
-//                            } catch (Exception e) {
-//                                runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//
-//                                        noInternetLayout.setVisibility(View.VISIBLE);
-//                                        DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                                        dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//                                    }
-//                                });
-//                                // TODO Auto-generated catch block
-//                                e.printStackTrace();
-//                            }
-//
-//                        }
-//
-//
-//                        /**********footer**********/
-//
-//
-//                       /* JSONArray jsoFooterMenuNode = myJson.getJSONArray("footer_menu");
-//                        int lengthFooter = jsoFooterMenuNode.length();
-//                       *//* if (lengthFooter > 0){
-//                            menuList.add(new NavDrawerItem("FooterSection", "",false));
-//
-//                        }*//*
-//                        for(int i=0; i < lengthFooter; i++) {
-//                            JSONObject jsonChildNode;
-//                            try {
-//                                jsonChildNode = jsoFooterMenuNode.getJSONObject(i);
-//
-//                                if ((jsonChildNode.has("display_name")) && jsonChildNode.getString("display_name").trim() != null && !jsonChildNode.getString("display_name").trim().isEmpty() && !jsonChildNode.getString("display_name").trim().equals("null") && !jsonChildNode.getString("display_name").trim().matches("")) {
-//                                    displayName = jsonChildNode.getString("display_name");
-//
-//                                }
-//                                if ((jsonChildNode.has("url")) && jsonChildNode.getString("url").trim() != null && !jsonChildNode.getString("url").trim().isEmpty() && !jsonChildNode.getString("url").trim().equals("null") && !jsonChildNode.getString("url").trim().matches("")) {
-//                                    permalink = jsonChildNode.getString("url");
-//
-//                                }
-//
-//                                menuList.add(new NavDrawerItem(displayName, permalink,false,menuLinkType));
-//
-//                            } catch (Exception e) {
-//                                runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        tryAgainButton.setClickable(true);
-//                                        tryAgainButton.setEnabled(true);
-//                                        noInternetLayout.setVisibility(View.VISIBLE);
-//                                        DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                                        dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//                                    }
-//                                });
-//                                // TODO Auto-generated catch block
-//                                e.printStackTrace();
-//                            }
-//                        }
-//*/
-//                      /*  if ((myJson.has("image_url")) && myJson.getString("image_url").trim() != null && !myJson.getString("image_url").trim().isEmpty() && !myJson.getString("image_url").trim().equals("null") && !myJson.getString("image_url").trim().matches("")) {
-//                            menuTitles=new String[]{myJson.getString("status")};
-//                            JSONArray jsonarray = new JSONArray("[\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"] ");
-//                            List<String> list = new ArrayList<String>();
-//                            for (int i=0; i<jsonarray.length(); i++) {
-//                                list.add( jsonarray.getString(i) );
-//                            }
-//                            menuTitles = list.toArray(new String[list.size()]);
-//                        }
-//                        else{
-//                            responseStr = "0";
-//                            menuTitles = null;
-//
-//                        }*/
-//                    }
-//                } else {
-//
-//                    responseStr = "0";
-//                    menuList = null;
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//                            noInternetLayout.setVisibility(View.VISIBLE);
-//                            DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                            dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//                        }
-//                    });
-//                }
-//            } catch (JSONException e1) {
-//
-//                if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-//                    internetSpeedDialog.hide();
-//                    internetSpeedDialog = null;
-//                }
-//                responseStr = "0";
-//                menuList = null;
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        noInternetLayout.setVisibility(View.VISIBLE);
-//                        DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                        dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//                    }
-//                });
-//                e1.printStackTrace();
-//            } catch (Exception e)
-//
-//            {
-//
-//                if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-//                    internetSpeedDialog.hide();
-//                    internetSpeedDialog = null;
-//
-//                }
-//                responseStr = "0";
-//                menuList = null;
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        noInternetLayout.setVisibility(View.VISIBLE);
-//                        DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                        dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//                    }
-//                });
-//                e.printStackTrace();
-//
-//            }
-//            return null;
-//
-//        }
-//
-//        protected void onPostExecute(Void result) {
-//
-//
-//            try {
-//
-//            } catch (IllegalArgumentException ex) {
-//
-//                responseStr = "0";
-//                menuList = null;
-//
-//                noInternetLayout.setVisibility(View.VISIBLE);
-//                DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//            }
-//
-//            if (responseStr == null) {
-//
-//                responseStr = "0";
-//                menuList = null;
-//
-//                noInternetLayout.setVisibility(View.VISIBLE);
-//                DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//            }
-//
-//            if ((responseStr.trim().equalsIgnoreCase("0"))) {
-//                menuList = null;
-//
-//                noInternetLayout.setVisibility(View.VISIBLE);
-//                DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//
-//
-//            } else {
-//                if (menuList != null && menuList.size() > 0) {
-//                    if (as != null) {
-//                        as = null;
-//                    }
-//
-//                    menuList.add(0, new NavDrawerItem(languagePreference.getTextofLanguage( Util.HOME, Util.DEFAULT_HOME), "-101", true, "-101"));
-//
-//                    // menuList.add(new NavDrawerItem("Home", "",true,"0"));
-//                   /* menuList.add(new NavDrawerItem("Terms", "",false,"-1"));
-//                    menuList.add(new NavDrawerItem("About", "",false,"-1"));
-//*/
-//
-//
-//                    boolean isNetwork = Util.checkNetwork(MainActivity.this);
-//                    imageUrlStr = "https://dadc-muvi.s3-eu-west-1.amazonaws.com/check-download-speed.jpg";
-//                    if (isNetwork == true) {
-//
-//                        new Thread(mWorker).start();
-//                    } else {
-//                        internetSpeed = "0";
-//                    }
-//                    if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-//                        internetSpeedDialog.hide();
-//                        internetSpeedDialog = null;
-//
-//                    }
-//                    drawerFragment = (FragmentDrawer)
-//                            getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-//                    drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
-//                    drawerFragment.setDrawerListener(MainActivity.this);
-//                    displayView(0);
-//
-//                  /*  as = new AsynLoadImageUrls();
-//                    as.executeOnExecutor(threadPoolExecutor);*/
-//                } else {
-//
-//                    noInternetLayout.setVisibility(View.VISIBLE);
-//                    DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                    dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//                }
-//            }
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            try {
-//             /*   internetSpeedDialog = new ProgressDialog(MainActivity.this);
-//                internetSpeedDialog.setMessage(getResources().getString(R.string.loading_str));
-//                internetSpeedDialog.setIndeterminate(false);
-//                internetSpeedDialog.setCancelable(false);
-//                internetSpeedDialog.show();*/
-//
-//                internetSpeedDialog = new ProgressBarHandler(MainActivity.this);
-//                internetSpeedDialog.show();
-//
-//
-//            } catch (IllegalArgumentException ex) {
-//
-//                noInternetLayout.setVisibility(View.VISIBLE);
-//                DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                dl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//            }
-//         /*  if (internetSpeedDialog == null || !internetSpeedDialog.isShowing()){
-//               internetSpeedDialog = new ProgressDialog(MainActivity.this);
-//               internetSpeedDialog.setMessage(getResources().getString(R.string.loading_str));
-//               internetSpeedDialog.setIndeterminate(false);
-//               internetSpeedDialog.setCancelable(false);
-//               internetSpeedDialog.show();
-//           }*/
-//        }
-//
-//
-//    }
 
     public void ShowLanguagePopup() {
 
@@ -1965,7 +1140,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
                     LanguageListInputModel languageListInputModel = new LanguageListInputModel();
                     languageListInputModel.setLangCode(Default_Language);
-                    languageListInputModel.setAuthToken(preferenceManager.getAuthToken());
+                    languageListInputModel.setAuthToken(preferenceManager.getAuthToken().trim());
                     GetTranslateLanguageAsync asynGetTransalatedLanguage = new GetTranslateLanguageAsync(languageListInputModel, MainActivity.this, MainActivity.this);
                     asynGetTransalatedLanguage.executeOnExecutor(threadPoolExecutor);
                 }
@@ -2506,56 +1681,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 //        }
 //    }
 
-    @Override
-    public void onUserLeaveHint() {
-        super.onUserLeaveHint();
-        /*List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-        if (fragmentList != null) {
-            //TODO: Perform your logic to pass back press here
-            for(Fragment fragment : fragmentList){
-                if(fragment instanceof HomeFragment){
-                    ((HomeFragment)fragment).myOnKeyDown();
-                    ActivityCompat.finishAffinity(this);
-                    finish();
-                    System.exit(0);
-                }
-                else if(fragment instanceof VideosListFragment){
-                    ((VideosListFragment)fragment).myOnKeyDown();
-                    ActivityCompat.finishAffinity(this);
-                    finish();
-                    System.exit(0);
-                }
-            }
-        }*/
-        if (asynLoadMenuItems != null) {
-            asynLoadMenuItems.cancel(true);
-        }
-        if (as != null) {
-            as.cancel(true);
-        }
-        if (isNavigated == 0) {
-            if (internetSpeedDialog != null && internetSpeedDialog.isShowing()) {
-                internetSpeedDialog.hide();
-                internetSpeedDialog = null;
 
-            }
-
-            ActivityCompat.finishAffinity(this);
-            finish();
-            System.exit(0);
-        }
-
-
-
-
-      /*  if (internetSpeedDialog!=null && internetSpeedDialog.isShowing()){
-            internetSpeedDialog.dismiss();
-        }
-        ActivityCompat.finishAffinity(this);
-        finish();
-        System.exit(0);*/
-
-    }
 
     /*@Override
     public boolean dispatchKeyEvent(KeyEvent event) {

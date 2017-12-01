@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import android.graphics.drawable.LayerDrawable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -128,7 +129,7 @@ public class EpisodeListOptionMenuHandler {
 
             if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
                     .trim()).equals("1"))
-                mydownload_menu.setVisible(false);
+                mydownload_menu.setVisible(true);
             else
                 mydownload_menu.setVisible(false);
 
