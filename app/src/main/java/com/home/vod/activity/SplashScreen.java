@@ -9,10 +9,13 @@ import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -70,6 +73,7 @@ import static com.home.vod.util.Util.DEFAULT_GOOGLE_FCM_TOKEN;
 import static com.home.vod.util.Util.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.util.Util.GOOGLE_FCM_TOKEN;
 
+import static com.home.vod.util.Util.decodeSampledBitmapFromResource;
 import static player.utils.Util.HAS_FAVORITE;
 import static player.utils.Util.IS_CHROMECAST;
 import static player.utils.Util.IS_OFFLINE;
@@ -123,6 +127,21 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
         geoTextView = (TextView) findViewById(R.id.geoBlockedTextView);
+        ImageView imageResize = (ImageView) findViewById(R.id.splash_screen);
+       /* DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;*/
+
+        Display display = getWindowManager().getDefaultDisplay();
+        float dpHeight = display.getHeight();
+        float dpWidth = display.getWidth();
+
+        if ( Util.isTablet(SplashScreen.this)){
+            imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        }
+
+      imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
+
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
         geoTextView.setText(languagePreference.getTextofLanguage(GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT));
 

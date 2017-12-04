@@ -2,7 +2,7 @@
 
 <ExpandableListView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list_slidermenu"
-    android:layout_width="300dp"
+    android:layout_width="@dimen/slider_menu_width"
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:background="@drawable/actionbar_background"

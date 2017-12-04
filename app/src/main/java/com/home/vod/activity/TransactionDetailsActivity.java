@@ -132,7 +132,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 
     String TransactionDate, OredrId, Amount, Invoice, TransactionStatus, PlanName;
 
-    String download_Url;
+    String download_Url="";
     boolean deletion_success = false;
     AlertDialog msgAlert;
     private String Currency_symbol;
@@ -141,7 +141,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
     TextView no_internet_text;
     ProgressBarHandler Ph;
     LanguagePreference languagePreference;
-
+    DownloadFileFromURL downloadFileFromURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -276,16 +276,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                 } else {
                     //Call whatever you want
                     if (NetworkStatus.getInstance().isConnected(TransactionDetailsActivity.this)) {
-
-                        GetInvoicePdfInputModel getInvoicePdfInputModel = new GetInvoicePdfInputModel();
-                        getInvoicePdfInputModel.setAuthToken(authTokenStr);
-                        getInvoicePdfInputModel.setUser_id(user_id);
-                        getInvoicePdfInputModel.setId(id);
-                        getInvoicePdfInputModel.setDevice_type("app");
-                        getInvoicePdfInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                        GetInvoicePdfAsynTask downloadDocumentDetails = new GetInvoicePdfAsynTask(getInvoicePdfInputModel, TransactionDetailsActivity.this, TransactionDetailsActivity.this);
-                        downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);
-
+                        getPdfDetail();
                     } else {
                         Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
@@ -300,7 +291,8 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
     public void DownloadTransactionDetails() {
 
         registerReceiver(InternetStatus, new IntentFilter("android.net.wifi.STATE_CHANGE"));
-        new DownloadFileFromURL().execute(Util.Dwonload_pdf_rootUrl + download_Url);
+        downloadFileFromURL=new DownloadFileFromURL();
+        downloadFileFromURL.execute(Util.Dwonload_pdf_rootUrl + download_Url);
 
         LogUtil.showLog("MUVI", "Url=" + Util.Dwonload_pdf_rootUrl + download_Url);
 
@@ -323,6 +315,12 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
             }
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(InternetStatus);
+    }
 
     @Override
     public void onDeleteInvoicePdfPreExecuteStarted() {
@@ -396,7 +394,11 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            showDialog(progress_bar_type);
+            try{
+//                pDialog.cancel();
+                showDialog(progress_bar_type);
+            }catch (Exception e){showDialog(progress_bar_type);
+            }
         }
 
         /**
@@ -407,54 +409,10 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         protected String doInBackground(String... f_url) {
             int count;
 
-           /* try {
-                URL url = new URL(f_url[0]);
-                //URL url = new URL("https://upload.wikimedia.org/wikipedia/commons/3/36/Hopetoun_falls.jpg");
-                LogUtil.showLog("MUVI","url=="+url);
-                String str = f_url[0];
-                filename = str.substring(str.lastIndexOf("/") + 1);
-                URLConnection conection = url.openConnection();
-                conection.connect();
-                // this will be useful so that you can show a tipical 0-100% progress bar
-                int lenghtOfFile = conection.getContentLength();
 
-                // download the file
-                InputStream input = new BufferedInputStream(url.openStream(), 8192);
-                mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "");
-
-                if (!mediaStorageDir.exists()) {
-                    if (!mediaStorageDir.mkdirs()) {
-                        Log.d("App", "failed to create directory");
-                    }
-                }
-                // Output stream
-
-                LogUtil.showLog("MUVI","Download File link found");
-                OutputStream output = new FileOutputStream(mediaStorageDir + "/" + filename);
-                byte data[] = new byte[1024];
-                long total = 0;
-                LogUtil.showLog("MUVI","input .read(data)=="+ input.read(data));
-                while ((count = input.read(data)) != -1) {
-                    LogUtil.showLog("MUVI","Download started");
-                    total += count;
-                    // publishing the progress....
-                    // After this onProgressUpdate will be called
-                    publishProgress("" + (int) ((total * 100) / lenghtOfFile));
-                    // LogUtil.showLog("MUVI", "Lrngth" + data.length);
-                    // writing data to file
-                    output.write(data, 0, count);
-                }
-
-                // flushing output
-                output.flush();
-
-                // closing streams
-                output.close();
-                input.close();
-
-            }*/
             File file = null;
             try {
+                pDialog.setProgress(0);
                 URL url = new URL(f_url[0]);
                 String dwnload_file_path = f_url[0];
                 Download_Url = dwnload_file_path.substring(dwnload_file_path.lastIndexOf("/") + 1);
@@ -495,6 +453,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                 }
                 // close the output stream when complete //
                 fileOutput.close();
+                urlConnection.disconnect();
                 //setText("Download Complete. Open PDF Application installed in the device.");
                 runOnUiThread(new Runnable() {
                     public void run() {
@@ -546,6 +505,11 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after the file was downloaded
 
+            try {
+                downloadFileFromURL.cancel(true);
+            }catch (Exception e){
+
+            }
             LogUtil.showLog("MUVI", "Download Completed");
 
         }
@@ -998,10 +962,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                     if ((grantResults.length > 0) && (grantResults[0]) == PackageManager.PERMISSION_GRANTED) {
                         //Call whatever you want
                         if (NetworkStatus.getInstance().isConnected(TransactionDetailsActivity.this)) {
-                            if (!download_Url.equals(""))
-                                DownloadTransactionDetails();
-                            else
-                                Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_PDF, DEFAULT_NO_PDF), Toast.LENGTH_LONG).show();
+                            getPdfDetail();
                         } else {
                             Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
@@ -1015,5 +976,16 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                 return;
             }
         }
+    }
+
+    public void getPdfDetail(){
+        GetInvoicePdfInputModel getInvoicePdfInputModel = new GetInvoicePdfInputModel();
+        getInvoicePdfInputModel.setAuthToken(authTokenStr);
+        getInvoicePdfInputModel.setUser_id(user_id);
+        getInvoicePdfInputModel.setId(id);
+        getInvoicePdfInputModel.setDevice_type("app");
+        getInvoicePdfInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        GetInvoicePdfAsynTask downloadDocumentDetails = new GetInvoicePdfAsynTask(getInvoicePdfInputModel, TransactionDetailsActivity.this, TransactionDetailsActivity.this);
+        downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);
     }
 }

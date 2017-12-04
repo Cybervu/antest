@@ -168,7 +168,16 @@ public class PurchaseHistoryAsyntask extends AsyncTask<PurchaseHistoryInputModel
                             }
                         }
                         else {
-                            content.setAmount("");
+
+                            if(content.getCurrency_symbol().equals("") || content.getCurrency_symbol()==null || content.getCurrency_symbol().trim().equals(null))
+                            {
+                                content.setAmount(content.getCurrency_code()+"0");
+                            }
+                            else
+                            {
+                                content.setAmount(content.getCurrency_symbol()+"0");
+                            }
+                           // content.setAmount("");
                         }
                         if ((jsonChildNode.has("id")) && jsonChildNode.optString("id").trim() != null && !jsonChildNode.optString("id").trim().isEmpty() && !jsonChildNode.optString("id").trim().equals("null") && !jsonChildNode.optString("id").trim().matches("")) {
                             content.setId(jsonChildNode.optString("id"));

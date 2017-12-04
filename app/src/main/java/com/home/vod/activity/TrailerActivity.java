@@ -809,9 +809,7 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
         if (asyncFFVideoLogDetails!=null){
             asyncFFVideoLogDetails.cancel(true);
         }
-        if (progressView!=null && progressView.isShown()){
-            progressView = null;
-        }
+
         if (timer!=null){
             stoptimertask();
             timer = null;
@@ -1348,57 +1346,55 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     private Runnable updateTimeTask = new Runnable() {
         public void run() {
 
-            if (emVideoView.getCurrentPosition() % 2 == 0)
-                BufferBandWidth();
+            try{
+                if (emVideoView.getCurrentPosition() % 2 == 0)
+                    BufferBandWidth();
 
 
-            seekBar.setProgress(emVideoView.getCurrentPosition());
-            seekBar.setMax(emVideoView.getDuration());
-            Calcute_Currenttime_With_TotalTime();
-            mHandler.postDelayed(this, 1000);
+                seekBar.setProgress(emVideoView.getCurrentPosition());
+                seekBar.setMax(emVideoView.getDuration());
+                Calcute_Currenttime_With_TotalTime();
+                mHandler.postDelayed(this, 1000);
 
-            if (content_types_id!= 4){
-                seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
-            }
-
-            current_matching_time = emVideoView.getCurrentPosition();
-
-
-            if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
-                progressView.setVisibility(View.VISIBLE);
-                center_play_pause.setVisibility(View.GONE);
-                latest_center_play_pause.setVisibility(View.GONE);
-                previous_matching_time = current_matching_time;
-            } else {
-
-                if (content_types_id== 4){
-
-
+                if (content_types_id!= 4){
+                    showCurrentTime();
                 }
-                else
-                {
-                    if (current_matching_time >= emVideoView.getDuration()) {
-                        mHandler.removeCallbacks(updateTimeTask);
-                        //  pause_play.setImageResource(R.drawable.ic_media_play);
-//                    emVideoView.release();
-//                    emVideoView.reset();
-                        seekBar.setProgress(0);
-//                    emVideoView.seekTo(0);
-                        current_time.setText("00:00:00");
-                        total_time.setText("00:00:00");
-                        previous_matching_time = 0;
-                        current_matching_time = 0;
-                        video_completed = true;
-                        //onBackPressed();
-                        backCalled();
+
+                current_matching_time = emVideoView.getCurrentPosition();
+
+
+                if ((previous_matching_time == current_matching_time) && (current_matching_time < emVideoView.getDuration())) {
+                    progressView.setVisibility(View.VISIBLE);
+                    center_play_pause.setVisibility(View.GONE);
+                    latest_center_play_pause.setVisibility(View.GONE);
+                    previous_matching_time = current_matching_time;
+                } else {
+
+                    if (content_types_id== 4){
+
+
                     }
+                    else
+                    {
+                        if (current_matching_time >= emVideoView.getDuration()) {
+                            mHandler.removeCallbacks(updateTimeTask);
+                            seekBar.setProgress(0);
+                            current_time.setText("00:00:00");
+                            total_time.setText("00:00:00");
+                            previous_matching_time = 0;
+                            current_matching_time = 0;
+                            video_completed = true;
+                            backCalled();
+                        }
+                    }
+
+
+                    previous_matching_time = current_matching_time;
+                    ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
                 }
+            }catch (Exception e){
 
-
-                previous_matching_time = current_matching_time;
-                ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
             }
-
         }
     };
 
@@ -1423,52 +1419,56 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
 
     public void onBackPressed() {
         super.onBackPressed();
-        if (asynGetIpAddress!=null){
-            asynGetIpAddress.cancel(true);
-        }
-        if (asyncVideoLogDetails!=null){
-            asyncVideoLogDetails.cancel(true);
-        }
-        if (asyncFFVideoLogDetails!=null){
-            asyncFFVideoLogDetails.cancel(true);
-        }
-        if (progressView!=null && progressView.isShown()){
-            progressView = null;
-        }
-        if (timer!=null){
-            stoptimertask();
-            timer = null;
-        }
-        mHandler.removeCallbacks(updateTimeTask);
-        if (emVideoView!=null) {
-            emVideoView.release();
-        }
+
+        try{
+            if (asynGetIpAddress!=null){
+                asynGetIpAddress.cancel(true);
+            }
+            if (asyncVideoLogDetails!=null){
+                asyncVideoLogDetails.cancel(true);
+            }
+            if (asyncFFVideoLogDetails!=null){
+                asyncFFVideoLogDetails.cancel(true);
+            }
+
+            if (timer!=null){
+                stoptimertask();
+                timer = null;
+            }
+            mHandler.removeCallbacks(updateTimeTask);
+            if (emVideoView!=null) {
+                emVideoView.release();
+            }
+        }catch (Exception e){}
+
         finish();
         overridePendingTransition(0, 0);
     }
     @Override
     protected void onUserLeaveHint()
     {
-        if (asynGetIpAddress!=null){
-            asynGetIpAddress.cancel(true);
-        }
-        if (asyncVideoLogDetails!=null){
-            asyncVideoLogDetails.cancel(true);
-        }
-        if (asyncFFVideoLogDetails!=null){
-            asyncFFVideoLogDetails.cancel(true);
-        }
-        if (progressView!=null && progressView.isShown()){
-            progressView = null;
-        }
-        if (timer!=null){
-            stoptimertask();
-            timer = null;
-        }
-        mHandler.removeCallbacks(updateTimeTask);
-        if (emVideoView!=null) {
-            emVideoView.release();
-        }
+        try{
+            if (asynGetIpAddress!=null){
+                asynGetIpAddress.cancel(true);
+            }
+            if (asyncVideoLogDetails!=null){
+                asyncVideoLogDetails.cancel(true);
+            }
+            if (asyncFFVideoLogDetails!=null){
+                asyncFFVideoLogDetails.cancel(true);
+            }
+
+            if (timer!=null){
+                stoptimertask();
+                timer = null;
+            }
+            mHandler.removeCallbacks(updateTimeTask);
+            if (emVideoView!=null) {
+                emVideoView.release();
+            }
+        }catch(Exception e){}
+
+
         finish();
         overridePendingTransition(0, 0);
         super.onUserLeaveHint();
@@ -1485,7 +1485,6 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
             if (video_completed) {
 
                 if (content_types_id!= 4){
-                    // onBackPressed();
                     backCalled();
                 }
 
@@ -1551,47 +1550,33 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
         current_time.setText(Current_Time);
         current_time_position_timer();
 
-       /* if(seek_label_pos == 0)
-        {
-            current_time_position_timer();
-        }
-        else
-        {
-            seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
-            current_time.setX(seek_label_pos - current_time.getWidth() / 2);
-        }
-
-       *//* if (progresss <=9)
-        {
-            current_time.setX(seek_label_pos -6);
-        }
-        else
-        {
-            current_time.setX(seek_label_pos - 11);
-        }*/
-
-
     }
 
-    public void current_time_position_timer()
-    {
-        final Timer timer  = new Timer();
+    public void current_time_position_timer() {
+        final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (content_types_id!= 4){
+                        if (content_types_id != 4) {
 
-                            seek_label_pos = (((seekBar.getRight() - seekBar.getLeft()) * seekBar.getProgress()) / seekBar.getMax()) + seekBar.getLeft();
-                            current_time.setX(seek_label_pos - current_time.getWidth() / 2);
+                            current_time.setText(Current_Time);
+                            double pourcent = seekBar.getProgress() / (double) seekBar.getMax();
+                            int offset = seekBar.getThumbOffset();
+                            int seekWidth = seekBar.getWidth();
+                            int val = (int) Math.round(pourcent * (seekWidth - 2 * offset));
+                            int labelWidth = current_time.getWidth();
+                            current_time.setX(offset + seekBar.getX() + val
+                                    - Math.round(pourcent * offset)
+                                    - Math.round(pourcent * labelWidth / 2));
                             timer.cancel();
                         }
                     }
                 });
             }
-        },0,100);
+        }, 0, 100);
     }
 
     private void hideSystemUI() {
@@ -1710,7 +1695,6 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
                         videoLogId = "0";
                         log_temp_id = "0";
                     }
-
                 }
 
             } catch (Exception e) {

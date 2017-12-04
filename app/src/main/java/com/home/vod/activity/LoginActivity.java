@@ -21,7 +21,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -37,14 +36,9 @@ import android.widget.Toast;
 import com.androidquery.AQuery;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -85,7 +79,6 @@ import com.home.apisdk.apiModel.LogoutInput;
 import com.home.apisdk.apiModel.SimultaneousLogoutInput;
 import com.home.apisdk.apiModel.SocialAuthInputModel;
 import com.home.apisdk.apiModel.SocialAuthOutputModel;
-import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.BuildConfig;
 import com.home.vod.LoginHandler;
@@ -123,7 +116,6 @@ import player.activity.AdPlayerActivity;
 import player.activity.ExoPlayerActivity;
 import player.activity.MyLibraryPlayer;
 import player.activity.Player;
-import player.activity.ResumePopupActivity;
 
 import static com.home.vod.preferences.LanguagePreference.ANDROID_VERSION;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
@@ -265,7 +257,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         pDialog.hide();
                         pDialog = null;
                     }
-                    LogUtil.showLog("MUVI", "isRestrictDevice called==="+(languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE)));
+                    LogUtil.showLog("MUVI", "isRestrictDevice called===" + (languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE)));
 
                     if ((languagePreference.getTextofLanguage(IS_RESTRICT_DEVICE, DEFAULT_IS_RESTRICT_DEVICE)).trim().equals("1")) {
 
@@ -295,20 +287,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                 //go to subscription page
                                 if (NetworkStatus.getInstance().isConnected(this)) {
 
-                                  /*  ValidateUserInput validateUserInput = new ValidateUserInput();
-                                    validateUserInput.setAuthToken(authTokenStr);
-                                    validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                                    validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                                    validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                    validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                                    validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                    validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                                    asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
-                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
-
-                                    Intent intent = new Intent();
-                                    setResult(RESULT_OK,intent);
-                                    finish();
+                                    setResultAtFinishActivity();
 
 
                                 } else {
@@ -405,7 +384,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     @Override
     public void onGetValidateUserPostExecuteCompleted(ValidateUserOutput validateUserOutput, int status, String message) {
         String validUserStr = validateUserOutput.getValiduser_str();
-        String Subscription_Str = preferenceManager.getIsSubscribedFromPref();
+        String subscription_Str = preferenceManager.getIsSubscribedFromPref();
 
         try {
             if (pDialog != null && pDialog.isShowing()) {
@@ -480,9 +459,10 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 dlgAlert.create().show();
             } else if (status == 429 || status == 430) {
 
-                new MonetizationHandler(LoginActivity.this).handle429OR430statusCod(validUserStr,message,Subscription_Str);
+                new MonetizationHandler(LoginActivity.this).handle429OR430statusCod(validUserStr, message, subscription_Str);
 
-            } else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
+            }
+           else if (Util.dataModel.getIsAPV() == 1 || Util.dataModel.getIsPPV() == 1) {
                 if (Util.dataModel.getContentTypesId() == 3) {
                     // Show Popup
                     ShowPpvPopUp();
@@ -516,10 +496,10 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);
-                    getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
-                    getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
+                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                     getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
-                    getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
+                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
                     getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this, this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
@@ -597,13 +577,13 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
 
         if (statusCode == 200) {
-            if (_video_details_output.getIs_offline()!=null
+            if (_video_details_output.getIs_offline() != null
                     && !_video_details_output.getIs_offline().trim().isEmpty() &&
                     !_video_details_output.getIs_offline().trim().equals("null") &&
                     !_video_details_output.getIs_offline().trim().matches("")) {
                 playerModel.setIsOffline(_video_details_output.getIs_offline());
             }
-            if (_video_details_output.getDownload_status()!=null
+            if (_video_details_output.getDownload_status() != null
                     && !_video_details_output.getDownload_status().trim().isEmpty() &&
                     !_video_details_output.getDownload_status().trim().equals("null") &&
                     !_video_details_output.getDownload_status().trim().matches("")
@@ -736,8 +716,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         ) {
                     if (mCastSession != null && mCastSession.isConnected()) {
                         ///Added for resume cast watch
-                        if((Util.dataModel.getPlayPos() * 1000)>0)
-                        {
+                        if ((Util.dataModel.getPlayPos() * 1000) > 0) {
                             Util.dataModel.setPlayPos(Util.dataModel.getPlayPos());
                           /*  Intent resumeIntent = new Intent(LoginActivity.this, ResumePopupActivity.class);
                             startActivityForResult(resumeIntent, 1001);*/
@@ -746,7 +725,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
 
                             movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory());
-                            movieMetadata.putString(MediaMetadata.KEY_TITLE,  playerModel.getVideoTitle());
+                            movieMetadata.putString(MediaMetadata.KEY_TITLE, playerModel.getVideoTitle());
                             movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
                             movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
 
@@ -793,7 +772,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     jsonObj.put("played_length", "0");
                                     jsonObj.put("log_temp_id", "0");
                                     jsonObj.put("resume_time", "0");
-                                    jsonObj.put("seek_status",seek_status);
+                                    jsonObj.put("seek_status", seek_status);
                                     // This  Code Is Added For Drm BufferLog By Bibhu ...
 
                                     jsonObj.put("resolution", "BEST");
@@ -856,7 +835,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     jsonObj.put("resume_time", "0");
 
 
-
                                     if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                                         jsonObj.put("restrict_stream_id", "0");
                                         jsonObj.put("is_streaming_restriction", "1");
@@ -916,15 +894,14 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             setResult(RESULT_OK, resumeLogin);
                             finish();
 
-                        }else
-                        {
+                        } else {
                             Played_Length = 0;
                             watch_status_String = "start";
 
                             PlayThroughChromeCast();
                         }
 
-                    }else {
+                    } else {
 
                         playerModel.setThirdPartyPlayer(false);
                         final Intent playVideoIntent;
@@ -1114,7 +1091,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
                 jsonObj.put("resume_time", "0");
-                jsonObj.put("seek_status",seek_status);
+                jsonObj.put("seek_status", seek_status);
                 // This  Code Is Added For Drm BufferLog By Bibhu ...
 
                 jsonObj.put("resolution", "BEST");
@@ -1178,7 +1155,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 jsonObj.put("resume_time", "0");
 
 
-
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                     jsonObj.put("restrict_stream_id", "0");
                     jsonObj.put("is_streaming_restriction", "1");
@@ -1238,6 +1214,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         }
     }
+
     @Override
     public void onLogoutPreExecuteStarted() {
         pDialog = new ProgressBarHandler(LoginActivity.this);
@@ -1516,7 +1493,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 return false;
             }
         });*/
-     
+
 
         /*******enter key of keyboard *************/
 
@@ -1576,7 +1553,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             @Override
             public void onClick(View v) {
 
-               Util.hideKeyboard(LoginActivity.this);
+                Util.hideKeyboard(LoginActivity.this);
 
                 loginButtonClicked();
 
@@ -1878,7 +1855,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     login_input.setDevice_id(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
                     login_input.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
                     login_input.setDevice_type("1");
-                    login_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+                    login_input.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                     LoginAsynTask asyncReg = new LoginAsynTask(login_input, this, this);
                     asyncReg.executeOnExecutor(threadPoolExecutor);
                 } else {
@@ -2913,7 +2890,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
     @Override
     public void onBackPressed() {
-        if (asynValidateUserDetails!=null){
+        if (asynValidateUserDetails != null) {
             asynValidateUserDetails.cancel(true);
         }
 
@@ -3777,12 +3754,11 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && requestCode == 1001)
-        {
+        if (resultCode == RESULT_OK && requestCode == 1001) {
             if (data.getStringExtra("yes").equals("1002")) {
                 watch_status_String = "halfplay";
                 seek_status = "first_time";
-                Played_Length = Util.dataModel.getPlayPos()*1000;
+                Played_Length = Util.dataModel.getPlayPos() * 1000;
                 PlayThroughChromeCast();
 
             } else {
@@ -3790,10 +3766,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 Played_Length = 0;
                 PlayThroughChromeCast();
             }
-        }
-        else
-        {
-            if(requestCode == 1001) {
+        } else {
+            if (requestCode == 1001) {
                 watch_status_String = "strat";
                 Played_Length = 0;
                 PlayThroughChromeCast();
@@ -4165,7 +4139,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         checkDeviceInput.setDevice_info(deviceName + "," + languagePreference.getTextofLanguage(ANDROID_VERSION, DEFAULT_ANDROID_VERSION) + " " + Build.VERSION.RELEASE);
                         CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
                         asynCheckDevice.executeOnExecutor(threadPoolExecutor);
-                    }else {
+                    } else {
 
 
                         if (Util.check_for_subscription == 1) {
@@ -4182,20 +4156,10 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
                                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                                 } else {
-                                    /*ValidateUserInput validateUserInput = new ValidateUserInput();
-                                    validateUserInput.setAuthToken(authTokenStr);
-                                    validateUserInput.setUserId(validateUserInput.getUserId());
-                                    validateUserInput.setMuviUniqueId(validateUserInput.getMuviUniqueId());
-                                    validateUserInput.setEpisodeStreamUniqueId(validateUserInput.getEpisodeStreamUniqueId());
-                                    validateUserInput.setSeasonId(validateUserInput.getSeasonId());
-                                    validateUserInput.setLanguageCode(validateUserInput.getLanguageCode());
-                                    validateUserInput.setPurchaseType(validateUserInput.getPurchaseType());
-                                    GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
-                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
 
-                                    Intent intent = new Intent();
-                                    setResult(RESULT_OK,intent);
-                                    finish();
+                                    setResultAtFinishActivity();
+
+
                                 }
                             } else {
                                 Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -4211,8 +4175,6 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             onBackPressed();
                         }
                     }
-
-
 
 
                 } else {
@@ -5058,21 +5020,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
-                           /* ValidateUserInput validateUserInput = new ValidateUserInput();
-                            validateUserInput.setAuthToken(authTokenStr);
-                            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                            validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                            validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                            validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                            validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                            GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
-                            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
-
-                            Intent intent = new Intent();
-                            setResult(RESULT_OK,intent);
-                            finish();
-
+                            setResultAtFinishActivity();
 
                         }
                     } else {
@@ -5255,7 +5203,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         LogoutInput logoutInput = new LogoutInput();
         logoutInput.setAuthToken(authTokenStr);
         logoutInput.setLogin_history_id(loginHistoryIdStr);
-        logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
+        logoutInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
         LogoutAsynctask asynLogoutDetails = new LogoutAsynctask(logoutInput, this, this);
         asynLogoutDetails.executeOnExecutor(threadPoolExecutor);
     }
@@ -5741,21 +5689,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         if (Util.check_for_subscription == 1) {
                             //go to subscription page
                             if (NetworkStatus.getInstance().isConnected(LoginActivity.this)) {
-
-                               /* ValidateUserInput validateUserInput = new ValidateUserInput();
-                                validateUserInput.setAuthToken(authTokenStr);
-                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-                                validateUserInput.setMuviUniqueId(Util.dataModel.getMovieUniqueId().trim());
-                                validateUserInput.setEpisodeStreamUniqueId(Util.dataModel.getEpisode_id());
-                                validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
-                                validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                validateUserInput.setPurchaseType(Util.dataModel.getPurchase_type());
-                                GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
-                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
-
-                                Intent intent = new Intent();
-                                setResult(RESULT_OK,intent);
-                                finish();
+                                setResultAtFinishActivity();
 
                             } else {
                                 Util.showToast(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
@@ -5823,7 +5757,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         asynCheckFbUserDetails.executeOnExecutor(threadPoolExecutor);
 
     }
-    public void handleActionForValidateUserPayment(String validUserStr, String message, String Subscription_Str){
+
+    public void handleActionForValidateUserPayment(String validUserStr, String message, String Subscription_Str) {
         if (validUserStr != null) {
 
 
@@ -5874,7 +5809,8 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         }
 
     }
-    public void handleActionForValidateSonyUserPayment(String validUserStr, String message, String subscription_Str,String alertShowMsg) {
+
+    public void handleActionForValidateSonyUserPayment(String validUserStr, String message, String subscription_Str, String alertShowMsg) {
         if (validUserStr != null) {
 
 
@@ -5889,7 +5825,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                     getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput,this, this);
+                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, this, this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                 } else {
                     Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
@@ -5897,10 +5833,16 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
             } else {
 
                 if ((message.trim().equalsIgnoreCase("Unpaid")) || (message.trim().matches("Unpaid")) || (message.trim().equals("Unpaid"))) {
-                    Util.showActivateSubscriptionWatchVideoAleart(this,alertShowMsg);
+                    Util.showActivateSubscriptionWatchVideoAleart(this, alertShowMsg);
                 }
 
             }
         }
+    }
+
+    public void setResultAtFinishActivity(){
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

@@ -161,6 +161,8 @@ import static android.R.attr.format;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
@@ -672,7 +674,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         videoCastCrewTitleTextView = (TextView) findViewById(R.id.videoCastCrewTitleTextView);
         Typeface watchTrailerButtonTypeface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fonts));
         videoCastCrewTitleTextView.setTypeface(watchTrailerButtonTypeface);
-        videoCastCrewTitleTextView.setText(Util.getTextofLanguage(ExoPlayerActivity.this, Util.CAST_CREW_BUTTON_TITLE, Util.DEFAULT_CAST_CREW_BUTTON_TITLE));
+        videoCastCrewTitleTextView.setText(languagePreference.getTextofLanguage( CAST_CREW_BUTTON_TITLE,DEFAULT_CAST_CREW_BUTTON_TITLE));
 
         // ExoPlayerActivity.this is changed for the new requirement of Offline Viewing.
         ExoPlayerActivity.this.startService(new Intent(ExoPlayerActivity.this, DataConsumptionService.class));
@@ -872,9 +874,10 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
         if (playerModel.getVideoStory().trim() != null && !playerModel.getVideoStory().trim().matches(""))
 
         {
-            story.setText(playerModel.getVideoStory());
+//            story.setText(playerModel.getVideoStory());
+            story.setText(com.home.vod.util.Util.getTextViewTextFromApi(playerModel.getVideoStory()));
             story.setVisibility(View.VISIBLE);
-            ResizableCustomView.doResizeTextView(ExoPlayerActivity.this, story, MAX_LINES, Util.getTextofLanguage(ExoPlayerActivity.this, Util.VIEW_MORE, Util.DEFAULT_VIEW_MORE), true);
+            ResizableCustomView.doResizeTextView(ExoPlayerActivity.this, story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE,DEFAULT_VIEW_MORE), true);
         } else {
             story.setVisibility(View.GONE);
         }
@@ -3307,7 +3310,8 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
     }
 
     private void showSystemUI() {
-        story.setText(playerModel.getVideoStory());
+//        story.setText(playerModel.getVideoStory());
+        story.setText(com.home.vod.util.Util.getTextViewTextFromApi(playerModel.getVideoStory()));
         ResizableCustomView.doResizeTextView(ExoPlayerActivity.this, story, MAX_LINES, languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE), true);
 
         View decorView = getWindow().getDecorView();
