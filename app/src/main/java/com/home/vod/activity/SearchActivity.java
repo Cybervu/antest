@@ -485,6 +485,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     @Override
     public void onSearchDataPostExecuteCompleted(ArrayList<Search_Data_otput> contentListOutputArray, int status, int totalItems, String message) {
 
+        itemsInServer=totalItems;
         String videoGenreStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         String videoName = "";
         String videoImageStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
@@ -520,6 +521,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     gridView.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
                     noDataLayout.setVisibility(View.GONE);
+
 
 
                     for (int i = 0; i < contentListOutputArray.size(); i++) {
@@ -1027,6 +1029,20 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input, SearchActivity.this, SearchActivity.this);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
+                           /* Search_Data_input search_data_input = new Search_Data_input();
+                            search_data_input.setAuthToken("7a4d24bf8f28432dd3e3d75980a6f7c3");
+                            search_data_input.setLimit("15");
+                            search_data_input.setOffset("1");
+                            search_data_input.setQ("trapped ");
+                            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
+                            if (countryCodeStr != null) {
+                                search_data_input.setCountry("IN");
+                            } else {
+                                search_data_input.setCountry("IN");
+                            }
+                            search_data_input.setLanguage_code("nl");
+                            SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input, SearchActivity.this, SearchActivity.this);
+                            asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
                         }
                     }
                     return true;
