@@ -312,6 +312,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAsynTask.Con
         regEmailStr = editEmailStr.getText().toString().trim();
         regNameStr = editNameStr.getText().toString().trim();
         regMessageStr = editMessageStr.getText().toString().trim();
+        regMessageStr = regMessageStr.replaceAll("(\r\n|\n\r|\r|\n|<br />)", " ");
 
         boolean isNetwork = NetworkStatus.getInstance().isConnected(context);
         if (isNetwork) {

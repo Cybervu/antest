@@ -33,6 +33,7 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.util.Util;
 
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
+import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.util.Constant.authTokenStr;
 
@@ -66,6 +67,9 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
         final View view = inflater.inflate(R.layout.fragment_about_us, container, false);
         context = getActivity();
         languagePreference = LanguagePreference.getLanguagePreference(context);
+
+
+
         progresBar = (ProgressBar) view.findViewById(R.id.progress_bar);
 
 
@@ -210,7 +214,7 @@ public class AboutUsFragment extends Fragment implements AboutUsAsync.AboutUsLis
 
           /*  textView.setMovementMethod(LinkMovementMethod.getInstance());
             textView.setText(getStyledTextFromHtml(bodyData));*/
-        int color = getResources().getColor(R.color.aboutustextcolor);
+        int color =  getActivity().getResources().getColor(R.color.aboutustextcolor);
         String aboutUSTextColor = "#" + Integer.toHexString(color & 0x00FFFFFF);
         String text = "<html><head>"
                 + "<style type=\"text/css\" >body{color:" + aboutUSTextColor + ";}"

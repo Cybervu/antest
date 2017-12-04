@@ -37,7 +37,7 @@
                     android:layout_centerInParent="true"
                     android:gravity="center"
                     android:orientation="vertical">
-               <!--     <EditText
+                    <!--     <EditText
                         android:id="@+id/editProfileNameEditText_first"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
                         android:textColor="@color/editTextColor"
                         android:textColorHint="@color/hint_color"
                         android:textSize="@dimen/edit_text_size"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
 
                     <EditText
                         android:id="@+id/emailAddressEditText"
@@ -191,7 +191,7 @@
                         android:stateListAnimator="@null"
                         android:textAllCaps="false"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="@dimen/changepas_edittest"
+                        android:textSize="@dimen/login_text_size"
 
                         />
 

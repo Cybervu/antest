@@ -31,6 +31,7 @@
         android:icon="@drawable/search"
         android:orderInCategory="103"
         app:showAsAction="always|never"
+        android:visible="false"
         />
     <item
         android:id="@+id/action_filter"
@@ -38,7 +39,7 @@
         android:icon="@drawable/filter"
         android:orderInCategory="101"
         app:showAsAction="always|never"
-        android:visible="true"
+        android:visible="false"
         />
 
     <item
@@ -46,7 +47,8 @@
         android:title=""
         android:icon="@drawable/optionmanu"
         android:orderInCategory="105"
-        app:showAsAction="always|never">
+        app:showAsAction="always|never"
+        android:visible="false">
         <menu>
             <item
                 android:id="@+id/action_login"
