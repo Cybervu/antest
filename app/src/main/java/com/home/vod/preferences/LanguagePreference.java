@@ -89,6 +89,10 @@ public class LanguagePreference {
     public static final String SAVE_THIS_CARD = "SAVE_THIS_CARD";
     public static final String USE_NEW_CARD = "USE_NEW_CARD";
     public static final String BUTTON_APPLY = "BUTTON_APPLY";
+    public static final String BUTTON_RESET = "BUTTON_RESET";
+    public static final String DEFAULT_BUTTON_RESET = "Reset";
+    public static String CHK_OVER_18 = "CHK_OVER_18";
+    public static String DEFAULT_CHK_OVER_18 = "By clicking on Register, I agree to";
     public static final String BUTTON_OK = "BUTTON_OK";
     public static final String AGREE_TERMS = "AGREE_TERMS";
     public static final String TERMS = "TERMS";

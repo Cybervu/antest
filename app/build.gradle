@@ -158,9 +158,12 @@ android {
             applicationId 'com.release.teststreamingapp'
             versionCode 11
             targetSdkVersion 25
+
+            
             versionName '2.2.4'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
+            //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
         }
         lumiere_staging_ {
             dimension 'environment'

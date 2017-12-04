@@ -39,15 +39,29 @@
                     android:orientation="vertical">
 
                     <EditText
-                        android:id="@+id/editProfileNameEditText"
+                        android:id="@+id/editProfileNameEditText_first"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
                         android:layout_below="@+id/iconImageViewLayout"
                         android:layout_centerHorizontal="true"
-
                         android:drawablePadding="@dimen/Login_drawing_padding"
                         android:padding="@dimen/login_padding_bottom"
+                        android:hint="First Name"
+                        android:textColor="@color/editTexColor"
+                        android:textColorHint="@color/hintTextColor"
+                        android:textSize="@dimen/edit_text_size" />
+
+                    <EditText
+                        android:id="@+id/editProfileNameEditText_last"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_below="@+id/iconImageViewLayout"
+                        android:layout_centerHorizontal="true"
+                        android:drawablePadding="@dimen/Login_drawing_padding"
+                        android:padding="@dimen/login_padding_bottom"
+                        android:hint="Last Name"
                         android:textColor="@color/editTexColor"
                         android:textColorHint="@color/hintTextColor"
                         android:textSize="@dimen/edit_text_size" />
@@ -181,7 +195,7 @@
                         android:textAllCaps="false"
                         android:stateListAnimator="@null"
                         android:textColor="@color/buttonTextColor"
-                        android:textSize="@dimen/changepas_edittest"
+                        android:textSize="@dimen/login_text_size"
 
                         />
 

@@ -266,7 +266,7 @@
                         android:maxLines="1"
                         android:text=""
                         android:textColor="@color/videoTitleTextColor"
-                        android:textSize="@dimen/forgot_text_size"
+                        android:textSize="@dimen/videotitle_text_size"
                         android:textStyle="bold"
                         android:visibility="gone" />
 
@@ -311,9 +311,8 @@
                         android:layout_marginLeft="@dimen/ppv_margin"
                         android:layout_marginRight="@dimen/ppv_margin"
                         android:layout_marginTop="@dimen/terms_text_view_margin_right"
-
                         android:textColor="@color/detailsPageTextColor"
-                        android:textSize="@dimen/review_btn_textsize" />
+                        android:textSize="@dimen/preorderbtn_text_size" />
 
                     <TextView
                         android:id="@+id/videoCastCrewTitleTextView"
@@ -381,8 +380,8 @@
 
                 <Button
                     android:id="@+id/btnMore"
-                    android:layout_width="@dimen/review_btn_width"
-                    android:layout_height="@dimen/review_btn_height"
+                    android:layout_width="@dimen/btnmore_width"
+                    android:layout_height="@dimen/btnmore_height"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"

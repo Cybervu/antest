@@ -75,7 +75,6 @@ import com.home.apisdk.apiModel.Registration_input;
 import com.home.apisdk.apiModel.Registration_output;
 import com.home.apisdk.apiModel.SocialAuthInputModel;
 import com.home.apisdk.apiModel.SocialAuthOutputModel;
-import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.BuildConfig;
 import com.home.vod.MonetizationHandler;
