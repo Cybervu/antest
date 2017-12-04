@@ -1528,6 +1528,12 @@ public class Sdk_TrailerActivity extends AppCompatActivity implements SensorOrie
         super.onBackPressed();
 
         try{
+
+            if (video_completed == false){
+                AsyncResumeVideoLogDetails  asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+                asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            }
+
             if (asynGetIpAddress!=null){
                 asynGetIpAddress.cancel(true);
             }
@@ -1556,6 +1562,12 @@ public class Sdk_TrailerActivity extends AppCompatActivity implements SensorOrie
     protected void onUserLeaveHint()
     {
         try{
+
+            if (video_completed == false){
+
+                AsyncResumeVideoLogDetails  asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+                asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            }
 
             if (asynGetIpAddress!=null){
                 asynGetIpAddress.cancel(true);

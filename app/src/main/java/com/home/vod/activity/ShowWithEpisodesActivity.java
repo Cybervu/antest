@@ -208,6 +208,9 @@ import static com.release.muvisdk.player.utils.Util.REVIEWS;
 
 
 import com.home.vod.util.Util;
+import com.release.muvisdk.player.activity.SdkMyDownloads;
+import com.release.muvisdk.player.activity.Sdk_TrailerActivity;
+import com.release.muvisdk.player.model.DownloadModel;
 import com.squareup.picasso.Picasso;
 
 import com.release.muvisdk.player.activity.AdPlayerActivity;
@@ -484,6 +487,17 @@ MonetizationHandler monetizationHandler;
             Util.currencyModel = contentDetailsOutput.getCurrencyDetails();
             Util.apvModel = contentDetailsOutput.getApvDetails();
             Util.ppvModel = contentDetailsOutput.getPpvDetails();
+
+            trailer_player.setVideoTitle(movieNameStr);
+            trailer_player.setVideoGenre(movieTypeStr);
+            trailer_player.setVideoDuration(videoduration);
+            trailer_player.setCensorRating(censorRatingStr);
+            trailer_player.setVideoReleaseDate(contentDetailsOutput.getReleaseDate());
+            trailer_player.setVideoStory(contentDetailsOutput.getStory());
+            trailer_player.setCastCrew(contentDetailsOutput.getCastStr());
+            trailer_player.setContentTypesId(1);
+            trailer_player.setMovieUniqueId(movieUniqueId);
+            trailer_player.setEpisode_id(movieStreamUniqueId);
 
             /***favorite *****/
 
@@ -1811,6 +1825,7 @@ MonetizationHandler monetizationHandler;
 
     AlertDialog alert;
     Player playerModel;
+    Player trailer_player;
 
     RecyclerView.LayoutManager mLayoutManager;
     String movieStreamUniqueId, bannerImageId, posterImageId, permalinkStr;
@@ -1858,6 +1873,7 @@ MonetizationHandler monetizationHandler;
         monetizationHandler=new MonetizationHandler(this);
         languagePreference = LanguagePreference.getLanguagePreference(ShowWithEpisodesActivity.this);
         playerModel = new Player();
+        trailer_player = new Player();
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
         handleRatingbar = new HandleRatingbar(this);
         //playerModel = (Player) getIntent().getSerializableExtra("PlayerModel");
@@ -2167,11 +2183,18 @@ MonetizationHandler monetizationHandler;
                         togglePlayback();
 
                     } else {
-                        final Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, TrailerActivity.class);
+                        trailer_player.setUserId(id);
+                        trailer_player.setAuthToken(authTokenStr);
+                        trailer_player.setEmailId(email);
+                        trailer_player.setVideoUrl(Util.dataModel.getVideoUrl());
+                        trailer_player.setAppName(getResources().getString(R.string.app_name));
+
+                        final Intent playVideoIntent = new Intent(ShowWithEpisodesActivity.this, Sdk_TrailerActivity.class);
 
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                playVideoIntent.putExtra("PlayerModel",trailer_player);
                                 startActivity(playVideoIntent);
 
                             }
@@ -3426,7 +3449,19 @@ MonetizationHandler monetizationHandler;
                 return false;
             case R.id.action_mydownload:
 
-                Intent mydownload = new Intent(ShowWithEpisodesActivity.this, MyDownloads.class);
+                DownloadModel downloadModel = new DownloadModel();
+                downloadModel.setUserId(id);
+                downloadModel.setEmail(email);
+                downloadModel.setAuthToken(authTokenStr);
+
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                    downloadModel.setIsstreaming_restricted(true);
+                } else {
+                    downloadModel.setIsstreaming_restricted(false);
+                }
+
+                Intent mydownload = new Intent(ShowWithEpisodesActivity.this, SdkMyDownloads.class);
+                mydownload.putExtra("DownloadModel",downloadModel);
                 startActivity(mydownload);
                 // Not implemented here
                 return false;

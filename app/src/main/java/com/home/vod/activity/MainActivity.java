@@ -74,6 +74,8 @@ import com.home.vod.util.LogUtil;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
+import com.release.muvisdk.player.activity.SdkMyDownloads;
+import com.release.muvisdk.player.model.DownloadModel;
 
 import org.json.JSONException;
 
@@ -97,6 +99,7 @@ import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LANGUAGE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_HOME;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_LIBRARY;
@@ -108,6 +111,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNI
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.HOME;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
 import static com.home.vod.preferences.LanguagePreference.MY_LIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO;
@@ -433,7 +437,19 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 return false;
             case R.id.action_mydownload:
 
-                Intent mydownload = new Intent(MainActivity.this, MyDownloads.class);
+                DownloadModel downloadModel = new DownloadModel();
+                downloadModel.setUserId(id);
+                downloadModel.setEmail(email);
+                downloadModel.setAuthToken(authTokenStr);
+
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                    downloadModel.setIsstreaming_restricted(true);
+                } else {
+                    downloadModel.setIsstreaming_restricted(false);
+                }
+
+                Intent mydownload = new Intent(MainActivity.this, SdkMyDownloads.class);
+                mydownload.putExtra("DownloadModel",downloadModel);
                 startActivity(mydownload);
                 // Not implemented here
                 return false;

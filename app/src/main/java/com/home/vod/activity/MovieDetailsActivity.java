@@ -106,7 +106,9 @@ import com.home.vod.util.Util;
 
 import com.release.muvisdk.player.activity.AdPlayerActivity;
 //import com.release.muvisdk.player.activity.Sdk_TrailerActivity;
+import com.release.muvisdk.player.activity.SdkMyDownloads;
 import com.release.muvisdk.player.activity.Sdk_TrailerActivity;
+import com.release.muvisdk.player.model.DownloadModel;
 import com.release.muvisdk.player.model.Player;
 import com.release.muvisdk.player.activity.PlayerActivity;
 import com.release.muvisdk.player.activity.ResumePopupActivity;
@@ -433,7 +435,21 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 return false;
             case R.id.action_mydownload:
 
-                Intent mydownload = new Intent(MovieDetailsActivity.this, MyDownloads.class);
+                DownloadModel downloadModel = new DownloadModel();
+                downloadModel.setUserId(id);
+                downloadModel.setEmail(email);
+                downloadModel.setAuthToken(authTokenStr);
+
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                    downloadModel.setIsstreaming_restricted(true);
+                } else {
+                    downloadModel.setIsstreaming_restricted(false);
+                }
+
+
+
+                Intent mydownload = new Intent(MovieDetailsActivity.this, SdkMyDownloads.class);
+                mydownload.putExtra("DownloadModel",downloadModel);
                 startActivity(mydownload);
                 // Not implemented here
                 return false;

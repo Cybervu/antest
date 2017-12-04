@@ -62,6 +62,8 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
+import com.release.muvisdk.player.activity.SdkMyDownloads;
+import com.release.muvisdk.player.model.DownloadModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -88,6 +90,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_APP_SELECT_LAN
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT_SUCCESS;
@@ -106,6 +109,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SIGN_OUT_WARNI
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_YES;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
+import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT_SUCCESS;
@@ -1731,6 +1735,26 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 startActivity(purchaseintent);
                 // Not implemented here
                 return false;
+
+            case R.id.action_mydownload:
+
+                DownloadModel downloadModel = new DownloadModel();
+                downloadModel.setUserId(id);
+                downloadModel.setEmail(email);
+                downloadModel.setAuthToken(authTokenStr);
+
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+                    downloadModel.setIsstreaming_restricted(true);
+                } else {
+                    downloadModel.setIsstreaming_restricted(false);
+                }
+
+                Intent mydownload = new Intent(ViewMoreActivity.this, SdkMyDownloads.class);
+                mydownload.putExtra("DownloadModel",downloadModel);
+                startActivity(mydownload);
+                // Not implemented here
+                return false;
+
             case R.id.action_logout:
 
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ViewMoreActivity.this, R.style.MyAlertDialogStyle);

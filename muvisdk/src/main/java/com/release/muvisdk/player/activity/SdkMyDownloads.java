@@ -467,11 +467,10 @@ public class SdkMyDownloads extends AppCompatActivity {
         }
 
 
-        if (downloadModel.getRestrictionStatus()){
             if (!CheckAccessPeriodOfDpwnloadContent()) {
                 return;
             }
-    }
+
 
         /**
          * This is applicable for resume watch feature on downloaed content .

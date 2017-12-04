@@ -410,7 +410,7 @@ public class MarlinBroadbandExample extends AppCompatActivity implements SensorO
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sdk_trailer_player);
+        setContentView(R.layout.sdk_marlin_player);
 
         _init();
         _setData();
