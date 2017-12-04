@@ -741,7 +741,14 @@ public class Util {
 
     }
 
-
+    /**
+     * This method is used to set translation language from json keyword.
+     * @param languagePreference
+     * @param lanngKey
+     * @param langValue
+     * @param jsonKey
+     * @param jsonObject
+     */
     private static void setTranslationLanguageToPref(LanguagePreference languagePreference, String lanngKey,
                                                      String langValue, String jsonKey, JSONObject jsonObject) {
         if (jsonObject.has(jsonKey))
