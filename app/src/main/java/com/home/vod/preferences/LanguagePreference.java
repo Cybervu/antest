@@ -108,6 +108,7 @@ public class LanguagePreference {
     public static final String INVALID_COUPON = "INVALID_COUPON";
     public static final String DISCOUNT_ON_COUPON = "DISCOUNT_ON_COUPON";
     public static final String HOME = "HOME";
+    public static final String CONTACT_US = "contactus";
     public static final String ACTIVATE_SUBSCRIPTION_WATCH_VIDEO = "ACTIVATE_SUBSCRIPTION_WATCH_VIDEO";
     public static final String CROSSED_MAXIMUM_LIMIT = "CROSSED_MAXIMUM_LIMIT";
     public static final String ACCESS_PERIOD_EXPIRED = "ACCESS_PERIOD_EXPIRED";
@@ -307,8 +308,7 @@ public class LanguagePreference {
     public static final String DEFAULT_ENTER_REGISTER_FIELDS_DATA = "Fill the empty field(s)";
     public static final String DEFAULT_TERMS_AND_CONDITIONS = "Termes & Conditions";
     public static final String DEFAULT_ABOUT_US = "About Us";
-    public static final String DEFAULT_CONTACT_US = "Contact Us";
-    public static final String CONTACT_US = "CONTACT_US";
+    public static final String DEFAULT_CONTACT_US = "Contact us";
 
     public static final String DEFAULT_SEARCH_PLACEHOLDER = "Search";
     public static final String DEFAULT_VIEW_TRAILER = "View Trailer";

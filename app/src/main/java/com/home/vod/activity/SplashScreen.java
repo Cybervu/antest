@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -126,16 +127,25 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         noInternetTextView = (TextView) findViewById(R.id.noInternetTextView);
         geoTextView = (TextView) findViewById(R.id.geoBlockedTextView);
+        ImageView imageResize = (ImageView) findViewById(R.id.splash_screen);
+       /* DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;*/
+
+        Display display = getWindowManager().getDefaultDisplay();
+        float dpHeight = display.getHeight();
+        float dpWidth = display.getWidth();
+
+        if ( Util.isTablet(SplashScreen.this)){
+            imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        }
+
+      imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
+
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
         geoTextView.setText(languagePreference.getTextofLanguage(GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT));
 
        // ImageView imageResize = (ImageView) findViewById(R.id.splash_screen);
-        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
-        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        Log.v("nihar_gg",dpHeight+"////////"+dpWidth);
-
-       // imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
 
         noInternetLayout.setVisibility(View.GONE);
         geoBlockedLayout.setVisibility(View.GONE);
@@ -158,6 +168,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
         _init();
     }
 
@@ -175,12 +186,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         super.onConfigurationChanged(newConfig);
     }
 
-    @Override
-    public void onUserLeaveHint() {
-        super.onUserLeaveHint();
-        finish();
-        System.exit(0);
-    }
 
     @Override
     public void onIPAddressPreExecuteStarted() {
@@ -227,6 +232,15 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 geoBlockedLayout.setVisibility(View.VISIBLE);
             }
         }
+
+       /* if (preferenceManager != null) {
+            preferenceManager.setCountryCodeToPref("AU");
+            SubscriptionPlanInputModel planListInput = new SubscriptionPlanInputModel();
+            planListInput.setAuthToken(authTokenStr);
+            planListInput.setLang(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+            GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, SplashScreen.this, SplashScreen.this);
+            asynGetPlanid.executeOnExecutor(threadPoolExecutor);
+        }*/
 
     }
 

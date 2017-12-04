@@ -3310,7 +3310,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         Log.v("MUVI", "call review details");
         GetReviewDetails();
 
-
     }
 
     @Override

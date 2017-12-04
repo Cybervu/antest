@@ -41,6 +41,7 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.apiModel.APVModel;
 import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.PPVModel;
+import com.home.vod.BuildConfig;
 import com.home.vod.QueueDataProvider;
 import com.home.vod.R;
 import com.home.vod.activity.LoginActivity;
@@ -156,8 +157,15 @@ public class Util {
     public static boolean hide_pause = false;
     public static boolean call_finish_at_onUserLeaveHint = true;
 
-    public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
+    //public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
+
+    public static String pdf_url=BuildConfig.SERVICE_BASE_PATH;
+    public static String  final_pdf_url=pdf_url.substring(0,pdf_url.lastIndexOf("rest"+""+'/'));
+    public static String Dwonload_pdf_rootUrl = final_pdf_url +""+ "docs/";
+
     public static boolean app_is_in_player_context = false;
+    public static ArrayList<String> drawer_collapse_expand_imageview = new ArrayList<>();
+    public static int image_compressed = 3;
 
    /*public static boolean checkNetwork(Context context) {
       ConnectivityManager cm =
@@ -734,7 +742,14 @@ public class Util {
 
     }
 
-
+    /**
+     * This method is used to set translation language from json keyword.
+     * @param languagePreference
+     * @param lanngKey
+     * @param langValue
+     * @param jsonKey
+     * @param jsonObject
+     */
     private static void setTranslationLanguageToPref(LanguagePreference languagePreference, String lanngKey,
                                                      String langValue, String jsonKey, JSONObject jsonObject) {
         if (jsonObject.has(jsonKey))
@@ -745,7 +760,15 @@ public class Util {
     }
 
 
-    public static void getDPI(Context _context) {
+    public static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
+    public static int getDPI(Context _context) {
+
+        int screen_Info=0;
 
         int density = _context.getResources().getDisplayMetrics().densityDpi;
         float density1 = _context.getResources().getDisplayMetrics().density;
@@ -761,39 +784,47 @@ public class Util {
         switch (density) {
             case DisplayMetrics.DENSITY_LOW: {
                 LogUtil.showLog("Login", "LDPI height-" + dpHeight + ",Width:-" + dpWidth);
+                screen_Info=DisplayMetrics.DENSITY_LOW;
             }
             break;
             case DisplayMetrics.DENSITY_MEDIUM: {
                 LogUtil.showLog("Login", "MDPI height-" + dpHeight + ",Width:-" + dpWidth);
+                screen_Info=DisplayMetrics.DENSITY_MEDIUM;
 
             }
             break;
             case DisplayMetrics.DENSITY_HIGH: {
                 LogUtil.showLog("Login", "HDPI height-" + dpHeight + ",Width:-" + dpWidth);
+                screen_Info=DisplayMetrics.DENSITY_HIGH;
 
             }
             break;
             case DisplayMetrics.DENSITY_XHIGH: {
                 LogUtil.showLog("Login", "XHDPI height-" + dpHeight + ",Width:-" + dpWidth);
+                screen_Info=DisplayMetrics.DENSITY_XHIGH;
 
             }
             break;
             case DisplayMetrics.DENSITY_XXHIGH: {
                 LogUtil.showLog("Login", "XXHDPI height-" + dpHeight + ",Width:-" + dpWidth);
+                screen_Info=DisplayMetrics.DENSITY_XXHIGH;
 
             }
             break;
             case DisplayMetrics.DENSITY_XXXHIGH: {
                 LogUtil.showLog("Login", "XXXHDPI height-" + dpHeight + ",Width:-" + dpWidth);
+                screen_Info=DisplayMetrics.DENSITY_XXXHIGH;
 
             }
             break;
             case DisplayMetrics.DENSITY_TV: {
                 LogUtil.showLog("Login", "TVDPI height-" + dpHeight + ",Width:-" + dpWidth);
+                screen_Info=DisplayMetrics.DENSITY_TV;
 
             }
             break;
         }
+        return screen_Info;
     }
 
 

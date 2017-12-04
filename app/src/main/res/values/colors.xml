@@ -6,6 +6,7 @@
  <color name="textColor">#111111</color>
  <color name="videotextColor">#ffffff</color>
  <color name="videotitleColor">#000000</color>
+ <color name="toolbarTitleColor">#fff</color>
  <color name="loginTextViewColor">#b70000</color>
  <color name="checkboxcolor">#fff</color>
  <color name="navlogobackgroundcolor">#fff</color>

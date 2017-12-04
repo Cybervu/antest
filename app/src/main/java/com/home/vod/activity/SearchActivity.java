@@ -361,6 +361,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
                         if (NetworkStatus.getInstance().isConnected(SearchActivity.this)) {
 
+
                             // default data
                             Search_Data_input search_data_input = new Search_Data_input();
                             search_data_input.setAuthToken(authTokenStr);
@@ -1029,20 +1030,6 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input, SearchActivity.this, SearchActivity.this);
                             asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
-                           /* Search_Data_input search_data_input = new Search_Data_input();
-                            search_data_input.setAuthToken("7a4d24bf8f28432dd3e3d75980a6f7c3");
-                            search_data_input.setLimit("15");
-                            search_data_input.setOffset("1");
-                            search_data_input.setQ("trapped ");
-                            String countryCodeStr = preferenceManager.getCountryCodeFromPref();
-                            if (countryCodeStr != null) {
-                                search_data_input.setCountry("IN");
-                            } else {
-                                search_data_input.setCountry("IN");
-                            }
-                            search_data_input.setLanguage_code("nl");
-                            SearchDataAsynTask asyncLoadVideos = new SearchDataAsynTask(search_data_input, SearchActivity.this, SearchActivity.this);
-                            asyncLoadVideos.executeOnExecutor(threadPoolExecutor);*/
                         }
                     }
                     return true;
@@ -1082,6 +1069,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
+
             return null;
         }
 

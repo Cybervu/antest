@@ -318,5 +318,6 @@
     <dimen name="list_singlecard_img_height">154dp</dimen>
     <dimen name="movie_videotitle_size">14sp</dimen>
 
-
-</resources>
+        <!--new  dimen optimization for menu-->
+        <dimen name="slider_menu_width">300dp</dimen>
+    </resources>
