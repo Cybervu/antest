@@ -379,6 +379,28 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
+
+
+
+        avin {
+            minSdkVersion 16
+            dimension 'vendor'
+            applicationId 'com.epizod.avin'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            // buildConfigField "String", "AUTH_TOKEN", "\"398fe175085c765637c0dc4c02acb3fa\""
+            buildConfigField "String", "AUTH_TOKEN", "\"ffc9daf6dadbc94f8aa00d02ffd91928\""
+            targetSdkVersion 23
+            versionCode 3
+            versionName '1.0.2'
+        }
+        avin_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        avin_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
     }
 }
 
@@ -441,6 +463,9 @@ android.variantFilter { variant ->
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     } else if (vendor.equals('mikado') && (environment.equals('mikado_staging_') || environment.equals('mikado_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }else if (vendor.equals('avin') && (environment.equals('avin_staging_') || environment.equals('avin_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     } else {
