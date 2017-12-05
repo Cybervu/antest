@@ -12,7 +12,7 @@ public class CurrencyModel implements Serializable {
 
     String currencyId;
     String currencyCode;
-    String currencySymbol="";
+    String currencySymbol="$";
 
     /**
      * This Method is use to Get the Currency ID

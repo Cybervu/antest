@@ -9,6 +9,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+
 import com.release.muvisdk.api.APIUrlConstant;
 import com.release.muvisdk.api.apiModel.APVModel;
 import com.release.muvisdk.api.apiModel.ContentDetailsInput;
@@ -188,7 +189,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                     }
                     String movieTypeStr = "";
                     if ((mainJson.has("genre")) && mainJson.optString("genre").trim() != null && !mainJson.optString("genre").trim().isEmpty() && !mainJson.optString("genre").trim().equals("null") && !mainJson.optString("genre").trim().matches("")) {
-                        movieTypeStr = mainJson.getString("genre");
+                        movieTypeStr = mainJson.optString("genre");
                         movieTypeStr = movieTypeStr.replaceAll("\\[", "");
                         movieTypeStr = movieTypeStr.replaceAll("\\]", "");
                         movieTypeStr = movieTypeStr.replaceAll(",", " , ");
@@ -401,7 +402,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                             if (currencyJson.has("symbol") && currencyJson.optString("symbol").trim() != null && !currencyJson.optString("symbol").trim().isEmpty() && !currencyJson.optString("symbol").trim().equals("null") && !currencyJson.optString("symbol").trim().matches("")) {
                                 currencyModel.setCurrencySymbol(currencyJson.optString("symbol"));
                             } else {
-                                currencyModel.setCurrencySymbol("");
+                                currencyModel.setCurrencySymbol("$.0");
                             }
                             contentDetailsOutput.setCurrencyDetails(currencyModel);
 

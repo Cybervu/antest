@@ -10,7 +10,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+
 import com.release.muvisdk.api.APIUrlConstant;
+import com.release.muvisdk.api.Utils;
 import com.release.muvisdk.api.apiModel.VideoBufferLogsInputModel;
 import com.release.muvisdk.api.apiModel.VideoBufferLogsOutputModel;
 
@@ -105,64 +107,24 @@ public class GetVideoBufferLogsAsynTask extends AsyncTask<VideoBufferLogsInputMo
         try {
 
             // Execute HTTP Post Request
-            try {
-                URL url = new URL(APIUrlConstant.getVideoBufferLogsUrl());
-                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-                conn.setReadTimeout(10000);
-                conn.setConnectTimeout(15000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
+            URL url = new URL(APIUrlConstant.getVideoBufferLogsUrl());
 
-                Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.videoBufferLogsInputModel.getAuthToken())
-                        .appendQueryParameter(HeaderConstants.USER_ID, this.videoBufferLogsInputModel.getUserId())
-                        .appendQueryParameter(HeaderConstants.IP_ADDRESS, this.videoBufferLogsInputModel.getIpAddress())
-                        .appendQueryParameter(HeaderConstants.MOVIE_ID, this.videoBufferLogsInputModel.getMuviUniqueId())
-                        .appendQueryParameter(HeaderConstants.EPISODE_ID, this.videoBufferLogsInputModel.getEpisodeStreamUniqueId())
-                        .appendQueryParameter(HeaderConstants.LOG_ID, this.videoBufferLogsInputModel.getBufferLogId())
-                        .appendQueryParameter(HeaderConstants.RESOLUTION, this.videoBufferLogsInputModel.getVideoResolution())
-                        .appendQueryParameter(HeaderConstants.DEVICE_TYPE, this.videoBufferLogsInputModel.getDeviceType())
-                        .appendQueryParameter(HeaderConstants.START_TIME, this.videoBufferLogsInputModel.getBufferStartTime())
-                        .appendQueryParameter(HeaderConstants.END_TIME, this.videoBufferLogsInputModel.getBufferEndTime())
-                        .appendQueryParameter(HeaderConstants.LOG_UNIQUE_ID, this.videoBufferLogsInputModel.getBufferLogUniqueId())
-                        .appendQueryParameter(HeaderConstants.LOCATION, this.videoBufferLogsInputModel.getLocation());
+            Uri.Builder builder = new Uri.Builder()
+                    .appendQueryParameter(HeaderConstants.AUTH_TOKEN, this.videoBufferLogsInputModel.getAuthToken())
+                    .appendQueryParameter(HeaderConstants.USER_ID, this.videoBufferLogsInputModel.getUserId())
+                    .appendQueryParameter(HeaderConstants.IP_ADDRESS, this.videoBufferLogsInputModel.getIpAddress())
+                    .appendQueryParameter(HeaderConstants.MOVIE_ID, this.videoBufferLogsInputModel.getMuviUniqueId())
+                    .appendQueryParameter(HeaderConstants.EPISODE_ID, this.videoBufferLogsInputModel.getEpisodeStreamUniqueId())
+                    .appendQueryParameter(HeaderConstants.LOG_ID, this.videoBufferLogsInputModel.getBufferLogId())
+                    .appendQueryParameter(HeaderConstants.RESOLUTION, this.videoBufferLogsInputModel.getVideoResolution())
+                    .appendQueryParameter(HeaderConstants.DEVICE_TYPE, this.videoBufferLogsInputModel.getDeviceType())
+                    .appendQueryParameter(HeaderConstants.START_TIME, this.videoBufferLogsInputModel.getBufferStartTime())
+                    .appendQueryParameter(HeaderConstants.END_TIME, this.videoBufferLogsInputModel.getBufferEndTime())
+                    .appendQueryParameter(HeaderConstants.LOG_UNIQUE_ID, this.videoBufferLogsInputModel.getBufferLogUniqueId())
+                    .appendQueryParameter(HeaderConstants.LOCATION, this.videoBufferLogsInputModel.getLocation());
 
-                String query = builder.build().getEncodedQuery();
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(query);
-                writer.flush();
-                writer.close();
-                os.close();
-
-                InputStream ins = conn.getInputStream();
-                InputStreamReader isr = new InputStreamReader(ins);
-                BufferedReader in = new BufferedReader(isr);
-
-                String inputLine;
-
-                while ((inputLine = in.readLine()) != null) {
-                    System.out.println(inputLine);
-                    responseStr = inputLine;
-                    Log.v("MUVISDK", "responseStr" + responseStr);
-
-                }
-                in.close();
-
-
-            } catch (org.apache.http.conn.ConnectTimeoutException e) {
-
-                status = 0;
-                message = "Error";
-
-
-            } catch (IOException e) {
-                status = 0;
-                message = "Error";
-            }
+            String query = builder.build().getEncodedQuery();
+            responseStr = Utils.handleHttpAndHttpsRequest(url, query, status, message);
 
             JSONObject mainJson = null;
             if (responseStr != null) {

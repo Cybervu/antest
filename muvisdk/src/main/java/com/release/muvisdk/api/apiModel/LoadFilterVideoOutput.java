@@ -1,10 +1,7 @@
 package com.release.muvisdk.api.apiModel;
 
-
 /**
- * This Model Class Holds All The Output Attributes For LoadFilterVideoAsync
- *
- * @author MUVI
+ * Created by MUVI on 11/8/2017.
  */
 
 public class LoadFilterVideoOutput {

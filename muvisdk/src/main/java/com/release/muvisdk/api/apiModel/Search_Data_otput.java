@@ -51,6 +51,16 @@ public class Search_Data_otput {
     String actor;
     String isFreeContent;
 
+    public int getItemsInServer() {
+        return itemsInServer;
+    }
+
+    public void setItemsInServer(int itemsInServer) {
+        this.itemsInServer = itemsInServer;
+    }
+
+    int itemsInServer;
+
     /**
      * This Method is use to Get the Third Party URL
      *

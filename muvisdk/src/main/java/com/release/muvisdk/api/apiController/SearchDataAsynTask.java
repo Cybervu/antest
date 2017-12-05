@@ -9,6 +9,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+
 import com.release.muvisdk.api.APIUrlConstant;
 import com.release.muvisdk.api.apiModel.Search_Data_input;
 import com.release.muvisdk.api.apiModel.Search_Data_otput;
@@ -109,9 +110,9 @@ public class SearchDataAsynTask extends AsyncTask<Search_Data_input, Void, Void>
             httppost.addHeader(HeaderConstants.AUTH_TOKEN, this.search_data_input.getAuthToken());
             httppost.addHeader(HeaderConstants.LIMIT, this.search_data_input.getLimit());
             httppost.addHeader(HeaderConstants.OFFSET, this.search_data_input.getOffset());
-            httppost.addHeader(HeaderConstants.Q, this.search_data_input.getQ());
+            httppost.addHeader(HeaderConstants.Q, this.search_data_input.getQ().trim());
             httppost.addHeader(HeaderConstants.COUNTRY, this.search_data_input.getCountry());
-            httppost.addHeader(HeaderConstants.LANG_CODE, this.search_data_input.getLanguage_code());
+           // httppost.addHeader(HeaderConstants.LANG_CODE, this.search_data_input.getLanguage_code());
 
 
             // Execute HTTP Post Request

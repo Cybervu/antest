@@ -9,6 +9,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+
 import com.release.muvisdk.api.APIUrlConstant;
 import com.release.muvisdk.api.apiModel.Update_UserProfile_Input;
 import com.release.muvisdk.api.apiModel.Update_UserProfile_Output;
@@ -111,6 +112,7 @@ public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Inp
             httppost.addHeader(HeaderConstants.CUSTOM_LANGUAGES, this.update_userProfile_input.getCustom_languages());
             httppost.addHeader(HeaderConstants.CUSTOM_COUNTRY, this.update_userProfile_input.getCustom_country());
             httppost.addHeader(HeaderConstants.LANG_CODE, this.update_userProfile_input.getLang_code());
+            httppost.addHeader(HeaderConstants.MOBILE_NO, this.update_userProfile_input.getPhone_no());
 
             // Execute HTTP Post Request
             try {
@@ -142,7 +144,13 @@ public class UpadteUserProfileAsynctask extends AsyncTask<Update_UserProfile_Inp
                     update_userProfile_output.setEmail(myJson.optString("email"));
                     update_userProfile_output.setNick_name(myJson.optString("nick_name"));
                     update_userProfile_output.setProfile_image(myJson.optString("profile_image"));
+                    if (myJson.has("mobile_number")) {
+                        update_userProfile_output.setPhone_no(myJson.optString("mobile_number"));
+                    }
+                    else {
+                        update_userProfile_output.setPhone_no("");
 
+                    }
                     Log.v("MUVISDK", "user_name====== " + myJson.optString("name"));
 
                 } catch (Exception e) {
