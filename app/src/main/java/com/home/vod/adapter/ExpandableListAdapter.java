@@ -2,6 +2,7 @@ package com.home.vod.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,7 +106,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView listTitleTextView = (TextView) convertView .findViewById(R.id.listTitle);
         listTitleTextView.setTypeface(null, Typeface.NORMAL);
-        listTitleTextView.setText(listTitle);
+        listTitleTextView.setText(Html.fromHtml(listTitle));
         iconimage=(ImageView) convertView.findViewById(R.id.iconimage);
         iconimage1=(ImageView) convertView.findViewById(R.id.iconimage1);
         //listTitleTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, isExpanded ? 0 : android.R.drawable.ic_menu_more, 0);

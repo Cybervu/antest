@@ -145,6 +145,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
         geoTextView.setText(languagePreference.getTextofLanguage(GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT));
 
+       // ImageView imageResize = (ImageView) findViewById(R.id.splash_screen);
+
         noInternetLayout.setVisibility(View.GONE);
         geoBlockedLayout.setVisibility(View.GONE);
 
