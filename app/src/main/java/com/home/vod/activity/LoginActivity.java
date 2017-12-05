@@ -118,11 +118,13 @@ import player.activity.MyLibraryPlayer;
 import player.activity.Player;
 
 import static com.home.vod.preferences.LanguagePreference.ANDROID_VERSION;
+import static com.home.vod.preferences.LanguagePreference.BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEAFULT_CANCEL_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_ANDROID_VERSION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BTN_REGISTER;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_NOT_FOUND_ALERT;
@@ -269,7 +271,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                             checkDeviceInput.setUser_id(userIdStr.trim());
                         }
                         checkDeviceInput.setDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                        checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(Util.GOOGLE_FCM_TOKEN, Util.DEFAULT_GOOGLE_FCM_TOKEN));
+                        checkDeviceInput.setGoogle_id(languagePreference.getTextofLanguage(GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
                         checkDeviceInput.setAuthToken(authTokenStr);
                         checkDeviceInput.setUser_id(preferenceManager.getUseridFromPref());
                         checkDeviceInput.setDevice_type("1");
@@ -1528,8 +1530,15 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         signUpTextView = (TextView) findViewById(R.id.signUpTextView);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), signUpTextView);
 
-        signUpTextView.setText(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE));
 
+        /*
+         Because Of request of Sony we used BTN_REGISTER instead of SIGN_UP_TITLE
+         *Abhishek
+         */
+        //signUpTextView.setText(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE));
+
+
+        signUpTextView.setText(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
 
         loginButton = (Button) findViewById(R.id.loginButton);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.regular_fonts), loginButton);

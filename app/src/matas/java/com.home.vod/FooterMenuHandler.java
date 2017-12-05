@@ -22,10 +22,8 @@ public class FooterMenuHandler {
         for (MenusOutputModel.FooterMenu menuListOutput : menusOutputModel.getFooterMenuModel()) {
             LogUtil.showLog("Alok", "footermenuListOutputList ::" + menuListOutput.getPermalink());
 
-            if (menuListOutput.getUrl() != null && !menuListOutput.getUrl().equalsIgnoreCase("")) {
                     menuList.add(new NavDrawerItem(menuListOutput.getDisplay_name(), menuListOutput.getPermalink(), menuListOutput.isEnable(), menuListOutput.getLink_type(), menuListOutput.getUrl()));
 
-            }
         }
     }
 }

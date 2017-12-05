@@ -20,11 +20,11 @@ public class CheckVoucherOrPpvPaymentHandler {
     public void handleVoucherPaymentOrPpvPayment(){
         try {
             if (activity instanceof MovieDetailsActivity)
-                ((MovieDetailsActivity) activity).callValidateUserAPI();
+                ((MovieDetailsActivity) activity).getMonitizationDetailsApi();
             if (activity instanceof ShowWithEpisodesActivity)
-                ((ShowWithEpisodesActivity) activity).callValidateUserAPI();
+                ((ShowWithEpisodesActivity) activity).getMonitizationDetailsApi();
             if (activity instanceof Episode_list_Activity)
-                ((Episode_list_Activity) activity).callValidateUserAPI();
+                ((Episode_list_Activity) activity).getMonitizationDetailsApi();
            /* if (activity instanceof RegisterActivity)
                 ((RegisterActivity) activity).getMonitizationDetailsApi();
             if (activity instanceof LoginActivity)

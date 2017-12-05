@@ -72,7 +72,7 @@ import static com.home.vod.util.Constant.authTokenStr;
  */
 public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVideosAsyncListener, GetAppHomePageAsync.HomePageListener {
 
-//    int bannerArray[] = {R.drawable.banner1};
+    //    int bannerArray[] = {R.drawable.banner1};
     int videoHeight = 185;
     int videoWidth = 256;
 
@@ -268,38 +268,42 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
         } catch (IllegalArgumentException ex) {
 
         }
-        String movieImageStr = "";
 
-        singleItem = new ArrayList<SingleItemModel>();
+        if (loadVideoOutputs != null) {
 
-        for (int i = 0; i < loadVideoOutputs.size(); i++) {
-            movieImageStr = loadVideoOutputs.get(i).getPoster_url();
-            String movieName = loadVideoOutputs.get(i).getName();
-            String videoTypeIdStr = loadVideoOutputs.get(i).getContent_types_id();
-            String movieGenreStr = loadVideoOutputs.get(i).getGenre();
-            String moviePermalinkStr = loadVideoOutputs.get(i).getPermalink();
-            String isEpisodeStr = loadVideoOutputs.get(i).getIs_episode();
-            int isConverted = loadVideoOutputs.get(i).getIs_converted();
-            int isPPV = loadVideoOutputs.get(i).getIs_ppv();
-            int isAPV = loadVideoOutputs.get(i).getIs_advance();
+            String movieImageStr = "";
 
+            singleItem = new ArrayList<SingleItemModel>();
 
-            singleItem.add(new SingleItemModel(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
-        }
-
-        allSampleData.add(new SectionDataModel(menuList.get(counter).getName(), menuList.get(counter).getSectionId(), singleItem));
+            for (int i = 0; i < loadVideoOutputs.size(); i++) {
+                movieImageStr = loadVideoOutputs.get(i).getPoster_url();
+                String movieName = loadVideoOutputs.get(i).getName();
+                String videoTypeIdStr = loadVideoOutputs.get(i).getContent_types_id();
+                String movieGenreStr = loadVideoOutputs.get(i).getGenre();
+                String moviePermalinkStr = loadVideoOutputs.get(i).getPermalink();
+                String isEpisodeStr = loadVideoOutputs.get(i).getIs_episode();
+                int isConverted = loadVideoOutputs.get(i).getIs_converted();
+                int isPPV = loadVideoOutputs.get(i).getIs_ppv();
+                int isAPV = loadVideoOutputs.get(i).getIs_advance();
 
 
-        if (NetworkStatus.getInstance().isConnected(getActivity())) {
-
-            if (getActivity() != null) {
-                new RetrieveFeedTask().execute(movieImageStr);
-
+                singleItem.add(new SingleItemModel(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
             }
 
+            allSampleData.add(new SectionDataModel(menuList.get(counter).getName(), menuList.get(counter).getSectionId(), singleItem));
 
-        } else {
-            noInternetLayout.setVisibility(View.VISIBLE);
+
+            if (NetworkStatus.getInstance().isConnected(getActivity())) {
+
+                if (getActivity() != null) {
+                    new RetrieveFeedTask().execute(movieImageStr);
+
+                }
+
+
+            } else {
+                noInternetLayout.setVisibility(View.VISIBLE);
+            }
         }
 
 
@@ -501,95 +505,109 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
             mProgressBarHandler.hide();
             mProgressBarHandler = null;
         }
+        if (appHomePageOutput != null) {
 
-        if (status == 200) {
+            if (status == 200) {
 
-            if (singleItem != null && singleItem.size() > 0) {
-                singleItem.clear();
-            }
+                if (singleItem != null && singleItem.size() > 0) {
+                    singleItem.clear();
+                }
 
-            if (allSampleData != null && allSampleData.size() > 0) {
-                allSampleData.clear();
-            }
-            for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
-                url_maps.add(model.getImage_path());
-            }
+                if (allSampleData != null && allSampleData.size() > 0) {
+                    allSampleData.clear();
+                }
 
-            for (HomePageSectionModel section : appHomePageOutput.getHomePageSectionModel()) {
-                menuList.add(new GetMenuItem(section.getTitle(), section.getSection_id(), section.getStudio_id(), section.getLanguage_id()));
-            }
+                if (appHomePageOutput.getHomePageBannerModels() != null) {
+                    for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
+                        if (model != null) {
+                            if (model.getImage_path() != null) {
+                                url_maps.add(model.getImage_path());
+                            }
+                        }
+                    }
+                }
+                if (appHomePageOutput.getHomePageSectionModel() != null) {
+                    for (HomePageSectionModel section : appHomePageOutput.getHomePageSectionModel()) {
+                        if (section != null) {
+                            if (section.getTitle() != null || section.getSection_id() != null || section.getStudio_id() != null || section.getLanguage_id() != null) {
+                                menuList.add(new GetMenuItem(section.getTitle(), section.getSection_id(), section.getStudio_id(), section.getLanguage_id()));
+
+                            }
+                        }
+                    }
+                }
 
 
-            if (NetworkStatus.getInstance().isConnected(getActivity())) {
+                if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
-                my_recycler_view.setLayoutManager(mLayoutManager);
-                adapter = new RecyclerViewDataAdapter(context, allSampleData, url_maps, firstTime, MainActivity.vertical);
-                my_recycler_view.setAdapter(adapter);
-                my_recycler_view.setVisibility(View.VISIBLE);
+                    my_recycler_view.setLayoutManager(mLayoutManager);
+                    adapter = new RecyclerViewDataAdapter(context, allSampleData, url_maps, firstTime, MainActivity.vertical);
+                    my_recycler_view.setAdapter(adapter);
+                    my_recycler_view.setVisibility(View.VISIBLE);
 
-
-                LoadVideoInput loadVideoInput = new LoadVideoInput();
-                loadVideoInput.setAuthToken(authTokenStr);
-                loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
-                asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
-                asynLoadVideos.executeOnExecutor(threadPoolExecutor);
-                // default data
+                    LoadVideoInput loadVideoInput = new LoadVideoInput();
+                    loadVideoInput.setAuthToken(authTokenStr);
+                    loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                    loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
+                    asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
+                    asynLoadVideos.executeOnExecutor(threadPoolExecutor);
+                    // default data
                     /*asynLoadVideos = new AsynLoadVideos();
                     asynLoadVideos.executeOnExecutor(threadPoolExecutor,menuList.get(counter).getSectionId());*/
 
-            } else {
-                noInternetLayout.setVisibility(View.VISIBLE);
-            }
+                } else {
+                    noInternetLayout.setVisibility(View.VISIBLE);
+                }
 
-        } else {
+            } else {
 //            url_maps.add("https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png");
 
-            for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
-                url_maps.add(model.getImage_path());
-            }
+                for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
+                    url_maps.add(model.getImage_path());
+                }
 
-            if (firstTime == false) {
-                firstTime = true;
+                if (firstTime == false) {
+                    firstTime = true;
 
-                if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                    for (int j = 0; j < url_maps.size(); j++) {
-                        DefaultSliderView textSliderView = new DefaultSliderView(context);
-                        textSliderView
-                                .description("")
-                                .image(url_maps.get(j))
-                                .setScaleType(BaseSliderView.ScaleType.Fit);
-                        // .setOnSliderClickListener(this);
-                        textSliderView.bundle(new Bundle());
-                        textSliderView.getBundle()
-                                .putString("extra", "");
+                    if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+                        for (int j = 0; j < url_maps.size(); j++) {
+                            DefaultSliderView textSliderView = new DefaultSliderView(context);
+                            textSliderView
+                                    .description("")
+                                    .image(url_maps.get(j))
+                                    .setScaleType(BaseSliderView.ScaleType.Fit);
+                            // .setOnSliderClickListener(this);
+                            textSliderView.bundle(new Bundle());
+                            textSliderView.getBundle()
+                                    .putString("extra", "");
 
-                        mDemoSlider.addSlider(textSliderView);
-                    }
-                } else {
-                    for (int j = 0; j < url_maps.size(); j++) {
-                        DefaultSliderView textSliderView = new DefaultSliderView(context);
-                        textSliderView
-                                .description("")
-                                .image(url_maps.get(j))
-                                .setScaleType(BaseSliderView.ScaleType.Fit);
-                        // .setOnSliderClickListener(this);
-                        textSliderView.bundle(new Bundle());
-                        textSliderView.getBundle()
-                                .putString("extra", "");
+                            mDemoSlider.addSlider(textSliderView);
+                        }
+                    } else {
+                        for (int j = 0; j < url_maps.size(); j++) {
+                            DefaultSliderView textSliderView = new DefaultSliderView(context);
+                            textSliderView
+                                    .description("")
+                                    .image(url_maps.get(j))
+                                    .setScaleType(BaseSliderView.ScaleType.Fit);
+                            // .setOnSliderClickListener(this);
+                            textSliderView.bundle(new Bundle());
+                            textSliderView.getBundle()
+                                    .putString("extra", "");
 
-                        mDemoSlider.addSlider(textSliderView);
+                            mDemoSlider.addSlider(textSliderView);
+                        }
                     }
                 }
+                mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+                mDemoSlider.setDuration(10000);
+                //   mDemoSlider.addOnPageChangeListener(this);
+                mDemoSlider.getPagerIndicator().setVisibility(View.INVISIBLE);
+
+                sliderRelativeLayout.setVisibility(View.VISIBLE);
+
             }
-            mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-            mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-            mDemoSlider.setDuration(10000);
-            //   mDemoSlider.addOnPageChangeListener(this);
-            mDemoSlider.getPagerIndicator().setVisibility(View.INVISIBLE);
-
-            sliderRelativeLayout.setVisibility(View.VISIBLE);
-
         }
         return;
     }
@@ -1109,6 +1127,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
 
     }*/
+
     public void myOnKeyDown() {
         //do whatever you want here
         if (asynLoadMenuItems != null) {

@@ -11,6 +11,8 @@
     <string name="fb_login_protocol_scheme">fb197890110740115</string>
     <string name="fb_login_text">Login With Facebook</string>
     <string name="fb_registration_text">Register With Facebook</string>
+    <string name="fonts">fonts/Anchor-Semibold.otf</string>
+    <string name="fonts_regular">fonts/Anchor-Semibold.otf</string>
 
 
     <!--App Drawer-->

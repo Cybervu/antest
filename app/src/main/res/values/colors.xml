@@ -6,6 +6,7 @@
  <color name="textColor">#111111</color>
  <color name="videotextColor">#ffffff</color>
  <color name="videotitleColor">#000000</color>
+ <color name="toolbarTitleColor">#fff</color>
  <color name="loginTextViewColor">#b70000</color>
  <color name="checkboxcolor">#fff</color>
  <color name="navlogobackgroundcolor">#fff</color>
@@ -23,6 +24,8 @@
  <color name="OsTextColor">#757575</color>
  <color name="white">#ffffff</color>
  <color name="resumepopupcolor">#000</color>
+ <color name="button_bg">#913b28</color>
+ <color name="buttonbg">#E89B4C</color>
  <color name="card_backgroud_drawable">#303030</color>
  <color name="alreadyHaveALoginButtonTextColor">#b70000</color>
  <color name="border_color">#b70000</color>

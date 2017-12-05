@@ -49,11 +49,11 @@ public class MonetizationHandler {
         try {
 
             if (activity instanceof ShowWithEpisodesActivity)
-                ((ShowWithEpisodesActivity) activity).handleFor428Status(subscription_Str);
+                ((ShowWithEpisodesActivity) activity).handleFor428StatusVoucher(subscription_Str);
             if (activity instanceof Episode_list_Activity)
-                ((Episode_list_Activity) activity).handleFor428Status( subscription_Str);
+                ((Episode_list_Activity) activity).handleFor428StatusVoucher( subscription_Str);
             if (activity instanceof MovieDetailsActivity)
-                ((MovieDetailsActivity) activity).handleFor428Status( subscription_Str);
+                ((MovieDetailsActivity) activity).handleFor428StatusVoucher( subscription_Str);
 
         } catch (ClassCastException e){
             e.printStackTrace();

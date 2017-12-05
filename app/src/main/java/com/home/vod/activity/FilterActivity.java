@@ -29,6 +29,10 @@ import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 
+import static com.home.vod.preferences.LanguagePreference.BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.BUTTON_RESET;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_APPLY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_RESET;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_A_Z;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_ALPHA_Z_A;
@@ -92,6 +96,8 @@ public class FilterActivity extends AppCompatActivity {
         final ArrayList<FilterListModel> mdata = new ArrayList<FilterListModel>();
 
 
+        resetButton.setText(languagePreference.getTextofLanguage(BUTTON_RESET,DEFAULT_BUTTON_RESET));
+        applyButton.setText(languagePreference.getTextofLanguage(BUTTON_APPLY, DEFAULT_BUTTON_APPLY));
        // SharedPreferences isLoginPref = getSharedPreferences(Util.IS_LOGIN_SHARED_PRE, 0); // 0 - for private mode
 
        // String genreString = isLoginPref.getString(Util.GENRE_ARRAY_PREF_KEY, null);

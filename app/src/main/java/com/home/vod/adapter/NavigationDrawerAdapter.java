@@ -117,7 +117,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
             title = (TextView) itemView.findViewById(R.id.title);
             textViewLine = (TextView) itemView.findViewById(R.id.textViewLine);
 
-            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),title);
+           FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),title);
 
            /* Typeface custom_name = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.regular_fonts));
             title.setTypeface(custom_name);*/

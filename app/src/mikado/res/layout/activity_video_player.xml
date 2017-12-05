@@ -321,7 +321,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text=""
-                    android:textColor="@color/videomovieTitleColor"
+                    android:textColor="@color/textColor"
                     android:textSize="@dimen/forgot_text_size"
                     android:textStyle="bold" />
 
@@ -367,7 +367,7 @@
                         android:layout_marginRight="@dimen/ppv_margin"
                         android:gravity="center"
                         android:text="0%"
-                        android:textColor="@color/dividerColor"
+                        android:textColor="@color/playerColor"
                         android:textSize="@dimen/percentage_text_size"
                         android:visibility="gone" />
                 </RelativeLayout>

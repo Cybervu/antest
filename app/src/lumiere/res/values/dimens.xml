@@ -133,6 +133,7 @@
     <dimen name="preorderbtn_text_size">14sp</dimen>
     <dimen name="trailerbtn_text_size">14sp</dimen>
     <dimen name="vdioduration_text_size">14sp</dimen>
+
     <dimen name="playbtn_width">60dp</dimen>
     <dimen name="playbtn_height">60dp</dimen>
     <dimen name="vdiogenere_text_size">14sp</dimen>
@@ -321,5 +322,6 @@
 
     <dimen name="nav_drawer_text_size">18sp</dimen>
 
-
+    <!--new  dimen optimization for menu-->
+    <dimen name="slider_menu_width">300dp</dimen>
 </resources>

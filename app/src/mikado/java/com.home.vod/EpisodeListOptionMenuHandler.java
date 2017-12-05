@@ -56,7 +56,8 @@ public class EpisodeListOptionMenuHandler {
         int isLogin = preferenceManager.getLoginFeatureFromPref();
 
         MenuItem filter_menu, profile_menu, purchage_menu, logout_menu,
-                login_menu, register_menu, mydownload_menu, favorite_menu, mediaRouteMenuItem, menu_language,action_searchmenu;
+                login_menu, register_menu, mydownload_menu, favorite_menu, mediaRouteMenuItem, menu_language,action_searchmenu
+                ,submenu;
 
         filter_menu = menu.findItem(R.id.action_filter);
         menu_language = menu.findItem(R.id.menu_item_language);
@@ -68,6 +69,7 @@ public class EpisodeListOptionMenuHandler {
         mydownload_menu = menu.findItem(R.id.action_mydownload);
         favorite_menu = menu.findItem(R.id.menu_item_favorite);
         action_searchmenu=menu.findItem(R.id.action_search);
+        submenu=menu.findItem(R.id.submenu);
 
         /***************chromecast**********************/
 
@@ -85,6 +87,8 @@ public class EpisodeListOptionMenuHandler {
         purchage_menu.setTitle(languagePreference.getTextofLanguage(PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY));
         favorite_menu.setTitle(languagePreference.getTextofLanguage(MY_FAVOURITE, DEFAULT_MY_FAVOURITE));
 
+        submenu.setVisible(true);
+        action_searchmenu.setVisible(true);
         filter_menu.setVisible(false);
         if ((languagePreference.getTextofLanguage(IS_CHROMECAST, DEFAULT_IS_CHROMECAST).trim()).equals("1"))
             mediaRouteMenuItem.setVisible(true);
@@ -94,7 +98,7 @@ public class EpisodeListOptionMenuHandler {
         if (preferenceManager.getLanguageListFromPref().equals("1"))
             menu_language.setVisible(false);
         else
-            menu_language.setVisible(true);
+            menu_language.setVisible(false);
 
 
         if (loggedInStr != null) {
@@ -105,17 +109,17 @@ public class EpisodeListOptionMenuHandler {
 
 
             if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE).trim()).equals("1"))
-                favorite_menu.setVisible(true);
+                favorite_menu.setVisible(false);
             else
                 favorite_menu.setVisible(false);
 
-            purchage_menu.setVisible(true);
+            purchage_menu.setVisible(false);
 
             logout_menu.setVisible(true);
 
             if ((languagePreference.getTextofLanguage(IS_OFFLINE, DEFAULT_IS_OFFLINE)
                     .trim()).equals("1"))
-                mydownload_menu.setVisible(true);
+                mydownload_menu.setVisible(false);
             else
                 mydownload_menu.setVisible(false);
 
