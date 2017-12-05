@@ -155,6 +155,7 @@ public class Util {
 
     public static boolean hide_pause = false;
     public static boolean call_finish_at_onUserLeaveHint = true;
+    public static int ERROR_CODE_EXPIRED_AUTHTOKEN = 410;
 
     //public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
 
@@ -536,6 +537,7 @@ public class Util {
 
     public static void parseLanguage(LanguagePreference languagePreference, String jsonResponse, String default_Language) throws JSONException {
         JSONObject json = new JSONObject(jsonResponse);
+        setTranslationLanguageToPref(languagePreference, GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT, "", json);
         setTranslationLanguageToPref(languagePreference, GMAIL_SIGNIN, DEFAULT_GMAIL_SIGNIN, "google_signin", json);
         setTranslationLanguageToPref(languagePreference, GMAIL_SIGNUP, DEFAULT_GMAIL_SIGNUP, "google_signup", json);
         setTranslationLanguageToPref(languagePreference, VIEW_LESS, DEFAULT_VIEW_LESS, "view_less", json);
@@ -883,6 +885,8 @@ public class Util {
 
         return inSampleSize;
     }
+
+
 
 }
 

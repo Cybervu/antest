@@ -261,17 +261,22 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
 
 
                             if (menusOutputModelLocal.getFooterMenuModel().get(i).getLink_type().trim().equalsIgnoreCase("2")){
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menusOutputModelLocal.getFooterMenuModel().get(listPosition).getPermalink().trim()));
+                               /* Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menusOutputModelLocal.getFooterMenuModel().get(listPosition).getPermalink().trim()));
                                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(browserIntent);
 
                                 //isNavigated = 1;
-                                Log.v("SUBHA","hello"+ menusOutputModelLocal.getFooterMenuModel().get(i).getDisplay_name());
-
+                                Log.v("SUBHA","hello"+ menusOutputModelLocal.getFooterMenuModel().get(i).getDisplay_name());*/
+                              /*  LogUtil.showLog("MUVI","url of link type 2==="+menusOutputModelLocal.getFooterMenuModel().get(listPosition).getPermalink());
                                 mDrawerLayout.openDrawer(Gravity.LEFT);
-                                browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menusOutputModelLocal.getFooterMenuModel().get(listPosition).getPermalink().trim()));
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink().trim()));
                                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(browserIntent);
+                                startActivity(browserIntent);*/
+
+                                 String externalLink=menusOutputModelLocal.getFooterMenuModel().get(i).getPermalink();
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                                browserIntent.setData(Uri.parse(externalLink));
+                                getActivity().startActivity(browserIntent);
 
                             }else {
                                 // isNavigated = 1;

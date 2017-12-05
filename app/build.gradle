@@ -336,7 +336,7 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"3ea7e43c13d8ab6eb505b960217df923\""
 //Magic Movies
-            //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+           // buildConfigField "String", "AUTH_TOKEN", "\"ffc9daf6dadbc94f8aa00d02ffd91928\""
             targetSdkVersion 23
             versionCode 1
             versionName '1.0'
@@ -374,7 +374,7 @@ android {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             buildConfigField "String", "AUTH_TOKEN", "\"848ff43117a71e967354b42f5735e2cc\""
-            targetSdkVersion 23
+            targetSdkVersion 25
             versionCode 1
             versionName '1.0'
 
@@ -388,13 +388,13 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         mikado {
-            minSdkVersion 16
+            minSdkVersion 21
             dimension 'vendor'
             applicationId 'com.release.canal'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
            // buildConfigField "String", "AUTH_TOKEN", "\"398fe175085c765637c0dc4c02acb3fa\""
             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
-            targetSdkVersion 23
+            targetSdkVersion 25
             versionCode 3
             versionName '1.0.2'
         }
@@ -403,6 +403,27 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         mikado_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+
+
+        gabejaramillo {
+            minSdkVersion 21
+            dimension 'vendor'
+            applicationId 'com.release.gabejaramillo'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+           //  buildConfigField "String", "AUTH_TOKEN", "\"b561ddbb2c4575ca681e79ba117e59f8\""
+            buildConfigField "String", "AUTH_TOKEN", "\"e35feed9e448d7e709a438d48418cf4a\""
+            targetSdkVersion 25
+            versionCode 3
+            versionName '1.0.2'
+        }
+        gabejaramillo_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        gabejaramillo_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
@@ -475,7 +496,12 @@ android.variantFilter { variant ->
      else if (vendor.equals('mikado') && (environment.equals('mikado_staging_') || environment.equals('mikado_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    } else {
+    }
+    else if (vendor.equals('gabejaramillo') && (environment.equals('gabejaramillo_staging_') || environment.equals('gabejaramillo_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else {
         variant.setIgnore(true)
     }
 }

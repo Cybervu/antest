@@ -155,4 +155,5 @@
  <color name="purchaseBackgroundColor">#909293</color>
  <color name="purchaseBackground">#e2e1e1</color>
  <color name="purchaseTextColor">#000</color>
+ <color name="nav_drawer_lineColor_menu">#000</color>
 </resources>

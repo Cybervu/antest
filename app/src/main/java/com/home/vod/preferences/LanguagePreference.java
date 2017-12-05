@@ -119,6 +119,7 @@ public class LanguagePreference {
     public static final String SORT_LAST_UPLOADED = "SORT_LAST_UPLOADED";
     public static final String SEARCH_HINT = "SEARCH_HINT";
     public static final String GEO_BLOCKED_ALERT = "GEO_BLOCKED_ALERT";
+    public static final String APP_NO_LONGER_ACTIVE = "APP_NO_LONGER_ACTIVE";
     public static final String NO_INTERNET_NO_DATA = "NO_INTERNET_NO_DATA";
     public static final String TRY_AGAIN = "TRY_AGAIN";
     public static final String SLOW_INTERNET_CONNECTION = "SLOW_INTERNET_CONNECTION";
@@ -351,6 +352,7 @@ public class LanguagePreference {
     public static final String DEFAULT_SORT_ALPHA_Z_A = "Alphabetic Z-A";
     public static final String DEFAULT_SORT_LAST_UPLOADED = "Last Uploaded";
     public static final String DEFAULT_GEO_BLOCKED_ALERT = "Sorry, this app is not available in your country.";
+    public static final String DEFAULT_APP_NO_LONGER_ACTIVE = "Sorry, This app is no longer active";
     public static final String DEFAULT_NO_INTERNET_NO_DATA = "No Internet Connection / No Data";
     public static final String DEFAULT_SLOW_INTERNET_CONNECTION = "Slow Internet Connection";
     public static final String DEFAULT_NO_INTERNET_CONNECTION = "No Internet Connection";
