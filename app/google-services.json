@@ -201,6 +201,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "914358570958-4m6jc34ptqcesukp1oal6s55sdv2i9a0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.release.muvionyx1",
+            "certificate_hash": "183a744614bc9e6654976bf12a589426bbd8440e"
+          }
+        },
+        {
           "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -215,8 +223,20 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.release.digiosmosis"
+              }
+            }
+          ]
         },
         "ads_service": {
           "status": 2
@@ -231,6 +251,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "914358570958-aaf8ni63ciippth8itm19tbav2gtunqq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.release.muvisdk",
+            "certificate_hash": "127b2b82c43c86dcddff4d01e5687e881b8c3b08"
+          }
+        },
+        {
+          "client_id": "914358570958-t0b1aeklmbvfietafqma4fjnnhqr5gtc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.release.muvisdk",
+            "certificate_hash": "affd81b8179abd6237f712e0f79dcec8d8d68e9a"
+          }
+        },
         {
           "client_id": "914358570958-e3i7si9q74ph59i5pn2ul6kv62phornv.apps.googleusercontent.com",
           "client_type": 1,
@@ -273,15 +309,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
-            },
-            {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
             }
           ]
         },
@@ -386,15 +422,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
-            },
-            {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
             }
           ]
         },
@@ -841,15 +877,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
-            },
-            {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
             }
           ]
         },
@@ -892,15 +928,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
-            },
-            {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
             }
           ]
         },
@@ -1067,15 +1103,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
               "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.release.digiosmosis"
               }
-            },
-            {
-              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
-              "client_type": 3
             }
           ]
         },
@@ -1207,8 +1243,89 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914358570958:android:b71517a90d1d5688",
+        "android_client_info": {
+          "package_name": "com.epizod.avin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914358570958-hk0nceh6087epef5djb12llm80379an2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.epizod.avin",
+            "certificate_hash": "e17416d83c1662b93989bacf113593510e08c951"
+          }
+        },
+        {
+          "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjD9ZvvjiWkIevxyYdVGV7i7eItQ-Eo1o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "914358570958-gg6j2onipv6fuqgc1i8u0jpbhejsi7j1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.release.digiosmosis"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914358570958:android:9ade85033b146f2b",
+        "android_client_info": {
+          "package_name": "com.release.coteouest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914358570958-tq2sps7ofornnft9jkc54b37tkl24sm9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjD9ZvvjiWkIevxyYdVGV7i7eItQ-Eo1o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
-
   "configuration_version": "1"
 }
