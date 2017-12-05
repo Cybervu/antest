@@ -68,9 +68,11 @@ public class YogaFilterAdapter extends ArrayAdapter<YogaItem> implements DeleteF
     PreferenceManager preferenceManager;
     private String loggedInStr;
     LanguagePreference languagePreference;
+    private static final int TYPE_PERSON = 0;
+    private static final int TYPE_DIVIDER = 1;
     private int isFavoritePos;
 
-    int i = -1;
+    int i = 0;
     private ArrayList<ViewHolder> viewstoreHolder = new ArrayList<>();
     private ProgressBarHandler PDialog;
 
@@ -90,10 +92,25 @@ public class YogaFilterAdapter extends ArrayAdapter<YogaItem> implements DeleteF
     public View getView(final int position, final View convertView, ViewGroup parent) {
         View row = convertView;
         ViewHolder holder = null;
+        int type = getItemViewType(position);
+
+
+
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
+
+
+            switch (type) {
+
+                case TYPE_PERSON:
+                    row = inflater.inflate(layoutResourceId, parent, false);
+                    break;
+                case TYPE_DIVIDER:
+                    row = inflater.inflate(R.layout.yoga_listing, parent, false);
+                    break;
+            }
+
             holder = new ViewHolder();
 //            viewstoreHolder.add(position, holder);
         } else {
@@ -227,7 +244,11 @@ public class YogaFilterAdapter extends ArrayAdapter<YogaItem> implements DeleteF
                     if (preferenceManager != null) {
                         loggedInStr = preferenceManager.getUseridFromPref();
                     }
+                    Log.v("SUBHA","position1 === "+ position);
+
                     i = position;
+
+                    Log.v("SUBHA","position === "+ position + " Data " + i);
                     if (loggedInStr != null) {
                         if (data.get(position).getIsFavorite() == 1) {
 
@@ -270,14 +291,11 @@ public class YogaFilterAdapter extends ArrayAdapter<YogaItem> implements DeleteF
                         Util.favorite_clicked = true;
                         Util.favPosition = position;
                         final Intent registerActivity = new Intent(context, RegisterActivity.class);
-                        ((Activity) context).runOnUiThread(new Runnable() {
-                            public void run() {
-                                registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                registerActivity.putExtra("from", this.getClass().getName());
-                                ((Activity) context).startActivityForResult(registerActivity, 30060);
 
-                            }
-                        });
+                        registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        registerActivity.putExtra("from", this.getClass().getName());
+                        ((Activity) context).startActivityForResult(registerActivity, 30060);
+
 
                     }
 
@@ -295,6 +313,38 @@ public class YogaFilterAdapter extends ArrayAdapter<YogaItem> implements DeleteF
         return row;
     }
 
+
+    @Override
+    public int getCount() {
+        return data.size();
+    }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public YogaItem getItem(int position) {
+        return data.get(position);
+    }
+    @Override
+    public int getItemViewType(int position) {
+        if (getItem(position) instanceof YogaItem) {
+            return TYPE_PERSON;
+        }
+
+        return TYPE_DIVIDER;
+    }
+    @Override
+    public boolean isEnabled(int position) {
+        return (getItemViewType(position) == TYPE_PERSON);
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        // TYPE_PERSON and TYPE_DIVIDER
+        return 2;
+    }
     @Override
     public void onDeleteFavPreExecuteStarted() {
         ((Activity) context).runOnUiThread(new Runnable() {
@@ -371,6 +421,8 @@ public class YogaFilterAdapter extends ArrayAdapter<YogaItem> implements DeleteF
 
         if (status == 200) {
             // data.get(i).setFavbtnClicked(true);
+
+            Log.v("SUBHA","data yoga item size == "+ data.size());
 
             data.get(i).setIsFavorite(1);
             data.get(i).setFavoriteClicked(true);

@@ -48,6 +48,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_LANGUAGE_POPUP
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MY_FAVOURITE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_NOTIFICATION_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PURCHASE_HISTORY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
@@ -55,6 +56,7 @@ import static com.home.vod.preferences.LanguagePreference.LANGUAGE_POPUP_LOGIN;
 import static com.home.vod.preferences.LanguagePreference.LOGOUT;
 import static com.home.vod.preferences.LanguagePreference.MY_DOWNLOAD;
 import static com.home.vod.preferences.LanguagePreference.MY_FAVOURITE;
+import static com.home.vod.preferences.LanguagePreference.NOTIFICATION_TITLE;
 import static com.home.vod.preferences.LanguagePreference.PROFILE;
 import static com.home.vod.preferences.LanguagePreference.PURCHASE_HISTORY;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
@@ -79,9 +81,9 @@ public class SideMenuHandler {
     public ArrayList<NavDrawerItem> originalMenuList = new ArrayList<>();
 
     String favourite_menu,favourite_menuPermalink, login_menu,register_menu,profile_menu,mydownload_menu,purchase_menu,logout_menu,login_menuPermalink,register_menuPermalink,profile_menuPermalink,mydownload_menuPermalink,purchase_menuPermalink,logout_menuPermalink;
+    LanguagePreference languagePreference;
 
-
-    TextView nameText,badge,badge1;
+    TextView nameText,badge,badge1,logoutTextView,notificationTextView,noLoginNotificationTextView;
     ImageView editPen,profile_image,bannerImageView;
     LinearLayout layout1,layout2,notification,logout;
 
@@ -92,6 +94,7 @@ public class SideMenuHandler {
     public SideMenuHandler(Activity activity, PreferenceManager preferenceManager) {
         this.context = activity;
 
+        languagePreference = LanguagePreference.getLanguagePreference(context);
         editPen = (ImageView) context.findViewById(R.id.edit_profile);
         nameText = (TextView) context.findViewById(R.id.edit_name);
         profile_image = (ImageView) context.findViewById(R.id.logo);
@@ -101,6 +104,9 @@ public class SideMenuHandler {
         layout1 = (LinearLayout) context.findViewById(R.id.layout_1);
         layout2 = (LinearLayout) context.findViewById(R.id.layout_2);
         notification = (LinearLayout) context.findViewById(R.id.notification);
+        logoutTextView = (TextView) context.findViewById(R.id.logoutTextView);
+        notificationTextView = (TextView) context.findViewById(R.id.notificationTextView);
+        noLoginNotificationTextView = (TextView) context.findViewById(R.id.noLoginNotificationTextView);
         logout = (LinearLayout) context.findViewById(R.id.logout);
         badge = (TextView) context.findViewById(R.id.badge);
         badge1 = (TextView) context.findViewById(R.id.badge);
@@ -110,6 +116,9 @@ public class SideMenuHandler {
         BadgeCount.setBadgeCount(this, icon2, preferenceManager.getNOTI_COUNT());
 */
 
+        notificationTextView.setText(languagePreference.getTextofLanguage(NOTIFICATION_TITLE,DEFAULT_NOTIFICATION_TITLE));
+        noLoginNotificationTextView.setText(languagePreference.getTextofLanguage(NOTIFICATION_TITLE,DEFAULT_NOTIFICATION_TITLE));
+        logoutTextView.setText(languagePreference.getTextofLanguage(LOGOUT,DEFAULT_LOGOUT));
 
        /* BadgeView badge = new BadgeView(this, layout2);
         badge.setText("1");
@@ -230,7 +239,7 @@ public class SideMenuHandler {
                     menuList.add(adding_position + 3, new NavDrawerItem(favourite_menu, favourite_menuPermalink, true, "internal"));
 
                 }
-                    menuList.add(new NavDrawerItem(logout_menu, logout_menuPermalink, true, "internal"));
+//                    menuList.add(new NavDrawerItem(logout_menu, logout_menuPermalink, true, "internal"));
 
             }
 

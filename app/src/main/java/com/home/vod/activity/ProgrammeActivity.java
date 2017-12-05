@@ -278,7 +278,6 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
     public void onOrientationChange(int orientation) {
 
         Log.v("Subhalaxmi","video done");
-        Toast.makeText(ProgrammeActivity.this,"video done",Toast.LENGTH_SHORT).show();
 
         if (orientation == 90) {
             compressed = false;
@@ -463,6 +462,9 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         @Override
         public void onSessionEnding(CastSession session) {
 
+            cast_disconnected_position = session.getRemoteMediaClient().getApproximateStreamPosition();
+
+
         }
 
         @Override
@@ -520,6 +522,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(ProgrammeActivity.this);
         playButton = (ImageView) findViewById(R.id.playButton);
+        playButton.setVisibility(View.GONE);
         detailsTextView = (TextView) findViewById(R.id.detailsTextView);
         difficulty = (TextView) findViewById(R.id.difficulty);
         lineTextview = (TextView) findViewById(R.id.lineTextview);
@@ -1281,6 +1284,8 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             movieTrailerUrlStr = contentDetailsOutput.getTrailerUrl();
             contentTypesId = contentDetailsOutput.getContentTypesId();
 
+
+            Log.v("SUBHASHREE","movieTrailer === "+ movieTrailerUrlStr);
             lineTextview.setVisibility(View.VISIBLE);
 
             benefitsTitleTextView.setText(languagePreference.getTextofLanguage(BENEFIT_TITLE, DEFAULT_BENEFIT_TITLE));
@@ -1314,7 +1319,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             }
 
 
-            if (movieTrailerUrlStr.equals("") && movieTrailerUrlStr != null && movieTrailerUrlStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
+            if (movieTrailerUrlStr.matches("") || (movieTrailerUrlStr != null && movieTrailerUrlStr.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA)))) {
                 playButton.setVisibility(View.GONE);
                 Log.v("SUBHA", "trailer url no === ");
             } else {
@@ -2036,23 +2041,9 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         Log.v("BKS", "elseclickedddddd");
-        /*loginresultcode = requestCode;
-        if (requestCode == 40500) {
-            if (resultCode == RESULT_OK) {
-                Util.favorite_clicked = false;
 
-                loggedInStr = pref.getString("PREFS_LOGGEDIN_ID_KEY", null);
-
-                AsynLoadMovieDetails asyncViewFavorite = new AsynLoadMovieDetails();
-                asyncViewFavorite.executeOnExecutor(threadPoolExecutor);
-            } else {
-                Log.v("BKS", "elseclickedddddd");
-                Util.favorite_clicked = false;
-            }
-
-        }*/
-//
         if (requestCode == 30060 && resultCode == RESULT_OK) {
             if (NetworkStatus.getInstance().isConnected(this)) {
                 ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
@@ -2307,7 +2298,6 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 //                    backCalled();
                 }*/
                 Log.v("Subhalaxmi","video done");
-                Toast.makeText(ProgrammeActivity.this,"video done 1",Toast.LENGTH_SHORT).show();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

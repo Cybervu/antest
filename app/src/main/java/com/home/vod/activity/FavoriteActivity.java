@@ -292,7 +292,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Log.v("SUBHAlaxmi","GG"+i+customGridAdapter.getItem(i).isSelected());
+              /*  Log.v("SUBHAlaxmi","GG"+i+customGridAdapter.getItem(i).isSelected());
                 view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 a=true;
                 index = i  ;
@@ -314,7 +314,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                     customGridAdapter.getItem(i).setSelected(false);
 
                 }
-                customGridAdapter.notifyDataSetChanged();
+                customGridAdapter.notifyDataSetChanged();*/
                 return false;
             }
         });

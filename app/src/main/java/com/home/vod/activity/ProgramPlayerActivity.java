@@ -100,6 +100,7 @@ import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.vod.BuildConfig;
 import com.home.vod.R;
 import com.home.vod.adapter.ProgramPlayerAdapter;
+import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.model.SeasonModel;
 import com.home.vod.network.NetworkStatus;
@@ -229,6 +230,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
     ProgressBarHandler mDialog;
     // private SampleVideoPlayer mVideoPlayer;
 
+    String seekStatusStr = "";
     // The container for the ad's UI.
     private ViewGroup mAdUiContainer;
 
@@ -367,6 +369,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
     TextView videoTitle, GenreTextView, descriptionDetailsTextView, clocktime, durationTitleTextView, durationTextView, moreVideoTitleTextView, descriptionTitleTextVIew, videoDurationTextView, videoCensorRatingTextView, videoCensorRatingTextView1, videoReleaseDateTextView,
             videoCastCrewTitleTextView;
     TextView story;
+    RelativeLayout moreVideosRelativeLayout;
     RecyclerView moreVideosRecyclerView;
     private EMVideoView emVideoView;
     int seek_label_pos = 0;
@@ -516,6 +519,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 if (NetworkStatus.getInstance().isConnected(this)) {
 
                     Log.v("SUBHA", "Video PLayer Called 1");
+                    Log.v("SUBHALAXMIPANDA1", "status" +upContentUniqueId+upStreamUniqueId+preferenceManager.getUseridFromPref()+languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 
                     GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
                     getVideoDetailsInput.setAuthToken(authTokenStr);
@@ -523,6 +527,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                     getVideoDetailsInput.setStream_uniq_id(upStreamUniqueId);
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
 //                    getVideoDetailsInput.setUser_id("157218");
                     asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
@@ -564,6 +569,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                     getVideoDetailsInput.setStream_uniq_id(upStreamUniqueId);
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+
 //                    getVideoDetailsInput.setUser_id("157218");
                     asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
@@ -586,6 +593,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
     @Override
     public void onVideoDetailsPostExecuteCompleted(Video_Details_Output _video_details_output, int code, String status, String message) {
 
+        Log.v("SUBHALAXMIPANDA1", "_video_details_output============" +_video_details_output);
 
         // _video_details_output.setThirdparty_url("https://www.youtube.com/watch?v=fqU2FzATTPY&spfreload=10");
         // _video_details_output.setThirdparty_url("https://player.vimeo.com/video/192417650?color=00ff00&badge=0");
@@ -607,7 +615,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             play_video = true;
         }
 
-        Log.v("SUBHA", "play video ==== " + play_video);
+        Log.v("SUBHALAXMIPANDA1", "play video ==== " + play_video);
         if (!play_video) {
 
             try {
@@ -695,12 +703,19 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                 }
             }
-
+            if (playerModel.getVideoUrl().contains(".mpd")) {
+                isDrm = true;
+            } else {
+                isDrm = false;
+            }
             com.home.vod.util.Util.dataModel.setVideoResolution(_video_details_output.getVideoResolution());
 
             playerModel.setVideoResolution(_video_details_output.getVideoResolution());
-            if (_video_details_output.getPlayed_length() != null && !_video_details_output.getPlayed_length().equals(""))
+            Log.v("SUBHALAXMIPANDA1", "play video ==== " + _video_details_output.getPlayed_length());
+
+            if (_video_details_output.getPlayed_length() != null && !_video_details_output.getPlayed_length().equals("")) {
                 playerModel.setPlayPos((com.home.vod.util.Util.isDouble(_video_details_output.getPlayed_length())));
+            }
 
 //            played_length = playerModel.getPlayPos() * 1000;
             Log.v("pratik","length in ppa post vd==="+played_length);
@@ -738,12 +753,24 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 //            SubTitleName = _video_details_output.getSubTitleName();
 //            SubTitleLanguage = _video_details_output.getSubTitleLanguage();
 
-            if (SubTitlePath.size() > 0 || ResolutionUrl.size() > 0) {
-                subtitle_change_btn.setVisibility(View.VISIBLE);
+            if (isDrm) {
+                if (SubTitlePath.size() > 0) {
+                    subtitle_change_btn.setVisibility(View.VISIBLE);
+                }
+            } else {
+                if (SubTitlePath.size() > 0 || ResolutionUrl.size() > 0) {
+                    subtitle_change_btn.setVisibility(View.VISIBLE);
+                }
             }
 
 
+           /* if (SubTitlePath.size() > 0 || ResolutionUrl.size() > 0) {
+                subtitle_change_btn.setVisibility(View.VISIBLE);
+            }
+*/
+
             com.home.vod.util.Util.dataModel.setVideoUrl(_video_details_output.getVideoUrl());
+            Log.v("ANU","datamodel.getVideoUrl()==="+_video_details_output.getVideoUrl());
             com.home.vod.util.Util.dataModel.setVideoResolution(_video_details_output.getVideoResolution());
             com.home.vod.util.Util.dataModel.setThirdPartyUrl(_video_details_output.getThirdparty_url());
             com.home.vod.util.Util.dataModel.setAdNetworkId(_video_details_output.getAdNetworkId());
@@ -773,6 +800,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             playerModel.setOfflineLanguage(_video_details_output.getOfflineLanguage());
 
 
+
+            Log.v("ANU","playerModel.getVideoUrl()==="+playerModel.getVideoUrl());
+            Log.v("ANU","playerModel.getVideoUrl()==="+playerModel.getVideoTitle());
             if (playerModel.getVideoUrl() == null ||
                     playerModel.getVideoUrl().matches("")) {
 
@@ -795,14 +825,39 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 // condition for checking if the response has third party url or not.
                 if (_video_details_output.getThirdparty_url() == null || _video_details_output.getThirdparty_url().matches("")) {
 
+                    Log.v("ProgramPlayer","mCastSession==="+mCastSession);
 
                     if (mCastSession != null && mCastSession.isConnected()) {
-                        MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+                       // setupCastListener();
+
+
+
+
+
+                        Log.v("ProgramPlayer","mCastSession==="+mCastSession);
+                        Log.v("Program","item clicked === " + video_prepared);
+                        videoLogId = "0";
+                        videoBufferLogUniqueId = "0";
+                        videoBufferLogId = "0";
+                        Location = "0";
+                        seekStatusStr = "first_time";
+                        playerPosition = 0;
+                        current_played_length = 0;
+                        Log.v("ProgramPlayer","1==="+mCastSession);
+
+                        setPlayVideoUrl(playerModel.getVideoUrl());
+                       /* MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
 
                         movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, playerModel.getVideoStory());
                         movieMetadata.putString(MediaMetadata.KEY_TITLE, playerModel.getVideoTitle());
                         movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
                         movieMetadata.addImage(new WebImage(Uri.parse(playerModel.getPosterImageId())));
+
+
+
+                        Log.v("ANU","Video Title === "+ playerModel.getVideoTitle());
+                        Log.v("ANU","Video Url === "+ playerModel.getVideoUrl());
+
 
 
                         String mediaContentType = "videos/mp4";
@@ -967,7 +1022,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
 
                             togglePlayback();
-                        }
+                        }*/
+
+
+
                     } else {
 
 
@@ -1007,7 +1065,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                         } else {
 
                             playerModel.setThirdPartyPlayer(false);
-                            emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
+
+                            setPlayVideoUrl(playerModel.getVideoUrl());
+                            //emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
                         }
                     }
                 } else {
@@ -1082,12 +1142,16 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             }
             LogUtil.showLog("MUVI", "episode show...1");
 
+            Log.v("Nihar","questions ===== " + questions.size());
 
             if (questions.size() <= 0) {
 
+                moreVideosRelativeLayout.setVisibility(View.GONE);
 
                 //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
             } else {
+                moreVideosRelativeLayout.setVisibility(View.VISIBLE);
+                moreVideoTitleTextView.setVisibility(View.VISIBLE);
                 moreVideosRecyclerView.setVisibility(View.VISIBLE);
                 moreVideosRecyclerView.setLayoutManager(mLayoutManager);
                 moreVideosRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -1098,7 +1162,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                         contentPosition = position;
                         getData();
-                        Log.v("SUBHA", "data set here");
+
+                        Log.v("PROGRAM", "data set here");
                     }
 
                     @Override
@@ -1222,7 +1287,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             @Override
             public void run() {
 
-                Log.v("PINTU", "CheckAvailabilityOfChromecast called");
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -1296,9 +1360,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
         season_change_textview = (TextView) findViewById(R.id.season_change_textview);
         FontUtls.loadFont(ProgramPlayerActivity.this, getResources().getString(R.string.regular_fonts), season_change_textview);
-        if (totalSeason == 1) {
-            seasonScroller.setVisibility(View.GONE);
-        }
+
+
         Log.v("Nihar", "called ----------------"+counter);
 
         previous_season = (ImageView) findViewById(R.id.previous_season);
@@ -1330,6 +1393,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         preferenceManager = PreferenceManager.getPreferenceManager(this);
          totalSeasonModel = (ArrayList<SeasonModel>) getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY);
         totalSeason = totalSeasonModel.size();
+
+        if (totalSeason == 1) {
+            seasonScroller.setVisibility(View.GONE);
+        }
         current_season = Integer.parseInt(getIntent().getStringExtra("Current_SEASON"));
         counter = Integer.parseInt(getIntent().getStringExtra("Index"));
         season_change_textview.setText(totalSeasonModel.get(counter).getSeasonName() + " OF "+totalSeason);
@@ -1513,6 +1580,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         //Check for offline content // Added By sanjay
         mediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
         download_layout = (RelativeLayout) findViewById(R.id.downloadRelativeLayout);
+        download_layout.setVisibility(View.INVISIBLE);
+
         if (content_types_id != 4 && playerModel.getIsOffline().equals("1") && playerModel.getDownloadStatus().equals("1")) {
             download_layout.setVisibility(View.VISIBLE);
         }
@@ -1595,11 +1664,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
         subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
         subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
+        subtitle_change_btn.setVisibility(View.INVISIBLE);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
         videoTitle = (TextView) findViewById(R.id.videoTitle);
         moreVideoTitleTextView = (TextView) findViewById(R.id.moreVideoTitleTextView);
+        moreVideosRelativeLayout = (RelativeLayout) findViewById(R.id.moreVideosRelativeLayout);
         moreVideoTitleTextView.setText(languagePreference.getTextofLanguage(MORE_VIDEOS,DEFAULT_MORE_VIDEOS));
-
         Typeface videoTitleface = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.regular_fonts));
         videoTitle.setTypeface(videoTitleface);
         moreVideoTitleTextView.setTypeface(videoTitleface);
@@ -1720,6 +1790,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 Log.v("BIBHU1", "subtitle_image button visible called");
             }
         }
+
+
 
 
         subtitle_change_btn.setOnClickListener(new View.OnClickListener() {
@@ -2079,9 +2151,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         emVideoView.setOnPreparedListener(new OnPreparedListener() {
             @Override
             public void onPrepared() {
+                Log.v("ProgramPlayer","4==="+mCastSession);
 
+                Log.v("SUBHALAXMIPANDA1","onPrepared"+is_paused);
                 video_prepared = true;
                 if (change_resolution) {
+                    Log.v("SUBHALAXMIPANDA1","change_resolution"+is_paused);
 
                     change_resolution = false;
                     emVideoView.start();
@@ -2098,11 +2173,15 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                 } else {
 
+                    Log.v("SUBHALAXMIPANDA1","onplayerModel.getPlayPos()"+playerModel.getPlayPos());
 
                     if (playerModel.getPlayPos() >= emVideoView.getDuration() / 1000) {
-                        played_length = 0;
-                    }
 
+                        played_length = 0;
+                    }else{
+                        played_length = playerModel.getPlayPos() * 1000;
+                        current_played_length = played_length;
+                    }
                     video_completed = false;
                     if (progressView != null) {
                         ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
@@ -2137,13 +2216,14 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                             updateProgressBar();
                         } else {
                             startTimer();
+                            seekStatusStr = "first_time";
+                            Log.v("ProgramPlayer","5==="+mCastSession);
 
-
-                            Log.v("SUBHA","played_length === " + played_length);
-
+                            Log.v("SUBHALAXMIPANDA1","played_length === 74632 video log details called" + played_length );
                             if (played_length > 0) {
                                 ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
                                 Util.call_finish_at_onUserLeaveHint = false;
+                                Log.v("ProgramPlayer","ResumePopupActivity " + played_length );
 
                                 Intent resumeIntent = new Intent(ProgramPlayerActivity.this, ResumePopupActivity.class);
                                 startActivityForResult(resumeIntent, 1001);
@@ -2155,8 +2235,16 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                                     requestAds(playerModel.getChannel_id());
 
                                 }
+                                Log.v("ProgramPlayer","fdff==="+video_prepared);
+                               /* if (mCastSession==null || !mCastSession.isConnected()) {
+                                    emVideoView.start();
+                                }*/
                                 emVideoView.start();
+
+                                Log.v("ProgramPlayer","fsf==="+video_prepared);
+
                                 seekBar.setProgress(emVideoView.getCurrentPosition());
+
                                 updateProgressBar();
 
                                 if (SubTitlePath.size() > 0) {
@@ -2166,11 +2254,14 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                                     subsFetchTask = new SubtitleProcessingTask("1");
                                     subsFetchTask.execute();
                                 } else {
-                                    Log.v("SUBHA","played_length === 1" );
+                                    Log.v("ProgramPlayer","played_length === 1 video log details called" );
                                     asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-                                }
 
+                                }
+                                if (mCastSession!=null && mCastSession.isConnected()) {
+                                    loadVideosToPlaycast();
+                                }
 
                             }
 
@@ -2193,101 +2284,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             }
         });
 
+        setPlayVideoUrl(playerModel.getVideoUrl());
 
-//commented by me
-        //  emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
-        try {
-            /*
-             * Initialize the Wasabi Runtime (necessary only once for each
-			 * instantiation of the application)
-			 *
-			 * ** Note: Set Runtime Properties as needed for your environment
-			 */
-            Runtime.initialize(getDir("wasabi", MODE_PRIVATE).getAbsolutePath());
-            /*
-             * Personalize the application (acquire DRM keys). ProgramPlayerActivity.this is only
-			 * necessary once each time the application is freshly installed
-			 *
-			 * ** Note: personalize() is a blocking call and may take long
-			 * enough to complete to trigger ANR (Application Not Responding)
-			 * errors. In a production application ProgramPlayerActivity.this should be called in a
-			 * background thread.
-			 */
-            if (!Runtime.isPersonalized())
-                Runtime.personalize();
-
-        } catch (NullPointerException e) {
-            //onBackPressed();
-            backCalled();
-            return;
-        } catch (ErrorCodeException e) {
-            // Consult WasabiErrors.txt for resolution of the error codes
-            //onBackPressed();
-            backCalled();
-            return;
-        }
-
-        try {
-            EnumSet<PlaylistProxy.Flags> flags = EnumSet.noneOf(PlaylistProxy.Flags.class);
-            playerProxy = new PlaylistProxy(flags, ProgramPlayerActivity.this, new Handler());
-            playerProxy.start();
-        } catch (ErrorCodeException e) {
-            // Consult WasabiErrors.txt for resolution of the error codes
-            //  onBackPressed();
-            backCalled();
-            return;
-        }
-
-
-
-        	/*
-         * create a playlist proxy url and pass it to the native player
-		 */
-        try {
-            /*
-             * Note that the MediaSourceType must be adapted to the stream type
-			 * (DASH or HLS). Similarly,
-			 * the MediaSourceParams need to be set according to the media type
-			 * if MediaSourceType is SINGLE_FILE
-			 */
-
-            ContentTypes3 contentType = ContentTypes3.DASH;
-            PlaylistProxy.MediaSourceParams params = new PlaylistProxy.MediaSourceParams();
-            params.sourceContentType = contentType
-                    .getMediaSourceParamsContentType();
-            /*
-             * if the content has separate audio tracks (eg languages) you may
-			 * select one using MediaSourceParams, eg params.language="es";
-			 */
-            String contentTypeValue = contentType.toString();
-            if (playerModel.getVideoUrl().contains(".mpd")) {
-                String url = playerProxy.makeUrl(playerModel.getVideoUrl(), PlaylistProxy.MediaSourceType.valueOf((contentTypeValue == "MP4" || contentTypeValue == "HLS" || contentTypeValue == "DASH") ? contentTypeValue : "SINGLE_FILE"), params);
-                emVideoView.setVideoURI(Uri.parse(url));
-
-            } else {
-                emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
-
-            }
-
-
-        } catch (ErrorCodeException e) {
-            // Consult WasabiErrors.txt for resolution of the error codes
-            //  onBackPressed();
-            backCalled();
-            return;
-        } catch (IllegalArgumentException e) {
-            // onBackPressed();
-            backCalled();
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            // onBackPressed();
-            backCalled();
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            //  onBackPressed();
-            backCalled();
-            e.printStackTrace();
-        }
 
 
         /*****Offline*****/
@@ -2460,6 +2458,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
 
 
+
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                     Log.v("BIBHU", "sending restrict_stream_id============" + restrict_stream_id);
                     httppost.addHeader("is_streaming_restriction", "1");
@@ -2526,7 +2525,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                         log_temp_id = myJson.optString("log_temp_id");
                         restrict_stream_id = myJson.optString("restrict_stream_id");
 
-                        Log.v("BIBHU", "responseStr of restrict_stream_id============" + restrict_stream_id);
+                        Log.v("SUBHA11", "responseStr of video log id normal player===========" + videoLogId);
 
 
                     } else {
@@ -2553,13 +2552,18 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 log_temp_id = "0";
             }
 
-            AsyncVideoBufferLogDetails asyncVideoBufferLogDetails = new AsyncVideoBufferLogDetails();
-            asyncVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
+            try {
+                AsyncVideoBufferLogDetails asyncVideoBufferLogDetails = new AsyncVideoBufferLogDetails();
+                asyncVideoBufferLogDetails.executeOnExecutor(threadPoolExecutor);
+            }catch (Exception e){
+                videoLogId = "0";
+                log_temp_id = "0";
+            }
         }
 
         @Override
         protected void onPreExecute() {
-            Log.v("SUBHA","played_length === 2" );
+
 //            stoptimertask();
         }
 
@@ -2625,15 +2629,29 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                                 playerPreviousPosition = 0;
 
+                                Log.v("BIBHU1","initializeTimerTask fastforword false called");
+
                                 int duration = emVideoView.getDuration() / 1000;
                                 if (currentPositionStr > 0 && currentPositionStr == duration) {
-                                    asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     watchStatus = "complete";
-                                    asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+
+
+                                    try{
+                                        stoptimertask();
+                                        asyncVideoLogDetails = new AsyncVideoLogDetails();
+                                        asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+                                    }catch (Exception e){Log.v("BIBHU1","Exception at complete ="+e.toString());}
+
+
                                 } else if (currentPositionStr > 0 && currentPositionStr % 60 == 0) {
-                                    asyncVideoLogDetails = new AsyncVideoLogDetails();
                                     watchStatus = "halfplay";
-                                    asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+
+                                    try{
+                                        asyncVideoLogDetails = new AsyncVideoLogDetails();
+                                        asyncVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+                                    }catch (Exception e){Log.v("BIBHU1","Exception at halfplay ="+e.toString());}
+
+
 
                                 }
                             }
@@ -3007,6 +3025,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                     } else {
                         if (current_matching_time >= emVideoView.getDuration()) {
+                            emVideoView.pause();
                             mHandler.removeCallbacks(updateTimeTask);
                             //  pause_play.setImageResource(R.drawable.ic_media_play);
 //                    emVideoView.release();
@@ -3080,6 +3099,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                                 EpisodesListModel listModel = questions.get(contentPosition);
                                 durationTextView.setText(listModel.getEpisodeDuration());
                                 playerModel.setVideoDuration(listModel.getEpisodeDuration());
+                                playerModel.setVideoTitle(listModel.getEpisodeTitle());
 
 //                                Util.dataModel.setVideoDuration(listModel.getEpisodeDuration());
                                 /////genere
@@ -3126,6 +3146,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                             asynLoadVideoUrls.execute();*/
 
                             } else {
+                                Log.v("ProgramPlayer","completed");
                                 backCalled();
 
                             }
@@ -3187,18 +3208,18 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             timer = null;
         }
 
-        if (video_completed == false) {
+       // if (video_completed == false) {
 
             AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
             asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-            return;
-        }
-        mHandler.removeCallbacks(updateTimeTask);
+           // return;
+        //}
+     /*   mHandler.removeCallbacks(updateTimeTask);
         if (emVideoView != null) {
             emVideoView.release();
         }
         finish();
-        overridePendingTransition(0, 0);
+        overridePendingTransition(0, 0);*/
     }
 
     public void backCalled() {
@@ -3219,8 +3240,17 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             stoptimertask();
             timer = null;
         }
-        AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
-        asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+       // if (video_completed == false) {
+
+            AsyncResumeVideoLogDetails asyncResumeVideoLogDetails = new AsyncResumeVideoLogDetails();
+            asyncResumeVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+            //return;
+      //  }
+       /* mHandler.removeCallbacks(updateTimeTask);
+        if (emVideoView != null) {
+            emVideoView.release();
+        }
+      */
         return;
       /*  if (video_completed == false){
 
@@ -3466,6 +3496,134 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         return super.onKeyUp(keyCode, objEvent);
     }
 */
+
+
+    private class AsyncResumeNextVideoLogDetails extends AsyncTask<Void, Void, Void> {
+        //  ProgressDialog pDialog;
+        String responseStr;
+        int statusCode = 0;
+        String watchSt = "halfplay";
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+//            String urlRouteList = Util.rootUrl().trim() + Util.videoLogUrl.trim();
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost(APIUrlConstant.getVideoLogsUrl());
+                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+                httppost.addHeader("authToken", authTokenStr);
+                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
+                httppost.addHeader("ip_address", ipAddressStr.trim());
+                httppost.addHeader("movie_id", playerModel.getMovieUniqueId());
+                httppost.addHeader("episode_id", playerModel.getStreamUniqueId().trim());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (current_matching_time >= emVideoView.getDuration()) {
+                            watchSt = "complete";
+                        }
+
+                    }
+
+                });
+                httppost.addHeader("watch_status", watchSt);
+
+
+                if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
+
+                    httppost.addHeader("is_streaming_restriction", "1");
+                    httppost.addHeader("restrict_stream_id", restrict_stream_id);
+                    httppost.addHeader("is_active_stream_closed", "1");
+                }
+
+                // Following code is changed due to NewVideoLog API ;
+
+                httppost.addHeader("played_length", "" + (playerPosition - player_start_time));
+                httppost.addHeader("log_temp_id", log_temp_id);
+                httppost.addHeader("resume_time", "" + (playerPosition));
+
+                Log.v("PROGRAM", "played_length============" + (playerPosition - player_start_time));
+                Log.v("PROGRAM", "log_temp_id============" + log_temp_id);
+                Log.v("PROGRAM", "resume_time============" + (playerPosition));
+                Log.v("PROGRAM", "log_id============" + videoLogId);
+                Log.v("PROGRAM","video_completed1"+video_completed);
+
+                //===============End=============================//
+
+
+                httppost.addHeader("device_type", "2");
+                httppost.addHeader("log_id", videoLogId);
+
+
+                // Execute HTTP Post Request
+                try {
+                    HttpResponse response = httpclient.execute(httppost);
+                    responseStr = EntityUtils.toString(response.getEntity());
+                    Log.v("PROGRAM","responseStr of responseStr============"+responseStr);
+
+
+                } catch (org.apache.http.conn.ConnectTimeoutException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            videoLogId = "0";
+
+                        }
+
+                    });
+
+                } catch (IOException e) {
+                    videoLogId = "0";
+
+                    e.printStackTrace();
+                }
+                if (responseStr != null) {
+                    JSONObject myJson = new JSONObject(responseStr);
+                    statusCode = Integer.parseInt(myJson.optString("code"));
+                    if (statusCode == 200) {
+                        videoLogId = myJson.optString("log_id");
+                        log_temp_id = myJson.optString("log_temp_id");
+                        restrict_stream_id = myJson.optString("restrict_stream_id");
+                        Log.v("PROGRAM", "responseStr of restrict_stream_id============" + restrict_stream_id);
+                    } else {
+                        videoLogId = "0";
+                        log_temp_id = "0";
+                    }
+
+                }
+
+            } catch (Exception e) {
+                videoLogId = "0";
+                log_temp_id = "0";
+
+            }
+
+            return null;
+        }
+
+
+        protected void onPostExecute(Void result) {
+
+            if (responseStr == null) {
+                videoLogId = "0";
+                log_temp_id = "0";
+
+            }
+            Log.v("PROGRAM","loadAnotherVideo");
+            mHandler.removeCallbacks(updateTimeTask);
+
+            loadAnotherVideo();
+            return;
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+           // stoptimertask();
+        }
+    }
 
 
     private class AsyncResumeVideoLogDetails extends AsyncTask<Void, Void, Void> {
@@ -3756,7 +3914,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Log.v("SUBHAlaxmipanda1","onActivityResult"+requestCode);
         if (resultCode == RESULT_OK) {
 
             if (requestCode == 8001) {
@@ -3845,15 +4003,28 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
 
                 if (data.getStringExtra("yes").equals("1002")) {
+                    Log.v("SUBHALAXMIPANDA1","1002");
+                    seekStatusStr = "";
 
                     watchStatus = "halfplay";
                     playerPosition = playerModel.getPlayPos();
                     player_start_time = playerPosition;
                     PreviousUsedDataByApp(false);
+                  /*  if (mCastSession==null || !mCastSession.isConnected()) {
+                        emVideoView.start();
+                    }*/
                     emVideoView.start();
+
+                    current_played_length = played_length;
                     emVideoView.seekTo(played_length);
                     seekBar.setProgress(played_length);
+
                     updateProgressBar();
+
+                    if (mCastSession!=null && mCastSession.isConnected()) {
+                        seekStatusStr = "first_time";
+                        loadVideosToPlaycast();
+                    }
 
                 } else {
                     if (playerModel.getPreRoll() == 1 && playerModel.getAdNetworkId() == 1) {
@@ -3899,9 +4070,25 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                             Toast.makeText(getApplicationContext(), Util.getTextofLanguage(ProgramPlayerActivity.this, Util.NO_INTERNET_CONNECTION, Util.DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
                     } else {
+
+
+
+                        seekStatusStr = "";
+                        watchStatus = "start";
+                        playerPosition = 0;
+                        player_start_time = playerPosition;
+                        PreviousUsedDataByApp(false);
                         emVideoView.start();
-                        seekBar.setProgress(emVideoView.getCurrentPosition());
+                        played_length = 0;
+                        current_played_length = played_length;
+                        emVideoView.seekTo(played_length);
+                        seekBar.setProgress(played_length);
+
+                       // seekBar.setProgress(emVideoView.getCurrentPosition());
                         updateProgressBar();
+                        if (mCastSession!=null && mCastSession.isConnected()) {
+                            loadVideosToPlaycast();
+                        }
                     }
                 }
                 if (SubTitlePath.size() > 0) {
@@ -3929,8 +4116,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                         }
                         change_resolution = true;
                         ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.VISIBLE);
-                        emVideoView.setVideoURI(Uri.parse(ResolutionUrl.get(Integer.parseInt(data.getStringExtra("position")))));
-
+                       // emVideoView.setVideoURI(Uri.parse(ResolutionUrl.get(Integer.parseInt(data.getStringExtra("position")))));
+                        setPlayVideoUrl(ResolutionUrl.get(Integer.parseInt(data.getStringExtra("position"))));
                     }
 
                 } else {
@@ -4466,7 +4653,16 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 videoBufferLogUniqueId = "0";
                 Location = "0";
             }
-            if (!watchStatus.equals("complete"))
+            Log.v("ProgramPlayer","Emvideoview ==== 24"+ emVideoView.isPlaying());
+
+            if (mCastSession!=null && mCastSession.isConnected()){
+                Log.v("ProgramPlayer","Emvideoview ==== 25"+ emVideoView.isPlaying());
+
+                return;
+
+            }
+            else if (!watchStatus.equals("complete"))
+
                 startTimer();
 
             return;
@@ -5177,7 +5373,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 Download_SubTitle(playerModel.getOfflineUrl().get(0).trim());
             } else {
                 playerModel.setThirdPartyPlayer(false);
-                emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
+                setPlayVideoUrl(playerModel.getVideoUrl());
+               // emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
             }
 
         }
@@ -5190,7 +5387,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
     // ProgramPlayerActivity.this added later for chromecast//
     private void setupCastListener() {
+        Log.v("ProgramPlayer","setupCastListener");
+
         mSessionManagerListener = new SessionManagerListener<CastSession>() {
+
 
             @Override
             public void onSessionEnded(CastSession session, int error) {
@@ -5208,11 +5408,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                 startTimer();
                 PreviousUsedDataByApp(false);
+
                 emVideoView.start();
 
                 if (cast_disconnected_position != 0) {
 
-                    Log.v("BIBHU2", "onSessionEnded===and video log called");
+                    Log.v("BIBHU2", "onSessionEnded===and video log called"+cast_disconnected_position);
 
                     emVideoView.seekTo((int) cast_disconnected_position);
                     log_temp_id = "0";
@@ -5317,16 +5518,16 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                     castSession.setMessageReceivedCallbacks("urn:x-cast:muvi.mcrt.final", new Cast.MessageReceivedCallback() {
                         @Override
                         public void onMessageReceived(CastDevice castDevice, String s, String s1) {
-                            Log.v("bibhu", "onMessageReceived Message from receiver=" + s1);
+                            Log.v("SUBHA", "onMessageReceived Message from receiver=" + s1);
 
 
                             if (s1.contains("completed")) {
                                 video_completed_at_chromecast = true;
-                                Log.v("bibhu", "video completed at chromecast");
+                                Log.v("SUBHA", "video completed at chromecast");
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        finish();
+                                        emVideoView.reset();
                                     }
                                 });
                             } else {
@@ -5334,10 +5535,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                                     JSONObject jsonObject = new JSONObject(s1);
                                     videoLogId = jsonObject.optString("video_log_id");
 
+                                    Log.v("SUBHA11","video log id for cast connected == "+videoLogId );
+
                                     if (isDrm) {
                                         videoBufferLogId = jsonObject.optString("bandwidth_log_id");
                                         Current_Sesion_DataUsedByChrmoeCast = Long.parseLong(jsonObject.optString("bandwidth"));
-                                        Log.v("bibhu", "Current_Sesion_DataUsedByChrmoeCast=*****************=====" + Current_Sesion_DataUsedByChrmoeCast);
+                                        Log.v("SUBHA11", "Current_Sesion_DataUsedByChrmoeCast=*****************=====" + Current_Sesion_DataUsedByChrmoeCast);
                                     }
 
                                 } catch (Exception e) {
@@ -5372,8 +5575,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 subtitleText.setText("");
                 emVideoView.setEnabled(false);
 //                latest_center_play_pause.setEnabled(true);
+                Log.v("ProgramPlayer","Emvideoview ==== 20"+ emVideoView.isPlaying());
 
+                Log.v("SUBHA","Emvideoview ==== " + emVideoView.isPlaying());
                 if (emVideoView.isPlaying()) {
+                    Log.v("ProgramPlayer","Emvideoview ==== 21"+ emVideoView.isPlaying());
+
                     emVideoView.pause();
                     latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
                     center_play_pause.setImageResource(R.drawable.ic_media_play);
@@ -5385,6 +5592,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                     center_pause_paly_timer.cancel();
                     center_pause_paly_timer_is_running = false;
                     Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
+                    Log.v("ProgramPlayer","Emvideoview ==== 22"+ emVideoView.isPlaying());
+                    Log.v("ProgramPlayer","Emvideoview ==== 23"+ emVideoView.isPlaying());
 
 
                     last_ll.setVisibility(View.GONE);
@@ -5532,7 +5741,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
             @Override
             public void onStatusUpdated() {
-
+              /*  Intent intent = new Intent(ProgramPlayerActivity.this, ExpandedControlsActivity.class);
+                startActivity(intent);
+                remoteMediaClient.removeListener(this);*/
 //                Intent intent = new Intent(ProgramPlayerActivity.this, ExpandedControlsActivity.class);
 //                startActivity(intent);
 //                remoteMediaClient.removeListener(ProgramPlayerActivity.this);
@@ -5543,6 +5754,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                Log.v("ProgramPlayer","11");
                                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
                                 latest_center_play_pause.setVisibility(View.VISIBLE);
                             }
@@ -5551,6 +5763,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                Log.v("ProgramPlayer","12");
+
                                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
                                 latest_center_play_pause.setVisibility(View.VISIBLE);
                             }
@@ -5591,6 +5805,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
 
     public void PlayUsingCsat() {
+        Log.v("ProgramPlayer","8==="+video_prepared);
 
 
         MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
@@ -5606,18 +5821,38 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             JSONObject jsonObj = null;
             try {
                 jsonObj = new JSONObject();
-                jsonObj.put("description", playerModel.getVideoTitle());
+                jsonObj.put("description", playerModel.getVideoStory());
                 jsonObj.put("licenseUrl", playerModel.getLicenseUrl());
 
                 jsonObj.put("active_track_index", active_track_index);
 
                 //  This Code Is Added For Video Log By Bibhu..
 
-                jsonObj.put("authToken", Util.authTokenStr.trim());
+
+                Log.v("SUBHA11","AUthtoken === " +authTokenStr );
+                Log.v("SUBHA11","userIdStr === " +userIdStr.trim() );
+                Log.v("SUBHA11","ipAddressStr === " +ipAddressStr.trim() );
+                Log.v("SUBHA11"," playerModel.getMovieUniqueId() === " + playerModel.getMovieUniqueId() );
+                Log.v("SUBHA11"," playerModel.getEpisode_id() === " + playerModel.getStreamUniqueId() );
+                Log.v("SUBHA11"," watchStatus === " + watchStatus );
+                Log.v("SUBHA11"," videoLogId === " + videoLogId );
+                Log.v("SUBHA11"," resumetime === " + playerPosition );
+                Log.v("SUBHA11"," seekstatus === " + seekStatusStr );
+                Log.v("SUBHA11"," domain name  === " + BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
+
+
+                jsonObj.put("authToken", authTokenStr);
                 jsonObj.put("user_id", userIdStr.trim());
                 jsonObj.put("ip_address", ipAddressStr.trim());
                 jsonObj.put("movie_id", playerModel.getMovieUniqueId());
-                jsonObj.put("episode_id", playerModel.getEpisode_id());
+
+                if(content_types_id == 3){
+                    jsonObj.put("episode_id", playerModel.getStreamUniqueId());
+
+                }else{
+                    jsonObj.put("episode_id", playerModel.getEpisode_id());
+
+                }
 
 
                 jsonObj.put("watch_status", watchStatus);
@@ -5627,14 +5862,14 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "1");
-                    Log.v("BIBHU4", "restrict_stream_id============1");
+                    Log.v("SUBHA11", "restrict_stream_id============1");
                 } else {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);
                     jsonObj.put("is_streaming_restriction", "0");
-                    Log.v("BIBHU4", "restrict_stream_id============0");
+                    Log.v("SUBHA11", "restrict_stream_id============0");
                 }
 
-                jsonObj.put("domain_name", Util.rootUrl().trim().substring(0, Util.rootUrl().trim().length() - 6));
+                jsonObj.put("domain_name", BuildConfig.SERVICE_BASE_PATH.trim().substring(0, BuildConfig.SERVICE_BASE_PATH.trim().length() - 6));
                 jsonObj.put("is_log", "1");
 
                 // ProgramPlayerActivity.this code is changed according to new Video log //
@@ -5642,7 +5877,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 jsonObj.put("played_length", "0");
                 jsonObj.put("log_temp_id", "0");
                 jsonObj.put("resume_time", "" + (playerPosition));
-                jsonObj.put("seek_status", "first_time");
+                jsonObj.put("seek_status", seekStatusStr);
 
 
                 //=====================End===================//
@@ -5659,9 +5894,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 jsonObj.put("video_type", "mped_dash");
 
 
-                Log.v("BIBHU4", "drm_bandwidth_by_sender============" + ((CurrentUsedData + DataUsedByChrmoeCast) * 1024));
-                Log.v("BIBHU4", "CurrentUsedData============" + CurrentUsedData);
-                Log.v("BIBHU4", "DataUsedByChrmoeCast============" + DataUsedByChrmoeCast);
+                Log.v("SUBHA11", "drm_bandwidth_by_sender============" + ((CurrentUsedData + DataUsedByChrmoeCast) * 1024));
+                Log.v("SUBHA11", "CurrentUsedData============" + CurrentUsedData);
+                Log.v("SUBHA11", "DataUsedByChrmoeCast============" + DataUsedByChrmoeCast);
 
                 jsonObj.put("drm_bandwidth_by_sender", "" + ((CurrentUsedData + DataUsedByChrmoeCast) * 1024));
 
@@ -5672,7 +5907,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
             List tracks = new ArrayList();
 
-            Log.v("BIBHU", "url size============" + playerModel.offline_url.size());
+            Log.v("SUBHA11", "url size============" + playerModel.offline_url.size());
             if (playerModel.offline_url.size() > 0) {
 
                 for (int i = 0; i < playerModel.offline_url.size(); i++) {
@@ -6573,8 +6808,30 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
 
     public void getData() {
-        mHandler.removeCallbacks(updateTimeTask);
-        seekBar.setProgress(0);
+
+        Util.call_finish_at_onUserLeaveHint = true;
+
+        if (asyncVideoLogDetails != null) {
+            asyncVideoLogDetails.cancel(true);
+        }
+        if (asyncFFVideoLogDetails != null) {
+            asyncFFVideoLogDetails.cancel(true);
+        }
+
+        if (timer != null) {
+            stoptimertask();
+            timer = null;
+        }
+        Log.v("PROGRAM","video_completed1"+video_completed);
+
+        if (video_completed == false) {
+
+            AsyncResumeNextVideoLogDetails asyncResumeNextVideoLogDetails = new AsyncResumeNextVideoLogDetails();
+            asyncResumeNextVideoLogDetails.executeOnExecutor(threadPoolExecutor);
+        }
+        //Util.call_finish_at_onUserLeaveHint = true;
+
+       /* seekBar.setProgress(0);
         current_time.setText("00:00:00");
         total_time.setText("00:00:00");
         previous_matching_time = 0;
@@ -6606,14 +6863,14 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
         seekBarProgress = 0;
         change_resolution = false;
-        is_paused = false;
+        is_paused = false;*/
 
         //======end========//
 
 
-        int totalsize = questions.size() - 1;
-        Log.v("Nihar", "" + contentPosition);
-       // if (totalsize > contentPosition && contentPosition != questions.size()) {
+       /* int totalsize = questions.size() - 1;
+        Log.v("SUBHALAXMIPANDA1", "called contentposition" + contentPosition);
+     //   if (totalsize > contentPosition && contentPosition != questions.size()) {
 
            // contentPosition = contentPosition + 1;
             stoptimertask();
@@ -6624,6 +6881,10 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
 
         moreVideosRecyclerView.setAdapter(mAdapter);
+
+
+
+
         primary_ll.setVisibility(View.GONE);
             last_ll.setVisibility(View.GONE);
             center_play_pause.setVisibility(View.GONE);
@@ -6672,10 +6933,12 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
             asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
             asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                          /*  AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
-                            asynLoadVideoUrls.execute();*/
+                          *//*  AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+                            asynLoadVideoUrls.execute();*//*
             previous_matching_time = current_matching_time;
             ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+*/
+
        // }
     }
     public static interface ClickListener1{
@@ -6737,5 +7000,291 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         return input;
     }
 
+    public void setPlayVideoUrl(String videourl){
+        //commented by me
+        //  emVideoView.setVideoURI(Uri.parse(playerModel.getVideoUrl()));
+        try {
+            /*
+             * Initialize the Wasabi Runtime (necessary only once for each
+			 * instantiation of the application)
+			 *
+			 * ** Note: Set Runtime Properties as needed for your environment
+			 */
+            Runtime.initialize(getDir("wasabi", MODE_PRIVATE).getAbsolutePath());
+            /*
+             * Personalize the application (acquire DRM keys). ProgramPlayerActivity.this is only
+			 * necessary once each time the application is freshly installed
+			 *
+			 * ** Note: personalize() is a blocking call and may take long
+			 * enough to complete to trigger ANR (Application Not Responding)
+			 * errors. In a production application ProgramPlayerActivity.this should be called in a
+			 * background thread.
+			 */
+            if (!Runtime.isPersonalized())
+                Runtime.personalize();
 
+        } catch (NullPointerException e) {
+            //onBackPressed();
+            backCalled();
+            return;
+        } catch (ErrorCodeException e) {
+            // Consult WasabiErrors.txt for resolution of the error codes
+            //onBackPressed();
+            backCalled();
+            return;
+        }
+
+        try {
+            EnumSet<PlaylistProxy.Flags> flags = EnumSet.noneOf(PlaylistProxy.Flags.class);
+            playerProxy = new PlaylistProxy(flags, ProgramPlayerActivity.this, new Handler());
+            playerProxy.start();
+        } catch (ErrorCodeException e) {
+            // Consult WasabiErrors.txt for resolution of the error codes
+            //  onBackPressed();
+            backCalled();
+            return;
+        }
+
+
+
+        	/*
+         * create a playlist proxy url and pass it to the native player
+		 */
+        try {
+            /*
+             * Note that the MediaSourceType must be adapted to the stream type
+			 * (DASH or HLS). Similarly,
+			 * the MediaSourceParams need to be set according to the media type
+			 * if MediaSourceType is SINGLE_FILE
+			 */
+
+            ContentTypes3 contentType = ContentTypes3.DASH;
+            PlaylistProxy.MediaSourceParams params = new PlaylistProxy.MediaSourceParams();
+            params.sourceContentType = contentType
+                    .getMediaSourceParamsContentType();
+            /*
+             * if the content has separate audio tracks (eg languages) you may
+			 * select one using MediaSourceParams, eg params.language="es";
+			 */
+            String contentTypeValue = contentType.toString();
+            if (videourl.contains(".mpd")) {
+                videourl = playerProxy.makeUrl(videourl, PlaylistProxy.MediaSourceType.valueOf((contentTypeValue == "MP4" || contentTypeValue == "HLS" || contentTypeValue == "DASH") ? contentTypeValue : "SINGLE_FILE"), params);
+
+            }
+            Log.v("ProgramPlayer","2==="+mCastSession);
+
+            emVideoView.setVideoURI(Uri.parse(videourl));
+            Log.v("ProgramPlayer","3==="+mCastSession);
+
+
+        } catch (ErrorCodeException e) {
+            // Consult WasabiErrors.txt for resolution of the error codes
+            //  onBackPressed();
+            backCalled();
+            return;
+        } catch (IllegalArgumentException e) {
+            // onBackPressed();
+            backCalled();
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            // onBackPressed();
+            backCalled();
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            //  onBackPressed();
+            backCalled();
+            e.printStackTrace();
+        }
+
+    }
+    void loadAnotherVideo()
+    {
+
+        Log.v("Program","item clicked === ");
+
+        seekBar.setProgress(0);
+        current_time.setText("00:00:00");
+        total_time.setText("00:00:00");
+        previous_matching_time = 0;
+        current_matching_time = 0;
+        video_completed = true;
+        content_types_id = 0;//set
+        videoLogId = "0";
+        watchStatus = "start";
+        playerPosition = 0;
+        videoBufferLogId = "0";
+        videoBufferLogUniqueId = "0";
+        Location = "0";
+        played_length = 0;
+        playerStartPosition = 0;
+        restrict_stream_id = "0";
+        movieId = "";//set
+        episodeId = "0";//set
+        selected_download_format = 0;
+        previous_matching_time = 0;
+        current_matching_time = 0;
+        SubTitleName.clear();
+        SubTitlePath.clear();
+        ResolutionFormat.clear();
+        ResolutionUrl.clear();
+        callWithoutCaption = true;
+        censor_layout = true;
+
+        // This added for resolution Change.
+
+        seekBarProgress = 0;
+        change_resolution = false;
+        is_paused = false;
+
+
+        int totalsize = questions.size() - 1;
+        Log.v("PROGRAM", "called contentposition" + contentPosition);
+        //   if (totalsize > contentPosition && contentPosition != questions.size()) {
+
+        // contentPosition = contentPosition + 1;
+
+        String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
+        clocktimetv.setText(clocktext);
+
+        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
+
+        moreVideosRecyclerView.setAdapter(mAdapter);
+
+
+
+
+        primary_ll.setVisibility(View.GONE);
+        last_ll.setVisibility(View.GONE);
+        center_play_pause.setVisibility(View.GONE);
+        latest_center_play_pause.setVisibility(View.GONE);
+        current_time.setVisibility(View.GONE);
+        subtitle_change_btn.setVisibility(View.INVISIBLE);
+        mediaRouteButton.setVisibility(View.VISIBLE);
+        back.setVisibility(View.VISIBLE);
+        End_Timer();
+        Log.v("Nihar", totalsize + "NextPosition   429  :" + contentPosition);
+        EpisodesListModel listModel = questions.get(contentPosition);
+        durationTextView.setText(listModel.getEpisodeDuration());
+        playerModel.setVideoDuration(listModel.getEpisodeDuration());
+        playerModel.setVideoTitle(listModel.getEpisodeTitle());
+        playerModel.setPosterImageId(listModel.getEpisodeThumbnailImageView());
+        playerModel.setVideoStory(listModel.getEpisodeDescription());
+
+//                                Util.dataModel.setVideoDuration(listModel.getEpisodeDuration());
+        /////genere
+        videoTitle.setText(listModel.getEpisodeTitle());
+//                                Util.dataModel.setEpisode_title(listModel.getEpisodeTitle());
+        ///video story text view start
+        descriptionTitleTextVIew.setText(listModel.getEpisodeDescription());
+//                                Util.dataModel.setVideoStory(listModel.getEpisodeDescription());
+
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+
+        );
+        ///end videostory
+        Episodeid = listModel.getEpisodeMuviUniqueId();
+        content_types_id = playerModel.getContentTypesId();
+
+        upStreamUniqueId = listModel.getEpisodeStreamUniqueId();
+        episodeId = upStreamUniqueId;
+        upContentUniqueId = listModel.getEpisodeMuviUniqueId();
+        movieId = upContentUniqueId;
+        playerModel.setMovieUniqueId(movieId);
+        playerModel.setStreamUniqueId(episodeId);
+        emVideoView.pause();
+        playerPosition = 0;
+        playerPreviousPosition = 0;
+
+        ValidateUserInput validateUserInput = new ValidateUserInput();
+        validateUserInput.setAuthToken(authTokenStr);
+        validateUserInput.setUserId(preferenceManager.getUseridFromPref());
+//            validateUserInput.setUserId("157218");
+        validateUserInput.setMuviUniqueId(upContentUniqueId.trim());
+        validateUserInput.setPurchaseType(com.home.vod.util.Util.dataModel.getPurchase_type());
+        validateUserInput.setSeasonId(com.home.vod.util.Util.dataModel.getSeason_id());
+        // validateUserInput.setEpisodeStreamUniqueId(com.home.vod.util.Util.dataModel.getEpisode_id());
+        validateUserInput.setEpisodeStreamUniqueId(upStreamUniqueId);
+
+        validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
+        asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                          /*  AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
+                            asynLoadVideoUrls.execute();*/
+        previous_matching_time = current_matching_time;
+        ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+
+    }
+    void loadVideosToPlaycast()
+    {
+
+
+
+        Log.v("ProgramPlayer","loadVideosToPlaycast==="+video_prepared);
+
+        video_prepared = true;
+        DataUsedByChrmoeCast = 0;
+        PreviousUsedDataByApp(true);
+        mediaRouteButton.setVisibility(View.VISIBLE);
+        primary_ll.setVisibility(View.VISIBLE);
+        // setupCastListener();
+        Log.v("ProgramPlayer","7==="+video_prepared);
+        stoptimertask();
+        Util.call_finish_at_onUserLeaveHint = false;
+        Util.hide_pause = true;
+        ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+        latest_center_play_pause.setVisibility(View.VISIBLE);
+        subtitleText.setText("");
+        emVideoView.setEnabled(false);
+//                latest_center_play_pause.setEnabled(true);
+        Log.v("ProgramPlayer","Emvideoview ==== "+ emVideoView.isPlaying());
+
+        Log.v("SUBHA","Emvideoview ==== " + emVideoView.isPlaying());
+        if (emVideoView.isPlaying()) {
+            emVideoView.pause();
+            latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
+            center_play_pause.setImageResource(R.drawable.ic_media_play);
+            mHandler.removeCallbacks(updateTimeTask);
+        }
+
+
+        if (center_pause_paly_timer_is_running) {
+            center_pause_paly_timer.cancel();
+            center_pause_paly_timer_is_running = false;
+            Log.v("BIBHU11", "CastAndCrewActivity End_Timer cancel called");
+            Log.v("ProgramPlayer","Emvideoview ==== "+ emVideoView.isPlaying());
+
+
+            last_ll.setVisibility(View.GONE);
+            center_play_pause.setVisibility(View.GONE);
+            current_time.setVisibility(View.GONE);
+        }
+
+        if (SubTitlePath.size() > 0)
+            subtitle_change_btn.setVisibility(View.VISIBLE);
+        mediaRouteButton.setVisibility(View.VISIBLE);
+        primary_ll.setVisibility(View.VISIBLE);
+
+
+        //===================================================================================================//
+
+
+      /*  Log.v("BIBHU2", "cast connected");
+        cast_disconnected_position = 0;
+        mLocation = PlaybackLocation.REMOTE;
+        if (null != mSelectedMedia) {
+
+            if (mPlaybackState == PlaybackState.PLAYING) {
+                       *//* mVideoView.pause();
+                        loadRemoteMedia(mSeekbar.getProgress(), true);*//*
+                return;
+            } else {
+                mPlaybackState = PlaybackState.IDLE;
+                updatePlaybackLocation(PlaybackLocation.REMOTE);
+            }
+        }
+        updatePlayButton(mPlaybackState);*/
+        PlayUsingCsat();
+    }
 }

@@ -124,7 +124,7 @@
 
     <dimen name="season_card_width">150dp</dimen>
     <dimen name="season_card_height">150dp</dimen>
-    <dimen name="season_layout_card_height">140dp</dimen>
+    <dimen name="season_layout_card_height">144dp</dimen>
 
     <!--//**********profile picture*************//-->
 
@@ -138,6 +138,8 @@
 
     <dimen name="season_margin_left">10dp</dimen>
 
+    <dimen name="sideTitle_line_height">17dp</dimen>
+    <dimen name="sideTitle_line_width">3dp</dimen>
     <dimen name="detailsTextView">150dp</dimen>
 
 </resources>

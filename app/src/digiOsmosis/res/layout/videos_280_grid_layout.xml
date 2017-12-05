@@ -61,7 +61,7 @@
                 android:ellipsize="end"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 android:maxLines="1"
                 android:padding="@dimen/loginImageViewMarging_top_padding"
                 android:background="@color/button_background"

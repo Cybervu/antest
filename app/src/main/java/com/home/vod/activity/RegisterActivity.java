@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.Log;
@@ -300,7 +301,20 @@ public class RegisterActivity extends AppCompatActivity implements
                 } else {
                     if (getIntent().getStringExtra("from") != null) {
                         //** review **//*
-                        onBackPressed();
+//                        onBackPressed();
+
+                        if(Util.favorite_clicked == true) {
+
+                            Intent intent = new Intent();
+
+                            setResult(RESULT_OK, intent);
+
+                            onBackPressed();
+                        }else{
+                            onBackPressed();
+
+                        }
+
                     } else {
                         if (Util.check_for_subscription == 1) {
                             //go to subscription page
@@ -318,8 +332,10 @@ public class RegisterActivity extends AppCompatActivity implements
                                 asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
 
                                 Intent intent = new Intent();
+
                                 setResult(RESULT_OK,intent);
-                                finish();
+
+                                onBackPressed();
 
                             } else {
                                 Util.showToast(RegisterActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
@@ -497,6 +513,13 @@ public class RegisterActivity extends AppCompatActivity implements
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
+   /* @Override
+    protected void onDestroy() {
+        finish();
+        overridePendingTransition(0,0);
+        super.onDestroy();
+    }*/
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -518,6 +541,8 @@ public class RegisterActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LogUtil.showLog("BKS", "packagename===" + SDKInitializer.user_Package_Name_At_Api);
+
         /*********fb****/
         FacebookSdk.sdkInitialize(getApplicationContext());
         /*********fb****/
@@ -533,7 +558,7 @@ public class RegisterActivity extends AppCompatActivity implements
         registerUIBackgroundHandler.handleBackgroundOfLayout("https://sampledesign.muvi.com/Login.jpg",mainLayout,registerScrollView,registerParentLayout);
 
 
-        LogUtil.showLog("BKS", "packagename===" + SDKInitializer.user_Package_Name_At_Api);
+
 
         languagePreference = LanguagePreference.getLanguagePreference(RegisterActivity.this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
@@ -572,7 +597,7 @@ public class RegisterActivity extends AppCompatActivity implements
         mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+//                onBackPressed();
             }
         });
 
@@ -614,6 +639,7 @@ public class RegisterActivity extends AppCompatActivity implements
         /*******enter key of keyboard *************/
 
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editEmail);
+        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editName);
 
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editPassword);
         FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.light_fonts), editConfirmPassword);
@@ -624,32 +650,16 @@ public class RegisterActivity extends AppCompatActivity implements
 
         /*editName_first.setHint(languagePreference.getTextofLanguage(FIRST_NAME,DEFAULT_FIRST_NAME));
         editName_last.setHint(languagePreference.getTextofLanguage(LAST_NAME,DEFAULT_LAST_NAME));
-        editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));*/
+        */
 
-
+        editName.setHint(languagePreference.getTextofLanguage(NAME_HINT, DEFAULT_NAME_HINT));
         editEmail.setHint(languagePreference.getTextofLanguage(TEXT_EMIAL, DEFAULT_TEXT_EMIAL));
         editPassword.setHint(languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD));
         editConfirmPassword.setHint(languagePreference.getTextofLanguage(CONFIRM_PASSWORD, DEFAULT_CONFIRM_PASSWORD));
         registerButton.setText(languagePreference.getTextofLanguage(BTN_REGISTER, DEFAULT_BTN_REGISTER));
         alreadyMemmberText.setText(languagePreference.getTextofLanguage(ALREADY_MEMBER, DEFAULT_ALREADY_MEMBER));
-        loginTextView.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
-
-       /* *//**********fb*********//*
-        loginWithFacebookButton = (LoginButton) findViewById(R.id.loginWithFacebookButton);
-        loginWithFacebookButton.setVisibility(View.GONE);
-        TextView fbLoginTextView = (TextView) findViewById(R.id.fbLoginTextView);
-        FontUtls.loadFont(RegisterActivity.this, getResources().getString(R.string.regular_fonts),fbLoginTextView);
-        *//**********fb*********//*
-*/
-
-       /* Toolbar mActionBarToolbar= (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
-        mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });*/
+//        loginTextView.setText(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN));
+        loginTextView.setText(Html.fromHtml(languagePreference.getTextofLanguage(LOGIN, DEFAULT_LOGIN)));
 
 
         planId = (languagePreference.getTextofLanguage(PLAN_ID, DEFAULT_PLAN_ID)).trim();
@@ -977,7 +987,19 @@ public class RegisterActivity extends AppCompatActivity implements
                 } else {
                     if (getIntent().getStringExtra("from") != null) {
                         /** review **/
-                        onBackPressed();
+                        if(Util.favorite_clicked == true) {
+
+                            Intent intent = new Intent();
+
+                            setResult(RESULT_OK, intent);
+
+                            onBackPressed();
+                        }else{
+                            onBackPressed();
+
+                        }
+
+
                     } else {
                         if (Util.check_for_subscription == 1) {
                             // Go for subscription
@@ -1003,11 +1025,9 @@ public class RegisterActivity extends AppCompatActivity implements
                                     validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                                     asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, RegisterActivity.this, RegisterActivity.this);
                                     asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
-
-
                                     Intent intent = new Intent();
                                     setResult(RESULT_OK,intent);
-                                    finish();
+                                    onBackPressed();
 
                                 }
                             } else {
@@ -1023,7 +1043,8 @@ public class RegisterActivity extends AppCompatActivity implements
                                 if (LoginActivity.loginA != null) {
                                     LoginActivity.loginA.finish();
                                 }
-                                finish();
+                                onBackPressed();
+                               // finish();
                             } else {
                                 Intent in = new Intent(RegisterActivity.this, MainActivity.class);
                                 in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1032,7 +1053,8 @@ public class RegisterActivity extends AppCompatActivity implements
                                 if (LoginActivity.loginA != null) {
                                     LoginActivity.loginA.finish();
                                 }
-                                finish();
+                                onBackPressed();
+                               // finish();
                             }
                         }
                     }
@@ -3182,8 +3204,10 @@ public class RegisterActivity extends AppCompatActivity implements
     }
 
 
+
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
 
         if (asynValidateUserDetails != null) {
             asynValidateUserDetails.cancel(true);
@@ -3194,14 +3218,11 @@ public class RegisterActivity extends AppCompatActivity implements
         if (asyncReg != null) {
             asyncReg.cancel(true);
         }
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
+
+        removeFocusFromViews();
+
         finish();
         overridePendingTransition(0, 0);
-        super.onBackPressed();
     }
 
     public void removeFocusFromViews() {
@@ -3589,22 +3610,38 @@ public class RegisterActivity extends AppCompatActivity implements
                     CheckDeviceAsyncTask asynCheckDevice = new CheckDeviceAsyncTask(checkDeviceInput, this, this);
                     asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                 }else{
+                    if (getIntent().getStringExtra("from") != null) {
+                        //** review **//*
+//                        onBackPressed();
 
-                    if (Util.check_for_subscription == 1) {
-                        // Go for subscription
+                        if(Util.favorite_clicked == true) {
 
-                        if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
-                            if (Util.dataModel.getIsFreeContent() == 1) {
-                                GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                getVideoDetailsInput.setAuthToken(authTokenStr);
-                                getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-                                getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
-                                getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                                getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                                getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));
-                                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
-                                asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                            } else {
+                            Intent intent = new Intent();
+
+                            setResult(RESULT_OK, intent);
+
+                            onBackPressed();
+                        }else{
+                            onBackPressed();
+
+                        }
+
+                    }else {
+                        if (Util.check_for_subscription == 1) {
+                            // Go for subscription
+
+                            if (NetworkStatus.getInstance().isConnected(RegisterActivity.this)) {
+                                if (Util.dataModel.getIsFreeContent() == 1) {
+                                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                                    getVideoDetailsInput.setAuthToken(authTokenStr);
+                                    getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
+                                    getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
+                                    getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
+                                    getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
+                                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, RegisterActivity.this, RegisterActivity.this);
+                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                                } else {
                               /*  ValidateUserInput validateUserInput = new ValidateUserInput();
                                 validateUserInput.setAuthToken(authTokenStr);
                                 validateUserInput.setUserId(preferenceManager.getUseridFromPref());
@@ -3616,23 +3653,24 @@ public class RegisterActivity extends AppCompatActivity implements
                                 asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, RegisterActivity.this, RegisterActivity.this);
                                 asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
 
-                                Intent intent = new Intent();
-                                setResult(RESULT_OK,intent);
-                                finish();
+                                    Intent intent = new Intent();
+                                    setResult(RESULT_OK, intent);
+                                    onBackPressed();
+                                }
+                            } else {
+                                Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                             }
-                        } else {
-                            Toast.makeText(RegisterActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                        }
 
-                    } else {
-                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                        removeFocusFromViews();
-                        startActivity(intent);
-                        if (LoginActivity.loginA != null) {
-                            LoginActivity.loginA.finish();
+                        } else {
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                            removeFocusFromViews();
+                            startActivity(intent);
+                            if (LoginActivity.loginA != null) {
+                                LoginActivity.loginA.finish();
+                            }
+                            finish();
+                            overridePendingTransition(0, 0);
                         }
-                        finish();
-                        overridePendingTransition(0, 0);
                     }
                 }
 
@@ -4065,11 +4103,11 @@ public class RegisterActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
+   /* @Override
     protected void onStop() {
         super.onStop();
         // finish();
-    }
+    }*/
 
     public void handleActionForValidateUserPayment(String validUserStr, String message, String Subscription_Str) {
 

@@ -36,6 +36,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -106,6 +107,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
@@ -160,7 +162,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
     private String content_stream_id;
     private boolean backfromactivity = false;
 
-
+String titleStr;
     /***************
      * chromecast
      **********************/
@@ -320,7 +322,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
     String posterUrl;
 
     // UI
-    private GridView gridView;
+    private ListView listView;
 
     ImageView img;
     //data to load videourl
@@ -363,7 +365,8 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
         }
         super.onStop();
     }
-
+    TextView categoryTitle;
+    View headerView;
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
@@ -392,10 +395,6 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
         setupCastListener();
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
 
-        TextView categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
-        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fonts));
-        categoryTitle.setTypeface(castDescriptionTypeface);
-        categoryTitle.setText(getArguments().getString("title"));
         genreListData = (RecyclerView) rootView.findViewById(R.id.demoListView);
         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         genreListData.setLayoutManager(linearLayout);
@@ -405,8 +404,8 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
         posterUrl = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
 
-        gridView = (GridView) rootView.findViewById(R.id.imagesGridView);
-
+        listView = (ListView) rootView.findViewById(R.id.imagesGridView);
+ titleStr = getArguments().getString("title");
         footerView = (RelativeLayout) rootView.findViewById(R.id.loadingPanel);
 
         noInternetConnectionLayout = (RelativeLayout) rootView.findViewById(R.id.noInternet);
@@ -419,18 +418,28 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
         noInternetConnectionLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
-        gridView.setVisibility(View.VISIBLE);
+        listView.setVisibility(View.VISIBLE);
+      /*  View headerView = ((LayoutInflater)getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE)).inflate(R.layout.yoga_listing, listView, false);
+        listView.addHeaderView(headerView);
 
+        listView.setAdapter(customGridAdapter);*/
 
-        gridView.setAdapter(customGridAdapter);
+        headerView = ((LayoutInflater)getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE)).inflate(R.layout.yoga_listing, listView, false);
+        listView.addHeaderView(headerView);
 
+        listView.setAdapter(customGridAdapter);
+
+        categoryTitle = (TextView) rootView.findViewById(R.id.categoryTitle);
+        Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fonts));
+        categoryTitle.setTypeface(castDescriptionTypeface);
+        categoryTitle.setText(titleStr);
         //Detect Network Connection
 
 
         if (!NetworkStatus.getInstance().isConnected(getActivity())) {
             noInternetConnectionLayout.setVisibility(View.VISIBLE);
             noDataLayout.setVisibility(View.GONE);
-            gridView.setVisibility(View.GONE);
+            listView.setVisibility(View.GONE);
             footerView.setVisibility(View.GONE);
         }
         resetData();
@@ -443,18 +452,18 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
         GetCategoryListAsynTask getCategoryListAsynTask = new GetCategoryListAsynTask(categoryListInput, YogaFragment.this, getActivity());
         getCategoryListAsynTask.execute();
 
-        gridView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-                if (gridView.getLastVisiblePosition() >= itemsInServer - 1) {
+                if (listView.getLastVisiblePosition() >= itemsInServer - 1) {
                     footerView.setVisibility(View.GONE);
                     return;
 
                 }
 
-                if (view.getId() == gridView.getId()) {
-                    final int currentFirstVisibleItem = gridView.getFirstVisiblePosition();
+                if (view.getId() == listView.getId()) {
+                    final int currentFirstVisibleItem = listView.getFirstVisiblePosition();
 
                     if (currentFirstVisibleItem > mLastFirstVisibleItem) {
                         mIsScrollingUp = false;
@@ -488,7 +497,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                     if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
                         listSize = itemData.size();
-                        if (gridView.getLastVisiblePosition() >= itemsInServer - 1) {
+                        if (listView.getLastVisiblePosition() >= itemsInServer - 1) {
                             return;
 
                         }
@@ -522,22 +531,22 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
         });
 
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if(position <= 0){
+                    return;
+                }
                 img = (ImageView) view.findViewById(R.id.movieImageView);
 
                 Log.v("SUBHA", "grid view item called");
 
-                YogaItem item = itemData.get(position);
+
+                YogaItem item = itemData.get(position - 1);
                 itemToPlay = item;
-                String posterUrl = item.getImage();
-                String movieName = item.getTitle();
-                String movieGenre = item.getMovieGenre();
                 String moviePermalink = item.getPermalink();
-                String movieTypeId = item.getVideoTypeId();
                 videoUrlStr = item.getVideoUrl();
-                String isEpisode = item.getIsEpisode();
                 movieUniqueId = item.getMovieUniqueId();
                 movieStreamUniqueId = item.getMovieStreamUniqueId();
 
@@ -599,7 +608,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
 
                 filterView.setVisibility(View.GONE);
-                gridView.setEnabled(true);
+                listView.setEnabled(true);
 
                 if ((filterOrderByStr != null && !filterOrderByStr.equalsIgnoreCase("")) || (genreArray != null && genreArray.size() > 0)) {
                     firstTime = true;
@@ -622,7 +631,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                     if (!NetworkStatus.getInstance().isConnected(getActivity())) {
                         noInternetConnectionLayout.setVisibility(View.VISIBLE);
-                        gridView.setVisibility(View.GONE);
+                        listView.setVisibility(View.GONE);
                         if (filterMenuItem != null) {
 
                             filterMenuItem.setVisible(false);
@@ -847,14 +856,14 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                             if (itemData != null) {
                                 noInternetConnectionLayout.setVisibility(View.GONE);
-                                gridView.setVisibility(View.VISIBLE);
+                                listView.setVisibility(View.VISIBLE);
                                 noDataLayout.setVisibility(View.GONE);
 
 
                             } else {
                                 noInternetConnectionLayout.setVisibility(View.VISIBLE);
                                 noDataLayout.setVisibility(View.GONE);
-                                gridView.setVisibility(View.GONE);
+                                listView.setVisibility(View.GONE);
 
 
                             }
@@ -875,7 +884,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                             noInternetConnectionLayout.setVisibility(View.GONE);
                             noDataLayout.setVisibility(View.VISIBLE);
                             footerView.setVisibility(View.GONE);
-                            gridView.setVisibility(View.GONE);
+                            listView.setVisibility(View.GONE);
 
                         }
                     });
@@ -968,7 +977,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                                     public void run() {
                                         noDataLayout.setVisibility(View.VISIBLE);
                                         noInternetConnectionLayout.setVisibility(View.GONE);
-                                        gridView.setVisibility(View.GONE);
+                                        listView.setVisibility(View.GONE);
                                         footerView.setVisibility(View.GONE);
 
                                     }
@@ -984,7 +993,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                             public void run() {
                                 noDataLayout.setVisibility(View.VISIBLE);
                                 noInternetConnectionLayout.setVisibility(View.GONE);
-                                gridView.setVisibility(View.GONE);
+                                listView.setVisibility(View.GONE);
                                 footerView.setVisibility(View.GONE);
 
 
@@ -999,7 +1008,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                     public void run() {
                         noDataLayout.setVisibility(View.VISIBLE);
                         noInternetConnectionLayout.setVisibility(View.GONE);
-                        gridView.setVisibility(View.GONE);
+                        listView.setVisibility(View.GONE);
                         footerView.setVisibility(View.GONE);
 
                     }
@@ -1024,13 +1033,13 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                     noDataLayout.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
-                    gridView.setVisibility(View.GONE);
+                    listView.setVisibility(View.GONE);
                     footerView.setVisibility(View.GONE);
 
                 }
                 noDataLayout.setVisibility(View.VISIBLE);
                 noInternetConnectionLayout.setVisibility(View.GONE);
-                gridView.setVisibility(View.GONE);
+                listView.setVisibility(View.GONE);
                 footerView.setVisibility(View.GONE);
 
             } else {
@@ -1044,19 +1053,19 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                         noDataLayout.setVisibility(View.VISIBLE);
                         noInternetConnectionLayout.setVisibility(View.GONE);
-                        gridView.setVisibility(View.GONE);
+                        listView.setVisibility(View.GONE);
                         footerView.setVisibility(View.GONE);
 
                     }
                     noDataLayout.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
-                    gridView.setVisibility(View.GONE);
+                    listView.setVisibility(View.GONE);
                     footerView.setVisibility(View.GONE);
 
 
                 } else {
                     footerView.setVisibility(View.GONE);
-                    gridView.setVisibility(View.VISIBLE);
+                    listView.setVisibility(View.VISIBLE);
                     if (filterMenuItem != null) {
 
                         filterMenuItem.setVisible(true);
@@ -1140,9 +1149,18 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
     public void onResume() {
 
 
+        getActivity().invalidateOptionsMenu();
+
+        super.onResume();
+        if (getView() != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+        }
+        Log.v("SUBHAA", "onResume" + Util.favorite_clicked);
+
 
         // if (genreArray!=null && genreArray.size() > 0) {
-        if ((filterOrderByStr != null && !filterOrderByStr.equalsIgnoreCase("")) || (genreArray != null && genreArray.size() > 0)) {
+      /*  if ((filterOrderByStr != null && !filterOrderByStr.equalsIgnoreCase("")) || (genreArray != null && genreArray.size() > 0)) {
             firstTime = true;
             Log.v("SUBHAA", "hgdjhdgjhbj" + clearClicked);
 
@@ -1167,7 +1185,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
             if (!NetworkStatus.getInstance().isConnected(getActivity())) {
                 noInternetConnectionLayout.setVisibility(View.VISIBLE);
-                gridView.setVisibility(View.GONE);
+                listView.setVisibility(View.GONE);
                 if (filterMenuItem != null) {
 
                     filterMenuItem.setVisible(false);
@@ -1176,9 +1194,9 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
             } else {
 
-               /* if (itemData != null && itemData.size() > 0) {
+               *//* if (itemData != null && itemData.size() > 0) {
                     itemData.clear();
-                }*/
+                }*//*
                 if (pDialog != null && pDialog.isShowing()) {
                     pDialog.hide();
                     pDialog = null;
@@ -1197,60 +1215,50 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                 asyncLoadVideos.executeOnExecutor(threadPoolExecutor);
 
             }
-        }
+        }*/
         // }
+
 
 
         if (Util.favorite_clicked == true) {
 
             Util.favorite_clicked = false;
-            clearClicked = true;
+            listView.removeHeaderView(headerView);
+            listView.addHeaderView(headerView);
 
-        }
+        /*    Log.v("SUBHA","title "+ titleStr);
+            listView.setAdapter(customGridAdapter);
+            Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fonts));
+            categoryTitle.setTypeface(castDescriptionTypeface);
+            categoryTitle.setText(titleStr);
+            //Detect Network Connection
+            listView.addHeaderView(headerView);*/
 
-        if (pDialog != null) {
-            pDialog.hide();
-            pDialog = null;
-        }
-//        Log.v("SUBHA","JFJFJCLEA"+clearClicked);
-        if (clearClicked) {
+
             if (!NetworkStatus.getInstance().isConnected(getActivity())) {
                 noInternetConnectionLayout.setVisibility(View.VISIBLE);
                 noDataLayout.setVisibility(View.GONE);
-                gridView.setVisibility(View.GONE);
+                listView.setVisibility(View.GONE);
                 footerView.setVisibility(View.GONE);
             }
             resetData();
-            Log.v("SUBHAA", "JFJFJCLEA" + clearClicked);
 
-            clearClicked = false;
 
-            if (itemData != null && itemData.size() > 0) {
-                itemData.clear();
-            }
+         /*   CategoryListInput categoryListInput = new CategoryListInput();
+            categoryListInput.setAuthToken(authTokenStr);
+            GetCategoryListAsynTask getCategoryListAsynTask = new GetCategoryListAsynTask(categoryListInput, YogaFragment.this, getActivity());
+            getCategoryListAsynTask.execute();*/
 
             asynLoadVideos = new AsynLoadVideos();
-            asynLoadVideos.executeOnExecutor(threadPoolExecutor);
+            asynLoadVideos.execute();
         }
 
 
-        if (url_maps != null && url_maps.size() > 0) {
-            url_maps.clear();
-        }
-        getActivity().invalidateOptionsMenu();
-        super.onResume();
-       /* if (videoPDialog != null && videoPDialog.isShowing()) {
-            videoPDialog.hide();
-            videoPDialog = null;
-        }
-        if (pDialog != null && pDialog.isShowing()) {
-            pDialog.hide();
-            pDialog = null;
-        }*/
-        if (getView() != null) {
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-        }
+
+
+
+
+
 
     }
 
@@ -1305,6 +1313,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                 try {
                     HttpResponse response = httpclient.execute(httppost);
                     responseStr = EntityUtils.toString(response.getEntity());
+                    Log.v("SUBHAA", "responseStr"+responseStr);
 
                 } catch (org.apache.http.conn.ConnectTimeoutException e) {
                     getActivity().runOnUiThread(new Runnable() {
@@ -1313,12 +1322,12 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                             if (itemData != null) {
                                 noInternetConnectionLayout.setVisibility(View.GONE);
-                                gridView.setVisibility(View.VISIBLE);
+                                listView.setVisibility(View.VISIBLE);
                                 noDataLayout.setVisibility(View.GONE);
                             } else {
                                 noInternetConnectionLayout.setVisibility(View.VISIBLE);
                                 noDataLayout.setVisibility(View.GONE);
-                                gridView.setVisibility(View.GONE);
+                                listView.setVisibility(View.GONE);
                             }
 
                             footerView.setVisibility(View.GONE);
@@ -1331,13 +1340,15 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                     });
 
                 } catch (IOException e) {
+                    Log.v("SUBHAA", "IOException"+e.toString());
+
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             noInternetConnectionLayout.setVisibility(View.GONE);
                             noDataLayout.setVisibility(View.VISIBLE);
                             footerView.setVisibility(View.GONE);
-                            gridView.setVisibility(View.GONE);
+                            listView.setVisibility(View.GONE);
                         }
                     });
                     e.printStackTrace();
@@ -1361,82 +1372,89 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                         JSONArray jsonMainNode = myJson.getJSONArray("movieList");
 
                         int lengthJsonArr = jsonMainNode.length();
+                        Log.v("SUBHAA", "lengthJsonArr"+lengthJsonArr);
+
                         for (int i = 0; i < lengthJsonArr; i++) {
                             JSONObject jsonChildNode;
                             try {
+                                Log.v("SUBHAA", "i"+i);
+
                                 jsonChildNode = jsonMainNode.getJSONObject(i);
 
                                 if ((jsonChildNode.has("genre")) && jsonChildNode.getString("genre").trim() != null && !jsonChildNode.getString("genre").trim().isEmpty() && !jsonChildNode.getString("genre").trim().equals("null") && !jsonChildNode.getString("genre").trim().matches("")) {
                                     movieGenreStr = jsonChildNode.getString("genre");
-
+                                    Log.v("SUBHAA", "movieGenreStr "+movieGenreStr);
                                 }
                                 if ((jsonChildNode.has("name")) && jsonChildNode.getString("name").trim() != null && !jsonChildNode.getString("name").trim().isEmpty() && !jsonChildNode.getString("name").trim().equals("null") && !jsonChildNode.getString("name").trim().matches("")) {
                                     movieName = jsonChildNode.getString("name");
-
+                                    Log.v("SUBHAA", "movieName "+movieName);
                                 }
                                 if ((jsonChildNode.has("story")) && jsonChildNode.getString("story").trim() != null && !jsonChildNode.getString("story").trim().isEmpty() && !jsonChildNode.getString("story").trim().equals("null") && !jsonChildNode.getString("story").trim().matches("")) {
                                     movieStory = jsonChildNode.getString("story");
-
+                                    Log.v("SUBHAA", "movieStory "+movieStory);
                                 }
                                 if ((jsonChildNode.has("poster_url")) && jsonChildNode.getString("poster_url").trim() != null && !jsonChildNode.getString("poster_url").trim().isEmpty() && !jsonChildNode.getString("poster_url").trim().equals("null") && !jsonChildNode.getString("poster_url").trim().matches("")) {
                                     movieImageStr = jsonChildNode.getString("poster_url");
                                     //movieImageStr = movieImageStr.replace("episode", "original");
-
+                                    Log.v("SUBHAA", "movieImageStr "+movieImageStr);
                                 }
                                 if ((jsonChildNode.has("permalink")) && jsonChildNode.getString("permalink").trim() != null && !jsonChildNode.getString("permalink").trim().isEmpty() && !jsonChildNode.getString("permalink").trim().equals("null") && !jsonChildNode.getString("permalink").trim().matches("")) {
                                     moviePermalinkStr = jsonChildNode.getString("permalink");
-
+                                    Log.v("SUBHAA", "moviePermalinkStr "+moviePermalinkStr);
                                 }
                                 if ((jsonChildNode.has("content_types_id")) && jsonChildNode.getString("content_types_id").trim() != null && !jsonChildNode.getString("content_types_id").trim().isEmpty() && !jsonChildNode.getString("content_types_id").trim().equals("null") && !jsonChildNode.getString("content_types_id").trim().matches("")) {
                                     videoTypeIdStr = jsonChildNode.getString("content_types_id");
-
+                                    Log.v("SUBHAA", "videoTypeIdStr "+videoTypeIdStr);
                                 }
                                 //videoTypeIdStr = "1";
 
                                 if ((jsonChildNode.has("is_converted")) && jsonChildNode.getString("is_converted").trim() != null && !jsonChildNode.getString("is_converted").trim().isEmpty() && !jsonChildNode.getString("is_converted").trim().equals("null") && !jsonChildNode.getString("is_converted").trim().matches("")) {
                                     isConverted = Integer.parseInt(jsonChildNode.getString("is_converted"));
-
+                                    Log.v("SUBHAA", "isConverted "+isConverted);
                                 }
                                 if ((jsonChildNode.has("is_advance")) && jsonChildNode.getString("is_advance").trim() != null && !jsonChildNode.getString("is_advance").trim().isEmpty() && !jsonChildNode.getString("is_advance").trim().equals("null") && !jsonChildNode.getString("is_advance").trim().matches("")) {
                                     isAPV = Integer.parseInt(jsonChildNode.getString("is_advance"));
-
+                                    Log.v("SUBHAA", "isAPV "+isAPV);
                                 }
                                 if ((jsonChildNode.has("is_ppv")) && jsonChildNode.getString("is_ppv").trim() != null && !jsonChildNode.getString("is_ppv").trim().isEmpty() && !jsonChildNode.getString("is_ppv").trim().equals("null") && !jsonChildNode.getString("is_ppv").trim().matches("")) {
                                     isPPV = Integer.parseInt(jsonChildNode.getString("is_ppv"));
-
+                                    Log.v("SUBHAA", "isPPV "+isPPV);
                                 }
                                 if ((jsonChildNode.has("is_episode")) && jsonChildNode.getString("is_episode").trim() != null && !jsonChildNode.getString("is_episode").trim().isEmpty() && !jsonChildNode.getString("is_episode").trim().equals("null") && !jsonChildNode.getString("is_episode").trim().matches("")) {
                                     isEpisodeStr = jsonChildNode.getString("is_episode");
-
+                                    Log.v("SUBHAA", "isEpisodeStr "+isEpisodeStr);
                                 }
                                 if ((jsonChildNode.has("muvi_uniq_id")) && jsonChildNode.getString("muvi_uniq_id").trim() != null && !jsonChildNode.getString("muvi_uniq_id").trim().isEmpty() && !jsonChildNode.getString("muvi_uniq_id").trim().equals("null") && !jsonChildNode.getString("muvi_uniq_id").trim().matches("")) {
                                     movieUniqueId = jsonChildNode.getString("muvi_uniq_id");
-
+                                    Log.v("SUBHAA", "movieUniqueId "+movieUniqueId);
                                 }
                                 if ((jsonChildNode.has("content_types_id")) && jsonChildNode.getString("content_types_id").trim() != null && !jsonChildNode.getString("content_types_id").trim().isEmpty() && !jsonChildNode.getString("content_types_id").trim().equals("null") && !jsonChildNode.getString("content_types_id").trim().matches("")) {
                                     content_types_id = jsonChildNode.getString("content_types_id");
-
+                                    Log.v("SUBHAA", "content_types_id "+content_types_id);
                                 }
 
                                 if ((jsonChildNode.has("is_favorite")) && jsonChildNode.getString("is_favorite").trim() != null && !jsonChildNode.getString("is_favorite").trim().isEmpty() && !jsonChildNode.getString("is_favorite").trim().equals("null") && !jsonChildNode.getString("is_favorite").trim().matches("")) {
                                     isFavorite = Integer.parseInt(jsonChildNode.getString("is_favorite"));
+                                    Log.v("SUBHAA", "isFavorite "+isFavorite);
                                 }
                                 if ((jsonChildNode.has("movie_id")) && jsonChildNode.getString("movie_id").trim() != null && !jsonChildNode.getString("movie_id").trim().isEmpty() && !jsonChildNode.getString("movie_id").trim().equals("null") && !jsonChildNode.getString("movie_id").trim().matches("")) {
                                     content_id = jsonChildNode.getString("movie_id");
+                                    Log.v("SUBHAA", "content_id "+content_id);
                                 }
                                 if ((jsonChildNode.has("movie_stream_id")) && jsonChildNode.getString("movie_stream_id").trim() != null && !jsonChildNode.getString("movie_stream_id").trim().isEmpty() && !jsonChildNode.getString("movie_stream_id").trim().equals("null") && !jsonChildNode.getString("movie_stream_id").trim().matches("")) {
                                     content_stream_id = jsonChildNode.getString("movie_stream_id");
+                                    Log.v("SUBHAA", "content_stream_id "+content_stream_id);
                                 }
 
-                                Log.v("Nihar_sdk", " is favorite == " + isFavorite);
                                 itemData.add(new YogaItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, movieUniqueId, "", isConverted, isPPV, isAPV, movieStory, content_types_id, isFavorite, content_id, content_stream_id, false));
                             } catch (Exception e) {
+                                Log.v("SUBHAA", "Exception 1"+e.toString());
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         noDataLayout.setVisibility(View.VISIBLE);
                                         noInternetConnectionLayout.setVisibility(View.GONE);
-                                        gridView.setVisibility(View.GONE);
+                                        listView.setVisibility(View.GONE);
                                         footerView.setVisibility(View.GONE);
                                     }
                                 });
@@ -1445,26 +1463,29 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                             }
                         }
                     } else {
+                        Log.v("SUBHAA", "Exception datavg");
                         responseStr = "0";
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 noDataLayout.setVisibility(View.VISIBLE);
                                 noInternetConnectionLayout.setVisibility(View.GONE);
-                                gridView.setVisibility(View.GONE);
+                                listView.setVisibility(View.GONE);
                                 footerView.setVisibility(View.GONE);
                             }
                         });
                     }
                 }
             } catch (Exception e) {
+                Log.v("SUBHAA", "Exception"+e.toString());
+
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             noDataLayout.setVisibility(View.VISIBLE);
                             noInternetConnectionLayout.setVisibility(View.GONE);
-                            gridView.setVisibility(View.GONE);
+                            listView.setVisibility(View.GONE);
                             footerView.setVisibility(View.GONE);
                         }
                     });
@@ -1473,11 +1494,15 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                 e.printStackTrace();
 
             }
+            Log.v("SUBHAA", "size"+responseStr);
+
             return null;
 
         }
 
+        @Override
         protected void onPostExecute(Void result) {
+            Log.v("SUBHAA", "onPostExecute");
 
 
             if (responseStr == null)
@@ -1492,12 +1517,12 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                     noDataLayout.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
-                    gridView.setVisibility(View.GONE);
+                    listView.setVisibility(View.GONE);
                     footerView.setVisibility(View.GONE);
                 }
                 noDataLayout.setVisibility(View.VISIBLE);
                 noInternetConnectionLayout.setVisibility(View.GONE);
-                gridView.setVisibility(View.GONE);
+                listView.setVisibility(View.GONE);
                 footerView.setVisibility(View.GONE);
             } else {
                 if (itemData.size() <= 0) {
@@ -1510,16 +1535,16 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                         noDataLayout.setVisibility(View.VISIBLE);
                         noInternetConnectionLayout.setVisibility(View.GONE);
-                        gridView.setVisibility(View.GONE);
+                        listView.setVisibility(View.GONE);
                         footerView.setVisibility(View.GONE);
                     }
                     noDataLayout.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
-                    gridView.setVisibility(View.GONE);
+                    listView.setVisibility(View.GONE);
                     footerView.setVisibility(View.GONE);
                 } else {
                     footerView.setVisibility(View.GONE);
-                    gridView.setVisibility(View.VISIBLE);
+                    listView.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
                     noDataLayout.setVisibility(View.GONE);
                     videoImageStrToHeight = movieImageStr;
@@ -1562,20 +1587,26 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
         @Override
         protected void onPreExecute() {
+            Log.v("SUBHAA", "onPreExecute");
+
             if (MainActivity.internetSpeedDialog != null && MainActivity.internetSpeedDialog.isShowing()) {
                 videoPDialog = MainActivity.internetSpeedDialog;
                 footerView.setVisibility(View.GONE);
+                Log.v("SUBHAA", "internetSpeedDialog");
 
             } else {
                 videoPDialog = new ProgressBarHandler(context);
 
                 if (listSize == 0) {
                     // hide loader for first time
+                    Log.v("SUBHAA", "show");
 
                     videoPDialog.show();
                     footerView.setVisibility(View.GONE);
                 } else {
                     // show loader for first time
+                    Log.v("SUBHAA", "hide");
+
                     videoPDialog.hide();
                     footerView.setVisibility(View.VISIBLE);
 
@@ -1600,44 +1631,44 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
     }
 
 
-    @Override
+   /* @Override
     public void onConfigurationChanged(Configuration newConfig) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-     /*   InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+     *//*   InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-*/
+*//*
 
-        ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = listView.getLayoutParams();
         layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
-        gridView.setLayoutParams(layoutParams);
-        gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
-        gridView.setGravity(Gravity.CENTER_HORIZONTAL);
+        listView.setLayoutParams(layoutParams);
+        listView.setStretchMode(listView.STRETCH_COLUMN_WIDTH);
+        listView.setGravity(Gravity.CENTER_HORIZONTAL);
 
         if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
             if (videoWidth > videoHeight) {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
+                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
             } else {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3);
+                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3);
             }
 
         } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_NORMAL) {
             if (videoWidth > videoHeight) {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
+                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
             } else {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
+                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
             }
 
         } else if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_SMALL) {
 
-            gridView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
+            listView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
 
 
         } else {
             if (videoWidth > videoHeight) {
-                gridView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3);
+                listView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 3);
             } else {
-                gridView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 4);
+                listView.setNumColumns(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 5 : 4);
             }
 
 
@@ -1645,7 +1676,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
         super.onConfigurationChanged(newConfig);
     }
-
+*/
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -1662,7 +1693,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
         MenuItem item, item1;
         item = menu.findItem(R.id.action_filter);
-        item.setVisible(true);
+        item.setVisible(false);
 
     /*    item1= menu.findItem(R.id.action_notifications);
         item1.setVisible(false);*/
@@ -1695,11 +1726,15 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                         videoPDialog.hide();
                         videoPDialog = null;
                     }
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.hide();
+                        pDialog = null;
+                    }
                 } catch (IllegalArgumentException ex) {
 
                     noDataLayout.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
-                    gridView.setVisibility(View.GONE);
+                    listView.setVisibility(View.GONE);
                     if (filterMenuItem != null) {
 
                         filterMenuItem.setVisible(false);
@@ -1708,17 +1743,17 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                     footerView.setVisibility(View.GONE);
                 }
 
-                gridView.smoothScrollToPosition(0);
+                listView.smoothScrollToPosition(0);
                 firstTime = false;
-                ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
+                ViewGroup.LayoutParams layoutParams = listView.getLayoutParams();
                 layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT; //this is in pixels
-                gridView.setLayoutParams(layoutParams);
-                gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
-                gridView.setGravity(Gravity.CENTER_HORIZONTAL);
+                listView.setLayoutParams(layoutParams);
+               /* listView.setStretchMode(listView.STRETCH_COLUMN_WIDTH);
+                listView.setGravity(Gravity.CENTER_HORIZONTAL);*/
 
                 /*if (getActivity()!=null && (getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
                     if (videoWidth > videoHeight) {
-                        gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_large_3) : (int) context.getResources().getDimension(R.dimen.configuration_large_3));
+                        listView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_large_3) : (int) context.getResources().getDimension(R.dimen.configuration_large_3));
                     } else {
                         gridView.setNumColumns(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (int) context.getResources().getDimension(R.dimen.configuration_xlarge_4) : (int) context.getResources().getDimension(R.dimen.configuration_xlarge_4));
                     }
@@ -1751,7 +1786,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                         customGridAdapter = new YogaFilterAdapter(context, R.layout.list_card_item_layout, itemData);
 
                     }
-                    gridView.setAdapter(customGridAdapter);
+                    listView.setAdapter(customGridAdapter);
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new YogaFilterAdapter(context, R.layout.list_card_item_layout, itemData);
@@ -1761,14 +1796,14 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
                     }
                     customGridAdapter = new YogaFilterAdapter(context, R.layout.list_card_item_layout, itemData);
-                    gridView.setAdapter(customGridAdapter);
+                    listView.setAdapter(customGridAdapter);
                 }
 
 
             } else {
                 // save RecyclerView state
                 mBundleRecyclerViewState = new Bundle();
-                Parcelable listState = gridView.onSaveInstanceState();
+                Parcelable listState = listView.onSaveInstanceState();
                 mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
 
 
@@ -1780,7 +1815,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                         customGridAdapter = new YogaFilterAdapter(context, R.layout.list_card_item_layout, itemData);
 
                     }
-                    gridView.setAdapter(customGridAdapter);
+                    listView.setAdapter(customGridAdapter);
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
                         customGridAdapter = new YogaFilterAdapter(context, R.layout.list_card_item_layout, itemData);
@@ -1788,11 +1823,11 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
                         customGridAdapter = new YogaFilterAdapter(context, R.layout.list_card_item_layout, itemData);
 
                     }
-                    gridView.setAdapter(customGridAdapter);
+                    listView.setAdapter(customGridAdapter);
                 }
 
                 if (mBundleRecyclerViewState != null) {
-                    gridView.onRestoreInstanceState(listState);
+                    listView.onRestoreInstanceState(listState);
                 }
 
             }
@@ -1806,7 +1841,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
         super.onSaveInstanceState(outState);
         // save RecyclerView state
         mBundleRecyclerViewState = new Bundle();
-        Parcelable listState = gridView.onSaveInstanceState();
+        Parcelable listState = listView.onSaveInstanceState();
         mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
     }
 
@@ -1891,7 +1926,7 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
 
 
                 noInternetConnectionLayout.setVisibility(View.GONE);
-                gridView.setEnabled(true);
+                listView.setEnabled(true);
                 startActivity(new Intent(getActivity(), FilterActivity.class));
                 Intent filterIntent = new Intent(getActivity(), FilterActivity.class);
                 filterIntent.putExtra("genreList", genreArray);
@@ -2268,5 +2303,47 @@ public class YogaFragment extends Fragment implements DeleteFavAsync.DeleteFavLi
             }
         }
 
+    }
+
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.v("BKS", "elseclickedddddd");
+
+        if (requestCode == 30060 && resultCode == RESULT_OK) {
+            if (NetworkStatus.getInstance().isConnected(getActivity())) {
+
+
+                asynLoadVideos = new AsynLoadVideos();
+                asynLoadVideos.executeOnExecutor(threadPoolExecutor);
+
+
+               /* ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
+                permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
+                useridStr = preferenceManager.getUseridFromPref();
+
+                contentDetailsInput.setAuthToken(authTokenStr);
+
+                Log.v("SUBHA", "authToken1243442554 === " + authTokenStr);
+                if (preferenceManager != null) {
+                    String countryPref = preferenceManager.getCountryCodeFromPref();
+                    contentDetailsInput.setCountry(countryPref);
+                } else {
+                    contentDetailsInput.setCountry("IN");
+                }
+                contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                contentDetailsInput.setPermalink(permalinkStr);
+                contentDetailsInput.setUser_id(useridStr);
+                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
+                asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);*/
+
+            } else {
+                Toast.makeText(getActivity(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                getActivity().finish();
+            }
+        }
     }
 }

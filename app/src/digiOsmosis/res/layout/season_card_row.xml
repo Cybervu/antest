@@ -53,7 +53,7 @@
                 android:layout_marginTop="@dimen/marginleft10dp"
                 android:padding="@dimen/card_title_padding"
                 android:layout_marginBottom="@dimen/marginleft10dp"
-                android:text="Hello"
+                android:text="Day 1"
                 android:textColor="@color/seasonTextColor"
                 android:textSize="@dimen/card_title" />
 

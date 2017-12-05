@@ -25,7 +25,7 @@
     <dimen name="pass_text_size">16sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>
     <dimen name="submit_text_size">14sp</dimen>
-    <dimen name="listitemlayout_height">200dp</dimen>
+    <dimen name="listitemlayout_height">230dp</dimen>
     <dimen name="slider_height">210dp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
     <dimen name="submit_height_size">45dp</dimen>
@@ -130,8 +130,8 @@
     <dimen name="card_radius">7dp</dimen>
     <dimen name="card_elevation">7dp</dimen>
     <dimen name="loginImageViewMarging_top_padding">7dp</dimen>
-    <dimen name="sideTitle_line_height">18dp</dimen>
-    <dimen name="sideTitle_line_width">5dp</dimen>
+    <dimen name="sideTitle_line_height">17dp</dimen>
+    <dimen name="sideTitle_line_width">3dp</dimen>
     <dimen name="sideTitle_line_marginleft">10dp</dimen>
 
     <dimen name="season_card_width">150dp</dimen>

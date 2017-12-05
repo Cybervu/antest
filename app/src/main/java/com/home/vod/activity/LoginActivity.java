@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.Log;
@@ -31,6 +32,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,6 +91,7 @@ import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.vod.BuildConfig;
 import com.home.vod.LoginHandler;
+import com.home.vod.LoginUIBackgroundHandler;
 import com.home.vod.MonetizationHandler;
 
 import com.home.vod.ProgramPlayerIntentHandler;
@@ -294,7 +297,17 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
                         if (getIntent().getStringExtra("from") != null) {
                             /** review **/
-                            onBackPressed();
+                            if(Util.favorite_clicked == true) {
+
+                                Intent intent = new Intent();
+
+                                setResult(RESULT_OK, intent);
+
+                                onBackPressed();
+                            }else{
+                                onBackPressed();
+
+                            }
                         } else {
                             if (Util.check_for_subscription == 1) {
                                 //go to subscription page
@@ -1432,7 +1445,9 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
     AlertDialog alert;
     String priceForUnsubscribedStr, priceFosubscribedStr;
     String deviceName = "";
-
+    ScrollView loginScrollView;
+    LinearLayout loginParentLayout;
+    RelativeLayout mainLayout;
     ArrayList<EpisodesListModel> questions;
     int contentPosition;
 
@@ -1451,6 +1466,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         languagePreference = LanguagePreference.getLanguagePreference((this));
         BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
         deviceName = myDevice.getName();
+
 
         try {
             contentPosition = getIntent().getIntExtra("TAG", 0);
@@ -1554,6 +1570,14 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
 
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), editPasswordStr);
 
+        loginScrollView = (ScrollView) findViewById(R.id.loginScrollView);
+        loginParentLayout = (LinearLayout) findViewById(R.id.loginParentLayout);
+        mainLayout = (RelativeLayout) findViewById(R.id.mainLayout);
+
+        LoginUIBackgroundHandler loginUIBackgroundHandler = new LoginUIBackgroundHandler(this);
+        loginUIBackgroundHandler.handleBackgroundOfLayout("https://sampledesign.muvi.com/Login.jpg",mainLayout,loginScrollView,loginParentLayout);
+
+
 
         editPasswordStr.setHint(languagePreference.getTextofLanguage(TEXT_PASSWORD, DEFAULT_TEXT_PASSWORD));
         forgotPassword = (TextView) findViewById(R.id.forgotPasswordTextView);
@@ -1567,7 +1591,7 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
         signUpTextView = (TextView) findViewById(R.id.signUpTextView);
         FontUtls.loadFont(LoginActivity.this, getResources().getString(R.string.light_fonts), signUpTextView);
 
-        signUpTextView.setText(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE));
+        signUpTextView.setText(Html.fromHtml(languagePreference.getTextofLanguage(SIGN_UP_TITLE, DEFAULT_SIGN_UP_TITLE)));
 
 
         loginButton = (Button) findViewById(R.id.loginButton);
@@ -4074,21 +4098,38 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                         asynCheckDevice.executeOnExecutor(threadPoolExecutor);
                     }else {
 
+                        if (getIntent().getStringExtra("from") != null) {
+                            //** review **//*
+//                        onBackPressed();
 
-                        if (Util.check_for_subscription == 1) {
-                            //go to subscription page
-                            if (NetworkStatus.getInstance().isConnected(this)) {
-                                if (Util.dataModel.getIsFreeContent() == 1) {
-                                    GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
-                                    getVideoDetailsInput.setAuthToken(authTokenStr);
-                                    getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
-                                    getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
-                                    getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
-                                    getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
-                                    getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                    VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
-                                    asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
-                                } else {
+                            if(Util.favorite_clicked == true) {
+
+                                Intent intent = new Intent();
+
+                                setResult(RESULT_OK, intent);
+
+                                onBackPressed();
+                            }else{
+                                onBackPressed();
+
+                            }
+
+                        }else {
+
+                            if (Util.check_for_subscription == 1) {
+                                //go to subscription page
+                                if (NetworkStatus.getInstance().isConnected(this)) {
+                                    if (Util.dataModel.getIsFreeContent() == 1) {
+                                        GetVideoDetailsInput getVideoDetailsInput = new GetVideoDetailsInput();
+                                        getVideoDetailsInput.setAuthToken(authTokenStr);
+                                        getVideoDetailsInput.setContent_uniq_id(getVideoDetailsInput.getContent_uniq_id());
+                                        getVideoDetailsInput.setStream_uniq_id(getVideoDetailsInput.getStream_uniq_id());
+                                        getVideoDetailsInput.setInternetSpeed(getVideoDetailsInput.getInternetSpeed());
+                                        getVideoDetailsInput.setUser_id(getVideoDetailsInput.getUser_id());
+                                        getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                                        VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, LoginActivity.this, LoginActivity.this);
+                                        asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
+                                    } else {
                                     /*ValidateUserInput validateUserInput = new ValidateUserInput();
                                     validateUserInput.setAuthToken(authTokenStr);
                                     validateUserInput.setUserId(validateUserInput.getUserId());
@@ -4100,22 +4141,23 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                                     GetValidateUserAsynTask asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, LoginActivity.this, LoginActivity.this);
                                     asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);*/
 
-                                    Intent intent = new Intent();
-                                    setResult(RESULT_OK,intent);
-                                    finish();
+                                        Intent intent = new Intent();
+                                        setResult(RESULT_OK, intent);
+                                        finish();
+                                    }
+                                } else {
+                                    Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                                 }
+
                             } else {
-                                Toast.makeText(LoginActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+
+                                Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                                in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(in);
+
+                                onBackPressed();
                             }
-
-                        } else {
-
-                            Intent in = new Intent(LoginActivity.this, MainActivity.class);
-                            in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            in.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(in);
-
-                            onBackPressed();
                         }
                     }
 
@@ -5617,7 +5659,17 @@ public class LoginActivity extends AppCompatActivity implements LoginAsynTask.Lo
                 } else {
                     if (getIntent().getStringExtra("from") != null) {
                         //** review **//*
-                        onBackPressed();
+                        if(Util.favorite_clicked == true) {
+
+                            Intent intent = new Intent();
+
+                            setResult(RESULT_OK, intent);
+
+                            onBackPressed();
+                        }else{
+                            onBackPressed();
+
+                        }
                     } else {
                         if (Util.check_for_subscription == 1) {
                             //go to subscription page

@@ -105,19 +105,19 @@ public class FavoriteAdapter extends ArrayAdapter<GridItem> {
         holder.title.setText(item.getTitle());
         holder.movieDescription.setText(item.getStory());
         String imageId = item.getImage();
-        LogUtil.showLog("Nihar_feb",""+imageId);
 
 
         holder.closeAlbumArt.setTag(Integer.valueOf(position));
-
+        holder.closeAlbumArt.setClickable(true);
         holder.closeAlbumArt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogUtil.showLog("SUBHAlaxmi","clicked ");
                 close=true;
+                data.get(position).setSelected(true);
+                data.get(position).setClicked(true);
+
                if (data.get(position).isClicked()){
 
-                   LogUtil.showLog("SUBHAlaxmi","movieUniqueId  ========"+item.getMovieUniqueId());
 
                    mActivity.removeFavorite(item,position);
 

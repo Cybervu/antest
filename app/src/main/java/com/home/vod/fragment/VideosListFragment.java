@@ -1537,7 +1537,7 @@ public class VideosListFragment extends Fragment   {
 
         MenuItem item,item1;
         item= menu.findItem(R.id.action_filter);
-        item.setVisible(true);
+        item.setVisible(false);
 
     /*    item1= menu.findItem(R.id.action_notifications);
         item1.setVisible(false);*/

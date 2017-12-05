@@ -51,7 +51,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         NavDrawerItem current = data.get(position);
-        holder.title.setText(current.getTitle().toString().toLowerCase());
+        holder.title.setText(current.getTitle().toString());
         LogUtil.showLog("Alok ::",current.getTitle());
 
 /*
