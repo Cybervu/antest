@@ -486,6 +486,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     @Override
     public void onSearchDataPostExecuteCompleted(ArrayList<Search_Data_otput> contentListOutputArray, int status, int totalItems, String message) {
 
+        itemsInServer=totalItems;
         String videoGenreStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
         String videoName = "";
         String videoImageStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
@@ -523,6 +524,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     noDataLayout.setVisibility(View.GONE);
 
 
+
                     for (int i = 0; i < contentListOutputArray.size(); i++) {
 
 
@@ -539,6 +541,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     }
 
                     videoImageStrToHeight = videoImageStr;
+
                     if (firstTime == true){
                         Picasso.with(SearchActivity.this).load(videoImageStrToHeight
                         ).error(R.drawable.no_image).into(new Target() {

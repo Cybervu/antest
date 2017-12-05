@@ -12,6 +12,7 @@
     <dimen name="preorderbtn_text_size">14sp</dimen>
     <dimen name="singleimgwidth">170dp</dimen>
     <dimen name="singleimgheight">216dp</dimen>
+    <dimen name="fragment_text_size">25sp</dimen>
     <dimen name="buttonheight">47dp</dimen>
     <dimen name="titletxt">24sp</dimen>
     <dimen name="forgot_logo_width">150dp</dimen>
