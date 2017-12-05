@@ -124,7 +124,7 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("MUVISDK", "RES" + responseStr);
+                Log.v("Muvi", "RES fragment =" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 status = 0;
