@@ -409,8 +409,8 @@ android {
             dimension 'vendor'
             applicationId 'com.release.gabejaramillo'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-           //  buildConfigField "String", "AUTH_TOKEN", "\"b561ddbb2c4575ca681e79ba117e59f8\""
-            buildConfigField "String", "AUTH_TOKEN", "\"e35feed9e448d7e709a438d48418cf4a\""
+             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+           // buildConfigField "String", "AUTH_TOKEN", "\"e35feed9e448d7e709a438d48418cf4a\""
             targetSdkVersion 25
             versionCode 3
             versionName '1.0.2'
