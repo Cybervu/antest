@@ -194,7 +194,9 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         int isAPV = 0;
         int isPPV = 0;
         int isConverted = 0;
+        Log.v("BISHAL123", "RES" + contentListOutputArray);
         if (status==200){
+            Log.v("BISHAL123", "RES" + "status 200 sucess and enter in onpostof conetntlist");
             itemsInServer=totalItems;
             for (int i=0;i<contentListOutputArray.size();i++){
                 movieGenreStr=contentListOutputArray.get(i).getGenre();
@@ -207,8 +209,9 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 isPPV=contentListOutputArray.get(i).getIsPPV();
                 isEpisodeStr=contentListOutputArray.get(i).getIsEpisodeStr();
                 itemData.add(new GridItem(movieImageStr, movieName, "", videoTypeIdStr, movieGenreStr, "", moviePermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV));
+                Log.v("BISHAL123", "RES" + "inside for loop data fetch");
             }
-
+            Log.v("BISHAL123", "RES" + "for loop finish");
             if (itemData.size() <= 0) {
                 try {
                     if (videoPDialog != null && videoPDialog.isShowing()) {
@@ -242,11 +245,13 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 videoImageStrToHeight = movieImageStr;
 
                 if (firstTime == true) {
+                    Log.v("BISHAL123", "RES" + "first time check");
                     Picasso.with(getActivity()).load(videoImageStrToHeight
                     ).into(new Target() {
 
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            Log.v("BISHAL123", "RES" + "load ui called start");
                             videoWidth = bitmap.getWidth();
                             videoHeight = bitmap.getHeight();
                             loadUI = new AsynLOADUI();
@@ -265,6 +270,7 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                         }
                     });
                 } else {
+                    Log.v("BISHAL123", "RES" + "else part load ui called start");
                     loadUI = new AsynLOADUI();
                     loadUI.executeOnExecutor(threadPoolExecutor);
                 }
@@ -2022,6 +2028,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         }
 
         protected void onPostExecute(Void result) {
+
+            Log.v("BISHAL123", "RES" + "Asyncload ui called");
             float density = context.getResources().getDisplayMetrics().density;
             if (firstTime == true) {
                 try {

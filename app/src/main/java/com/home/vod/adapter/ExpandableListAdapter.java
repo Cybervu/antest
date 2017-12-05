@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.home.apisdk.apiModel.MenusOutputModel;
 import com.home.vod.R;
+import com.home.vod.activity.MovieDetailsActivity;
+import com.home.vod.util.FontUtls;
 import com.home.vod.util.Util;
 
 import java.util.ArrayList;
@@ -63,6 +65,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView expandedListTextView = (TextView) convertView
                 .findViewById(R.id.expandedListItem);
         expandedListTextView.setText(expandedListText);
+        FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), expandedListTextView);
+
         return convertView;
     }
 

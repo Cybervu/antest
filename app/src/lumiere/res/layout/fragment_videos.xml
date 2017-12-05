@@ -7,35 +7,26 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/sectionTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/ppv_margin"
-        android:padding="@dimen/videoCensorRatingTextView_padding"
-        android:textColor="@color/pageTitleTextColor"
-        android:textSize="@dimen/catlist_text_size"
-        android:textStyle="normal" />
-
-    <TextView
         android:id="@+id/categoryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
         android:layout_marginLeft="@dimen/ppv_margin"
         android:textColor="@color/pageTitleColor"
-        android:textSize="@dimen/itemtitle_text_size"
-        android:textStyle="normal"
-        android:visibility="gone" />
+        android:textSize="@dimen/sectionTitle_textsize"
+        android:textStyle="normal" />
 
     <GridView
         android:id="@+id/imagesGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/sectionTitle"
+        android:layout_below="@+id/categoryTitle"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/pre_order_button_margin"
+        android:layout_marginLeft="@dimen/pre_order_button_margin"
+        android:layout_marginRight="@dimen/pre_order_button_margin"
         android:layout_marginTop="@dimen/pre_order_button_margin"
         android:horizontalSpacing="@dimen/pre_order_button_margin"
-        android:paddingLeft="@dimen/toastmsg_padding"
         android:verticalSpacing="@dimen/pre_order_button_margin">
 
     </GridView>
@@ -84,7 +75,7 @@
             android:gravity="center"
             android:maxLines="4"
             android:singleLine="false"
-            android:textColor="@color/no_internet_textColor"
+            android:textColor="@color/noInternetColor"
             android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
@@ -108,7 +99,7 @@
             android:gravity="center"
             android:maxLines="4"
             android:singleLine="false"
-            android:textColor="@color/no_internet_textColor"
+            android:textColor="@color/noInternetColor"
             android:textSize="@dimen/testview_text_size"
             android:textStyle="bold" />
 
@@ -119,8 +110,7 @@
         android:id="@+id/filterBg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#40000000"
-        android:paddingRight="@dimen/Login_drawing_padding"
+        android:background="@color/transparent"
         android:visibility="gone"
 
         >
@@ -131,7 +121,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/arrowIv_imageview_margin" />
+            android:layout_marginRight="@dimen/arrowIv_margin"
+            android:background="@drawable/filter_arrow" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/demoListView"
@@ -139,16 +130,13 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/arrowIv"
-            android:layout_marginBottom="@dimen/ppv_margin"
             android:layout_marginLeft="@dimen/profile_image_view_margin_end"
+            android:layout_marginRight="@dimen/payment_textview_showname_margin"
             android:background="@drawable/filterbg"
             android:gravity="center"
-            android:paddingBottom="@dimen/Login_drawing_padding"
-
-            />
+            android:paddingBottom="@dimen/demoListView_padding" />
 
 
     </RelativeLayout>
-
 
 </RelativeLayout>
