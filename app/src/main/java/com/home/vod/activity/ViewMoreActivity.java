@@ -773,7 +773,15 @@ public class ViewMoreActivity extends AppCompatActivity implements
 
     @Override
     public void onGetFeatureContentPostExecuteCompleted(ArrayList<FeatureContentOutputModel> featureContentOutputModelArray, int status, String message) {
+        try {
+            if (videoPDialog != null && videoPDialog.isShowing()) {
+                videoPDialog.hide();
 
+            }
+        } catch (IllegalArgumentException ex) {
+
+
+        }
         String movieImageStr = "";
 
         Log.v("Muvi","featurecontent size="+featureContentOutputModelArray.size());
@@ -795,36 +803,13 @@ public class ViewMoreActivity extends AppCompatActivity implements
         if (message == null)
             message = "0";
         if ((message.trim().equals("0"))) {
-            try {
-                if (videoPDialog != null && videoPDialog.isShowing()) {
-                    videoPDialog.hide();
-                    videoPDialog = null;
-                }
-            } catch (IllegalArgumentException ex) {
 
-                noDataLayout.setVisibility(View.VISIBLE);
-                noInternetConnectionLayout.setVisibility(View.GONE);
-                gridView.setVisibility(View.GONE);
-                footerView.setVisibility(View.GONE);
-            }
             noDataLayout.setVisibility(View.VISIBLE);
             noInternetConnectionLayout.setVisibility(View.GONE);
             gridView.setVisibility(View.GONE);
             footerView.setVisibility(View.GONE);
         } else {
             if (itemData.size() <= 0) {
-                try {
-                    if (videoPDialog != null && videoPDialog.isShowing()) {
-                        videoPDialog.hide();
-                        videoPDialog = null;
-                    }
-                } catch (IllegalArgumentException ex) {
-
-                    noDataLayout.setVisibility(View.VISIBLE);
-                    noInternetConnectionLayout.setVisibility(View.GONE);
-                    gridView.setVisibility(View.GONE);
-                    footerView.setVisibility(View.GONE);
-                }
                 noDataLayout.setVisibility(View.VISIBLE);
                 noInternetConnectionLayout.setVisibility(View.GONE);
                 gridView.setVisibility(View.GONE);
@@ -896,7 +881,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
 //        @Override
 //        protected Void doInBackground(Void... params) {
 //
-           // String urlRouteList = Util.rootUrl().trim() + Util.getContent.trim();
+    // String urlRouteList = Util.rootUrl().trim() + Util.getContent.trim();
 //            try {
 //                HttpClient httpclient = new DefaultHttpClient();
 //                HttpPost httppost = new HttpPost(urlRouteList);
@@ -1172,18 +1157,6 @@ public class ViewMoreActivity extends AppCompatActivity implements
             float density = getResources().getDisplayMetrics().density;
 
             if (firstTime == true) {
-                try {
-                    if (videoPDialog != null && videoPDialog.isShowing()) {
-                        videoPDialog.hide();
-                        videoPDialog = null;
-                    }
-                } catch (IllegalArgumentException ex) {
-
-                    noDataLayout.setVisibility(View.VISIBLE);
-                    noInternetConnectionLayout.setVisibility(View.GONE);
-                    gridView.setVisibility(View.GONE);
-                    footerView.setVisibility(View.GONE);
-                }
 
                 gridView.smoothScrollToPosition(0);
                 firstTime = false;
@@ -2253,7 +2226,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
         if (status > 0 && status == 200) {
 
             try {
-               Util.parseLanguage(languagePreference,jsonResponse,Default_Language);
+                Util.parseLanguage(languagePreference,jsonResponse,Default_Language);
 
                 //Call For Language PopUp Dialog
 
