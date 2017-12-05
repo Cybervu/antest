@@ -294,7 +294,6 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
             if (getActivity() != null) {
                 new RetrieveFeedTask().execute(movieImageStr);
-
             }
 
 
