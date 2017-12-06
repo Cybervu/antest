@@ -392,7 +392,11 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 videoImageStrToHeight = movieImageStr;
 
                 if (firstTime == true) {
-                    Picasso.with(getActivity()).load(videoImageStrToHeight
+
+
+                    new RetrieveFeedTask().execute(videoImageStrToHeight);
+
+                   /* Picasso.with(getActivity()).load(videoImageStrToHeight
                     ).into(new Target() {
 
                         @Override
@@ -410,10 +414,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
                         @Override
                         public void onPrepareLoad(final Drawable placeHolderDrawable) {
-                                /*AsynLOADUI loadUI = new AsynLOADUI();
-                                loadUI.executeOnExecutor(threadPoolExecutor);*/
+                                *//*AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);*//*
                         }
-                    });
+                    });*/
                 } else {
                     loadUI = new AsynLOADUI();
                     loadUI.executeOnExecutor(threadPoolExecutor);

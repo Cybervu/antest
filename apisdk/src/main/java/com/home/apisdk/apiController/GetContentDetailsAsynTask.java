@@ -298,7 +298,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                     if ((mainJson.has("release_date")) && mainJson.optString("release_date").trim() != null && !mainJson.optString("release_date").trim().isEmpty() && !mainJson.optString("release_date").trim().equals("null") && !mainJson.optString("release_date").trim().matches("")) {
                         contentDetailsOutput.setReleaseDate(mainJson.optString("release_date"));
                     } else {
-                        contentDetailsOutput.setReleaseDate(mainJson.optString("isFreeContent"));
+                        contentDetailsOutput.setReleaseDate(mainJson.optString(""));
 
                     }
                     if ((mainJson.has("is_ppv")) && mainJson.optString("is_ppv").trim() != null && !mainJson.optString("is_ppv").trim().isEmpty() && !mainJson.optString("is_ppv").trim().equals("null") && !mainJson.optString("is_ppv").trim().matches("")) {

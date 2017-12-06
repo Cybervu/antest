@@ -494,11 +494,11 @@ public class NavigationDrawerFragment extends Fragment implements GetAppMenuAsyn
         mCallbacks = null;
     }
 
-    @Override
+  /*  @Override
     public void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState (outState);
         outState.putInt (STATE_SELECTED_POSITION, mCurrentSelectedPosition);
-    }
+    }*/
 
     @Override
     public void onConfigurationChanged (Configuration newConfig) {
