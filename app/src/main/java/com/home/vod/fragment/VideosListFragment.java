@@ -197,10 +197,6 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         int isAPV = 0;
         int isPPV = 0;
         int isConverted = 0;
-
-        Log.v("Muvi","featurecontent size in vfeolist="+contentListOutputArray.size());
-
-
         if (status==200){
             itemsInServer=totalItems;
             for (int i=0;i<contentListOutputArray.size();i++){

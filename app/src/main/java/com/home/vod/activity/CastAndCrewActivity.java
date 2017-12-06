@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.home.apisdk.apiController.GetCelibrityAsyntask;
 import com.home.apisdk.apiModel.CelibrityInputModel;
 import com.home.apisdk.apiModel.CelibrityOutputModel;
+import com.home.vod.CastAndCrewDetailsIntentHandler;
 import com.home.vod.R;
 import com.home.vod.adapter.CastCrewAdapter;
 import com.home.vod.model.GetCastCrewItem;
@@ -60,7 +61,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
     TextView castCrewTitleTextView;
     RecyclerView castCrewListRecyclerView;
 
-    ArrayList<GetCastCrewItem> castCrewItems=new ArrayList<GetCastCrewItem>();
+    ArrayList<GetCastCrewItem> castCrewItems = new ArrayList<GetCastCrewItem>();
     CastCrewAdapter castCrewAdapter;
     GridView cast_crew_crid;
 
@@ -75,7 +76,7 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
 
     String movie_id, movie_uniq_id;
     LanguagePreference languagePreference;
-
+    CastAndCrewDetailsIntentHandler castAndCrewDetailsIntentHandler;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     int keepAliveTime = 10;
@@ -104,11 +105,11 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         noDataTextView = (TextView) findViewById(R.id.noDataTextView);
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
         noDataTextView.setText(languagePreference.getTextofLanguage(NO_CONTENT, DEFAULT_NO_CONTENT));
-
+        castAndCrewDetailsIntentHandler = new CastAndCrewDetailsIntentHandler(this);
 
         primary_layout = (LinearLayout) findViewById(R.id.primary_layout);
         castCrewTitleTextView = (TextView) findViewById(R.id.castCrewTitleTextView);
-        FontUtls.loadFont(CastAndCrewActivity.this,getResources().getString(R.string.regular_fonts),castCrewTitleTextView);
+        FontUtls.loadFont(CastAndCrewActivity.this, getResources().getString(R.string.regular_fonts), castCrewTitleTextView);
         castCrewTitleTextView.setText(languagePreference.getTextofLanguage(CAST_CREW_BUTTON_TITLE, DEFAULT_CAST_CREW_BUTTON_TITLE));
         cast_crew_crid = (GridView) findViewById(R.id.cast_crew_crid);
         isNetwork = NetworkStatus.getInstance().isConnected(this);
@@ -128,15 +129,15 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 GetCastCrewItem item = castCrewItems.get(position);
-                Intent castCrewIntent = new Intent(CastAndCrewActivity.this,CastCrewDetailsActivity.class);
-                castCrewIntent.putExtra("castPermalink",item.getCastPermalink());
+                Intent castCrewIntent = new Intent(CastAndCrewActivity.this, CastCrewDetailsActivity.class);
+                castCrewIntent.putExtra("castPermalink", item.getCastPermalink());
                 LogUtil.showLog("SUBHA", "PERMALINK_INTENT_KEY" + item.getCastPermalink());
 
-                castCrewIntent.putExtra("castName",item.getCastPermalink());
-                castCrewIntent.putExtra("castSummary",item.getCelebritySummary());
-                castCrewIntent.putExtra("castImage",item.getCastImage());
+                castCrewIntent.putExtra("castName", item.getCastPermalink());
+                castCrewIntent.putExtra("castSummary", item.getCelebritySummary());
+                castCrewIntent.putExtra("castImage", item.getCastImage());
 
-                startActivity(castCrewIntent);
+                castAndCrewDetailsIntentHandler.castandcrewdetailsIntentShowORHide(castCrewIntent);
             }
         });
 
@@ -179,9 +180,9 @@ public class CastAndCrewActivity extends AppCompatActivity implements GetCelibri
         if (status == 200) {
             //castCrewItems = new ArrayList<GetCastCrewItem>();
             for (int i = 0; i < celibrityOutputModel.size(); i++) {
-                GetCastCrewItem   movie = new GetCastCrewItem(celibrityOutputModel.get(i).getName(),celibrityOutputModel.get(i).getCast_type()
-                        ,celibrityOutputModel.get(i).getCelebrity_image()
-                        ,celibrityOutputModel.get(i).getPermalink(),celibrityOutputModel.get(i).getSummary());
+                GetCastCrewItem movie = new GetCastCrewItem(celibrityOutputModel.get(i).getName(), celibrityOutputModel.get(i).getCast_type()
+                        , celibrityOutputModel.get(i).getCelebrity_image()
+                        , celibrityOutputModel.get(i).getPermalink(), celibrityOutputModel.get(i).getSummary());
 
                 castCrewItems.add(movie);
             }

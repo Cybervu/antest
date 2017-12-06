@@ -47,7 +47,7 @@
  <color name="nav_drawer_lineColor">#000</color>
  <color name="nav_lineColor">#000</color>
  <color name="nav_text_line_color">#000000</color>
- <color name="nav_drawer_text_Color">#000000</color>
+ <color name="nav_drawer_text_Color">#666</color>
  <color name="style_circular_color">#999999</color>
  <color name="style_circular_color_2">#ff0400</color>
  <color name="button_background">#930f18</color>

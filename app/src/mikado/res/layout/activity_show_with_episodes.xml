@@ -168,7 +168,7 @@
                             android:layout_width="@dimen/viewmore_btn_width"
                             android:layout_height="@dimen/viewmore_btn_height"
                             android:layout_alignParentRight="true"
-                            android:background="@drawable/view_more_button_background"
+                            android:background="@drawable/button_radious"
                             android:padding="@dimen/payment_spinner_padding"
                             android:stateListAnimator="@null"
                             android:textAllCaps="false"

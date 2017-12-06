@@ -154,9 +154,9 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.teststreamingapp'
-            versionCode 14
+            versionCode 15
             targetSdkVersion 25
-            versionName '3.1.0'
+            versionName '3.1.1'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
             //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
@@ -174,9 +174,9 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.matas'
-            versionCode 3
+            versionCode 4
             targetSdkVersion 25
-            versionName '1.1.0'
+            versionName '1.1.1'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"0c2236eee851357d1fecc01fbba128c5\""
 //            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
@@ -388,7 +388,7 @@ android {
             dimension 'vendor'
             applicationId 'com.release.canal'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-           // buildConfigField "String", "AUTH_TOKEN", "\"398fe175085c765637c0dc4c02acb3fa\""
+            // buildConfigField "String", "AUTH_TOKEN", "\"398fe175085c765637c0dc4c02acb3fa\""
             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
             targetSdkVersion 25
             versionCode 3
@@ -420,6 +420,26 @@ android {
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         gabejaramillo_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+
+        cote_ouest {
+            minSdkVersion 16
+            dimension 'vendor'
+            applicationId 'com.release.coteouest'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            // buildConfigField "String", "AUTH_TOKEN", "\"398fe175085c765637c0dc4c02acb3fa\""
+            buildConfigField "String", "AUTH_TOKEN", "\"0f05eecafd0c3cb4290050ee055118e8\""
+            targetSdkVersion 23
+            versionCode 1
+            versionName '1.0'
+        }
+        cote_ouest_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        cote_ouest_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
@@ -484,12 +504,13 @@ android.variantFilter { variant ->
     } else if (vendor.equals('ubereatsvod') && (environment.equals('ubereatsvod_staging_') || environment.equals('ubereatsvod_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-    else if (vendor.equals('ionsporty') && (environment.equals('ionsporty_staging_')||environment.equals('ionsporty_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('ionsporty') && (environment.equals('ionsporty_staging_') || environment.equals('ionsporty_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }
-     else if (vendor.equals('mikado') && (environment.equals('mikado_staging_') || environment.equals('mikado_Prod_'))
+    } else if (vendor.equals('mikado') && (environment.equals('mikado_staging_') || environment.equals('mikado_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    } else if (vendor.equals('cote_ouest') && (environment.equals('cote_ouest_staging_') || environment.equals('cote_ouest_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }
