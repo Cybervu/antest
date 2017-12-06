@@ -124,7 +124,7 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("BISHAL123", "RES" + responseStr);
+                Log.v("Muvi", "RES fragment =" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 status = 0;
@@ -143,13 +143,10 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
                 status = Integer.parseInt(myJson.optString("status"));
                 totalItems = Integer.parseInt(myJson.optString("item_count"));
                 message = myJson.optString("msg");
-                Log.v("BISHAL123", "RES" + responseStr);
             }
 
 
             if (status == 200) {
-
-                Log.v("BISHAL123", "RES"+status);
 
                 JSONArray jsonMainNode = myJson.getJSONArray("movieList");
 
@@ -197,7 +194,6 @@ public class GetContentListAsynTask extends AsyncTask<ContentListInput, Void, Vo
 
                         }
                         contentListOutput.add(content);
-                        Log.v("BISHAL123", "RES" + content);
                     } catch (Exception e) {
                         status = 0;
                         totalItems = 0;

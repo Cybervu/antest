@@ -72,7 +72,7 @@ import static com.home.vod.util.Constant.authTokenStr;
  */
 public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVideosAsyncListener, GetAppHomePageAsync.HomePageListener {
 
-    //    int bannerArray[] = {R.drawable.banner1};
+//    int bannerArray[] = {R.drawable.banner1};
     int videoHeight = 185;
     int videoWidth = 256;
 
@@ -295,10 +295,9 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
             if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
-                if (getActivity() != null) {
-                    new RetrieveFeedTask().execute(movieImageStr);
-
-                }
+            if (getActivity() != null) {
+                new RetrieveFeedTask().execute(movieImageStr);
+            }
 
 
             } else {

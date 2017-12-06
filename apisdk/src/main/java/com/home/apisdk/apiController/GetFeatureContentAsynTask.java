@@ -122,7 +122,7 @@ public class GetFeatureContentAsynTask extends AsyncTask<FeatureContentInputMode
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("MUVISDK", "RES" + responseStr);
+                Log.v("Muvi", "RES feature =" + responseStr);
 
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 status = 0;
