@@ -97,7 +97,7 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     private ArrayList<String> genreArrayList = new ArrayList<String>();
     private ArrayList<String> genreValueArrayList = new ArrayList<String>();
     private String user_Id = "", email_Id = "", isSubscribed = "0";
-
+ 
      Timer GoogleIdGeneraterTimer;
 
     /*Asynctask on background thread*/
