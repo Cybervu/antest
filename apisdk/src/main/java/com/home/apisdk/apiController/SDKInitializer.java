@@ -116,7 +116,7 @@ public class SDKInitializer {
     public interface SDKInitializerListner {
         public void onPreExexuteListner();
 
-        public void onPostExecuteListner();
+        public void onPostExecuteListner(int status);
     }
 
 
@@ -131,7 +131,7 @@ public class SDKInitializer {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            sdkInitializerListner.onPostExecuteListner();
+            sdkInitializerListner.onPostExecuteListner(status);
         }
 
         @Override

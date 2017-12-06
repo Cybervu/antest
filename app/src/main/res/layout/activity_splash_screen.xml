@@ -49,8 +49,9 @@
 
         <ImageView
             android:id="@+id/geoBlockedImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:scaleType="fitXY"
             android:layout_centerInParent="true"
             android:src="@drawable/logo" />
 

@@ -221,7 +221,9 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
                 GetPlanListAsynctask asynGetPlanid = new GetPlanListAsynctask(planListInput, SplashScreen.this, SplashScreen.this);
                 asynGetPlanid.executeOnExecutor(threadPoolExecutor);
 
-            } else {
+            }
+
+            else {
                 noInternetLayout.setVisibility(View.GONE);
                 geoBlockedLayout.setVisibility(View.VISIBLE);
             }
@@ -606,12 +608,20 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
     }
 
     @Override
-    public void onPostExecuteListner() {
+    public void onPostExecuteListner(int status) {
         SDKInitializer.setData(this);
-        if (NetworkStatus.getInstance().isConnected(this)) {
-            GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
-            asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
-        } else {
+        if (status==200){
+            if (NetworkStatus.getInstance().isConnected(this)) {
+                GetIpAddressAsynTask asynGetIpAddress = new GetIpAddressAsynTask(this, this);
+                asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+            }
+        }
+        else if (status==Util.ERROR_CODE_EXPIRED_AUTHTOKEN){
+            geoTextView.setText(languagePreference.getTextofLanguage(APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE));
+            noInternetLayout.setVisibility(View.GONE);
+            geoBlockedLayout.setVisibility(View.VISIBLE);
+        }
+         else {
             noInternetLayout.setVisibility(View.VISIBLE);
             geoBlockedLayout.setVisibility(View.GONE);
         }

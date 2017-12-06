@@ -1,5 +1,6 @@
 package com.home.vod.activity;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -936,7 +937,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false);
         searchView.setIconifiedByDefault(false);
@@ -1040,6 +1041,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     }
                     return true;
                 }
+
                 return false;
             }
         });
@@ -1059,6 +1061,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // TODO Auto-generated method stub
+
                 return false;
             }
 

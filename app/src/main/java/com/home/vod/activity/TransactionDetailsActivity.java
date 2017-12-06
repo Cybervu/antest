@@ -323,6 +323,12 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(InternetStatus);
+    }
+
+    @Override
     public void onDeleteInvoicePdfPreExecuteStarted() {
         Ph = new ProgressBarHandler(TransactionDetailsActivity.this);
         Ph.show();
