@@ -11,7 +11,7 @@
 
     <dimen name="singleimgwidth">70dp</dimen>
     <dimen name="singleimgheight">126dp</dimen>
-
+    <dimen name="trailerpadding">0dp</dimen>
     <dimen name="buttonheight">37dp</dimen>
     <dimen name="titletxt">13sp</dimen>
     <dimen name="indicatorheight">130dp</dimen>
