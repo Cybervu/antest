@@ -663,7 +663,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, COUPON_ALERT, "", "coupon_alert", json);
         setTranslationLanguageToPref(languagePreference, VALID_CONFIRM_PASSWORD, "", "valid_confirm_password", json);
         setTranslationLanguageToPref(languagePreference, PROFILE, DEFAULT_PROFILE, "profile", json);
-        setTranslationLanguageToPref(languagePreference, BUTTON_RESET, DEFAULT_BUTTON_RESET, "profile", json);
+        setTranslationLanguageToPref(languagePreference, BUTTON_RESET, DEFAULT_BUTTON_RESET, "btn_reset", json);
         setTranslationLanguageToPref(languagePreference, PROFILE_UPDATED, DEFAULT_PROFILE_UPDATED, "profile_updated", json);
 
         setTranslationLanguageToPref(languagePreference, PURCHASE, DEFAULT_PURCHASE, "purchase", json);
