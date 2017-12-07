@@ -24,6 +24,16 @@ public class Registration_input {
     String lang_code;
     String custom_country;
 
+    public String getCustom_last_name() {
+        return custom_last_name;
+    }
+
+    public void setCustom_last_name(String custom_last_name) {
+        this.custom_last_name = custom_last_name;
+    }
+
+    String custom_last_name;
+
     /**
      * This Method  is use to Get the Language Code
      *

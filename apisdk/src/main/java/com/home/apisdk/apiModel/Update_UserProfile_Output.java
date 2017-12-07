@@ -8,6 +8,16 @@ package com.home.apisdk.apiModel;
 public class Update_UserProfile_Output {
 
     String name;
+
+    public String getCustom_last_name() {
+        return custom_last_name;
+    }
+
+    public void setCustom_last_name(String custom_last_name) {
+        this.custom_last_name = custom_last_name;
+    }
+
+    String custom_last_name;
     String email;
     String nick_name;
     String profile_image;

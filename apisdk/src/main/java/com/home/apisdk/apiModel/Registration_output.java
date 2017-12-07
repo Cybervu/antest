@@ -18,6 +18,16 @@ public class Registration_output {
     String status;
     String msg;
 
+    public String getCustom_last_name() {
+        return custom_last_name;
+    }
+
+    public void setCustom_last_name(String custom_last_name) {
+        this.custom_last_name = custom_last_name;
+    }
+
+    String custom_last_name;
+
     /**
      * This Method is use to Get the Login History Id
      *
