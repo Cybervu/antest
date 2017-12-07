@@ -158,6 +158,7 @@ import player.utils.SensorOrientationChangeNotifier;
 import player.utils.Util;
 
 import static android.R.attr.format;
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
@@ -459,11 +460,21 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
             @Override
             public void run() {
 
+
                 Log.v("PINTU", "CheckAvailabilityOfChromecast called");
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+                        int orientation = display.getRotation();
+
+//                        Toast.makeText(ExoPlayerActivity.this,"orientation called="+orientation,Toast.LENGTH_SHORT).show();
+
+                        if (orientation == 1|| orientation == 3) {
+                            hideSystemUI();
+                        }
 
                         if (video_prepared) {
                             if (mediaRouteButton.isEnabled()) {

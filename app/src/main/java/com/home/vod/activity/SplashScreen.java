@@ -130,6 +130,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
 
         if ( Util.isTablet(SplashScreen.this)){
             imageResize.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        }else {
+            imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
         }
         else
         {

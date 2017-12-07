@@ -23,6 +23,7 @@ import com.home.vod.activity.ViewMoreActivity;
 import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
 import com.home.vod.preferences.LanguagePreference;
+import com.home.vod.util.Constant;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.Util;
@@ -89,7 +90,7 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
     @Override
     public void onBindViewHolder(final ItemRowHolder itemRowHolder, final int i) {
 
-        LogUtil.showLog("MUVI", "position of the item in adapter ==============" + i);
+        LogUtil.showLog("MUVI1", "position of the item in adapter ==============" + i);
 
        /* if(i>=counter)
         {
@@ -110,9 +111,13 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         SectionListDataAdapter itemListDataAdapter = null;
 //            if (MainActivity.vertical == 1) {
 
+        for(int ii=0;ii<Util.image_orentiation.size();ii++){
+            LogUtil.showLog("MUVI1", "orien==" + Util.image_orentiation.get(ii));
+        }
+
 
         try {
-            if (Util.image_orentiation.get(i) == 1) {
+            if (Util.image_orentiation.get(i) == Constant.IMAGE_PORTAIT_CONST) {
                 float density = mContext.getResources().getDisplayMetrics().density;
                 if (density >= 3.5 && density <= 4.0) {
                     itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);

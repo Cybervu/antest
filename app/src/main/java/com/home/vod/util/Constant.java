@@ -19,5 +19,7 @@ public class Constant {
     public static final String SEASON_INTENT_KEY = "SEASON";
     public static final String authTokenStr = BuildConfig.AUTH_TOKEN; //new thought channel
     public static final String VIDEO_TITLE_INTENT_KEY = "VIDEO TITLE";
+    public static final int IMAGE_PORTAIT_CONST = 1;
+    public static final int IMAGE_LANDSCAPE_CONST = 0;
 
 }

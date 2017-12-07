@@ -6,7 +6,7 @@
     <color name="videotextColor">#000000</color>
     <color name="videotitleColor">#000000</color>
     <color name="loginTextViewColor">#b70000</color>
-    <color name="buttonTextColor">#111</color>
+    <color name="buttonTextColor">#FFF</color>
     <color name="selectedHintColor">#b70000</color>
     <color name="forgotPasswordTextViewColor">#b70000</color>
     <color name="fb_text_color">#fff</color>

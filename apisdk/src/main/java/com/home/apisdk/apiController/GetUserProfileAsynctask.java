@@ -147,6 +147,7 @@ public class GetUserProfileAsynctask extends AsyncTask<Get_UserProfile_Input, Vo
                     get_userProfile_output.setDisplay_name(myJson.optString("display_name"));
                     get_userProfile_output.setStudio_id(myJson.optString("studio_id"));
                     get_userProfile_output.setProfile_image(myJson.optString("profile_image"));
+                    get_userProfile_output.setCustom_last_name(myJson.optString("custom_last_name"));
                     get_userProfile_output.setIsSubscribed(myJson.optString("isSubscribed"));
                     if ((myJson.has("mobile_number")) && myJson.optString("mobile_number").trim() != null && !myJson.optString("mobile_number").trim().isEmpty() && !myJson.optString("mobile_number").trim().equals("null") && !myJson.optString("mobile_number").trim().matches("")) {
                         get_userProfile_output.setPhone(myJson.optString("mobile_number"));

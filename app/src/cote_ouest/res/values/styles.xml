@@ -8,6 +8,7 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:editTextStyle">@style/Widget.App.EditText</item>
         <item name="colorControlNormal">@color/unSelectedHintColor</item>
+        <item name="autoCompleteTextViewStyle">@style/cursorColor</item>
         <item name="colorControlActivated">@color/selectedHintColor</item>
         <!--
         <item name="windowActionBar">false</item>
@@ -61,6 +62,10 @@
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="cursorColor" parent="Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:textCursorDrawable">@drawable/cursor</item>
     </style>
 
     <style name="CustomDialogTheme" parent="android:Theme.Holo.Dialog">

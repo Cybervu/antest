@@ -31,8 +31,10 @@ public class ProfileHandler {
     private Activity context;
     EditText editProfileNameEditText_first,editProfileNameEditText_last;
     LanguagePreference languagePreference;
-    String first_nameStr,last_nameStr;
+    public String first_nameStr,last_nameStr;
     public String final_name = "";
+    public String last_name="";
+
     public String phoneStr="";
 
     public ProfileHandler(Activity context){
@@ -67,8 +69,8 @@ public class ProfileHandler {
                         InputMethodManager.HIDE_NOT_ALWAYS);
                 first_nameStr = editProfileNameEditText_first.getText().toString().trim();
                 last_nameStr = editProfileNameEditText_last.getText().toString().trim();
-                final_name = first_nameStr + " " + last_nameStr;
-                ((ProfileActivity) context).UpdateProfile(final_name,phoneStr);
+                //final_name = first_nameStr + " " + last_nameStr;
+                ((ProfileActivity) context).UpdateProfile(first_nameStr,last_nameStr,phoneStr);
 
             }
 
@@ -76,30 +78,14 @@ public class ProfileHandler {
     }
 
 
-    public void setNameTxt(String nameString,String phoneNumber){
-        if(nameString.contains(" "))
-        {
+    public void setNameTxt(String first_name, String last_name, String phoneNumber) {
 
-            String data[] = nameString.split(" ");
-            String fname = "";
-
-            Log.v("BIBHU2","name===size==="+data.length);
-
-            for(int i=0 ;i<data.length-1;i++)
-            {
-                fname = fname+" "+data[i];
-                Log.v("BIBHU2","loop name===="+fname);
-            }
-
-            editProfileNameEditText_first.setText(fname.trim());
-            editProfileNameEditText_last.setText(data[data.length-1]);
+        try {
+            editProfileNameEditText_first.setText(first_name.trim());
+            editProfileNameEditText_last.setText(last_name.trim());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        else
-        {
-            editProfileNameEditText_first.setText(nameString.trim());
-            editProfileNameEditText_last.setText("");
-        }
-
     }
 
 }
