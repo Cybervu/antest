@@ -57,32 +57,38 @@
 
         >
 
-        <TextView
-            android:layout_width="@dimen/sideTitle_line_width"
-            android:layout_height="@dimen/sideTitle_line_height"
-            android:id="@+id/colortitle"
-            android:background="@color/colorPrimary"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="@dimen/marginleft10dp"
-            />
-
-
-        <TextView
-            android:id="@+id/itemTitle"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sample title"
-            android:textAllCaps="true"
-            android:textColor="@color/videotextColor"
-            android:textSize="@dimen/itemtitle_text_size"
-            android:layout_marginLeft="@dimen/marginRight20dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:orientation="vertical"
+
+            >
+
+            <TextView
+                android:layout_width="@dimen/sideTitle_line_height"
+                android:layout_height="@dimen/sideTitle_line_width"
+                android:id="@+id/colortitle"
+                android:background="@color/colorPrimary"
+
+                android:layout_marginLeft="@dimen/marginleft10dp"
+                />
 
 
+            <TextView
+                android:id="@+id/itemTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sample title"
+
+                android:textAllCaps="true"
+                android:textColor="@color/videotextColor"
+                android:textSize="@dimen/itemtitle_text_size"
+                android:layout_marginTop="@dimen/marginBottom5dp"
+                android:layout_marginLeft="@dimen/marginleft10dp"
+                />
+
+        </LinearLayout>
         <Button
             android:id="@+id/btnMore"
             android:layout_width="wrap_content"
@@ -95,7 +101,7 @@
             android:stateListAnimator="@null"
             android:text=""
             android:textAllCaps="false"
-            android:textColor="@color/button_background"
+            android:textColor="@color/nav_drawer_lineColor"
             android:textSize="@dimen/btnmore_text_size" />
 
 

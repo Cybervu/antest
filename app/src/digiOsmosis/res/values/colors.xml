@@ -33,7 +33,7 @@
     <color name="edit_color2">#00FFFFFF</color>
     <color name="alreadyMemberTextColor">#ffffff</color>
     <color name="alreadyHaveALoginButtonTextColor">#ffffff</color>
-    <color name="border_color">#4cbfb8</color>
+    <color name="border_color">#4cbfb9</color>
     <color name="cancel_button_text_color">#ff5a75</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="castCrewTitleTextColor">#ff5a75</color>
@@ -42,17 +42,17 @@
     <color name="pageTitleColor">#4f4f4f</color>
     <color name="preOrderButtonTextColor">#DDD</color>
     <color name="spinnerDropDownListColor">#000</color>
-    <color name="leftMenuBackground">#fff</color>
-    <color name="colorPrimary">#4cbfb8</color>
-    <color name="exercise_imagecolor">#4cbfb8</color>
-    <color name="navlogobackgroundcolor">#4cbfb8</color>
-    <color name="colorPrimaryDark">#4cbfb8</color>
+    <color name="leftMenuBackground">#4cbfb9</color>
+    <color name="colorPrimary">#4cbfb9</color>
+    <color name="exercise_imagecolor">#4cbfb9</color>
+    <color name="navlogobackgroundcolor">#4cbfb9</color>
+    <color name="colorPrimaryDark">#4cbfb9</color>
     <color name="languagePopupColor">#fff</color>
     <color name="languagePopupFadeColor">#50696969</color>
     <color name="filterTextColor">#5c6873</color>
     <color name="nav_drawer_lineColor">#000</color>
 
-    <color name="nav_lineColor">#60c6c0</color>
+    <color name="nav_lineColor">#ff7a91</color>
     <color name="sidemenu_notification_Color">#60c6c0</color>
     <color name="sidemenu_logout_color">#61aba6</color>
     <color name="nav_drawer_text_Color">#ffffff</color>
@@ -67,6 +67,9 @@
     <color name="windowBackground">#000</color>
     <color name="selected_color">#000</color>
     <color name="unselected_color">#fff</color>
+    <color name="line_divider_detailsPage">#d0d0d0</color>
+    <color name="buttonStrokeColor">#000000</color>
+    <color name="buttonBackgroundColor">#ffffff</color>
 
     <color name="filter_text_color">#000</color>
     <color name="censorRatingBackground">#ff5a75</color>

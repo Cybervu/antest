@@ -423,7 +423,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
     boolean isDrm = false;
     int contentPosition;
     int current_season  ;
-    int totalSeason;
+    int totalSeason = 0;
     // =====================End==============================//
 
 
@@ -1389,15 +1389,22 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             }
         });
         preferenceManager = PreferenceManager.getPreferenceManager(this);
-         totalSeasonModel = (ArrayList<SeasonModel>) getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY);
-        totalSeason = totalSeasonModel.size();
+        if((ArrayList<SeasonModel>) getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY) != null) {
+            totalSeasonModel = (ArrayList<SeasonModel>) getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY);
+            totalSeason = totalSeasonModel.size();
+            season_change_textview.setText(totalSeasonModel.get(counter).getSeasonName() + " OF "+totalSeason);
+        }
 
-        if (totalSeason == 1) {
+
+        if (totalSeason == 0 ||totalSeason == 1 ) {
             seasonScroller.setVisibility(View.GONE);
         }
-        current_season = Integer.parseInt(getIntent().getStringExtra("Current_SEASON"));
+
+        if(getIntent().getStringExtra("Current_SEASON") != null) {
+            current_season = Integer.parseInt(getIntent().getStringExtra("Current_SEASON"));
+        }
         counter = Integer.parseInt(getIntent().getStringExtra("Index"));
-        season_change_textview.setText(totalSeasonModel.get(counter).getSeasonName() + " OF "+totalSeason);
+
         next_season.setVisibility(View.VISIBLE);
         previous_season.setVisibility(View.VISIBLE);
 
@@ -1410,7 +1417,6 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             //something here
 
 
-        Log.v("Nihar", "arraylist player" + totalSeasonModel.size()+"current season : "+current_season);
         try {
 //
      /*       SeasonModelArrayList = (ArrayList<SeasonModel>) getIntent().getSerializableExtra("SEASON_ARRAY_MODEL");

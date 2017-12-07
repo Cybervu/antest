@@ -1186,17 +1186,17 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 }
                 if (videoWidth > videoHeight) {
                     if (density >= 3.5 && density <= 4.0) {
-                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.nexus_videos_grid_layout_land, itemData);
+                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.row_programe_layout, itemData);
                     } else {
-                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_280_grid_layout, itemData);
+                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.row_programe_layout, itemData);
 
                     }
                     gridView.setAdapter(customGridAdapter);
                 } else {
                     if (density >= 3.5 && density <= 4.0) {
-                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.nexus_videos_grid_layout, itemData);
+                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.row_programe_layout, itemData);
                     } else {
-                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.videos_grid_layout, itemData);
+                        customGridAdapter = new VideoFilterAdapter(ViewMoreActivity.this, R.layout.row_programe_layout, itemData);
 
                     }
                     // customGridAdapter = new VideoFilterAdapter(context, R.layout.videos_grid_layout, itemData);

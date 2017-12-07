@@ -56,8 +56,8 @@
     <dimen name="cast_height_icon">100dp</dimen>
     <dimen name="paybtn_height">35dp</dimen>
     <dimen name="editbox_text_size">13sp</dimen>
-    <dimen name="itemtitle_text_size">15sp</dimen>
-    <dimen name="itemtitle1_text_size">16sp</dimen>
+    <dimen name="itemtitle_text_size">17sp</dimen>
+    <dimen name="itemtitle1_text_size">20sp</dimen>
     <dimen name="homelogo_height">80dp</dimen>
     <dimen name="homelogo_width">150dp</dimen>
     <dimen name="banner_image_height">210dp</dimen>
@@ -72,8 +72,9 @@
     <dimen name="plainrow_text_size">10sp</dimen>
     <dimen name="plainrow_mrgin_top">20dp</dimen>
     <dimen name="preorderbtn_padding">10dp</dimen>
-
-
+    <dimen name="padding17dp">0dp</dimen>
+    <dimen name="padding25dp">25dp</dimen>
+    <dimen name="row_gap">15dp</dimen>
     <dimen name="cast_details_width">200dp</dimen>
     <dimen name="cast_details_height">200dp</dimen>
     <dimen name="cast_textsize">17sp</dimen>
@@ -96,5 +97,10 @@
     <dimen name="sideTitle_line_height">17dp</dimen>
     <dimen name="sideTitle_line_width">3dp</dimen>
     <dimen name="detailsTextView">150dp</dimen>
+    <dimen name="week_days">100dp</dimen>
+    <dimen name="week_days_title">55dp</dimen>
 
+    <dimen name="week_top">10dp</dimen>
+    <dimen name="program_left">30dp</dimen>
+    <dimen name="program_banner_height">400dp</dimen>
 </resources>

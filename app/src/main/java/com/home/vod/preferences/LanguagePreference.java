@@ -18,6 +18,8 @@ public class LanguagePreference {
      */
     public static String DEFAULT_DELETE_BTN = "Delete";
     public static String DELETE_BTN = "DELETE_BTN";
+    public static String DAYS_TITLE = "DAYS_TITLE";
+    public static String DEFAULT_DAYS_TITLE = "DAYS";
     public static String DEFAULT_WANT_TO_DELETE = "Want to Delete";
     public static String WANT_TO_DELETE = "WANT_TO_DELETE";
     public static String MY_DOWNLOAD = "MY_DOWNLOAD";
@@ -415,12 +417,16 @@ public class LanguagePreference {
     public static String DIFFICULTY_TITLE = "DIFFICULTY_TITLE";
     public static String REPETITION_TITLE = "REPETITION_TITLE";
     public static String PROGRAM_BUTTON = "PROGRAM_BUTTON";
+    public static String FOLLOW_PROGRAM_BUTTON = "FOLLOW_PROGRAM_BUTTON";
+    public static String FOLLOWED_PROGRAM_BUTTON = "FOLLOWED_PROGRAM_BUTTON";
     public static String WORKOUT_BUTTON = "WORKOUT_BUTTON";
     public static String DIET_BUTTON = "DIET_BUTTON";
     public static String DEFAULT_DIFFICULTY_TITLE = "DIFFICULTY";
     public static String DEFAULT_REPETITION_TITLE = "REPETITION";
-    public static String DEFAULT_PROGRAM_BUTTON = "Start programme";
-    public static String DEFAULT_DIET_BUTTON = "Diet Plan";
+    public static String DEFAULT_PROGRAM_BUTTON = "START PROGRAMME";
+    public static String DEFAULT_FOLLOW_PROGRAM_BUTTON = "FOLLOW PROGRAMME";
+    public static String DEFAULT_FOLLOWED_PROGRAM_BUTTON = "FOLLOWED";
+    public static String DEFAULT_DIET_BUTTON = "DIET PLAN";
     public static String DEFAULT_WORKOUT_BUTTON = "Start Workout";
     public static String DURATION_TITLE = "DURATION_TITLE";
     public static String DEFAULT_DURATION_TITLE = "DURATION";

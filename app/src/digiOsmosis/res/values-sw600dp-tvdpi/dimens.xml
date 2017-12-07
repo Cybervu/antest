@@ -83,10 +83,9 @@
     <dimen name="contactformtitle_text_size">17sp</dimen>
     <dimen name="editbox_text_size">18dp</dimen>
     <dimen name="home280_layout_width">183dp</dimen>
-    <dimen name="list_singlecard_img_width">150dp</dimen>
-    <dimen name="list_singlecard_img_height">214dp</dimen>
-    <dimen name="videogrid_width">170dp</dimen>
-    <dimen name="videogrid_height">243dp</dimen>
+    <dimen name="list_singlecard_img_width">175dp</dimen>
+    <dimen name="list_singlecard_img_height">250dp</dimen>
+
     <dimen name="videogrid_land_width">182dp</dimen>
     <dimen name="videogrid_land_height">101dp</dimen>
     <dimen name="plainrowlayout_height">100dp</dimen>
@@ -100,7 +99,7 @@
     <dimen name="video280_height">103dp</dimen>
     <dimen name="loginImageViewMarging_top_padding">10sp</dimen>
     <dimen name="listitemlayout_height">330dp</dimen>
-    <dimen name="itemtitle_text_size">22sp</dimen>
+    <dimen name="itemtitle_text_size">23sp</dimen>
     <dimen name="left_padding">10dp</dimen>
     <dimen name="right_padding">10dp</dimen>
     <dimen name="login_padding">10dp</dimen>
@@ -118,7 +117,7 @@
     <dimen name="register_margin_top">40dp</dimen>
     <dimen name="cast_width_icon">150dp</dimen>
     <dimen name="cast_height_icon">130dp</dimen>
-    <dimen name="itemtitle1_text_size">16sp</dimen>
+    <dimen name="itemtitle1_text_size">21sp</dimen>
     <dimen name="homelogo_height">87dp</dimen>
     <dimen name="homelogo_width">185dp</dimen>
     <dimen name="plainrow_mrgin_top">20dp</dimen>
@@ -126,7 +125,9 @@
     <dimen name="preorderbtn_padding">20dp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
     <dimen name="submit_width_size">210dp</dimen>
-
+    <dimen name="padding17dp">0dp</dimen>
+    <dimen name="padding25dp">25dp</dimen>
+    <dimen name="row_gap">15dp</dimen>
     <dimen name="cast_details_width">200dp</dimen>
     <dimen name="cast_details_height">200dp</dimen>
     <dimen name="cast_textsize">17sp</dimen>
@@ -182,9 +183,9 @@
     <dimen name="sideTitle_line_width">3dp</dimen>
     <dimen name="sideTitle_line_marginleft">15dp</dimen>
 
-    <dimen name="season_card_width">250dp</dimen>
-    <dimen name="season_card_height">250dp</dimen>
-    <dimen name="season_layout_card_height">240dp</dimen>
+    <dimen name="season_card_width">160dp</dimen>
+    <dimen name="season_card_height">256dp</dimen>
+    <dimen name="season_layout_card_height">256dp</dimen>
 
     <dimen name="fav_card_elevation">10dp</dimen>
     <dimen name="fav_img_width">150dp</dimen>
@@ -214,5 +215,12 @@
     <dimen name="sidemenu_padding_bottom">10dp</dimen>
 
     <dimen name="detailsTextView">230dp</dimen>
-
+    <dimen name="week_days">170dp</dimen>
+    <dimen name="week_days_title">70dp</dimen>
+    <dimen name="videogrid_width">250dp</dimen>
+    <dimen name="videogrid_height">357dp</dimen>
+    <dimen name="week_left">17dp</dimen>
+    <dimen name="week_top">15dp</dimen>
+    <dimen name="program_left">30dp</dimen>
+    <dimen name="program_banner_height">400dp</dimen>
 </resources>

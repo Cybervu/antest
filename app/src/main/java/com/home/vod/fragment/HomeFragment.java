@@ -308,42 +308,6 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
     }
 
 
-    private class AsynLOADPicasso extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Picasso.with(context).load(videoImageStrToHeight).into(new Target() {
-                @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    videoWidth = bitmap.getWidth();
-                    videoHeight = bitmap.getHeight();
-                    loadui = new AsynLOADUI();
-                    loadui.executeOnExecutor(threadPoolExecutor);
-                }
-
-                @Override
-                public void onBitmapFailed(Drawable errorDrawable) {
-                    loadui = new AsynLOADUI();
-                    loadui.executeOnExecutor(threadPoolExecutor);
-                }
-
-                @Override
-                public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                }
-            });
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-        }
-    }
-
     private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {

@@ -103,6 +103,8 @@ public class SideMenuHandler {
         nameText.setText(preferenceManager.getDispNameFromPref());
         layout1 = (LinearLayout) context.findViewById(R.id.layout_1);
         layout2 = (LinearLayout) context.findViewById(R.id.layout_2);
+        layout1.setVisibility(View.GONE);
+        layout2.setVisibility(View.GONE);
         notification = (LinearLayout) context.findViewById(R.id.notification);
         logoutTextView = (TextView) context.findViewById(R.id.logoutTextView);
         notificationTextView = (TextView) context.findViewById(R.id.notificationTextView);
@@ -168,7 +170,7 @@ public class SideMenuHandler {
 
 
     }
-//    login_menu= (languagePreference.getTextofLanguage(LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN));
+
 
 
 
@@ -239,7 +241,7 @@ public class SideMenuHandler {
                     menuList.add(adding_position + 3, new NavDrawerItem(favourite_menu, favourite_menuPermalink, true, "internal"));
 
                 }
-//                    menuList.add(new NavDrawerItem(logout_menu, logout_menuPermalink, true, "internal"));
+                    menuList.add(new NavDrawerItem(logout_menu, logout_menuPermalink, true, "internal"));
 
             }
 
@@ -299,7 +301,8 @@ public class SideMenuHandler {
 
         if (loggedInStr!= null) {
 
-            layout1.setVisibility(View.VISIBLE);
+//            layout1.setVisibility(View.VISIBLE);
+            layout1.setVisibility(View.GONE);
             layout2.setVisibility(View.GONE);
             Log.v("ANU","loggedInStr===="+loggedInStr);
             String PIMG = preferenceManager.getLoginProfImgFromPref();
@@ -330,7 +333,8 @@ public class SideMenuHandler {
         else {
 
             layout1.setVisibility(View.GONE);
-            layout2.setVisibility(View.VISIBLE);
+            layout2.setVisibility(View.GONE);
+//            layout2.setVisibility(View.VISIBLE);
             Picasso.with(context)
                     .load(R.drawable.profile)
                     .into(profile_image);
