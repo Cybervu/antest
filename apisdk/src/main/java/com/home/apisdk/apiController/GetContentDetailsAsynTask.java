@@ -239,10 +239,17 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                         contentDetailsOutput.setTrailerUrl("");
 
                     }
-                    if ((mainJson.has("is_favorite")) && mainJson.getString("is_favorite").trim() != null && !mainJson.getString("is_favorite").trim().isEmpty() && !mainJson.getString("is_favorite").trim().equals("null") && !mainJson.getString("is_episode").trim().matches("")) {
-                        contentDetailsOutput.setIs_favorite(Integer.parseInt(mainJson.getString("is_favorite")));
+                    try {
+                        if ((mainJson.has("is_favorite")) && mainJson.getString("is_favorite").trim() != null && !mainJson.getString("is_favorite").trim().isEmpty() && !mainJson.getString("is_favorite").trim().equals("null") && !mainJson.getString("is_episode").trim().matches("")) {
+                            contentDetailsOutput.setIs_favorite(Integer.parseInt(mainJson.getString("is_favorite")));
 
+                        }else {
+                            contentDetailsOutput.setIs_favorite(0);
+                        }
+                    }catch (Exception e){
+                        contentDetailsOutput.setIs_favorite(0);
                     }
+
 
                     if ((mainJson.has("movie_stream_uniq_id")) && mainJson.optString("movie_stream_uniq_id").trim() != null && !mainJson.optString("movie_stream_uniq_id").trim().isEmpty() && !mainJson.optString("movie_stream_uniq_id").trim().equals("null") && !mainJson.optString("movie_stream_uniq_id").trim().matches("")) {
                         contentDetailsOutput.setMovieStreamUniqId(mainJson.optString("movie_stream_uniq_id"));
@@ -292,39 +299,58 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                     if ((mainJson.has("isFreeContent")) && mainJson.optString("isFreeContent").trim() != null && !mainJson.optString("isFreeContent").trim().isEmpty() && !mainJson.optString("isFreeContent").trim().equals("null") && !mainJson.optString("isFreeContent").trim().matches("")) {
                         contentDetailsOutput.setIsFreeContent(mainJson.optString("isFreeContent"));
                     } else {
-                        contentDetailsOutput.setIsFreeContent(mainJson.optString("isFreeContent"));
+                        contentDetailsOutput.setIsFreeContent("");
 
                     }
                     if ((mainJson.has("release_date")) && mainJson.optString("release_date").trim() != null && !mainJson.optString("release_date").trim().isEmpty() && !mainJson.optString("release_date").trim().equals("null") && !mainJson.optString("release_date").trim().matches("")) {
                         contentDetailsOutput.setReleaseDate(mainJson.optString("release_date"));
                     } else {
-                        contentDetailsOutput.setReleaseDate(mainJson.optString("isFreeContent"));
+                        contentDetailsOutput.setReleaseDate("");
 
                     }
-                    if ((mainJson.has("is_ppv")) && mainJson.optString("is_ppv").trim() != null && !mainJson.optString("is_ppv").trim().isEmpty() && !mainJson.optString("is_ppv").trim().equals("null") && !mainJson.optString("is_ppv").trim().matches("")) {
-                        contentDetailsOutput.setIsPpv(Integer.parseInt(mainJson.optString("is_ppv")));
-                    } else {
+                    try {
+                        if ((mainJson.has("is_ppv")) && mainJson.optString("is_ppv").trim() != null && !mainJson.optString("is_ppv").trim().isEmpty() && !mainJson.optString("is_ppv").trim().equals("null") && !mainJson.optString("is_ppv").trim().matches("")) {
+                            contentDetailsOutput.setIsPpv(Integer.parseInt(mainJson.optString("is_ppv")));
+                        } else {
+                            contentDetailsOutput.setIsPpv(0);
+
+                        }
+                    }catch (Exception e){
                         contentDetailsOutput.setIsPpv(0);
-
                     }
-                    if ((mainJson.has("content_types_id")) && mainJson.optString("content_types_id").trim() != null && !mainJson.optString("content_types_id").trim().isEmpty() && !mainJson.optString("content_types_id").trim().equals("null") && !mainJson.optString("content_types_id").trim().matches("")) {
-                        contentDetailsOutput.setContentTypesId(Integer.parseInt(mainJson.optString("content_types_id")));
-                    } else {
+
+                    try {
+                        if ((mainJson.has("content_types_id")) && mainJson.optString("content_types_id").trim() != null && !mainJson.optString("content_types_id").trim().isEmpty() && !mainJson.optString("content_types_id").trim().equals("null") && !mainJson.optString("content_types_id").trim().matches("")) {
+                            contentDetailsOutput.setContentTypesId(Integer.parseInt(mainJson.optString("content_types_id")));
+                        } else {
+                            contentDetailsOutput.setContentTypesId(0);
+
+                        }
+                    }catch (Exception e){
                         contentDetailsOutput.setContentTypesId(0);
-
                     }
-                    if ((mainJson.has("is_converted")) && mainJson.optString("is_converted").trim() != null && !mainJson.optString("is_converted").trim().isEmpty() && !mainJson.optString("is_converted").trim().equals("null") && !mainJson.optString("is_converted").trim().matches("")) {
-                        contentDetailsOutput.setIsConverted(Integer.parseInt(mainJson.optString("is_converted")));
-                    } else {
+                    try {
+                        if ((mainJson.has("is_converted")) && mainJson.optString("is_converted").trim() != null && !mainJson.optString("is_converted").trim().isEmpty() && !mainJson.optString("is_converted").trim().equals("null") && !mainJson.optString("is_converted").trim().matches("")) {
+                            contentDetailsOutput.setIsConverted(Integer.parseInt(mainJson.optString("is_converted")));
+                        } else {
+                            contentDetailsOutput.setIsConverted(0);
+
+                        }
+                    }catch (Exception e){
                         contentDetailsOutput.setIsConverted(0);
-
                     }
-                    if ((mainJson.has("is_advance")) && mainJson.optString("is_advance").trim() != null && !mainJson.optString("is_advance").trim().isEmpty() && !mainJson.optString("is_advance").trim().equals("null") && !mainJson.optString("is_advance").trim().matches("")) {
-                        contentDetailsOutput.setIsApv(Integer.parseInt(mainJson.optString("is_advance")));
-                    } else {
+
+                    try {
+                        if ((mainJson.has("is_advance")) && mainJson.optString("is_advance").trim() != null && !mainJson.optString("is_advance").trim().isEmpty() && !mainJson.optString("is_advance").trim().equals("null") && !mainJson.optString("is_advance").trim().matches("")) {
+                            contentDetailsOutput.setIsApv(Integer.parseInt(mainJson.optString("is_advance")));
+                        } else {
+                            contentDetailsOutput.setIsApv(0);
+
+                        }
+                    }catch (Exception e){
                         contentDetailsOutput.setIsApv(0);
-
                     }
+
 
                     if (mainJson.has("cast_detail") && mainJson.has("cast_detail") != false && mainJson.getString("cast_detail").trim() != null && !mainJson.getString("cast_detail").trim().isEmpty() && !mainJson.getString("cast_detail").trim().equals("null") && !mainJson.getString("cast_detail").trim().equals("false")) {
                         contentDetailsOutput.setCastStr(true);

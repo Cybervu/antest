@@ -122,6 +122,6 @@
     <dimen name="homescreen_title_text_size">13sp</dimen>
     <dimen name="list_singlecard_img_width">108dp</dimen>
     <dimen name="list_singlecard_img_height">154dp</dimen>
-
+    <dimen name="Login_drawing_padding">10dp</dimen>
 
 </resources>

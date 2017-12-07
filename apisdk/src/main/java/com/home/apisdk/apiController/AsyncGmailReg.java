@@ -109,11 +109,7 @@ public class AsyncGmailReg extends AsyncTask<GmailLoginInput, Void, Void> {
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 responseStr = EntityUtils.toString(response.getEntity());
-                Log.v("Nihar", responseStr);
-                Log.v("ANU","NAME==="+this.gmailLoginInput.getName());
-                Log.v("ANU","email==="+this.gmailLoginInput.getEmail());
-                Log.v("ANU","gplus_userid==="+this.gmailLoginInput.getGmail_userid());
-                Log.v("ANU","profile_image==="+this.gmailLoginInput.getProfile_image());
+
             } catch (org.apache.http.conn.ConnectTimeoutException e) {
                 status = 0;
                 message = "Error";
@@ -137,8 +133,15 @@ public class AsyncGmailReg extends AsyncTask<GmailLoginInput, Void, Void> {
                         gmailLoginOutput.setId("");
 
                     }
-                    if ((myJson.has("isSubscribed")) && myJson.optString("isSubscribed").trim() != null && !myJson.optString("isSubscribed").trim().isEmpty() && !myJson.optString("isSubscribed").trim().equals("null") && !myJson.optString("isSubscribed").trim().matches("")) {
-                        gmailLoginOutput.setIsSubscribed(myJson.optInt("isSubscribed"));
+                    try {
+                        if ((myJson.has("isSubscribed")) && myJson.optString("isSubscribed").trim() != null && !myJson.optString("isSubscribed").trim().isEmpty() && !myJson.optString("isSubscribed").trim().equals("null") && !myJson.optString("isSubscribed").trim().matches("")) {
+                            gmailLoginOutput.setIsSubscribed(myJson.optInt("isSubscribed"));
+                        }
+                        else {
+                            gmailLoginOutput.setIsSubscribed(0);
+                        }
+                    }catch (Exception e){
+                        gmailLoginOutput.setIsSubscribed(0);
                     }
 
                     if ((myJson.has("login_history_id")) && myJson.optString("login_history_id").trim() != null && !myJson.optString("login_history_id").trim().isEmpty() && !myJson.optString("login_history_id").trim().equals("null") && !myJson.optString("login_history_id").trim().matches("")) {

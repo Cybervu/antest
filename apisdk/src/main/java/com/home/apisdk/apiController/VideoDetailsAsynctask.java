@@ -251,7 +251,11 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                                     if (adJosnArray.getJSONObject(i).has("channel_id"))
                                         _video_details_output.setChannel_id(adJosnArray.getJSONObject(i).optString("channel_id").trim());
                                     if (adJosnArray.getJSONObject(i).has("ad_network_id"))
-                                        _video_details_output.setAdNetworkId(adJosnArray.getJSONObject(i).optInt("ad_network_id"));
+                                        try {
+                                            _video_details_output.setAdNetworkId(adJosnArray.getJSONObject(i).optInt("ad_network_id"));
+                                        }catch (Exception e){
+                                            _video_details_output.setAdNetworkId(0);
+                                        }
                                 }
 
                             }
@@ -260,9 +264,21 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
 
                     if (adJosnDetails.has("adsTime")) {
                         JSONObject adTimeJosnDetails = adJosnDetails.getJSONObject("adsTime");
-                        _video_details_output.setMidRoll(Integer.parseInt(adTimeJosnDetails.optString("mid")));
-                        _video_details_output.setPreRoll(Integer.parseInt(adTimeJosnDetails.optString("start")));
-                        _video_details_output.setPostRoll(Integer.parseInt(adTimeJosnDetails.optString("end")));
+                        try {
+                            _video_details_output.setMidRoll(Integer.parseInt(adTimeJosnDetails.optString("mid")));
+                        }catch (Exception e){
+                            _video_details_output.setMidRoll(0);
+                        }
+                        try {
+                            _video_details_output.setPreRoll(Integer.parseInt(adTimeJosnDetails.optString("start")));
+                        }catch (Exception e){
+                            _video_details_output.setPreRoll(0);
+                        }
+                        try {
+                            _video_details_output.setPostRoll(Integer.parseInt(adTimeJosnDetails.optString("end")));
+                        }catch (Exception e){
+                            _video_details_output.setPostRoll(0);
+                        }
 
                         if (_video_details_output.getMidRoll() == 1) {
                             _video_details_output.setAdDetails(adTimeJosnDetails.optString("midroll_values"));

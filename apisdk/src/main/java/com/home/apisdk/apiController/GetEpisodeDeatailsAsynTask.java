@@ -153,7 +153,11 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
                 Log.v("BKS","permalik episode"+ permalink);
                 item_count= Integer.parseInt(myJson.optString("item_count"));
                 movieUniqueId=myJson.optString("muvi_uniq_id");*/
-                item_count = Integer.parseInt(myJson.optString("item_count"));
+              try {
+                  item_count = Integer.parseInt(myJson.optString("item_count"));
+              }catch (Exception e){
+                  item_count = 0;
+              }
                 movieUniqueId = myJson.optString("muvi_uniq_id");
                 permalink = myJson.optString("permalink");
                 episode_details_output.setName(myJson.optString("name"));
@@ -163,21 +167,28 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
             if (status > 0) {
 
                 if (status == 200) {
-                    if ((myJson.has("is_ppv")) && myJson.getString("is_ppv").trim() != null && !myJson.getString("is_ppv").trim().isEmpty() && !myJson.getString("is_ppv").trim().equals("null") && !myJson.getString("is_ppv").trim().matches("")) {
+                    try {
+                        if ((myJson.has("is_ppv")) && myJson.getString("is_ppv").trim() != null && !myJson.getString("is_ppv").trim().isEmpty() && !myJson.getString("is_ppv").trim().equals("null") && !myJson.getString("is_ppv").trim().matches("")) {
 
-                        is_ppv = Integer.parseInt(myJson.getString("is_ppv"));
-                    } else {
+                            is_ppv = Integer.parseInt(myJson.getString("is_ppv"));
+                        } else {
+                            is_ppv = 0;
+                        }
+                    }catch (Exception e){
                         is_ppv = 0;
-
-
                     }
+
 
                     episode_details_output.setIs_ppv(is_ppv);
 
-                    if ((myJson.has("is_advance")) && myJson.getString("is_advance").trim() != null && !myJson.getString("is_advance").trim().isEmpty() && !myJson.getString("is_advance").trim().equals("null") && !myJson.getString("is_advance").trim().matches("")) {
+                    try {
+                        if ((myJson.has("is_advance")) && myJson.getString("is_advance").trim() != null && !myJson.getString("is_advance").trim().isEmpty() && !myJson.getString("is_advance").trim().equals("null") && !myJson.getString("is_advance").trim().matches("")) {
 
-                        isAPV = Integer.parseInt(myJson.getString("is_advance"));
-                    } else {
+                            isAPV = Integer.parseInt(myJson.getString("is_advance"));
+                        } else {
+                            isAPV = 0;
+                        }
+                    }catch (Exception e){
                         isAPV = 0;
                     }
 
@@ -291,34 +302,38 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
 
 
                             }
-                            if ((ppvJson.has("is_show")) && ppvJson.getString("is_show").trim() != null && !ppvJson.getString("is_show").trim().isEmpty() && !ppvJson.getString("is_show").trim().equals("null") && !ppvJson.getString("is_show").trim().matches("")) {
-                                //  planIdStr = ppvJson.getString("id");
-                                ppvModel.setIsShow(Integer.parseInt(ppvJson.getString("is_show")));
+                            try {
+                                if ((ppvJson.has("is_show")) && ppvJson.getString("is_show").trim() != null && !ppvJson.getString("is_show").trim().isEmpty() && !ppvJson.getString("is_show").trim().equals("null") && !ppvJson.getString("is_show").trim().matches("")) {
+                                    ppvModel.setIsShow(Integer.parseInt(ppvJson.getString("is_show")));
 
-                            } else {
-                                //  planIdStr = "0";
+                                } else {
+                                    ppvModel.setIsShow(0);
+                                }
+                            }catch (Exception e){
                                 ppvModel.setIsShow(0);
-
-
                             }
-                            if ((ppvJson.has("is_season")) && ppvJson.getString("is_season").trim() != null && !ppvJson.getString("is_season").trim().isEmpty() && !ppvJson.getString("is_season").trim().equals("null") && !ppvJson.getString("is_season").trim().matches("")) {
-                                //  planIdStr = ppvJson.getString("id");
-                                ppvModel.setIsSeason(Integer.parseInt(ppvJson.getString("is_season")));
 
-                            } else {
-                                //  planIdStr = "0";
-                                ppvModel.setIsSeason(0);
+                           try {
+                               if ((ppvJson.has("is_season")) && ppvJson.getString("is_season").trim() != null && !ppvJson.getString("is_season").trim().isEmpty() && !ppvJson.getString("is_season").trim().equals("null") && !ppvJson.getString("is_season").trim().matches("")) {
+                                   ppvModel.setIsSeason(Integer.parseInt(ppvJson.getString("is_season")));
 
+                               } else {
+                                   ppvModel.setIsSeason(0);
+                               }
+                           }catch (Exception e){
+                               ppvModel.setIsSeason(0);
+                           }
 
-                            }
-                            if ((ppvJson.has("is_episode")) && ppvJson.getString("is_episode").trim() != null && !ppvJson.getString("is_episode").trim().isEmpty() && !ppvJson.getString("is_episode").trim().equals("null") && !ppvJson.getString("is_episode").trim().matches("")) {
-                                //  planIdStr = ppvJson.getString("id");
-                                ppvModel.setIsEpisode(Integer.parseInt(ppvJson.getString("is_episode")));
+                           try {
+                               if ((ppvJson.has("is_episode")) && ppvJson.getString("is_episode").trim() != null && !ppvJson.getString("is_episode").trim().isEmpty() && !ppvJson.getString("is_episode").trim().equals("null") && !ppvJson.getString("is_episode").trim().matches("")) {
+                                   ppvModel.setIsEpisode(Integer.parseInt(ppvJson.getString("is_episode")));
 
-                            } else {
-                                //  planIdStr = "0";
-                                ppvModel.setIsEpisode(0);
-                            }
+                               } else {
+                                   ppvModel.setIsEpisode(0);
+                               }
+                           }catch (Exception e){
+                               ppvModel.setIsEpisode(0);
+                           }
 
                             if ((ppvJson.has("pricing_id")) && ppvJson.getString("pricing_id").trim() != null && !ppvJson.getString("pricing_id").trim().isEmpty() && !ppvJson.getString("pricing_id").trim().equals("null") && !ppvJson.getString("pricing_id").trim().matches("")) {
                                 //  planIdStr = ppvJson.getString("id");
@@ -570,10 +585,16 @@ public class GetEpisodeDeatailsAsynTask extends AsyncTask<Episode_Details_input,
 
                             }
 
-                            if ((jsonChildNode.has("content_types_id")) && jsonChildNode.optString("content_types_id").trim() != null && !jsonChildNode.optString("content_types_id").trim().isEmpty() && !jsonChildNode.optString("episode_title").trim().equals("null") && !jsonChildNode.optString("content_types_id").trim().matches("")) {
-                                // String episode_title=jsonChildNode.optString("episode_title");
-                                episode.setContent_types_id(jsonChildNode.optInt("content_types_id"));
+                            try {
+                                if ((jsonChildNode.has("content_types_id")) && jsonChildNode.optString("content_types_id").trim() != null && !jsonChildNode.optString("content_types_id").trim().isEmpty() && !jsonChildNode.optString("episode_title").trim().equals("null") && !jsonChildNode.optString("content_types_id").trim().matches("")) {
+                                    episode.setContent_types_id(jsonChildNode.optInt("content_types_id"));
+                                }else {
+                                    episode.setContent_types_id(0);
+                                }
+                            }catch (Exception e){
+                                episode.setContent_types_id(0);
                             }
+
                             if ((jsonChildNode.has("movie_stream_uniq_id")) && jsonChildNode.optString("movie_stream_uniq_id").trim() != null && !jsonChildNode.optString("movie_stream_uniq_id").trim().isEmpty() && !jsonChildNode.optString("movie_stream_uniq_id").trim().equals("null") && !jsonChildNode.optString("movie_stream_uniq_id").trim().matches("")) {
                                 // String episode_title=jsonChildNode.optString("episode_title");
                                 episode.setMovie_stream_uniq_id(jsonChildNode.optString("movie_stream_uniq_id"));

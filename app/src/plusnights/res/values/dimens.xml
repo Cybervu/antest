@@ -331,4 +331,5 @@
     <dimen name="list_singlecard_img_height">154dp</dimen>
     <!--new  dimen optimization for menu-->
     <dimen name="slider_menu_width">300dp</dimen>
+    <dimen name="trailerpadding">6dp</dimen>
 </resources>

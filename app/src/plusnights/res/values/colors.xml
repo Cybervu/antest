@@ -73,5 +73,5 @@
     <color name="leftMenuBgColor">#87005F</color>
     <color name="aboutustestcolor">#fff</color>
     <color name="videotextColor">#666</color>
-
+    <color name="dialogepopupbackgroundcolor">#1e292d</color>
 </resources>
