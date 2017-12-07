@@ -197,7 +197,7 @@ public class GetContentDetailsAsynTask extends AsyncTask<ContentDetailsInput, Vo
                             String key = iter.next();
                             try {
                                 Object value = custom_meta_data.get(key);
-                                if (key.equalsIgnoreCase("duration") || key.equalsIgnoreCase("repetition") || key.equalsIgnoreCase("difficulty_level")){
+                                if (key.equalsIgnoreCase("duration") || key.equalsIgnoreCase("repetition") || key.equalsIgnoreCase("difficulty_level") ){
 
                                 }else{
                                     String details = value.toString();

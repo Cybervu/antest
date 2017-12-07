@@ -1553,7 +1553,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 progressView.setVisibility(View.VISIBLE);
                 center_play_pause.setVisibility(View.GONE);
                 latest_center_play_pause.setVisibility(View.GONE);
-                try {
+               /* try {
 
                    // mHandler.removeCallbacks(updateTimeTask);
 
@@ -1565,7 +1565,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
                     ////nihar
                 } catch (Exception e) {
-                }
+                }*/
             }
         });
 
@@ -1955,7 +1955,10 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
                         if (entry.getValue() != null && !entry.getValue().matches("")) {
 
-                            DynamicLayout(benefitsLinearLayout, entry.getKey().toUpperCase(), entry.getValue());
+                            if(!entry.getKey().equalsIgnoreCase("_____programtype")) {
+
+                                DynamicLayout(benefitsLinearLayout, entry.getKey().toUpperCase(), entry.getValue());
+                            }
                             if (entry.getKey().equalsIgnoreCase("_____programtype") ){
                                 programType = entry.getValue();
 
@@ -2836,11 +2839,13 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                         total_time.setText("00:00:00");
                         previous_matching_time = 0;
                         current_matching_time = 0;
+
                         video_completed = true;
 
 
 //                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                         bannerImageRelativeLayout.setVisibility(View.VISIBLE);
+
                         player_layout.setVisibility(View.GONE);
 
 
@@ -3191,7 +3196,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
 
         TextView detail_text = new TextView(this);
-        detail_text.setPadding(0, 0, 0, 0);
+        detail_text.setPadding(0, topmargin, 0, topmargin);
         detail_text.setTextColor(getResources().getColor(R.color.videotextColor));
         //  int detailTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.story_text_size) , getResources().getDisplayMetrics());
 
@@ -3204,9 +3209,10 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         detail_text.setText(Details);
 
         LinearLayout.LayoutParams detailsParam = new LinearLayout.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT);
+        detailsParam.setMargins(0, 0, 0,topmargin);
+
         detail_text.setLayoutParams(detailsParam);
 
-        detailsParam.setMargins(0, 0, 0, 0);
 
 
         ///main layout view set
