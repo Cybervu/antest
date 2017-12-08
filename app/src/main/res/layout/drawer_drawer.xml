@@ -6,7 +6,7 @@
     android:alpha="255"
     android:background="@drawable/actionbar_background"
     android:choiceMode="singleChoice"
-    android:divider="#000"
+    android:divider="#ffffff"
     android:dividerHeight="0.2dp"
     android:groupIndicator="@null"
     android:scrollbars="none">
