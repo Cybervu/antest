@@ -42,19 +42,18 @@ import static com.home.vod.preferences.LanguagePreference.TERMS;
 public class RegisterUIHandler {
     private Activity context;
     private TextView termsTextView,termsTextView1;
-    private EditText editName;
     private LinearLayout btnLogin;
-    public  String selected_Language_Id="", selected_Country_Id="",regNameStr,regPhone="";
-    private Button loginButton;
+    private EditText editName;
+    public  String selected_Language_Id="", selected_Country_Id="",regNameStr,regPhone="",last_name="";
     private LanguagePreference languagePreference;
 
     public RegisterUIHandler(Activity context){
         this.context=context;
         termsTextView = (TextView) context.findViewById(R.id.termsTextView);
         termsTextView1 = (TextView) context.findViewById(R.id.termsTextView1);
-        editName = (EditText) context.findViewById(R.id.editNameStr);
         btnLogin = (LinearLayout) context.findViewById(R.id.btnLogin);
         btnLogin.setVisibility(View.GONE);
+        editName = (EditText) context.findViewById(R.id.editNameStr);
         languagePreference = LanguagePreference.getLanguagePreference(context);
     }
     public void setCountryList(PreferenceManager preferenceManager){
@@ -70,23 +69,20 @@ public class RegisterUIHandler {
         termsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.newthoughtchannel.com/page/terms-privacy-policy"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.plusnights.co.uk/privacy-policy"));
                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 context.startActivity(browserIntent);
             }
         });
    }
-
     public void getRegisterName(){
         regNameStr = editName.getText().toString().trim();
         if (!regNameStr.equals("")) {
-            ((RegisterActivity) context).registerButtonClicked(regNameStr,regPhone);
+            ((RegisterActivity) context).registerButtonClicked(regNameStr,last_name,regPhone);
         }else {
             Toast.makeText(context, languagePreference.getTextofLanguage(ENTER_REGISTER_FIELDS_DATA, DEFAULT_ENTER_REGISTER_FIELDS_DATA), Toast.LENGTH_LONG).show();
         }
     }
-
-
     public void callFblogin(final CallbackManager callbackManager, Button loginButton, LanguagePreference languagePreference){
 
     }
@@ -94,5 +90,7 @@ public class RegisterUIHandler {
     public void callSignin(LanguagePreference languagePreference){
 
     }
+
+
 
 }
