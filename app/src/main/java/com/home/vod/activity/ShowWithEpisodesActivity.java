@@ -4071,6 +4071,10 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
                 }
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
+                if (preferenceManager.getUseridFromPref()!=null){
+                    Intent intent = new Intent(ShowWithEpisodesActivity.this, ExpandedControlsActivity.class);
+                    startActivity(intent);
+                }
             }
 
             private void onApplicationDisconnected() {

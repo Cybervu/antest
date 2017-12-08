@@ -1928,6 +1928,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
                 }
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
+
+                if (preferenceManager.getUseridFromPref()!=null){
+                    Intent intent = new Intent(MovieDetailsActivity.this, ExpandedControlsActivity.class);
+                    startActivity(intent);
+                }
             }
 
             private void onApplicationDisconnected() {
@@ -2092,10 +2097,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
             @Override
             public void onStatusUpdated() {
-
+/*
                 Intent intent = new Intent(MovieDetailsActivity.this, ExpandedControlsActivity.class);
                 startActivity(intent);
-                remoteMediaClient.removeListener(this);
+                remoteMediaClient.removeListener(this);*/
             }
 
             @Override

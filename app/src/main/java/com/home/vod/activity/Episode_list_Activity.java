@@ -3520,6 +3520,10 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
                 }
                 updatePlayButton(mPlaybackState);
                 invalidateOptionsMenu();
+                if (preferenceManager.getUseridFromPref()!=null){
+                    Intent intent = new Intent(Episode_list_Activity.this, ExpandedControlsActivity.class);
+                    startActivity(intent);
+                }
             }
 
             private void onApplicationDisconnected() {
