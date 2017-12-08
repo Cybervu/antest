@@ -473,7 +473,7 @@ public class ProfileActivity extends AppCompatActivity implements
         if (code > 0) {
             if (code == 200) {
                 String confirmPasswordStr = editNewPassword.getText().toString().trim();
-                name_of_user.setText(profileHandler.first_nameStr+ " "+profileHandler.last_nameStr);
+                name_of_user.setText(profileHandler.first_nameStr);
                 if (!confirmPasswordStr.trim().equalsIgnoreCase("") &&
                         !confirmPasswordStr.isEmpty() &&
                         !confirmPasswordStr.equalsIgnoreCase("null") &&
@@ -790,7 +790,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
 
         profileHandler.setNameTxt(get_userProfile_output.getDisplay_name(),get_userProfile_output.getCustom_last_name(),get_userProfile_output.getPhone());
-        name_of_user.setText(get_userProfile_output.getDisplay_name()+ " " +get_userProfile_output.getCustom_last_name());
+        name_of_user.setText(get_userProfile_output.getDisplay_name());
         emailAddressEditText.setText(get_userProfile_output.getEmail());
         if (get_userProfile_output.getProfile_image().matches(NO_DATA)) {
             bannerImageView.setAlpha(0.8f);

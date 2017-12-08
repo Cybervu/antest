@@ -31,7 +31,7 @@ public class ProfileHandler {
     private Activity context;
     EditText editProfileNameEditText_first,editProfileNameEditText_last;
     LanguagePreference languagePreference;
-    String first_nameStr,last_nameStr;
+    public String first_nameStr,last_nameStr;
     public String final_name = "";
     public String phoneStr="";
 

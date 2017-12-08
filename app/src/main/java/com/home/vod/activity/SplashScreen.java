@@ -133,10 +133,6 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
         }else {
             imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
         }
-        else
-        {
-            imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
-        }
 
       imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
 
