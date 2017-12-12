@@ -189,6 +189,10 @@
     <dimen name="fav_card_elevation">10dp</dimen>
     <dimen name="fav_img_width">150dp</dimen>
     <dimen name="fav_img_height">214dp</dimen>
+    <dimen name="fitness_margin_left">20dp</dimen>
+    <dimen name="fitness_margin_right">40dp</dimen>
+    <dimen name="fitness_editText_height">40dp</dimen>
+    <dimen name="fitness_editText_width">500dp</dimen>
     <dimen name="fav_title_textsize">20dp</dimen>
     <dimen name="fav_des_textsize">15dp</dimen>
     <dimen name="close_album_img_width">20dp</dimen>

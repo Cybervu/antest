@@ -312,11 +312,13 @@
             android:screenOrientation="portrait" />
         android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activity.Notification" />
-        <activity android:name=".activity.YogaPlayerActivity"
+        <activity
+            android:name=".activity.YogaPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.FitnessActivity"></activity>
     </application>
 
 </manifest>

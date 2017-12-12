@@ -28,7 +28,7 @@
     <color name="sign_up_text_color">#ff5a75</color>
     <color name="edit_color">#dadada</color>
     <color name="duration_color">#a6a6a6</color>
-
+    <color name="sideIndex_color">#4cbfb8</color>
     <color name="hint_color">#dddddd</color>
     <color name="edit_color2">#00FFFFFF</color>
     <color name="alreadyMemberTextColor">#ffffff</color>

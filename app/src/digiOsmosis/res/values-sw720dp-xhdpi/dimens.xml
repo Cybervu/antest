@@ -193,7 +193,10 @@
     <dimen name="layout2_padding_top">80dp</dimen>
     <dimen name="sidemenu_padding_bottom">10dp</dimen>
 
-
+    <dimen name="fitness_margin_left">25dp</dimen>
+    <dimen name="fitness_margin_right">40dp</dimen>
+    <dimen name="fitness_editText_height">40dp</dimen>
+    <dimen name="fitness_editText_width">650dp</dimen>
     <dimen name="fav_img_width">150dp</dimen>
     <dimen name="fav_img_height">214dp</dimen>
     <dimen name="close_album_img_width">20dp</dimen>

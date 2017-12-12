@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 
 import com.home.vod.activity.ProgrammeActivity;
+import com.home.vod.fragment.FitnessFragment;
 import com.home.vod.fragment.VideosListFragment;
 import com.home.vod.fragment.YogaFragment;
 
@@ -25,7 +26,7 @@ public class Content_List_Handler {
             return new YogaFragment();
 
         }else {
-            return new VideosListFragment();
+            return new FitnessFragment();
         }
     }
 

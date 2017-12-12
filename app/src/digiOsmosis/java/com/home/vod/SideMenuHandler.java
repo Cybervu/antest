@@ -99,7 +99,6 @@ public class SideMenuHandler {
         nameText = (TextView) context.findViewById(R.id.edit_name);
         profile_image = (ImageView) context.findViewById(R.id.logo);
         bannerImageView = (ImageView) context.findViewById(R.id.bannerImageView);
-       Log.v("BKS","profile=="+preferenceManager.getDispNameFromPref());
         nameText.setText(preferenceManager.getDispNameFromPref());
         layout1 = (LinearLayout) context.findViewById(R.id.layout_1);
         layout2 = (LinearLayout) context.findViewById(R.id.layout_2);

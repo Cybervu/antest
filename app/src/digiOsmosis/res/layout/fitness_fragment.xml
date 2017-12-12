@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBackgroundColor">
+
+
+    <RelativeLayout
+        android:id="@+id/categoryTitleRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="@dimen/marginleft10dp"
+        android:layout_marginRight="@dimen/marginleft10dp"
+        android:layout_alignParentStart="true"
+        >
+
+
+        <TextView
+            android:layout_width="@dimen/sideTitle_line_width"
+            android:layout_height="@dimen/sideTitle_line_height"
+            android:id="@+id/colortitle"
+            android:background="@color/colorPrimary"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/marginleft10dp"
+            />
+
+
+        <TextView
+            android:id="@+id/sectionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sample title"
+            android:textAllCaps="true"
+            android:textColor="@color/videotextColor"
+            android:textSize="@dimen/itemtitle_text_size"
+            android:layout_marginLeft="@dimen/marginRight20dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText_layout"
+        android:layout_below="@id/categoryTitleRelativeLayout"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp">
+
+        <EditText
+            android:layout_width="@dimen/fitness_editText_width"
+            android:layout_height="@dimen/fitness_editText_height"
+            android:id="@+id/search_edittext"
+            android:layout_marginRight="@dimen/fitness_margin_right"
+            android:layout_marginLeft="@dimen/fitness_margin_left"
+            android:visibility="invisible"
+            android:paddingLeft="2dp"
+            android:textColorHint="@color/hint_color"/>
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/clear_text"
+            android:src="@drawable/close_cancel"
+            android:layout_alignRight="@id/search_edittext"
+            android:visibility="invisible"
+            android:layout_marginTop="5dp"
+            />
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:id="@+id/search_icon"
+                android:src="@drawable/search_fitness"
+                android:layout_marginRight="25dp"
+                android:visibility="invisible"
+                android:layout_marginTop="5dp"
+
+                />
+
+        </RelativeLayout>
+
+
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText_layout"
+        android:layout_marginBottom="@dimen/marginleft10dp"
+        android:layout_marginLeft="@dimen/marginleft10dp"
+        android:layout_marginRight="@dimen/marginleft10dp"
+        android:layout_marginTop="@dimen/marginleft10dp"
+        android:horizontalSpacing="@dimen/pre_order_button_margin"
+        android:verticalSpacing="@dimen/pre_order_button_margin">
+
+
+        <ListView
+            android:id="@+id/fitness_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingRight="5dp" >
+        </ListView>
+
+
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:fillViewport="true"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/side_index"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:background="@color/transparent"
+                android:orientation="vertical" >
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/progress_rawable"
+            android:indeterminateDuration="1000" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/noInternet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/appBackgroundColor"
+        android:padding="@dimen/main_padding"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/noInternetTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/noData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/appBackgroundColor"
+        android:padding="@dimen/main_padding"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/noDataTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textColor="@color/noInternetColor"
+            android:textSize="@dimen/testview_text_size"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/filterBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:visibility="gone"
+
+        >
+
+        <ImageView
+            android:id="@+id/arrowIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="@dimen/arrowIv_margin"
+            android:background="@drawable/filter_arrow" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/demoListView"
+            android:layout_width="@dimen/recylerview_width"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/arrowIv"
+            android:layout_marginLeft="@dimen/profile_image_view_margin_end"
+            android:layout_marginRight="@dimen/payment_textview_showname_margin"
+            android:background="@drawable/filterbg"
+            android:gravity="center"
+            android:paddingBottom="@dimen/demoListView_padding" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
