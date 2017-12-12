@@ -130,7 +130,7 @@ android {
             versionCode 1
             versionName '1.0'
             buildConfigField "String", "AUTH_TOKEN", "\"8c6e6162f22f3f43a6d88efc1a64cd18\""
-            // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+//             buildConfigField "String", "AUTH_TOKEN", "\"f9a6721797794260b43d7b1c711b0eac\""
         }
         digiOsmosis_staging_ {
             dimension 'environment'

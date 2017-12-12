@@ -3492,7 +3492,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
         Log.v("Nihar", "" + Header + Details);
         //masterlayout
         LinearLayout linearLayout = new LinearLayout(this);
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
         /////View
         View view = new View(this);
         int paddingleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
@@ -3514,7 +3514,7 @@ public class YogaPlayerActivity extends AppCompatActivity implements PlaylistPro
 
         textView.setTextSize(20);
 
-        FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), textView);
+        FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.medium_fonts), textView);
         LinearLayout.LayoutParams TextViewParams = new LinearLayout.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT);
         int textview = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
         int topmargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());

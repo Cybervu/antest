@@ -86,23 +86,26 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
     @Override
     public void onBindViewHolder(final ItemRowHolder itemRowHolder, final int i) {
 
-        LogUtil.showLog("MUVI","position of the item in adapter =============="+i);
+        LogUtil.showLog("SUBHASS","position of the item in adapter =============="+i);
 
        /* if(i>=counter)
         {
             counter = i;*/
+
+        if (i % 2 == 0) {
+            itemRowHolder.colortitle.setBackgroundColor(mContext.getResources().getColor(R.color.button_background));
+        }else{
+            itemRowHolder.colortitle.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
+
+        }
         final String sectionName = dataList.get(i).getHeaderTitle();
         final String sectionId = dataList.get(i).getHeaderPermalink();
 
         singleSectionItems = dataList.get(i).getAllItemsInSection();
         pemalink=dataList.get(i).getHeaderPermalink();
-        /*for (int j = 0; j > bannerUrls.size(); j++) {
-            //image = bannerUrls.get(j);
-        }*/
+
         FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.fonts),itemRowHolder.itemTitle);
 
-       /* Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
-        itemRowHolder.itemTitle.setTypeface(castDescriptionTypeface);*/
         itemRowHolder.itemTitle.setText(sectionName);
         SectionListDataAdapter itemListDataAdapter = null;
 //            if (MainActivity.vertical == 1) {
@@ -110,16 +113,16 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
         if (Util.image_orentiation == 1) {
             float density = mContext.getResources().getDisplayMetrics().density;
             if (density >= 3.5 && density <= 4.0) {
-                itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);
+                itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card,i);
             }else  if (density <= 1.5) {
-                itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card_small);
+                itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card_small,i);
             }else{
-                itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card_nexus);
+                itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card_nexus,i);
             }
             //  itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_single_card);
 
         }else{
-            itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.home_280_card);
+            itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.home_280_card,i);
 
         }
 
@@ -251,6 +254,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
     public class ItemRowHolder extends RecyclerView.ViewHolder implements  BaseSliderView.OnSliderClickListener,ViewPagerEx.OnPageChangeListener{
 
         protected TextView itemTitle;
+        protected TextView colortitle;
 
         protected RecyclerView recycler_view_list;
 
@@ -263,6 +267,7 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
             super(view);
 
             this.itemTitle = (TextView) view.findViewById(R.id.itemTitle);
+            this.colortitle = (TextView) view.findViewById(R.id.colortitle);
             this.recycler_view_list = (RecyclerView) view.findViewById(R.id.featureContent);
             this.btnMore= (Button) view.findViewById(R.id.btnMore);
             this.btnMoreLayout= (RelativeLayout) view.findViewById(R.id.btnMoreLayout);

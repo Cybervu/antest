@@ -81,10 +81,9 @@
     <dimen name="contactformtitle_text_size">17sp</dimen>
     <dimen name="editbox_text_size">18sp</dimen>
     <dimen name="home280_layout_width">157dp</dimen>
-    <dimen name="list_singlecard_img_width">170dp</dimen>
-    <dimen name="list_singlecard_img_height">243dp</dimen>
-    <dimen name="videogrid_width">220dp</dimen>
-    <dimen name="videogrid_height">314dp</dimen>
+    <dimen name="list_singlecard_img_width">152dp</dimen>
+    <dimen name="list_singlecard_img_height">217dp</dimen>
+
     <dimen name="videogrid_land_width">182dp</dimen>
     <dimen name="videogrid_land_height">101dp</dimen>
     <dimen name="plainrowlayout_height">100dp</dimen>
@@ -96,7 +95,7 @@
     <dimen name="video280_width">185dp</dimen>
     <dimen name="video280_height">100dp</dimen>
     <dimen name="listitemlayout_height">350dp</dimen>
-    <dimen name="itemtitle_text_size">20sp</dimen>
+    <dimen name="itemtitle_text_size">21sp</dimen>
     <dimen name="left_padding">10dp</dimen>
     <dimen name="right_padding">10dp</dimen>
     <dimen name="login_padding">10dp</dimen>
@@ -142,7 +141,8 @@
     <dimen name="card_title">23sp</dimen>
     <dimen name="human_image_height">100dp</dimen>
     <dimen name="human_image_width">100dp</dimen>
-
+    <dimen name="padding17dp">37dp</dimen>
+    <dimen name="padding25dp">25dp</dimen>
     <!--//**********program activity*************//-->
     <dimen name="story_margin_left">10dp</dimen>
     <dimen name="story_title_text_size">20sp</dimen>
@@ -176,8 +176,8 @@
     <dimen name="sideTitle_line_height">17dp</dimen>
     <dimen name="sideTitle_line_width">3dp</dimen>
     <dimen name="sideTitle_line_marginleft">15dp</dimen>
-    <dimen name="season_card_width">300dp</dimen>
-    <dimen name="season_card_height">300dp</dimen>
+    <dimen name="season_card_width">180dp</dimen>
+    <dimen name="season_card_height">288dp</dimen>
     <dimen name="fav_card_elevation">10dp</dimen>
     <dimen name="fav_title_textsize">25dp</dimen>
     <dimen name="fav_des_textsize">15dp</dimen>
@@ -210,5 +210,14 @@
 
 
     <dimen name="detailsTextView">250dp</dimen>
-
+    <dimen name="programdetails_start_button_width">120dp</dimen>
+    <dimen name="week_days">200dp</dimen>
+    <dimen name="week_days_title">70dp</dimen>
+    <dimen name="videogrid_width">280dp</dimen>
+    <dimen name="videogrid_height">400dp</dimen>
+    <dimen name="row_gap">40dp</dimen>
+    <dimen name="week_left">40dp</dimen>
+    <dimen name="week_top">30dp</dimen>
+    <dimen name="program_left">30dp</dimen>
+    <dimen name="program_banner_height">400dp</dimen>
 </resources>

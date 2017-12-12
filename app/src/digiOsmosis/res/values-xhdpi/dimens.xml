@@ -67,7 +67,7 @@
     <dimen name="cast_width_icon">80dp</dimen>
     <dimen name="cast_height_icon">100dp</dimen>
     <dimen name="editbox_text_size">16sp</dimen>
-    <dimen name="itemtitle_text_size">18sp</dimen>
+    <dimen name="itemtitle_text_size">20sp</dimen>
     <dimen name="itemtitle1_text_size">16sp</dimen>
     <dimen name="homelogo_height">85dp</dimen>
     <dimen name="homelogo_width">170dp</dimen>
@@ -135,12 +135,19 @@
     <dimen name="layout2_padding_top">30dp</dimen>
     <dimen name="loginImageViewMarging_top1">30dp</dimen>
     <dimen name="sidemenu_padding_bottom">80dp</dimen>
-
+    <dimen name="row_gap">15dp</dimen>
     <dimen name="season_margin_left">10dp</dimen>
-
+    <dimen name="program_banner_height">400dp</dimen>
     <dimen name="sideTitle_line_height">17dp</dimen>
     <dimen name="sideTitle_line_width">3dp</dimen>
     <dimen name="detailsTextView">150dp</dimen>
+    <dimen name="week_days">100dp</dimen>
+    <dimen name="week_days_title">55dp</dimen>
+    <dimen name="padding17dp">0dp</dimen>
+    <dimen name="padding25dp">25dp</dimen>
+    <dimen name="week_left">10dp</dimen>
+    <dimen name="week_top">10dp</dimen>
+    <dimen name="program_left">30dp</dimen>
 
     <dimen name="fitness_margin_left">25dp</dimen>
     <dimen name="fitness_margin_right">40dp</dimen>

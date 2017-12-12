@@ -130,7 +130,7 @@
  <color name="pageTitleTextColor">#666666</color>
  <color name="castNameTextColor">#2acb99</color>
  <color name="castDescTextColor">#A9A9A9</color>
- <color name="seasonTextColor">#666666</color>
+ <color name="seasonTextColor">#ffffff</color>
  <color name="listTitleContentColor">#fff</color>
  <color name="languagePopup">#fff</color>
  <color name="languagePopupFade">#fff</color>

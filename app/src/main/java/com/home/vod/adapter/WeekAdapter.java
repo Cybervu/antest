@@ -11,23 +11,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.home.vod.R;
-import com.home.vod.model.SeasonModel;
+import com.home.vod.model.WeekModel;
 import com.home.vod.preferences.LanguagePreference;
 
 import java.util.ArrayList;
 
-import static com.home.vod.preferences.LanguagePreference.DAYS_TITLE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_DAYS_TITLE;
-
-public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHolder> {
+public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.MyViewHolder> {
 
     private Context mContext;
-    private ArrayList<SeasonModel> data = new ArrayList<SeasonModel>();
+    private ArrayList<WeekModel> data = new ArrayList<WeekModel>();
     private int layoutResourceId;
     private  OnItemClickListener listener;
     LanguagePreference languagePreference;
@@ -40,15 +38,14 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
         public MyViewHolder(View view) {
             super(view);
 
-            title = (TextView) view.findViewById(R.id.seasonTitle);
-//            thumbnail = (ImageView) view.findViewById(R.id.seasonImageView);
-            card_view = (RelativeLayout) view.findViewById(R.id.cardLayout);
+            title = (TextView) view.findViewById(R.id.weekTitle);
+            card_view = (RelativeLayout) view.findViewById(R.id.circularLayout);
 
         }
     }
 
-    public SeasonAdapter(Context context, int layoutResourceId,
-                         ArrayList<SeasonModel> data) {
+    public WeekAdapter(Context context, int layoutResourceId,
+                       ArrayList<WeekModel> data) {
         this.layoutResourceId = layoutResourceId;
         this.mContext = context;
         this.data = data;
@@ -57,14 +54,14 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
 
 
     public interface OnItemClickListener {
-        void onItemClick(SeasonModel item, int pos);
+        void onItemClick(WeekModel item, int pos);
 
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.season_card_row, parent, false);
+                .inflate(R.layout.week_card_row, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -72,18 +69,39 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        SeasonModel album = data.get(position);
-        holder.title.setText(album.getSeasonName());
+        WeekModel album = data.get(position);
+        holder.title.setText(album.getWeekName());
+     //   holder.card_view.setBackground(mContext.getResources().getDrawable(R.drawable.week_circle));
         languagePreference = LanguagePreference.getLanguagePreference(mContext);
 //        holder.thumbnail.setImageResource(album.getSeasonImage());
 
-        Log.v("SUBHASS","pos ==== "+ position);
 
-        if (position % 2 == 0) {
+        if (position  == 0) {
 //            holder.card_view.setCardBackgroundColor(mContext.getResources().getDrawable(R.drawable.button_radious));
-            holder.card_view.setBackgroundColor(mContext.getResources().getColor(R.color.button_background));
-        }else{
-            holder.card_view.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
+            holder.card_view.setBackground(mContext.getResources().getDrawable(R.drawable.week_blue_circle));
+        }else {
+//            holder.card_view.setBackground(mContext.getResources().getDrawable(R.drawable.week_circle));
+
+            try {
+
+                int lineNum = position / 3;
+                if(lineNum == 0){
+                    holder.card_view.setBackground(mContext.getResources().getDrawable(R.drawable.week_blue_circle));
+
+                }else
+                {
+                    if(lineNum % 2 == 0){
+
+                        holder.card_view.setBackground(mContext.getResources().getDrawable(R.drawable.week_blue_circle));
+                    }
+                    else{
+                        holder.card_view.setBackground(mContext.getResources().getDrawable(R.drawable.week_circle));
+                    }
+                }
+            }catch (Exception e){
+
+            }
+
         }
 
         // For selection

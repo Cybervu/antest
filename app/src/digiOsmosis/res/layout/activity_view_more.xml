@@ -15,8 +15,47 @@
         layout="@layout/logo_image"
         />
 
-    <RelativeLayout
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/toolbar"
         android:id="@+id/categoryTitleRelativeLayout"
+        android:layout_marginLeft="@dimen/pre_order_button_margin"
+        android:layout_marginRight="@dimen/pre_order_button_margin"
+
+        android:layout_alignLeft="@+id/imagesGridView"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="@dimen/marginRight20dp"
+        android:padding="@dimen/padding17dp"
+        >
+
+        <TextView
+            android:layout_width="@dimen/sideTitle_line_height"
+            android:layout_height="@dimen/sideTitle_line_width"
+            android:id="@+id/colortitle"
+            android:background="@color/colorPrimary"
+            android:layout_marginLeft="@dimen/marginRight20dp"
+            />
+
+
+        <TextView
+            android:id="@+id/sectionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sample title"
+
+            android:textAllCaps="true"
+            android:textColor="@color/videotextColor"
+            android:textSize="@dimen/itemtitle_text_size"
+            android:layout_marginTop="@dimen/marginBottom5dp"
+            android:layout_marginLeft="@dimen/marginRight20dp"
+            />
+
+    </LinearLayout>
+
+   <!-- <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -53,7 +92,7 @@
 
     </RelativeLayout>
 
-
+-->
 
 
     <GridView
@@ -61,13 +100,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/categoryTitleRelativeLayout"
-        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/pre_order_button_margin"
         android:layout_marginLeft="@dimen/pre_order_button_margin"
         android:layout_marginRight="@dimen/pre_order_button_margin"
         android:layout_marginTop="@dimen/pre_order_button_margin"
-        android:horizontalSpacing="@dimen/pre_order_button_margin"
-        android:verticalSpacing="@dimen/pre_order_button_margin"
+
+
 
         />
 

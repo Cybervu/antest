@@ -273,6 +273,9 @@
             android:name=".activity.SeasonActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.WeekActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.ProgrammeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""

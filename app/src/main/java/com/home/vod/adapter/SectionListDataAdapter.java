@@ -67,12 +67,15 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
     private ArrayList<SingleItemModel> itemsList;
     private Context mContext;
+    private int parentPosition;
 
-    public SectionListDataAdapter(Context context, ArrayList<SingleItemModel> itemsList, int layoutname) {
+    public SectionListDataAdapter(Context context, ArrayList<SingleItemModel> itemsList, int layoutname,int parentPosition) {
         this.itemsList = itemsList;
         this.mContext = context;
         this.layoutname = layoutname;
         preferenceManager =  PreferenceManager.getPreferenceManager(context);
+        this.parentPosition = parentPosition;
+
 
     }
    /* @Override
@@ -103,7 +106,14 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
       /*  Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
         holder.itemTitle.setTypeface(castDescriptionTypeface);*/
 
+        if (parentPosition % 2 == 0) {
+            holder.itemTitle.setBackgroundColor(mContext.getResources().getColor(R.color.button_background));
+        }else{
+            holder.itemTitle.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
+
+        }
         holder.itemTitle.setText(singleItem.getTitle());
+
         holder.position = i;
         // holder.temPV.setTag(singleItem.get(i)); //For passing the list item index
 

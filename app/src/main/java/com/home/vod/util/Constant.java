@@ -13,6 +13,7 @@ public class Constant {
     public static final String IS_CAST_CONNECTED_INTENT_KEY = "IS_CAST_CONNECTED_INTENT_KEY";
     public static final String PERMALINK_INTENT_ARRAY = "PERMALINK_INTENT_ARRAY";
     public static final String PERMALINK_INTENT_KEY = "PERMALINK_INTENT_KEY";
+    public static final String DAYS_DATA = "DAYS_DATA";
     public static final String GENRE_INTENT_KEY = "GENRE";
     public static final String STORY_INTENT_KEY = "STORY";
     public static final String CENSOR_RATING_INTENT_KEY = "CENSORRATING";

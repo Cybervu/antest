@@ -2,7 +2,6 @@ package com.home.vod.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -44,8 +43,10 @@ import com.home.vod.MyDownloadIntentHandler;
 import com.home.vod.R;
 import com.home.vod.SearchIntentHandler;
 import com.home.vod.adapter.SeasonAdapter;
+import com.home.vod.adapter.WeekAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.SeasonModel;
+import com.home.vod.model.WeekModel;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
@@ -83,14 +84,14 @@ import static com.home.vod.util.Constant.authTokenStr;
  * @author Abhishek
  */
 
-public class SeasonActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, GetIpAddressAsynTask.IpAddressListener {
+public class WeekActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, GetIpAddressAsynTask.IpAddressListener {
 
     int prevPos = 0;
     RecyclerView seasonGridView;
     TextView itemTitle;
     RelativeLayout image_logo;
-    ArrayList<SeasonModel> season;
-    SeasonAdapter adapter;
+    ArrayList<WeekModel> week;
+    WeekAdapter adapter;
     GetContentDetailsAsynTask asynLoadSeason;
     ProgressBarHandler pDialog;
     int corePoolSize = 60;
@@ -101,7 +102,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
     String useridStr;
     String ipAddres = "";
     String email, id;
-    ArrayList<SeasonModel> itemData;
+    ArrayList<WeekModel> itemData;
     String permalinkStr;
     Toolbar mActionBarToolbar;
     PreferenceManager preferenceManager;
@@ -133,39 +134,9 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
     private int mDuration;
     private TextView mAuthorView;
     private ImageButton mPlayCircle;
-   public int totalDays;
 
-    /*int[] imageArr = {R.drawable.man_doing_pushups,
-            R.drawable.man_flexing_knees_with_arms_up,
-            R.drawable.man_flexing_waist,
-            R.drawable.man_flexing_waist_down,
-            R.drawable.man_flexing_waist_to_feet,
-            R.drawable.man_laying_on_his_back_with_his_knees_on_his_chest,
-            R.drawable.man_on_floor_flexing_backwards,
-            R.drawable.man_on_his_knees,
-            R.drawable.man_on_his_knees_stretching_arms_on_floor,
-            R.drawable.man_on_his_knees_stretching_back,
-            R.drawable.man_on_his_knees_stretching_side_view,
-            R.drawable.man_on_his_knees_with_head_on_floor,
-            R.drawable.man_on_squat_position_turning_waist,
-            R.drawable.man_on_the_floor_flexing_body,
-            R.drawable.man_sitting_on_the_floor_stretching_leg_and_waist,
-            R.drawable.man_squatting,
-            R.drawable.man_standing_on_his_right_leg_stretching_left_leg_and_right_arm,
-            R.drawable.man_stretching_back,
-            R.drawable.man_stretching_both_arms_and_legs,
-            R.drawable.man_stretching_left_leg_and_bending_waist,
-            R.drawable.man_stretching_leg_and_arms,
-            R.drawable.man_stretching_legs_and_flexing_body,
-            R.drawable.man_stretching_legs_and_waist,
-            R.drawable.man_supporting_himself_on_one_arm_and_stretching_right_arm,
-            R.drawable.man_up_flexing_to_right,
-            R.drawable.woman_bending_waist_to_feet_with_stretching_leg,
-            R.drawable.woman_flexing_body,
-            R.drawable.woman_flexing_waist_to_feet,
-            R.drawable.woman_honding_her_body_with_arms_and_legs
-    };
-*/
+    public int totaldays;
+
     @Override
     public void onIPAddressPreExecuteStarted() {
 
@@ -263,14 +234,14 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
-        setContentView(R.layout.activity_season);
+        setContentView(R.layout.activity_week);
         TypedArray ta = getResources().obtainTypedArray(R.array.season_image_array);
         imageArr = new int[ta.length()];
         for (int i = 0; i < ta.length(); i++) {
             imageArr[i] = ta.getResourceId(i,0);
         }
         ta.recycle();
-        season = new ArrayList<SeasonModel>();
+
 
         seasonGridView = (RecyclerView) findViewById(R.id.seasonGridView);
         itemTitle = (TextView) findViewById(R.id.itemTitle);
@@ -294,8 +265,9 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
             }
         });
 
+        itemTitle.setText("SELECT A WEEK");
 
-        itemTitle.setText(languagePreference.getTextofLanguage(DAYS_TITLE,DEFAULT_DAYS_TITLE));
+//        itemTitle.setText(languagePreference.getTextofLanguage(DAYS_TITLE,DEFAULT_DAYS_TITLE));
         // seasonGridView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         seasonGridView.setItemAnimator(new DefaultItemAnimator());
         if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
@@ -420,48 +392,8 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
         }
 /*chromecast-------------------------------------*/
 
-        if(getIntent().getIntExtra(DAYS_DATA,0) > 0 ){
-            totalDays = getIntent().getIntExtra(DAYS_DATA,0);
 
-        }
-        if(totalDays <= 0){
-            finish();
-        }
-
-        Log.v("SUBHASS","Total days season"+ getIntent().getIntExtra(DAYS_DATA,0));
-
-        for (int j = 0; j < totalDays; j++) {
-            int days = j+1;
-            season.add(new SeasonModel(String.valueOf(days), imageArr[j], languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + days,false));
-
-
-        }
-        adapter = new SeasonAdapter(SeasonActivity.this, R.layout.season_card_row, season) ;
-        seasonGridView.setVisibility(View.VISIBLE);
-        seasonGridView.setAdapter(adapter);
-
-        seasonGridView.addOnItemTouchListener(new RecyclerTouchListener2(this,
-                seasonGridView, new ClickListener2() {
-            @Override
-            public void onClick(View view, final int position) {
-                //Values are passing to activity & to fragment as well
-                // clickItem(item, position);
-
-           /*     season.get(prevPos).setIsSelected(false);
-                prevPos = position;
-                season.get(position).setIsSelected(true);
-                adapter.notifyDataSetChanged();*/
-                clickItem(season.get(position), position);
-
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-                return;
-            }
-        }));
-        /*ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
+        ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
 
         contentDetailsInput.setAuthToken(authTokenStr);
         if (preferenceManager != null) {
@@ -475,7 +407,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
         contentDetailsInput.setUser_id(useridStr);
         asynLoadSeason = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
         asynLoadSeason.executeOnExecutor(threadPoolExecutor);
-*/
+
     }
 
     @Override
@@ -492,7 +424,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
         switch (item.getItemId()) {
 
             case R.id.action_search:
-                final Intent searchIntent = new SearchIntentHandler(SeasonActivity.this).handleSearchIntent();
+                final Intent searchIntent = new SearchIntentHandler(WeekActivity.this).handleSearchIntent();
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
                 // Not implemented here
@@ -503,14 +435,14 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
                 return false;
             case R.id.action_login:
 
-                Intent loginIntent = new Intent(SeasonActivity.this, LoginActivity.class);
+                Intent loginIntent = new Intent(WeekActivity.this, LoginActivity.class);
                 Util.check_for_subscription = 0;
                 startActivity(loginIntent);
                 // Not implemented here
                 return false;
             case R.id.action_register:
 
-                Intent registerIntent = new Intent(SeasonActivity.this, RegisterActivity.class);
+                Intent registerIntent = new Intent(WeekActivity.this, RegisterActivity.class);
                 Util.check_for_subscription = 0;
                 startActivity(registerIntent);
                 // Not implemented here
@@ -526,14 +458,14 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
                 return false;
             case R.id.action_mydownload:
 
-                final Intent mydownload = new MyDownloadIntentHandler(SeasonActivity.this).handleDownloadIntent();
+                final Intent mydownload = new MyDownloadIntentHandler(WeekActivity.this).handleDownloadIntent();
                 startActivity(mydownload);
                 // Not implemented here
                 return false;
 
             case R.id.menu_item_profile:
 
-                Intent profileIntent = new Intent(SeasonActivity.this, ProfileActivity.class);
+                Intent profileIntent = new Intent(WeekActivity.this, ProfileActivity.class);
                 profileIntent.putExtra("EMAIL", email);
                 profileIntent.putExtra("LOGID", id);
                 startActivity(profileIntent);
@@ -541,7 +473,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
                 return false;
             case R.id.action_purchage:
 
-                Intent purchaseintent = new Intent(SeasonActivity.this, PurchaseHistoryActivity.class);
+                Intent purchaseintent = new Intent(WeekActivity.this, PurchaseHistoryActivity.class);
                 startActivity(purchaseintent);
                 // Not implemented here
                 return false;
@@ -557,7 +489,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
     @Override
     public void onGetContentDetailsPreExecuteStarted() {
 
-        pDialog = new ProgressBarHandler(SeasonActivity.this);
+        pDialog = new ProgressBarHandler(WeekActivity.this);
         pDialog.show();
 
     }
@@ -578,18 +510,41 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
         if (status == 200) {
 
 
-            if (season != null && season.size() > 0) {
-                season.clear();
+            if (week != null && week.size() > 0) {
+                week.clear();
             }
-            season = new ArrayList<SeasonModel>();
+            week = new ArrayList<WeekModel>();
 
-            if (contentDetailsOutput.getSeason() != null) {
-                for (int j = 0; j < contentDetailsOutput.getSeason().length; j++) {
-                    season.add(new SeasonModel(String.valueOf(contentDetailsOutput.getSeason()[j]), imageArr[j], languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + contentDetailsOutput.getSeason()[j],false));
+            Log.v("SUBHASS","contentDetailsOutput.getSeason() === "+ contentDetailsOutput.getSeason().length);
+
+            if (contentDetailsOutput.getSeason() != null && contentDetailsOutput.getSeason().length > 0) {
+                int days = contentDetailsOutput.getSeason().length;
+
+                    int weeks = Math.round(days / 7);
+                    Log.v("SUBHA","weeks"+weeks);
+
+                    if (days % 7 > 0){
+                        weeks = weeks +1;
+
+                        Log.v("SUBHA","weeks days ==="+weeks);
+                    }
+
+                    for (int k = 0; k < weeks; k++) {
+                        int remainDays = 7;
+                        if (days % 7 > 0){
+                            remainDays = days%7;
+                        }
+                        Log.v("SUBHA","remainDays"+remainDays);
+                        totaldays = remainDays;
+                        int weekNumber = k +1;
+                        week.add(new WeekModel(String.valueOf(contentDetailsOutput.getSeason()[k]), "Week" +" "+ weekNumber ,remainDays));
+
+                    }
 
 
-                }
-                adapter = new SeasonAdapter(SeasonActivity.this, R.layout.season_card_row, season) ;
+
+
+                adapter = new WeekAdapter(WeekActivity.this, R.layout.week_card_row, week) ;
 
                 seasonGridView.addOnItemTouchListener(new RecyclerTouchListener2(this,
                         seasonGridView, new ClickListener2() {
@@ -598,11 +553,11 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
                         //Values are passing to activity & to fragment as well
                        // clickItem(item, position);
 
-                        season.get(prevPos).setIsSelected(false);
+//                        week.get(prevPos).setIsSelected(false);
                         prevPos = position;
-                        season.get(position).setIsSelected(true);
+//                        week.get(position).setIsSelected(true);
                         adapter.notifyDataSetChanged();
-                        clickItem(season.get(position), position);
+                        clickItem(week.get(position), position);
 
                     }
 
@@ -677,13 +632,14 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
 
         }
     }
-    public void clickItem(SeasonModel item,int pos) {
+    public void clickItem(WeekModel item,int pos) {
 
-        Intent in = new Intent(SeasonActivity.this, ProgramDetailsActivity.class);
-        Log.v("SUBHA","season intent key as id == " + item.getSeasonId());
-        in.putExtra(SEASON_INTENT_KEY, item.getSeasonId());
+        Intent in = new Intent(WeekActivity.this, SeasonActivity.class);
+        in.putExtra(SEASON_INTENT_KEY, item.getWeekId());
         in.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
-        in.putExtra(PERMALINK_INTENT_ARRAY, season);
+//        in.putExtra(PERMALINK_INTENT_ARRAY, week);
+        Log.v("SUBHASS","totaldays === "+totaldays);
+        in.putExtra(DAYS_DATA,totaldays);
         in.putExtra("Index",String.valueOf(pos));
         startActivity(in);
     }
@@ -1108,7 +1064,7 @@ public class SeasonActivity extends AppCompatActivity implements GetContentDetai
             @Override
             public void onStatusUpdated() {
 
-                Intent intent = new Intent(SeasonActivity.this, ExpandedControlsActivity.class);
+                Intent intent = new Intent(WeekActivity.this, ExpandedControlsActivity.class);
                 startActivity(intent);
                 remoteMediaClient.removeListener(this);
             }

@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.home.vod.R;
@@ -33,6 +35,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
     private Context context;
     private int layoutResourceId;
     private ArrayList<GridItem> data = new ArrayList<GridItem>();
+    ArrayList<Integer> elementPosition = new ArrayList<>();
 
     public VideoFilterAdapter(Context context, int layoutResourceId,
                               ArrayList<GridItem> data) {
@@ -40,6 +43,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
+        elementPosition.clear();
     }
 
     @Override
@@ -47,13 +51,38 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
         View row = convertView;
         ViewHolder holder = null;
 
-        if (row == null) {
+//        if (row == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
+
+
+            Log.v("SUBHASS","pos === "+ position);
+
+            try {
+
+
+
+                if (position == 0) {
+                    row = inflater.inflate(R.layout.row_programe_layout, parent, false);
+                } else {
+                    if (position % 2 == 0) {
+                        row = inflater.inflate(R.layout.row_programe_layout, parent, false);
+                    } else {
+                        row = inflater.inflate(R.layout.row_2_programe_layout, parent, false);
+                    }
+                }
+            }catch (Exception e){
+
+            }
+
+
+
+
+//            row = inflater.inflate(R.layout.row_programe_layout, parent, false);
             holder = new ViewHolder();
             holder.title = (TextView) row.findViewById(R.id.movieTitle);
             FontUtls.loadFont(context, context.getResources().getString(R.string.regular_fonts), holder.title );
             holder.videoImageview = (ImageView) row.findViewById(R.id.movieImageView);
+            holder.titleRelativeLayout = (RelativeLayout) row.findViewById(R.id.titleRelativeLayout);
 
            /* int height = holder.videoImageview.getDrawable().getIntrinsicHeight();
             int width = holder.videoImageview.getDrawable().getIntrinsicWidth();
@@ -82,9 +111,9 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
             }
             row.setTag(holder);
 
-        } else {
+        /*} else {
             holder = (ViewHolder) row.getTag();
-        }
+        }*/
       try {
 
         GridItem item = data.get(position);
@@ -92,6 +121,12 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
         String imageId = item.getImage();
 
 
+         /* if (position % 2 == 0) {
+              holder.titleRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.button_background));
+          }else{
+              holder.titleRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+          }
+*/
         if(imageId.matches("") || imageId.matches(LanguagePreference.getLanguagePreference(context).getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){
             holder.videoImageview.setImageResource(R.drawable.logo);
 
@@ -125,6 +160,7 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
     static class ViewHolder {
         public TextView title;
         public ImageView videoImageview;
+        public RelativeLayout titleRelativeLayout;
 
     }
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight){

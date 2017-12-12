@@ -104,7 +104,7 @@
     <dimen name="video280_width">185dp</dimen>
     <dimen name="video280_height">103dp</dimen>
     <dimen name="listitemlayout_height">430dp</dimen>
-    <dimen name="itemtitle_text_size">21sp</dimen>
+    <dimen name="itemtitle_text_size">22sp</dimen>
     <dimen name="left_padding">10dp</dimen>
     <dimen name="right_padding">10dp</dimen>
     <dimen name="login_padding">10dp</dimen>
@@ -148,9 +148,10 @@
     <dimen name="trailer_btn_text_size">18sp</dimen>
     <dimen name="toastmsg_padding">10dp</dimen>
     <dimen name="user_review_textsize">14sp</dimen>
-
+    <dimen name="padding17dp">0dp</dimen>
+    <dimen name="padding25dp">25dp</dimen>
     <!--//**********logo image*************//-->
-
+    <dimen name="row_gap">15dp</dimen>
     <dimen name="logo_height">100dp</dimen>
     <dimen name="logo_width">100dp</dimen>
 
@@ -167,7 +168,11 @@
 
     <dimen name="sideTitle_line_height">17dp</dimen>
     <dimen name="sideTitle_line_width">3dp</dimen>
-
+    <dimen name="week_days">100dp</dimen>
+    <dimen name="week_days_title">55dp</dimen>
     <dimen name="detailsTextView">230dp</dimen>
-
+    <dimen name="week_left">10dp</dimen>
+    <dimen name="week_top">10dp</dimen>
+    <dimen name="program_left">30dp</dimen>
+    <dimen name="program_banner_height">400dp</dimen>
 </resources>

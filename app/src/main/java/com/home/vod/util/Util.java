@@ -507,6 +507,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference,GMAIL_SIGNUP,DEFAULT_GMAIL_SIGNUP,"google_signup",json);
         setTranslationLanguageToPref(languagePreference,SIGN_UP_WITH_EMAIL,DEFAULT_SIGN_UP_WITH_EMAIL,"signup_with_email",json);
         setTranslationLanguageToPref(languagePreference, VIEW_LESS, DEFAULT_VIEW_LESS,"view_less",json);
+        setTranslationLanguageToPref(languagePreference, DAYS_TITLE, DEFAULT_DAYS_TITLE,"days_title",json);
         setTranslationLanguageToPref(languagePreference, LOGIN_FACEBOOK,DEFAULT_LOGIN_FACEBOOK,"login_facebook",json);
         setTranslationLanguageToPref(languagePreference, REGISTER_FACEBOOK,DEFAULT_REGISTER_FACEBOOK,"register_facebook",json);
 
@@ -688,6 +689,8 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, DETAIL_VIEW_MORE,DEFAULT_DETAIL_VIEW_MORE, "view_more",json);
         setTranslationLanguageToPref(languagePreference, TUTORIAL_TITLE,DEFAULT_TUTORIAL_TITLE, "tutorial",json);
         setTranslationLanguageToPref(languagePreference, PROGRAM_BUTTON,DEFAULT_PROGRAM_BUTTON, "program_button",json);
+        setTranslationLanguageToPref(languagePreference, FOLLOW_PROGRAM_BUTTON,DEFAULT_FOLLOW_PROGRAM_BUTTON, "follow_program_button",json);
+        setTranslationLanguageToPref(languagePreference, FOLLOWED_PROGRAM_BUTTON,DEFAULT_FOLLOWED_PROGRAM_BUTTON, "followed_program_button",json);
         setTranslationLanguageToPref(languagePreference, DIET_BUTTON,DEFAULT_DIET_BUTTON, "diet_button",json);
         setTranslationLanguageToPref(languagePreference, WORKOUT_BUTTON,DEFAULT_WORKOUT_BUTTON, "workout_button",json);
         setTranslationLanguageToPref(languagePreference, MORE_VIDEOS,DEFAULT_MORE_VIDEOS, "more_videos",json);
