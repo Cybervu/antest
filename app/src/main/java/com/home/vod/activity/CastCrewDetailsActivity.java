@@ -340,10 +340,7 @@ public class CastCrewDetailsActivity extends AppCompatActivity implements GetCas
 
                 if (filmogrpahyItems.size() <= 0) {
 
-                    if (pDialog != null && pDialog.isShowing()) {
-                        pDialog.hide();
-                        pDialog = null;
-                    }
+
                     if (castNameStr.matches("")) {
                         castNameTextView.setVisibility(View.GONE);
                     } else {
