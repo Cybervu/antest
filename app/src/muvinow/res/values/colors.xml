@@ -88,4 +88,5 @@
     <color name="navdrawerImageBelowLineColor">#000</color>
     <color name="purchaseBackgroundColor">#909293</color>
     <color name="purchaseTextColor">#000</color>
+    <color name="buttonbg">#eb0609</color>
 </resources>

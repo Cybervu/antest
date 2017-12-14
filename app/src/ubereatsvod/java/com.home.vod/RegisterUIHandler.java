@@ -93,7 +93,7 @@ public class RegisterUIHandler {
         termsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.muvinow.com.au/terms-privacy-policy"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ubereatsvod.canal-vod.com/termes-conditions"));
                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 context.startActivity(browserIntent);
             }

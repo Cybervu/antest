@@ -106,7 +106,8 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
 
        /* Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
         itemRowHolder.itemTitle.setTypeface(castDescriptionTypeface);*/
-        itemRowHolder.itemTitle.setText(sectionName);
+        itemRowHolder.itemTitle.setText(sectionName.trim());
+        itemRowHolder.itemTitle.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
         SectionListDataAdapter itemListDataAdapter = null;
 //            if (MainActivity.vertical == 1) {
 

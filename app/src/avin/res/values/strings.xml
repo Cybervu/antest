@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name"> Epizod </string>
-    <string name="regular_fonts">fonts/AvenirNextLTPro-Regular.ttf</string>
-    <string name="light_fonts">fonts/AvenirNextLTProDemi.ttf</string>
+    <string name="app_name"> اپیزود </string>
+    <string name="regular_fonts">fonts/Vazir-Bold.ttf</string>
+    <string name="light_fonts">fonts/Vazir-Light.ttf</string>
 
     <!--App Drawer-->
     <string name="action_search">Search</string>

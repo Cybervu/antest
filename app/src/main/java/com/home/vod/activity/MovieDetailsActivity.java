@@ -3314,53 +3314,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
             }
 
 
-            if (contentDetailsOutput.getBanner().trim().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
+            String bannerUrl = contentDetailsOutput.getBanner().trim().equals("")?contentDetailsOutput.getPoster().trim():contentDetailsOutput.getBanner().trim();
+            Picasso.with(MovieDetailsActivity.this)
+                    .load(bannerUrl)
+                    .error(R.drawable.logo)
+                    .placeholder(R.drawable.logo)
+                    .into(moviePoster);
 
-                if (contentDetailsOutput.getPoster().trim().matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
-
-                    moviePoster.setImageResource(R.drawable.logo);
-                } else {
-
-
-                   /* ImageLoader imageLoader = ImageLoader.getInstance();
-                    imageLoader.init(ImageLoaderConfiguration.createDefault(MovieDetailsActivity.this));
-
-                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                            .cacheOnDisc(true).resetViewBeforeLoading(true)
-                            .showImageForEmptyUri(R.drawable.logo)
-                            .showImageOnFail(R.drawable.logo)
-                            .showImageOnLoading(R.drawable.logo).build();
-                    imageLoader.displayImage(contentDetailsOutput.getPoster(), moviePoster, options);
-*/
-                    Picasso.with(MovieDetailsActivity.this)
-                            .load(contentDetailsOutput.getPoster().trim())
-                            .error(R.drawable.logo)
-                            .placeholder(R.drawable.logo)
-                            .into(moviePoster);
-
-                }
-
-            } else {
-
-
-                /*ImageLoader imageLoader = ImageLoader.getInstance();
-                imageLoader.init(ImageLoaderConfiguration.createDefault(MovieDetailsActivity.this));
-
-                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                        .cacheOnDisc(true).resetViewBeforeLoading(true)
-                        .showImageForEmptyUri(R.drawable.logo)
-                        .showImageOnFail(R.drawable.logo)
-                        .showImageOnLoading(R.drawable.logo).build();
-                imageLoader.displayImage(contentDetailsOutput.getPoster().trim(), moviePoster, options);
-*/
-                Picasso.with(MovieDetailsActivity.this)
-                        .load(contentDetailsOutput.getPoster().trim())
-                        .error(R.drawable.logo)
-                        .placeholder(R.drawable.logo)
-                        .into(moviePoster);
-
-
-            }
 
         } else {
             noInternetConnectionLayout.setVisibility(View.GONE);
@@ -3369,7 +3329,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
 
         Log.v("MUVI", "call review details");
         GetReviewDetails();
-
 
     }
 
@@ -3844,4 +3803,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LogoutAsy
         asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, MovieDetailsActivity.this, MovieDetailsActivity.this);
         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
     }
+
+
 }

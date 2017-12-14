@@ -161,6 +161,8 @@ import static android.R.attr.format;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+import static com.home.vod.preferences.LanguagePreference.CAST_CREW_BUTTON_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_CAST_CREW_BUTTON_TITLE;
 import static com.home.vod.preferences.LanguagePreference.BTN_DISCARD;
 import static com.home.vod.preferences.LanguagePreference.BTN_KEEP;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
@@ -4739,7 +4741,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements SensorOrient
 
                 jsonObj.put("watch_status", watchStatus);
                 jsonObj.put("device_type", "2");
-                jsonObj.put("log_id", videoLogId);
+                jsonObj.put("log_id", videoLogId); //in
 
                 if (languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1")) {
                     jsonObj.put("restrict_stream_id", restrict_stream_id);

@@ -1726,7 +1726,7 @@ public class Episode_list_Activity extends AppCompatActivity implements VideoDet
             }
         });
 
-/*chromecast-------------------------------------*/
+/*----------------------------------chromecast-------------------------------------*/
 
         mAquery = new AQuery(this);
 

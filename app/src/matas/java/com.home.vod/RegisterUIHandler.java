@@ -70,7 +70,7 @@ public class RegisterUIHandler {
         termsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.newthoughtchannel.com/page/terms-privacy-policy"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.muvinow.com.au/terms-privacy-policy"));
                 browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 context.startActivity(browserIntent);
             }

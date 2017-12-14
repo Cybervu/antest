@@ -46,6 +46,8 @@
                 android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜáíóúñÑñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜãÃÐðÊËÈıÍÎÏÌÓßÔÒÒõÕµþÞÚÛÙýÝ "
                 android:drawablePadding="@dimen/Login_drawing_padding"
                 android:hint="name"
+                android:textAlignment="viewStart"
+                android:gravity="start"
                 android:padding="@dimen/register_edittext_padding"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
@@ -58,6 +60,8 @@
                 android:layout_below="@+id/editNameStr"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/login_maring_top"
+                android:textAlignment="viewStart"
+                android:gravity="start"
                 android:drawablePadding="@dimen/Login_drawing_padding"
                 android:hint="email"
                 android:padding="@dimen/register_edittext_padding"
@@ -76,6 +80,8 @@
                 android:hint="password"
                 android:inputType="textPassword"
                 android:padding="@dimen/register_edittext_padding"
+                android:textAlignment="viewStart"
+                android:gravity="start"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
                 android:textSize="@dimen/edit_text_size"
@@ -93,6 +99,8 @@
                 android:drawablePadding="@dimen/Login_drawing_padding"
                 android:hint="confirm password"
                 android:inputType="textPassword"
+                android:textAlignment="viewStart"
+                android:gravity="start"
                 android:padding="@dimen/register_edittext_padding"
                 android:textColor="@color/editTextColor"
                 android:textColorHint="@color/hint_color"
@@ -117,7 +125,7 @@
                     android:layout_marginRight="@dimen/terms_text_view_margin_right"
                     android:clickable="true"
                     android:text="By Clicking on Register,I agree "
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/alreadyMemberTextColor"
                     android:textSize="@dimen/playbtn_text_size" />
 
                 <TextView
@@ -204,6 +212,44 @@
                 android:layout_marginBottom="@dimen/login_facebook_margin"
                 android:layout_marginTop="@dimen/login_facebook_margin"
                 android:visibility="gone" />
+
+            <RelativeLayout
+                android:padding="6dp"
+                android:layout_marginTop="20dp"
+                android:id="@+id/sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="8dp"
+                android:paddingLeft="8dp"
+                android:elevation="2dp"
+                android:background="@drawable/gbg"
+                android:layout_below="@+id/btnLogin"
+                android:layout_centerVertical="true">
+
+
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:fontFamily="@string/regular_fonts"
+                    android:text="Sign up with Google"
+                    android:layout_gravity="start"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="5dp"
+
+                    android:textColor="#a49f9f"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
+                <ImageView
+                    android:layout_toLeftOf="@+id/textView"
+                    android:id="@+id/imageView2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/google_icon_svg" />
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/alreadymemberRelativeLayout"

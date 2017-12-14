@@ -372,4 +372,10 @@
     <dimen name="viewmore_text_size">14sp</dimen>
     <dimen name="homescreen_title_text_size">16sp</dimen>
 
+
+
+    <!--new  dimen optimization for menu-->
+    <dimen name="slider_menu_width">300dp</dimen>
+
+
 </resources>

@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -15,6 +17,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -44,6 +47,8 @@ import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.ProgressBarHandler;
 import com.home.vod.util.Util;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
@@ -357,6 +362,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
 
                         if (NetworkStatus.getInstance().isConnected(SearchActivity.this)) {
 
+
                             // default data
                             Search_Data_input search_data_input = new Search_Data_input();
                             search_data_input.setAuthToken(authTokenStr);
@@ -534,10 +540,38 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                     }
 
                     videoImageStrToHeight = videoImageStr;
+                    if (firstTime == true){
+                        Picasso.with(SearchActivity.this).load(videoImageStrToHeight
+                        ).error(R.drawable.no_image).into(new Target() {
 
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                videoWidth = bitmap.getWidth();
+                                videoHeight = bitmap.getHeight();
+                                AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);
+                            }
 
-                    AsynLOADUI loadui = new AsynLOADUI();
-                    loadui.executeOnExecutor(threadPoolExecutor);
+                            @Override
+                            public void onBitmapFailed(final Drawable errorDrawable) {
+                                videoImageStrToHeight = "https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png";
+                                videoWidth = errorDrawable.getIntrinsicWidth();
+                                videoHeight = errorDrawable.getIntrinsicHeight();
+                                AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);
+
+                            }
+
+                            @Override
+                            public void onPrepareLoad(final Drawable placeHolderDrawable) {
+
+                            }
+                        });
+
+                    }else {
+                        AsynLOADUI loadUI = new AsynLOADUI();
+                        loadUI.executeOnExecutor(threadPoolExecutor);
+                    }
 
                 } else {
 
@@ -914,6 +948,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
         theTextArea.setBackgroundResource(R.drawable.edit);
 
         theTextArea.setHint(languagePreference.getTextofLanguage(TEXT_SEARCH_PLACEHOLDER, DEFAULT_TEXT_SEARCH_PLACEHOLDER));
+        theTextArea.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
        /* if ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) {
             theTextArea.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_search_large, 0, 0, 0);
             v.setImageResource(R.drawable.ic_action_search_xlarge);
@@ -984,6 +1019,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
                             search_data_input.setLimit(String.valueOf(limit));
                             search_data_input.setOffset(String.valueOf(offset));
                             search_data_input.setQ(searchTextStr.trim());
+                            Log.v("pratik","q===="+searchTextStr.trim());
                             String countryCodeStr = preferenceManager.getCountryCodeFromPref();
                             if (countryCodeStr != null) {
                                 search_data_input.setCountry(countryCodeStr);
@@ -1033,6 +1069,7 @@ public class SearchActivity extends AppCompatActivity implements SearchDataAsynT
     private class AsynLOADUI extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
+
             return null;
         }
 

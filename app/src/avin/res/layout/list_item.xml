@@ -47,27 +47,29 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/loginImageViewMarging_top"
         android:paddingLeft="@dimen/login_new_user_padding"
         android:paddingRight="@dimen/login_new_user_padding"
-
-        >
+        android:orientation="horizontal">
 
 
         <TextView
             android:id="@+id/itemTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sample title"
             android:textAllCaps="true"
             android:textColor="@color/videotextColor"
             android:textSize="@dimen/itemtitle_text_size"
+            android:textAlignment="viewEnd"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:gravity="end"
+            android:layout_gravity="end"/>
 
 
         <Button
@@ -83,10 +85,11 @@
             android:text="vfewgafeqfgqeg"
             android:textAllCaps="false"
             android:textColor="@color/buttonTextColor"
-            android:textSize="@dimen/viewmore_text_size" />
+            android:textSize="@dimen/viewmore_text_size"
+            android:layout_gravity="end"/>
 
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/featureContent"

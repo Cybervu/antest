@@ -482,6 +482,8 @@
                     android:layout_marginRight="@dimen/login_btn_margin_top"
                     android:layout_toLeftOf="@+id/storyViewMoreButton"
                     android:ellipsize="end"
+                    android:textAlignment="viewStart"
+                    android:gravity="start"
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/cast_description_text" />
 
@@ -506,6 +508,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/ppv_margin"
                 android:layout_marginTop="@dimen/confirm_passwrd_margin_top"
+                android:textAlignment="viewStart"
+                android:gravity="start"
                 android:textColor="@color/castCrewTitleTextColor"
                 android:textSize="@dimen/vdiocast_text_size"
                 android:textStyle="bold" />
