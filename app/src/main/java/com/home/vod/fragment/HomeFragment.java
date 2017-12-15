@@ -1,15 +1,19 @@
 package com.home.vod.fragment;
 
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.TabLayout;
+
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,8 +28,10 @@ import android.widget.TextView;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
+
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.home.apisdk.apiController.GetAppHomePageAsync;
 import com.home.apisdk.apiController.GetLoadVideosAsync;
 import com.home.apisdk.apiModel.AppHomePageOutput;
@@ -34,9 +40,11 @@ import com.home.apisdk.apiModel.HomePageInputModel;
 import com.home.apisdk.apiModel.HomePageSectionModel;
 import com.home.apisdk.apiModel.LoadVideoInput;
 import com.home.apisdk.apiModel.LoadVideoOutput;
+import com.home.vod.HomePageHandler;
 import com.home.vod.R;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.adapter.RecyclerViewDataAdapter;
+import com.home.vod.adapter.ViewPagerAdapter;
 import com.home.vod.model.GetMenuItem;
 import com.home.vod.model.SectionDataModel;
 import com.home.vod.model.SingleItemModel;
@@ -97,6 +105,8 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
     RecyclerView my_recycler_view;
     Context context;
+    AppHomePageOutput appHomePageOutput;
+    int status=0;
 
     private final String KEY_RECYCLER_STATE = "recycler_state";
     private static Bundle mBundleRecyclerViewState;
@@ -127,50 +137,41 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
     String videoImageStrToHeight;
     int ui_completed = 0;
     int loading_completed = 0;
+/*
+    TabLayout tabLayout;
+    private ViewPager viewPager;*/
+    int banner[] = {R.drawable.slider,R.drawable.slider1,R.drawable.slider2,R.drawable.slider3,R.drawable.slider4};
+  //  TextView line;
+    HomePageHandler homePageHandler;
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         rootView = v;
         context = getActivity();
         setHasOptionsMenu(true);
+        homePageHandler=new HomePageHandler(context,v,this);
         Util.image_orentiation.clear();
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
         LogUtil.showLog("MUVI", "device_id already created =" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
         String GOOGLE_FCM_TOKEN;
-        // LogUtil.showLog("MUVI", "google_id already created =" + languagePreference.getTextofLanguage( GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN));
 
-
-
- /*       *//***************chromecast**********************//*
-
-        mCastStateListener = new CastStateListener() {
-            @Override
-            public void onCastStateChanged(int newState) {
-                if (newState != CastState.NO_DEVICES_AVAILABLE) {
-
-                    showIntroductoryOverlay();
-                }
-            }
-        };
-        mCastContext = CastContext.getSharedInstance(getActivity());
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(getActivity(), savedInstanceState);
-
-
-
-        // int startPosition = getInt("startPosition", 0);
-        // mVideoView.setVideoURI(Uri.parse(item.getContentId()));
-
-        setupCastListener();
-        mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
-
-*//***************chromecast**********************//*
-*/
         allSampleData = new ArrayList<SectionDataModel>();
         // createDummyData();
+        /*for view pager this is initialized*/
+  /*      tabLayout = (TabLayout) v.findViewById(R.id.tabs);
+        viewPager = (ViewPager) v.findViewById(R.id.pager);
+        line = (TextView) v.findViewById(R.id.lineTextView2);*/
+
+
+
+
+
         footerView = (RelativeLayout) v.findViewById(R.id.loadingPanel);
-        my_recycler_view = (RecyclerView) v.findViewById(R.id.my_recycler_view);
+       // my_recycler_view = (RecyclerView) v.findViewById(R.id.my_recycler_view);
         sliderRelativeLayout = (RelativeLayout) v.findViewById(R.id.sliderRelativeLayout);
         mDemoSlider = (SliderLayout) v.findViewById(R.id.sliderLayout);
+
 
         sliderRelativeLayout.setVisibility(View.GONE);
         noInternetLayout = (RelativeLayout) rootView.findViewById(R.id.noInternet);
@@ -182,7 +183,7 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
 
         footerView.setVisibility(View.GONE);
 
-        my_recycler_view.setHasFixedSize(true);
+       // my_recycler_view.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
 
         if (NetworkStatus.getInstance().isConnected(getActivity())) {
@@ -438,115 +439,227 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
     @Override
     public void onHomePagePostExecuteCompleted(AppHomePageOutput appHomePageOutput, int status, String message) {
 
+        this.appHomePageOutput=appHomePageOutput;
+        this.status=status;
         if (mProgressBarHandler != null) {
             mProgressBarHandler.hide();
             mProgressBarHandler = null;
         }
         if (appHomePageOutput != null) {
 
-            if (status == 200) {
+       // AppHomepageLoad(appHomePageOutput,status);
+           // ViewpagerAppHomepageLoad(appHomePageOutput,status);
+            homePageHandler.viewpagerOrNormalHomepage(appHomePageOutput,status);
+        }
+        return;
+    }
 
-                if (singleItem != null && singleItem.size() > 0) {
-                    singleItem.clear();
-                }
+    public void ViewpagerAppHomepageLoad(AppHomePageOutput appHomePageOutput, int status, final TabLayout tabLayout, final ViewPager viewPager, TextView line) {
+        if (status == 200) {
 
-                if (allSampleData != null && allSampleData.size() > 0) {
-                    allSampleData.clear();
-                }
+            if (singleItem != null && singleItem.size() > 0) {
+                singleItem.clear();
+            }
 
-                if (appHomePageOutput.getHomePageBannerModels() != null) {
-                    for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
-                        if (model != null) {
-                            if (model.getImage_path() != null) {
-                                url_maps.add(model.getImage_path());
-                            }
+            if (allSampleData != null && allSampleData.size() > 0) {
+                allSampleData.clear();
+            }
+
+            if (appHomePageOutput.getHomePageBannerModels() != null) {
+                for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
+                    if (model != null) {
+                        if (model.getImage_path() != null) {
+                            url_maps.add(model.getImage_path());
                         }
                     }
                 }
-                if (appHomePageOutput.getHomePageSectionModel() != null) {
-                    for (HomePageSectionModel section : appHomePageOutput.getHomePageSectionModel()) {
-                        if (section != null) {
-                            if (section.getTitle() != null || section.getSection_id() != null || section.getStudio_id() != null || section.getLanguage_id() != null) {
-                                menuList.add(new GetMenuItem(section.getTitle(), section.getSection_id(), section.getStudio_id(), section.getLanguage_id()));
+            }
+            if (appHomePageOutput.getHomePageSectionModel() != null) {
+                for (HomePageSectionModel section : appHomePageOutput.getHomePageSectionModel()) {
+                    if (section != null) {
+                        if (section.getTitle() != null || section.getSection_id() != null || section.getStudio_id() != null || section.getLanguage_id() != null) {
+                            menuList.add(new GetMenuItem(section.getTitle(), section.getSection_id(), section.getStudio_id(), section.getLanguage_id()));
+                            tabLayout.addTab(tabLayout.newTab().setText(section.getTitle().trim()));
+                            tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#ffffff"));
 
-                            }
+                            //tabLayout.setSelectedTabIndicatorHeight((int) (1 * getResources().getDisplayMetrics().density));
+                            // tabLayout.setTabTextColors(Color.parseColor("#727272"), Color.parseColor("#ffffff"));
+                            tabLayout.setTabTextColors(Color.parseColor("#ffffff"), Color.parseColor("#ffffff"));
+
+                            line.setVisibility(View.VISIBLE);
+                            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+                            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                                ViewGroup vg = (ViewGroup) tabLayout.getChildAt(0);
+                                int tabsCount = vg.getChildCount();
+
+                                @Override
+                                public void onTabSelected(TabLayout.Tab tab) {
+                                    viewPager.setCurrentItem(tab.getPosition());
+
+                                    ViewGroup vgTab = (ViewGroup) vg.getChildAt(tab.getPosition());
+
+                                    //vg.getChildAt(tab.getPosition()).setBackgroundResource(R.drawable.tab_bg_unselected);
+
+                                }
+
+                                @Override
+                                public void onTabUnselected(TabLayout.Tab tab) {
+
+                                    //vg.getChildAt(tab.getPosition()).setBackgroundResource(R.drawable.grad);
+
+                                }
+
+                                @Override
+                                public void onTabReselected(TabLayout.Tab tab) {
+
+                                }
+                            });
                         }
                     }
                 }
+            }
 
 
-                if (NetworkStatus.getInstance().isConnected(getActivity())) {
 
-                    my_recycler_view.setLayoutManager(mLayoutManager);
-                    adapter = new RecyclerViewDataAdapter(context, allSampleData, url_maps, firstTime, MainActivity.vertical);
-                    my_recycler_view.setAdapter(adapter);
-                    my_recycler_view.setVisibility(View.VISIBLE);
+            float density = context.getResources().getDisplayMetrics().density;
 
-                    LoadVideoInput loadVideoInput = new LoadVideoInput();
-                    loadVideoInput.setAuthToken(authTokenStr);
-                    loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                    loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
-                    asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
-                    asynLoadVideos.executeOnExecutor(threadPoolExecutor);
-                    // default data
+            if (density >= 3.5 && density <= 4.0) {
+
+
+                mDemoSlider.getLayoutParams().height = 800;  // replace 100 with your dimensions
+            }
+
+            for (int j = 0; j < url_maps.size(); j++) {
+                DefaultSliderView textSliderView = new DefaultSliderView(context);
+                textSliderView
+                        .description("")
+                        .image(url_maps.get(j))
+                        .setScaleType(BaseSliderView.ScaleType.Fit)
+                        ;
+                mDemoSlider.addSlider(textSliderView);
+            }
+
+
+
+
+
+            mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+            mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+            mDemoSlider.setDuration(3000);
+            sliderRelativeLayout.setVisibility(View.VISIBLE);
+
+            if (NetworkStatus.getInstance().isConnected(getActivity())){
+                ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager(), menuList);
+                viewPager.setOffscreenPageLimit(menuList.size());
+                viewPager.setAdapter(adapter);
+            }
+
+        }
+    }
+
+
+    private void AppHomepageLoad(AppHomePageOutput appHomePageOutput,int status) {
+        if (status == 200) {
+
+            if (singleItem != null && singleItem.size() > 0) {
+                singleItem.clear();
+            }
+
+            if (allSampleData != null && allSampleData.size() > 0) {
+                allSampleData.clear();
+            }
+
+            if (appHomePageOutput.getHomePageBannerModels() != null) {
+                for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
+                    if (model != null) {
+                        if (model.getImage_path() != null) {
+                            url_maps.add(model.getImage_path());
+                        }
+                    }
+                }
+            }
+            if (appHomePageOutput.getHomePageSectionModel() != null) {
+                for (HomePageSectionModel section : appHomePageOutput.getHomePageSectionModel()) {
+                    if (section != null) {
+                        if (section.getTitle() != null || section.getSection_id() != null || section.getStudio_id() != null || section.getLanguage_id() != null) {
+                            menuList.add(new GetMenuItem(section.getTitle(), section.getSection_id(), section.getStudio_id(), section.getLanguage_id()));
+
+                        }
+                    }
+                }
+            }
+
+
+            if (NetworkStatus.getInstance().isConnected(getActivity())) {
+
+                my_recycler_view.setLayoutManager(mLayoutManager);
+                adapter = new RecyclerViewDataAdapter(context, allSampleData, url_maps, firstTime, MainActivity.vertical);
+                my_recycler_view.setAdapter(adapter);
+                my_recycler_view.setVisibility(View.VISIBLE);
+
+                LoadVideoInput loadVideoInput = new LoadVideoInput();
+                loadVideoInput.setAuthToken(authTokenStr);
+                loadVideoInput.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                loadVideoInput.setSection_id(menuList.get(counter).getSectionId());
+                asynLoadVideos = new GetLoadVideosAsync(loadVideoInput, HomeFragment.this, context);
+                asynLoadVideos.executeOnExecutor(threadPoolExecutor);
+                // default data
                     /*asynLoadVideos = new AsynLoadVideos();
                     asynLoadVideos.executeOnExecutor(threadPoolExecutor,menuList.get(counter).getSectionId());*/
 
-                } else {
-                    noInternetLayout.setVisibility(View.VISIBLE);
-                }
-
             } else {
+                noInternetLayout.setVisibility(View.VISIBLE);
+            }
+
+        } else {
 //            url_maps.add("https://d2gx0xinochgze.cloudfront.net/public/no-image-a.png");
 
-                for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
-                    url_maps.add(model.getImage_path());
-                }
+            for (HomePageBannerModel model : appHomePageOutput.getHomePageBannerModels()) {
+                url_maps.add(model.getImage_path());
+            }
 
-                if (firstTime == false) {
-                    firstTime = true;
+            if (firstTime == false) {
+                firstTime = true;
 
-                    if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
-                        for (int j = 0; j < url_maps.size(); j++) {
-                            DefaultSliderView textSliderView = new DefaultSliderView(context);
-                            textSliderView
-                                    .description("")
-                                    .image(url_maps.get(j))
-                                    .setScaleType(BaseSliderView.ScaleType.Fit);
-                            // .setOnSliderClickListener(this);
-                            textSliderView.bundle(new Bundle());
-                            textSliderView.getBundle()
-                                    .putString("extra", "");
+                if (((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((context.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
+                    for (int j = 0; j < url_maps.size(); j++) {
+                        DefaultSliderView textSliderView = new DefaultSliderView(context);
+                        textSliderView
+                                .description("")
+                                .image(url_maps.get(j))
+                                .setScaleType(BaseSliderView.ScaleType.Fit);
+                        // .setOnSliderClickListener(this);
+                        textSliderView.bundle(new Bundle());
+                        textSliderView.getBundle()
+                                .putString("extra", "");
 
-                            mDemoSlider.addSlider(textSliderView);
-                        }
-                    } else {
-                        for (int j = 0; j < url_maps.size(); j++) {
-                            DefaultSliderView textSliderView = new DefaultSliderView(context);
-                            textSliderView
-                                    .description("")
-                                    .image(url_maps.get(j))
-                                    .setScaleType(BaseSliderView.ScaleType.Fit);
-                            // .setOnSliderClickListener(this);
-                            textSliderView.bundle(new Bundle());
-                            textSliderView.getBundle()
-                                    .putString("extra", "");
+                        mDemoSlider.addSlider(textSliderView);
+                    }
+                } else {
+                    for (int j = 0; j < url_maps.size(); j++) {
+                        DefaultSliderView textSliderView = new DefaultSliderView(context);
+                        textSliderView
+                                .description("")
+                                .image(url_maps.get(j))
+                                .setScaleType(BaseSliderView.ScaleType.Fit);
+                        // .setOnSliderClickListener(this);
+                        textSliderView.bundle(new Bundle());
+                        textSliderView.getBundle()
+                                .putString("extra", "");
 
-                            mDemoSlider.addSlider(textSliderView);
-                        }
+                        mDemoSlider.addSlider(textSliderView);
                     }
                 }
-                mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-                mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-                mDemoSlider.setDuration(10000);
-                //   mDemoSlider.addOnPageChangeListener(this);
-                mDemoSlider.getPagerIndicator().setVisibility(View.INVISIBLE);
-
-                sliderRelativeLayout.setVisibility(View.VISIBLE);
-
             }
+            mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+            mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+            mDemoSlider.setDuration(10000);
+            //   mDemoSlider.addOnPageChangeListener(this);
+            mDemoSlider.getPagerIndicator().setVisibility(View.INVISIBLE);
+
+            sliderRelativeLayout.setVisibility(View.VISIBLE);
+
         }
-        return;
     }
 
     public void myOnKeyDown() {
@@ -638,8 +751,8 @@ public class HomeFragment extends Fragment implements GetLoadVideosAsync.LoadVid
             }*/
 
             LogUtil.showLog("MUVI1", "==HHH");
-            loadui = new AsynLOADUI();
-            loadui.executeOnExecutor(threadPoolExecutor);
+          /*  loadui = new AsynLOADUI();
+            loadui.executeOnExecutor(threadPoolExecutor);*/
         }
 
         @Override

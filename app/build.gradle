@@ -1,4 +1,3 @@
-
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
@@ -443,6 +442,26 @@ android {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
+
+        fdghana {
+            minSdkVersion 16
+            dimension 'vendor'
+            applicationId 'com.release.fdmobile'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            // buildConfigField "String", "AUTH_TOKEN", "\"398fe175085c765637c0dc4c02acb3fa\""
+            buildConfigField "String", "AUTH_TOKEN", "\"18852a67c1b0a8387c89fa7135fe8d83\""
+            targetSdkVersion 23
+            versionCode 6
+            versionName '2.1.2'
+        }
+        fdghana_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://ansah.muvi.com/rest/\""
+        }
+        fdghana_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://ansah.muvi.com/rest/\""
+        }
     }
 }
 
@@ -515,6 +534,10 @@ android.variantFilter { variant ->
         variant.setIgnore(false)
     }
     else if (vendor.equals('gabejaramillo') && (environment.equals('gabejaramillo_staging_') || environment.equals('gabejaramillo_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('fdghana') && (environment.equals('fdghana_staging_') || environment.equals('fdghana_Prod_'))
             && (isRelease || isDebug)) {
         variant.setIgnore(false)
     }

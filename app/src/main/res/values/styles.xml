@@ -44,7 +44,6 @@
     <style name="MyMaterialTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="MyMaterialTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
-        <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <item name="android:colorBackground">@color/background</item>
         <item name="android:textColor">@color/colorAccent</item>
         </style>

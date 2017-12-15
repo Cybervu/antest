@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+
+    >
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="@integer/column_count"
+        android:stretchMode="columnWidth"
+        android:focusable="true"
+        android:clickable="true"/>
+
+    <!--<TextView-->
+    <!--android:id="@+id/position"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:gravity="center"-->
+    <!--android:text=" The page Number is 1"-->
+    <!--android:textColor="#000"-->
+    <!--android:textSize="20sp"/>-->
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:indeterminateDrawable="@drawable/large_progress_bar"
+        android:indeterminateDuration="1000"
+        style="?android:attr/progressBarStyleInverse"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        android:visibility="gone"/>
+
+
+
+
+</RelativeLayout>

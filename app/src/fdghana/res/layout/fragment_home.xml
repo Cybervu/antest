@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/tools"
+    android:background="@drawable/background"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/line"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:id="@+id/lineTextView3"
+
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sliderRelativeLayout"
+        android:background="@color/transparent"
+        android:layout_below="@+id/lineTextView3"
+
+        >
+
+
+        <com.daimajia.slider.library.SliderLayout
+            android:id="@+id/sliderLayout"
+            android:layout_width="match_parent"
+            custom:auto_cycle="true"
+            custom:indicator_visibility="visible"
+            custom:pager_animation_span="1100"
+            android:layout_height="230dp"/>
+
+        <com.daimajia.slider.library.Indicators.PagerIndicator
+            android:id="@+id/custom_indicator2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AndroidImageSlider_Corner_Oval_Orange"
+            android:layout_below="@+id/sliderLayout"
+            android:layout_marginBottom="0dp"
+            android:layout_centerHorizontal="true"
+            />
+
+        />
+
+
+
+    </RelativeLayout>
+    <!--<android.support.v7.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/imgwidth"
+        android:background="@color/transparent"
+        android:layout_below="@+id/lineTextView3"
+        android:scrollbars="none" />
+-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/line"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:id="@+id/lineTextView1"
+        android:layout_below="@+id/sliderRelativeLayout"
+        />
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lineTextView1"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        app:tabIndicatorHeight="0.3dp"
+        android:foreground="@drawable/menu_overlay"
+        app:tabMaxWidth="0dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.2dp"
+        android:background="#727272"
+        android:layout_marginLeft="5dp"
+        android:visibility="gone"
+        android:layout_marginRight="5dp"
+        android:id="@+id/lineTextView2"
+        android:layout_below="@+id/tabs"
+        />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+
+        android:layout_below="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:gravity="center">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleInverse"
+            android:indeterminateDrawable="@drawable/progress_rawable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateDuration="1000"
+            android:indeterminate="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/noInternet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="gone"
+        android:layout_below="@+id/toolbar"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="4"
+            android:id="@+id/noInternetTextView"
+            android:singleLine="false"
+            android:layout_centerInParent="true"
+            android:textColor="@color/black"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/noData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="gone"
+        android:layout_below="@+id/toolbar"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="4"
+            android:id="@+id/noDataTextView"
+            android:singleLine="false"
+            android:layout_centerInParent="true"
+            android:textColor="@color/black"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

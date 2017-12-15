@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Toolbar color-->
+
+    <color name="colorPrimary">#3b2119</color>
+    <!-- status bar color-->
+
+    <color name="colorPrimaryDark">#3b2119</color>
+    <color name="textColorPrimary">#000000</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- movie Detais Page color -->
+
+    <color name="paragraph_text">#757575</color>
+    <color name="title">#000000</color>
+    <color name="button_bg">#913b28</color>
+    <color name="watchnow_button_bg">#FFFFFF</color>
+    <color name="watchnow_button_title">#da241a</color>
+    <color name="button_title">#FFFFFF</color>
+
+    <!-- Overlay color-->
+    <color name="color_overlay_bar">#000000</color>
+    <color name="progressdialog_showtitle">#db6715</color>
+
+
+    <!-- loading, checkbox color-->
+    <color name="colorAccent">#4f1114</color>
+    <color name="blue">#00abea</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="even">#FFFFFF</color>
+    <color name="odd">#eeeeee</color>
+    <color name="text_color">#000000</color>
+    <integer-array name="colors">
+        <item>@color/holo_blue_dark</item>
+        <item>@color/holo_yellow_dark</item>
+        <item>@color/holo_green_dark</item>
+        <item>@color/holo_purple_dark</item>
+        <item>@color/holo_red_dark</item>
+    </integer-array>
+
+    <integer-array name="gplus_colors">
+        <item>@color/gplus_color_1</item>
+        <item>@color/gplus_color_2</item>
+        <item>@color/gplus_color_3</item>
+        <item>@color/gplus_color_4</item>
+    </integer-array>
+
+    <integer-array name="pocket_bar_colors">
+        <item>@color/pocket_color_1</item>
+        <item>@color/pocket_color_1</item>
+        <item>@color/pocket_color_1</item>
+        <item>@color/pocket_color_1</item>
+        <item>@color/pocket_color_2</item>
+        <item>@color/pocket_color_2</item>
+        <item>@color/pocket_color_2</item>
+        <item>@color/pocket_color_2</item>
+        <item>@color/pocket_color_3</item>
+        <item>@color/pocket_color_3</item>
+        <item>@color/pocket_color_3</item>
+        <item>@color/pocket_color_3</item>
+        <item>@color/pocket_color_4</item>
+        <item>@color/pocket_color_4</item>
+        <item>@color/pocket_color_4</item>
+        <item>@color/pocket_color_4</item>
+    </integer-array>
+
+    <integer-array name="pocket_background_colors">
+        <item>@color/pocket_color_1</item>
+        <item>@color/pocket_color_2</item>
+        <item>@color/pocket_color_3</item>
+        <item>@color/pocket_color_4</item>
+    </integer-array>
+
+    <color name="pocket_color_1">#85edb9</color>
+    <color name="pocket_color_2">#34bdb7</color>
+    <color name="pocket_color_3">#ee4458</color>
+    <color name="pocket_color_4">#fcb74d</color>
+
+    <color name="gplus_color_1">#3e802f</color>
+    <color name="gplus_color_2">#f4b400</color>
+    <color name="gplus_color_3">#427fed</color>
+    <color name="gplus_color_4">#b23424</color>
+
+    <color name="holo_blue_dark">#0099cc</color>
+    <color name="holo_yellow_dark">#ff8800</color>
+    <color name="holo_green_dark">#669900</color>
+    <color name="holo_purple_dark">#9933cc</color>
+    <color name="holo_red_dark">#cc0000</color>
+    <color name="color_primary">#FFFFFF</color>
+    <color name="color_orange">#c94038</color>
+    <color name="color_orange1">#c94038</color>
+    <color name="color_card_background">#333</color>
+    <color name="color_date">#999</color>
+    <color name="color_description">#444</color>
+    <color name="progress_bar_loader">#cd7c4b</color>
+
+
+    <color name="teal_100">#FFCDD2</color>
+    <color name="teal_500">#F44336</color>
+
+   <!-- <color name="hint_text_background">#737373</color>
+    <color name="hint_text_color">#8e8e8e</color>
+    <color name="transaction_text_color">#913b28</color>
+    <color name="transaction_purchase_text_color">#f4f4f4</color>
+    <color name="transaction_active_alert">#197b30</color>
+    <color name="transaction_card_color">#202020</color>
+    <color name="filter_genre_color">#353434</color>
+    <color name="content_background_color">#080808</color>
+    <color name="active_text_color">#458ccc</color>
+    <color name="expired_text_color">#6c6c6c</color>
+    <color name="plan_unselected_color">#202020</color>
+    <color name="plan_unselected_plans_color">#111111</color>
+    <color name="plan_selected_color">#b5b4b4</color>
+    <color name="plan_selected__plan_color">#458ccc</color>
+    <color name="purchase_details_text_color">#737373</color>
+    <color name="buttonbg">#458ccc</color>
+    <color name="details_story_color">#ddd</color>-->
+    <color name="genre_color">#eee</color>
+<!--
+    <color name="nav_drawer_text_color">#525252</color>
+-->
+    <color name="resume_title_text_color">#ffffff</color>
+    <color name="resume_popup_button_continue_bg_color">#cd7c4b</color>
+    <color name="resume_popup_button_cancel_bg_color">#DDD</color>
+    <color name="resume_popup_color">#454444</color>
+    <color name="background">#323232</color>
+    <color name="textColor">#ffffff</color>
+    <color name="episodeBackgroundColor">#5b4636</color>
+<!--
+    <color name="appBackgroundColor">#000000</color>
+-->
+    <color name="leftMenuBackground">#ffffff</color>
+    <color name="languagePopup">#000000</color>
+    <color name="languagePopupFade">#50696969</color>
+    <color name="languagePopupBottom">#cd7c4b</color>
+    <!--   <color name="editext_selected_bg">#458ccc</color>
+       <color name="editext_normal_bg">#737373</color>-->
+    <color name="fb_bg">#0d101d</color>
+    <color name="fb_text_color">#5a6068</color>
+
+    <color name="ccbuttonbg">#976036</color>
+    <color name="white_button_text_color">#cd7c4b</color>
+    <color name="buttonbg3">#cd7c4b</color>
+    <color name="buttonbg1">#913b28</color>
+    <color name="buttonbg2">#790000</color>
+    <color name="fb_button_bg">#64b3bf</color>
+
+
+    <color name="hint_text_background">#737373</color>
+    <color name="hint_text_color">#8e8e8e</color>
+    <color name="transaction_text_color">#913b28</color>
+    <color name="transaction_purchase_text_color">#f4f4f4</color>
+    <color name="transaction_active_alert">#197b30</color>
+    <color name="transaction_card_color">#202020</color>
+    <color name="filter_genre_color">#353434</color>
+    <color name="content_background_color">#080808</color>
+    <color name="active_text_color">#197b30</color>
+    <color name="expired_text_color">#6c6c6c</color>
+    <color name="plan_unselected_color">#202020</color>
+    <color name="plan_unselected_plans_color">#111111</color>
+    <color name="plan_selected_color">#b5b4b4</color>
+    <color name="plan_selected__plan_color">#930f18</color>
+    <color name="purchase_details_text_color">#737373</color>
+    <color name="buttonbg">#ad5a39</color>
+    <color name="details_story_color">#DDD</color>
+    <color name="nav_drawer_text_color">#525252</color>
+    <color name="bar_color">#cd7c4b</color>
+    <color name="episodebg">#976036</color>
+    <color name="sign_up_buttonbg">#d59552</color>
+    <color name="arrow_buttonbg">#913b29</color>
+
+
+</resources>
