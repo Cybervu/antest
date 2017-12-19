@@ -103,6 +103,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -474,9 +475,9 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
             isSubscribedStr = preferenceManager.getIsSubscribedFromPref();
             if (isSubscribedStr.equalsIgnoreCase("1")) {
                 if (getIntent().getStringExtra("planSubscribedPrice") != null) {
-                    chargedPrice = Float.parseFloat(getIntent().getStringExtra("planSubscribedPrice"));
-                    previousChargedPrice = Float.parseFloat(getIntent().getStringExtra("planSubscribedPrice"));
-                    planPrice = Float.parseFloat(getIntent().getStringExtra("planSubscribedPrice"));
+                    chargedPrice = round(Float.parseFloat(getIntent().getStringExtra("planSubscribedPrice")),2);
+                    previousChargedPrice = round(Float.parseFloat(getIntent().getStringExtra("planSubscribedPrice")),2);
+                    planPrice = round(Float.parseFloat(getIntent().getStringExtra("planSubscribedPrice")),2);
                 } else {
                     chargedPrice = 0.0f;
                     previousChargedPrice = 0.0f;
@@ -484,9 +485,9 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
                 }
             } else {
                 if (getIntent().getStringExtra("planUnSubscribedPrice") != null) {
-                    chargedPrice = Float.parseFloat(getIntent().getStringExtra("planUnSubscribedPrice"));
-                    previousChargedPrice = Float.parseFloat(getIntent().getStringExtra("planUnSubscribedPrice"));
-                    planPrice = Float.parseFloat(getIntent().getStringExtra("planUnSubscribedPrice"));
+                    chargedPrice = round(Float.parseFloat(getIntent().getStringExtra("planUnSubscribedPrice")),2);
+                    previousChargedPrice = round(Float.parseFloat(getIntent().getStringExtra("planUnSubscribedPrice")),2);
+                    planPrice = round(Float.parseFloat(getIntent().getStringExtra("planUnSubscribedPrice")),2);
 
                 } else {
                     chargedPrice = 0.0f;
@@ -1562,12 +1563,14 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
                     chargedPrice = planPrice - planPrice * (Float.parseFloat(validateCouponCodeOutputModel.getDiscount().trim()) / 100);
 
+                    chargedPrice = round(chargedPrice,2);
                     if (chargedPrice < 0.0f) {
                         chargedPrice = 0.0f;
                     }
                 } else {
 
                     chargedPrice = planPrice - Float.parseFloat(validateCouponCodeOutputModel.getDiscount().trim());
+                    chargedPrice = round(chargedPrice,2);
 
                     if (chargedPrice < 0.0f) {
                         chargedPrice = 0.0f;
@@ -3382,5 +3385,11 @@ public class PPvPaymentInfoActivity extends ActionBarActivity implements
 
     }*/
 
+
+    public float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
+    }
 
 }

@@ -670,7 +670,7 @@ public class ViewMoreActivity extends AppCompatActivity implements
                 preferenceManager.clearLoginPref();
                 if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
-                    final Intent startIntent = new Intent(ViewMoreActivity.this, SplashScreen.class);
+                    final Intent startIntent = new Intent(ViewMoreActivity.this, Splash.class);
                     runOnUiThread(new Runnable() {
                         public void run() {
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

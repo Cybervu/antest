@@ -92,7 +92,7 @@
             android:layout_marginLeft="@dimen/select_planMark_margin"
             android:layout_marginStart="@dimen/select_planMark_margin2"
             android:layout_marginTop="@dimen/loginImageViewMarging_top"
-            android:background="@drawable/mark"
+            android:background="@drawable/markk"
             android:visibility="visible" />
     </RelativeLayout>
 </RelativeLayout>

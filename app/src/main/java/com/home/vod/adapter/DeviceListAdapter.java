@@ -153,7 +153,7 @@ public class DeviceListAdapter extends BaseAdapter implements RemoveDeviceAsynTa
                         devie_id = deviceName.get(position);
 
                         RemoveDeviceInputModel removeDeviceInputModel = new RemoveDeviceInputModel();
-                        removeDeviceInputModel.setAuthToken(authTokenStr);
+                        removeDeviceInputModel.setAuthToken(preferenceManager.getAuthToken());
                         removeDeviceInputModel.setDevice(devie_id);
                         removeDeviceInputModel.setUser_id(preferenceManager.getUseridFromPref());
                         removeDeviceInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE,DEFAULT_SELECTED_LANGUAGE_CODE));

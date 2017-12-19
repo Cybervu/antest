@@ -865,7 +865,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
                 if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
-                    final Intent startIntent = new Intent(MainActivity.this, SplashScreen.class);
+                    final Intent startIntent = new Intent(MainActivity.this, Splash.class);
                     runOnUiThread(new Runnable() {
                         public void run() {
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

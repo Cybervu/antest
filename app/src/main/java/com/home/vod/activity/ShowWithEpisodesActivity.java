@@ -335,6 +335,7 @@ MonetizationHandler monetizationHandler;
             }
         } catch (IllegalArgumentException ex) {
             noInternetConnectionLayout.setVisibility(View.GONE);
+            Log.v("ANU","nodata layout called1===");
             noDataLayout.setVisibility(View.VISIBLE);
         }
         if (status == null) {
@@ -350,7 +351,7 @@ MonetizationHandler monetizationHandler;
                 preferenceManager.clearLoginPref();
                 if ((languagePreference.getTextofLanguage(IS_ONE_STEP_REGISTRATION, DEFAULT_IS_ONE_STEP_REGISTRATION)
                         .trim()).equals("1")) {
-                    final Intent startIntent = new Intent(ShowWithEpisodesActivity.this, SplashScreen.class);
+                    final Intent startIntent = new Intent(ShowWithEpisodesActivity.this, Splash.class);
                     runOnUiThread(new Runnable() {
                         public void run() {
                             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -431,24 +432,23 @@ MonetizationHandler monetizationHandler;
     @Override
     public void onGetContentDetailsPostExecuteCompleted(ContentDetailsOutput contentDetailsOutput, int status, String message) {
 
-        LogUtil.showLog("MUVI", "onGetContentDetailsPostExecuteCompleted");
 
         try {
             if (pDialog != null && pDialog.isShowing()) {
-                LogUtil.showLog("PINTU", "contentdetails pdlog hide");
                 pDialog.hide();
 
 
             }
         } catch (IllegalArgumentException ex) {
             noInternetConnectionLayout.setVisibility(View.GONE);
+            Log.v("ANU","nodata layout called2===");
             noDataLayout.setVisibility(View.VISIBLE);
-            LogUtil.showLog("BKS", "exception==" + ex);
         }
 
 
         if (status == 200) {
             noInternetConnectionLayout.setVisibility(View.GONE);
+            Log.v("ANU","nodata layout called8===");
             noDataLayout.setVisibility(View.GONE);
             castStr = contentDetailsOutput.getCastStr();
             isFreeContent = Integer.parseInt(contentDetailsOutput.getIsFreeContent());
@@ -678,6 +678,7 @@ MonetizationHandler monetizationHandler;
         } else {
             noDataTextView.setText(languagePreference.getTextofLanguage(CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY, DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY));
             noInternetConnectionLayout.setVisibility(View.GONE);
+            Log.v("ANU","nodata layout called9===");
             noDataLayout.setVisibility(View.GONE);
 
             story_layout.setVisibility(View.GONE);
@@ -710,6 +711,7 @@ MonetizationHandler monetizationHandler;
             }
         } catch (IllegalArgumentException ex) {
             noInternetConnectionLayout.setVisibility(View.GONE);
+            Log.v("ANU","nodata layout called3===");
             noDataLayout.setVisibility(View.VISIBLE);
             LogUtil.showLog("BKS", "exception==" + ex);
         }
@@ -720,6 +722,7 @@ MonetizationHandler monetizationHandler;
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
         if (status == 200) {
             noInternetConnectionLayout.setVisibility(View.GONE);
+            Log.v("ANU","nodata layout called10===");
             noDataLayout.setVisibility(View.GONE);
             itemData = new ArrayList<EpisodesListModel>();
             isAPV = episode_details_output.getIsAPV();
@@ -1024,6 +1027,7 @@ MonetizationHandler monetizationHandler;
             }
         } catch (IllegalArgumentException ex) {
             noInternetConnectionLayout.setVisibility(View.GONE);
+            Log.v("ANU","nodata layout called4===");
             noDataLayout.setVisibility(View.VISIBLE);
         }
         if (status == 200) {
@@ -1084,6 +1088,7 @@ MonetizationHandler monetizationHandler;
             }
         } catch (IllegalArgumentException ex) {
             noInternetConnectionLayout.setVisibility(View.GONE);
+            Log.v("ANU","nodata layout called5===");
             noDataLayout.setVisibility(View.VISIBLE);
         }
 
@@ -1091,6 +1096,7 @@ MonetizationHandler monetizationHandler;
 
 
             noInternetConnectionLayout.setVisibility(View.GONE);
+            Log.v("ANU","nodata layout called11===");
             noDataLayout.setVisibility(View.GONE);
 
             String loggedInStr = preferenceManager.getLoginStatusFromPref();
@@ -1152,8 +1158,8 @@ MonetizationHandler monetizationHandler;
             }
             /***favorite *****/
         } else {
-            noInternetConnectionLayout.setVisibility(View.GONE);
-            noDataLayout.setVisibility(View.VISIBLE);
+
+
         }
     }
 

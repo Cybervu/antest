@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.R;
+import com.home.vod.util.Util;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,7 +25,7 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
+        Util.getDPI(this);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         regid = preferenceManager.getSharedPref();
 
