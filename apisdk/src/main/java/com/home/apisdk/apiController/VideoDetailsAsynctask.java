@@ -44,7 +44,7 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
     private ArrayList<String> adnetworkid = new ArrayList<>();
     private ArrayList<String> offline_url = new ArrayList<>();
     private ArrayList<String> offline_language = new ArrayList<>();
-    private ArrayList<String> SubTitleLanguage = new ArrayList<>();
+    private ArrayList<String> subtitle_code = new ArrayList<>();
     private ArrayList<String> ResolutionUrl = new ArrayList<>();
     private String PACKAGE_NAME;
     private String message;
@@ -196,18 +196,22 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                 if (SubtitleJosnArray != null) {
                     if (SubtitleJosnArray.length() > 0) {
                         for (int i = 0; i < SubtitleJosnArray.length(); i++) {
+
+
                             SubTitleName.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
                             FakeSubTitlePath.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
-                            SubTitleLanguage.add(SubtitleJosnArray.getJSONObject(i).optString("code").trim());
+                            subtitle_code.add(SubtitleJosnArray.getJSONObject(i).optString("code").trim());
                             offline_url.add(SubtitleJosnArray.getJSONObject(i).optString("url").trim());
                             offline_language.add(SubtitleJosnArray.getJSONObject(i).optString("language").trim());
+
+
 
 
                         }
 
                         _video_details_output.setSubTitleName(SubTitleName);
                         _video_details_output.setFakeSubTitlePath(FakeSubTitlePath);
-                        _video_details_output.setSubTitleLanguage(SubTitleLanguage);
+                        _video_details_output.setSubTitleLanguage(subtitle_code);
                         _video_details_output.setOfflineUrl(offline_url);
                         _video_details_output.setOfflineLanguage(offline_language);
                     }
@@ -247,7 +251,11 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
                                     if (adJosnArray.getJSONObject(i).has("channel_id"))
                                         _video_details_output.setChannel_id(adJosnArray.getJSONObject(i).optString("channel_id").trim());
                                     if (adJosnArray.getJSONObject(i).has("ad_network_id"))
-                                        _video_details_output.setAdNetworkId(adJosnArray.getJSONObject(i).optInt("ad_network_id"));
+                                        try {
+                                            _video_details_output.setAdNetworkId(adJosnArray.getJSONObject(i).optInt("ad_network_id"));
+                                        }catch (Exception e){
+                                            _video_details_output.setAdNetworkId(0);
+                                        }
                                 }
 
                             }
@@ -256,9 +264,21 @@ public class VideoDetailsAsynctask extends AsyncTask<GetVideoDetailsInput, Void,
 
                     if (adJosnDetails.has("adsTime")) {
                         JSONObject adTimeJosnDetails = adJosnDetails.getJSONObject("adsTime");
-                        _video_details_output.setMidRoll(Integer.parseInt(adTimeJosnDetails.optString("mid")));
-                        _video_details_output.setPreRoll(Integer.parseInt(adTimeJosnDetails.optString("start")));
-                        _video_details_output.setPostRoll(Integer.parseInt(adTimeJosnDetails.optString("end")));
+                        try {
+                            _video_details_output.setMidRoll(Integer.parseInt(adTimeJosnDetails.optString("mid")));
+                        }catch (Exception e){
+                            _video_details_output.setMidRoll(0);
+                        }
+                        try {
+                            _video_details_output.setPreRoll(Integer.parseInt(adTimeJosnDetails.optString("start")));
+                        }catch (Exception e){
+                            _video_details_output.setPreRoll(0);
+                        }
+                        try {
+                            _video_details_output.setPostRoll(Integer.parseInt(adTimeJosnDetails.optString("end")));
+                        }catch (Exception e){
+                            _video_details_output.setPostRoll(0);
+                        }
 
                         if (_video_details_output.getMidRoll() == 1) {
                             _video_details_output.setAdDetails(adTimeJosnDetails.optString("midroll_values"));

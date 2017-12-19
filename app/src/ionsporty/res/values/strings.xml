@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">Penrith Juniors</string>
+    <string name="regular_fonts">fonts/OpenSans-Regular.ttf</string>
+    <string name="light_fonts">fonts/OpenSans-Light.ttf</string>
+
+    <!--App Drawer-->
+    <string name="action_search">Search</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="studio_site">http://pjrl.ion-sport.com/</string>
+    <string name="title_activity_resume_popup">ResumePopupActivity</string>
+  <!--  <string name="facebook_app_id">261414937652536</string>-->
+    <string name="facebook_app_id">1306334396125225</string>
+    <string name="fb_login_protocol_scheme">fb261414937652536</string>
+    <string name="fb_login_text">Login With Facebook</string>
+    <string name="fb_registration_text">Register With Facebook</string>
+
+    <!--
+        <string name="facebook_app_id">143293746197101</string>
+    -->
+    <string name="app_id">3EBA576E</string>
+    <string name="action_settings">Settings</string>
+    <string name="cast_app_name">GoogleCastPlayer</string>
+    <string name="media_route_menu_title">Play on&#8230;</string>
+    <string name="version">CastVideos: %1$s</string>
+    <!-- Preferences -->
+    <string name="prefs_header_application">Application Behavior</string>
+    <string name="prefs_header_application_summary">Control how the application behaves on the TV
+    </string>
+    <string name="prefs_termination_policy_default">0</string>
+    <string name="prefs_termination_policy_dialog_title">When Disconnecting</string>
+    <string name="prefs_volume_title">Volume Assignment</string>
+    <string name="prefs_volume_title_summary">Controls %1$s</string>
+    <string name="prefs_volume_dialog_title">Volume Assignment</string>
+    <string name="prefs_volume_default">device</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="about_app">About Cast Videos</string>
+    <string name="play_now">Play Now</string>
+    <string name="introducing_cast">Introducing Cast</string>
+</resources>

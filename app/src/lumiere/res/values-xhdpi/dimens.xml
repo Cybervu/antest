@@ -12,9 +12,11 @@
 
     <dimen name="singleimgwidth">90dp</dimen>
     <dimen name="singleimgheight">146dp</dimen>
-
+    <dimen name="preorderbtn_width">90dp</dimen>
+    <dimen name="preorderbtn_height">44dp</dimen>
     <dimen name="buttonheight">39dp</dimen>
     <dimen name="okbtn_width">150dp</dimen>
+    <dimen name="trailerbtn_text_size">13sp</dimen>
     <dimen name="okbtn_height">40dp</dimen>
     <dimen name="titletxt">14sp</dimen>
     <dimen name="indicatorheight">180dp</dimen>
@@ -33,7 +35,7 @@
     <dimen name="submit_text_size">16sp</dimen>
     <dimen name="listitemlayout_height">330dp</dimen>
     <dimen name="slider_height">200dp</dimen>
-    <dimen name="cancelbtn_text_size">13sp</dimen>
+    <dimen name="cancelbtn_text_size">10sp</dimen>
     <dimen name="registerbtn_height">40dp</dimen>
     <dimen name="banner_image_height">210dp</dimen>
     <dimen name="submit_height_size">45sp</dimen>
@@ -62,7 +64,7 @@
     <dimen name="episode_listing_section_textview">22sp</dimen>
     <dimen name="login_text_size">14sp</dimen>
     <dimen name="submitcontact_height">45dp</dimen>
-    <dimen name="sliderLayout_height">230dp</dimen>
+    <dimen name="sliderLayout_height">200dp</dimen>
     <dimen name="submitcontact_text_size">15sp</dimen>
     <dimen name="submitcontact_width">120dp</dimen>
     <dimen name="fragmentimgview_width">120dp</dimen>

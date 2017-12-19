@@ -11,6 +11,16 @@ public class Update_UserProfile_Input {
     String authToken;
     String user_id;
 
+    public String getCustom_last_name() {
+        return custom_last_name;
+    }
+
+    public void setCustom_last_name(String custom_last_name) {
+        this.custom_last_name = custom_last_name;
+    }
+
+    String custom_last_name;
+
     public String getPhone_no() {
         return phone_no;
     }

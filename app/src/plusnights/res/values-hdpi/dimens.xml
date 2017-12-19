@@ -18,6 +18,7 @@
 
 
     <dimen name="forgot_logo_width">120dp</dimen>
+    <dimen name="testview_text_size">30sp</dimen>
     <dimen name="filter_marginLeft">50dp</dimen>
     <dimen name="forgot_logo_height">120dp</dimen>
     <dimen name="email_text_size">14sp</dimen>
@@ -109,5 +110,6 @@
     <dimen name="homescreen_title_text_size">14sp</dimen>
     <dimen name="list_singlecard_img_width">108dp</dimen>
     <dimen name="list_singlecard_img_height">154dp</dimen>
-
+    <dimen name="trailerpadding">0dp</dimen>
+    <dimen name="Login_drawing_padding">8dp</dimen>
 </resources>

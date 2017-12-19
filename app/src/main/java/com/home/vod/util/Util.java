@@ -9,12 +9,18 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -35,6 +41,7 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.home.apisdk.apiModel.APVModel;
 import com.home.apisdk.apiModel.CurrencyModel;
 import com.home.apisdk.apiModel.PPVModel;
+import com.home.vod.BuildConfig;
 import com.home.vod.QueueDataProvider;
 import com.home.vod.R;
 import com.home.vod.activity.LoginActivity;
@@ -149,9 +156,17 @@ public class Util {
 
     public static boolean hide_pause = false;
     public static boolean call_finish_at_onUserLeaveHint = true;
+    public static int ERROR_CODE_EXPIRED_AUTHTOKEN = 410;
 
-    public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
+    //public static String Dwonload_pdf_rootUrl = "https://www.muvi.com/docs/";
+
+    public static String pdf_url=BuildConfig.SERVICE_BASE_PATH;
+    public static String  final_pdf_url=pdf_url.substring(0,pdf_url.lastIndexOf("rest"+""+'/'));
+    public static String Dwonload_pdf_rootUrl = final_pdf_url +""+ "docs/";
+
     public static boolean app_is_in_player_context = false;
+    public static ArrayList<String> drawer_collapse_expand_imageview = new ArrayList<>();
+    public static int image_compressed = 3;
 
    /*public static boolean checkNetwork(Context context) {
       ConnectivityManager cm =
@@ -227,17 +242,16 @@ public class Util {
         }
         return check;
     }
-    public static boolean isValidPhone(String phone)
-    {
 
-        if ((phone.length() >= 10) && (phone.length() <=15))
-        {
+    public static boolean isValidPhone(String phone) {
+
+        if ((phone.length() >= 10) && (phone.length() <= 15)) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
+
     public static boolean isConfirmPassword(String password, String confirmPassword) {
         Pattern pattern = Pattern.compile(password, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(confirmPassword);
@@ -455,7 +469,7 @@ public class Util {
         dlgAlert.create().show();
     }
 
-    public static void showActivateSubscriptionWatchVideoAleart(final Activity mContext,String showMsg) {
+    public static void showActivateSubscriptionWatchVideoAleart(final Activity mContext, String showMsg) {
         LanguagePreference languagePreference = LanguagePreference.getLanguagePreference(mContext);
         AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mContext, R.style.MyAlertDialogStyle);
                   /*  if (userMessage!=null && !userMessage.equalsIgnoreCase("")){
@@ -501,8 +515,8 @@ public class Util {
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                 LogUtil.showLog("MUVIshkey:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-                String s=Base64.encodeToString(md.digest(), Base64.DEFAULT);
+                LogUtil.showLog("MUVIshkey:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                String s = Base64.encodeToString(md.digest(), Base64.DEFAULT);
                 LogUtil.showLog("MUVIshkey:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
         } catch (PackageManager.NameNotFoundException e) {
@@ -510,6 +524,7 @@ public class Util {
         } catch (NoSuchAlgorithmException e) {
 
         }
+
     }
 
     /**
@@ -523,6 +538,7 @@ public class Util {
 
     public static void parseLanguage(LanguagePreference languagePreference, String jsonResponse, String default_Language) throws JSONException {
         JSONObject json = new JSONObject(jsonResponse);
+        setTranslationLanguageToPref(languagePreference, GEO_BLOCKED_ALERT, DEFAULT_GEO_BLOCKED_ALERT, "", json);
         setTranslationLanguageToPref(languagePreference, GMAIL_SIGNIN, DEFAULT_GMAIL_SIGNIN, "google_signin", json);
         setTranslationLanguageToPref(languagePreference, GMAIL_SIGNUP, DEFAULT_GMAIL_SIGNUP, "google_signup", json);
         setTranslationLanguageToPref(languagePreference, VIEW_LESS, DEFAULT_VIEW_LESS, "view_less", json);
@@ -530,6 +546,8 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, SUBSCRIPTION_COMPLETED, DEFAULT_SUBSCRIPTION_COMPLETED, "subscription completed", json);
 
         setTranslationLanguageToPref(languagePreference, ACTIAVTE_PLAN_TITLE, DEFAULT_ACTIAVTE_PLAN_TITLE, "activate_plan_title", json);
+        setTranslationLanguageToPref(languagePreference, APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE, "app_expired", json);
+
         setTranslationLanguageToPref(languagePreference, TRANSACTION_STATUS_ACTIVE, "", "transaction_status_active", json);
         setTranslationLanguageToPref(languagePreference, ADD_TO_FAV, "", "add_to_fav", json);
         setTranslationLanguageToPref(languagePreference, ADDED_TO_FAV, "", "added_to_fav", json);
@@ -540,14 +558,16 @@ public class Util {
         //setTranslationLanguageToPref(languagePreference, GOOGLE_FCM_TOKEN, DEFAULT_GOOGLE_FCM_TOKEN, "google_fcm_token", json);
 
         setTranslationLanguageToPref(languagePreference, EPISODE_TITLE, DEFAULT_EPISODE_TITLE, "episodes_title", json);
-        setTranslationLanguageToPref(languagePreference,GMAIL_SIGNIN,DEFAULT_GMAIL_SIGNIN,"gmail_signin",json);
+        setTranslationLanguageToPref(languagePreference, GMAIL_SIGNIN, DEFAULT_GMAIL_SIGNIN, "gmail_signin", json);
         setTranslationLanguageToPref(languagePreference, SORT_ALPHA_A_Z, DEFAULT_SORT_ALPHA_A_Z, "sort_alpha_a_z", json);
         setTranslationLanguageToPref(languagePreference, SORT_ALPHA_Z_A, DEFAULT_SORT_ALPHA_Z_A, "sort_alpha_z_a", json);
-        setTranslationLanguageToPref(languagePreference, LOGIN_FACEBOOK,DEFAULT_LOGIN_FACEBOOK,"login_facebook",json);
-        setTranslationLanguageToPref(languagePreference, REGISTER_FACEBOOK,DEFAULT_REGISTER_FACEBOOK,"register_facebook",json);
+        setTranslationLanguageToPref(languagePreference, LOGIN_FACEBOOK, DEFAULT_LOGIN_FACEBOOK, "login_facebook", json);
+        setTranslationLanguageToPref(languagePreference, REGISTER_FACEBOOK, DEFAULT_REGISTER_FACEBOOK, "register_facebook", json);
         setTranslationLanguageToPref(languagePreference, AMOUNT, DEFAULT_AMOUNT, "amount", json);
         setTranslationLanguageToPref(languagePreference, COUPON_CANCELLED, DEFAULT_COUPON_CANCELLED, "coupon_cancelled", json);
         setTranslationLanguageToPref(languagePreference, BUTTON_APPLY, DEFAULT_BUTTON_APPLY, "btn_apply", json);
+        setTranslationLanguageToPref(languagePreference, CHK_OVER_18, DEFAULT_CHK_OVER_18, "chk_over_18", json);
+
         setTranslationLanguageToPref(languagePreference, SIGN_OUT_WARNING, DEFAULT_SIGN_OUT_WARNING, "sign_out_warning", json);
         setTranslationLanguageToPref(languagePreference, DISCOUNT_ON_COUPON, DEFAULT_DISCOUNT_ON_COUPON, "discount_on_coupon", json);
         setTranslationLanguageToPref(languagePreference, MY_LIBRARY, DEFAULT_MY_LIBRARY, "my_library", json);
@@ -565,8 +585,10 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, CANCEL_BUTTON, DEFAULT_CANCEL_BUTTON, "btn_cancel", json);
         setTranslationLanguageToPref(languagePreference, RESUME_MESSAGE, DEFAULT_RESUME_MESSAGE, "resume_watching", json);
         setTranslationLanguageToPref(languagePreference, CONTINUE_BUTTON, DEFAULT_CONTINUE_BUTTON, "continue", json);
+        setTranslationLanguageToPref(languagePreference, CONTACT_US, DEFAULT_CONTACT_US, "contact_us", json);
 
 
+        setTranslationLanguageToPref(languagePreference, ENTER_VOUCHER_CODE, DEFAULT_ENTER_VOUCHER_CODE, "enter_voucher_code", json);
         setTranslationLanguageToPref(languagePreference, CONFIRM_PASSWORD, DEFAULT_CONFIRM_PASSWORD, "confirm_password", json);
         setTranslationLanguageToPref(languagePreference, CREDIT_CARD_DETAILS, DEFAULT_CREDIT_CARD_DETAILS, "credit_card_detail", json);
         setTranslationLanguageToPref(languagePreference, DIRECTOR, "", "director", json);
@@ -607,7 +629,9 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, SORT_LAST_UPLOADED, DEFAULT_SORT_LAST_UPLOADED, "sort_last_uploaded", json);
 
         setTranslationLanguageToPref(languagePreference, LANGUAGE_POPUP_LOGIN, DEFAULT_LANGUAGE_POPUP_LOGIN, "language_popup_login", json);
-        setTranslationLanguageToPref(languagePreference, LOGIN, DEFAULT_LOGIN, "activity_login", json);
+        setTranslationLanguageToPref(languagePreference, LOGIN, DEFAULT_LOGIN, "login", json);
+        setTranslationLanguageToPref(languagePreference, FIRST_NAME, DEFAULT_FIRST_NAME, "first_name", json);
+        setTranslationLanguageToPref(languagePreference, LAST_NAME, DEFAULT_LAST_NAME, "last_name", json);
         setTranslationLanguageToPref(languagePreference, LOGOUT, DEFAULT_LOGOUT, "logout", json);
         setTranslationLanguageToPref(languagePreference, LOGOUT_SUCCESS, DEFAULT_LOGOUT_SUCCESS, "logout_success", json);
         setTranslationLanguageToPref(languagePreference, MY_FAVOURITE, DEFAULT_MY_FAVOURITE, "my_favourite", json);
@@ -635,11 +659,13 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, PAY_WITH_CREDIT_CARD, "", "pay_with_credit_card", json);
         setTranslationLanguageToPref(languagePreference, PAYMENT_OPTIONS_TITLE, DEFAULT_PAYMENT_OPTIONS_TITLE, "payment_options_title", json);
         setTranslationLanguageToPref(languagePreference, PLAN_NAME, DEFAULT_PLAN_NAME, "plan_name", json);
+        setTranslationLanguageToPref(languagePreference, PLAN_NAME, DEFAULT_PLAN_NAME, "plan_name", json);
         setTranslationLanguageToPref(languagePreference, ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, DEFAULT_ACTIVATE_SUBSCRIPTION_WATCH_VIDEO, "activate_subscription_watch_video", json);
 
         setTranslationLanguageToPref(languagePreference, COUPON_ALERT, "", "coupon_alert", json);
         setTranslationLanguageToPref(languagePreference, VALID_CONFIRM_PASSWORD, "", "valid_confirm_password", json);
         setTranslationLanguageToPref(languagePreference, PROFILE, DEFAULT_PROFILE, "profile", json);
+        setTranslationLanguageToPref(languagePreference, BUTTON_RESET, DEFAULT_BUTTON_RESET, "btn_reset", json);
         setTranslationLanguageToPref(languagePreference, PROFILE_UPDATED, DEFAULT_PROFILE_UPDATED, "profile_updated", json);
 
         setTranslationLanguageToPref(languagePreference, PURCHASE, DEFAULT_PURCHASE, "purchase", json);
@@ -721,7 +747,14 @@ public class Util {
 
     }
 
-
+    /**
+     * This method is used to set translation language from json keyword.
+     * @param languagePreference
+     * @param lanngKey
+     * @param langValue
+     * @param jsonKey
+     * @param jsonObject
+     */
     private static void setTranslationLanguageToPref(LanguagePreference languagePreference, String lanngKey,
                                                      String langValue, String jsonKey, JSONObject jsonObject) {
         if (jsonObject.has(jsonKey))
@@ -732,7 +765,15 @@ public class Util {
     }
 
 
-    public static void getDPI(Context _context) {
+    public static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
+    public static int getDPI(Context _context) {
+
+        int screen_Info=0;
 
         int density = _context.getResources().getDisplayMetrics().densityDpi;
         float density1 = _context.getResources().getDisplayMetrics().density;
@@ -748,39 +789,47 @@ public class Util {
         switch (density) {
             case DisplayMetrics.DENSITY_LOW: {
                 LogUtil.showLog("Login", "LDPI height-" + dpHeight + ",Width:-" + dpWidth);
+                screen_Info=DisplayMetrics.DENSITY_LOW;
             }
             break;
             case DisplayMetrics.DENSITY_MEDIUM: {
                 LogUtil.showLog("Login", "MDPI height-" + dpHeight + ",Width:-" + dpWidth);
+                screen_Info=DisplayMetrics.DENSITY_MEDIUM;
 
             }
             break;
             case DisplayMetrics.DENSITY_HIGH: {
                 LogUtil.showLog("Login", "HDPI height-" + dpHeight + ",Width:-" + dpWidth);
+                screen_Info=DisplayMetrics.DENSITY_HIGH;
 
             }
             break;
             case DisplayMetrics.DENSITY_XHIGH: {
                 LogUtil.showLog("Login", "XHDPI height-" + dpHeight + ",Width:-" + dpWidth);
+                screen_Info=DisplayMetrics.DENSITY_XHIGH;
 
             }
             break;
             case DisplayMetrics.DENSITY_XXHIGH: {
                 LogUtil.showLog("Login", "XXHDPI height-" + dpHeight + ",Width:-" + dpWidth);
+                screen_Info=DisplayMetrics.DENSITY_XXHIGH;
 
             }
             break;
             case DisplayMetrics.DENSITY_XXXHIGH: {
                 LogUtil.showLog("Login", "XXXHDPI height-" + dpHeight + ",Width:-" + dpWidth);
+                screen_Info=DisplayMetrics.DENSITY_XXXHIGH;
 
             }
             break;
             case DisplayMetrics.DENSITY_TV: {
                 LogUtil.showLog("Login", "TVDPI height-" + dpHeight + ",Width:-" + dpWidth);
+                screen_Info=DisplayMetrics.DENSITY_TV;
 
             }
             break;
         }
+        return screen_Info;
     }
 
 
@@ -788,7 +837,7 @@ public class Util {
         return languagePreference.getTextofLanguage(IS_STREAMING_RESTRICTION, DEFAULT_IS_IS_STREAMING_RESTRICTION).equals("1");
     }
 
-    public static void hideKeyboard(Context context){
+    public static void hideKeyboard(Context context) {
         Activity act = (Activity) context;
         InputMethodManager inputManager = (InputMethodManager)
                 act.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -797,4 +846,51 @@ public class Util {
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
+    /**
+     * This method will return a string format text which comes form API end , if it contains any html contnet.
+     *
+     * @param input
+     * @return
+     */
+    public static String getTextViewTextFromApi(String input) {
+
+        return "" + (input.replace("\\r\\n", "<br>").replace("\\n", "<br>").replace("\\", ""));
+
+    }
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         float reqWidth, float reqHeight) {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, float reqWidth, float reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+
+
 }
+

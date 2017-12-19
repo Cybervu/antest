@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/appBackgroundColor"
-    >
-
+    tools:context="com.home.vod.activity.MainActivity" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,32 +24,35 @@
                 android:id="@+id/toolbar"
                 layout="@layout/toolbar" />
         </LinearLayout>
-
         <FrameLayout
-            android:id="@+id/container_body"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/main_frame_height"
-            android:layout_weight="1" />
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
 
 
     </LinearLayout>
 
 
+
+
+
     <fragment
-        android:id="@+id/fragment_navigation_drawer"
-        android:name="com.home.vod.fragment.FragmentDrawer"
+        android:id="@+id/navigation_drawer"
+        android:name="com.home.vod.activity.NavigationDrawerFragment"
         android:layout_width="@dimen/nav_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:layout="@layout/fragment_navigation_drawer"
-        tools:layout="@layout/fragment_navigation_drawer" />
+        tools:layout="@layout/drawer_drawer"/>
+
     <RelativeLayout
         android:id="@+id/noInternet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/appBackgroundColor"
         android:visibility="gone"
-        android:padding="@dimen/main_padding">
+
+        android:padding="8dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -61,7 +63,7 @@
             android:singleLine="false"
             android:layout_centerInParent="true"
             android:textColor="@color/noInternetColor"
-            android:textSize="@dimen/testview_text_size"
+            android:textSize="36sp"
             android:textStyle="bold" />
 
 

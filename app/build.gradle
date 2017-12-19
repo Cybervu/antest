@@ -1,3 +1,4 @@
+
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
@@ -49,21 +50,23 @@ android {
             applicationId 'com.release.muvisdk'
             minSdkVersion 15
             targetSdkVersion 23
-            versionCode 2
-            versionName "1.01"
+            versionCode 4
+            versionName "1.04"
             testInstrumentationRunner "android.support.testR.runner.AndroidJUnitRunner"
             //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
-           // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
+            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
             //  buildConfigField "String", "AUTH_TOKEN", "\"d2d529d95240ed416ead6684bd888c0f\""//idogic test
-            buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//edocent
+            //buildConfigField "String", "AUTH_TOKEN", "\"5e478efeab5dae14ea960b251f08b491\""//edocent
         }
         defaultFlavor_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+            // buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         defaultFlavor_Prod_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+            //buildConfigField "String", "SERVICE_BASE_PATH", "\"http://www.edocent.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
         /*Structuring vishwamtv flavour with dimension*/
         vishwamtv {
@@ -75,6 +78,7 @@ android {
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"e8ae05a2ef3fd0c6688952c8f7557823\""
+            // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
         }
         vishwamtv_staging_ {
             dimension 'environment'
@@ -93,8 +97,8 @@ android {
             versionCode 1
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
-            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
+            buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
+            //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
             // buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
             // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
         }
@@ -150,11 +154,12 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.teststreamingapp'
-            versionCode 11
+            versionCode 16
             targetSdkVersion 25
-            versionName '2.2.4'
+            versionName '3.1.2'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
+            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
+            //buildConfigField "String", "AUTH_TOKEN", "\"759f1f0dababbf4cae7b423d833a87f4\""
         }
         lumiere_staging_ {
             dimension 'environment'
@@ -169,22 +174,26 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.matas'
-            versionCode 11
+            versionCode 4
             targetSdkVersion 25
-            versionName '1.0.1'
+            versionName '1.1.1'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
             buildConfigField "String", "AUTH_TOKEN", "\"0c2236eee851357d1fecc01fbba128c5\""
-            //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+//            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
         }
         matas_staging_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+//            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+
         }
         matas_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+//            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+
         }
-       /*Structuring Monetizer flavour with dimension*/
+        /*Structuring Monetizer flavour with dimension*/
         monetizer {
             dimension 'vendor'
             minSdkVersion 21
@@ -208,9 +217,9 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.plusnights'
-            versionCode 1
+            versionCode 5
             targetSdkVersion 25
-            versionName "1.0.0"
+            versionName "1.4.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"0831fbbacf89caf9d32aca43e21665b8\""
             //            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
@@ -305,9 +314,8 @@ android {
             targetSdkVersion 25
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            //            buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
-            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
-
+            buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
+            //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
         }
         yoteshingo_staging_ {
             dimension 'environment'
@@ -323,15 +331,115 @@ android {
             applicationId 'com.release.magicmovies'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"3ea7e43c13d8ab6eb505b960217df923\""
+//Magic Movies
+           // buildConfigField "String", "AUTH_TOKEN", "\"ffc9daf6dadbc94f8aa00d02ffd91928\""
             targetSdkVersion 23
             versionCode 1
             versionName '1.0'
         }
         magicmovies_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://api-ireland.muvi.com/rest/\""
         }
         magicmovies_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://api-ireland.muvi.com/rest/\""
+        }
+        ubereatsvod {
+            minSdkVersion 21
+            dimension 'vendor'
+            applicationId 'com.release.UberEatsVOD'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"45cfb681ab026427eb9c031e3f6c1f08\""
+            targetSdkVersion 23
+            versionCode 1
+            versionName '1.0'
+        }
+        ubereatsvod_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+        ubereatsvod_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://sonydadc.muvi.com/rest/\""
+        }
+        ionsporty {
+            minSdkVersion 21
+            dimension 'vendor'
+            applicationId 'com.release.penrithJuniors'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            buildConfigField "String", "AUTH_TOKEN", "\"848ff43117a71e967354b42f5735e2cc\""
+            targetSdkVersion 25
+            versionCode 1
+            versionName '1.0'
+
+        }
+        ionsporty_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        ionsporty_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        mikado {
+            minSdkVersion 21
+            dimension 'vendor'
+            applicationId 'com.release.canal'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            // buildConfigField "String", "AUTH_TOKEN", "\"398fe175085c765637c0dc4c02acb3fa\""
+            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            targetSdkVersion 25
+            versionCode 3
+            versionName '1.0.2'
+        }
+        mikado_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        mikado_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+
+
+        gabejaramillo {
+            minSdkVersion 21
+            dimension 'vendor'
+            applicationId 'com.release.gabejaramillo'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+             //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+           buildConfigField "String", "AUTH_TOKEN", "\"e35feed9e448d7e709a438d48418cf4a\""
+            targetSdkVersion 25
+            versionCode 3
+            versionName '1.0.2'
+        }
+        gabejaramillo_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        gabejaramillo_Prod_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+
+        cote_ouest {
+            minSdkVersion 16
+            dimension 'vendor'
+            applicationId 'com.release.coteouest'
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            // buildConfigField "String", "AUTH_TOKEN", "\"398fe175085c765637c0dc4c02acb3fa\""
+            buildConfigField "String", "AUTH_TOKEN", "\"0f05eecafd0c3cb4290050ee055118e8\""
+            targetSdkVersion 23
+            versionCode 1
+            versionName '1.0'
+        }
+        cote_ouest_staging_ {
+            dimension 'environment'
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+        }
+        cote_ouest_Prod_ {
             dimension 'environment'
             buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
         }
@@ -352,51 +460,68 @@ android.variantFilter { variant ->
     /*Avoid defaultFlavor to vishwamtv combination for both debug & release mode.*/
 
     if (vendor.equals('defaultFlavor') && (environment.equals('defaultFlavor_staging_') || environment.equals('defaultFlavor_Prod_'))
-            && (isRelease||isDebug)) {
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('vishwamtv') && (environment.equals('vishwamtv_staging_')||environment.equals('vishwamtv_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('vishwamtv') && (environment.equals('vishwamtv_staging_') || environment.equals('vishwamtv_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('newthoughtchannel') && (environment.equals('newthoughtchannel_staging_')||environment.equals('newthoughtchannel_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('newthoughtchannel') && (environment.equals('newthoughtchannel_staging_') || environment.equals('newthoughtchannel_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('digiOsmosis') && (environment.equals('digiOsmosis_staging_')||environment.equals('digiOsmosis_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('digiOsmosis') && (environment.equals('digiOsmosis_staging_') || environment.equals('digiOsmosis_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('lumiere') && (environment.equals('lumiere_staging_')||environment.equals('lumiere_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('lumiere') && (environment.equals('lumiere_staging_') || environment.equals('lumiere_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('matas') && (environment.equals('matas_staging_')||environment.equals('matas_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('matas') && (environment.equals('matas_staging_') || environment.equals('matas_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('monetizer') && (environment.equals('monetizer_staging_')||environment.equals('monetizer_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('monetizer') && (environment.equals('monetizer_staging_') || environment.equals('monetizer_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('plusnights') && (environment.equals('plusnights_staging_')||environment.equals('plusnights_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('plusnights') && (environment.equals('plusnights_staging_') || environment.equals('plusnights_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('metrox') && (environment.equals('metrox_staging_')||environment.equals('metrox_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('metrox') && (environment.equals('metrox_staging_') || environment.equals('metrox_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('wuntustreaming') && (environment.equals('wuntustreaming_staging_')||environment.equals('wuntustreaming_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('wuntustreaming') && (environment.equals('wuntustreaming_staging_') || environment.equals('wuntustreaming_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('cmax') && (environment.equals('cmax_staging_')||environment.equals('cmax_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('cmax') && (environment.equals('cmax_staging_') || environment.equals('cmax_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('muvinow') && (environment.equals('muvinow_staging_')||environment.equals('muvinow_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('muvinow') && (environment.equals('muvinow_staging_') || environment.equals('muvinow_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('yoteshingo') && (environment.equals('yoteshingo_staging_')||environment.equals('yoteshingo_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('yoteshingo') && (environment.equals('yoteshingo_staging_') || environment.equals('yoteshingo_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else if (vendor.equals('magicmovies') && (environment.equals('magicmovies_staging_')||environment.equals('magicmovies_Prod_'))
-            && (isRelease||isDebug)) {
+    } else if (vendor.equals('magicmovies') && (environment.equals('magicmovies_staging_') || environment.equals('magicmovies_Prod_'))
+            && (isRelease || isDebug)) {
         variant.setIgnore(false)
-    }else{
+    } else if (vendor.equals('ubereatsvod') && (environment.equals('ubereatsvod_staging_') || environment.equals('ubereatsvod_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    } else if (vendor.equals('ionsporty') && (environment.equals('ionsporty_staging_') || environment.equals('ionsporty_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    } else if (vendor.equals('mikado') && (environment.equals('mikado_staging_') || environment.equals('mikado_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    } else if (vendor.equals('cote_ouest') && (environment.equals('cote_ouest_staging_') || environment.equals('cote_ouest_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else if (vendor.equals('gabejaramillo') && (environment.equals('gabejaramillo_staging_') || environment.equals('gabejaramillo_Prod_'))
+            && (isRelease || isDebug)) {
+        variant.setIgnore(false)
+    }
+    else {
         variant.setIgnore(true)
     }
-   }
+}
 
 android {
     useLibrary 'org.apache.http.legacy'

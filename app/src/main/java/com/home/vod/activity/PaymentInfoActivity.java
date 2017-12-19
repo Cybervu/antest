@@ -92,6 +92,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_ERROR_IN_SUBSC
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SUBSCRIPTION_COMPLETED;
 import static com.home.vod.preferences.LanguagePreference.ERROR_IN_SUBSCRIPTION;
@@ -99,6 +100,7 @@ import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.IS_ONE_STEP_REGISTRATION;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
+import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
 import static com.home.vod.preferences.LanguagePreference.SUBSCRIPTION_COMPLETED;
 import static com.home.vod.util.Constant.authTokenStr;
@@ -248,6 +250,14 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
         } else {
             //mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         }
+
+        if (getIntent().getStringExtra("muviuniqueid") != null) {
+            muviUniqueIdStr = getIntent().getStringExtra("muviuniqueid");
+        } else {
+            muviUniqueIdStr = "";
+        }
+
+
 
         /*mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -1185,13 +1195,14 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
     @Override
     public void onRegisterUserPaymentPostExecuteCompleted(RegisterUserPaymentOutputModel registerUserPaymentOutputModel, int status) {
 
+        try {
+            if (progressBarHandler.isShowing())
+                progressBarHandler.hide();
+        } catch (IllegalArgumentException ex) {
+            status = 0;
+        }
         if (status == 0) {
-            try {
-                if (progressBarHandler.isShowing())
-                    progressBarHandler.hide();
-            } catch (IllegalArgumentException ex) {
-                status = 0;
-            }
+
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
             dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_SUBSCRIPTION, DEFAULT_ERROR_IN_SUBSCRIPTION));
             dlgAlert.setTitle(languagePreference.getTextofLanguage(FAILURE, DEFAULT_FAILURE));
@@ -1207,8 +1218,6 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
         } else if (status > 0) {
 
             if (status == 200) {
-                if (progressBarHandler.isShowing())
-                    progressBarHandler.hide();
                 Toast.makeText(PaymentInfoActivity.this, languagePreference.getTextofLanguage(SUBSCRIPTION_COMPLETED, DEFAULT_SUBSCRIPTION_COMPLETED), Toast.LENGTH_LONG).show();
                 if (Util.check_for_subscription == 0) {
                     Intent intent = new Intent(PaymentInfoActivity.this, MainActivity.class);
@@ -1224,7 +1233,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                         getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                         getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                         getVideoDetailsInput.setContent_uniq_id(Util.dataModel.getMovieUniqueId().trim());
-
+                        getVideoDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
                         VideoDetailsAsynctask asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, PaymentInfoActivity.this, PaymentInfoActivity.this);
                         asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
@@ -1239,12 +1248,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                 }
 
             } else {
-                try {
-                    if (progressBarHandler.isShowing())
-                        progressBarHandler.hide();
-                } catch (IllegalArgumentException ex) {
-                    status = 0;
-                }
+
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(PaymentInfoActivity.this);
                 dlgAlert.setMessage(languagePreference.getTextofLanguage(ERROR_IN_SUBSCRIPTION, DEFAULT_ERROR_IN_SUBSCRIPTION));
                 dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
@@ -1257,6 +1261,7 @@ public class PaymentInfoActivity extends ActionBarActivity implements VideoDetai
                             }
                         });
                 dlgAlert.create().show();
+
             }
         }
 

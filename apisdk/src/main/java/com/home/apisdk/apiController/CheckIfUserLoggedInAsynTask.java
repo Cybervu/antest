@@ -137,9 +137,17 @@ public class CheckIfUserLoggedInAsynTask extends AsyncTask<CheckIfUserLoggedInIn
 
             if (status == 200) {
 
-                if ((myJson.has("is_login")) && myJson.optString("is_login").trim() != null && !myJson.optString("is_login").trim().isEmpty() && !myJson.optString("is_login").trim().equals("null") && !myJson.optString("is_login").trim().matches("")) {
-                    checkIfUserLoggedInOutputModel.setIs_login(Integer.parseInt(myJson.optString("is_login")));
+                try {
+                    if ((myJson.has("is_login")) && myJson.optString("is_login").trim() != null && !myJson.optString("is_login").trim().isEmpty() && !myJson.optString("is_login").trim().equals("null") && !myJson.optString("is_login").trim().matches("")) {
+                        checkIfUserLoggedInOutputModel.setIs_login(Integer.parseInt(myJson.optString("is_login")));
+                    }
+                    else {
+                        checkIfUserLoggedInOutputModel.setIs_login(0);
+                    }
+                }catch (Exception e){
+                    checkIfUserLoggedInOutputModel.setIs_login(0);
                 }
+
 
 
             } else {

@@ -9,6 +9,7 @@
         <dimen name="imgheight">300dp</dimen>
         <dimen name="imgwidth">300dp</dimen>
         <dimen name="toolbarheight">70dp</dimen>
+
         <dimen name="navwide">400dp</dimen>
 
         <dimen name="singleimgwidth">170dp</dimen>
@@ -18,6 +19,7 @@
 
 
         <dimen name="forgot_logo_width">200dp</dimen>
+        <dimen name="radiobtn_text_size">17sp</dimen>
         <dimen name="forgot_logo_height">200dp</dimen>
         <dimen name="email_text_size">14sp</dimen>
         <dimen name="btnmore_text_size">16sp</dimen>

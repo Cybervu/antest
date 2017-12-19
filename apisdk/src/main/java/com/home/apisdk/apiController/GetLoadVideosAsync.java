@@ -163,15 +163,40 @@ public class GetLoadVideosAsync extends AsyncTask<LoadVideoInput, Void, Void> {
                         if ((jsonChildNode.has("content_types_id")) && jsonChildNode.optString("content_types_id").trim() != null && !jsonChildNode.optString("content_types_id").trim().isEmpty() && !jsonChildNode.optString("content_types_id").trim().equals("null") && !jsonChildNode.optString("content_types_id").trim().matches("")) {
                             content.setContent_types_id(jsonChildNode.optString("content_types_id"));
                         }
-                        if ((jsonChildNode.has("is_converted")) && jsonChildNode.optString("is_converted").trim() != null && !jsonChildNode.optString("is_converted").trim().isEmpty() && !jsonChildNode.optString("is_converted").trim().equals("null") && !jsonChildNode.optString("is_converted").trim().matches("")) {
-                            content.setIs_converted(jsonChildNode.optInt("is_converted"));
+
+                        try {
+                            if ((jsonChildNode.has("is_converted")) && jsonChildNode.optString("is_converted").trim() != null && !jsonChildNode.optString("is_converted").trim().isEmpty() && !jsonChildNode.optString("is_converted").trim().equals("null") && !jsonChildNode.optString("is_converted").trim().matches("")) {
+                                content.setIs_converted(jsonChildNode.optInt("is_converted"));
+                            }
+                            else {
+                                content.setIs_converted(0);
+                            }
+                        }catch (Exception e){
+                            content.setIs_converted(0);
                         }
-                        if ((jsonChildNode.has("is_advance")) && jsonChildNode.optString("is_advance").trim() != null && !jsonChildNode.optString("is_advance").trim().isEmpty() && !jsonChildNode.optString("is_advance").trim().equals("null") && !jsonChildNode.optString("is_advance").trim().matches("")) {
-                            content.setIs_advance(jsonChildNode.optInt("is_advance"));
+
+                        try {
+                            if ((jsonChildNode.has("is_advance")) && jsonChildNode.optString("is_advance").trim() != null && !jsonChildNode.optString("is_advance").trim().isEmpty() && !jsonChildNode.optString("is_advance").trim().equals("null") && !jsonChildNode.optString("is_advance").trim().matches("")) {
+                                content.setIs_advance(jsonChildNode.optInt("is_advance"));
+                            }
+                            else {
+                                content.setIs_advance(0);
+                            }
+                        }catch (Exception e){
+                            content.setIs_advance(0);
                         }
-                        if ((jsonChildNode.has("is_ppv")) && jsonChildNode.optString("is_ppv").trim() != null && !jsonChildNode.optString("is_ppv").trim().isEmpty() && !jsonChildNode.optString("is_ppv").trim().equals("null") && !jsonChildNode.optString("is_ppv").trim().matches("")) {
-                            content.setIs_ppv(jsonChildNode.optInt("is_ppv"));
+
+                        try {
+                            if ((jsonChildNode.has("is_ppv")) && jsonChildNode.optString("is_ppv").trim() != null && !jsonChildNode.optString("is_ppv").trim().isEmpty() && !jsonChildNode.optString("is_ppv").trim().equals("null") && !jsonChildNode.optString("is_ppv").trim().matches("")) {
+                                content.setIs_ppv(jsonChildNode.optInt("is_ppv"));
+                            }
+                            else {
+                                content.setIs_ppv(0);
+                            }
+                        }catch (Exception e){
+                            content.setIs_ppv(0);
                         }
+
                         if ((jsonChildNode.has("is_episode")) && jsonChildNode.optString("is_episode").trim() != null && !jsonChildNode.optString("is_episode").trim().isEmpty() && !jsonChildNode.optString("is_episode").trim().equals("null") && !jsonChildNode.optString("is_episode").trim().matches("")) {
                             content.setIs_episode(jsonChildNode.optString("is_episode"));
                         }

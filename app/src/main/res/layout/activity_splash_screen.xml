@@ -2,9 +2,14 @@
     android:id="@+id/mainlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_screen"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
+    <ImageView
+        android:id="@+id/splash_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
     <RelativeLayout
         android:id="@+id/noInternet"
@@ -44,8 +49,9 @@
 
         <ImageView
             android:id="@+id/geoBlockedImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:scaleType="fitXY"
             android:layout_centerInParent="true"
             android:src="@drawable/logo" />
 

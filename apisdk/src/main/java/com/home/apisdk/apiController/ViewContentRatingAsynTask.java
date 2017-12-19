@@ -143,9 +143,15 @@ public class ViewContentRatingAsynTask extends AsyncTask<ViewContentRatingInputM
                 if (status == 200) {
                     viewContentRatingOutputModel = new ViewContentRatingOutputModel();
 
-                    if ((myJson.has("showrating")) && myJson.optString("showrating").trim() != null && !myJson.optString("showrating").trim().isEmpty() && !myJson.optString("showrating").trim().equals("null") && !myJson.optString("showrating").trim().matches("")) {
-                        viewContentRatingOutputModel.setShowrating(Integer.parseInt(myJson.optString("showrating")));
+                    try {
+                        if ((myJson.has("showrating")) && myJson.optString("showrating").trim() != null && !myJson.optString("showrating").trim().isEmpty() && !myJson.optString("showrating").trim().equals("null") && !myJson.optString("showrating").trim().matches("")) {
+                            viewContentRatingOutputModel.setShowrating(Integer.parseInt(myJson.optString("showrating")));
 
+                        }else {
+                            viewContentRatingOutputModel.setShowrating(0);
+                        }
+                    }catch (Exception e){
+                        viewContentRatingOutputModel.setShowrating(0);
                     }
                     JSONArray jsonMainNode = myJson.getJSONArray("rating");
                     int lengthJsonArr = jsonMainNode.length();

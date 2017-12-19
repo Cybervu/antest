@@ -329,4 +329,7 @@
     <dimen name="homescreen_title_text_size">16sp</dimen>
     <dimen name="list_singlecard_img_width">108dp</dimen>
     <dimen name="list_singlecard_img_height">154dp</dimen>
+    <!--new  dimen optimization for menu-->
+    <dimen name="slider_menu_width">300dp</dimen>
+    <dimen name="trailerpadding">6dp</dimen>
 </resources>

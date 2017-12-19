@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -66,6 +67,7 @@ import com.home.vod.activity.FilterActivity;
 import com.home.vod.activity.LoginActivity;
 import com.home.vod.activity.MainActivity;
 import com.home.vod.activity.MovieDetailsActivity;
+import com.home.vod.activity.ViewMoreActivity;
 import com.home.vod.adapter.GenreFilterAdapter;
 import com.home.vod.adapter.VideoFilterAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
@@ -91,6 +93,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -108,6 +111,7 @@ import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 import static com.home.vod.preferences.LanguagePreference.BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_FILTER_BY;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
@@ -121,6 +125,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_BY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_LAST_UPLOADED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORT_RELEASE_DATE;
 import static com.home.vod.preferences.LanguagePreference.FILTER_BY;
+import static com.home.vod.preferences.LanguagePreference.IS_MYLIBRARY;
 import static com.home.vod.preferences.LanguagePreference.NO_CONTENT;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
@@ -240,7 +245,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 videoImageStrToHeight = movieImageStr;
 
                 if (firstTime == true) {
-                    Picasso.with(getActivity()).load(videoImageStrToHeight
+
+                    new RetrieveFeedTask().execute(videoImageStrToHeight);
+
+                /*    Picasso.with(getActivity()).load(videoImageStrToHeight
                     ).into(new Target() {
 
                         @Override
@@ -258,10 +266,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
                         @Override
                         public void onPrepareLoad(final Drawable placeHolderDrawable) {
-                                /*AsynLOADUI loadUI = new AsynLOADUI();
-                                loadUI.executeOnExecutor(threadPoolExecutor);*/
+                                *//*AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);*//*
                         }
-                    });
+                    });*/
                 } else {
                     loadUI = new AsynLOADUI();
                     loadUI.executeOnExecutor(threadPoolExecutor);
@@ -384,7 +392,11 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
                 videoImageStrToHeight = movieImageStr;
 
                 if (firstTime == true) {
-                    Picasso.with(getActivity()).load(videoImageStrToHeight
+
+
+                    new RetrieveFeedTask().execute(videoImageStrToHeight);
+
+                   /* Picasso.with(getActivity()).load(videoImageStrToHeight
                     ).into(new Target() {
 
                         @Override
@@ -402,10 +414,10 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
 
                         @Override
                         public void onPrepareLoad(final Drawable placeHolderDrawable) {
-                                /*AsynLOADUI loadUI = new AsynLOADUI();
-                                loadUI.executeOnExecutor(threadPoolExecutor);*/
+                                *//*AsynLOADUI loadUI = new AsynLOADUI();
+                                loadUI.executeOnExecutor(threadPoolExecutor);*//*
                         }
-                    });
+                    });*/
                 } else {
                     loadUI = new AsynLOADUI();
                     loadUI.executeOnExecutor(threadPoolExecutor);
@@ -686,6 +698,8 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         genreListData.setItemAnimator(new DefaultItemAnimator());
         preferenceManager = PreferenceManager.getPreferenceManager(getActivity());
         languagePreference = LanguagePreference.getLanguagePreference(getActivity());
+
+
 
         posterUrl = languagePreference.getTextofLanguage(NO_DATA,DEFAULT_NO_DATA);
 
@@ -2479,4 +2493,52 @@ public class VideosListFragment extends Fragment implements GetContentListAsynTa
         }
     }
 /***************chromecast**********************/
+
+
+// Added by bibhu
+class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
+
+    private Exception exception;
+    private ProgressBarHandler phandler;
+
+    protected Void doInBackground(String... urls) {
+        try {
+
+
+            URL url = new URL(urls[0]);
+            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            videoHeight = bmp.getHeight();
+            videoWidth = bmp.getWidth();
+
+
+            LogUtil.showLog("MUVI", "videoHeight==============" + videoHeight);
+            LogUtil.showLog("MUVI", "videoWidth==============" + videoWidth);
+
+            return null;
+        } catch (Exception e) {
+            this.exception = e;
+            return null;
+        }
+    }
+
+    protected void onPostExecute(Void feed) {
+        // TODO: check this.exception
+        // TODO: do something with the feed
+
+           /* if (phandler != null && phandler.isShowing()) {
+                phandler.hide();
+            }*/
+
+        AsynLOADUI loadUI = new AsynLOADUI();
+        loadUI.executeOnExecutor(threadPoolExecutor);
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+          /*  phandler = new ProgressBarHandler(getActivity());
+            phandler.show();*/
+
+    }
+}
 }

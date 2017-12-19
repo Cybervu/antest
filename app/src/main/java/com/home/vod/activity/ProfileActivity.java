@@ -56,27 +56,21 @@ import static com.home.vod.preferences.LanguagePreference.CONFIRM_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CHANGE_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONFIRM_PASSWORD;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_FAILURE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_MANAGE_DEVICE;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NEW_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_OLD_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PASSWORDS_DO_NOT_MATCH;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROFILE_UPDATED;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_UPDATE_PROFILE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_UPDATE_PROFILE_ALERT;
-import static com.home.vod.preferences.LanguagePreference.FAILURE;
 import static com.home.vod.preferences.LanguagePreference.IS_RESTRICT_DEVICE;
 import static com.home.vod.preferences.LanguagePreference.MANAGE_DEVICE;
-import static com.home.vod.preferences.LanguagePreference.NAME_HINT;
 import static com.home.vod.preferences.LanguagePreference.NEW_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_INTERNET_CONNECTION;
-import static com.home.vod.preferences.LanguagePreference.OLD_PASSWORD;
 import static com.home.vod.preferences.LanguagePreference.PASSWORDS_DO_NOT_MATCH;
 import static com.home.vod.preferences.LanguagePreference.PROFILE_UPDATED;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
@@ -328,7 +322,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
                         } else {
                             if (NetworkStatus.getInstance().isConnected(ProfileActivity.this)) {
-                                UpdateProfile(profileHandler.final_name,profileHandler.phoneStr);
+                                UpdateProfile(profileHandler.first_nameStr,profileHandler.last_nameStr,profileHandler.phoneStr);
                                 editConfirmPassword.setText("");
                                 editNewPassword.setText("");
                                 editConfirmPassword.setVisibility(View.GONE);
@@ -439,13 +433,14 @@ public class ProfileActivity extends AppCompatActivity implements
         dlgAlert.create().show();
     }
 
-    public void UpdateProfile(String name,String phone_No) {
+    public void UpdateProfile(String first_name,String last_name,String phone_No) {
 
         Update_UserProfile_Input update_userProfile_input = new Update_UserProfile_Input();
         update_userProfile_input.setAuthToken(authTokenStr);
         update_userProfile_input.setUser_id(preferenceManager.getUseridFromPref().trim());
-        update_userProfile_input.setName(name);
+        update_userProfile_input.setName(first_name);
         update_userProfile_input.setPhone_no(phone_No);
+        update_userProfile_input.setCustom_last_name(last_name);
         String confirmPasswordStr = editNewPassword.getText().toString().trim();
         if (!confirmPasswordStr.trim().equalsIgnoreCase("") && !confirmPasswordStr.isEmpty() && !confirmPasswordStr.equalsIgnoreCase("null") && !confirmPasswordStr.equalsIgnoreCase(null) && !confirmPasswordStr.equals(null) && !confirmPasswordStr.matches("")) {
             update_userProfile_input.setPassword(confirmPasswordStr.trim());
@@ -478,7 +473,7 @@ public class ProfileActivity extends AppCompatActivity implements
         if (code > 0) {
             if (code == 200) {
                 String confirmPasswordStr = editNewPassword.getText().toString().trim();
-                name_of_user.setText(profileHandler.final_name);
+                name_of_user.setText(profileHandler.first_nameStr);
                 if (!confirmPasswordStr.trim().equalsIgnoreCase("") &&
                         !confirmPasswordStr.isEmpty() &&
                         !confirmPasswordStr.equalsIgnoreCase("null") &&
@@ -766,69 +761,45 @@ public class ProfileActivity extends AppCompatActivity implements
 
         }
 
-        if (Selected_Country_Id.equals("0")) {
-            country_spinner.setSelection(224);
-            Selected_Country_Id = Country_Code_List.get(224);
-            LogUtil.showLog("Muvi", "country not  matched =" + Selected_Country + "==" + Selected_Country_Id);
-        } else {
-            for (int i = 0; i < Country_Code_List.size(); i++) {
-                if (Selected_Country_Id.trim().equals(Country_Code_List.get(i))) {
-                    country_spinner.setSelection(i);
-                    Selected_Country_Id = Country_Code_List.get(i);
+        if (code==200) {
 
-                    LogUtil.showLog("Muvi", "country  matched =" + Selected_Country_Id + "==" + Selected_Country_Id);
+            if (get_userProfile_output!=null) {
+
+
+                if (Selected_Country_Id.equals("0")) {
+                    country_spinner.setSelection(224);
+                    Selected_Country_Id = Country_Code_List.get(224);
+                    LogUtil.showLog("Muvi", "country not  matched =" + Selected_Country + "==" + Selected_Country_Id);
+                } else {
+                    for (int i = 0; i < Country_Code_List.size(); i++) {
+                        if (Selected_Country_Id.trim().equals(Country_Code_List.get(i))) {
+                            country_spinner.setSelection(i);
+                            Selected_Country_Id = Country_Code_List.get(i);
+
+                            LogUtil.showLog("Muvi", "country  matched =" + Selected_Country_Id + "==" + Selected_Country_Id);
+                        }
+                    }
                 }
-            }
-        }
-        Country_arrayAdapter.notifyDataSetChanged();
+                Country_arrayAdapter.notifyDataSetChanged();
 
 
-        for (int i = 0; i < Language_Code_List.size(); i++) {
-            if (Selected_Language_Id.trim().equals(Language_Code_List.get(i))) {
-                language_spinner.setSelection(i);
-                Selected_Language_Id = Language_Code_List.get(i);
+                for (int i = 0; i < Language_Code_List.size(); i++) {
+                    if (Selected_Language_Id.trim().equals(Language_Code_List.get(i))) {
+                        language_spinner.setSelection(i);
+                        Selected_Language_Id = Language_Code_List.get(i);
 
-                LogUtil.showLog("Muvi", "Selected_Language_Id =" + Selected_Language_Id);
-            }
-        }
-        Language_arrayAdapter.notifyDataSetChanged();
-
-
-        profileHandler.setNameTxt(get_userProfile_output.getDisplay_name(),get_userProfile_output.getPhone());
-        name_of_user.setText(get_userProfile_output.getDisplay_name());
-        emailAddressEditText.setText(get_userProfile_output.getEmail());
-        if (get_userProfile_output.getProfile_image().matches(NO_DATA)) {
-            bannerImageView.setAlpha(0.8f);
-            bannerImageView.setImageResource(R.drawable.logo);
-        } else {
-            Picasso.with(ProfileActivity.this)
-                    .load(get_userProfile_output.getProfile_image())
-                    .placeholder(R.drawable.logo).error(R.drawable.logo).noFade().resize(200, 200).into(bannerImageView, new Callback() {
-
-                @Override
-                public void onSuccess() {
-
-                    Bitmap bitmapFromPalette = ((BitmapDrawable) bannerImageView.getDrawable()).getBitmap();
-                    Palette palette = Palette.generate(bitmapFromPalette);
+                        LogUtil.showLog("Muvi", "Selected_Language_Id =" + Selected_Language_Id);
+                    }
                 }
+                Language_arrayAdapter.notifyDataSetChanged();
 
-                @Override
-                public void onError() {
-                    // reset your views to default colors, etc.
+
+                profileHandler.setNameTxt(get_userProfile_output.getDisplay_name(), get_userProfile_output.getCustom_last_name(), get_userProfile_output.getPhone());
+                name_of_user.setText(get_userProfile_output.getDisplay_name());
+                emailAddressEditText.setText(get_userProfile_output.getEmail());
+                if (get_userProfile_output.getProfile_image().matches(NO_DATA)) {
                     bannerImageView.setAlpha(0.8f);
-                    bannerImageView.setImageResource(R.drawable.no_image);
-                }
-
-            });
-            if (get_userProfile_output.getProfile_image() != null && get_userProfile_output.getProfile_image().length() > 0) {
-                int pos = get_userProfile_output.getProfile_image().lastIndexOf("/");
-                String x = get_userProfile_output.getProfile_image().substring(pos + 1, get_userProfile_output.getProfile_image().length());
-
-                if (x.equalsIgnoreCase("no-user.png")) {
-                    bannerImageView.setImageResource(R.drawable.no_image);
-                    bannerImageView.setAlpha(0.8f);
-                    //imagebg.setBackgroundColor(Color.parseColor("#969393"));
-
+                    bannerImageView.setImageResource(R.drawable.logo);
                 } else {
                     Picasso.with(ProfileActivity.this)
                             .load(get_userProfile_output.getProfile_image())
@@ -836,276 +807,58 @@ public class ProfileActivity extends AppCompatActivity implements
 
                         @Override
                         public void onSuccess() {
-                            bannerImageView.setAlpha(0.3f);
 
+                            Bitmap bitmapFromPalette = ((BitmapDrawable) bannerImageView.getDrawable()).getBitmap();
+                            Palette palette = Palette.generate(bitmapFromPalette);
                         }
 
                         @Override
                         public void onError() {
-                            bannerImageView.setImageResource(R.drawable.no_image);
+                            // reset your views to default colors, etc.
                             bannerImageView.setAlpha(0.8f);
-                            //imagebg.setBackgroundColor(Color.parseColor("#969393"));
+                            bannerImageView.setImageResource(R.drawable.no_image);
                         }
 
                     });
+                    if (get_userProfile_output.getProfile_image() != null && get_userProfile_output.getProfile_image().length() > 0) {
+                        int pos = get_userProfile_output.getProfile_image().lastIndexOf("/");
+                        String x = get_userProfile_output.getProfile_image().substring(pos + 1, get_userProfile_output.getProfile_image().length());
+
+                        if (x.equalsIgnoreCase("no-user.png")) {
+                            bannerImageView.setImageResource(R.drawable.no_image);
+                            bannerImageView.setAlpha(0.8f);
+                            //imagebg.setBackgroundColor(Color.parseColor("#969393"));
+
+                        } else {
+                            Picasso.with(ProfileActivity.this)
+                                    .load(get_userProfile_output.getProfile_image())
+                                    .placeholder(R.drawable.logo).error(R.drawable.logo).noFade().resize(200, 200).into(bannerImageView, new Callback() {
+
+                                @Override
+                                public void onSuccess() {
+                                    bannerImageView.setAlpha(0.3f);
+
+                                }
+
+                                @Override
+                                public void onError() {
+                                    bannerImageView.setImageResource(R.drawable.no_image);
+                                    bannerImageView.setAlpha(0.8f);
+                                    //imagebg.setBackgroundColor(Color.parseColor("#969393"));
+                                }
+
+                            });
+                        }
+                    }
                 }
             }
+        }else {
+            name_of_user.setText("");
+            emailAddressEditText.setText("");
         }
     }
 
-//    private class AsynLoadProfileDetails extends AsyncTask<Void, Void, Void> {
-//        ProgressBarHandler pDialog;
-//        String responseStr;
-//        int statusCode;
-//        String name;
-//        String profileEmail;
-//        String profileImage;
-//        String langStr = "";
-//        String countryStr = "";
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//
-//            try {
-//                HttpClient httpclient = new DefaultHttpClient();
-//                HttpPost httppost = new HttpPost(Util.rootUrl().trim() + Util.loadProfileUrl.trim());
-//                httppost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-//                httppost.addHeader("authToken", Util.authTokenStr.trim());
-//                httppost.addHeader("user_id", preferenceManager.getUseridFromPref());
-//                httppost.addHeader("email", preferenceManager.getEmailIdFromPref());
-//                httppost.addHeader("lang_code", languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, Util.DEFAULT_SELECTED_LANGUAGE_CODE));
-//
-//                // Execute HTTP Post Request
-//                try {
-//
-//                    HttpResponse response = httpclient.execute(httppost);
-//                    responseStr = EntityUtils.toString(response.getEntity());
-//
-//
-//                } catch (org.apache.http.conn.ConnectTimeoutException e) {
-//                    ProfileActivity.this.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            responseStr = "0";
-//                            Toast.makeText(ProfileActivity.this, languagePreference.getTextofLanguage(SLOW_INTERNET_CONNECTION, Util.DEFAULT_SLOW_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-//
-//                        }
-//
-//                    });
-//
-//                } catch (IOException e) {
-//                    responseStr = "0";
-//                    e.printStackTrace();
-//                }
-//
-//                LogUtil.showLog("Muvi", "responseStr =" + responseStr);
-//
-//                JSONObject myJson = null;
-//                if (responseStr != null) {
-//                    myJson = new JSONObject(responseStr);
-//                    statusCode = Integer.parseInt(myJson.optString("code"));
-//
-//                }
-//                if (statusCode > 0) {
-//                    if (statusCode == 200) {
-//
-//                        if ((myJson.has("display_name")) && myJson.optString("display_name").trim() != null && !myJson.optString("display_name").trim().isEmpty() && !myJson.optString("display_name").trim().equals("null") && !myJson.optString("display_name").trim().matches("")) {
-//                            name = myJson.getString("display_name");
-//                        } else {
-//                            name = "";
-//
-//                        }
-//
-//                        if ((myJson.has("email")) && myJson.optString("email").trim() != null && !myJson.optString("email").trim().isEmpty() && !myJson.optString("email").trim().equals("null") && !myJson.optString("email").trim().matches("")) {
-//                            profileEmail = myJson.optString("email");
-//
-//                        } else {
-//                            profileEmail = "";
-//
-//                        }
-//                        if ((myJson.has("profile_image")) && myJson.optString("profile_image").trim() != null && !myJson.optString("profile_image").trim().isEmpty() && !myJson.optString("profile_image").trim().equals("null") && !myJson.optString("profile_image").trim().matches("")) {
-//                            profileImage = myJson.optString("profile_image");
-//
-//
-//                        } else {
-//                            profileImage = languagePreference.getTextofLanguage(NO_DATA, Util.DEFAULT_NO_DATA);
-//
-//                        }
-//
-//                        JSONArray languageJson = null;
-//                        if ((myJson.has("custom_languages"))) {
-//
-//                            languageJson = myJson.getJSONArray("custom_languages");
-//
-//                            if (languageJson.length() > 0) {
-//                                Selected_Language_Id = languageJson.optString(0);
-//                                LogUtil.showLog("Muvi", "Selected_Language_Id st jon parsing =" + Selected_Language_Id);
-//                            } else {
-//                                langStr = "";
-//                            }
-//                        } else {
-//                            langStr = "";
-//                        }
-//
-//
-//                        if ((myJson.has("custom_country")) && myJson.optString("custom_country").trim() != null && !myJson.optString("custom_country").trim().isEmpty() && !myJson.optString("custom_country").trim().equals("null") && !myJson.optString("custom_country").trim().matches("")) {
-//                            //countryPosition = Integer.parseInt(myJson.optString("custom_country"));
-//                            countryStr = myJson.getString("custom_country");
-//                            Selected_Country_Id = countryStr;
-//
-//                        } else {
-//                            countryStr = "";
-//
-//                        }
-//
-//
-//                    } else {
-//                        name = "";
-//                        profileEmail = "";
-//                        profileImage = Util.NO_DATA;
-//
-//                    }
-//                } else {
-//                    responseStr = "0";
-//                }
-//            } catch (JSONException e1) {
-//
-//                responseStr = "0";
-//                e1.printStackTrace();
-//            } catch (Exception e) {
-//                responseStr = "0";
-//                e.printStackTrace();
-//
-//            }
-//
-//            return null;
-//
-//        }
-//
-//        protected void onPostExecute(Void result) {
-//
-//            try {
-//                if (pDialog != null && pDialog.isShowing()) {
-//                    pDialog.hide();
-//                    pDialog = null;
-//                }
-//            } catch (IllegalArgumentException ex) {
-//                responseStr = "0";
-//            }
-//            if (responseStr == null) {
-//                responseStr = "0";
-//            }
-//
-//            if ((responseStr.trim().equalsIgnoreCase("0"))) {
-//
-//                editProfileNameEditText.setText("");
-//                emailAddressEditText.setText("");
-//                name_of_user.setText("");
-////                bannerImageView.setImageResource(R.drawable.no_user_bg);
-//                bannerImageView.setAlpha(0.8f);
-//
-//                // imagebg.setBackgroundColor(Color.parseColor("#969393"));
-//                bannerImageView.setImageResource(R.drawable.no_image);
-//            } else {
-//
-//
-//                if (Selected_Country_Id.equals("0")) {
-//                    country_spinner.setSelection(224);
-//                    Selected_Country_Id = Country_Code_List.get(224);
-//                    LogUtil.showLog("Muvi", "country not  matched =" + Selected_Country + "==" + Selected_Country_Id);
-//                } else {
-//                    for (int i = 0; i < Country_Code_List.size(); i++) {
-//                        if (Selected_Country_Id.trim().equals(Country_Code_List.get(i))) {
-//                            country_spinner.setSelection(i);
-//                            Selected_Country_Id = Country_Code_List.get(i);
-//
-//                            LogUtil.showLog("Muvi", "country  matched =" + Selected_Country_Id + "==" + Selected_Country_Id);
-//                        }
-//                    }
-//                }
-//                Country_arrayAdapter.notifyDataSetChanged();
-//
-//
-//                for (int i = 0; i < Language_Code_List.size(); i++) {
-//                    if (Selected_Language_Id.trim().equals(Language_Code_List.get(i))) {
-//                        language_spinner.setSelection(i);
-//                        Selected_Language_Id = Language_Code_List.get(i);
-//
-//                        LogUtil.showLog("Muvi", "Selected_Language_Id =" + Selected_Language_Id);
-//                    }
-//                }
-//                Language_arrayAdapter.notifyDataSetChanged();
-//
-//
-//                editProfileNameEditText.setText(name);
-//                name_of_user.setText(name);
-//                emailAddressEditText.setText(profileEmail);
-//                if (profileImage.matches(Util.NO_DATA)) {
-//                    bannerImageView.setAlpha(0.8f);
-//                    bannerImageView.setImageResource(R.drawable.logo);
-//                } else {
-//                    Picasso.with(ProfileActivity.this)
-//                            .load(profileImage)
-//                            .placeholder(R.drawable.logo).error(R.drawable.logo).noFade().resize(200, 200).into(bannerImageView, new Callback() {
-//
-//                        @Override
-//                        public void onSuccess() {
-//
-//                            Bitmap bitmapFromPalette = ((BitmapDrawable) bannerImageView.getDrawable()).getBitmap();
-//                            Palette palette = Palette.generate(bitmapFromPalette);
-//                        }
-//
-//                        @Override
-//                        public void onError() {
-//                            // reset your views to default colors, etc.
-//                            bannerImageView.setAlpha(0.8f);
-//                            bannerImageView.setImageResource(R.drawable.no_image);
-//                        }
-//
-//                    });
-//                    if (profileImage != null && profileImage.length() > 0) {
-//                        int pos = profileImage.lastIndexOf("/");
-//                        String x = profileImage.substring(pos + 1, profileImage.length());
-//
-//                        if (x.equalsIgnoreCase("no-user.png")) {
-//                            bannerImageView.setImageResource(R.drawable.no_image);
-//                            bannerImageView.setAlpha(0.8f);
-//                            //imagebg.setBackgroundColor(Color.parseColor("#969393"));
-//
-//                        } else {
-//                            Picasso.with(ProfileActivity.this)
-//                                    .load(profileImage)
-//                                    .placeholder(R.drawable.logo).error(R.drawable.logo).noFade().resize(200, 200).into(bannerImageView, new Callback() {
-//
-//                                @Override
-//                                public void onSuccess() {
-//                                    bannerImageView.setAlpha(0.3f);
-//
-//                                }
-//
-//                                @Override
-//                                public void onError() {
-//                                    bannerImageView.setImageResource(R.drawable.no_image);
-//                                    bannerImageView.setAlpha(0.8f);
-//                                    //imagebg.setBackgroundColor(Color.parseColor("#969393"));
-//                                }
-//
-//                            });
-//                        }
-//                    }
-//                }
-//
-//            }
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            pDialog = new ProgressBarHandler(ProfileActivity.this);
-//            pDialog.show();
-//        }
-//
-//
-//    }
+
 
     @Override
     public void onBackPressed() {

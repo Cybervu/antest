@@ -2,10 +2,12 @@
 <resources>
 
  <color name="appBackgroundColor">#fff</color>
+ <color name="background">#fff</color>
  <color name="downloadpopupcolor">#fff</color>
  <color name="textColor">#111111</color>
  <color name="videotextColor">#ffffff</color>
  <color name="videotitleColor">#000000</color>
+ <color name="toolbarTitleColor">#fff</color>
  <color name="loginTextViewColor">#b70000</color>
  <color name="checkboxcolor">#fff</color>
  <color name="navlogobackgroundcolor">#fff</color>
@@ -23,6 +25,8 @@
  <color name="OsTextColor">#757575</color>
  <color name="white">#ffffff</color>
  <color name="resumepopupcolor">#000</color>
+ <color name="button_bg">#913b28</color>
+ <color name="buttonbg">#E89B4C</color>
  <color name="card_backgroud_drawable">#303030</color>
  <color name="alreadyHaveALoginButtonTextColor">#b70000</color>
  <color name="border_color">#b70000</color>
@@ -44,7 +48,7 @@
  <color name="nav_drawer_lineColor">#000</color>
  <color name="nav_lineColor">#000</color>
  <color name="nav_text_line_color">#000000</color>
- <color name="nav_drawer_text_Color">#000000</color>
+ <color name="nav_drawer_text_Color">#666</color>
  <color name="style_circular_color">#999999</color>
  <color name="style_circular_color_2">#ff0400</color>
  <color name="button_background">#930f18</color>
@@ -152,4 +156,5 @@
  <color name="purchaseBackgroundColor">#909293</color>
  <color name="purchaseBackground">#e2e1e1</color>
  <color name="purchaseTextColor">#000</color>
+ <color name="nav_drawer_lineColor_menu">#000</color>
 </resources>

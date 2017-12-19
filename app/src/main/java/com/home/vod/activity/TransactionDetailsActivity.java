@@ -18,6 +18,7 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -53,6 +54,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -120,6 +122,9 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
     String filename;
     int progress_bar_type = 0;
     int progressStatus = 0;
+    String Download_Url;
+    int downloadedSize = 0, totalsize;
+    //float per = 0;
 
     String id, user_id;
     RelativeLayout noInternet;
@@ -128,7 +133,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 
     String TransactionDate, OredrId, Amount, Invoice, TransactionStatus, PlanName;
 
-    String download_Url;
+    String download_Url="";
     boolean deletion_success = false;
     AlertDialog msgAlert;
     private String Currency_symbol;
@@ -137,7 +142,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
     TextView no_internet_text;
     ProgressBarHandler Ph;
     LanguagePreference languagePreference;
-
+    DownloadFileFromURL downloadFileFromURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -272,16 +277,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                 } else {
                     //Call whatever you want
                     if (NetworkStatus.getInstance().isConnected(TransactionDetailsActivity.this)) {
-
-                        GetInvoicePdfInputModel getInvoicePdfInputModel = new GetInvoicePdfInputModel();
-                        getInvoicePdfInputModel.setAuthToken(authTokenStr);
-                        getInvoicePdfInputModel.setUser_id(user_id);
-                        getInvoicePdfInputModel.setId(id);
-                        getInvoicePdfInputModel.setDevice_type("app");
-                        getInvoicePdfInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                        GetInvoicePdfAsynTask downloadDocumentDetails = new GetInvoicePdfAsynTask(getInvoicePdfInputModel, TransactionDetailsActivity.this, TransactionDetailsActivity.this);
-                        downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);
-
+                        getPdfDetail();
                     } else {
                         Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                     }
@@ -296,7 +292,8 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
     public void DownloadTransactionDetails() {
 
         registerReceiver(InternetStatus, new IntentFilter("android.net.wifi.STATE_CHANGE"));
-        new DownloadFileFromURL().execute(Util.Dwonload_pdf_rootUrl + download_Url);
+        downloadFileFromURL=new DownloadFileFromURL();
+        downloadFileFromURL.execute(Util.Dwonload_pdf_rootUrl + download_Url);
 
         LogUtil.showLog("MUVI", "Url=" + Util.Dwonload_pdf_rootUrl + download_Url);
 
@@ -311,7 +308,6 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                 if (pDialog.isShowing() && pDialog != null) {
 
                     showDialog(languagePreference.getTextofLanguage(DOWNLOAD_INTERRUPTED, DEFAULT_DOWNLOAD_INTERRUPTED), 0);
-                    unregisterReceiver(InternetStatus);
                     pDialog.setProgress(0);
                     progressStatus = 0;
                     dismissDialog(progress_bar_type);
@@ -319,6 +315,22 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
             }
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            unregisterReceiver(InternetStatus);
+        }catch (Exception e) {
+        }
+        //LocalBroadcastManager.getInstance(this).unregisterReceiver(InternetStatus);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //unregisterReceiver(InternetStatus);
+    }
 
     @Override
     public void onDeleteInvoicePdfPreExecuteStarted() {
@@ -392,7 +404,11 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            showDialog(progress_bar_type);
+            try{
+//                pDialog.cancel();
+                showDialog(progress_bar_type);
+            }catch (Exception e){showDialog(progress_bar_type);
+            }
         }
 
         /**
@@ -403,48 +419,63 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         protected String doInBackground(String... f_url) {
             int count;
 
+
+            File file = null;
             try {
+                pDialog.setProgress(0);
                 URL url = new URL(f_url[0]);
-                String str = f_url[0];
-                filename = str.substring(str.lastIndexOf("/") + 1);
-                URLConnection conection = url.openConnection();
-                conection.connect();
-                // this will be useful so that you can show a tipical 0-100% progress bar
-                int lenghtOfFile = conection.getContentLength();
+                String dwnload_file_path = f_url[0];
+                Download_Url = dwnload_file_path.substring(dwnload_file_path.lastIndexOf("/") + 1);
+                HttpURLConnection urlConnection = (HttpURLConnection) url
+                        .openConnection();
 
-                // download the file
-                InputStream input = new BufferedInputStream(url.openStream(), 8192);
-                mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "");
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setDoOutput(true);
 
-                if (!mediaStorageDir.exists()) {
-                    if (!mediaStorageDir.mkdirs()) {
-                        Log.d("App", "failed to create directory");
+                // connect
+                urlConnection.connect();
+
+                // set the path where we want to save the file
+                File SDCardRoot =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                // create a new file, to save the downloaded file
+                file = new File(SDCardRoot, Download_Url);
+
+                FileOutputStream fileOutput = new FileOutputStream(file);
+
+                // Stream used for reading the data from the internet
+                InputStream inputStream = urlConnection.getInputStream();
+
+                // this is the total size of the file which we are
+                // downloading
+                totalsize = urlConnection.getContentLength();
+                //setText("Starting PDF download...");
+
+                // create a buffer...
+                byte[] buffer = new byte[1024 * 1024];
+                int bufferLength = 0;
+                float per = 0;
+                while ((bufferLength = inputStream.read(buffer)) > 0) {
+                    fileOutput.write(buffer, 0, bufferLength);
+                    downloadedSize += bufferLength;
+                    per = ((float) downloadedSize / totalsize) * 100;
+                    pDialog.setProgress((int) per);
+
+                }
+                // close the output stream when complete //
+                fileOutput.close();
+                urlConnection.disconnect();
+                //setText("Download Complete. Open PDF Application installed in the device.");
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        pDialog.dismiss(); // if you want close it..
+
+                        showDialog(languagePreference.getTextofLanguage(DOWNLOAD_COMPLETED,DEFAULT_DOWNLOAD_COMPLETED), 1);
                     }
-                }
-                // Output stream
+                });
+            }
 
 
-                OutputStream output = new FileOutputStream(mediaStorageDir + "/" + filename);
-                byte data[] = new byte[1024];
-                long total = 0;
-                while ((count = input.read(data)) != -1) {
-                    total += count;
-                    // publishing the progress....
-                    // After this onProgressUpdate will be called
-                    publishProgress("" + (int) ((total * 100) / lenghtOfFile));
-                    // LogUtil.showLog("MUVI", "Lrngth" + data.length);
-                    // writing data to file
-                    output.write(data, 0, count);
-                }
-
-                // flushing output
-                output.flush();
-
-                // closing streams
-                output.close();
-                input.close();
-
-            } catch (Exception e) {
+           catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
@@ -464,7 +495,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
 
                 showDialog(languagePreference.getTextofLanguage(DOWNLOAD_COMPLETED, DEFAULT_DOWNLOAD_COMPLETED), 1);
 
-                unregisterReceiver(InternetStatus);
+
                 pDialog.setProgress(0);
                 progressStatus = 0;
                 dismissDialog(progress_bar_type);
@@ -484,6 +515,11 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after the file was downloaded
 
+            try {
+                downloadFileFromURL.cancel(true);
+            }catch (Exception e){
+
+            }
             LogUtil.showLog("MUVI", "Download Completed");
 
         }
@@ -936,10 +972,7 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                     if ((grantResults.length > 0) && (grantResults[0]) == PackageManager.PERMISSION_GRANTED) {
                         //Call whatever you want
                         if (NetworkStatus.getInstance().isConnected(TransactionDetailsActivity.this)) {
-                            if (!download_Url.equals(""))
-                                DownloadTransactionDetails();
-                            else
-                                Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_PDF, DEFAULT_NO_PDF), Toast.LENGTH_LONG).show();
+                            getPdfDetail();
                         } else {
                             Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
                         }
@@ -953,5 +986,16 @@ public class TransactionDetailsActivity extends AppCompatActivity implements
                 return;
             }
         }
+    }
+
+    public void getPdfDetail(){
+        GetInvoicePdfInputModel getInvoicePdfInputModel = new GetInvoicePdfInputModel();
+        getInvoicePdfInputModel.setAuthToken(authTokenStr);
+        getInvoicePdfInputModel.setUser_id(user_id);
+        getInvoicePdfInputModel.setId(id);
+        getInvoicePdfInputModel.setDevice_type("app");
+        getInvoicePdfInputModel.setLang_code(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+        GetInvoicePdfAsynTask downloadDocumentDetails = new GetInvoicePdfAsynTask(getInvoicePdfInputModel, TransactionDetailsActivity.this, TransactionDetailsActivity.this);
+        downloadDocumentDetails.executeOnExecutor(threadPoolExecutor);
     }
 }

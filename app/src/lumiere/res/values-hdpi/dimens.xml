@@ -11,6 +11,8 @@
 
     <dimen name="singleimgwidth">70dp</dimen>
     <dimen name="singleimgheight">126dp</dimen>
+    <dimen name="cancelbtn_text_size">14sp</dimen>
+
 
     <dimen name="buttonheight">37dp</dimen>
     <dimen name="titletxt">13sp</dimen>
@@ -22,7 +24,7 @@
     <dimen name="forgot_logo_height">120dp</dimen>
     <dimen name="email_text_size">14sp</dimen>
     <dimen name="contactformtitle_text_size">15sp</dimen>
-    <dimen name="pass_text_size">13sp</dimen>
+    <dimen name="pass_text_size">15sp</dimen>
     <dimen name="forgot_text_size">13sp</dimen>
     <dimen name="submit_text_size">16sp</dimen>
     <dimen name="edit_text_size">16sp</dimen>
@@ -42,9 +44,10 @@
     <dimen name="episodelayout_width">171dp</dimen>
     <dimen name="episodelayout_height">117dp</dimen>
     <dimen name="playimg_width">45dp</dimen>
+    <dimen name="videoTitle_textview">15sp</dimen>
     <dimen name="playimg_height">45dp</dimen>
     <dimen name="changepas_height">40dp</dimen>
-    <dimen name="login_text_size">17sp</dimen>
+    <dimen name="login_text_size">15sp</dimen>
     <dimen name="submitcontact_height">40dp</dimen>
     <dimen name="episode_listing_section_textview">21sp</dimen>
     <dimen name="submitcontact_text_size">15sp</dimen>

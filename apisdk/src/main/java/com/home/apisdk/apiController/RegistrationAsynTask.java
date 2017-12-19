@@ -114,6 +114,7 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
             httppost.addHeader(HeaderConstants.DEVICE_ID, this.registration_input.getDevice_id());
             httppost.addHeader(HeaderConstants.GOOGLE_ID, this.registration_input.getGoogle_id());
             httppost.addHeader(HeaderConstants.DEVICE_TYPE, this.registration_input.getDevice_type());
+            httppost.addHeader(HeaderConstants.Custom_last_Name, this.registration_input.getCustom_last_name());
 
             // Execute HTTP Post Request
             try {
@@ -196,6 +197,12 @@ public class RegistrationAsynTask extends AsyncTask<Registration_input, Void, Vo
                     registration_output.setMsg(mainJson.optString("msg"));
                 } else {
                     registration_output.setMsg("");
+
+                }
+                if ((mainJson.has("custom_last_name")) && mainJson.optString("custom_last_name").trim() != null && !mainJson.optString("custom_last_name").trim().isEmpty() && !mainJson.optString("custom_last_name").trim().equals("null") && !mainJson.optString("custom_last_name").trim().matches("")) {
+                    registration_output.setCustom_last_name(mainJson.optString("custom_last_name"));
+                } else {
+                    registration_output.setCustom_last_name("");
 
                 }
 

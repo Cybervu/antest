@@ -56,7 +56,7 @@
             android:maxLines="1"
             android:padding="@dimen/loginImageViewMarging_top_padding"
             android:textColor="@color/listTitleContentColor"
-            android:textSize="@dimen/itemtitle1_text_size"
+            android:textSize="@dimen/email_text_size"
             android:textStyle="normal" />
 
     </RelativeLayout>

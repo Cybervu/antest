@@ -17,9 +17,9 @@ public class LanguagePreference {
      * Language Constant default Key
      */
     public static String INVALID_PHONE_NUMBER = "OOPS_INVALID_PHONE_NUMBER";
-    public static  String DEFAULT_INVALID_PHONE_NUMBER = "Oops ! Invalid Number";
+    public static String DEFAULT_INVALID_PHONE_NUMBER = "Oops ! Invalid Number";
     public static String MOBILE = "MOBILE";
-    public static  String DEFAULT_MOBILE = "Enter Mobile Number";
+    public static String DEFAULT_MOBILE = "Enter Mobile Number";
     public static String DEFAULT_FIRST_NAME = "First Name";
     public static String DEFAULT_LAST_NAME = "Last Name";
     public static String FIRST_NAME = "FIRST_NAME";
@@ -76,14 +76,23 @@ public class LanguagePreference {
     public static final String TRANSACTION_STATUS = "TRANSACTION_STATUS";
     public static final String PLAN_NAME = "PLAN_NAME";
     public static final String SEASON = "SEASON";
+    public static String NEXT = "NEXT";
+    public static String SELECT_PURCHASE_TYPE = "SELECT_PURCHASE_TYPE";
+    public static String COMPLETE_SEASON = "COMPLETE_SEASON";
     public static final String SELECT_PLAN = "SELECT_PLAN";
     public static final String SKIP_BUTTON_TITLE = "SKIP_BUTTON_TITLE";
     public static final String PURCHASE = "PURCHASE";
+    public static String ENTER_VOUCHER_CODE = "ENTER_VOUCHER_CODE";
+    public static String VOUCHER_SUCCESS = "VOUCHER_SUCCESS";
     public static final String CREDIT_CARD_DETAILS = "CREDIT_CARD_DETAILS";
     public static final String CARD_WILL_CHARGE = "CARD_WILL_CHARGE";
     public static final String SAVE_THIS_CARD = "SAVE_THIS_CARD";
     public static final String USE_NEW_CARD = "USE_NEW_CARD";
     public static final String BUTTON_APPLY = "BUTTON_APPLY";
+    public static final String BUTTON_RESET = "BUTTON_RESET";
+    public static final String DEFAULT_BUTTON_RESET = "Reset";
+    public static String CHK_OVER_18 = "CHK_OVER_18";
+    public static String DEFAULT_CHK_OVER_18 = "By clicking on Register, I agree to";
     public static final String BUTTON_OK = "BUTTON_OK";
     public static final String AGREE_TERMS = "AGREE_TERMS";
     public static final String TERMS = "TERMS";
@@ -99,6 +108,7 @@ public class LanguagePreference {
     public static final String INVALID_COUPON = "INVALID_COUPON";
     public static final String DISCOUNT_ON_COUPON = "DISCOUNT_ON_COUPON";
     public static final String HOME = "HOME";
+    public static final String CONTACT_US = "contactus";
     public static final String ACTIVATE_SUBSCRIPTION_WATCH_VIDEO = "ACTIVATE_SUBSCRIPTION_WATCH_VIDEO";
     public static final String CROSSED_MAXIMUM_LIMIT = "CROSSED_MAXIMUM_LIMIT";
     public static final String ACCESS_PERIOD_EXPIRED = "ACCESS_PERIOD_EXPIRED";
@@ -109,6 +119,7 @@ public class LanguagePreference {
     public static final String SORT_LAST_UPLOADED = "SORT_LAST_UPLOADED";
     public static final String SEARCH_HINT = "SEARCH_HINT";
     public static final String GEO_BLOCKED_ALERT = "GEO_BLOCKED_ALERT";
+    public static final String APP_NO_LONGER_ACTIVE = "APP_NO_LONGER_ACTIVE";
     public static final String NO_INTERNET_NO_DATA = "NO_INTERNET_NO_DATA";
     public static final String TRY_AGAIN = "TRY_AGAIN";
     public static final String SLOW_INTERNET_CONNECTION = "SLOW_INTERNET_CONNECTION";
@@ -298,7 +309,7 @@ public class LanguagePreference {
     public static final String DEFAULT_ENTER_REGISTER_FIELDS_DATA = "Fill the empty field(s)";
     public static final String DEFAULT_TERMS_AND_CONDITIONS = "Termes & Conditions";
     public static final String DEFAULT_ABOUT_US = "About Us";
-    public static final String DEFAULT_CONTACT_US = "Contact Us";
+    public static final String DEFAULT_CONTACT_US = "Contact us";
 
     public static final String DEFAULT_SEARCH_PLACEHOLDER = "Search";
     public static final String DEFAULT_VIEW_TRAILER = "View Trailer";
@@ -314,8 +325,13 @@ public class LanguagePreference {
     public static final String DEFAULT_LOGOUT = "Logout";
     public static final String DEFAULT_CHANGE_PASSWORD = "Change Password";
     public static final String DEFAULT_SEASON = "Season";
+    public static String DEFAULT_NEXT = "Next";
+    public static String DEFAULT_COMPLETE_SEASON = "Complete Season";
+    public static String DEFAULT_SELECT_PURCHASE_TYPE = "Select Purchase Type";
 
     public static final String DEFAULT_PURCHASE = "Purchase";
+    public static String DEFAULT_ENTER_VOUCHER_CODE = "Enter Voucher Code";
+    public static String DEFAULT_VOUCHER_SUCCESS = "Voucher Applied  Successfully.";
     public static final String DEFAULT_BUTTON_APPLY = "Apply";
     public static final String DEFAULT_BUTTON_OK = "Ok";
     public static final String DEFAULT_OOPS_INVALID_EMAIL = "Oops! Invalid email.";
@@ -336,6 +352,7 @@ public class LanguagePreference {
     public static final String DEFAULT_SORT_ALPHA_Z_A = "Alphabetic Z-A";
     public static final String DEFAULT_SORT_LAST_UPLOADED = "Last Uploaded";
     public static final String DEFAULT_GEO_BLOCKED_ALERT = "Sorry, this app is not available in your country.";
+    public static final String DEFAULT_APP_NO_LONGER_ACTIVE = "Sorry, This app is no longer active";
     public static final String DEFAULT_NO_INTERNET_NO_DATA = "No Internet Connection / No Data";
     public static final String DEFAULT_SLOW_INTERNET_CONNECTION = "Slow Internet Connection";
     public static final String DEFAULT_NO_INTERNET_CONNECTION = "No Internet Connection";
