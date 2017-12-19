@@ -1,5 +1,6 @@
 package com.home.apisdk;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -33,82 +34,55 @@ public class Utils {
                 conn.setRequestMethod("POST");
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(query);
-                writer.flush();
-                writer.close();
-                os.close();
-                //ins = conn.getInputStream();
-                int responseCode = conn.getResponseCode();
-                if (responseCode != HttpsURLConnection.HTTP_OK) {
-                    InputStream err = conn.getErrorStream();
-                    InputStreamReader isr = new InputStreamReader(err);
-                    BufferedReader in = new BufferedReader(isr);
-                    String inputLine;
-                    while ((inputLine = in.readLine()) != null) {
-                        System.out.println(inputLine);
-                        responseStr = inputLine;
-                        Log.v("MUVISDK", "responseStr" + responseStr);
 
+                try{
+                    String requestParameter[] = query.split("&");
+                    for(int i=0;i<requestParameter.length;i++){
+                        String key_value[] = requestParameter[i].split("=");
+                        conn.setRequestProperty(key_value[0].trim(),key_value[1].trim());
                     }
-                    in.close();
-                    err.close();
-                } else {
-                    InputStream ins = conn.getInputStream();
-                    InputStreamReader isr = new InputStreamReader(ins);
-                    BufferedReader in = new BufferedReader(isr);
-                    String inputLine;
-                    while ((inputLine = in.readLine()) != null) {
-                        System.out.println(inputLine);
-                        responseStr = inputLine;
-                        Log.v("MUVISDK", "responseStr" + responseStr);
+                }catch (Exception e){}
 
-                    }
-                    in.close();
+
+                InputStream ins = conn.getInputStream();
+                InputStreamReader isr = new InputStreamReader(ins);
+                BufferedReader in = new BufferedReader(isr);
+
+                String inputLine;
+
+                while ((inputLine = in.readLine()) != null) {
+                    System.out.println(inputLine);
+                    responseStr = inputLine;
                 }
 
             }else{
+
+
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(10000);
                 conn.setConnectTimeout(15000);
                 conn.setRequestMethod("POST");
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(query);
-                writer.flush();
-                writer.close();
-                os.close();
-                int responseCode = conn.getResponseCode();
-                if (responseCode != HttpsURLConnection.HTTP_OK) {
-                    InputStream err = conn.getErrorStream();
-                    InputStreamReader isr = new InputStreamReader(err);
-                    BufferedReader in = new BufferedReader(isr);
-                    String inputLine;
-                    while ((inputLine = in.readLine()) != null) {
-                        System.out.println(inputLine);
-                        responseStr = inputLine;
-                        Log.v("MUVISDK", "responseStr" + responseStr);
 
+                try{
+                    String requestParameter[] = query.split("&");
+                    for(int i=0;i<requestParameter.length;i++){
+                        String key_value[] = requestParameter[i].split("=");
+                        conn.setRequestProperty(key_value[0].trim(),key_value[1].trim());
                     }
-                    in.close();
-                    err.close();
-                } else {
-                    InputStream ins = conn.getInputStream();
-                    InputStreamReader isr = new InputStreamReader(ins);
-                    BufferedReader in = new BufferedReader(isr);
-                    String inputLine;
-                    while ((inputLine = in.readLine()) != null) {
-                        System.out.println(inputLine);
-                        responseStr = inputLine;
-                        Log.v("MUVISDK", "responseStr" + responseStr);
+                }catch (Exception e){}
 
-                    }
-                    in.close();
+
+                InputStream ins = conn.getInputStream();
+                InputStreamReader isr = new InputStreamReader(ins);
+                BufferedReader in = new BufferedReader(isr);
+
+                String inputLine;
+
+                while ((inputLine = in.readLine()) != null) {
+                    System.out.println(inputLine);
+                    responseStr = inputLine;
                 }
 
             }
@@ -127,4 +101,9 @@ public class Utils {
 
         return responseStr;
     }
+
+
+
+
+
 }

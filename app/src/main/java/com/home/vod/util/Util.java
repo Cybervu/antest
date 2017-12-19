@@ -546,6 +546,8 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, SUBSCRIPTION_COMPLETED, DEFAULT_SUBSCRIPTION_COMPLETED, "subscription completed", json);
 
         setTranslationLanguageToPref(languagePreference, ACTIAVTE_PLAN_TITLE, DEFAULT_ACTIAVTE_PLAN_TITLE, "activate_plan_title", json);
+        setTranslationLanguageToPref(languagePreference, APP_NO_LONGER_ACTIVE, DEFAULT_APP_NO_LONGER_ACTIVE, "app_expired", json);
+
         setTranslationLanguageToPref(languagePreference, TRANSACTION_STATUS_ACTIVE, "", "transaction_status_active", json);
         setTranslationLanguageToPref(languagePreference, ADD_TO_FAV, "", "add_to_fav", json);
         setTranslationLanguageToPref(languagePreference, ADDED_TO_FAV, "", "added_to_fav", json);

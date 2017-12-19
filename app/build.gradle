@@ -158,8 +158,8 @@ android {
             targetSdkVersion 25
             versionName '3.1.2'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
-            //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
+            //buildConfigField "String", "AUTH_TOKEN", "\"759f1f0dababbf4cae7b423d833a87f4\""
         }
         lumiere_staging_ {
             dimension 'environment'
@@ -339,11 +339,11 @@ android {
         }
         magicmovies_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://api-ireland.muvi.com/rest/\""
         }
         magicmovies_Prod_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://api-ireland.muvi.com/rest/\""
         }
         ubereatsvod {
             minSdkVersion 21
