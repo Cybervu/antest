@@ -1256,7 +1256,7 @@ public class ShowWithEpisodesActivity extends AppCompatActivity implements
             /***favorite *****/
         } else {
             noInternetConnectionLayout.setVisibility(View.GONE);
-            noDataLayout.setVisibility(View.VISIBLE);
+            noDataLayout.setVisibility(View.GONE);
         }
     }
 
