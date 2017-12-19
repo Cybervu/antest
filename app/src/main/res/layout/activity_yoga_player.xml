@@ -717,7 +717,7 @@
                             android:layout_marginRight="@dimen/marginright10dp"
                             android:gravity="center"
                             android:text="0%"
-                            android:textColor="@color/border_color"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/percentage_text_size"
                             android:visibility="gone" />
 

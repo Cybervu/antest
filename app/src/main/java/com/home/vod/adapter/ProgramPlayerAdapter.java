@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 
-public class ProgramPlayerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ProgramPlayerAdapter extends RecyclerView.Adapter<ProgramPlayerAdapter.ViewHolder> {
 
     int posT = 0;
     private String bannerImageUrl = "";
@@ -38,6 +38,7 @@ public class ProgramPlayerAdapter extends RecyclerView.Adapter<RecyclerView.View
     private int layoutResourceId;
     private int isThirdParty = 0;
     private int pos = 0;
+    private int nextPosition = 1;
 
 
 
@@ -54,12 +55,13 @@ public class ProgramPlayerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
 
     public ProgramPlayerAdapter(Context context, int layoutResourceId,
-                                ArrayList<EpisodesListModel> data,int pos) {
+                                ArrayList<EpisodesListModel> data,int pos,int nextPosition) {
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
         this.movieUniqueId = movieUniqueId;
         this.pos = pos;
+        this.nextPosition = nextPosition;
 
 
     }
@@ -68,13 +70,15 @@ public class ProgramPlayerAdapter extends RecyclerView.Adapter<RecyclerView.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView episodeTitleTextView;
         public TextView episodeNameTextView;
-        public TextView episodeDateTextView;
+        public TextView episodeDateTextView,belowlineTextView,middleLineTextView;
         public View iView;
-        public ImageView episodeImageView;
+        public TextView episodeNowTextView;
         public ViewHolder(View view) {
             super(view);
             iView = view;
             episodeTitleTextView = (TextView) view.findViewById(R.id.itemTitle);
+            belowlineTextView = (TextView) view.findViewById(R.id.belowlineTextView);
+            middleLineTextView = (TextView) view.findViewById(R.id.middleLineTextView);
             FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeTitleTextView);
 
            /* Typeface castDescriptionTypeface = Typeface.createFromAsset(context.getAssets(),context.getResources().getString(R.string.regular_fonts));
@@ -82,7 +86,8 @@ public class ProgramPlayerAdapter extends RecyclerView.Adapter<RecyclerView.View
             //  episodeNameTextView = (TextView) view.findViewById(R.id.episodeNameTextView);
             //episodeDateTextView = (TextView) view.findViewById(R.id.itemImage);
 
-            episodeImageView = (ImageView) view.findViewById(R.id.itemImage);
+            episodeNowTextView = (TextView) view.findViewById(R.id.itemNowTitle);
+
 
             //episodeImageView.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), R.id.movieImageView,episodeImageView.getDrawable().getIntrinsicWidth(),episodeImageView.getDrawable().getIntrinsicHeight()));
         }
@@ -95,7 +100,7 @@ public class ProgramPlayerAdapter extends RecyclerView.Adapter<RecyclerView.View
             LogUtil.showLog("MUVI","kjshdvuih");
 
 
-            if(imageId.matches("") || imageId.matches(LanguagePreference.getLanguagePreference(context).getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){
+           /* if(imageId.matches("") || imageId.matches(LanguagePreference.getLanguagePreference(context).getTextofLanguage(NO_DATA,DEFAULT_NO_DATA))){
                 episodeImageView.setImageResource(R.drawable.logo);
 
             }else {
@@ -103,8 +108,8 @@ public class ProgramPlayerAdapter extends RecyclerView.Adapter<RecyclerView.View
                         .load(item.getEpisodeThumbnailImageView()).error(R.drawable.logo).placeholder(R.drawable.logo)
                         .into(episodeImageView);
             }
-
-          /*  itemView.setOnClickListener(new View.OnClickListener() {
+*/
+           /* itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onItemClick(item,item.getTag());
@@ -124,37 +129,59 @@ public class ProgramPlayerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(layoutResourceId, parent, false));
     }
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
 
-        ViewHolder groupViewHolder = (ViewHolder) holder;
         RecyclerView.LayoutParams param = (RecyclerView.LayoutParams)holder.itemView.getLayoutParams();
         param.height = LinearLayout.LayoutParams.WRAP_CONTENT;
         param.width = LinearLayout.LayoutParams.WRAP_CONTENT;
         // groupViewHolder.mImage.setText(labels.get(position - 1));
         posT = position;
-        Log.v("Subhalaxmi","jf"+pos);
-        Log.v("Subhalaxmi", "position" + position);
+        //int nextPosInt = nextPosition;
 
-        if (pos == position) {
-            Log.v("Subhalaxmi", "GONE" + position);
-            param.height = 0;
-            param.width = 0;
-            holder.itemView.setLayoutParams(param);
-            holder.itemView.setVisibility(View.GONE);
+        Log.v("Subhalaxmi","position"+position);
+        Log.v("Subhalaxmi","pos"+pos);
+        Log.v("Subhalaxmi", "position" + nextPosition);
 
-        } else {
-            Log.v("Subhalaxmi","VISIBLE"+position);
+        holder.itemView.setLayoutParams(param);
+        holder.itemView.setVisibility(View.VISIBLE);
+        Log.v("SUBHASS","POs === "+pos + nextPosition + position);
+        if (pos == position || nextPosition == position) {
             holder.itemView.setLayoutParams(param);
             holder.itemView.setVisibility(View.VISIBLE);
 
 
+            if(pos == position){
+                holder.episodeNowTextView.setText(" NOW ");
+                holder.episodeNowTextView.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+                holder.episodeTitleTextView.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+                holder.middleLineTextView.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+                holder.belowlineTextView.setVisibility(View.VISIBLE);
+
+            }
+            else if(nextPosition == position){
+                holder.episodeNowTextView.setText(" NEXT ");
+                holder.episodeNowTextView.setTextColor(context.getResources().getColor(R.color.player_next_linecolor));
+                holder.episodeTitleTextView.setTextColor(context.getResources().getColor(R.color.player_next_linecolor));
+                holder.middleLineTextView.setBackgroundColor(context.getResources().getColor(R.color.player_next_linecolor));
+                holder.belowlineTextView.setVisibility(View.GONE);
+
+            }
+
+//            ((ViewHolder) holder).episodeNowTextView.setTextColor(R.color.colorPrimary);
+
+        } else {
+            param.height = 0;
+            param.width = 0;
+            Log.v("Subhalaxmi", "VISIBLE" + position);
+            holder.itemView.setLayoutParams(param);
+            holder.itemView.setVisibility(View.GONE);
         }
-        groupViewHolder.bind(data.get(position), listener);
+        holder.bind(data.get(position), listener);
     }
 
 

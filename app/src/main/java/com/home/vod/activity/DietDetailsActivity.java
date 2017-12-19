@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -28,7 +26,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -50,7 +47,6 @@ import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
-import com.google.android.gms.cast.MediaTrack;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.CastStateListener;
@@ -66,7 +62,6 @@ import com.home.apisdk.apiController.GetIpAddressAsynTask;
 import com.home.apisdk.apiController.GetLanguageListAsynTask;
 import com.home.apisdk.apiController.GetRelatedContentAsynTask;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
-import com.home.apisdk.apiController.GetVideoLogsAsynTask;
 import com.home.apisdk.apiController.HeaderConstants;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
 import com.home.apisdk.apiModel.AddToFavInputModel;
@@ -83,7 +78,6 @@ import com.home.apisdk.apiModel.RelatedContentInput;
 import com.home.apisdk.apiModel.RelatedContentOutput;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
-import com.home.apisdk.apiModel.VideoLogsInputModel;
 import com.home.apisdk.apiModel.Video_Details_Output;
 import com.home.vod.BuildConfig;
 import com.home.vod.EpisodeListOptionMenuHandler;
@@ -91,8 +85,6 @@ import com.home.vod.LoginRegistrationOnContentClickHandler;
 import com.home.vod.MyDownloadIntentHandler;
 import com.home.vod.R;
 import com.home.vod.SearchIntentHandler;
-import com.home.vod.adapter.ProgramDetailsAdapter;
-import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.EpisodesListModel;
 import com.home.vod.model.LanguageModel;
@@ -102,7 +94,6 @@ import com.home.vod.preferences.PreferenceManager;
 import com.home.vod.util.FontUtls;
 import com.home.vod.util.LogUtil;
 import com.home.vod.util.ProgressBarHandler;
-import com.home.vod.util.ResizableCustomView;
 import com.home.vod.util.SensorOrientationChangeNotifier;
 import com.home.vod.util.Util;
 import com.squareup.picasso.Picasso;
@@ -113,7 +104,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -137,7 +127,6 @@ import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BENEFIT_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_DETAILS_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIET_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DIFFICULTY_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DURATION_TITLE;
@@ -151,8 +140,6 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_PROGRAM_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_SORRY;
-import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
-import static com.home.vod.preferences.LanguagePreference.DETAILS_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DIET_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DIFFICULTY_TITLE;
 import static com.home.vod.preferences.LanguagePreference.DURATION_TITLE;
@@ -166,13 +153,9 @@ import static com.home.vod.preferences.LanguagePreference.PLAN_ID;
 import static com.home.vod.preferences.LanguagePreference.PROGRAM_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.SELECTED_LANGUAGE_CODE;
 import static com.home.vod.preferences.LanguagePreference.SORRY;
-import static com.home.vod.preferences.LanguagePreference.VIEW_MORE;
 import static com.home.vod.util.Constant.DAYS_DATA;
-import static com.home.vod.util.Constant.PERMALINK_INTENT_ARRAY;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
-import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
-import static com.home.vod.util.Util.is_followed;
 import static com.home.vod.util.Util.languageModel;
 import static player.utils.Util.DEFAULT_HAS_FAVORITE;
 import static player.utils.Util.HAS_FAVORITE;
@@ -184,18 +167,16 @@ import static player.utils.Util.timer;
  * @author Abhishek
  */
 
-public class ProgrammeActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener,GetRelatedContentAsynTask.GetRelatedContentListener, GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,GetValidateUserAsynTask.GetValidateUserListener,
+public class DietDetailsActivity extends AppCompatActivity implements SensorOrientationChangeNotifier.Listener,GetRelatedContentAsynTask.GetRelatedContentListener, GetContentDetailsAsynTask.GetContentDetailsListener, DeleteFavAsync.DeleteFavListener, AddToFavAsync.AddToFavListener,GetValidateUserAsynTask.GetValidateUserListener,
         GetIpAddressAsynTask.IpAddressListener, GetLanguageListAsynTask.GetLanguageListListener,GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener, VideoDetailsAsynctask.VideoDetailsListener {
 
     String PlanId = "";
     GetValidateUserAsynTask asynValidateUserDetails;
-    String programType = "";
-    TextView detailsTextView, videoStoryTextView, colortitle, colortitle1, benefitsTitleTextView, benefitsStoryTextView,startProgrammeTextView, durationTitleTextView, diffcultyTitleTextView, difficulty, days, lineTextview;
+    String dietPlanUrl= "";
+    TextView detailsTextView, videoStoryTextView, colortitle ;
     ImageView bannerImageView, playButton, moviePoster, share;
-    TextView benefitsTitleLineDivider,storyTitleLineDivider,detailsTitleLineDivider;
+    TextView storyTitleLineDivider;
     Button  dietPlanButton;
-    RelativeLayout startProgramButton;
-    LinearLayout durationLayout,difficultyLayout;
     ProgressBarHandler pDialog;
     RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout, image_logo;
     LinearLayout story_layout;
@@ -207,7 +188,6 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
     String name;
     int selectedPurchaseType = 0;
     AlertDialog alert;
-    LinearLayout benefitsLinearLayout;
     String difficulty_level;
     String repetition;
     String email, id;
@@ -221,7 +201,6 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
     VideoDetailsAsynctask asynLoadVideoUrls;
     String movieReleaseDateStr = "";
     PreferenceManager preferenceManager;
-    Button favorite_view_episode;
     Toolbar mActionBarToolbar;
     static String _permalink;
     String sucessMsg;
@@ -300,7 +279,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
     @Override
     public void onGetLanguageListPreExecuteStarted() {
 
-        pDialog = new ProgressBarHandler(ProgrammeActivity.this);
+        pDialog = new ProgressBarHandler(DietDetailsActivity.this);
         pDialog.show();
     }
 
@@ -383,7 +362,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
             RelativeLayout.LayoutParams params1 = null;
             if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
-                if(ProgrammeActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                if(DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
                 {
                     params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
 
@@ -540,7 +519,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         } catch (IllegalArgumentException ex) {
 
         }
-            Toast.makeText(ProgrammeActivity.this,"No Content Available",Toast.LENGTH_LONG).show();
+            Toast.makeText(DietDetailsActivity.this,"No Content Available",Toast.LENGTH_LONG).show();
         }
 
     }
@@ -586,7 +565,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             } catch (IllegalArgumentException ex) {
             }
 
-            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgrammeActivity.this, R.style.MyAlertDialogStyle);
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietDetailsActivity.this, R.style.MyAlertDialogStyle);
             dlgAlert.setMessage(message);
             dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
             dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
@@ -714,7 +693,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             if (playerModel.getVideoUrl() == null ||
                     playerModel.getVideoUrl().matches("")) {
 
-                Util.showNoDataAlert(ProgrammeActivity.this);
+                Util.showNoDataAlert(DietDetailsActivity.this);
                /* AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramDetailsActivity.this, R.style.MyAlertDialogStyle);
                 dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
                 dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
@@ -742,7 +721,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                         Log.v("pratik","tym=="+playerModel.getPlayPos()*1000);
                         if ((playerModel.getPlayPos() * 1000) > 0) {
                             playerModel.setPlayPos(playerModel.getPlayPos());
-                            Intent resumeIntent = new Intent(ProgrammeActivity.this, ResumePopupActivity.class);
+                            Intent resumeIntent = new Intent(DietDetailsActivity.this, ResumePopupActivity.class);
                             startActivityForResult(resumeIntent, 1001);
                             Log.v("pratik","tym==>0");
 
@@ -763,21 +742,21 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                         if (playerModel.getAdNetworkId() == 3) {
                             LogUtil.showLog("responseStr", "playVideoIntent" + playerModel.getAdNetworkId());
 
-                            playVideoIntent = new Intent(ProgrammeActivity.this, ProgramPlayerActivity.class);
+                            playVideoIntent = new Intent(DietDetailsActivity.this, ProgramPlayerActivity.class);
 //                            playVideoIntent = new Intent(ProgramDetailsActivity.this, ExoPlayerActivity.class);
 
                         } else if (playerModel.getAdNetworkId() == 1 && playerModel.getPreRoll() == 1) {
                             if (playerModel.getPlayPos() <= 0) {
-                                playVideoIntent = new Intent(ProgrammeActivity.this, AdPlayerActivity.class);
+                                playVideoIntent = new Intent(DietDetailsActivity.this, AdPlayerActivity.class);
                             } else {
-                                playVideoIntent = new Intent(ProgrammeActivity.this, ProgramPlayerActivity.class);
+                                playVideoIntent = new Intent(DietDetailsActivity.this, ProgramPlayerActivity.class);
 //                                playVideoIntent = new Intent(ProgramDetailsActivity.this, ExoPlayerActivity.class);
 
                             }
 
 
                         } else {
-                            playVideoIntent = new Intent(ProgrammeActivity.this, ProgramPlayerActivity.class);
+                            playVideoIntent = new Intent(DietDetailsActivity.this, ProgramPlayerActivity.class);
 //                            playVideoIntent = new Intent(ProgramDetailsActivity.this, ExoPlayerActivity.class);
                         }
                         /***ad **/
@@ -794,7 +773,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                                         }
                                     }
 
-                                    progressBarHandler = new ProgressBarHandler(ProgrammeActivity.this);
+                                    progressBarHandler = new ProgressBarHandler(DietDetailsActivity.this);
                                     progressBarHandler.show();
 //                                    Download_SubTitle(FakeSubTitlePath.get(0).trim());
                                 } else {
@@ -814,7 +793,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                         });
                     }
                 } else {
-                    final Intent playVideoIntent = new Intent(ProgrammeActivity.this, ProgramPlayerActivity.class);
+                    final Intent playVideoIntent = new Intent(DietDetailsActivity.this, ProgramPlayerActivity.class);
 //                    final Intent   playVideoIntent = new Intent(ProgramDetailsActivity.this, ExoPlayerActivity.class);
                     playVideoIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
@@ -836,7 +815,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
             playerModel.setVideoUrl(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA));
 
-            Util.showNoDataAlert(ProgrammeActivity.this);
+            Util.showNoDataAlert(DietDetailsActivity.this);
         }
 
     }
@@ -865,7 +844,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
         if (validateUserOutput == null) {
 
-            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgrammeActivity.this);
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietDetailsActivity.this);
             dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
             dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
             dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
@@ -874,7 +853,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
-                            Intent in = new Intent(ProgrammeActivity.this, MainActivity.class);
+                            Intent in = new Intent(DietDetailsActivity.this, MainActivity.class);
                             startActivity(in);
 
                         }
@@ -882,7 +861,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             dlgAlert.create().show();
         } else if (status <= 0) {
 
-            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgrammeActivity.this);
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietDetailsActivity.this);
             dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
             dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, DEFAULT_SORRY));
             dlgAlert.setPositiveButton(languagePreference.getTextofLanguage(BUTTON_OK, DEFAULT_BUTTON_OK), null);
@@ -891,7 +870,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
-                            Intent in = new Intent(ProgrammeActivity.this, MainActivity.class);
+                            Intent in = new Intent(DietDetailsActivity.this, MainActivity.class);
                             startActivity(in);
 
                         }
@@ -903,7 +882,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             if (status == 427) {
 
 
-                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgrammeActivity.this);
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(DietDetailsActivity.this);
                 if (message != null && message.equalsIgnoreCase("")) {
                     dlgAlert.setMessage(message);
                 } else {
@@ -934,10 +913,10 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                             getVideoDetailsInput.setContent_uniq_id(itemData.get(0).getEpisodeMuviUniqueId());
                             getVideoDetailsInput.setStream_uniq_id(itemData.get(0).getEpisodeStreamUniqueId());
                             getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
-                            asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgrammeActivity.this, ProgrammeActivity.this);
+                            asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, DietDetailsActivity.this, DietDetailsActivity.this);
                             asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                         } else {
-                            Toast.makeText(ProgrammeActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                            Toast.makeText(DietDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 
                         }
                     } else {
@@ -946,7 +925,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                             if (isAPV == 1 || isPPV == 1) {
                                 ShowPpvPopUp();
                             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                                Intent intent = new Intent(ProgrammeActivity.this, SubscriptionActivity.class);
+                                Intent intent = new Intent(DietDetailsActivity.this, SubscriptionActivity.class);
                                 intent.putExtra("PlayerModel", playerModel);
                                 intent.putExtra("PERMALINK", _permalink);
                                 intent.putExtra("SEASON", 0);
@@ -966,7 +945,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             } else if (isAPV == 1 || isPPV == 1) {
                 ShowPpvPopUp();
             } else if (PlanId.equals("1") && subscription_Str.equals("0")) {
-                Intent intent = new Intent(ProgrammeActivity.this, SubscriptionActivity.class);
+                Intent intent = new Intent(DietDetailsActivity.this, SubscriptionActivity.class);
                 intent.putExtra("PlayerModel", playerModel);
                 intent.putExtra("PERMALINK", _permalink);
                 intent.putExtra("SEASON", 0);
@@ -975,7 +954,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             } else if (Util.dataModel.getIsConverted() == 0) {
-                Util.showNoDataAlert(ProgrammeActivity.this);
+                Util.showNoDataAlert(DietDetailsActivity.this);
                 /*AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ProgramDetailsActivity.this);
                 dlgAlert.setMessage(languagePreference.getTextofLanguage(NO_VIDEO_AVAILABLE, Util.DEFAULT_NO_VIDEO_AVAILABLE));
                 dlgAlert.setTitle(languagePreference.getTextofLanguage(SORRY, Util.DEFAULT_SORRY));
@@ -1000,10 +979,10 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                     getVideoDetailsInput.setStream_uniq_id(Util.dataModel.getStreamUniqueId().trim());
                     getVideoDetailsInput.setInternetSpeed(MainActivity.internetSpeed.trim());
                     getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
-                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgrammeActivity.this, ProgrammeActivity.this);
+                    asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, DietDetailsActivity.this, DietDetailsActivity.this);
                     asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
                 } else {
-                    Toast.makeText(ProgrammeActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                    Toast.makeText(DietDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
 
                 }
             }
@@ -1131,44 +1110,28 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
-        setContentView(R.layout.activity_programme);
+        setContentView(R.layout.activity_diet_details);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
-        languagePreference = LanguagePreference.getLanguagePreference(ProgrammeActivity.this);
+        languagePreference = LanguagePreference.getLanguagePreference(DietDetailsActivity.this);
         playButton = (ImageView) findViewById(R.id.playButton);
         playButton.setVisibility(View.GONE);
-        benefitsLinearLayout = (LinearLayout) findViewById(R.id.benefitsRelativeLayout);
         detailsTextView = (TextView) findViewById(R.id.detailsTextView);
-        difficulty = (TextView) findViewById(R.id.difficulty);
-        lineTextview = (TextView) findViewById(R.id.lineTextview);
-        days = (TextView) findViewById(R.id.days);
+
         videoStoryTextView = (TextView) findViewById(R.id.videoStoryTextView);
-        benefitsTitleTextView = (TextView) findViewById(R.id.benefitsTitleTextView);
-        benefitsTitleLineDivider = (TextView) findViewById(R.id.benefitsTitleLineDivider);
-        detailsTitleLineDivider = (TextView) findViewById(R.id.detailsTitleLineDivider);
-        storyTitleLineDivider = (TextView) findViewById(R.id.line_divider);
+//        storyTitleLineDivider = (TextView) findViewById(R.id.line_divider);
         colortitle = (TextView) findViewById(R.id.colortitle);
-        colortitle1 = (TextView) findViewById(R.id.colortitle1);
         PlanId = (languagePreference.getTextofLanguage(PLAN_ID, DEFAULT_PLAN_ID)).trim();
-        benefitsStoryTextView = (TextView) findViewById(R.id.benefitsStoryTextView);
-        startProgramButton = (RelativeLayout) findViewById(R.id.startProgramButton);
-        durationLayout = (LinearLayout) findViewById(R.id.durationLayout);
-        difficultyLayout = (LinearLayout) findViewById(R.id.difficultyLayout);
         dietPlanButton = (Button) findViewById(R.id.dietPlanButton);
-        durationTitleTextView = (TextView) findViewById(R.id.durationTitleTextView);
-        startProgrammeTextView = (TextView) findViewById(R.id.startProgrammeTextView);
-        diffcultyTitleTextView = (TextView) findViewById(R.id.diffcultyTitleTextView);
-        favorite_view_episode = (Button) findViewById(R.id.favoriteImageView);
+
         moviePoster = (ImageView) findViewById(R.id.bannerImageView);
-        share = (ImageView) findViewById(R.id.share);
+//        share = (ImageView) findViewById(R.id.share);
         isLogin = preferenceManager.getLoginFeatureFromPref();
         image_logo = (RelativeLayout) findViewById(R.id.logo_image);
         bannerImageRelativeLayout = (RelativeLayout) findViewById(R.id.bannerImageRelativeLayout);
         player_layout = (RelativeLayout) findViewById(R.id.player_layout);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
         colortitle.setVisibility(View.GONE);
-        colortitle1.setVisibility(View.GONE);
-        lineTextview.setVisibility(View.GONE);
-        progressBarHandler = new ProgressBarHandler(ProgrammeActivity.this);
+        progressBarHandler = new ProgressBarHandler(DietDetailsActivity.this);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -1219,7 +1182,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
         RelativeLayout.LayoutParams params1 = null;
         if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
-            if(ProgrammeActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+            if(DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
             {
                 params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
 
@@ -1231,7 +1194,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         }
         else
         {
-            if(ProgrammeActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+            if(DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
             {
                 params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
 
@@ -1361,7 +1324,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
                     RelativeLayout.LayoutParams params1 = null;
                     if (((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)){
-                        if(ProgrammeActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                        if(DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
                         {
                             params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*35)/100);
 
@@ -1373,7 +1336,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                     }
                     else
                     {
-                        if(ProgrammeActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                        if(DietDetailsActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
                         {
                             params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(screenHeight*40)/100);
 
@@ -1410,14 +1373,11 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         movieUniqueId = dbModel.getMovieUniqueId();
         isEpisode = dbModel.getEpisode_id();
         Util.dataModel = dbModel;
-        lineTextview.setVisibility(View.GONE);
 
 
         image_logo.bringToFront();
 
-        FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.regular_fonts), startProgrammeTextView);
-        FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.regular_fonts), favorite_view_episode);
-        FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.regular_fonts), dietPlanButton);
+        FontUtls.loadFont(DietDetailsActivity.this, getResources().getString(R.string.regular_fonts), dietPlanButton);
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1571,82 +1531,38 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         });
 
 
-        startProgramButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-
-                Log.v("SUBHASS","clicked" +programType );
-                // TODO Auto-generated method stub
-                if (programType.equalsIgnoreCase("WeekBased")){
-                    Log.v("SUBHASS","week days");
-
-                    if (season != null && season.length > 0) {
-                        Intent i = new Intent(getApplicationContext(), WeekActivity.class);
-                        i.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
-                        startActivity(i);
-                        bannerImageRelativeLayout.setVisibility(View.VISIBLE);
-                        player_layout.setVisibility(View.GONE);
-                    } else {
-                        Toast.makeText(ProgrammeActivity.this, "No Content Available", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                }else if (programType.equalsIgnoreCase("DayBased")){
-                    Log.v("SUBHASS","day days");
-                    Intent i = new Intent(getApplicationContext(), SeasonActivity.class);
-                    i.putExtra(PERMALINK_INTENT_KEY, permalinkStr);
-                    i.putExtra(DAYS_DATA,totaldays);
-                    startActivity(i);
-                    bannerImageRelativeLayout.setVisibility(View.VISIBLE);
-                    player_layout.setVisibility(View.GONE);
-
-                }else if (programType.equalsIgnoreCase("TimeBased")){
-                    Log.v("SUBHASS","time days");
-
-                    loadEpisodes();
-                }
-
-            }
-        });
 
         dietPlanButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                RelatedContentInput relatedContentInput = new RelatedContentInput();
-                LogUtil.showLog("SUBHA", "conten" + contentId + "hf" + muviStreamId);
 
-                relatedContentInput.setAuthToken(authTokenStr);
-                relatedContentInput.setContentId(contentId);
-                relatedContentInput.setContent_stream_id(muviStreamId);
-                relatedContentInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                GetRelatedContentAsynTask asyngetRelatedContent = new GetRelatedContentAsynTask(relatedContentInput, ProgrammeActivity.this, ProgrammeActivity.this);
-                asyngetRelatedContent.executeOnExecutor(threadPoolExecutor);
+                Toast.makeText(DietDetailsActivity.this,"fg"+dietPlanUrl,Toast.LENGTH_LONG).show();
+
+
+                Log.v("SUBHA","CLCIKED DIET"+dietPlanUrl);
+                //String url = "http://www.facebook.com/yourfanpagename";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(dietPlanUrl));
+                startActivity(i);
 
             }
         });
 
-       /* dietPlanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
+      /*  share.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(ProgrammeActivity.this, DietPlanActivity.class);
-                startActivity(intent);
-            }
-        });*/
-
-        share.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Util.shareIt(ProgrammeActivity.this);
+                Util.shareIt(DietDetailsActivity.this);
             }
         });
-
+*/
         ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
         useridStr = preferenceManager.getUseridFromPref();
 
         contentDetailsInput.setAuthToken(authTokenStr);
 
-        Log.v("SUBHA", "authToken === " + authTokenStr);
+        Log.v("SUBHASSSS", "authToken === " + getIntent().getStringExtra(HeaderConstants.VLINK));
         if (preferenceManager != null) {
             String countryPref = preferenceManager.getCountryCodeFromPref();
             contentDetailsInput.setCountry(countryPref);
@@ -1654,67 +1570,13 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             contentDetailsInput.setCountry("IN");
         }
         contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        contentDetailsInput.setPermalink(permalinkStr);
+        contentDetailsInput.setPermalink(getIntent().getStringExtra(HeaderConstants.VLINK));
         contentDetailsInput.setUser_id(useridStr);
         asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
         asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
 
 
-        /***favorite *****/
-        favorite_view_episode.setVisibility(View.GONE);
 
-        favorite_view_episode.setOnClickListener(new View.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onClick(View v) {
-
-                if (preferenceManager != null) {
-                    loggedInStr = preferenceManager.getUseridFromPref();
-                }
-
-                if (loggedInStr != null) {
-                    if (isFavorite == 1) {
-
-                        DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
-                        deleteFavInputModel.setAuthTokenStr(authTokenStr);
-                        deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
-                        deleteFavInputModel.setMovieUniqueId(movieUniqueId);
-                        deleteFavInputModel.setIsEpisode(isEpisode);
-
-                        DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, ProgrammeActivity.this, ProgrammeActivity.this);
-                        deleteFavAsync.executeOnExecutor(threadPoolExecutor);
-
-                       /* AsynFavoriteDelete asynFavoriteDelete=new AsynFavoriteDelete();
-                        asynFavoriteDelete.execute();*/
-                    } else {
-
-                        LogUtil.showLog("MUVI", "favorite");
-                        AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-                        addToFavInputModel.setAuthToken(authTokenStr);
-                        addToFavInputModel.setMovie_uniq_id(movieUniqueId);
-                        addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
-                        addToFavInputModel.setIsEpisodeStr(isEpisode);
-
-                        AddToFavAsync asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, ProgrammeActivity.this, ProgrammeActivity.this);
-                        asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
-
-
-                    }
-                } else {
-                    Util.favorite_clicked = true;
-
-                    Intent registerActivity = new Intent(ProgrammeActivity.this, RegisterActivity.class);
-                    registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    registerActivity.putExtra("from", this.getClass().getName());
-                    startActivityForResult(registerActivity, 30060);
-
-                    bannerImageRelativeLayout.setVisibility(View.VISIBLE);
-                    player_layout.setVisibility(View.GONE);
-
-                }
-
-            }
-        });
 
 
         /***favorite *****/
@@ -1832,7 +1694,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         switch (item.getItemId()) {
 
             case R.id.action_search:
-                final Intent searchIntent = new SearchIntentHandler(ProgrammeActivity.this).handleSearchIntent();
+                final Intent searchIntent = new SearchIntentHandler(DietDetailsActivity.this).handleSearchIntent();
                 searchIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(searchIntent);
                 // Not implemented here
@@ -1843,14 +1705,14 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 return false;
             case R.id.action_login:
 
-                Intent loginIntent = new Intent(ProgrammeActivity.this, LoginActivity.class);
+                Intent loginIntent = new Intent(DietDetailsActivity.this, LoginActivity.class);
                 Util.check_for_subscription = 0;
                 startActivity(loginIntent);
                 // Not implemented here
                 return false;
             case R.id.action_register:
 
-                Intent registerIntent = new Intent(ProgrammeActivity.this, RegisterActivity.class);
+                Intent registerIntent = new Intent(DietDetailsActivity.this, RegisterActivity.class);
                 Util.check_for_subscription = 0;
                 startActivity(registerIntent);
                 // Not implemented here
@@ -1866,14 +1728,14 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 return false;
             case R.id.action_mydownload:
 
-                final Intent mydownload = new MyDownloadIntentHandler(ProgrammeActivity.this).handleDownloadIntent();
+                final Intent mydownload = new MyDownloadIntentHandler(DietDetailsActivity.this).handleDownloadIntent();
                 startActivity(mydownload);
                 // Not implemented here
                 return false;
 
             case R.id.menu_item_profile:
 
-                Intent profileIntent = new Intent(ProgrammeActivity.this, ProfileActivity.class);
+                Intent profileIntent = new Intent(DietDetailsActivity.this, ProfileActivity.class);
                 profileIntent.putExtra("EMAIL", email);
                 profileIntent.putExtra("LOGID", id);
                 startActivity(profileIntent);
@@ -1881,7 +1743,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 return false;
             case R.id.action_purchage:
 
-                Intent purchaseintent = new Intent(ProgrammeActivity.this, PurchaseHistoryActivity.class);
+                Intent purchaseintent = new Intent(DietDetailsActivity.this, PurchaseHistoryActivity.class);
                 startActivity(purchaseintent);
                 // Not implemented here
                 return false;
@@ -1896,7 +1758,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
     @Override
     public void onGetContentDetailsPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(ProgrammeActivity.this);
+        pDialog = new ProgressBarHandler(DietDetailsActivity.this);
         pDialog.show();
     }
 
@@ -1936,43 +1798,33 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
 
             Log.v("SUBHASHREE","movieTrailer === "+ movieTrailerUrlStr);
-            lineTextview.setVisibility(View.GONE);
 
-            benefitsTitleTextView.setText(languagePreference.getTextofLanguage(BENEFIT_TITLE, DEFAULT_BENEFIT_TITLE));
-            durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
-            diffcultyTitleTextView.setText(languagePreference.getTextofLanguage(DIFFICULTY_TITLE, DEFAULT_DIFFICULTY_TITLE));
-            startProgrammeTextView.setText(languagePreference.getTextofLanguage(PROGRAM_BUTTON, DEFAULT_PROGRAM_BUTTON));
-            favorite_view_episode.setText(languagePreference.getTextofLanguage(FOLLOW_PROGRAM_BUTTON, DEFAULT_FOLLOW_PROGRAM_BUTTON));
-            dietPlanButton.setText(languagePreference.getTextofLanguage(DIET_BUTTON, DEFAULT_DIET_BUTTON));
 
+
+            dietPlanButton.setText("VIEW DIET PLAN");
+
+            dietPlanButton.setVisibility(View.VISIBLE);
 
             if (contentDetailsOutput.getMetadata() != null || contentDetailsOutput.getMetadata().size() > 0) {
                /* benefitsTitleTextView.setVisibility(View.GONE);
                 colortitle1.setVisibility(View.GONE);*/
-                benefitsLinearLayout.removeAllViews();
                 for (Map.Entry<String, String> entry : contentDetailsOutput.getMetadata().entrySet()) {
 
                     Log.v("SUBHASS","program type value == "+entry.getValue());
 
                         if (entry.getValue() != null && !entry.getValue().matches("")) {
 
-                            if(!entry.getKey().equalsIgnoreCase("_____programtype")) {
+                          /*  if(!entry.getKey().equalsIgnoreCase("_____programtype")) {
 
-                                DynamicLayout(benefitsLinearLayout, entry.getKey().toUpperCase(), entry.getValue());
-                            }
-                            if (entry.getKey().equalsIgnoreCase("_____programtype") ){
-                                programType = entry.getValue();
+                            }*/
+                            if (entry.getKey().equalsIgnoreCase("custom_url") ){
+                                dietPlanUrl = entry.getValue();
 
                             }
 //                            programType= "WeekBased";
 
 
-                            if (programType != null && !programType.matches("")) {
-                                startProgramButton.setVisibility(View.VISIBLE);
-                            }
-                            else{
-                                startProgramButton.setVisibility(View.INVISIBLE);
-                            }
+
                     }
 
 
@@ -1986,20 +1838,9 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.light_fonts), benefitsStoryTextView);
                 benefitsStoryTextView.setText(benefits.trim());
                 colortitle1.setVisibility(View.VISIBLE);*/
-                benefitsLinearLayout.setVisibility(View.GONE);
             }
 
-            if (benefits.matches("") || benefits.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
-                benefitsTitleTextView.setVisibility(View.GONE);
-                colortitle1.setVisibility(View.GONE);
-            } else {
-                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.medium_fonts), benefitsTitleTextView);
-                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), benefitsStoryTextView);
-                benefitsStoryTextView.setText(benefits.trim());
-                colortitle1.setVisibility(View.VISIBLE);
-                benefitsTitleLineDivider.setVisibility(View.VISIBLE);
-                benefitsTitleTextView.setVisibility(View.VISIBLE);
-            }
+
 
             if (name.matches("") || name.matches(languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA))) {
                 detailsTextView.setVisibility(View.GONE);
@@ -2008,11 +1849,10 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             } else {
 
 
-                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.medium_fonts), detailsTextView);
+                FontUtls.loadFont(DietDetailsActivity.this, getResources().getString(R.string.medium_fonts), detailsTextView);
                 detailsTextView.setVisibility(View.VISIBLE);
-                detailsTitleLineDivider.setVisibility(View.VISIBLE);
                 detailsTextView.setText(name);
-                colortitle.setVisibility(View.GONE);
+                colortitle.setVisibility(View.VISIBLE);
             }
 
 
@@ -2024,34 +1864,9 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 Log.v("SUBHA", "trailer url yes === ");
             }
 
-            if (duration.matches("")) {
-                durationLayout.setVisibility(View.GONE);
-                durationTitleTextView.setVisibility(View.GONE);
-                lineTextview.setVisibility(View.GONE);
 
-            } else {
 
-                durationLayout.setVisibility(View.VISIBLE);
-                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
-                days.setText(duration);
-            }
-            if (difficulty_level.matches("")) {
-                difficultyLayout.setVisibility(View.GONE);
-                diffcultyTitleTextView.setVisibility(View.GONE);
-                lineTextview.setVisibility(View.GONE);
-            } else {
-                difficultyLayout.setVisibility(View.VISIBLE);
-                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.regular_fonts), diffcultyTitleTextView);
-                difficulty.setText(difficulty_level);
-            }
 
-            if (difficulty_level.matches("") && duration != null) {
-                lineTextview.setVisibility(View.GONE);
-                days.setGravity(Gravity.CENTER);
-            } else if (duration.matches("") && difficulty_level != null) {
-                lineTextview.setVisibility(View.GONE);
-                difficulty.setGravity(Gravity.CENTER);
-            }
 
             dietPlanButton.setVisibility(View.VISIBLE);
             // Util.favorite_clicked = false;
@@ -2064,9 +1879,9 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
             } else {
                 //  videoStoryTextView.setMaxLines(3);
                 videoStoryTextView.setVisibility(View.VISIBLE);
-                storyTitleLineDivider.setVisibility(View.VISIBLE);
+//                storyTitleLineDivider.setVisibility(View.VISIBLE);
 
-                FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), videoStoryTextView);
+                FontUtls.loadFont(DietDetailsActivity.this, getResources().getString(R.string.light_fonts), videoStoryTextView);
 
                 videoStoryTextView.setText(movieDetailsStr.trim());
 
@@ -2091,7 +1906,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                             .showImageOnLoading(R.drawable.logo).build();
                     imageLoader.displayImage(posterImageId, moviePoster, options);*/
 
-                    Picasso.with(ProgrammeActivity.this)
+                    Picasso.with(DietDetailsActivity.this)
                             .load(posterImageId)
                             .error(R.drawable.logo)
                             .placeholder(R.drawable.logo)
@@ -2112,7 +1927,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                         .showImageOnLoading(R.drawable.logo).build();
                 imageLoader.displayImage(bannerImageId.trim(), moviePoster, options);*/
 
-                Picasso.with(ProgrammeActivity.this)
+                Picasso.with(DietDetailsActivity.this)
                         .load(bannerImageId)
                         .error(R.drawable.logo)
                         .placeholder(R.drawable.logo)
@@ -2120,34 +1935,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
 
             }
-            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE)
-                    .trim()).equals("1")) {
-                favorite_view_episode.setVisibility(View.VISIBLE);
-                if (preferenceManager != null) {
-                    loggedInStr = preferenceManager.getUseridFromPref();
-                }
-                if (loggedInStr != null && isFavorite == 0 && Util.favorite_clicked == true) {
 
-                    Util.favorite_clicked = false;
-                    Log.v("SUBHA", "favorite ----");
-
-                    AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
-                    addToFavInputModel.setAuthToken(authTokenStr);
-                    addToFavInputModel.setMovie_uniq_id(movieUniqueId);
-                    addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
-                    addToFavInputModel.setIsEpisodeStr(isEpisode);
-
-                    AddToFavAsync asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, ProgrammeActivity.this, ProgrammeActivity.this);
-                    asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
-                } else if (loggedInStr != null && isFavorite == 1) {
-
-//                    favorite_view_episode.setImageResource(R.drawable.favorite_red);
-                    favorite_view_episode.setText(languagePreference.getTextofLanguage(FOLLOWED_PROGRAM_BUTTON,DEFAULT_FOLLOWED_PROGRAM_BUTTON));
-                }
-
-            } else {
-                favorite_view_episode.setVisibility(View.GONE);
-            }
 
 
             if (contentDetailsOutput.getSeason() != null) {
@@ -2191,33 +1979,6 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
         mCastContext.getSessionManager().addSessionManagerListener(
                 mSessionManagerListener, CastSession.class);
-        if(is_followed == true){
-            is_followed = false;
-            if (NetworkStatus.getInstance().isConnected(this)) {
-                ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
-                permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
-                useridStr = preferenceManager.getUseridFromPref();
-
-                contentDetailsInput.setAuthToken(authTokenStr);
-
-                Log.v("SUBHA", "authToken1243442554 === " + authTokenStr);
-                if (preferenceManager != null) {
-                    String countryPref = preferenceManager.getCountryCodeFromPref();
-                    contentDetailsInput.setCountry(countryPref);
-                } else {
-                    contentDetailsInput.setCountry("IN");
-                }
-                contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                contentDetailsInput.setPermalink(permalinkStr);
-                contentDetailsInput.setUser_id(useridStr);
-                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
-                asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
-
-            } else {
-                Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
-                finish();
-            }
-        }
         /***************chromecast**********************/
         invalidateOptionsMenu();
 
@@ -2226,16 +1987,15 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
     @Override
     public void onDeleteFavPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(ProgrammeActivity.this);
+        pDialog = new ProgressBarHandler(DietDetailsActivity.this);
         pDialog.show();
     }
 
     @Override
     public void onDeleteFavPostExecuteCompleted(DeleteFavOutputModel deleteFavOutputModel, int status, String sucessMsg) {
 
-        ProgrammeActivity.this.sucessMsg = sucessMsg;
+        DietDetailsActivity.this.sucessMsg = sucessMsg;
 //        favorite_view_episode.setImageResource(R.drawable.favorite);
- favorite_view_episode.setText(languagePreference.getTextofLanguage(FOLLOW_PROGRAM_BUTTON, DEFAULT_FOLLOW_PROGRAM_BUTTON));
 
 
 //        showToast();
@@ -2271,7 +2031,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
     @Override
     public void onAddToFavPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(ProgrammeActivity.this);
+        pDialog = new ProgressBarHandler(DietDetailsActivity.this);
         pDialog.show();
     }
 
@@ -2281,11 +2041,10 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
 
             //pref = getSharedPreferences(Util.LOGIN_PREF, 0);
-            ProgrammeActivity.this.sucessMsg = sucessMsg;
+            DietDetailsActivity.this.sucessMsg = sucessMsg;
             String loggedInStr = preferenceManager.getLoginStatusFromPref();
 
 //            favorite_view_episode.setImageResource(R.drawable.favorite_red);
-            favorite_view_episode.setText(languagePreference.getTextofLanguage(FOLLOWED_PROGRAM_BUTTON,DEFAULT_FOLLOWED_PROGRAM_BUTTON));
             isFavorite = 1;
 
 //            showToast();
@@ -2755,34 +2514,21 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
         }
         if (status == 200) {
-            String permalinkStr = relatedContentOutput.getPermalink();
-            String storyStr = relatedContentOutput.getStory();
-            String titleStr = relatedContentOutput.getTitle();
-            String trailer_urlStr = relatedContentOutput.getTrailer_url();
-            String posterStr = relatedContentOutput.getPoster();
-            String content_bannerStr = relatedContentOutput.getContent_banner();
+            String permalinkStr = relatedContentOutput.getPermalink().substring(relatedContentOutput.getPermalink().lastIndexOf("/") + 1);
             LogUtil.showLog("SUBHA", "getPermalink()" + permalinkStr);
 
-            if(relatedContentOutput.getIs_downloadable().equalsIgnoreCase("1") || relatedContentOutput.getIs_downloadable().equalsIgnoreCase("2")) {
 
-
-                Intent intent = new Intent(ProgrammeActivity.this, DietDetailsActivity.class);
-                intent.putExtra(HeaderConstants.VLINK, permalinkStr);
-               /* intent.putExtra("STORY", storyStr);
-                intent.putExtra("TITLE", titleStr);
-                intent.putExtra("TRAILER_URL", trailer_urlStr);
-                intent.putExtra("POSTER", posterStr);
-                intent.putExtra("CONTENT_BANNER", content_bannerStr);*/
-                startActivity(intent);
-            }
+            Intent intent = new Intent(DietDetailsActivity.this, DietPlanActivity.class);
+            intent.putExtra(HeaderConstants.VLINK, permalinkStr);
+            startActivity(intent);
 
         } else
-            Toast.makeText(ProgrammeActivity.this, "There is No Diet Plan", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DietDetailsActivity.this, "There is No Diet Plan", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onGetRelatedContentPreExecuteStarted() {
-        pDialog = new ProgressBarHandler(ProgrammeActivity.this);
+        pDialog = new ProgressBarHandler(DietDetailsActivity.this);
         pDialog.show();
         LogUtil.showLog("SUBHA", "onGetRelatedContentPreExecuteStarted");
 
@@ -3225,7 +2971,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
         textView.setTextSize(20);
 
-        FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.regular_fonts), textView);
+        FontUtls.loadFont(DietDetailsActivity.this, getResources().getString(R.string.regular_fonts), textView);
         LinearLayout.LayoutParams TextViewParams = new LinearLayout.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT);
       //  int textview = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
         int topmargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
@@ -3245,7 +2991,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         // detail_text.setTextSize(getResources().getDimension(R.dimen.story_text_size));
 
        // int textviewheader = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-        FontUtls.loadFont(ProgrammeActivity.this, getResources().getString(R.string.light_fonts), detail_text);
+        FontUtls.loadFont(DietDetailsActivity.this, getResources().getString(R.string.light_fonts), detail_text);
 
         detail_text.setText(Details);
 
@@ -3336,7 +3082,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                     callForValidateUser();
 
                 } else {
-                    Util.showToast(ProgrammeActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+                    Util.showToast(DietDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
 
                     //  Toast.makeText(ProgramDetailsActivity.this,Util.getTextofLanguage(ProgramDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
                 }
@@ -3345,7 +3091,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
 
 
-                Intent registerActivity = new LoginRegistrationOnContentClickHandler(ProgrammeActivity.this).handleClickOnContent();
+                Intent registerActivity = new LoginRegistrationOnContentClickHandler(DietDetailsActivity.this).handleClickOnContent();
                 registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 Util.check_for_subscription = 1;
                 registerActivity.putExtra("PLAY_LIST", itemData);
@@ -3376,11 +3122,11 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                 getVideoDetailsInput.setUser_id(preferenceManager.getUseridFromPref());
 
 
-                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, ProgrammeActivity.this, ProgrammeActivity.this);
+                asynLoadVideoUrls = new VideoDetailsAsynctask(getVideoDetailsInput, DietDetailsActivity.this, DietDetailsActivity.this);
                 asynLoadVideoUrls.executeOnExecutor(threadPoolExecutor);
 
             } else {
-                Util.showToast(ProgrammeActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
+                Util.showToast(DietDetailsActivity.this, languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
 
                 //Toast.makeText(ProgramDetailsActivity.this,Util.getTextofLanguage(ProgramDetailsActivity.this,Util.NO_INTERNET_CONNECTION,Util.DEFAULT_NO_INTERNET_CONNECTION),Toast.LENGTH_LONG).show();
             }
@@ -3403,7 +3149,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
         validateUserInput.setSeasonId(Util.dataModel.getSeason_id());
         validateUserInput.setEpisodeStreamUniqueId(itemData.get(0).getEpisodeStreamUniqueId());
         validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-        asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ProgrammeActivity.this, ProgrammeActivity.this);
+        asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, DietDetailsActivity.this, DietDetailsActivity.this);
         asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
     }
 
@@ -3413,20 +3159,20 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
 
             try {
                 if (Util.currencyModel.getCurrencySymbol() == null) {
-                    Util.showToast(ProgrammeActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                    Util.showToast(DietDetailsActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
 
                     // Toast.makeText(ProgramDetailsActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
 
                 }
             } catch (Exception e) {
-                Util.showToast(ProgrammeActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
+                Util.showToast(DietDetailsActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, DEFAULT_NO_DETAILS_AVAILABLE));
 
                 // Toast.makeText(ProgramDetailsActivity.this, languagePreference.getTextofLanguage(NO_DETAILS_AVAILABLE, Util.DEFAULT_NO_DETAILS_AVAILABLE), Toast.LENGTH_LONG).show();
                 return;
             }
 
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProgrammeActivity.this, R.style.MyAlertDialogStyle);
-            LayoutInflater inflater = (LayoutInflater) ProgrammeActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(DietDetailsActivity.this, R.style.MyAlertDialogStyle);
+            LayoutInflater inflater = (LayoutInflater) DietDetailsActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
             View convertView = inflater.inflate(R.layout.activity_ppv_popup, null);
             alertDialog.setView(convertView);
@@ -3672,7 +3418,7 @@ public class ProgrammeActivity extends AppCompatActivity implements SensorOrient
                     LogUtil.showLog("MUVI", "Show withepisode Activity episode Id =" + Util.selected_episode_id);
 
                     alert.dismiss();
-                    final Intent showPaymentIntent = new Intent(ProgrammeActivity.this, PPvPaymentInfoActivity.class);
+                    final Intent showPaymentIntent = new Intent(DietDetailsActivity.this, PPvPaymentInfoActivity.class);
                     showPaymentIntent.putExtra("muviuniqueid", Util.dataModel.getMovieUniqueId().trim());
                     showPaymentIntent.putExtra("episodeStreamId", Util.dataModel.getStreamUniqueId().trim());
                     showPaymentIntent.putExtra("contentTypesId", Util.dataModel.getContentTypesId());

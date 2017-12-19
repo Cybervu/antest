@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/listViewLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/grid_color_selector"
+    android:clickable="false"
+    android:focusable="false">
+
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fav_img_height"
+            android:paddingRight="@dimen/card_padding"
+            android:id="@+id/favoriteImageRelativeLayout"
+
+            >
+
+            <ImageView
+                android:id="@+id/itemImage"
+                android:layout_width="@dimen/fav_img_width"
+                android:layout_height="@dimen/fav_img_height"
+                android:src="@drawable/logo"
+                android:layout_marginTop="@dimen/marginBottom5dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                />
+
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/fav_img_height"
+                android:layout_toRightOf="@+id/itemImage"
+                android:paddingLeft="10dp"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/itemTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:ellipsize="end"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="start"
+                    android:maxLines="1"
+                    android:layout_marginTop="@dimen/marginleft10dp"
+                    android:padding="@dimen/loginImageViewMarging_top_padding"
+                    android:text="Padhastana"
+                    android:textSize="@dimen/story_text_size"
+                    android:textColor="@color/pageTitleColor"
+                     />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/itemTitle"
+                    android:gravity="start"
+                    android:id="@+id/movieStory"
+                    android:paddingLeft="@dimen/loginImageViewMarging_top_padding"
+                    android:text="Story comes here"
+                    android:layout_alignLeft="@+id/itemTitle"
+                    android:maxLines="@integer/story_lines"
+                    android:ellipsize="end"
+                    android:textSize="@dimen/story_text_size"
+                    android:textColor="@color/colorPrimary"
+                    android:visibility="visible" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+
+</RelativeLayout>

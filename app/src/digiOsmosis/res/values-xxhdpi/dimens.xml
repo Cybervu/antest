@@ -79,7 +79,7 @@
     <dimen name="plainrow_text_size">15sp</dimen>
     <dimen name="plainrow_mrgin_top">25dp</dimen>
     <dimen name="preorderbtn_padding">14dp</dimen>
-
+    <dimen name="diet_story">18sp</dimen>
 
     <dimen name="cast_details_width">200dp</dimen>
     <dimen name="cast_details_height">200dp</dimen>
@@ -178,4 +178,7 @@
     <dimen name="week_top">10dp</dimen>
     <dimen name="program_left">30dp</dimen>
     <dimen name="program_banner_height">400dp</dimen>
+    <dimen name="player_looping_layout">100dp</dimen>
+    <dimen name="player_title">20dp</dimen>
+    <dimen name="player_marginTop">50dp</dimen>
 </resources>

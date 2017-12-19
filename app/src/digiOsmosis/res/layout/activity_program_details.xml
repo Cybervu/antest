@@ -13,19 +13,27 @@
         layout="@layout/logo_image"
         android:id="@+id/logo_image"/>
 
+    <fragment
+        android:id="@+id/cast_mini_controller"
+        class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:layout_alignParentLeft="true"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@id/toolbar"
         android:background="@color/appBackgroundColor"
         android:fillViewport="true">
 
 
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
+
+    <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
@@ -71,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_marginTop="@dimen/marginRight20dp"
                 android:layout_below="@+id/bannerImageRelativeLayout"
                 android:padding="10dp">
 
@@ -81,6 +90,7 @@
                     android:layout_alignBottom="@+id/titleTextView"
                     android:layout_alignTop="@+id/titleTextView"
                     android:layout_marginLeft="8dp"
+                    android:visibility="gone"
                     android:background="@color/colorPrimary"
                     android:paddingLeft="10dp" />
 
@@ -90,84 +100,213 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/marginleft10dp"
                     android:text=""
+                    android:textAllCaps="true"
                     android:layout_toRightOf="@+id/view"
-                    android:textColor="@color/videotextColor"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/story_title_text_size"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/share"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_centerVertical="true"
                     android:layout_gravity="right"
-                    android:layout_marginEnd="13dp"
-                    android:layout_marginRight="13dp"
-                    android:src="@drawable/share" />
+                    android:layout_marginRight="8dp"
+                    android:src="@drawable/share"
+                    android:visibility="gone"
+                    android:layout_alignParentEnd="true" />
+
+                <ImageView
+                    android:id="@+id/favoriteImageView1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="22dp"
+                    android:layout_marginRight="9dp"
+                    android:src="@drawable/favorite"
+                    android:visibility="gone"
+                    android:layout_alignTop="@+id/share"
+                    android:layout_toStartOf="@+id/share" />
 
             </RelativeLayout>
 
-            <Button
-                android:id="@+id/startWorkoutButton"
-                android:layout_width="@dimen/start_program_button"
-                android:layout_height="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:id="@+id/detailsTitleLineDivider"
+                android:layout_alignLeft="@+id/titleRelativeLayout"
                 android:layout_below="@+id/titleRelativeLayout"
-                android:layout_centerInParent="true"
-                android:background="@drawable/my_button"
-                android:padding="@dimen/button_padding"
-                android:stateListAnimator="@null"
-                android:text=""
-                android:textAllCaps="false"
-                android:textColor="@color/buttonTextColor"
-                android:textSize="@dimen/program_button_text_size"
-                android:visibility="visible" />
-
-            <Button
-                android:id="@+id/dietPlanButton"
-                android:layout_width="@dimen/start_program_button"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/startWorkoutButton"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/my_button"
-                android:padding="6dp"
-                android:stateListAnimator="@null"
-                android:text=""
-                android:textAllCaps="false"
-                android:textColor="@color/buttonTextColor"
-                android:textSize="@dimen/program_button_text_size"
-                android:visibility="visible" />
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/line_divider_detailsPage"
+                android:padding="@dimen/marginRight20dp"
+                android:visibility="visible"/>
 
 
 
             <LinearLayout
-                android:id="@+id/durationLinearLayout"
+                android:id="@+id/buttonLinearlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/dietPlanButton"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="18dp"
-                android:orientation="vertical"
-                android:paddingLeft="10dp">
+                android:layout_alignLeft="@+id/titleRelativeLayout"
+                android:layout_below="@+id/titleRelativeLayout"
+                android:layout_marginLeft="@dimen/marginleft10dp"
+                android:layout_marginRight="@dimen/marginleft10dp"
+                android:orientation="horizontal"
+                android:visibility="gone"
 
-                <TextView
-                    android:id="@+id/durationTitleTextView"
+                android:padding="@dimen/marginRight20dp"
+                android:weightSum="3">
+
+
+                <Button
+                    android:id="@+id/startWorkoutButton"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/programme_details_button_background"
+                    android:gravity="center"
+                    android:layout_gravity="center|right"
+                    android:padding="6dp"
+                    android:text=""
+                    android:textAllCaps="false"
+                    android:textColor="@color/button_background"
+                    android:textSize="@dimen/program_button_text_size"
+                    android:visibility="visible" />
+
+
+                <RelativeLayout
+                    android:id="@+id/letsWorkoutButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/pageTitleColor"
-                    android:textSize="@dimen/duration_title_text"
-                    android:textStyle="bold" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="6dp"
+                    android:clickable="true"
+                    android:visibility="visible">
 
-                <TextView
-                    android:id="@+id/durationTextView"
-                    android:layout_width="wrap_content"
+
+                    <ImageView
+                        android:id="@+id/startProgrammeBGImageView"
+                        android:layout_width="@dimen/programdetails_start_button_width"
+                        android:layout_height="@dimen/programdetails_start_button_width"
+                        android:src="@drawable/start_now_program_bg" />
+
+                    <TextView
+                        android:id="@+id/startProgrammeTextView"
+                        android:layout_width="@dimen/programdetails_start_button_width"
+                        android:layout_height="@dimen/programdetails_start_button_width"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:minLines="2"
+                        android:text="Let's \n Workout"
+                        android:textAllCaps="true"
+                        android:textColor="@color/buttonTextColor"
+
+                        android:textSize="@dimen/program_button_text_size" />
+                </RelativeLayout>
+
+
+
+
+                <Button
+                    android:id="@+id/stretchWorkoutButton"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/videotextColor"
-                    android:textSize="@dimen/duration" />
+                    android:layout_below="@+id/startProgramButton"
+                    android:layout_centerInParent="true"
+                    android:layout_weight="1"
+                    android:background="@drawable/programme_details_button_background"
+                    android:gravity="center"
+                    android:layout_gravity="center|left"
+                    android:padding="6dp"
+                    android:text=""
+                    android:textAllCaps="false"
+                    android:textColor="@color/button_background"
+                    android:textSize="@dimen/program_button_text_size"
+                    android:visibility="visible" />
 
             </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/line_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:visibility="visible"
+                android:layout_alignLeft="@+id/buttonLinearlayout"
+                android:layout_alignRight="@+id/buttonLinearlayout"
+                android:layout_below="@+id/buttonLinearlayout"
+                android:layout_marginLeft="@dimen/marginRight20dp"
+                android:layout_marginRight="@dimen/marginRight20dp"
+                android:background="@color/line_divider_detailsPage"
+                android:padding="@dimen/marginRight20dp" />
+
+
+
+            <LinearLayout
+                android:id="@+id/equipmentRelativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/line_divider"
+                android:layout_alignLeft="@+id/line_divider"
+                android:layout_marginTop="@dimen/program_left"
+                android:layout_marginBottom="@dimen/marginRight20dp"
+                android:padding="@dimen/marginRight20dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+
+                >
+
+                <LinearLayout
+                    android:id="@+id/equipmentTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/colortitle1"
+                        android:layout_width="@dimen/sideTitle_line_height"
+                        android:layout_height="@dimen/sideTitle_line_width"
+                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:visibility="gone"
+                        android:background="@color/colorPrimary" />
+
+
+                    <TextView
+                        android:id="@+id/equipmentTitleTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:visibility="visible"
+                        android:layout_marginTop="@dimen/marginBottom5dp"
+                        android:text="Benefits"
+                        android:textAllCaps="true"
+                        android:textColor="@color/videotextColor"
+                        android:textSize="@dimen/story_title_text_size" />
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/equipmentStoryTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/equipmentTitle"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="@dimen/marginleft10dp"
+                    android:ellipsize="end"
+                    android:padding="10dp"
+                    android:text=""
+                    android:textColor="@color/videotextColor"
+                    android:textSize="@dimen/story_text_size" />
+
+            </LinearLayout>
+
 
 
 
@@ -177,31 +316,45 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/durationLinearLayout"
+                android:visibility="gone"
+                android:layout_alignLeft="@+id/equipmentRelativeLayout"
+                android:layout_below="@+id/equipmentRelativeLayout"
                 android:padding="10dp">
 
-                <View
-                    android:id="@+id/view1"
-                    android:layout_width="@dimen/sideTitle_line_width"
-                    android:layout_height="@dimen/sideTitle_line_height"
-                    android:layout_alignBottom="@+id/tutorialTextView"
-                    android:layout_alignTop="@+id/tutorialTextView"
-                    android:layout_marginLeft="8dp"
-
-                    android:background="@color/colorPrimary"
-                    android:paddingLeft="10dp" />
 
 
-                <TextView
-                    android:id="@+id/tutorialTextView"
+
+                <LinearLayout
+                    android:id="@+id/tutorialTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/marginleft10dp"
-                    android:textSize="@dimen/story_title_text_size"
-                    android:text=""
-                    android:layout_toRightOf="@+id/view1"
-                    android:textColor="@color/videotextColor"
-                    android:textStyle="bold" />
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/view1"
+                        android:layout_width="@dimen/sideTitle_line_height"
+                        android:layout_height="@dimen/sideTitle_line_width"
+                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:visibility="visible"
+                        android:background="@color/colorPrimary" />
+
+
+                    <TextView
+                        android:id="@+id/tutorialTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:visibility="visible"
+                        android:layout_marginTop="@dimen/marginBottom5dp"
+                        android:text="Exercises"
+                        android:textAllCaps="true"
+                        android:textColor="@color/videotextColor"
+                        android:textSize="@dimen/story_title_text_size" />
+
+                </LinearLayout>
+
+
 
                 <TextView
                     android:id="@+id/viewAllTextView2"
@@ -224,19 +377,15 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tutorialRelativeLayout"
                 android:layout_gravity="center_vertical"
-                android:padding="10dp"
+                android:layout_alignLeft="@+id/tutorialRelativeLayout"
                 android:layout_marginBottom="10dp"
+                android:visibility="gone"
+
+                android:layout_margin="@dimen/marginRight20dp"
                 />
 
         </RelativeLayout>
 
     </ScrollView>
-
-    <fragment
-        android:id="@+id/cast_mini_controller"
-        class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

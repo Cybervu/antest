@@ -19,11 +19,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/logo_image"
         android:id="@+id/categoryTitleRelativeLayout"
         android:layout_marginLeft="@dimen/pre_order_button_margin"
         android:layout_marginRight="@dimen/pre_order_button_margin"
-
         android:layout_alignLeft="@+id/imagesGridView"
         android:layout_marginTop="25dp"
         android:layout_marginBottom="@dimen/marginRight20dp"
@@ -129,9 +128,10 @@
         android:id="@+id/noInternet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/logo_image"
         android:background="@color/appBackgroundColor"
         android:padding="@dimen/main_padding"
+        android:layout_marginTop="30dp"
         android:visibility="gone">
 
         <TextView
@@ -153,9 +153,10 @@
         android:id="@+id/noData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/logo_image"
         android:background="@color/appBackgroundColor"
         android:padding="@dimen/main_padding"
+        android:layout_marginTop="30dp"
         android:visibility="gone">
 
         <TextView

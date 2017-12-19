@@ -255,10 +255,19 @@
 
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/viewLine"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_below="@+id/player_layout"
+
+            android:background="@color/exercise_imagecolor" />
+
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/player_layout"
+            android:layout_below="@+id/viewLine"
 
             android:fillViewport="true">
 
@@ -275,7 +284,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-
                 android:layout_marginLeft="@dimen/marginleft10dp"
                 android:weightSum="1">
 
@@ -287,6 +295,8 @@
                     android:background="@color/colorPrimary"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
+                    android:visibility="gone"
+
                     android:layout_alignParentStart="true"
                     android:layout_marginLeft="@dimen/marginleft10dp"
                     />
@@ -299,6 +309,8 @@
                     android:text="Sample title"
                     android:textAllCaps="true"
                     android:maxLines="1"
+                    android:visibility="gone"
+
                     android:ellipsize="end"
                     android:textColor="@color/videotextColor"
                     android:textSize="@dimen/itemtitle_text_size"
@@ -381,6 +393,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:text="Hot Yoga"
+                android:visibility="gone"
                 android:textColor="@color/exercise_imagecolor"
                 android:textSize="@dimen/genre_textsize" />
 
@@ -392,6 +405,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="@dimen/marginleft10dp"
+                android:visibility="gone"
                 android:layout_below="@+id/videoTitle">
 
                 <TextView
@@ -407,20 +421,6 @@
                     android:textSize="@dimen/genre_textsize" />
 
 
-               <!-- <TextView
-                    android:id="@+id/story"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:layout_marginBottom="@dimen/marginleft10dp"
-                    android:layout_marginLeft="@dimen/marginleft10dp"
-                    android:layout_marginRight="@dimen/marginright10dp"
-                    android:layout_marginTop="@dimen/margintop8dp"
-                    android:layout_toRightOf="@+id/descriptionTitleTextVIew"
-                    android:text="hbbuhb hubububn"
-                    android:textColor="@color/nav_drawer_lineColor"
-                    android:textSize="@dimen/genre_textsize" />
--->
             </RelativeLayout>
 
             <RelativeLayout
@@ -428,6 +428,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:visibility="gone"
                 android:gravity="center">
 
                 <TextView
@@ -484,6 +485,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/durationLinearLayout"
+                android:visibility="gone"
                 android:padding="10dp">
 
                 <TextView
@@ -528,12 +530,81 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/moreVideosRelativeLayout"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="center|center_vertical"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="@dimen/marginleft10dp" />
+                android:layout_marginLeft="@dimen/marginRight20dp"
+                android:layout_marginRight="@dimen/marginRight20dp"
+                />
+
+
+            <!--<TextView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_above="@+id/controlsLayout"
+                android:id="@+id/belowlineTextView"
+                android:layout_marginTop="@dimen/player_looping_layout"
+                android:padding="@dimen/marginleft10dp"
+                android:background="@color/colorPrimary"/>-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/marginleft10dp"
+                android:layout_gravity="bottom"
+                android:padding="@dimen/marginleft10dp"
+                android:layout_marginBottom="@dimen/marginleft10dp"
+                android:id="@+id/controlsLayout"
+                android:orientation="vertical"
+                android:gravity="bottom"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_above="@+id/controlsLayout"
+                    android:id="@+id/belowlineTextView"
+                    android:layout_marginTop="@dimen/player_looping_layout"
+                    android:padding="@dimen/marginleft10dp"
+                    android:background="@color/colorPrimary"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/marginleft10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="3"
+                    >
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:id="@+id/player_repeat"
+                    android:clickable="true"
+                    android:src="@drawable/player_repeat"/>
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:id="@+id/player_pause"
+                    android:clickable="true"
+
+                    android:src="@drawable/player_pause"/>
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:id="@+id/player_next"
+                    android:clickable="true"
+                    android:src="@drawable/player_next"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
             <RelativeLayout
                 android:id="@+id/seasonScroller"
-
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/player_season_height"
                 android:background="@color/colorPrimary"

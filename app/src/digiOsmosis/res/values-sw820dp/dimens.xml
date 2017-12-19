@@ -221,4 +221,8 @@
     <dimen name="week_top">10dp</dimen>
     <dimen name="program_left">30dp</dimen>
     <dimen name="program_banner_height">400dp</dimen>
+    <dimen name="diet_story">18sp</dimen>
+    <dimen name="player_looping_layout">100dp</dimen>
+    <dimen name="player_title">20dp</dimen>
+    <dimen name="player_marginTop">100dp</dimen>
 </resources>

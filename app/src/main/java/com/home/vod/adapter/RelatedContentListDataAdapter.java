@@ -63,7 +63,7 @@ public class RelatedContentListDataAdapter extends RecyclerView.Adapter<Recycler
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView episodeTitleTextView;
-        public TextView episodeNameTextView;
+        public TextView movieStory;
         public TextView episodeDateTextView;
         public ImageView playButton;
 
@@ -71,9 +71,10 @@ public class RelatedContentListDataAdapter extends RecyclerView.Adapter<Recycler
         public ViewHolder(View view) {
             super(view);
             episodeTitleTextView = (TextView) view.findViewById(R.id.itemTitle);
-            playButton = (ImageView) view.findViewById(R.id.playButton);
-            playButton.setVisibility(View.GONE);
+            movieStory = (TextView) view.findViewById(R.id.movieStory);
+
             FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),episodeTitleTextView);
+            FontUtls.loadFont(context,context.getResources().getString(R.string.regular_fonts),movieStory);
 
 
             episodeImageView = (ImageView) view.findViewById(R.id.itemImage);
@@ -82,6 +83,7 @@ public class RelatedContentListDataAdapter extends RecyclerView.Adapter<Recycler
 
         public void bind(final RelatedContentListItem item, final OnItemClickListener listener) {
             episodeTitleTextView.setText(item.getTitle());
+            movieStory.setText("Story data ");
             // episodeNameTextView.setText(item.getEpisodeNumber());
 
             String imageId = item.getImage();

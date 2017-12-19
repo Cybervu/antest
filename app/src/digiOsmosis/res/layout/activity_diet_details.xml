@@ -327,7 +327,7 @@
                         <ImageView
                             android:id="@+id/bannerImageView"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/program_banner_height"
+                            android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
                             android:scaleType="centerCrop" />
 
@@ -365,413 +365,84 @@
                         android:background="@color/exercise_imagecolor" />
 
 
-                    <LinearLayout
-                        android:id="@+id/buttonLinearlayout"
-                        android:layout_width="match_parent"
+                    <Button
+                        android:id="@+id/dietPlanButton"
+                        android:layout_width="@dimen/start_program_button"
                         android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/titleTextView"
-                        android:layout_below="@+id/titleTextView"
-                       android:layout_marginLeft="@dimen/marginleft10dp"
-                       android:layout_marginRight="@dimen/marginleft10dp"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/marginRight20dp"
-                        android:weightSum="3">
-
-
-                        <Button
-                            android:id="@+id/dietPlanButton"
-                            android:layout_width="80dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/programme_details_button_background"
-                            android:gravity="center"
-                            android:layout_gravity="center|right"
-                            android:padding="6dp"
-                            android:text=""
-                            android:textAllCaps="false"
-                            android:textColor="@color/button_background"
-                            android:textSize="@dimen/program_button_text_size"
-                            android:visibility="gone" />
-
-
-                        <RelativeLayout
-                            android:id="@+id/startProgramButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:padding="6dp"
-                            android:clickable="true"
-                            android:visibility="gone">
-
-
-                            <ImageView
-                                android:id="@+id/startProgrammeBGImageView"
-                                android:layout_width="@dimen/programdetails_start_button_width"
-                                android:layout_height="@dimen/programdetails_start_button_width"
-                                android:src="@drawable/start_now_program_bg" />
-
-                            <TextView
-                                android:id="@+id/startProgrammeTextView"
-                                android:layout_width="@dimen/programdetails_start_button_width"
-                                android:layout_height="@dimen/programdetails_start_button_width"
-                                android:ellipsize="end"
-                                android:gravity="center"
-                                android:minLines="2"
-                                android:text="START \n PROGRAMME"
-                                android:textAllCaps="true"
-                                android:textColor="@color/buttonTextColor"
-
-                                android:textSize="@dimen/program_button_text_size" />
-                        </RelativeLayout>
-
-                        <!--  <Button
-
-                              android:layout_width="wrap_content"
-                              android:layout_height="wrap_content"
-                              android:layout_centerInParent="true"
-                              android:background="@drawable/my_button"
-                              android:padding="6dp"
-                              android:stateListAnimator="@null"
-                              android:text="Start Programme"
-                              android:layout_marginLeft="@dimen/dietmarginRight20dp"
-                              android:layout_marginTop="@dimen/marginLeft15dp"
-                              android:textAllCaps="false"
-                              android:textColor="@color/buttonTextColor"
-                              android:textSize="@dimen/program_button_text_size"
-                              android:visibility="visible" />-->
-
-
-                        <Button
-                            android:id="@+id/favoriteImageView"
-                            android:layout_width="80dp"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/startProgramButton"
-                            android:layout_centerInParent="true"
-                            android:layout_weight="1"
-                            android:background="@drawable/programme_details_button_background"
-                            android:gravity="center"
-                            android:layout_gravity="center|left"
-                            android:padding="6dp"
-                            android:text=""
-                            android:textAllCaps="false"
-                            android:textColor="@color/button_background"
-                            android:textSize="@dimen/program_button_text_size"
-                            android:visibility="gone" />
-
-
-                    </LinearLayout>
-
-
-                    <TextView
-                        android:id="@+id/videoStoryTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/buttonLinearlayout"
-                        android:layout_marginLeft="@dimen/marginleft10dp"
-                        android:layout_marginRight="@dimen/marginleft10dp"
-                        android:ellipsize="end"
-                        android:padding="@dimen/marginRight20dp"
+                        android:layout_below="@+id/viewLine"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/program_left"
+                        android:background="@drawable/my_button"
+                        android:padding="6dp"
+                        android:stateListAnimator="@null"
                         android:text=""
-                        android:textColor="@color/videotextColor"
-                        android:textSize="@dimen/story_text_size" />
-
-
-                    <TextView
-                        android:id="@+id/line_divider"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="30dp"
-                        android:visibility="gone"
-                        android:layout_alignLeft="@+id/videoStoryTextView"
-                        android:layout_alignRight="@+id/videoStoryTextView"
-                        android:layout_below="@+id/videoStoryTextView"
-                        android:layout_marginLeft="@dimen/marginRight20dp"
-                        android:layout_marginRight="@dimen/marginRight20dp"
-                        android:background="@color/line_divider_detailsPage"
-                        android:padding="@dimen/marginRight20dp" />
-                    <!--<TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        an
-                        android:layout_below="@+id/videoStoryTextView"
-                        android:layout_marginBottom="@dimen/marginleft10dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="16dp"
-                        android:background="@color/line_divider_detailsPage"
-                        android:padding="20dp" />
--->
-
-                    <!-- <Button
-                         android:id="@+id/startProgramButton"
-                         android:layout_width="@dimen/start_program_button"
-                         android:layout_height="wrap_content"
-                         android:layout_centerInParent="true"
-                         android:background="@drawable/my_button"
-                         android:padding="6dp"
-                         android:stateListAnimator="@null"
-                         android:text="Start Programme"
-                         android:textAllCaps="false"
-                         android:textColor="@color/buttonTextColor"
-                         android:textSize="@dimen/program_button_text_size"
-                         android:visibility="gone" />-->
-
-                    <!--  <Button
-                          android:id="@+id/dietPlanButton"
-                          android:layout_width="@dimen/start_program_button"
-                          android:layout_height="wrap_content"
-                          android:layout_below="@+id/startProgramButton"
-                          android:layout_centerInParent="true"
-                          android:layout_marginTop="15dp"
-                          android:background="@drawable/my_button"
-                          android:padding="6dp"
-                          android:stateListAnimator="@null"
-                          android:text="Diet Plan"
-                          android:textAllCaps="false"
-                          android:textColor="@color/buttonTextColor"
-                          android:textSize="@dimen/program_button_text_size"
-                          android:visibility="gone" />-->
-
-
-                    <LinearLayout
-                        android:id="@+id/durationLinearLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/line_divider"
-                        android:layout_marginBottom="20dp"
-                        android:padding="@dimen/marginRight20dp"
-
-                        android:layout_marginTop="20dp"
-                        android:orientation="horizontal">
-
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|left"
-                            android:layout_marginLeft="20dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:id="@+id/durationLayout"
-                            android:orientation="vertical"
-                            android:visibility="gone"
-                            android:paddingLeft="10dp">
-
-                            <TextView
-                                android:id="@+id/durationTitleTextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawablePadding="5dp"
-                                android:drawableTop="@drawable/duration"
-                                android:textColor="@color/button_background"
-                                android:textSize="@dimen/duration_title_text" />
-
-                            <TextView
-                                android:id="@+id/days"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAllCaps="true"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="@dimen/duration" />
-
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/lineTextview"
-                            android:layout_width="@dimen/weight_width"
-                            android:layout_height="@dimen/weight_height"
-                            android:background="@color/disableTextColor"
-                            android:textSize="1dp"
-                            android:visibility="gone" />
-
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|right"
-                            android:layout_marginRight="20dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:id="@+id/difficultyLayout"
-                            android:orientation="vertical"
-                            android:visibility="gone"
-                            android:paddingLeft="10dp">
-
-                            <TextView
-                                android:id="@+id/diffcultyTitleTextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawablePadding="5dp"
-                                android:drawableTop="@drawable/difficulty"
-                                android:gravity="center"
-
-                                android:textColor="@color/button_background"
-                                android:textSize="@dimen/duration_title_text" />
-
-                            <TextView
-                                android:id="@+id/difficulty"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAllCaps="true"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="@dimen/duration" />
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:id="@+id/benefitsTitleLineDivider"
-
-                        android:layout_alignLeft="@+id/durationLinearLayout"
-                        android:layout_alignRight="@+id/durationLinearLayout"
-                        android:layout_below="@+id/durationLinearLayout"
-                        android:layout_marginLeft="@dimen/program_left"
-                        android:visibility="gone"
-                        android:layout_marginRight="@dimen/program_left"
-                        android:background="@color/line_divider_detailsPage"
-                        android:padding="@dimen/marginRight20dp" />
-
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:textAllCaps="false"
+                        android:textColor="@color/buttonTextColor"
+                        android:textSize="@dimen/program_button_text_size"
+                        android:visibility="gone" />
 
                     <RelativeLayout
                         android:id="@+id/titleTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:layout_below="@+id/viewLine"
+                        android:layout_below="@+id/dietPlanButton"
+                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:layout_marginRight="@dimen/marginleft10dp"
                         android:layout_marginTop="@dimen/marginleft10dp"
                         android:padding="@dimen/marginleft10dp">
 
-                        <TextView
-                            android:id="@+id/colortitle"
-                            android:layout_width="@dimen/sideTitle_line_width"
-                            android:layout_height="@dimen/sideTitle_line_height"
-                            android:layout_marginLeft="@dimen/marginleft10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="3dp"
-                            android:background="@color/colorPrimary"
-
-                            android:visibility="gone" />
-
-
-                        <ImageView
-                            android:id="@+id/favoriteImageView1"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_alignParentBottom="true"
-                            android:layout_gravity="right"
-                            android:layout_marginEnd="9dp"
-                            android:layout_marginRight="9dp"
-                            android:layout_toLeftOf="@+id/share"
-                            android:layout_toStartOf="@+id/share"
-                            android:src="@drawable/favorite"
-                            android:visibility="gone" />
-
-                        <ImageView
-                            android:id="@+id/share"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_gravity="right"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
-                            android:src="@drawable/share"
-                            android:visibility="gone" />
-
-                        <TextView
-                            android:id="@+id/detailsTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/marginRight20dp"
-                            android:text=""
-
-                            android:textAllCaps="true"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="@dimen/story_title_text_size"
-
-                            />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:id="@+id/detailsTitleLineDivider"
-                            android:layout_alignLeft="@+id/detailsTextView"
-                            android:layout_below="@+id/detailsTextView"
-                            android:layout_marginLeft="@dimen/marginRight20dp"
-                            android:layout_marginRight="@dimen/marginRight20dp"
-                            android:background="@color/line_divider_detailsPage"
-                            android:padding="@dimen/marginRight20dp"
-                            android:visibility="gone"/>
-
-                    </RelativeLayout>
-
-                    <LinearLayout
-                        android:id="@+id/benefitsRelativeLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignLeft="@+id/benefitsTitleLineDivider"
-                        android:layout_below="@+id/durationLinearLayout"
-                        android:layout_marginLeft="@dimen/program_left"
-                        android:layout_marginRight="@dimen/program_left"
-                        android:layout_marginBottom="@dimen/program_left"
-                        android:layout_marginTop="30dp"
-                        android:orientation="vertical"
-                        >
 
                         <LinearLayout
-                            android:id="@+id/benefitsTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+
+                            >
 
                             <TextView
-                                android:id="@+id/colortitle1"
+                                android:id="@+id/colortitle"
                                 android:layout_width="@dimen/sideTitle_line_height"
                                 android:layout_height="@dimen/sideTitle_line_width"
                                 android:layout_marginLeft="@dimen/marginleft10dp"
-                                android:visibility="gone"
+
                                 android:background="@color/colorPrimary" />
 
 
                             <TextView
-                                android:id="@+id/benefitsTitleTextView"
+                                android:id="@+id/detailsTextView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/marginleft10dp"
-                                android:visibility="gone"
+
                                 android:layout_marginTop="@dimen/marginBottom5dp"
-                                android:text="Benefits"
+                                android:text=""
                                 android:textAllCaps="true"
                                 android:textColor="@color/videotextColor"
-                                android:textSize="@dimen/story_title_text_size" />
+                                android:textSize="@dimen/itemtitle_text_size" />
 
                         </LinearLayout>
 
+                    </RelativeLayout>
 
-                        <TextView
-                            android:id="@+id/benefitsStoryTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/benefitsTitle"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="16dp"
-                            android:layout_marginTop="@dimen/marginleft10dp"
-                            android:ellipsize="end"
-                            android:padding="10dp"
-                            android:text=""
-                            android:textColor="@color/videotextColor"
-                            android:textSize="@dimen/story_text_size" />
 
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/videoStoryTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/titleTextView"
+                        android:layout_marginLeft="@dimen/marginleft10dp"
+                        android:layout_marginRight="@dimen/marginleft10dp"
+                        android:ellipsize="end"
+                        android:padding="@dimen/marginRight20dp"
+                        android:text=""
+                        android:textColor="@color/videotextColor"
+                        android:textSize="@dimen/diet_story" />
+
+
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>

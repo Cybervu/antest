@@ -228,6 +228,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
     RecyclerView.LayoutManager mLayoutManager;
     ProgramPlayerAdapter mAdapter;
     ProgressBarHandler mDialog;
+    boolean isRepeated = false;
     // private SampleVideoPlayer mVideoPlayer;
 
     String seekStatusStr = "";
@@ -264,6 +265,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
     boolean censor_layout = true;
     VideoDetailsAsynctask asynLoadVideoUrls;
     GetValidateUserAsynTask asynValidateUserDetails;
+    ImageView player_next,player_pause,player_repeat;
 
     // ProgramPlayerActivity.this is added for the new video log API;
     String episodeVideoUrlStr;
@@ -421,7 +423,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
     int seekBarProgress = 0;
 
     boolean isDrm = false;
-    int contentPosition;
+    int contentPosition = 0,nextPosition = 1;
     int current_season  ;
     int totalSeason = 0;
     // =====================End==============================//
@@ -1135,6 +1137,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 String videodurationStr = episode_details_output.getEpisodeArray().get(a).getVideo_duration();
 
 
+
+
                 questions.add(new EpisodesListModel(episodeNoStr, episodeStoryStr, episodeDateStr, episodeImageStr, episodeTitleStr, episodeVideoUrlStr, episodeSeriesNoStr, movieUniqueId, episodeMovieStreamUniqueIdStr, episodeThirdParty, videodurationStr));
 
             }
@@ -1148,17 +1152,18 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                 //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
             } else {
-                moreVideosRelativeLayout.setVisibility(View.VISIBLE);
-                moreVideoTitleTextView.setVisibility(View.VISIBLE);
+                moreVideosRelativeLayout.setVisibility(View.GONE);
+                moreVideoTitleTextView.setVisibility(View.GONE);
                 moreVideosRecyclerView.setVisibility(View.VISIBLE);
                 moreVideosRecyclerView.setLayoutManager(mLayoutManager);
                 moreVideosRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
-                moreVideosRecyclerView.addOnItemTouchListener(new RecyclerTouchListener1(this, moreVideosRecyclerView, new ClickListener1() {
+                mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.player_listing, questions,contentPosition,nextPosition);
+              /*  moreVideosRecyclerView.addOnItemTouchListener(new RecyclerTouchListener1(this, moreVideosRecyclerView, new ClickListener1() {
                     @Override
                     public void onClick(View view, int position) {
 
                         contentPosition = position;
+                        nextPosition = position+1;
                         getData();
 
                         Log.v("PROGRAM", "data set here");
@@ -1168,34 +1173,28 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                     public void onLongClick(View view, int position) {
                         return;
                     }
-                }));
+                }));*/
+
+                nextPosition = 1;
+
+
                 contentPosition = 0;
+              /*  if (contentPosition < questions.size() - 1) {
+                    nextPosition = 1;
+                    player_next.setVisibility(View.VISIBLE);
+
+
+                }else
+                {
+                    player_next.setVisibility(View.GONE);
+                }
+*/
                 getData();
                 moreVideosRecyclerView.setAdapter(mAdapter);
                 LogUtil.showLog("BISHAL", "data show...");
 
 
-             /*   ProgramDetailsAdapter mAdapter = new ProgramDetailsAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions);
 
-                    moreVideosRecyclerView.addOnItemTouchListener(new RecyclerTouchListener1(this,
-                            moreVideosRecyclerView, new ClickListener1() {
-                        @Override
-                        public void onClick(View view, final int position) {
-                            //Values are passing to activity & to fragment as well
-                            contentPosition = position;
-                            getData();
-                        }
-
-                        @Override
-                        public void onLongClick(View view, int position) {
-
-                            return;
-                        }
-                    }));
-
-                contentPosition = 0;
-                getData();
-                moreVideosRecyclerView.setAdapter(mAdapter);*/
 
             }
         }
@@ -1252,8 +1251,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
     boolean is_paused = false;
 
     public void EpisodeDetails(String season) {
-        next_season.setVisibility(View.VISIBLE);
-        previous_season.setVisibility(View.VISIBLE);
+        next_season.setVisibility(View.GONE);
+        previous_season.setVisibility(View.GONE);
 
         if (counter == 0) {
             previous_season.setVisibility(View.GONE);
@@ -1316,6 +1315,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
                 latest_center_play_pause.setVisibility(View.GONE);
                 center_play_pause.setImageResource(R.drawable.ic_media_pause);
+                player_pause.setImageResource(R.drawable.player_pause);
+
                 seekBar.setProgress(emVideoView.getCurrentPosition());
                 updateProgressBar();
             }
@@ -1405,8 +1406,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         }
         counter = Integer.parseInt(getIntent().getStringExtra("Index"));
 
-        next_season.setVisibility(View.VISIBLE);
-        previous_season.setVisibility(View.VISIBLE);
+        next_season.setVisibility(View.GONE);
+        previous_season.setVisibility(View.GONE);
 
         if (counter == 0) {
             previous_season.setVisibility(View.GONE);
@@ -1433,46 +1434,25 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             // Util.PlayListArrayModel = questions;
             String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
             clocktimetv.setText(clocktext);
-            Log.v("Nihar", "" + questions.size() + "position :" + contentPosition);
         } catch (Exception e) {
             Log.v("Nihar", "exception" + e.toString());
         }
-        mLayoutManager = new LinearLayoutManager(ProgramPlayerActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        mLayoutManager = new LinearLayoutManager(ProgramPlayerActivity.this, LinearLayoutManager.VERTICAL, false);
 
         moreVideosRecyclerView = (RecyclerView) findViewById(R.id.moreVideosRecyclerView);
         moreVideosRecyclerView.setLayoutManager(mLayoutManager);
 
         moreVideosRecyclerView.setItemAnimator(new DefaultItemAnimator());
-       /* ProgramDetailsAdapter mAdapter = new ProgramDetailsAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions, new ProgramDetailsAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(EpisodesListModel item, int position) {
-//                clickItem(item, position);
-                Log.v("SUBHA","data set here"+contentPosition+position);
 
-                // contentPosition = position;
-                getData();
 
-            }
-        });*/
-      /*  moreVideosRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), moreVideosRecyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Log.v("SUBHA","data set here"+position);
 
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));*/
-
-        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
-        moreVideosRecyclerView.addOnItemTouchListener(new RecyclerTouchListener1(this, moreVideosRecyclerView, new ClickListener1() {
+        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.player_listing, questions,contentPosition,nextPosition);
+      /*  moreVideosRecyclerView.addOnItemTouchListener(new RecyclerTouchListener1(this, moreVideosRecyclerView, new ClickListener1() {
             @Override
             public void onClick(View view, int position) {
 
                 contentPosition = position;
+                nextPosition = position + 1;
                 getData();
                 Log.v("SUBHA", "data set here");
             }
@@ -1482,7 +1462,18 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 return;
             }
         }));
+*/
+      /*  contentPosition = 0;
+        if (contentPosition < questions.size() - 1) {
+            nextPosition = 1;
+            player_next.setVisibility(View.VISIBLE);
 
+
+        }else
+        {
+            player_next.setVisibility(View.GONE);
+        }
+*/
         moreVideosRecyclerView.setAdapter(mAdapter);
         /////////////end
         if (!playerModel.getVideoUrl().trim().equals("")) {
@@ -1667,6 +1658,68 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         emVideoView = (EMVideoView) findViewById(R.id.emVideoView);
         subtitleText = (TextView) findViewById(R.id.offLine_subtitleText);
         subtitle_change_btn = (ImageView) findViewById(R.id.subtitle_change_btn);
+        player_next = (ImageView) findViewById(R.id.player_next);
+        player_pause = (ImageView) findViewById(R.id.player_pause);
+        player_repeat = (ImageView) findViewById(R.id.player_repeat);
+        Log.v("Nihar", "" + questions.size() + "position :" + contentPosition);
+
+        if(contentPosition >= questions.size() - 1){
+            player_next.setVisibility(View.GONE);
+        }
+        player_pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Execute_Pause_Play();
+            }
+        });
+        player_repeat.setTag("100");
+        isRepeated = false;
+        player_repeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (player_repeat.getTag() == "100"){
+                    player_repeat.setImageResource(R.drawable.replayshadow);
+                    player_repeat.setTag("101");
+                    isRepeated = true;
+                    player_next.setFocusable(false);
+                    player_next.setVisibility(View.INVISIBLE);
+                }else{
+                    player_repeat.setTag("100");
+                    player_repeat.setImageResource(R.drawable.player_repeat);
+                    isRepeated = false;
+                    player_next.setFocusable(true);
+
+                }
+
+            }
+        });
+        player_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("SUBHASS", "FGFG" + contentPosition);
+                int tempPos = contentPosition +1;
+                contentPosition = tempPos;
+               // if (tempPos < questions.size() - 1) {
+                    nextPosition = tempPos + 1;
+               // }
+                getData();
+                Log.v("SUBHASS", "FGFGsfs" + contentPosition);
+
+                Log.v("SUBHA", "data set here");
+
+               /* int totalsize = questions.size() - 1;
+                Log.v("Nihar", "" + totalsize);
+                if (totalsize > contentPosition && contentPosition != questions.size()) {
+
+                    contentPosition = contentPosition + 1;
+//                    nextPosition = nextPosition ;
+//                    stoptimertask();
+                    getData();
+                }*/
+            }
+        });
         subtitle_change_btn.setVisibility(View.INVISIBLE);
         latest_center_play_pause = (ImageButton) findViewById(R.id.latest_center_play_pause);
         videoTitle = (TextView) findViewById(R.id.videoTitle);
@@ -1829,7 +1882,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
         {
             videoTitle.setText(playerModel.getVideoTitle().trim());
-            videoTitle.setVisibility(View.VISIBLE);
+            videoTitle.setVisibility(View.GONE);
         } else {
             videoTitle.setVisibility(View.GONE);
         }
@@ -1839,7 +1892,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
         {
             GenreTextView.setText(playerModel.getVideoGenre().trim());
-            GenreTextView.setVisibility(View.VISIBLE);
+            GenreTextView.setVisibility(View.GONE);
         } else {
             GenreTextView.setVisibility(View.GONE);
         }
@@ -1860,7 +1913,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             String desctitle = getColoredSpanned(playerModel.getVideoStory(),"#000000");
 
             descriptionTitleTextVIew.setText(Html.fromHtml(title + " : " + desctitle));
-            descriptionTitleTextVIew.setVisibility(View.VISIBLE);
+            descriptionTitleTextVIew.setVisibility(View.GONE);
         } else {
             descriptionTitleTextVIew.setVisibility(View.GONE);
         }
@@ -3078,79 +3131,89 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
 
                             int totalsize = questions.size() - 1;
                             Log.v("Nihar", "" + totalsize);
-                            if (totalsize > contentPosition && contentPosition != questions.size()) {
-
-                                contentPosition = contentPosition + 1;
+                            if( isRepeated == true){
                                 stoptimertask();
+                                int tempPos = contentPosition;
+                                contentPosition = tempPos;
+                                // if (tempPos < questions.size() - 1) {
+                                // }
+                                getData();
+                            }else {
+                                if (totalsize > contentPosition && contentPosition != questions.size()) {
 
-                                String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
-                                clocktimetv.setText(clocktext);
-                                mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
+                                    contentPosition = contentPosition + 1;
+                                    nextPosition = nextPosition + 1;
+                                    stoptimertask();
 
-                                moreVideosRecyclerView.setAdapter(mAdapter);
+                                    String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
+                                    clocktimetv.setText(clocktext);
+                                    mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.player_listing, questions, contentPosition, nextPosition);
 
-                                primary_ll.setVisibility(View.GONE);
-                                last_ll.setVisibility(View.GONE);
-                                center_play_pause.setVisibility(View.GONE);
-                                latest_center_play_pause.setVisibility(View.GONE);
-                                current_time.setVisibility(View.GONE);
-                                subtitle_change_btn.setVisibility(View.INVISIBLE);
-                                mediaRouteButton.setVisibility(View.INVISIBLE);
-                                End_Timer();
-                                Log.v("Nihar", totalsize + "NextPosition   429  :" + contentPosition);
-                                EpisodesListModel listModel = questions.get(contentPosition);
-                                durationTextView.setText(listModel.getEpisodeDuration());
-                                playerModel.setVideoDuration(listModel.getEpisodeDuration());
-                                playerModel.setVideoTitle(listModel.getEpisodeTitle());
+                                    moreVideosRecyclerView.setAdapter(mAdapter);
+
+                                    primary_ll.setVisibility(View.GONE);
+                                    last_ll.setVisibility(View.GONE);
+                                    center_play_pause.setVisibility(View.GONE);
+                                    latest_center_play_pause.setVisibility(View.GONE);
+                                    current_time.setVisibility(View.GONE);
+                                    subtitle_change_btn.setVisibility(View.INVISIBLE);
+                                    mediaRouteButton.setVisibility(View.INVISIBLE);
+                                    End_Timer();
+                                    Log.v("Nihar", totalsize + "NextPosition   429  :" + contentPosition);
+                                    EpisodesListModel listModel = questions.get(contentPosition);
+                                    durationTextView.setText(listModel.getEpisodeDuration());
+                                    playerModel.setVideoDuration(listModel.getEpisodeDuration());
+                                    playerModel.setVideoTitle(listModel.getEpisodeTitle());
 
 //                                Util.dataModel.setVideoDuration(listModel.getEpisodeDuration());
-                                /////genere
-                                videoTitle.setText(listModel.getEpisodeTitle());
+                                    /////genere
+                                    videoTitle.setText(listModel.getEpisodeTitle());
 //                                Util.dataModel.setEpisode_title(listModel.getEpisodeTitle());
-                                ///video story text view start
-                               // descriptionTitleTextVIew.setText(listModel.getEpisodeDescription());
+                                    ///video story text view start
+                                    // descriptionTitleTextVIew.setText(listModel.getEpisodeDescription());
 //                                Util.dataModel.setVideoStory(listModel.getEpisodeDescription());
-                                    String title = getColoredSpanned(languagePreference.getTextofLanguage(DESCRIPTION,DEFAULT_DESCRIPTION), "#4cbfb8");
-                                    String desctitle = getColoredSpanned(listModel.getEpisodeDescription(),"#000000");
+                                    String title = getColoredSpanned(languagePreference.getTextofLanguage(DESCRIPTION, DEFAULT_DESCRIPTION), "#4cbfb8");
+                                    String desctitle = getColoredSpanned(listModel.getEpisodeDescription(), "#000000");
 
                                     descriptionTitleTextVIew.setText(Html.fromHtml(title + " : " + desctitle));
 
 
-                                View decorView = getWindow().getDecorView();
-                                decorView.setSystemUiVisibility(
-                                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                    View decorView = getWindow().getDecorView();
+                                    decorView.setSystemUiVisibility(
+                                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 
-                                );
-                                ///end videostory
-                                Episodeid = listModel.getEpisodeMuviUniqueId();
-                                content_types_id = playerModel.getContentTypesId();
+                                    );
+                                    ///end videostory
+                                    Episodeid = listModel.getEpisodeMuviUniqueId();
+                                    content_types_id = playerModel.getContentTypesId();
 
-                                upStreamUniqueId = listModel.getEpisodeStreamUniqueId();
-                                episodeId = upStreamUniqueId;
-                                upContentUniqueId = listModel.getEpisodeMuviUniqueId();
-                                movieId = upContentUniqueId;
+                                    upStreamUniqueId = listModel.getEpisodeStreamUniqueId();
+                                    episodeId = upStreamUniqueId;
+                                    upContentUniqueId = listModel.getEpisodeMuviUniqueId();
+                                    movieId = upContentUniqueId;
 
 
-                                ValidateUserInput validateUserInput = new ValidateUserInput();
-                                validateUserInput.setAuthToken(authTokenStr);
-                                validateUserInput.setUserId(preferenceManager.getUseridFromPref());
+                                    ValidateUserInput validateUserInput = new ValidateUserInput();
+                                    validateUserInput.setAuthToken(authTokenStr);
+                                    validateUserInput.setUserId(preferenceManager.getUseridFromPref());
 //                                validateUserInput.setUserId("157218");
-                                validateUserInput.setMuviUniqueId(upContentUniqueId.trim());
-                                validateUserInput.setPurchaseType(com.home.vod.util.Util.dataModel.getPurchase_type());
-                                validateUserInput.setSeasonId(com.home.vod.util.Util.dataModel.getSeason_id());
-                                // validateUserInput.setEpisodeStreamUniqueId(com.home.vod.util.Util.dataModel.getEpisode_id());
-                                validateUserInput.setEpisodeStreamUniqueId(upStreamUniqueId);
+                                    validateUserInput.setMuviUniqueId(upContentUniqueId.trim());
+                                    validateUserInput.setPurchaseType(com.home.vod.util.Util.dataModel.getPurchase_type());
+                                    validateUserInput.setSeasonId(com.home.vod.util.Util.dataModel.getSeason_id());
+                                    // validateUserInput.setEpisodeStreamUniqueId(com.home.vod.util.Util.dataModel.getEpisode_id());
+                                    validateUserInput.setEpisodeStreamUniqueId(upStreamUniqueId);
 
-                                validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-                                asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
-                                asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
+                                    validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                                    asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
+                                    asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
                           /*  AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
                             asynLoadVideoUrls.execute();*/
 
-                            } else {
-                                Log.v("ProgramPlayer","completed");
-                                backCalled();
+                                } else {
+                                    Log.v("ProgramPlayer", "completed");
+                                    backCalled();
 
+                                }
                             }
 
                         }
@@ -3363,6 +3426,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             emVideoView.pause();
             latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
             center_play_pause.setImageResource(R.drawable.ic_media_play);
+            player_pause.setImageResource(R.drawable.player_play);
             mHandler.removeCallbacks(updateTimeTask);
         } else {
             if (video_completed) {
@@ -3377,6 +3441,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 emVideoView.start();
                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
                 center_play_pause.setImageResource(R.drawable.ic_media_pause);
+                player_pause.setImageResource(R.drawable.player_pause);
+
                 mHandler.removeCallbacks(updateTimeTask);
                 updateProgressBar();
             }
@@ -3612,7 +3678,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 log_temp_id = "0";
 
             }
-            Log.v("PROGRAM","loadAnotherVideo");
+            Log.v("PROGRAM","loadAnotherVideo"+contentPosition+"fhh"+questions.size());
             mHandler.removeCallbacks(updateTimeTask);
 
             loadAnotherVideo();
@@ -3923,6 +3989,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
                 latest_center_play_pause.setVisibility(View.GONE);
                 center_play_pause.setImageResource(R.drawable.ic_media_pause);
+                player_pause.setImageResource(R.drawable.player_pause);
 
                 Util.call_finish_at_onUserLeaveHint = true;
                 watchStatus = "halfplay";
@@ -3940,6 +4007,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
                 latest_center_play_pause.setVisibility(View.GONE);
                 center_play_pause.setImageResource(R.drawable.ic_media_pause);
+                player_pause.setImageResource(R.drawable.player_pause);
+
                 Util.call_finish_at_onUserLeaveHint = true;
                 watchStatus = "start";
                 // playerPosition = Util.dataModel.getPlayPos();
@@ -4041,6 +4110,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                                 emVideoView.pause();
                                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
                                 center_play_pause.setImageResource(R.drawable.ic_media_play);
+                                player_pause.setImageResource(R.drawable.player_play);
+
                                 mHandler.removeCallbacks(updateTimeTask);
 
                             }
@@ -5431,6 +5502,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
                 center_play_pause.setImageResource(R.drawable.ic_media_pause);
                 latest_center_play_pause.setVisibility(View.GONE);
+                player_pause.setImageResource(R.drawable.player_pause);
+
                 mHandler.removeCallbacks(updateTimeTask);
                 updateProgressBar();
 
@@ -5586,6 +5659,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                     emVideoView.pause();
                     latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
                     center_play_pause.setImageResource(R.drawable.ic_media_play);
+                    player_pause.setImageResource(R.drawable.player_play);
+
                     mHandler.removeCallbacks(updateTimeTask);
                 }
 
@@ -5758,6 +5833,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                             public void run() {
                                 Log.v("ProgramPlayer","11");
                                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
+                                player_pause.setImageResource(R.drawable.player_pause);
+
                                 latest_center_play_pause.setVisibility(View.VISIBLE);
                             }
                         });
@@ -5768,6 +5845,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                                 Log.v("ProgramPlayer","12");
 
                                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
+                                player_pause.setImageResource(R.drawable.player_play);
+
                                 latest_center_play_pause.setVisibility(View.VISIBLE);
                             }
                         });
@@ -6402,6 +6481,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 emVideoView.pause();
                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
                 center_play_pause.setImageResource(R.drawable.ic_media_play);
+                player_pause.setImageResource(R.drawable.player_play);
+
                 mHandler.removeCallbacks(updateTimeTask);
                 onClick1();
              /*   final ProgressDialog finalPDialog = pDialog;
@@ -6428,6 +6509,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 emVideoView.pause();
                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
                 center_play_pause.setImageResource(R.drawable.ic_media_play);
+                player_pause.setImageResource(R.drawable.player_play);
+
                 mHandler.removeCallbacks(updateTimeTask);
                 //  mVideoPlayer.pause();
                 break;
@@ -6443,6 +6526,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                 // playerPosition = Util.dataModel.getPlayPos();
                 emVideoView.start();
                 latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
+                player_pause.setImageResource(R.drawable.player_pause);
+
                 latest_center_play_pause.setVisibility(View.GONE);
                 center_play_pause.setImageResource(R.drawable.ic_media_pause);
                 seekBar.setProgress(emVideoView.getCurrentPosition());
@@ -6477,6 +6562,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         latest_center_play_pause.setImageResource(R.drawable.center_ic_media_pause);
         latest_center_play_pause.setVisibility(View.GONE);
         center_play_pause.setImageResource(R.drawable.ic_media_pause);
+        player_pause.setImageResource(R.drawable.player_pause);
+
         seekBar.setProgress(emVideoView.getCurrentPosition());
         updateProgressBar();
     }
@@ -6826,11 +6913,11 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         }
         Log.v("PROGRAM","video_completed1"+video_completed);
 
-        if (video_completed == false) {
+       // if (video_completed == false) {
 
             AsyncResumeNextVideoLogDetails asyncResumeNextVideoLogDetails = new AsyncResumeNextVideoLogDetails();
             asyncResumeNextVideoLogDetails.executeOnExecutor(threadPoolExecutor);
-        }
+       // }
         //Util.call_finish_at_onUserLeaveHint = true;
 
        /* seekBar.setProgress(0);
@@ -6870,78 +6957,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         //======end========//
 
 
-       /* int totalsize = questions.size() - 1;
-        Log.v("SUBHALAXMIPANDA1", "called contentposition" + contentPosition);
-     //   if (totalsize > contentPosition && contentPosition != questions.size()) {
 
-           // contentPosition = contentPosition + 1;
-            stoptimertask();
-
-            String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
-            clocktimetv.setText(clocktext);
-
-        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
-
-        moreVideosRecyclerView.setAdapter(mAdapter);
-
-
-
-
-        primary_ll.setVisibility(View.GONE);
-            last_ll.setVisibility(View.GONE);
-            center_play_pause.setVisibility(View.GONE);
-            latest_center_play_pause.setVisibility(View.GONE);
-            current_time.setVisibility(View.GONE);
-            subtitle_change_btn.setVisibility(View.INVISIBLE);
-            mediaRouteButton.setVisibility(View.INVISIBLE);
-            End_Timer();
-            Log.v("Nihar", totalsize + "NextPosition   429  :" + contentPosition);
-            EpisodesListModel listModel = questions.get(contentPosition);
-            durationTextView.setText(listModel.getEpisodeDuration());
-            playerModel.setVideoDuration(listModel.getEpisodeDuration());
-
-//                                Util.dataModel.setVideoDuration(listModel.getEpisodeDuration());
-            /////genere
-            videoTitle.setText(listModel.getEpisodeTitle());
-//                                Util.dataModel.setEpisode_title(listModel.getEpisodeTitle());
-            ///video story text view start
-        descriptionTitleTextVIew.setText(listModel.getEpisodeDescription());
-//                                Util.dataModel.setVideoStory(listModel.getEpisodeDescription());
-
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-
-            );
-            ///end videostory
-            Episodeid = listModel.getEpisodeMuviUniqueId();
-            content_types_id = playerModel.getContentTypesId();
-
-            upStreamUniqueId = listModel.getEpisodeStreamUniqueId();
-            episodeId = upStreamUniqueId;
-            upContentUniqueId = listModel.getEpisodeMuviUniqueId();
-            movieId = upContentUniqueId;
-
-            ValidateUserInput validateUserInput = new ValidateUserInput();
-            validateUserInput.setAuthToken(authTokenStr);
-            validateUserInput.setUserId(preferenceManager.getUseridFromPref());
-//            validateUserInput.setUserId("157218");
-            validateUserInput.setMuviUniqueId(upContentUniqueId.trim());
-            validateUserInput.setPurchaseType(com.home.vod.util.Util.dataModel.getPurchase_type());
-            validateUserInput.setSeasonId(com.home.vod.util.Util.dataModel.getSeason_id());
-            // validateUserInput.setEpisodeStreamUniqueId(com.home.vod.util.Util.dataModel.getEpisode_id());
-            validateUserInput.setEpisodeStreamUniqueId(upStreamUniqueId);
-
-            validateUserInput.setLanguageCode(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
-            asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ProgramPlayerActivity.this, ProgramPlayerActivity.this);
-            asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
-                          *//*  AsynLoadVideoUrls asynLoadVideoUrls = new AsynLoadVideoUrls();
-                            asynLoadVideoUrls.execute();*//*
-            previous_matching_time = current_matching_time;
-            ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
-*/
-
-       // }
     }
     public static interface ClickListener1{
         public void onClick(View view,int position);
@@ -7102,6 +7118,7 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
     void loadAnotherVideo()
     {
 
+
         Log.v("Program","item clicked === ");
 
         seekBar.setProgress(0);
@@ -7148,7 +7165,9 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         String clocktext = contentPosition + 1 + " to " + String.valueOf(questions.size());
         clocktimetv.setText(clocktext);
 
-        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.list_card_program_details, questions,contentPosition);
+
+
+        mAdapter = new ProgramPlayerAdapter(ProgramPlayerActivity.this, R.layout.player_listing, questions,contentPosition,nextPosition);
 
         moreVideosRecyclerView.setAdapter(mAdapter);
 
@@ -7198,7 +7217,15 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
         emVideoView.pause();
         playerPosition = 0;
         playerPreviousPosition = 0;
+        Log.v("contentPosition", contentPosition + "NextPosition   429  :" + questions.size());
 
+        if (contentPosition < questions.size() - 1 && isRepeated == false) {
+            player_next.setVisibility(View.VISIBLE);
+
+        }else
+        {
+            player_next.setVisibility(View.INVISIBLE);
+        }
         ValidateUserInput validateUserInput = new ValidateUserInput();
         validateUserInput.setAuthToken(authTokenStr);
         validateUserInput.setUserId(preferenceManager.getUseridFromPref());
@@ -7216,6 +7243,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
                             asynLoadVideoUrls.execute();*/
         previous_matching_time = current_matching_time;
         ((ProgressBar) findViewById(R.id.progress_view)).setVisibility(View.GONE);
+
+
 
     }
     void loadVideosToPlaycast()
@@ -7247,6 +7276,8 @@ public class ProgramPlayerActivity extends AppCompatActivity implements GetIpAdd
             emVideoView.pause();
             latest_center_play_pause.setImageResource(R.drawable.center_ic_media_play);
             center_play_pause.setImageResource(R.drawable.ic_media_play);
+            player_pause.setImageResource(R.drawable.player_play);
+
             mHandler.removeCallbacks(updateTimeTask);
         }
 

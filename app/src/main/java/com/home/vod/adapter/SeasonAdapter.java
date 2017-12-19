@@ -81,7 +81,7 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.MyViewHold
 
         if (position % 2 == 0) {
 //            holder.card_view.setCardBackgroundColor(mContext.getResources().getDrawable(R.drawable.button_radious));
-            holder.card_view.setBackgroundColor(mContext.getResources().getColor(R.color.button_background));
+            holder.card_view.setBackgroundColor(mContext.getResources().getColor(R.color.week_background));
         }else{
             holder.card_view.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
         }

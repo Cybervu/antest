@@ -93,9 +93,9 @@ public  class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewD
             counter = i;*/
 
         if (i % 2 == 0) {
-            itemRowHolder.colortitle.setBackgroundColor(mContext.getResources().getColor(R.color.button_background));
-        }else{
             itemRowHolder.colortitle.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
+        }else{
+            itemRowHolder.colortitle.setBackgroundColor(mContext.getResources().getColor(R.color.button_background));
 
         }
         final String sectionName = dataList.get(i).getHeaderTitle();

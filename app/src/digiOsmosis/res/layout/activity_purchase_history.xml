@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/primary_layout"
         android:visibility="visible"
+        android:layout_below="@+id/logo_image"
         android:orientation="vertical">
 
         <TextView
@@ -45,6 +46,7 @@
         android:layout_height="match_parent"
         android:background="@color/noInternetColor"
         android:visibility="gone"
+        android:layout_marginTop="30dp"
         android:padding="@dimen/manage_device_padding">
 
         <TextView
@@ -79,6 +81,7 @@
         android:layout_height="match_parent"
         android:background="@color/appBackgroundColor"
         android:visibility="gone"
+        android:layout_marginTop="30dp"
         android:layout_below="@+id/toolbar"
         android:padding="@dimen/manage_device_padding">
 

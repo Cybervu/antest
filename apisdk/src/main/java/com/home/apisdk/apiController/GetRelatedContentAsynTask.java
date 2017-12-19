@@ -147,10 +147,46 @@ public class GetRelatedContentAsynTask extends AsyncTask<RelatedContentInput, Vo
                     JSONObject mainJson = myJson.getJSONArray("contentData").getJSONObject(0);
 
                    // JSONObject mainJson = myJson.getJSONObject("contentData");
-                    if ((mainJson.has("permalink")) && mainJson.optString("permalink").trim() != null && !mainJson.optString("permalink").trim().isEmpty() && !mainJson.optString("permalink").trim().equals("null") && !mainJson.optString("permalink").trim().matches("")) {
-                        relatedContentOutput.setPermalink(mainJson.optString("permalink"));
+                    if ((mainJson.has("c_permalink")) && mainJson.optString("c_permalink").trim() != null && !mainJson.optString("c_permalink").trim().isEmpty() && !mainJson.optString("c_permalink").trim().equals("null") && !mainJson.optString("c_permalink").trim().matches("")) {
+                        relatedContentOutput.setPermalink(mainJson.optString("c_permalink"));
                     } else {
                         relatedContentOutput.setPermalink("");
+
+                    }
+                    if ((mainJson.has("story")) && mainJson.optString("story").trim() != null && !mainJson.optString("story").trim().isEmpty() && !mainJson.optString("story").trim().equals("null") && !mainJson.optString("story").trim().matches("")) {
+                        relatedContentOutput.setStory(mainJson.optString("story"));
+                    } else {
+                        relatedContentOutput.setStory("");
+
+                    }
+                    if ((mainJson.has("trailer_url")) && mainJson.optString("trailer_url").trim() != null && !mainJson.optString("trailer_url").trim().isEmpty() && !mainJson.optString("trailer_url").trim().equals("null") && !mainJson.optString("trailer_url").trim().matches("")) {
+                        relatedContentOutput.setTrailer_url(mainJson.optString("trailer_url"));
+                    } else {
+                        relatedContentOutput.setTrailer_url("");
+
+                    }
+                    if ((mainJson.has("poster")) && mainJson.optString("poster").trim() != null && !mainJson.optString("poster").trim().isEmpty() && !mainJson.optString("poster").trim().equals("null") && !mainJson.optString("poster").trim().matches("")) {
+                        relatedContentOutput.setPoster(mainJson.optString("poster"));
+                    } else {
+                        relatedContentOutput.setPoster("");
+
+                    }
+                    if ((mainJson.has("content_banner")) && mainJson.optString("content_banner").trim() != null && !mainJson.optString("content_banner").trim().isEmpty() && !mainJson.optString("content_banner").trim().equals("null") && !mainJson.optString("content_banner").trim().matches("")) {
+                        relatedContentOutput.setContent_banner(mainJson.optString("content_banner"));
+                    } else {
+                        relatedContentOutput.setContent_banner("");
+
+                    }
+                    if ((mainJson.has("title")) && mainJson.optString("title").trim() != null && !mainJson.optString("title").trim().isEmpty() && !mainJson.optString("title").trim().equals("null") && !mainJson.optString("title").trim().matches("")) {
+                        relatedContentOutput.setTitle(mainJson.optString("title"));
+                    } else {
+                        relatedContentOutput.setTitle("");
+
+                    }
+                    if ((mainJson.has("is_downloadable")) && mainJson.optString("is_downloadable").trim() != null && !mainJson.optString("is_downloadable").trim().isEmpty() && !mainJson.optString("is_downloadable").trim().equals("null") && !mainJson.optString("is_downloadable").trim().matches("")) {
+                        relatedContentOutput.setIs_downloadable(mainJson.optString("is_downloadable"));
+                    } else {
+                        relatedContentOutput.setIs_downloadable("");
 
                     }
 

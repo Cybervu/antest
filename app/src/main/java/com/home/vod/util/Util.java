@@ -108,6 +108,7 @@ import static com.home.vod.preferences.LanguagePreference.YES;
 public class Util {
     public static MediaInfo mSendingMedia;
     public static boolean app_is_in_player_context = false;
+    public static boolean is_followed = false;
 
 
     public static boolean drawer_line_visibility = true;

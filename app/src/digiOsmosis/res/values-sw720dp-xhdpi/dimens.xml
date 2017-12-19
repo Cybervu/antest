@@ -153,6 +153,7 @@
     <dimen name="story_text_size">16sp</dimen>
     <dimen name="weight_height">60dp</dimen>
     <dimen name="weight_width">5dp</dimen>
+    <dimen name="diet_story">18sp</dimen>
 
     <!--//**********logo image*************//-->
 
@@ -196,8 +197,8 @@
 
     <dimen name="fav_img_width">150dp</dimen>
     <dimen name="fav_img_height">214dp</dimen>
-    <dimen name="close_album_img_width">20dp</dimen>
-    <dimen name="close_album_img_height">20dp</dimen>
+    <dimen name="close_album_img_width">24dp</dimen>
+    <dimen name="close_album_img_height">24dp</dimen>
 
     <!--//**********profile picture*************//-->
 
@@ -217,4 +218,8 @@
     <dimen name="week_top">30dp</dimen>
     <dimen name="program_left">30dp</dimen>
     <dimen name="program_banner_height">400dp</dimen>
+    <dimen name="player_looping_layout">100dp</dimen>
+    <dimen name="marginRight20dp">20dp</dimen>
+    <dimen name="player_title">25dp</dimen>
+    <dimen name="player_marginTop">135dp</dimen>
 </resources>

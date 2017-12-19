@@ -20,11 +20,13 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +36,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -54,19 +57,28 @@ import com.google.android.gms.cast.framework.IntroductoryOverlay;
 import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.android.gms.common.images.WebImage;
+import com.home.apisdk.apiController.AddToFavAsync;
+import com.home.apisdk.apiController.DeleteFavAsync;
 import com.home.apisdk.apiController.GetContentDetailsAsynTask;
 import com.home.apisdk.apiController.GetEpisodeDeatailsAsynTask;
 import com.home.apisdk.apiController.GetIpAddressAsynTask;
+import com.home.apisdk.apiController.GetRelatedContentListAsynTask;
 import com.home.apisdk.apiController.GetValidateUserAsynTask;
 import com.home.apisdk.apiController.VideoDetailsAsynctask;
 import com.home.apisdk.apiModel.APVModel;
+import com.home.apisdk.apiModel.AddToFavInputModel;
+import com.home.apisdk.apiModel.AddToFavOutputModel;
 import com.home.apisdk.apiModel.ContentDetailsInput;
 import com.home.apisdk.apiModel.ContentDetailsOutput;
 import com.home.apisdk.apiModel.CurrencyModel;
+import com.home.apisdk.apiModel.DeleteFavInputModel;
+import com.home.apisdk.apiModel.DeleteFavOutputModel;
 import com.home.apisdk.apiModel.Episode_Details_input;
 import com.home.apisdk.apiModel.Episode_Details_output;
 import com.home.apisdk.apiModel.GetVideoDetailsInput;
 import com.home.apisdk.apiModel.PPVModel;
+import com.home.apisdk.apiModel.RelatedContentListInput;
+import com.home.apisdk.apiModel.RelatedContentListOutput;
 import com.home.apisdk.apiModel.ValidateUserInput;
 import com.home.apisdk.apiModel.ValidateUserOutput;
 import com.home.apisdk.apiModel.Video_Details_Output;
@@ -78,9 +90,11 @@ import com.home.vod.MyDownloadIntentHandler;
 import com.home.vod.R;
 import com.home.vod.SearchIntentHandler;
 import com.home.vod.adapter.ProgramDetailsAdapter;
+import com.home.vod.adapter.RelatedContentListDataAdapter;
 import com.home.vod.expandedcontrols.ExpandedControlsActivity;
 import com.home.vod.model.DataModel;
 import com.home.vod.model.EpisodesListModel;
+import com.home.vod.model.RelatedContentListItem;
 import com.home.vod.network.NetworkStatus;
 import com.home.vod.preferences.LanguagePreference;
 import com.home.vod.preferences.PreferenceManager;
@@ -102,6 +116,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -122,6 +137,7 @@ import static com.home.vod.preferences.LanguagePreference.CONTENT_NOT_AVAILABLE_
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_BUTTON_OK;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_CONTENT_NOT_AVAILABLE_IN_YOUR_COUNTRY;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_DURATION_TITLE;
+import static com.home.vod.preferences.LanguagePreference.DEFAULT_FOLLOWED_PROGRAM_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_IS_IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_NO_DETAILS_AVAILABLE;
@@ -134,6 +150,7 @@ import static com.home.vod.preferences.LanguagePreference.DEFAULT_TUTORIAL_TITLE
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_VIEW_MORE;
 import static com.home.vod.preferences.LanguagePreference.DEFAULT_WORKOUT_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.DURATION_TITLE;
+import static com.home.vod.preferences.LanguagePreference.FOLLOWED_PROGRAM_BUTTON;
 import static com.home.vod.preferences.LanguagePreference.IS_STREAMING_RESTRICTION;
 import static com.home.vod.preferences.LanguagePreference.NO_DATA;
 import static com.home.vod.preferences.LanguagePreference.NO_DETAILS_AVAILABLE;
@@ -149,14 +166,20 @@ import static com.home.vod.util.Constant.PERMALINK_INTENT_ARRAY;
 import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 import static com.home.vod.util.Constant.SEASON_INTENT_KEY;
 import static com.home.vod.util.Constant.authTokenStr;
+import static com.home.vod.util.Util.is_followed;
+import static player.utils.Util.DEFAULT_HAS_FAVORITE;
+import static player.utils.Util.HAS_FAVORITE;
 
 public class ProgramDetailsActivity extends AppCompatActivity implements GetContentDetailsAsynTask.GetContentDetailsListener, GetEpisodeDeatailsAsynTask.GetEpisodeDetailsListener, GetIpAddressAsynTask.IpAddressListener, GetValidateUserAsynTask.GetValidateUserListener,
-        VideoDetailsAsynctask.VideoDetailsListener {
+        VideoDetailsAsynctask.VideoDetailsListener ,GetRelatedContentListAsynTask.GetRelatedContentListListener,AddToFavAsync.AddToFavListener,DeleteFavAsync.DeleteFavListener{
 
-    ImageView bannerImageView, playButton, share;
-    TextView detailsTextView, durationTitleTextView, durationTextView, tutorialTextView, viewAllTextView;
+    ImageView bannerImageView, playButton, share,favorite_view_episode;
+    TextView detailsTextView,  tutorialTextView;
     String durationText = "";
-    Button startWorkoutButton, dietPlanButton;
+    Button startWorkoutButton, dietPlanButton,stretchWorkoutButton;
+    RelativeLayout letsWorkoutButton;
+    LinearLayout tutorialTitle,equipmentRelativeLayout,equipmentTitle,buttonLinearlayout;
+    TextView equipmentTitleTextView,equipmentStoryTextView;
     ProgressBarHandler progressBarHandler;
     GetValidateUserAsynTask asynValidateUserDetails;
     VideoDetailsAsynctask asynLoadVideoUrls;
@@ -164,9 +187,11 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     int isFreeContent = 0, isPPV, isConverted, contentTypesId, isAPV;
     PreferenceManager preferenceManager;
     RelativeLayout noInternetConnectionLayout, noDataLayout, iconImageRelativeLayout, bannerImageRelativeLayout, logo_image;
-    RecyclerView seasontiveLayout;
+    RecyclerView relatedContentList;
     Player playerModel;
-    String movieUniqueId = "";
+    int isFavorite;
+    String movieUniqueId = "",isEpisode = "";
+    RelativeLayout titleRelativeLayout;
     DataModel dbModel = new DataModel();
     int isLogin = 0;
     public static final int VIDEO_PLAY_BUTTON_CLICK_LOGIN_REG_REQUESTCODE = 8888;
@@ -178,6 +203,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     int ItemClickedPosition = 0;
     int position;
     static File mediaStorageDir;
+    ArrayList<RelatedContentListItem> relatedContentItemData = new ArrayList<RelatedContentListItem>();
     ArrayList<String> SubTitleName = new ArrayList<>();
     ArrayList<String> SubTitlePath = new ArrayList<>();
     ArrayList<String> FakeSubTitlePath = new ArrayList<>();
@@ -196,12 +222,13 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     String useridStr;
     EpisodesListModel itemToPlay;
     String ipAddres;
-    String bannerImageId, posterImageId, duration;
+    String bannerImageId, posterImageId, duration,contentStreamIdStr,contentIdStr;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     LanguagePreference languagePreference;
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
     /////by nihar
     String[] season;
+    String sucessMsg;
     /*chromecast-------------------------------------*/
     private VideoView mVideoView;
     private TextView mTitleView;
@@ -253,7 +280,9 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
     @Override
     public void onGetValidateUserPreExecuteStarted() {
         LogUtil.showLog("PINTU", "validateuser pdlog show");
-
+        if(pDialog==null) {
+            pDialog = new ProgressBarHandler(ProgramDetailsActivity.this);
+        }
         pDialog.show();
     }
 
@@ -429,7 +458,9 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
         LogUtil.showLog("PINTU", "videodetails pdlog show");
 
-        pDialog.show();
+        if(pDialog != null && !pDialog.isShowing()) {
+            pDialog.show();
+        }
     }
 
     @Override
@@ -729,6 +760,166 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
     }
 
+    @Override
+    public void onGetRelatedContentListPreExecuteStarted() {
+
+    }
+
+    @Override
+    public void onGetRelatedContentListPostExecuteCompleted(ArrayList<RelatedContentListOutput> relatedContentListOutputArray, int status, int totalItems, String message) {
+
+        String videoGenreStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoName = "";
+        String videoImageStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoPermalinkStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoTypeStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoTypeIdStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String videoUrlStr = languagePreference.getTextofLanguage(NO_DATA, DEFAULT_NO_DATA);
+        String isEpisodeStr = "";
+        String movieUniqueIdStr = "";
+        String movieStreamUniqueIdStr = "";
+        int isConverted = 0;
+        int isAPV = 0;
+        int isPPV = 0;
+        String movieThirdPartyUrl = "";
+
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.hide();
+                pDialog = null;
+            }
+        } catch (IllegalArgumentException ex) {
+
+        }
+
+        Log.v("SUBHA", "data called here 273ry    " + status);
+
+        if (status > 0) {
+            if (status == 200) {
+                relatedContentList.setVisibility(View.VISIBLE);
+                relatedContentItemData.clear();
+
+
+                if (relatedContentListOutputArray.size() > 0) {
+
+                    relatedContentList.setVisibility(View.VISIBLE);
+                    tutorialTitle.setVisibility(View.VISIBLE);
+
+
+                    for (int i = 0; i < relatedContentListOutputArray.size(); i++) {
+
+
+                        videoImageStr = relatedContentListOutputArray.get(i).getPosterUrl();
+
+                        videoName = relatedContentListOutputArray.get(i).getName();
+
+
+                        videoTypeIdStr = relatedContentListOutputArray.get(i).getContentTypesId();
+                        //videoGenreStr = relatedContentListOutputArray.get(i).getGenre();
+                        videoPermalinkStr = relatedContentListOutputArray.get(i).getPermalink();
+                        //isEpisodeStr = relatedContentListOutputArray.get(i).getIsEpisodeStr();
+                        //isConverted = relatedContentListOutputArray.get(i).getIsConverted();
+                        // isPPV = relatedContentListOutputArray.get(i).getIsPPV();
+                        // isAPV = relatedContentListOutputArray.get(i).getIsAPV();
+                        relatedContentItemData.add(new RelatedContentListItem(videoImageStr, videoName, "", videoTypeIdStr, videoGenreStr, "", videoPermalinkStr, isEpisodeStr, "", "", isConverted, isPPV, isAPV, "", relatedContentListOutputArray.get(i).getContentId(), relatedContentListOutputArray.get(i).getContentStreamId()));
+                    }
+
+
+                    if (relatedContentItemData.size() <= 0) {
+
+
+                        //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
+                    } else {
+
+
+                        LogUtil.showLog("BISHAL", "data show...");
+                        relatedContentList.setVisibility(View.VISIBLE);
+                        relatedContentList.setLayoutManager(mLayoutManager);
+                        relatedContentList.setItemAnimator(new DefaultItemAnimator());
+                        RelatedContentListDataAdapter mAdapter = new RelatedContentListDataAdapter(ProgramDetailsActivity.this, R.layout.related_content_listing, relatedContentItemData);
+
+
+                        relatedContentList.setAdapter(mAdapter);
+
+                    }
+
+                } else {
+
+                    relatedContentList.setVisibility(View.GONE);
+                    tutorialTitle.setVisibility(View.GONE);
+
+
+                }
+            } else {
+
+                relatedContentList.setVisibility(View.GONE);
+                tutorialTitle.setVisibility(View.GONE);
+
+
+            }
+        } else {
+
+
+            relatedContentList.setVisibility(View.GONE);
+            tutorialTitle.setVisibility(View.GONE);
+
+
+        }
+
+
+    }
+
+    @Override
+    public void onAddToFavPreExecuteStarted() {
+        pDialog = new ProgressBarHandler(ProgramDetailsActivity.this);
+        pDialog.show();
+
+    }
+
+    @Override
+    public void onAddToFavPostExecuteCompleted(AddToFavOutputModel addToFavOutputModel, int status, String sucessMsg) {
+        if (status == 200) {
+
+
+            //pref = getSharedPreferences(Util.LOGIN_PREF, 0);
+            ProgramDetailsActivity.this.sucessMsg = sucessMsg;
+            String loggedInStr = preferenceManager.getLoginStatusFromPref();
+
+            favorite_view_episode.setImageResource(R.drawable.favorite_red);
+//            favorite_view_episode.setText(languagePreference.getTextofLanguage(FOLLOWED_PROGRAM_BUTTON,DEFAULT_FOLLOWED_PROGRAM_BUTTON));
+            isFavorite = 1;
+
+//            showToast();
+            if (pDialog != null && pDialog.isShowing()) {
+                LogUtil.showLog("PINTU", "addd fav pdlog hide");
+                pDialog.hide();
+            }
+        }
+    }
+
+    @Override
+    public void onDeleteFavPreExecuteStarted() {
+        pDialog = new ProgressBarHandler(ProgramDetailsActivity.this);
+        pDialog.show();
+
+    }
+
+    @Override
+    public void onDeleteFavPostExecuteCompleted(DeleteFavOutputModel deleteFavOutputModel, int status, String sucessMsg) {
+
+        ProgramDetailsActivity.this.sucessMsg = sucessMsg;
+        favorite_view_episode.setImageResource(R.drawable.favorite);
+//        favorite_view_episode.setText(languagePreference.getTextofLanguage(FOLLOW_PROGRAM_BUTTON, DEFAULT_FOLLOW_PROGRAM_BUTTON));
+
+
+//        showToast();
+        isFavorite = 0;
+        if (pDialog != null && pDialog.isShowing()) {
+            LogUtil.showLog("PINTU", "delete fav pdlog hide");
+            pDialog.hide();
+        }
+    }
+
     /*chromecast-------------------------------------*/
      /*chromecast-------------------------------------*/
 
@@ -815,17 +1006,37 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_program_details);
+
+
+        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        logo_image = (RelativeLayout) findViewById(R.id.logo_image);
+        bannerImageRelativeLayout = (RelativeLayout) findViewById(R.id.bannerImageRelativeLayout);
+        buttonLinearlayout = (LinearLayout) findViewById(R.id.buttonLinearlayout);
+        logo_image.bringToFront();
+        setSupportActionBar(mActionBarToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         playButton = (ImageView) findViewById(R.id.playButton);
         detailsTextView = (TextView) findViewById(R.id.titleTextView);
         startWorkoutButton = (Button) findViewById(R.id.startWorkoutButton);
-        dietPlanButton = (Button) findViewById(R.id.dietPlanButton);
-        durationTitleTextView = (TextView) findViewById(R.id.durationTitleTextView);
-        durationTextView = (TextView) findViewById(R.id.durationTextView);
+        stretchWorkoutButton = (Button) findViewById(R.id.stretchWorkoutButton);
+        letsWorkoutButton = (RelativeLayout) findViewById(R.id.letsWorkoutButton);
+        titleRelativeLayout = (RelativeLayout) findViewById(R.id.titleRelativeLayout);
+//        dietPlanButton = (Button) findViewById(R.id.dietPlanButton);
+//        durationTitleTextView = (TextView) findViewById(R.id.durationTitleTextView);
+//        durationTextView = (TextView) findViewById(R.id.durationTextView);
         tutorialTextView = (TextView) findViewById(R.id.tutorialTextView);
-        viewAllTextView = (TextView) findViewById(R.id.viewAllTextView2);
-        seasontiveLayout = (RecyclerView) findViewById(R.id.featureContent);
+//        viewAllTextView = (TextView) findViewById(R.id.viewAllTextView2);
+        equipmentTitleTextView = (TextView) findViewById(R.id.equipmentTitleTextView);
+        equipmentStoryTextView = (TextView) findViewById(R.id.equipmentStoryTextView);
+        relatedContentList = (RecyclerView) findViewById(R.id.featureContent);
+        tutorialTitle = (LinearLayout) findViewById(R.id.tutorialTitle);
+        equipmentRelativeLayout = (LinearLayout) findViewById(R.id.equipmentRelativeLayout);
+        equipmentTitle = (LinearLayout) findViewById(R.id.equipmentTitle);
         share = (ImageView) findViewById(R.id.share);
+        favorite_view_episode = (ImageView) findViewById(R.id.favoriteImageView1);
         preferenceManager = PreferenceManager.getPreferenceManager(this);
         languagePreference = LanguagePreference.getLanguagePreference(ProgramDetailsActivity.this);
         episodeListOptionMenuHandler = new EpisodeListOptionMenuHandler(this);
@@ -836,20 +1047,15 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         playerModel.setIsstreaming_restricted(Util.getStreamingRestriction(languagePreference));
         itemData = new ArrayList<EpisodesListModel>();
         progressBarHandler = new ProgressBarHandler(ProgramDetailsActivity.this);
-        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        logo_image = (RelativeLayout) findViewById(R.id.logo_image);
-        logo_image.bringToFront();
-        setSupportActionBar(mActionBarToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        mActionBarToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+
         FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), detailsTextView);
-        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), viewAllTextView);
+//        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), viewAllTextView);
         FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), startWorkoutButton);
+        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), stretchWorkoutButton);
         detailsTextView.setText(languagePreference.getTextofLanguage(SEASON, DEFAULT_SEASON) + " " + getIntent().getStringExtra(SEASON_INTENT_KEY));
-        viewAllTextView.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
-        viewAllTextView.setVisibility(View.GONE);
-        dietPlanButton.setVisibility(View.GONE);
+//        viewAllTextView.setText(languagePreference.getTextofLanguage(VIEW_MORE, DEFAULT_VIEW_MORE));
+//        viewAllTextView.setVisibility(View.GONE);
+//        dietPlanButton.setVisibility(View.GONE);
         playButton.setVisibility(View.GONE);
         isLogin = preferenceManager.getLoginFeatureFromPref();
 
@@ -860,20 +1066,85 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 onBackPressed();
             }
         });
-        mLayoutManager = new LinearLayoutManager(ProgramDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        mLayoutManager = new LinearLayoutManager(ProgramDetailsActivity.this, LinearLayoutManager.VERTICAL, false);
 
         if (((ProgramDetailsActivity.this.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_LARGE) || ((ProgramDetailsActivity.this.getResources().getConfiguration().screenLayout & SCREENLAYOUT_SIZE_MASK) == SCREENLAYOUT_SIZE_XLARGE)) {
 
 
-            seasontiveLayout.addItemDecoration(new SpacesItemDecoration(30));
+            relatedContentList.addItemDecoration(new SpacesItemDecoration(30));
 
         } else {
 
-            seasontiveLayout.addItemDecoration(new SpacesItemDecoration(50));
+            relatedContentList.addItemDecoration(new SpacesItemDecoration(50));
 
 
         }
 
+
+        /***favorite *****/
+        favorite_view_episode.setVisibility(View.GONE);
+
+        favorite_view_episode.setOnClickListener(new View.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View v) {
+                is_followed = true;
+                if (preferenceManager != null) {
+                    loggedInStr = preferenceManager.getUseridFromPref();
+                }
+
+                if (loggedInStr != null) {
+                    if (isFavorite == 1) {
+
+                        DeleteFavInputModel deleteFavInputModel = new DeleteFavInputModel();
+                        deleteFavInputModel.setAuthTokenStr(authTokenStr);
+                        deleteFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
+                        deleteFavInputModel.setMovieUniqueId(movieUniqueId);
+                        deleteFavInputModel.setIsEpisode(isEpisode);
+
+                        DeleteFavAsync deleteFavAsync = new DeleteFavAsync(deleteFavInputModel, ProgramDetailsActivity.this, ProgramDetailsActivity.this);
+                        deleteFavAsync.executeOnExecutor(threadPoolExecutor);
+
+                       /* AsynFavoriteDelete asynFavoriteDelete=new AsynFavoriteDelete();
+                        asynFavoriteDelete.execute();*/
+                    } else {
+
+                        LogUtil.showLog("MUVI", "favorite");
+                        AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
+                        addToFavInputModel.setAuthToken(authTokenStr);
+                        addToFavInputModel.setMovie_uniq_id(movieUniqueId);
+                        addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
+                        addToFavInputModel.setIsEpisodeStr(isEpisode);
+
+                        AddToFavAsync asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, ProgramDetailsActivity.this, ProgramDetailsActivity.this);
+                        asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
+
+
+                    }
+                } else {
+                    Util.favorite_clicked = true;
+
+                    Intent registerActivity = new Intent(ProgramDetailsActivity.this, RegisterActivity.class);
+                    registerActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    registerActivity.putExtra("from", this.getClass().getName());
+                    startActivityForResult(registerActivity, 30060);
+
+                    bannerImageRelativeLayout.setVisibility(View.VISIBLE);
+
+                }
+
+            }
+        });
+
+        relatedContentList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ProgramDetailsActivity.this,"item clicked",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        /***favorite *****/
 
         /*chromecast-------------------------------------*/
 
@@ -945,7 +1216,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 }
             }*/
 
-        viewAllTextView.setOnClickListener(new View.OnClickListener() {
+       /* viewAllTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Intent episode = new Intent(ProgramDetailsActivity.this, Tutorial_List_Activity.class);
@@ -962,23 +1233,24 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
                 episode.putExtra(PERMALINK_INTENT_ARRAY, getIntent().getSerializableExtra(PERMALINK_INTENT_ARRAY));
                 startActivity(episode);
             }
-        });
+        });*/
 
-        dietPlanButton.setOnClickListener(new View.OnClickListener() {
+       /* dietPlanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProgramDetailsActivity.this, DietPlanActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
-        seasontiveLayout.addOnItemTouchListener(new RecyclerTouchListener(this,
-                seasontiveLayout, new ClickListener() {
+        relatedContentList.addOnItemTouchListener(new RecyclerTouchListener(this,
+                relatedContentList, new ClickListener() {
             @Override
             public void onClick(View view, final int position) {
                 //Values are passing to activity & to fragment as well
-                EpisodesListModel item = itemData.get(position);
-                clickItem(item, position);
+               /* EpisodesListModel item = itemData.get(position);
+                clickItem(item, position);*/
+
             }
 
             @Override
@@ -994,7 +1266,24 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
             }
         });
+        letsWorkoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickItem(itemData.get(1), 1);
 
+            }
+        });
+        stretchWorkoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+               EpisodesListModel item = itemData.get(itemData.size() -1);
+                clickItem(item, itemData.size() -1);
+
+            }
+        });
         if (shouldStartPlayback) {
             // this will be the case only if we are coming from the
             // CastControllerActivity by disconnecting from a device
@@ -1035,6 +1324,8 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         GetEpisodeDeatailsAsynTask getEpisodeDeatailsAsynTask = new GetEpisodeDeatailsAsynTask(episode_details_input, this, this);
         getEpisodeDeatailsAsynTask.executeOnExecutor(threadPoolExecutor);
 
+        share.setVisibility(View.VISIBLE);
+
         share.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Util.shareIt(ProgramDetailsActivity.this);
@@ -1042,13 +1333,13 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         });
 
 
-        dietPlanButton.setOnClickListener(new View.OnClickListener() {
+       /* dietPlanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProgramDetailsActivity.this, DietPlanActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
         ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
         permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
         useridStr = preferenceManager.getUseridFromPref();
@@ -1223,15 +1514,19 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             bannerImageId = contentDetailsOutput.getBanner();
             posterImageId = contentDetailsOutput.getPoster();
             duration = contentDetailsOutput.getDuration();
-
+            contentIdStr = contentDetailsOutput.getId();
+            contentStreamIdStr = contentDetailsOutput.getMovieStreamId();
+            isFavorite = contentDetailsOutput.getIs_favorite();
+            isEpisode = contentDetailsOutput.getIsEpisode();
 
             // viewAllTextView.setText(languagePreference.getTextofLanguage(DETAIL_VIEW_MORE,DEFAULT_DETAIL_VIEW_MORE));
-            viewAllTextView.setVisibility(View.VISIBLE);
-            tutorialTextView.setText(languagePreference.getTextofLanguage(TUTORIAL_TITLE, DEFAULT_TUTORIAL_TITLE));
-            durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
-            startWorkoutButton.setText(languagePreference.getTextofLanguage(WORKOUT_BUTTON, DEFAULT_WORKOUT_BUTTON));
+//            viewAllTextView.setVisibility(View.VISIBLE);
+//            tutorialTextView.setText(languagePreference.getTextofLanguage(TUTORIAL_TITLE, DEFAULT_TUTORIAL_TITLE));
+//            durationTitleTextView.setText(languagePreference.getTextofLanguage(DURATION_TITLE, DEFAULT_DURATION_TITLE));
+            startWorkoutButton.setText("WARM UP");
+            stretchWorkoutButton.setText("STRETCH");
             FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), tutorialTextView);
-            FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
+//            FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
 
           /*  if (duration.matches("")) {
                 durationTitleTextView.setVisibility(View.GONE);
@@ -1289,6 +1584,69 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
 
             }
 
+            if (contentDetailsOutput.getMetadata() != null || contentDetailsOutput.getMetadata().size() > 0) {
+               /* benefitsTitleTextView.setVisibility(View.GONE);
+                colortitle1.setVisibility(View.GONE);*/
+                equipmentRelativeLayout.removeAllViews();
+                for (Map.Entry<String, String> entry : contentDetailsOutput.getMetadata().entrySet()) {
+
+                    Log.v("SUBHASS","program type value == "+entry.getValue());
+
+                    if (entry.getValue() != null && !entry.getValue().matches("")) {
+
+
+
+                        if(!entry.getKey().equalsIgnoreCase("_____programtype")) {
+
+                            DynamicLayout(equipmentRelativeLayout, entry.getKey().toUpperCase(), entry.getValue());
+                        }
+
+                    }
+                    equipmentRelativeLayout.setVisibility(View.VISIBLE);
+
+                }
+              /*  RelativeLayout.LayoutParams params= new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.addRule(RelativeLayout.BELOW, R.id.benefitsLinearLayout);
+                relatedContentList.setLayoutParams(params);*/
+
+            } else {
+               /* FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.regular_fonts), benefitsTitleTextView);
+                FontUtls.loadFont(YogaPlayerActivity.this, getResources().getString(R.string.light_fonts), benefitsStoryTextView);
+                benefitsStoryTextView.setText(benefits.trim());
+                colortitle1.setVisibility(View.VISIBLE);*/
+                equipmentRelativeLayout.setVisibility(View.GONE);
+            }
+
+            if ((languagePreference.getTextofLanguage(HAS_FAVORITE, DEFAULT_HAS_FAVORITE)
+                    .trim()).equals("1")) {
+                favorite_view_episode.setVisibility(View.VISIBLE);
+                if (preferenceManager != null) {
+                    loggedInStr = preferenceManager.getUseridFromPref();
+                }
+                if (loggedInStr != null && isFavorite == 0 && Util.favorite_clicked == true) {
+
+                    Util.favorite_clicked = false;
+                    Log.v("SUBHA", "favorite ----");
+
+                    AddToFavInputModel addToFavInputModel = new AddToFavInputModel();
+                    addToFavInputModel.setAuthToken(authTokenStr);
+                    addToFavInputModel.setMovie_uniq_id(movieUniqueId);
+                    addToFavInputModel.setLoggedInStr(preferenceManager.getUseridFromPref());
+                    addToFavInputModel.setIsEpisodeStr(isEpisode);
+
+                    AddToFavAsync asynFavoriteAdd = new AddToFavAsync(addToFavInputModel, ProgramDetailsActivity.this, ProgramDetailsActivity.this);
+                    asynFavoriteAdd.executeOnExecutor(threadPoolExecutor);
+                } else if (loggedInStr != null && isFavorite == 1) {
+
+                    favorite_view_episode.setImageResource(R.drawable.favorite_red);
+//                    favorite_view_episode.setText(languagePreference.getTextofLanguage(FOLLOWED_PROGRAM_BUTTON,DEFAULT_FOLLOWED_PROGRAM_BUTTON));
+                }
+
+            } else {
+                favorite_view_episode.setVisibility(View.GONE);
+            }
+
+
         }
 
     }
@@ -1311,7 +1669,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
         }
 
 
-        durationText = episode_details_output.getSeason_total_duration();
+       /* durationText = episode_details_output.getSeason_total_duration();
 
         Log.v("SUBHA", "duration in time === " + Util.getCountDownStringInMinutes(Integer.parseInt(durationText)));
 
@@ -1323,7 +1681,7 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), durationTitleTextView);
             durationTextView.setText(Util.getCountDownStringInMinutes(Integer.parseInt(durationText)));
         }
-
+*/
 
         String loggedInStr = preferenceManager.getLoginStatusFromPref();
         if (status == 200) {
@@ -1360,21 +1718,60 @@ public class ProgramDetailsActivity extends AppCompatActivity implements GetCont
             LogUtil.showLog("BISHAL", "itemdata==" + itemData);
             if (itemData.size() <= 0) {
 
+                buttonLinearlayout.setVisibility(View.GONE);
+
+
+
 
                 //Toast.makeText(ShowWithEpisodesListActivity.this, getResources().getString(R.string.there_no_data_str), Toast.LENGTH_LONG).show();
             } else {
 
+                buttonLinearlayout.setVisibility(View.VISIBLE);
 
+                if(itemData.size() <= 1){
+                    startWorkoutButton.setVisibility(View.VISIBLE);
+                    letsWorkoutButton.setVisibility(View.GONE);
+                    stretchWorkoutButton.setVisibility(View.GONE);
+                }
+
+
+                tutorialTitle.setVisibility(View.VISIBLE);
                 LogUtil.showLog("BISHAL", "data show...");
-                seasontiveLayout.setVisibility(View.VISIBLE);
-                seasontiveLayout.setLayoutManager(mLayoutManager);
-                seasontiveLayout.setItemAnimator(new DefaultItemAnimator());
-                ProgramDetailsAdapter mAdapter = new ProgramDetailsAdapter(ProgramDetailsActivity.this, R.layout.list_card_program_details, itemData);
+                relatedContentList.setVisibility(View.VISIBLE);
+                relatedContentList.setLayoutManager(mLayoutManager);
+                relatedContentList.setItemAnimator(new DefaultItemAnimator());
+                RelatedContentListDataAdapter mAdapter = new RelatedContentListDataAdapter(ProgramDetailsActivity.this, R.layout.list_card_program_details, relatedContentItemData);
 
 
-                seasontiveLayout.setAdapter(mAdapter);
+                relatedContentList.setAdapter(mAdapter);
+
+                RelatedContentListInput relatedContentListInput = new RelatedContentListInput();
+
+                useridStr = preferenceManager.getUseridFromPref();
+
+                relatedContentListInput.setAuthToken(authTokenStr);
+
+                if (preferenceManager != null) {
+                    String countryPref = preferenceManager.getCountryCodeFromPref();
+                    relatedContentListInput.setCountry(countryPref);
+                } else {
+                    relatedContentListInput.setCountry("IN");
+                }
+                relatedContentListInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                relatedContentListInput.setContent_id(contentIdStr);
+//                relatedContentListInput.setContent_id("62695");
+                relatedContentListInput.setContent_stream_id(contentStreamIdStr);
+//                relatedContentListInput.setContent_stream_id("109294");
+                GetRelatedContentListAsynTask asynLoadMovieDetails = new GetRelatedContentListAsynTask(relatedContentListInput, this, this);
+                asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
 
             }
+
+
+
+
+
+
         }
 
     }
@@ -2522,6 +2919,31 @@ private void PlayThroughChromeCast(){
 
             callForValidateUser();
 
+        }else if (requestCode == 30060 && resultCode == RESULT_OK) {
+            if (NetworkStatus.getInstance().isConnected(this)) {
+                ContentDetailsInput contentDetailsInput = new ContentDetailsInput();
+                permalinkStr = getIntent().getStringExtra(PERMALINK_INTENT_KEY);
+                useridStr = preferenceManager.getUseridFromPref();
+
+                contentDetailsInput.setAuthToken(authTokenStr);
+
+                Log.v("SUBHA", "authToken1243442554 === " + authTokenStr);
+                if (preferenceManager != null) {
+                    String countryPref = preferenceManager.getCountryCodeFromPref();
+                    contentDetailsInput.setCountry(countryPref);
+                } else {
+                    contentDetailsInput.setCountry("IN");
+                }
+                contentDetailsInput.setLanguage(languagePreference.getTextofLanguage(SELECTED_LANGUAGE_CODE, DEFAULT_SELECTED_LANGUAGE_CODE));
+                contentDetailsInput.setPermalink(permalinkStr);
+                contentDetailsInput.setUser_id(useridStr);
+                asynLoadMovieDetails = new GetContentDetailsAsynTask(contentDetailsInput, this, this);
+                asynLoadMovieDetails.executeOnExecutor(threadPoolExecutor);
+
+            } else {
+                Toast.makeText(getApplicationContext(), languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
+                finish();
+            }
         }
 
     }
@@ -2538,4 +2960,70 @@ private void PlayThroughChromeCast(){
         asynValidateUserDetails = new GetValidateUserAsynTask(validateUserInput, ProgramDetailsActivity.this, ProgramDetailsActivity.this);
         asynValidateUserDetails.executeOnExecutor(threadPoolExecutor);
     }
+
+    public void DynamicLayout(LinearLayout layout, String Header, String Details) {
+        Log.v("Nihar", "" + Header + Details);
+        //masterlayout
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        /////View
+        View view = new View(this);
+        //int paddingleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+        //  view.setPadding(paddingleft, 0, 0, 0);
+        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,3, getResources().getDisplayMetrics());
+        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 17, getResources().getDisplayMetrics());
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width, height + 2);
+        view.setLayoutParams(parms);
+        //  int marginleft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
+        parms.setMargins(30, 0, 0, 0);
+        view.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+        ///Title Textview
+        TextView textView = new TextView(this);
+        textView.setText(Header);
+        textView.setAllCaps(true);
+        textView.setTextColor(getResources().getColor(R.color.videotextColor));
+        //  int titleTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.story_title_text_size) , getResources().getDisplayMetrics());
+
+        textView.setTextSize(20);
+
+        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.regular_fonts), textView);
+        LinearLayout.LayoutParams TextViewParams = new LinearLayout.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT);
+        //  int textview = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+        int topmargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
+        TextViewParams.setMargins(30, topmargin, 0, 2);
+        textView.setLayoutParams(TextViewParams);
+
+        linearLayout.addView(view);
+        linearLayout.addView(textView);
+
+
+        TextView detail_text = new TextView(this);
+        detail_text.setPadding(0, topmargin, 0, topmargin);
+        detail_text.setTextColor(getResources().getColor(R.color.videotextColor));
+        //  int detailTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.story_text_size) , getResources().getDisplayMetrics());
+
+        detail_text.setTextSize(13);
+        // detail_text.setTextSize(getResources().getDimension(R.dimen.story_text_size));
+
+        // int textviewheader = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+        FontUtls.loadFont(ProgramDetailsActivity.this, getResources().getString(R.string.light_fonts), detail_text);
+
+        detail_text.setText(Details);
+
+        LinearLayout.LayoutParams detailsParam = new LinearLayout.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT);
+        detailsParam.setMargins(30, 0, 0,topmargin);
+
+        detail_text.setLayoutParams(detailsParam);
+
+
+
+        ///main layout view set
+        layout.addView(linearLayout);
+        layout.addView(detail_text);
+
+    }
+
+
+
 }

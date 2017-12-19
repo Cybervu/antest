@@ -257,6 +257,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         noInternetConnectionLayout.setVisibility(View.GONE);
         noDataLayout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
+        sectionTitle.setVisibility(View.VISIBLE);
 
         //MUVIlaxmi
         gridView.setVisibility(View.VISIBLE);
@@ -649,12 +650,13 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                     videoPDialog = null;
                 }
             } catch (IllegalArgumentException ex) {
-
+                sectionTitle.setVisibility(View.GONE);
                 noDataLayout.setVisibility(View.VISIBLE);
                 noInternetConnectionLayout.setVisibility(View.GONE);
                 gridView.setVisibility(View.GONE);
                 footerView.setVisibility(View.GONE);
             }
+            sectionTitle.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.VISIBLE);
             noInternetConnectionLayout.setVisibility(View.GONE);
             gridView.setVisibility(View.GONE);
@@ -662,6 +664,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
         } else {
             footerView.setVisibility(View.GONE);
             gridView.setVisibility(View.VISIBLE);
+            sectionTitle.setVisibility(View.VISIBLE);
             noInternetConnectionLayout.setVisibility(View.GONE);
             noDataLayout.setVisibility(View.GONE);
             videoImageStrToHeight = movieImageStr;
@@ -755,6 +758,7 @@ public class FavoriteActivity extends AppCompatActivity implements GetLanguageLi
                     }
                 } catch (IllegalArgumentException ex) {
 
+                    sectionTitle.setVisibility(View.GONE);
                     noDataLayout.setVisibility(View.VISIBLE);
                     noInternetConnectionLayout.setVisibility(View.GONE);
                     gridView.setVisibility(View.GONE);
