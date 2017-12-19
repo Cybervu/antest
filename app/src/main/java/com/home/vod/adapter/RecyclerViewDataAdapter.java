@@ -90,7 +90,7 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
     @Override
     public void onBindViewHolder(final ItemRowHolder itemRowHolder, final int i) {
 
-        LogUtil.showLog("MUVI1", "position of the item in adapter ==============" + i);
+        Log.v("BIBHU12", "position of the item in adapter ==============" + i);
 
        /* if(i>=counter)
         {

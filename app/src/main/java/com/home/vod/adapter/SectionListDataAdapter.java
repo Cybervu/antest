@@ -106,19 +106,19 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
         // holder.temPV.setTag(singleItem.get(i)); //For passing the list item index
 
         if (singleItem.getImage()!=null) {
-            if (singleItem.getImage().equalsIgnoreCase("transparent")) {
+           /* if (singleItem.getImage().equalsIgnoreCase("transparent")) {
                 Picasso.with(mContext)
-                        .load("transparent")
+                        .load(R.drawable.logo)
                         .placeholder(R.drawable.transparent)   // optional
                         .error(R.drawable.transparent)      // optional
                         .into(holder.itemImage);
-            }else {
+            }else {*/
                 Picasso.with(mContext)
                         .load(singleItem.getImage())
                         .placeholder(R.drawable.logo)   // optional
                         .error(R.drawable.logo)      // optional
                         .into(holder.itemImage);
-            }
+//            }
         }else{
             Picasso.with(mContext)
                     .load(R.drawable.logo)

@@ -134,6 +134,8 @@ public class SplashScreen extends Activity implements GetIpAddressAsynTask.IpAdd
             imageResize.setScaleType(ImageView.ScaleType.FIT_XY);
         }
 
+
+
       imageResize.setImageBitmap(decodeSampledBitmapFromResource(getResources(), R.drawable.splash_screen, dpWidth, dpHeight));
 
         noInternetTextView.setText(languagePreference.getTextofLanguage(NO_INTERNET_CONNECTION, DEFAULT_NO_INTERNET_CONNECTION));
