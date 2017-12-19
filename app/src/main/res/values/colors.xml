@@ -2,6 +2,7 @@
 <resources>
 
  <color name="appBackgroundColor">#fff</color>
+ <color name="background">#fff</color>
  <color name="downloadpopupcolor">#fff</color>
  <color name="textColor">#111111</color>
  <color name="videotextColor">#ffffff</color>

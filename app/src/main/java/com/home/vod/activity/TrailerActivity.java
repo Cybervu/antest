@@ -180,12 +180,43 @@ public class TrailerActivity extends AppCompatActivity implements SensorOrientat
     int player_end_time = 0;
     String log_temp_id = "0";
 
+    Timer navigation_key_timer;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        try{
+            if (navigation_key_timer != null)
+                navigation_key_timer.cancel();
+        }catch (Exception e){}
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         SensorOrientationChangeNotifier.getInstance(TrailerActivity.this).addListener(this);
         AsynGetIpAddress asynGetIpAddress = new AsynGetIpAddress();
         asynGetIpAddress.executeOnExecutor(threadPoolExecutor);
+
+        navigation_key_timer = new Timer();
+        navigation_key_timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+                       int orientation = display.getRotation();
+
+                       if (orientation == 1|| orientation == 3) {
+                           hideSystemUI();
+                       }
+                   }
+               });
+            }
+        },0,1000);
 
     }
 

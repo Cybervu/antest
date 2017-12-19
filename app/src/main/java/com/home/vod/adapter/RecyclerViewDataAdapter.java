@@ -111,9 +111,9 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
         SectionListDataAdapter itemListDataAdapter = null;
 //            if (MainActivity.vertical == 1) {
 
-        for(int ii=0;ii<Util.image_orentiation.size();ii++){
+        /*for(int ii=0;ii<Util.image_orentiation.size();ii++){
             LogUtil.showLog("MUVI1", "orien==" + Util.image_orentiation.get(ii));
-        }
+        }*/
 
 
         try {

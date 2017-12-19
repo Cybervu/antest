@@ -97,8 +97,8 @@ android {
             versionCode 1
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            //buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
-            buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
+            buildConfigField "String", "AUTH_TOKEN", "\"a010d1cef24104ca628a54e3246a8e43\""
+            //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""//mob
             // buildConfigField "String", "AUTH_TOKEN", "\"6a9c6e9bfeee69e63d4bab668c01dc0a\""
             // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
         }
@@ -154,12 +154,12 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.teststreamingapp'
-            versionCode 15
+            versionCode 16
             targetSdkVersion 25
-            versionName '3.1.1'
+            versionName '3.1.2'
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
-            //buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""//Lumiere
+            //buildConfigField "String", "AUTH_TOKEN", "\"759f1f0dababbf4cae7b423d833a87f4\""
         }
         lumiere_staging_ {
             dimension 'environment'
@@ -217,9 +217,9 @@ android {
             dimension 'vendor'
             minSdkVersion 21
             applicationId 'com.release.plusnights'
-            versionCode 4
+            versionCode 5
             targetSdkVersion 25
-            versionName "1.3.0"
+            versionName "1.4.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             buildConfigField "String", "AUTH_TOKEN", "\"0831fbbacf89caf9d32aca43e21665b8\""
             //            buildConfigField "String", "AUTH_TOKEN", "\"7a4d24bf8f28432dd3e3d75980a6f7c3\""
@@ -339,11 +339,11 @@ android {
         }
         magicmovies_staging_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://api-ireland.muvi.com/rest/\""
         }
         magicmovies_Prod_ {
             dimension 'environment'
-            buildConfigField "String", "SERVICE_BASE_PATH", "\"https://www.muvi.com/rest/\""
+            buildConfigField "String", "SERVICE_BASE_PATH", "\"http://api-ireland.muvi.com/rest/\""
         }
         ubereatsvod {
             minSdkVersion 21
