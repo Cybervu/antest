@@ -448,8 +448,8 @@ android {
             dimension 'vendor'
             applicationId 'com.release.ikauf'
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            // buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
-            buildConfigField "String", "AUTH_TOKEN", "\" 78141a9c7e92f1f3493994553efbb7a1\""
+             buildConfigField "String", "AUTH_TOKEN", "\"25e74a5c88d19c4b57c8138bf47abdf7\""
+//            buildConfigField "String", "AUTH_TOKEN", "\" 78141a9c7e92f1f3493994553efbb7a1\""
             targetSdkVersion 25
             versionCode 1
             versionName '1.0'

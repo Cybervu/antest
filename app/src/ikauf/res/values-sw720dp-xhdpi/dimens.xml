@@ -97,7 +97,7 @@
     <dimen name="editbox_text_size">18sp</dimen>
     <dimen name="home280_layout_width">157dp</dimen>
     <dimen name="videogrid_width">140dp</dimen>
-    <dimen name="videogrid_height">200dp</dimen>
+    <dimen name="videogrid_height">190dp</dimen>
     <dimen name="videogrid_land_width">182dp</dimen>
     <dimen name="videogrid_land_height">101dp</dimen>
     <dimen name="plainrowlayout_height">100dp</dimen>

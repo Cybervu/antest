@@ -33,7 +33,7 @@
     <dimen name="forgotlayout_margin">10dp</dimen>
     <dimen name="registerlayout_padding">10dp</dimen>
     <dimen name="movieimg_width">108dp</dimen>
-    <dimen name="movieimg_height">150dp</dimen>
+    <dimen name="movieimg_height">140dp</dimen>
     <dimen name="video280_width">170dp</dimen>
     <dimen name="video280_height">95dp</dimen>
     <dimen name="testview2_text_size">18sp</dimen>
@@ -75,7 +75,7 @@
     <dimen name="plainrow_text_size">15sp</dimen>
     <dimen name="plainrow_mrgin_top">25dp</dimen>
     <dimen name="preorderbtn_padding">14dp</dimen>
-
+    <dimen name="videogrid_height">150dp</dimen>
 
     <dimen name="cast_details_width">200dp</dimen>
     <dimen name="cast_details_height">200dp</dimen>

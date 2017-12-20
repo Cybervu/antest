@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">IkaufTv</string>
+    <string name="app_name">ikaufTv</string>
 
     <!--App Drawer-->
     <string name="action_search">Search</string>
@@ -14,7 +14,7 @@
 
 
     <!--<string name="app_id">9C631550</string>-->
-    <string name="app_id">49A4D3B2</string>
+    <string name="app_id">70A0CD61</string>
     <!--<string name="app_id">00591A79</string>-->
     <!--<string name="app_id">8162836C</string>-->
     <!--<string name="app_id">F4284863</string>-->
