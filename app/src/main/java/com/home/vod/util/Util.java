@@ -671,6 +671,7 @@ public class Util {
         setTranslationLanguageToPref(languagePreference, PURCHASE, DEFAULT_PURCHASE, "purchase", json);
         setTranslationLanguageToPref(languagePreference, TRANSACTION_DETAIL_PURCHASE_DATE, DEFAULT_TRANSACTION_DETAIL_PURCHASE_DATE, "transaction_detail_purchase_date", json);
         setTranslationLanguageToPref(languagePreference, PURCHASE_HISTORY, DEFAULT_PURCHASE_HISTORY, "purchase_history", json);
+        setTranslationLanguageToPref(languagePreference, MY_DOWNLOAD, DEFAULT_MY_DOWNLOAD, "my_download", json);
         setTranslationLanguageToPref(languagePreference, BTN_REGISTER, DEFAULT_BTN_REGISTER, "btn_register", json);
         setTranslationLanguageToPref(languagePreference, SORT_RELEASE_DATE, DEFAULT_SORT_RELEASE_DATE, "sort_release_date", json);
 

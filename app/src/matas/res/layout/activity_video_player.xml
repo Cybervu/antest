@@ -352,7 +352,6 @@
                         android:layout_marginRight="15dp"
                         android:indeterminate="false"
                         android:max="100"
-
                         android:progress="0"
                         android:progressDrawable="@drawable/style_circular"
                         android:secondaryProgress="100" />
